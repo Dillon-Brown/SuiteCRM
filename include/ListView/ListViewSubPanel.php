@@ -111,8 +111,7 @@
                     $this->smartyTemplate->assign("THEME", $this->local_theme);
                     $this->smartyTemplate->assign("IMAGE_PATH", $this->local_image_path);
                     $this->smartyTemplate->assign("MODULE_NAME", $this->local_current_module);
-                }
-                else {
+                } else {
                     $GLOBALS['log']->error("NO SMARTY TEMPLATE PATH DEFINED CANNOT CREATE SMARTY TEMPLATE");
                 }
             }
@@ -145,8 +144,7 @@
 
             if ($subpanel_def->isCollection()) {
                 $thepanel = $subpanel_def->get_header_panel_def();
-            }
-            else {
+            } else {
                 $thepanel = $subpanel_def;
             }
 
@@ -212,15 +210,13 @@
 
                         if (!isset($count)) {
                             $count = 0;
-                        }
-                        else {
+                        } else {
                             $count++;
                         }
 
                         if ($col_count == 0 || $column_name == 'name') {
                             $footable = 'data-toggle="true"';
-                        }
-                        else {
+                        } else {
                             $footable = 'data-hide="phone"';
                             if ($col_count > 2) {
                                 $footable = 'data-hide="phone,phonelandscape"';
@@ -230,8 +226,7 @@
                             }
                         }
 
-                    }
-                    else {
+                    } else {
                         $buttons = true;
                     }
                 }
@@ -272,8 +267,7 @@
             $subpanel_list = array();
             if ($subpanel_def->isCollection()) {
                 $subpanel_list = $subpanel_def->sub_subpanels;
-            }
-            else {
+            } else {
                 $subpanel_list[] = $subpanel_def;
             }
 
@@ -313,8 +307,7 @@
                 if (isset($processed_ids[$aItem->id])) {
                     continue;
 
-                }
-                else {
+                } else {
                     $processed_ids[$aItem->id] = 1;
                 }
 
@@ -325,8 +318,7 @@
                 if ($this->shouldProcess) {
                     if ($aItem->ACLAccess('EditView')) {
                         $widget_contents[$aVal][0] = "<input type='checkbox' class='checkbox' name='mass[]' value='" . $fields['ID'] . "' />";
-                    }
-                    else {
+                    } else {
                         $widget_contents[$aVal][0] = '';
                     }
 //                    if ($aItem->ACLAccess('DetailView')) {
@@ -353,8 +345,7 @@
                 //the sub-panel and panel in the bean being processed.
                 if ($subpanel_def->isCollection()) {
                     $thepanel = $subpanel_def->sub_subpanels[$aItem->panel_name];
-                }
-                else {
+                } else {
                     $thepanel = $subpanel_def;
                 }
 
@@ -368,8 +359,7 @@
                 global $current_user;
                 if (is_admin($current_user)) {
                     $aclaccess_is_owner = true;
-                }
-                else {
+                } else {
                     $aclaccess_is_owner = $aItem->isOwner($current_user->id);
                 }
 
@@ -410,8 +400,7 @@
                         $count++;
                         $widget_contents[$aVal][$field_name] = '&nbsp;';
 
-                    }
-                    else {
+                    } else {
                         if ($usage != 'query_only') {
                             $list_field['name'] = $field_name;
 
@@ -422,15 +411,13 @@
                                 $list_field['owner_id'] = $aItem->$owner_field;
                                 $list_field['owner_module'] = $aItem->$module_field;
 
-                            }
-                            else {
+                            } else {
                                 $list_field['owner_id'] = false;
                                 $list_field['owner_module'] = false;
                             }
                             if (isset($list_field['alias'])) {
                                 $list_field['name'] = $list_field['alias'];
-                            }
-                            else {
+                            } else {
                                 $list_field['name'] = $field_name;
                             }
                             $list_field['fields'] = $fields;
@@ -448,15 +435,13 @@
                                 if (isset($vardef['type'])) {
                                     $fieldType = isset($vardef['custom_type']) ? $vardef['custom_type'] : $vardef['type'];
                                     $tmpField = SugarFieldHandler::getSugarField($fieldType, true);
-                                }
-                                else {
+                                } else {
                                     $tmpField = null;
                                 }
 
                                 if ($tmpField != null) {
                                     $widget_contents[$aVal][$field_name] = SugarFieldHandler::displaySmarty($list_field['fields'], $vardef, 'ListView', $list_field);
-                                }
-                                else {
+                                } else {
                                     // No SugarField for this particular type
                                     // Use the old, icky, SugarWidget for now
                                     $widget_contents[$aVal][$field_name] = $layout_manager->widgetDisplay($list_field);
@@ -476,8 +461,7 @@
 
                                     }
                                     $widget_contents[$aVal][$field_name] = $layout_manager->widgetDisplay($list_field);
-                                }
-                                else {
+                                } else {
                                     if (isset($list_field['widget_class']) && $list_field['widget_class'] == 'SubPanelEmailLink') {
                                         $widget_contents[$aVal][$field_name] = $layout_manager->widgetDisplay($list_field);
                                     }
@@ -487,8 +471,7 @@
                                 if (empty($widget_contents)) {
                                     $widget_contents[$aVal][$field_name] = '&nbsp;';
                                 }
-                            }
-                            else {
+                            } else {
                                 // This handles the edit and remove buttons and icon widget
                                 if (isset($list_field['widget_class']) && $list_field['widget_class'] == "SubPanelIcon") {
                                     $count++;
@@ -497,17 +480,14 @@
                                     if (empty($widget_contents[$aVal][$field_name])) {
                                         $widget_contents[$aVal][$field_name] = '&nbsp;';
                                     }
-                                }
-                                elseif (preg_match("/button/i", $list_field['name'])) {
+                                } elseif (preg_match("/button/i", $list_field['name'])) {
                                     if ((($list_field['name'] === 'edit_button' && $field_acl['EditView']) || ($list_field['name'] === 'close_button' && $field_acl['EditView']) || ($list_field['name'] === 'remove_button' && $field_acl['Delete'])) && '' != ($_content = $layout_manager->widgetDisplay($list_field))) {
                                         $button_contents[$aVal][] = $_content;
                                         unset($_content);
-                                    }
-                                    else {
+                                    } else {
                                         $button_contents[$aVal][] = '';
                                     }
-                                }
-                                else {
+                                } else {
                                     $count++;
 //                                    $this->smartyTemplate->assign('CLASS', "");
                                     $widget_contents[$aVal][$field_name] = $layout_manager->widgetDisplay($list_field);
@@ -557,8 +537,7 @@
             // Determine the start location of the last page
             if ($row_count == 0) {
                 $number_pages = 0;
-            }
-            else {
+            } else {
                 $number_pages = floor(($row_count - 1) / $this->records_per_page);
             }
 
@@ -606,22 +585,18 @@
                 if (0 == $current_offset) {
                     $start_link = "<button type='button' name='listViewStartButton' title='{$this->local_app_strings['LNK_LIST_START']}' class='button' disabled>" . SugarThemeRegistry::current()->getImage("start_off", "aborder='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_START']) . "</button>";
                     $previous_link = "<button type='button' name='listViewPrevButton' title='{$this->local_app_strings['LNK_LIST_PREVIOUS']}' class='button' disabled>" . SugarThemeRegistry::current()->getImage("previous_off", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_PREVIOUS']) . "</button>";
-                }
-                else {
+                } else {
                     if ($this->multi_select_popup) {// nav links for multiselect popup, submit form to save checks.
                         $start_link = "<button type='button' class='button' name='listViewStartButton' title='{$this->local_app_strings['LNK_LIST_START']}' onClick='javascript:save_checks(0, \"{$moduleString}\");'>" . SugarThemeRegistry::current()->getImage("start", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_START']) . "</button>";
                         $previous_link = "<button type='button' class='button' name='listViewPrevButton' title='{$this->local_app_strings['LNK_LIST_PREVIOUS']}' onClick='javascript:save_checks($previous_offset, \"{$moduleString}\");'>" . SugarThemeRegistry::current()->getImage("previous", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_PREVIOUS']) . "</button>";
-                    }
-                    elseif ($this->shouldProcess) {
+                    } elseif ($this->shouldProcess) {
                         $start_link = "<button type='button' class='button' name='listViewStartButton' title='{$this->local_app_strings['LNK_LIST_START']}' onClick='location.href=\"$start_URL\"; sListView.save_checks(0, \"{$moduleString}\");'>" . SugarThemeRegistry::current()->getImage("start", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_START']) . "</button>";
                         $previous_link = "<button type='button' class='button' name='listViewPrevButton' title='{$this->local_app_strings['LNK_LIST_PREVIOUS']}' onClick='location.href=\"$previous_URL\"; sListView.save_checks($previous_offset, \"{$moduleString}\");'>" . SugarThemeRegistry::current()->getImage("previous", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_PREVIOUS']) . "</button>";
-                    }
-                    else {
+                    } else {
                         $onClick = '';
                         if (0 != preg_match('/javascript.*/', $start_URL)) {
                             $onClick = "\"$start_URL;\"";
-                        }
-                        else {
+                        } else {
                             $onClick = "'location.href=\"$start_URL\";'";
                         }
                         $start_link = "<button type='button' class='button' name='listViewStartButton' title='{$this->local_app_strings['LNK_LIST_START']}' onClick=" . $onClick . ">" . SugarThemeRegistry::current()->getImage("start", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_START']) . "</button>";
@@ -629,8 +604,7 @@
                         $onClick = '';
                         if (0 != preg_match('/javascript.*/', $previous_URL)) {
                             $onClick = "\"$previous_URL;\"";
-                        }
-                        else {
+                        } else {
                             $onClick = "'location.href=\"$previous_URL\";'";
                         }
                         $previous_link = "<button type='button' class='button' name='listViewPrevButton' title='{$this->local_app_strings['LNK_LIST_PREVIOUS']}' onClick=" . $onClick . ">" . SugarThemeRegistry::current()->getImage("previous", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_PREVIOUS']) . "</button>";
@@ -640,25 +614,21 @@
                 if ($last_offset <= $current_offset) {
                     $end_link = "<button type='button' name='listViewEndButton' title='{$this->local_app_strings['LNK_LIST_END']}' class='button' disabled>" . SugarThemeRegistry::current()->getImage("end_off", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_END']) . "</button>";
                     $next_link = "<button type='button' name='listViewNextButton' title='{$this->local_app_strings['LNK_LIST_NEXT']}' class='button' disabled>" . SugarThemeRegistry::current()->getImage("next_off", "aborder='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_NEXT']) . "</button>";
-                }
-                else {
+                } else {
                     if ($this->multi_select_popup) { // nav links for multiselect popup, submit form to save checks.
                         $end_link = "<button type='button' name='listViewEndButton' class='button' title='{$this->local_app_strings['LNK_LIST_END']}' onClick='javascript:save_checks($last_offset, \"{$moduleString}\");'>" . SugarThemeRegistry::current()->getImage("end", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_END']) . "</button>";
                         if (!empty($sugar_config['disable_count_query'])) {
                             $end_link = '';
                         }
                         $next_link = "<button type='button' name='listViewNextButton' title='{$this->local_app_strings['LNK_LIST_NEXT']}' class='button' onClick='javascript:save_checks($next_offset, \"{$moduleString}\");'>" . SugarThemeRegistry::current()->getImage("next", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_NEXT']) . "</button>";
-                    }
-                    elseif ($this->shouldProcess) {
+                    } elseif ($this->shouldProcess) {
                         $end_link = "<button type='button' name='listViewEndButton' class='button' title='{$this->local_app_strings['LNK_LIST_END']}' onClick='location.href=\"$end_URL\"; sListView.save_checks(\"end\", \"{$moduleString}\");'>" . SugarThemeRegistry::current()->getImage("end", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_END']) . "</button>";
                         $next_link = "<button type='button' name='listViewNextButton' class='button' title='{$this->local_app_strings['LNK_LIST_NEXT']}' onClick='location.href=\"$next_URL\"; sListView.save_checks($next_offset, \"{$moduleString}\");'>" . SugarThemeRegistry::current()->getImage("next", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_NEXT']) . "</button>";
-                    }
-                    else {
+                    } else {
                         $onClick = '';
                         if (0 != preg_match('/javascript.*/', $next_URL)) {
                             $onClick = "\"$next_URL;\"";
-                        }
-                        else {
+                        } else {
                             $onClick = "'location.href=\"$next_URL\";'";
                         }
                         $next_link = "<button type='button' name='listViewNextButton' class='button' title='{$this->local_app_strings['LNK_LIST_NEXT']}' onClick=" . $onClick . ">" . SugarThemeRegistry::current()->getImage("next", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_NEXT']) . "</button>";
@@ -666,8 +636,7 @@
                         $onClick = '';
                         if (0 != preg_match('/javascript.*/', $end_URL)) {
                             $onClick = "\"$end_URL;\"";
-                        }
-                        else {
+                        } else {
                             $onClick = "'location.href=\"$end_URL\";'";
                         }
                         $end_link = "<button type='button' name='listViewEndButton' class='button' title='{$this->local_app_strings['LNK_LIST_END']}' onClick=" . $onClick . ">" . SugarThemeRegistry::current()->getImage("end", "border='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_END']) . "</button>";
@@ -705,8 +674,7 @@
                         $this->show_plus = true;
                         $total = $pageTotal;
                         $total_label = $total . '+';
-                    }
-                    else {
+                    } else {
                         $this->show_plus = false;
                         $total_label = $total;
                     }
@@ -722,8 +690,7 @@
                         'class' => 'clickMenu selectmenu', 'id' => 'selectLink', 'buttons' => $menuItems, 'flat' => false,
                     ), $this->smartyTemplate);
 
-                }
-                else {
+                } else {
                     $select_link = "&nbsp;";
                 }
 
@@ -731,8 +698,7 @@
 
                 if ($this->show_delete_button) {
                     $delete_link = '<input class="button" type="button" id="delete_button" name="Delete" value="' . $this->local_app_strings['LBL_DELETE_BUTTON_LABEL'] . '" onclick="return sListView.send_mass_update(\'selected\',\'' . $this->local_app_strings['LBL_LISTVIEW_NO_SELECTED'] . '\', 1)">';
-                }
-                else {
+                } else {
                     $delete_link = '&nbsp;';
                 }
 
@@ -773,8 +739,7 @@
                     }
                     $export_link = "&nbsp;";
                     $merge_link = "&nbsp;";
-                }
-                elseif ($_REQUEST['module'] != "Accounts" && $_REQUEST['module'] != "Cases" && $_REQUEST['module'] != "Contacts" && $_REQUEST['module'] != "Leads" && $_REQUEST['module'] != "Opportunities") {
+                } elseif ($_REQUEST['module'] != "Accounts" && $_REQUEST['module'] != "Cases" && $_REQUEST['module'] != "Contacts" && $_REQUEST['module'] != "Leads" && $_REQUEST['module'] != "Opportunities") {
                     $merge_link = "&nbsp;";
                 }
 
@@ -798,20 +763,17 @@
                         //attempt to get the query to recreate this subpanel
                         if (!empty($this->response)) {
                             $response =& $this->response;
-                        }
-                        else {
+                        } else {
                             $response = SugarBean::get_union_related_list($sugarbean, $this->sortby, $this->sort_order, $this->query_where, $current_offset, -1, $this->records_per_page, $this->query_limit, $subpanel_def);
                             $this->response = $response;
                         }
                         //if query is present, then pass it in as parameter
                         if (isset($response['query']) && !empty($response['query'])) {
                             $html_text .= $subpanelTiles->get_buttons($subpanel_def, $response['query']);
-                        }
-                        else {
+                        } else {
                             $html_text .= $subpanelTiles->get_buttons($subpanel_def);
                         }
-                    }
-                    else {
+                    } else {
                         $html_text .= "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr><td align=\"left\"  nowrap>$select_link&nbsp;$export_link&nbsp;$delete_link&nbsp;$selected_objects_span";
                     }
                     $html_text .= "</td>\n<td nowrap align=\"right\">" . $start_link . "&nbsp;&nbsp;" . $previous_link . "&nbsp;&nbsp;<span class='pageNumbers'>(" . $start_record . " - " . $end_record . " " . $this->local_app_strings['LBL_LIST_OF'] . " " . $row_count . ")</span>&nbsp;&nbsp;" . $next_link . "&nbsp;&nbsp;" . $end_link . "</td></tr></table>\n";
@@ -862,12 +824,10 @@
 
                     if ($this->base_URL == "/index.php") {
                         $this->base_URL .= "?";
-                    }
-                    else {
+                    } else {
                         if ($fullRequestString == substr($this->baseURL, '-' . strlen($fullRequestString))) {
                             $this->base_URL = preg_replace("/&" . $key . "\=.*/", "", $this->base_URL);
-                        }
-                        else {
+                        } else {
                             $this->base_URL = preg_replace("/&" . $key . "\=.*?&/", "&", $this->base_URL);
                         }
                         $this->base_URL .= "&";
@@ -885,8 +845,7 @@
                 $this->smartyTemplate->assign("ORDER_BY", $sort_URL_base);
 
                 return $sort_URL_base;
-            }
-            else {
+            } else {
                 return '';
             }
         }

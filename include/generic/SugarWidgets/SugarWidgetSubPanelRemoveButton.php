@@ -106,8 +106,9 @@ class SugarWidgetSubPanelRemoveButton extends SugarWidgetField
 
 		$icon_remove_text = $app_strings['LBL_ID_FF_REMOVE'];
 		
-         if($linked_field == 'get_emails_by_assign_or_link')
-            $linked_field = 'emails';
+         if($linked_field == 'get_emails_by_assign_or_link') {
+                     $linked_field = 'emails';
+         }
 		//based on listview since that lets you select records
 		if($layout_def['ListView'] && !$hideremove) {
             $retStr = "<a href=\"javascript:sub_p_rem('$subpanel', '$linked_field'" 
@@ -118,7 +119,7 @@ class SugarWidgetSubPanelRemoveButton extends SugarWidgetField
 			. ">$icon_remove_text</a>";
         return $retStr;
             
-		}else{
+		} else{
 			return '';
 		}
 	}

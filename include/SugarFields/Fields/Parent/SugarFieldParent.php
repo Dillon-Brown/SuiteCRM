@@ -45,7 +45,7 @@ class SugarFieldParent extends SugarFieldRelate {
 		$nolink = array('Users', 'Teams');
 		if(in_array($vardef['module'], $nolink)){
 			$this->ss->assign('nolink', true);
-		}else{
+		} else{
 			$this->ss->assign('nolink', false);
 		}
         $this->setup($parentFieldArray, $vardef, $displayParams, $tabindex);

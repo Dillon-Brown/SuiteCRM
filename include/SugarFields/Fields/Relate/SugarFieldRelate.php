@@ -45,7 +45,7 @@ class SugarFieldRelate extends SugarFieldBase {
         $nolink = array('Users', 'Teams');
         if(in_array($vardef['module'], $nolink)){
             $this->ss->assign('nolink', true);
-        }else{
+        } else{
             $this->ss->assign('nolink', false);
         }
         $this->setup($parentFieldArray, $vardef, $displayParams, $tabindex);
@@ -262,16 +262,16 @@ class SugarFieldRelate extends SugarFieldBase {
             if ( !isset($temp[1]) ) {
                 $names['f'] = '';
                 $names['l'] = $temp[0];
-            }
-            elseif ( !empty($temp) ) {
+            } elseif ( !empty($temp) ) {
                 $names['f'] = $temp[0];
                 $names['l'] = $temp[1];
             }
             for($i=0;$i<strlen($default_locale_name_format);$i++){
         	    $new_field .= array_key_exists($default_locale_name_format{$i}, $names) ? $names[$default_locale_name_format{$i}] : $default_locale_name_format{$i};
             }
+    	} else {
+    	    $new_field = $rawField;
     	}
-    	else  $new_field = $rawField;
 
         return $new_field;
     }
@@ -286,8 +286,9 @@ class SugarFieldRelate extends SugarFieldBase {
         ImportFieldSanitize $settings
         )
     {
-        if ( !isset($vardef['module']) )
-            return false;
+        if ( !isset($vardef['module']) ) {
+                    return false;
+        }
         $newbean = loadBean($vardef['module']);
 
         // Bug 38885 - If we are relating to the Users table on user_name, there's a good chance
@@ -304,8 +305,9 @@ class SugarFieldRelate extends SugarFieldBase {
         }
 
         // Bug 32869 - Assumed related field name is 'name' if it is not specified
-        if ( !isset($vardef['rname']) )
-            $vardef['rname'] = 'name';
+        if ( !isset($vardef['rname']) ) {
+                    $vardef['rname'] = 'name';
+        }
 
         // Bug 27046 - Validate field against type as it is in the related field
         $rvardef = $newbean->getFieldDefinition($vardef['rname']);
@@ -313,10 +315,11 @@ class SugarFieldRelate extends SugarFieldBase {
                 && method_exists($this,$rvardef['type']) ) {
             $fieldtype = $rvardef['type'];
             $returnValue = $settings->$fieldtype($value,$rvardef);
-            if ( !$returnValue )
-                return false;
-            else
-                $value = $returnValue;
+            if ( !$returnValue ) {
+                            return false;
+            } else {
+                            $value = $returnValue;
+            }
         }
 
         if ( isset($vardef['id_name']) ) {
@@ -325,8 +328,9 @@ class SugarFieldRelate extends SugarFieldBase {
             // Bug 24075 - clear out id field value if it is invalid
             if ( isset($focus->$idField) ) {
                 $checkfocus = loadBean($vardef['module']);
-                if ( $checkfocus && is_null($checkfocus->retrieve($focus->$idField)) )
-                    $focus->$idField = '';
+                if ( $checkfocus && is_null($checkfocus->retrieve($focus->$idField)) ) {
+                                    $focus->$idField = '';
+                }
             }
 
             // fixing bug #47722: Imports to Custom Relate Fields Do Not Work
@@ -343,10 +347,11 @@ class SugarFieldRelate extends SugarFieldBase {
                 // Bug 27562 - Check db_concat_fields first to see if the field name is a concatenation.
                 $relatedFieldDef = $newbean->getFieldDefinition($vardef['rname']);
                 if ( isset($relatedFieldDef['db_concat_fields'])
-                        && is_array($relatedFieldDef['db_concat_fields']) )
-                    $fieldName = $focus->db->concat($vardef['table'],$relatedFieldDef['db_concat_fields']);
-                else
-                    $fieldName = $vardef['rname'];
+                        && is_array($relatedFieldDef['db_concat_fields']) ) {
+                                    $fieldName = $focus->db->concat($vardef['table'],$relatedFieldDef['db_concat_fields']);
+                } else {
+                                    $fieldName = $vardef['rname'];
+                }
                 // lookup first record that matches in linked table
                 $query = "SELECT id
                             FROM {$vardef['table']}
@@ -355,14 +360,14 @@ class SugarFieldRelate extends SugarFieldBase {
 
                 $result = $focus->db->limitQuery($query,0,1,true, "Want only a single row");
                 if(!empty($result)){
-                    if ( $relaterow = $focus->db->fetchByAssoc($result) )
-                        $focus->$idField = $relaterow['id'];
-                    elseif ( !$settings->addRelatedBean
+                    if ( $relaterow = $focus->db->fetchByAssoc($result) ) {
+                                            $focus->$idField = $relaterow['id'];
+                    } elseif ( !$settings->addRelatedBean
                             || ( $newbean->bean_implements('ACL') && !$newbean->ACLAccess('save') )
                             || ( in_array($newbean->module_dir,array('Teams','Users')) )
-                            )
-                        return false;
-                    else {
+                            ) {
+                                            return false;
+                    } else {
                         // add this as a new record in that bean, then relate
                         if ( isset($relatedFieldDef['db_concat_fields'])
                                 && is_array($relatedFieldDef['db_concat_fields']) ) {
@@ -370,14 +375,16 @@ class SugarFieldRelate extends SugarFieldBase {
                         } else {
                             $newbean->$fieldName = $value;
                         }
-                        if ( !isset($focus->assigned_user_id) || $focus->assigned_user_id == '' )
-                            $newbean->assigned_user_id = $GLOBALS['current_user']->id;
-                        else
-                            $newbean->assigned_user_id = $focus->assigned_user_id;
-                        if ( !isset($focus->modified_user_id) || $focus->modified_user_id == '' )
-                            $newbean->modified_user_id = $GLOBALS['current_user']->id;
-                        else
-                            $newbean->modified_user_id = $focus->modified_user_id;
+                        if ( !isset($focus->assigned_user_id) || $focus->assigned_user_id == '' ) {
+                                                    $newbean->assigned_user_id = $GLOBALS['current_user']->id;
+                        } else {
+                                                    $newbean->assigned_user_id = $focus->assigned_user_id;
+                        }
+                        if ( !isset($focus->modified_user_id) || $focus->modified_user_id == '' ) {
+                                                    $newbean->modified_user_id = $GLOBALS['current_user']->id;
+                        } else {
+                                                    $newbean->modified_user_id = $focus->modified_user_id;
+                        }
 
                         // populate fields from the parent bean to the child bean
                         $focus->populateRelatedBean($newbean);

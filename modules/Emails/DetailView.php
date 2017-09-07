@@ -1,5 +1,7 @@
 <?php
-if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if(!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -174,16 +176,14 @@ if (isset($_REQUEST['return_id'])) { // coming from a subpanel, return_module|ac
 	if (isset($_REQUEST['return_module'])){
         $xtpl->assign('RETURN_MODULE', $_REQUEST['return_module']);
         $ret_mod = $_REQUEST['return_module'];
-    }
-	else {
+    } else {
         $xtpl->assign('RETURN_MODULE', 'Emails');
         $ret_mod = 'Emails';
     }
 	if (isset($_REQUEST['return_action'])){
         $xtpl->assign('RETURN_ACTION', $_REQUEST['return_action']);
         $ret_action = $_REQUEST['return_action'];
-    }
-	else {
+    } else {
         $xtpl->assign('RETURN_ACTION', 'DetailView');
         $ret_action = 'DetailView';
     }
@@ -461,8 +461,9 @@ if(is_admin($GLOBALS['current_user']) && $_REQUEST['module'] != 'DynamicLayout' 
 	$xtpl->assign("ADMIN_EDIT","<a href='index.php?action=index&module=DynamicLayout&from_action=".$_REQUEST['action'] ."&from_module=".$_REQUEST['module'] ."&record=".$_REQUEST['record']. "'>".SugarThemeRegistry::current()->getImage("EditLayout","border='0' align='bottom'",null,null,'.gif',$mod_strings['LBL_EDIT_LAYOUT'])."</a>");
 }
 
-if(isset($_REQUEST['offset']) && !empty($_REQUEST['offset'])) { $offset = $_REQUEST['offset']; }
-else $offset = 1;
+if(isset($_REQUEST['offset']) && !empty($_REQUEST['offset'])) { $offset = $_REQUEST['offset']; } else {
+    $offset = 1;
+}
 $detailView->processListNavigation($xtpl, "EMAIL", $offset, false);
 
 
@@ -494,8 +495,9 @@ if(! isset($notes_list)) {
 $attachments = '';
 for($i=0; $i<count($notes_list); $i++) {
 	$the_note = $notes_list[$i];
-	if(!empty($the_note->filename))
-    	$attachments .= "<a href=\"index.php?entryPoint=download&id=".$the_note->id."&type=Notes\">".$the_note->name."</a><br />";
+	if(!empty($the_note->filename)) {
+	    	$attachments .= "<a href=\"index.php?entryPoint=download&id=".$the_note->id."&type=Notes\">".$the_note->name."</a><br />";
+	}
     $focus->cid2Link($the_note->id, $the_note->file_mime_type);
 }
 

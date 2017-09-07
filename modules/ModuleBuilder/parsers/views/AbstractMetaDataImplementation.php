@@ -1,5 +1,7 @@
 <?php
-if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if(!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -187,29 +189,32 @@ abstract class AbstractMetaDataImplementation
 			}	
 			if(isset($defs[PopupMetaDataParser::$defsMap[$view]])){
 				$defs = $defs[PopupMetaDataParser::$defsMap[$view]];
-			}else{
+			} else{
 				//If there are no defs for this view, grab them from the non-popup view
 				if ($view == MB_POPUPLIST)
 				{
 					$this->_view = MB_LISTVIEW;
         			$defs = $this->_loadFromFile ( $this->getFileName ( MB_LISTVIEW, $this->_moduleName, MB_CUSTOMMETADATALOCATION ) ) ;
-	        		if ($defs == null)
-	        			$defs = $this->_loadFromFile ( $this->getFileName ( MB_LISTVIEW, $this->_moduleName, MB_BASEMETADATALOCATION ) ) ;
+	        		if ($defs == null) {
+	        			        			$defs = $this->_loadFromFile ( $this->getFileName ( MB_LISTVIEW, $this->_moduleName, MB_BASEMETADATALOCATION ) ) ;
+	        		}
         			$this->_view = $view;
-				} 
-				else if ($view == MB_POPUPSEARCH)
+				} else if ($view == MB_POPUPSEARCH)
 				{
 					$this->_view = MB_ADVANCEDSEARCH;
         			$defs = $this->_loadFromFile ( $this->getFileName ( MB_ADVANCEDSEARCH, $this->_moduleName, MB_CUSTOMMETADATALOCATION ) ) ;
-	        		if ($defs == null)
-	        			$defs = $this->_loadFromFile ( $this->getFileName ( MB_ADVANCEDSEARCH, $this->_moduleName, MB_BASEMETADATALOCATION ) ) ;
+	        		if ($defs == null) {
+	        			        			$defs = $this->_loadFromFile ( $this->getFileName ( MB_ADVANCEDSEARCH, $this->_moduleName, MB_BASEMETADATALOCATION ) ) ;
+	        		}
 	        		
-	        		if (isset($defs['layout']) && isset($defs['layout']['advanced_search']))
-	        			$defs = $defs['layout']['advanced_search'];
+	        		if (isset($defs['layout']) && isset($defs['layout']['advanced_search'])) {
+	        			        			$defs = $defs['layout']['advanced_search'];
+	        		}
 	        		$this->_view = $view;
 				}
-				if ($defs == null)
-					$defs = array();
+				if ($defs == null) {
+									$defs = array();
+				}
 			}
 		}
 		
@@ -230,8 +235,9 @@ abstract class AbstractMetaDataImplementation
 	 */
 	protected function _saveToFile ($filename , $defs , $useVariables = true, $forPopup = false )
 	{
-	    if(file_exists($filename))
-	        unlink($filename);
+	    if(file_exists($filename)) {
+	    	        unlink($filename);
+	    }
 	    
 	    mkdir_recursive ( dirname ( $filename ) ) ;
 
@@ -251,14 +257,15 @@ abstract class AbstractMetaDataImplementation
 		$viewVariable = $this->_fileVariables [ $this->_view ] ;
 		if($forPopup){
 			$out .= "\$$viewVariable = \n" . var_export_helper ( $defs ) ;
-		}else{
+		} else{
 		$out .= "\$$viewVariable [".(($useVariables) ? '$module_name' : "'$this->_moduleName'")."] = \n" . var_export_helper ( $defs ) ;
 		}
 		
 		$out .= ";\n?>\n" ;
 
-		if ( sugar_file_put_contents ( $filename, $out ) === false)
-			$GLOBALS [ 'log' ]->fatal ( get_class($this).": could not write new viewdef file " . $filename ) ;
+		if ( sugar_file_put_contents ( $filename, $out ) === false) {
+					$GLOBALS [ 'log' ]->fatal ( get_class($this).": could not write new viewdef file " . $filename ) ;
+		}
 	}
 
 	/*
@@ -280,23 +287,27 @@ abstract class AbstractMetaDataImplementation
 		foreach ( $layout as $key => $def )
 		{
 
-			if ( (string) $key == 'templateMeta' )
-			continue ;
+			if ( (string) $key == 'templateMeta' ) {
+						continue ;
+			}
 
 			if ( is_array ( $def ) )
 			{
-				if ( isset ( $def [ 'name' ] ) && ! is_array ( $def [ 'name' ] ) ) // found a 'name' definition, that is not the definition of a field called name :)
+				if ( isset ( $def [ 'name' ] ) && ! is_array ( $def [ 'name' ] ) ) {
+				    // found a 'name' definition, that is not the definition of a field called name :)
 				{
 					// if this is a module field, then merge in the definition, otherwise this is a new field defined in the layout, so just take the definition
 					$fielddefs [ $def [ 'name'] ] = ( isset ($fielddefs [ $def [ 'name' ] ] ) ) ? array_merge ( $fielddefs [ $def [ 'name' ] ], $def ) : $def ;
 				}
-				else if ( isset ( $def [ 'label' ] ) || isset ( $def [ 'vname' ] ) || isset($def ['widget_class']) ) // dealing with a listlayout which lacks 'name' keys, but which does have 'label' keys
+				} else if ( isset ( $def [ 'label' ] ) || isset ( $def [ 'vname' ] ) || isset($def ['widget_class']) ) {
+				    // dealing with a listlayout which lacks 'name' keys, but which does have 'label' keys
 				{
 					$key = strtolower ( $key ) ;
-					$fielddefs [ $key ] = ( isset ($fielddefs [ $key ] ) ) ? array_merge ( $fielddefs [ $key ], $def ) : $def ;
 				}
-				else
-				$this->_mergeFielddefs( $fielddefs , $def ) ;
+					$fielddefs [ $key ] = ( isset ($fielddefs [ $key ] ) ) ? array_merge ( $fielddefs [ $key ], $def ) : $def ;
+				} else {
+								$this->_mergeFielddefs( $fielddefs , $def ) ;
+				}
 			}
 		}
 

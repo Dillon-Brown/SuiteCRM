@@ -85,13 +85,13 @@ if($bean_name == 'Team')
  {
  	$focus->retrieve($record);
  	$focus->remove_user_from_team($linked_id);
- }
- else
+ } else
  {
  	// cut it off:
  	$focus->load_relationship($linked_field);
- 	if($focus->$linked_field->_relationship->relationship_name == 'quotes_contacts_shipto')
- 		unset($focus->$linked_field->_relationship->relationship_role_column);
+ 	if($focus->$linked_field->_relationship->relationship_name == 'quotes_contacts_shipto') {
+ 	 		unset($focus->$linked_field->_relationship->relationship_role_column);
+ 	}
  	$focus->$linked_field->delete($record,$linked_id);
  }
  if ($bean_name == 'Campaign' and $linked_field=='prospectlists' ) {

@@ -1,5 +1,7 @@
 <?php
-if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if(!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -108,8 +110,7 @@ class SugarFolder {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if(isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
-        }
-        else {
+        } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
@@ -550,9 +551,10 @@ ENDQ;
 			$a['selected'] = (in_array($a['id'], $subscriptions)) ? true : false;
             $a['origName'] = $a['name'];
 
-			if($a['is_group'] == 1)
-				if ($a['deleted'] != 1)
+			if($a['is_group'] == 1) {
+							if ($a['deleted'] != 1)
 					$grp[] = $a;
+			}
 		}
 
 		return $grp;
@@ -574,8 +576,9 @@ ENDQ;
 		foreach($folders as $a) {
 			$a['selected'] = (in_array($a['id'], $subscriptions)) ? true : false;
             $a['origName'] = $a['name'];
-            if( isset($a['dynamic_query']) )
-                unset($a['dynamic_query']);
+            if( isset($a['dynamic_query']) ) {
+                            unset($a['dynamic_query']);
+            }
 			if($a['is_group'] == 1) {
 				$grp[] = $a;
 			} else {
@@ -673,8 +676,9 @@ ENDQ;
 		}
 
 		foreach($folders as $a) {
-			if ($a['deleted'] == 1)
-				continue;
+			if ($a['deleted'] == 1) {
+							continue;
+			}
 			$label = ($a['name'] == 'My Email' ? $mod_strings['LNK_MY_INBOX'] : $a['name']);
 
 			$unseen = $this->getCountNewItems($a['id'], array('field' => 'status', 'value' => 'unread'), $a);
@@ -748,8 +752,9 @@ ENDQ;
 
 		if(!empty($folderNode->nodes)) {
 			foreach($folderNode->nodes as $node) {
-				if(in_array($node->_properties['id'], $subscriptions))
-					$metaNode['children'][] = $this->buildTreeNodeRefresh($node, $subscriptions);
+				if(in_array($node->_properties['id'], $subscriptions)) {
+									$metaNode['children'][] = $this->buildTreeNodeRefresh($node, $subscriptions);
+				}
 			}
 		}
 		return $metaNode;
@@ -913,8 +918,7 @@ ENDQ;
 			// if parent_id is set, update parent's has_child flag
 			$q3 = "UPDATE folders SET has_child = 1 WHERE id = '{$this->parent_folder}'";
 			$r3 = $this->db->query($q3);
-		}
-		else {
+		} else {
 			$q = "UPDATE folders SET name = '{$this->name}', parent_folder = '{$this->parent_folder}', dynamic_query = '{$this->dynamic_query}', assign_to_id = '{$this->assign_to_id}', " .
 				"modified_by = '{$current_user->id}' WHERE id = '{$this->id}'";
 		}

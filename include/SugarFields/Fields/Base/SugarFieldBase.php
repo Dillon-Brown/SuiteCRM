@@ -58,8 +58,7 @@ class SugarFieldBase {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if(isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
-        }
-        else {
+        } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($type);
@@ -148,8 +147,7 @@ class SugarFieldBase {
         if ($this->type != 'Enum' && $this->type != 'Radioenum')
         {
             $parentFieldArray = $this->setupFieldArray($parentFieldArray, $vardef);
-        }
-		else
+        } else
         {
         	$vardef['name'] = strtoupper($vardef['name']);
         }
@@ -208,15 +206,18 @@ class SugarFieldBase {
 
 
     function getSearchViewSmarty($parentFieldArray, $vardef, $displayParams, $tabindex) {
-		if(!empty($vardef['auto_increment']))$vardef['len']=255;
+		if(!empty($vardef['auto_increment'])) {
+		    $vardef['len']=255;
+		}
     	return $this->getSmartyView($parentFieldArray, $vardef, $displayParams, $tabindex, 'EditView');
     }
 
     function getPopupViewSmarty($parentFieldArray, $vardef, $displayParams, $tabindex){
-    	 if (is_array($displayParams) && !isset($displayParams['formName']))
-		     $displayParams['formName'] = 'popup_query_form';
-	     else if (empty($displayParams))
-		     $displayParams = array('formName' => 'popup_query_form');
+    	 if (is_array($displayParams) && !isset($displayParams['formName'])) {
+    	 		     $displayParams['formName'] = 'popup_query_form';
+    	 } else if (empty($displayParams)) {
+	     		     $displayParams = array('formName' => 'popup_query_form');
+	     }
 		 return $this->getSearchViewSmarty($parentFieldArray, $vardef, $displayParams, $tabindex);
     }
 
@@ -340,8 +341,7 @@ class SugarFieldBase {
         {
             $this->ss->left_delimiter = '{{';
             $this->ss->right_delimiter = '}}';
-        }
-        else
+        } else
         {
             $this->ss->left_delimiter = '{';
             $this->ss->right_delimiter = '}';
@@ -480,8 +480,7 @@ class SugarFieldBase {
          if ( isset($params[$prefix.$field]) ) {
              if(isset($properties['len']) && isset($properties['type']) && $this->isTrimmable($properties['type'])){
                  $bean->$field = trim($this->unformatField($params[$prefix.$field], $properties));
-             }
-             else {
+             } else {
                  $bean->$field = $this->unformatField($params[$prefix.$field], $properties);
          	 }
          }

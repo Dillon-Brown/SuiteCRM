@@ -1,5 +1,7 @@
 <?php
-if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if(!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -763,8 +765,9 @@ class InboundEmail extends SugarBean {
 
 			$tmp = '';
 			foreach($uids as $uid) {
-				if(!empty($tmp))
-					$tmp .= ", ";
+				if(!empty($tmp)) {
+									$tmp .= ", ";
+				}
 				$tmp .= "{$uid}";
 			}
 			$GLOBALS['log']->info("INBOUNDEMAIL-CACHE: filter UIDs: [ {$tmp} ]");
@@ -772,8 +775,9 @@ class InboundEmail extends SugarBean {
 			$cols = "";
 
 			foreach($this->overview->fieldDefs as $colDef) {
-				if(!empty($cols))
-					$cols .= ",";
+				if(!empty($cols)) {
+									$cols .= ",";
+				}
 
 				$cols .= "{$colDef['name']}";
 			}
@@ -867,8 +871,9 @@ class InboundEmail extends SugarBean {
 		if(!empty($update)) {
 			$cols = "";
 			foreach($this->overview->fieldDefs as $colDef) {
-				if(!empty($cols))
-					$cols .= ",";
+				if(!empty($cols)) {
+									$cols .= ",";
+				}
 
 				$cols .= "{$colDef['name']}";
 			}
@@ -898,8 +903,7 @@ class InboundEmail extends SugarBean {
                             if (isset($overview->$fieldName))
                             {
                                 $value = $this->db->quoted($overview->$fieldName);
-                            }
-                            else
+                            } else
                             {
                                 $value = $this->db->quoted($value);
                             }
@@ -2210,8 +2214,9 @@ class InboundEmail extends SugarBean {
 		$this->mailbox_type = 'pick'; // forcing this
 
 
-		if(isset($_REQUEST['ssl']) && $_REQUEST['ssl'] == 1) { $useSsl = true; }
-		else $useSsl = false;
+		if(isset($_REQUEST['ssl']) && $_REQUEST['ssl'] == 1) { $useSsl = true; } else {
+		    $useSsl = false;
+		}
 		$this->service = '::::::::::';
 
 		if($forceSave) {
@@ -2271,8 +2276,9 @@ class InboundEmail extends SugarBean {
 
 			//If this is the first personal account the user has setup mark it as default for them.
 			$currentIECount = $this->getUserPersonalAccountCount($focusUser);
-			if($currentIECount == 1)
-			    $this->setUsersDefaultOutboundServerId($focusUser, $ieId);
+			if($currentIECount == 1) {
+						    $this->setUsersDefaultOutboundServerId($focusUser, $ieId);
+			}
 
 			return true;
 		} else {
@@ -2394,8 +2400,9 @@ class InboundEmail extends SugarBean {
 		}
 
 		// in case we flip from IMAP to POP3
-		if($this->protocol == 'pop3')
-		  $this->mailbox = 'INBOX';
+		if($this->protocol == 'pop3') {
+				  $this->mailbox = 'INBOX';
+		}
 
 		//If user has selected multiple mailboxes, we only need to test the first mailbox for the connection string.
 		$a_mailbox = explode(",", $this->mailbox);
@@ -2408,8 +2415,7 @@ class InboundEmail extends SugarBean {
 				$returnService[$k] = 'foo'.$service;
 				$serviceArr[$k] = '{'.$this->server_url.':'.$this->port.'/service='.$this->protocol.$service.'}'.$tmpMailbox;
 			}
-		}
-		else
+		} else
 		{
 			foreach($nonSsl as $k => $service)
 			{
@@ -2454,8 +2460,7 @@ class InboundEmail extends SugarBean {
 					$GLOBALS['log']->debug($l.': I-E found good connection but with warnings ['.$serviceTest.'] Errors:' . $errors);
 					$retArray['good'][$k] = $returnService[$k];
 					$foundGoodConnection = true;
-				}
-				else {
+				} else {
 					$GLOBALS['log']->debug($l.': I-E failed using ['.$serviceTest.'] - error: '.$errors);
 					$retArray['err'][$k] = $errors;
 					$retArray['bad'][$k] = $serviceTest;
@@ -2481,7 +2486,9 @@ class InboundEmail extends SugarBean {
 					$this->setSessionInboundDelimiterString($this->server_url, $this->email_user, $this->port, $this->protocol, $delimiter);
 				} // if
 
-				if(!imap_close($this->conn)) $GLOBALS['log']->debug('imap_close() failed!');
+				if(!imap_close($this->conn)) {
+				    $GLOBALS['log']->debug('imap_close() failed!');
+				}
 			}
 
 			$GLOBALS['log']->debug($l.': I-E clearing error and alert stacks.');
@@ -2988,7 +2995,9 @@ class InboundEmail extends SugarBean {
 		}
 
 		foreach($exBc as $step) {
-		    if(empty($parts)) return false;
+		    if(empty($parts)) {
+		        return false;
+		    }
 		    $res = $parts[$step-1]; // MIME starts with 1, array starts with 0
 		    if(!empty($res->parts)) {
 		        $parts = $res->parts;
@@ -3073,21 +3082,24 @@ class InboundEmail extends SugarBean {
 	 */
 	function addBreadCrumbOffset($bc, $offset)
 	{
-	    if( (empty($bc) || is_null($bc)) && !empty($offset) )
-	       return $offset;
+	    if( (empty($bc) || is_null($bc)) && !empty($offset) ) {
+	    	       return $offset;
+	    }
 
 	    $a_bc = explode(".", $bc);
 	    $a_offset = explode(".",$offset);
-	    if(count($a_bc) < count($a_offset))
-	       $a_bc = array_merge($a_bc,array_fill( count($a_bc), count($a_offset) - count($a_bc), 0));
+	    if(count($a_bc) < count($a_offset)) {
+	    	       $a_bc = array_merge($a_bc,array_fill( count($a_bc), count($a_offset) - count($a_bc), 0));
+	    }
 
 	    $results = array();
 	    for($i=0;$i < count($a_bc); $i++)
 	    {
-	        if(isset($a_offset[$i]))
-	           $results[] = $a_bc[$i] + $a_offset[$i];
-	        else
-	           $results[] = $a_bc[$i];
+	        if(isset($a_offset[$i])) {
+	        	           $results[] = $a_bc[$i] + $a_offset[$i];
+	        } else {
+	        	           $results[] = $a_bc[$i];
+	        }
 	    }
 	    return implode(".", $results);
 	}
@@ -3105,8 +3117,9 @@ class InboundEmail extends SugarBean {
 		$msgPart = '';
 		$bc = $this->buildBreadCrumbs($structure->parts, $type);
 		//Add an offset if specified
-		if(!empty($bcOffset))
-            $bc = $this->addBreadCrumbOffset($bc, $bcOffset);
+		if(!empty($bcOffset)) {
+		            $bc = $this->addBreadCrumbOffset($bc, $bcOffset);
+		}
 
 		if(!empty($bc)) { // multi-part
 			// HUGE difference between PLAIN and HTML
@@ -3119,12 +3132,14 @@ class InboundEmail extends SugarBean {
 				// construct inline HTML/Rich msg
 				foreach($bcArray as $bcArryKey => $bcArr) {
 					foreach($bcArr as $type => $bcTrail) {
-						if($type == 'html')
-						    $msgPartRaw .= $this->getMessageTextFromSingleMimePart($msgNo,$bcTrail,$structure);
-						 else {
+						if($type == 'html') {
+												    $msgPartRaw .= $this->getMessageTextFromSingleMimePart($msgNo,$bcTrail,$structure);
+						} else {
 							// deal with inline image
 							$part = $this->getPartByPath($bcTrail, $structure->parts);
-							if(empty($part) || empty($part->id)) continue;
+							if(empty($part) || empty($part->id)) {
+							    continue;
+							}
 							$partid = substr($part->id, 1, -1); // strip <> around
 							if(isset($this->inlineImages[$partid])) {
 								$imageName = $this->inlineImages[$partid];
@@ -3504,7 +3519,9 @@ class InboundEmail extends SugarBean {
                             break;
                         }
                     }
-                    if(empty($fname)) continue;
+                    if(empty($fname)) {
+                        continue;
+                    }
 
 					// we assume that named parts are attachments too
                     $attach = $this->getNoteBeanForAttachment($emailId);
@@ -4088,8 +4105,9 @@ class InboundEmail extends SugarBean {
                 $mod = strtolower($email->parent_type);
                 $rel = array_key_exists($mod, $email->field_defs) ? $mod : $mod . "_activities_emails"; //Custom modules rel name
 
-                if(! $email->load_relationship($rel) )
-                    return FALSE;
+                if(! $email->load_relationship($rel) ) {
+                                    return FALSE;
+                }
                 $email->$rel->add($email->parent_id);
 	        }
 
@@ -4845,8 +4863,9 @@ eoq;
 	 */
 	function getUserPersonalAccountCount($user = null)
 	{
-	    if($user == null)
-	       $user = $GLOBALS['current_user'];
+	    if($user == null) {
+	    	       $user = $GLOBALS['current_user'];
+	    }
 
 	    $query = "SELECT count(*) as c FROM inbound_email WHERE deleted=0 AND is_personal='1' AND group_id='{$user->id}' AND status='Active'";
 
@@ -4996,12 +5015,15 @@ eoq;
 		if(!empty($this->service)) {
 			$exServ = explode('::', $this->service);
 			$this->tls		= $exServ[0];
-			if ( isset($exServ[1]) )
-			    $this->ca		= $exServ[1];
-			if ( isset($exServ[2]) )
-			    $this->ssl		= $exServ[2];
-			if ( isset($exServ[3]) )
-			    $this->protocol	= $exServ[3];
+			if ( isset($exServ[1]) ) {
+						    $this->ca		= $exServ[1];
+			}
+			if ( isset($exServ[2]) ) {
+						    $this->ssl		= $exServ[2];
+			}
+			if ( isset($exServ[3]) ) {
+						    $this->protocol	= $exServ[3];
+			}
 		}
 	}
 
@@ -5031,7 +5053,9 @@ eoq;
 		}
 
 		global $current_user;
-		if(empty($user)) $user = $current_user;
+		if(empty($user)) {
+		    $user = $current_user;
+		}
 
 		$emailSettings = $current_user->getPreference('emailSettings', 'Emails');
 		$emailSettings = is_string($emailSettings) ? sugar_unserialize($emailSettings) : $emailSettings;
@@ -5322,16 +5346,15 @@ eoq;
 				$trashFolder = "INBOX.Trash";
 			}
 			$uidsToMove = implode('::;::', $uids);
-			if($this->moveEmails($this->id, $this->mailbox, $this->id, $trashFolder, $uidsToMove))
-				$GLOBALS['log']->debug("INBOUNDEMAIL: MoveEmail to {$trashFolder} successful.");
-			else {
+			if($this->moveEmails($this->id, $this->mailbox, $this->id, $trashFolder, $uidsToMove)) {
+							$GLOBALS['log']->debug("INBOUNDEMAIL: MoveEmail to {$trashFolder} successful.");
+			} else {
 				$GLOBALS['log']->debug("INBOUNDEMAIL: MoveEmail to {$trashFolder} FAILED - trying hard delete for message: $uid");
 				$uidsToDelete = implode(',', $uids);
 				imap_delete($this->conn, $uidsToDelete, FT_UID);
 				$return = true;
 			}
-		}
-        else {
+		} else {
             $msgnos = array();
         	foreach($uids as $uid) {
             	$msgnos[] = $this->getCorrectMessageNoForPop3($uid);
@@ -5344,9 +5367,9 @@ eoq;
 		if(!imap_expunge($this->conn)) {
             $GLOBALS['log']->debug("NOOP: could not expunge deleted email.");
             $return = false;
+         } else {
+                     $GLOBALS['log']->info("INBOUNDEMAIL: hard-deleted mail with MSgno's' [ {$msgnos} ]");
          }
-         else
-            $GLOBALS['log']->info("INBOUNDEMAIL: hard-deleted mail with MSgno's' [ {$msgnos} ]");
 
 		return $return;
 	}
@@ -5625,8 +5648,9 @@ eoq;
 		}
 
 		// if a MsgNo is passed in, convert to UID
-		if($isMsgNo)
-			$uid = imap_uid($this->conn, $uid);
+		if($isMsgNo) {
+					$uid = imap_uid($this->conn, $uid);
+		}
 
 		// meta object to allow quick retrieval for replies
 		$meta = array();
@@ -5801,10 +5825,11 @@ eoq;
 		global $current_user;
 
 		$sortPrefs = $current_user->getPreference('folderSortOrder', 'Emails');
-		if(!empty($sortPrefs))
-			$listPrefs = $sortPrefs;
-		else
-			$listPrefs = array();
+		if(!empty($sortPrefs)) {
+					$listPrefs = $sortPrefs;
+		} else {
+					$listPrefs = array();
+		}
 
 		if(isset($listPrefs[$this->id][$this->mailbox])) {
 			$currentNode = $listPrefs[$this->id][$this->mailbox];
@@ -5975,8 +6000,9 @@ eoq;
 	    foreach($usersList as $userObject)
 	    {
 	        $previousSubscriptions = sugar_unserialize(base64_decode($userObject->getPreference('showFolders', 'Emails',$userObject)));
-	        if($previousSubscriptions === FALSE)
-	            $previousSubscriptions = array();
+	        if($previousSubscriptions === FALSE) {
+	        	            $previousSubscriptions = array();
+	        }
 
 	        $previousSubscriptions[] = $this->id;
 
@@ -6376,7 +6402,7 @@ eoq;
                             {
                                 $repeats = 0;
                                 array_push($result, $v1['msgNo']);
-                            }else{
+                            } else{
                                 $repeats++;
                             }
                         }
@@ -6385,13 +6411,11 @@ eoq;
                             if($repeats >= $limit)
                             {
                                 break;
-                            }
-                            else
+                            } else
                             {
                                 $tmpMsgs = array_splice($tmpMsgs, -$repeats, $repeats);
                             }
-                        }
-                        else
+                        } else
                         {
                             $tmpMsgs = array();
                         }
@@ -6399,7 +6423,7 @@ eoq;
                 }
                 unset($msgNo);
             }
-        }catch(Exception $ex)
+        } catch(Exception $ex)
         {
             $GLOBALS['log']->fatal($ex->getMessage());
         }

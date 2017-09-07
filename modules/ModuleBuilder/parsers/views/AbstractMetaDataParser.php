@@ -1,5 +1,7 @@
 <?php
-if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if(!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -85,10 +87,12 @@ abstract class AbstractMetaDataParser
         {
             if (is_array($def [ 'studio' ]))
             {
-                if (!empty($view) && isset($def [ 'studio' ][$view]))
-                   return $def [ 'studio' ][$view] !== false && $def [ 'studio' ][$view] !== 'false' && $def [ 'studio' ][$view] !== 'hidden';
-                if (isset($def [ 'studio' ]['visible']))
-                   return $def [ 'studio' ]['visible'];
+                if (!empty($view) && isset($def [ 'studio' ][$view])) {
+                                   return $def [ 'studio' ][$view] !== false && $def [ 'studio' ][$view] !== 'false' && $def [ 'studio' ][$view] !== 'hidden';
+                }
+                if (isset($def [ 'studio' ]['visible'])) {
+                                   return $def [ 'studio' ]['visible'];
+                }
             } else {
                 return ($def [ 'studio' ] != 'false' && $def [ 'studio' ] != 'hidden' && $def [ 'studio' ] !== false) ;
 			}

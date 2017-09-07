@@ -89,8 +89,7 @@ class ListViewDisplay {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if(isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
-        }
-        else {
+        } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
@@ -243,8 +242,9 @@ class ListViewDisplay {
 	 */
 	function buildSelectLink($id = 'select_link', $total=0, $pageTotal=0, $location="top") {
 		global $app_strings;
-		if ($pageTotal < 0)
-			$pageTotal = $total;
+		if ($pageTotal < 0) {
+					$pageTotal = $total;
+		}
 
 
         $total_label = "";
@@ -293,27 +293,34 @@ class ListViewDisplay {
 		}
 
 		// compose email
-        if ( $this->email )
-			$menuItems[] = $this->buildComposeEmailLink($this->data['pageData']['offsets']['total'], $location);
+        if ( $this->email ) {
+        			$menuItems[] = $this->buildComposeEmailLink($this->data['pageData']['offsets']['total'], $location);
+        }
 		// mass update
 		$mass = $this->getMassUpdate();
 		$mass->setSugarBean($this->seed);
-		if ( ( ACLController::checkAccess($this->seed->module_dir,'edit',true) && ACLController::checkAccess($this->seed->module_dir,'massupdate',true) ) && $this->showMassupdateFields && $mass->doMassUpdateFieldsExistForFocus() )
-            $menuItems[] = $this->buildMassUpdateLink($location);
+		if ( ( ACLController::checkAccess($this->seed->module_dir,'edit',true) && ACLController::checkAccess($this->seed->module_dir,'massupdate',true) ) && $this->showMassupdateFields && $mass->doMassUpdateFieldsExistForFocus() ) {
+		            $menuItems[] = $this->buildMassUpdateLink($location);
+		}
 		// merge
-		if ( $this->mailMerge )
-		    $menuItems[] = $this->buildMergeLink(null, $location);
-		if ( $this->mergeduplicates )
-		    $menuItems[] = $this->buildMergeDuplicatesLink($location);
+		if ( $this->mailMerge ) {
+				    $menuItems[] = $this->buildMergeLink(null, $location);
+		}
+		if ( $this->mergeduplicates ) {
+				    $menuItems[] = $this->buildMergeDuplicatesLink($location);
+		}
 		// add to target list
-		if ( $this->targetList && ACLController::checkAccess('ProspectLists','edit',true) )
-		    $menuItems[] = $this->buildTargetList($location);
+		if ( $this->targetList && ACLController::checkAccess('ProspectLists','edit',true) ) {
+				    $menuItems[] = $this->buildTargetList($location);
+		}
 		// export
-		if ( ACLController::checkAccess($this->seed->module_dir,'export',true) && $this->export )
-			$menuItems[] = $this->buildExportLink($location);
+		if ( ACLController::checkAccess($this->seed->module_dir,'export',true) && $this->export ) {
+					$menuItems[] = $this->buildExportLink($location);
+		}
 
-		foreach ( $this->actionsMenuExtraItems as $item )
-		    $menuItems[] = $item;
+		foreach ( $this->actionsMenuExtraItems as $item ) {
+				    $menuItems[] = $item;
+		}
 
         if ($this->delete && !$this->show_action_dropdown_as_delete) {
 			$menuItems[] = $this->buildDeleteLink($location);
@@ -383,21 +390,23 @@ class ListViewDisplay {
 
 		$userPref = $GLOBALS['current_user']->getPreference('email_link_type');
 		$defaultPref = $GLOBALS['sugar_config']['email_default_client'];
-		if($userPref != '')
-			$client = $userPref;
-		else
-			$client = $defaultPref;
+		if($userPref != '') {
+					$client = $userPref;
+		} else {
+					$client = $defaultPref;
+		}
 
-		if($client == 'sugar')
-			$script = "<a href='javascript:void(0)' " .
+		if($client == 'sugar') {
+					$script = "<a href='javascript:void(0)' " .
                     "class=\"parent-dropdown-action-handler\" id=\"composeemail_listview_". $loc ."\"".
 					'onclick="return sListView.send_form_for_emails(true, \''."Emails".'\', \'index.php?module=Emails&action=Compose&ListView=true\',\''.$app_strings['LBL_LISTVIEW_NO_SELECTED'].'\', \''.$this->seed->module_dir.'\', \''.$totalCount.'\', \''.$app_strings['LBL_LISTVIEW_LESS_THAN_TEN_SELECT'].'\')">' .
 					$app_strings['LBL_EMAIL_COMPOSE'] . '</a>';
-		else
-			$script = "<a href='javascript:void(0)' " .
+		} else {
+					$script = "<a href='javascript:void(0)' " .
                     "class=\"parent-dropdown-action-handler\" id=\"composeemail_listview_". $loc ."\"".
 					"onclick=\"return sListView.use_external_mail_client('{$app_strings['LBL_LISTVIEW_NO_SELECTED']}', '{$_REQUEST['module']}');\">" .
 					$app_strings['LBL_EMAIL_COMPOSE'] . '</a>';
+		}
 
         return $script;
 	} // fn

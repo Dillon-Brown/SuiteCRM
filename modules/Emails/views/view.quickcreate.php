@@ -1,6 +1,8 @@
 <?php
 //FILE SUGARCRM flav=pro || flav=sales
-if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if(!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -51,10 +53,11 @@ class EmailsViewQuickcreate extends ViewQuickcreate
     {
         $userPref = $GLOBALS['current_user']->getPreference('email_link_type');
 		$defaultPref = $GLOBALS['sugar_config']['email_default_client'];
-		if($userPref != '')
-			$client = $userPref;
-		else
-			$client = $defaultPref;
+		if($userPref != '') {
+					$client = $userPref;
+		} else {
+					$client = $defaultPref;
+		}
 		
         if ( $client == 'sugar' ) {
             $eUi = new EmailUI();
@@ -74,8 +77,7 @@ class EmailsViewQuickcreate extends ViewQuickcreate
             $ss = new Sugar_Smarty();
             $ss->assign('json_output', $json_obj->encode($opts));
             $ss->display('modules/Emails/templates/dceMenuQuickCreate.tpl');
-        }
-        else {
+        } else {
             $emailAddress = '';
             if(!empty($this->bean->id) && !in_array($this->bean->object_name,array('EmailMan'))
                 && !is_null($this->bean->emailAddress) ) {

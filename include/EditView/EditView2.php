@@ -118,8 +118,7 @@ class EditView
         if (!empty($this->metadataFile) && file_exists($this->metadataFile))
         {
             include($this->metadataFile);
-        }
-        else
+        } else
         {
             //If file doesn't exist we create a best guess
             if (!file_exists("modules/$this->module/metadata/editviewdefs.php")
@@ -163,7 +162,9 @@ class EditView
     {
         global $beanList, $beanFiles;
 
-        if (empty($beanList[$this->module])) return;
+        if (empty($beanList[$this->module])) {
+            return;
+        }
         if(!$this->focus )
         {
            $bean = $beanList[$this->module];
@@ -193,8 +194,7 @@ class EditView
            $bean = $beanList[$this->module];
            $obj = new $bean();
            $this->focus = $obj->retrieve($_REQUEST['record']);
-        }
-        else
+        } else
         {
            $GLOBALS['log']->debug("Unable to populate bean, no record parameter found");
         }
@@ -237,8 +237,7 @@ class EditView
                         }
 
                         $panels['required'][$reqRow][$reqCol] = $p[$row][$col];
-                    }
-                    else
+                    } else
                     {
                         $panels[$key][$row][$col] = $p[$row][$col];
                     }
@@ -293,8 +292,7 @@ class EditView
 
             if (!is_array($this->defs['panels'][$key])) {
                $this->sectionPanels[strtoupper($key)] = $p;
-            }
-            else
+            } else
             {
                 foreach ($p as $row=>$rowDef)
                 {
@@ -316,8 +314,7 @@ class EditView
                             if ($col == $columnsInRows - 1)
                             {
                                 $panel[$row][$col]['colspan'] = 2 * $maxColumns - ($columnsUsed + 1);
-                            }
-                            else
+                            } else
                             {
                                 $panel[$row][$col]['colspan'] = floor(($maxColumns * 2 - $columnsInRows) / $columnsInRows);
                                 $columnsUsed = $panel[$row][$col]['colspan'];
@@ -410,11 +407,21 @@ class EditView
             $this->th->ss->assign('showVCRControl', $this->showVCRControl);
         }
 
-        if (isset($_REQUEST['return_module'])) $this->returnModule = $_REQUEST['return_module'];
-        if (isset($_REQUEST['return_action'])) $this->returnAction = $_REQUEST['return_action'];
-        if (isset($_REQUEST['return_id'])) $this->returnId = $_REQUEST['return_id'];
-        if (isset($_REQUEST['return_relationship'])) $this->returnRelationship = $_REQUEST['return_relationship'];
-        if (isset($_REQUEST['return_name'])) $this->returnName = $this->getValueFromRequest($_REQUEST, 'return_name' ) ;
+        if (isset($_REQUEST['return_module'])) {
+            $this->returnModule = $_REQUEST['return_module'];
+        }
+        if (isset($_REQUEST['return_action'])) {
+            $this->returnAction = $_REQUEST['return_action'];
+        }
+        if (isset($_REQUEST['return_id'])) {
+            $this->returnId = $_REQUEST['return_id'];
+        }
+        if (isset($_REQUEST['return_relationship'])) {
+            $this->returnRelationship = $_REQUEST['return_relationship'];
+        }
+        if (isset($_REQUEST['return_name'])) {
+            $this->returnName = $this->getValueFromRequest($_REQUEST, 'return_name' ) ;
+        }
 
         // handle Create $module then Cancel
         if (empty($this->returnId))
@@ -477,7 +484,7 @@ class EditView
 	       	 		$function = $this->fieldDefs[$name]['function'];
 	       			if(is_array($function) && isset($function['name'])){
 	       				$function = $this->fieldDefs[$name]['function']['name'];
-	       			}else{
+	       			} else{
 	       				$function = $this->fieldDefs[$name]['function'];
 	       			}
 
@@ -492,7 +499,7 @@ class EditView
 						}
 						$value = call_user_func($function, $this->focus, $name, $value, $this->view);
 						$valueFormatted = true;
-					}else{
+					} else{
 						$this->fieldDefs[$name]['options'] = call_user_func($function, $this->focus, $name, $value, $this->view);
 					}
 	       	 	}
@@ -586,8 +593,7 @@ class EditView
             {
                 //$this->th->ss->assign('externalJSFile', 'modules/' . $this->module . '/metadata/editvewdefs.js');
                 $this->th->ss->assign('externalJSFile', $this->defs['templateMeta']['javascript']);
-            }
-            else
+            } else
             {
                 $this->th->ss->assign('scriptBlocks', $this->defs['templateMeta']['javascript']);
             }
@@ -627,8 +633,7 @@ class EditView
         if (!empty($this->formName)) {
             $form_id = $this->formName;
             $form_name = $this->formName;
-        }
-        else
+        } else
         {
             $form_id = $this->view;
             $form_name = $this->view;
@@ -702,8 +707,7 @@ class EditView
         if (!isset($match[2]) || $match[2] == '')
         {
             $this->th->ss->assign('CALENDAR_FORMAT', $date_format . ' ' . $t23 . $time_separator . '%M');
-        }
-        else
+        } else
         {
             $pm = $match[2] == 'pm' ? '%P' : '%p';
             $this->th->ss->assign('CALENDAR_FORMAT', $date_format . ' ' . $t23 . $time_separator . '%M' . $pm);
@@ -726,8 +730,7 @@ class EditView
 
             $this->th->ss->assign('RICH_TEXT_EDITOR_HEIGHT', $height);
             $this->th->ss->assign('RICH_TEXT_EDITOR_WIDTH', $width);
-        }
-        else
+        } else
         {
             $this->th->ss->assign('RICH_TEXT_EDITOR_HEIGHT', '100px');
             $this->th->ss->assign('RICH_TEXT_EDITOR_WIDTH', '95%');
@@ -750,7 +753,9 @@ class EditView
             //there are cases such as uploading an attachment to an email template where the request module may
             //not be the same as the current bean module. If that happens we can just skip it
             //however...let quickcreate through
-            if($this->view != 'QuickCreate' && (empty($_REQUEST['module']) || $_REQUEST['module'] != $this->focus->module_dir)) return $str;
+            if($this->view != 'QuickCreate' && (empty($_REQUEST['module']) || $_REQUEST['module'] != $this->focus->module_dir)) {
+                return $str;
+            }
 
             require_once('modules/SecurityGroups/SecurityGroup.php');
             $groupFocus = new SecurityGroup();
@@ -822,8 +827,7 @@ EOQ;
         {
             $execute_function[] = $vardef['function_class'];
             $execute_function[] = $vardef['function_name'];
-        }
-        else
+        } else
         {
             $execute_function = $vardef['function_name'];
         }
@@ -835,13 +839,11 @@ EOQ;
                 if (empty($this->focus->$param))
                 {
                     $can_execute = false;
-                }
-                else
+                } else
                 {
                     $execute_params[] = $this->focus->$param;
                 }
-            }
-            else if ($vardef['function_params_source']=='this')
+            } else if ($vardef['function_params_source']=='this')
             {
                 if (empty($this->focus->$param))
                 {
@@ -849,8 +851,7 @@ EOQ;
                 } else {
                     $execute_params[] = $this->focus->$param;
                 }
-            }
-            else
+            } else
             {
                 $can_execute = false;
             }
@@ -895,8 +896,7 @@ EOQ;
                 {
                     $d .= $request[$matches[1] . '_meridiem'];
                 }
-            }
-            else
+            } else
             {
                 if (isset($request['time_hour_' . $matches[1]])
                     && isset($request['time_minute_' . $matches[1]]))

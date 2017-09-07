@@ -1,5 +1,7 @@
 <?php
-if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if(!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -94,7 +96,9 @@ if(ACLController::checkAccess('Meetings', 'list', true)){
 	$where = '(';
 	$or = false;
 	foreach ($open_status as $status) {
-		if ($or) $where .= ' OR ';
+		if ($or) {
+		    $where .= ' OR ';
+		}
 		$or = true;
 		$where .= " meetings.status = '$status' ";
 	}
@@ -106,12 +110,10 @@ if(ACLController::checkAccess('Meetings', 'list', true)){
 	if($sugar_config["dbconfig"]["db_type"] == "mysql") {
 		$where .= " HAVING datetime <= '$dayEnd' ";
 	} elseif ($sugar_config["dbconfig"]["db_type"] == "oci8") {
-	}
-	else if ($sugar_config["dbconfig"]["db_type"] == "mssql")
+	} else if ($sugar_config["dbconfig"]["db_type"] == "mssql")
 	{
 		$where .= " AND meetings.date_start + ' ' +  meetings.time_start <= '$dayEnd' ";
-	}
-	else {
+	} else {
 		$GLOBALS['log']->fatal("No database type identified.");
 	}
 
@@ -125,7 +127,9 @@ if(ACLController::checkAccess('Calls', 'list', true)) {
 	$or = false;
 
 	foreach ($open_status as $status) {
-		if ($or) $where .= ' OR ';
+		if ($or) {
+		    $where .= ' OR ';
+		}
 		$or = true;
 		$where .= " calls.status = '$status' ";
 	}
@@ -138,7 +142,7 @@ if(ACLController::checkAccess('Calls', 'list', true)) {
 	if($sugar_config["dbconfig"]["db_type"] == "mysql") {
 		$where .= " HAVING datetime <= '$dayEnd' ";
 	} elseif ($sugar_config["dbconfig"]["db_type"] == "oci8") {
-	}else if ($sugar_config["dbconfig"]["db_type"] == "mssql")
+	} else if ($sugar_config["dbconfig"]["db_type"] == "mssql")
 	{
 		//add condition for MS Sql server.
 		$where .= " AND calls.date_start + ' ' + calls.time_start <= '$dayEnd' ";
@@ -326,6 +330,9 @@ foreach($open_activity_list as $activity) {
 } // END FOREACH()
 
 $xtpl->parse("open_activity");
-if (count($open_activity_list)>0) $xtpl->out("open_activity");
-else echo "<i>".$current_module_strings['NTC_NONE_SCHEDULED']."</i>";
+if (count($open_activity_list)>0) {
+    $xtpl->out("open_activity");
+} else {
+    echo "<i>".$current_module_strings['NTC_NONE_SCHEDULED']."</i>";
+}
 ?>
