@@ -195,8 +195,9 @@ if (!defined('sugarEntry') || !sugarEntry){
         {
             $overideAccount = $oe->getUsersMailerForSystemOverride($current_user->id);
             //If the user override account has not been created yet, create it for the user.
-            if($overideAccount == null)
-                $overideAccount = $oe->createUserSystemOverrideAccount($current_user->id);
+            if($overideAccount == null) {
+                            $overideAccount = $oe->createUserSystemOverrideAccount($current_user->id);
+            }
 
 		    $out['errorArray'] = array($overideAccount->id => $app_strings['LBL_EMAIL_WARNING_MISSING_USER_CREDS']);
         }
@@ -433,9 +434,9 @@ if (!defined('sugarEntry') || !sugarEntry){
             {
                 $out = trim($json->encode($ret, false));
                 echo $out;
+            } else {
+                            echo $ret['html'];
             }
-            else
-                echo $ret['html'];
 
     	}
     break;
@@ -939,13 +940,13 @@ eoq;
             $childrenSubs = array();
             //Find all children of the group folder subscribed to and add
             //them to the list of folders to show.
-            foreach ($subs as $singleSub)
-                $email->et->folder->findAllChildren($singleSub, $childrenSubs);
+            foreach ($subs as $singleSub) {
+                            $email->et->folder->findAllChildren($singleSub, $childrenSubs);
+            }
 
             $subs = array_merge($subs, $childrenSubs);
             $email->et->folder->setSubscriptions($subs);
-        }
-        elseif(empty($_REQUEST['subscriptions'])) {
+        } elseif(empty($_REQUEST['subscriptions'])) {
             $email->et->folder->clearSubscriptions();
         }
         break;
@@ -1161,8 +1162,7 @@ eoq;
             if( count($affectedInboundAccounts) > 0 && !$confirmedDelete)
             {
                 $results = array('is_error' => true, 'error_message' => $app_strings['LBL_EMAIL_REMOVE_SMTP_WARNING'] , 'outbound_email' => $_REQUEST['outbound_email']);
-            }
-            else
+            } else
             {
                 $oe->delete();
                 $results = array('is_error' => false, 'error_message' => '');
@@ -1174,8 +1174,7 @@ eoq;
             echo $out;
             ob_end_flush();
             die();
-        }
-        else
+        } else
         {
             echo "NOOP";
         }
@@ -1316,8 +1315,9 @@ eoq;
                         $ie->$k = $retService;
                     }
 
-                    if (isset($ie->$k))
-                    $ret[$k] = $ie->$k;
+                    if (isset($ie->$k)) {
+                                        $ret[$k] = $ie->$k;
+                    }
                 }
 
                 $out = $json->encode($ret);

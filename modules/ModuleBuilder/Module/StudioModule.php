@@ -78,8 +78,9 @@ class StudioModule
     	$modules_with_odd_names = array(
     	'Bugs'=>'Bugs'
     	);
-    	if ( isset ( $modules_with_odd_names [ $this->name ] ) )
-    		return ( $modules_with_odd_names [ $this->name ] ) ;
+    	if ( isset ( $modules_with_odd_names [ $this->name ] ) ) {
+    	    		return ( $modules_with_odd_names [ $this->name ] ) ;
+    	}
 
     	return $this->name;
     }
@@ -99,8 +100,9 @@ class StudioModule
     	$d = dir ( 'include/SugarObjects/templates' ) ;
 		while ( $filename = $d->read() )
 		{
-			if ( substr($filename,0,1) != '.' )
-				$templates [ strtolower ( $filename) ] = strtolower ( $filename ) ;
+			if ( substr($filename,0,1) != '.' ) {
+							$templates [ strtolower ( $filename) ] = strtolower ( $filename ) ;
+			}
 		}
 
 		// If a custom module, then its type is determined by the parent SugarObject that it extends
@@ -128,8 +130,9 @@ class StudioModule
 		'Leads' => 'person' , 
 		'Opportunities' => 'sale'
 		) ;
-		if ( isset ( $types [ $this->module ] ) )
-			return $types [ $this->module ] ;
+		if ( isset ( $types [ $this->module ] ) ) {
+					return $types [ $this->module ] ;
+		}
 
     	return "basic" ;
     }
@@ -170,9 +173,9 @@ class StudioModule
         		{
         			$nodes [ $source ] [ 'type' ] = 'Folder' ;
         			$nodes [ $source ] [ 'children' ] = $childNodes ;
+        		} else {
+        		        			unset ( $nodes [ $source ] ) ;
         		}
-        		else
-        			unset ( $nodes [ $source ] ) ;
         	}
         }
 
@@ -202,8 +205,9 @@ class StudioModule
             'campaigns'
             ) ;
         // Some modules should not have a QuickCreate form at all, so do not add them to the list
-        if (! in_array ( strtolower ( $this->module ), $hideQuickCreateForModules ))
-            $views [ 'quickcreatedefs' ] = array ( 'name' => translate('LBL_QUICKCREATE') , 'type' => MB_QUICKCREATE , 'image' => 'QuickCreate' ) ;
+        if (! in_array ( strtolower ( $this->module ), $hideQuickCreateForModules )) {
+                    $views [ 'quickcreatedefs' ] = array ( 'name' => translate('LBL_QUICKCREATE') , 'type' => MB_QUICKCREATE , 'image' => 'QuickCreate' ) ;
+        }
 
         $layouts = array ( ) ;
         foreach ( $views as $def )
@@ -262,14 +266,13 @@ class StudioModule
         		$title = translate ( $label ) ;
         		if($label == 'LBL_BASIC_SEARCH'){
 					$name = 'BasicSearch';
-				}elseif($label == 'LBL_ADVANCED_SEARCH'){
+				} elseif($label == 'LBL_ADVANCED_SEARCH'){
 					$name = 'AdvancedSearch';
-				}else{
+				} else{
 					$name = str_replace ( ' ', '', $title ) ;
 				}
             	$nodes [ $title ] = array ( 'name' => $title , 'action' => "module=ModuleBuilder&action=editLayout&view={$view}&view_module={$this->module}" , 'imageTitle' => $title , 'imageName' => $name , 'help' => "{$name}Btn" , 'size' => '48' ) ;
-        	}
-        	catch ( Exception $e )
+        	} catch ( Exception $e )
         	{
         		$GLOBALS [ 'log' ]->info( 'No search layout : '. $e->getMessage() ) ;
         	}
@@ -293,8 +296,9 @@ class StudioModule
      */
     function getSubpanels ()
     {
-        if(!empty($GLOBALS['current_user']) && empty($GLOBALS['modListHeader']))
-            $GLOBALS['modListHeader'] = query_module_access_list($GLOBALS['current_user']);
+        if(!empty($GLOBALS['current_user']) && empty($GLOBALS['modListHeader'])) {
+                    $GLOBALS['modListHeader'] = query_module_access_list($GLOBALS['current_user']);
+        }
 
         require_once ('include/SubPanel/SubPanel.php') ;
 
@@ -306,8 +310,9 @@ class StudioModule
             $ct=0;
             foreach ( SubPanel::getModuleSubpanels ( $this->module ) as $name => $label )
             {
-                if ($name == 'users')
-                    continue ;
+                if ($name == 'users') {
+                                    continue ;
+                }
                 $subname = sugar_ucfirst ( (! empty ( $label )) ? translate ( $label, $this->module ) : $name ) ;
                 $action = "module=ModuleBuilder&action=editLayout&view=ListView&view_module={$this->module}&subpanel={$name}&subpanelLabel=" . urlencode($subname);
 
@@ -376,11 +381,15 @@ class StudioModule
         foreach($modules_to_check as $mod_name){
             
             //skip if module name is not in bean list, otherwise get the bean class name
-            if(!isset($beanList[$mod_name])) continue;
+            if(!isset($beanList[$mod_name])) {
+                continue;
+            }
             $class = $beanList[$mod_name];
 
             //skip if class name is not in file list, otherwise require the bean file and create new class
-            if(!isset($beanFiles[$class]) || !file_exists($beanFiles[$class])) continue;
+            if(!isset($beanFiles[$class]) || !file_exists($beanFiles[$class])) {
+                continue;
+            }
             
             //retrieve subpanels for this bean
             require_once($beanFiles[$class]);
@@ -410,8 +419,10 @@ class StudioModule
             //If this module type doesn't support a given metadata type, we will get an exception from getParser()
             try {
                 $parser = ParserFactory::getParser( $defs [ 'type' ] , $this->module ) ;
-                if ($parser->removeField ( $fieldName ) )
-                    $parser->handleSave(false) ; // don't populate from $_REQUEST, just save as is...
+                if ($parser->removeField ( $fieldName ) ) {
+                                    $parser->handleSave(false) ;
+                }
+                // don't populate from $_REQUEST, just save as is...
             } catch(Exception $e){}
         }
         
@@ -421,8 +432,9 @@ class StudioModule
             //If this module type doesn't support a given metadata type, we will get an exception from getParser()
             try {
                 $parser = ParserFactory::getParser( MB_LISTVIEW , $parentModule, null ,  $this->module) ;
-                if ($parser->removeField ( $fieldName ) )
-                    $parser->handleSave(false) ;
+                if ($parser->removeField ( $fieldName ) ) {
+                                    $parser->handleSave(false) ;
+                }
             } catch(Exception $e){}
         }
     }

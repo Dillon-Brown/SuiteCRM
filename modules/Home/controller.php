@@ -75,7 +75,7 @@ class HomeController extends SugarController{
 
             if(is_object($bean) && $bean->id != ""){
                 echo getDisplayValue($bean, $_REQUEST['field'],"close");
-            }else{
+            } else{
                 echo "Could not find value.";
             }
 

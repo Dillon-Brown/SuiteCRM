@@ -88,7 +88,9 @@ class ListViewSmarty extends ListViewDisplay
      *
      */
     function process($file, $data, $htmlVar) {
-        if(!$this->should_process)return;
+        if(!$this->should_process) {
+            return;
+        }
         global $odd_bg, $even_bg, $hilite_bg, $app_strings, $sugar_config;
         parent::process($file, $data, $htmlVar);
 
@@ -105,8 +107,9 @@ class ListViewSmarty extends ListViewDisplay
         foreach($this->displayColumns as $name => $params) {
             $this->displayColumns[$name]['width'] = floor($this->displayColumns[$name]['width'] / $adjustment);
             // figure out which contextMenu objectsTypes are required
-            if(!empty($params['contextMenu']['objectType']))
-                $contextMenuObjectsTypes[$params['contextMenu']['objectType']] = true;
+            if(!empty($params['contextMenu']['objectType'])) {
+                            $contextMenuObjectsTypes[$params['contextMenu']['objectType']] = true;
+            }
         }
 
         //Check if inline editing is enabled for list view.
@@ -139,8 +142,12 @@ class ListViewSmarty extends ListViewDisplay
             $pageTotal = $this->data['pageData']['offsets']['total'] - $this->data['pageData']['offsets']['current'];
         }
 
-        if($this->select)$this->ss->assign('selectLinkTop', $this->buildSelectLink('select_link', $this->data['pageData']['offsets']['total'], $pageTotal));
-        if($this->select)$this->ss->assign('selectLinkBottom', $this->buildSelectLink('select_link', $this->data['pageData']['offsets']['total'], $pageTotal, "bottom"));
+        if($this->select) {
+            $this->ss->assign('selectLinkTop', $this->buildSelectLink('select_link', $this->data['pageData']['offsets']['total'], $pageTotal));
+        }
+        if($this->select) {
+            $this->ss->assign('selectLinkBottom', $this->buildSelectLink('select_link', $this->data['pageData']['offsets']['total'], $pageTotal, "bottom"));
+        }
 
         if($this->show_action_dropdown)
         {
@@ -219,7 +226,9 @@ class ListViewSmarty extends ListViewDisplay
      */
     function display($end = true) {
 
-        if(!$this->should_process) return $this->getSearchIcon().$GLOBALS['app_strings']['LBL_SEARCH_POPULATE_ONLY'];
+        if(!$this->should_process) {
+            return $this->getSearchIcon().$GLOBALS['app_strings']['LBL_SEARCH_POPULATE_ONLY'];
+        }
         global $app_strings, $sugar_version, $sugar_flavor, $currentModule, $app_list_strings;
         $this->ss->assign('moduleListSingular', $app_list_strings["moduleListSingular"]);
         $this->ss->assign('moduleList', $app_list_strings['moduleList']);

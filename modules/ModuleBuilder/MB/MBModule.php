@@ -166,8 +166,9 @@ class MBModule
 		if(!empty($existingVardefs['fields'][$vardef['name']])){
 			$vardef = array_merge( $existingVardefs['fields'][$vardef['name']], $vardef);
 		}
-        if (! empty ( $vardef [ 'source' ] ) && $vardef [ 'source' ] == 'custom_fields')
-            unset ( $vardef [ 'source' ] ) ;
+        if (! empty ( $vardef [ 'source' ] ) && $vardef [ 'source' ] == 'custom_fields') {
+                    unset ( $vardef [ 'source' ] ) ;
+        }
 
 	    $this->mbvardefs->load();
         $this->addField ( $vardef ) ;
@@ -184,18 +185,22 @@ class MBModule
         $vardefs = $this->getVardefs();
         if (! empty ( $vardefs ))
         {
-            if (empty ( $type ) && empty ( $name ))
-                return false ; else if (empty ( $type ))
-                return ! empty ( $vardefs [ 'fields' ] [ $name ] ) ; else if (empty ( $name ))
+            if (empty ( $type ) && empty ( $name )) {
+                            return false ;
+            } else if (empty ( $type )) {
+                                return ! empty ( $vardefs [ 'fields' ] [ $name ] ) ;
+                } else if (empty ( $name ))
             {
                 foreach ( $vardefs [ 'fields' ] as $def )
                 {
-                    if ($def [ 'type' ] == $type)
-                        return true ;
+                    if ($def [ 'type' ] == $type) {
+                                            return true ;
+                    }
                 }
                 return false ;
-            } else
-                return (! empty ( $vardefs [ 'fields' ] [ $name ] ) && ($vardefs [ 'fields' ] [ $name ] [ 'type' ] == $type)) ;
+            } else {
+                            return (! empty ( $vardefs [ 'fields' ] [ $name ] ) && ($vardefs [ 'fields' ] [ $name ] [ 'type' ] == $type)) ;
+            }
         } else
         {
             return false ;
@@ -341,10 +346,12 @@ class MBModule
     	$d = dir ( $from ) ;
         while ( $filename = $d->read () )
         {
-        	if (substr ( $filename, 0, 1 ) == '.')
-            	continue ;
-           	if ( $filename != 'metadata' && $filename != 'Dashlets' && $filename != 'relationships' && $filename != 'language' && $filename != 'config.php' && $filename != 'relationships.php' && $filename != 'vardefs.php' )
-           		copy_recursive ( "$from/$filename" , "$to/$filename" ) ;
+        	if (substr ( $filename, 0, 1 ) == '.') {
+        	            	continue ;
+        	}
+           	if ( $filename != 'metadata' && $filename != 'Dashlets' && $filename != 'relationships' && $filename != 'language' && $filename != 'config.php' && $filename != 'relationships.php' && $filename != 'vardefs.php' ) {
+           	           		copy_recursive ( "$from/$filename" , "$to/$filename" ) ;
+           	}
         }
     }
 
@@ -363,8 +370,9 @@ class MBModule
 
     function copyMetaRecursive ($from , $to , $overwrite = false)
     {
-        if (! file_exists ( $from ))
-            return ;
+        if (! file_exists ( $from )) {
+                    return ;
+        }
         if (is_dir ( $from ))
         {
             $findArray = array ( '<module_name>' , '<_module_name>' , '<MODULE_NAME>' , '<object_name>' , '<_object_name>' , '<OBJECT_NAME>' );
@@ -374,8 +382,9 @@ class MBModule
             $d = dir ( $from ) ;
             while ( $e = $d->read () )
             {
-                if (substr ( $e, 0, 1 ) == '.')
-                    continue ;
+                if (substr ( $e, 0, 1 ) == '.') {
+                                    continue ;
+                }
                 $nfrom = $from . '/' . $e ;
                 $nto = $to . '/' . str_replace ( 'm-n-', $this->key_name, $e ) ;
                 if (is_dir ( $nfrom ))
@@ -409,8 +418,9 @@ class MBModule
 
     function setConfigMD5 ()
     {
-        if (file_exists ( $this->path . '/config.php' ))
-            $this->config_md5 = md5 ( base64_encode ( serialize ( $this->config ) ) ) ;
+        if (file_exists ( $this->path . '/config.php' )) {
+                    $this->config_md5 = md5 ( base64_encode ( serialize ( $this->config ) ) ) ;
+        }
     }
 
     function build ($basepath)
@@ -451,8 +461,9 @@ class MBModule
         }
         foreach ( $this->config [ 'templates' ] as $template => $a )
         {
-            if ($template == 'basic')
-                continue ;
+            if ($template == 'basic') {
+                            continue ;
+            }
             $class [ 'templates' ] .= ",'$template'" ;
             $class [ 'extends' ] = ucFirst ( $template ) ;
             $class [ 'requires' ] [] = MB_TEMPLATES . '/' . $template . '/' . ucfirst ( $template ) . '.php' ;
@@ -479,8 +490,9 @@ class MBModule
         fwrite ( $fp, $smarty->fetch ( 'modules/ModuleBuilder/tpls/MBModule/vardef.tpl' ) ) ;
         fclose ( $fp ) ;
         
-        if (! file_exists ( $path . '/metadata' ))
-            mkdir_recursive ( $path . '/metadata' ) ;
+        if (! file_exists ( $path . '/metadata' )) {
+                    mkdir_recursive ( $path . '/metadata' ) ;
+        }
         if (! empty ( $this->config [ 'studio' ] ))
         {
             $fp = sugar_fopen ( $path . '/metadata/studio.php', 'w' ) ;
@@ -488,8 +500,9 @@ class MBModule
             fclose ( $fp ) ;
         } else
         {
-            if (file_exists ( $path . '/metadata/studio.php' ))
-                unlink ( $path . '/metadata/studio.php' ) ;
+            if (file_exists ( $path . '/metadata/studio.php' )) {
+                            unlink ( $path . '/metadata/studio.php' ) ;
+            }
         }
     }
 
@@ -644,8 +657,9 @@ class MBModule
     public function renameMetaData ($new_dir, $old_name)
     {
         $GLOBALS [ 'log' ]->debug ( 'MBModule.php->renameMetaData: new_dir=' . $new_dir ) ;
-        if (! file_exists ( $new_dir ))
-            return ;
+        if (! file_exists ( $new_dir )) {
+                    return ;
+        }
         $dir = dir ( $new_dir ) ;
         while ( $e = $dir->read () )
         {
@@ -853,16 +867,19 @@ class MBModule
     	foreach ($views as $type )
         {
             $parser = ParserFactory::getParser( $type , $this->name , $this->package ) ;
-            if ($parser->removeField ( $fieldName ) )
-                $parser->handleSave(false) ; // don't populate from $_REQUEST, just save as is...
+            if ($parser->removeField ( $fieldName ) ) {
+                            $parser->handleSave(false) ;
+            }
+            // don't populate from $_REQUEST, just save as is...
         }
 		//Remove the fields in subpanel
         $psubs = $this->getProvidedSubpanels() ; 
         foreach ( $psubs as $sub )
         {
 			$parser = ParserFactory::getParser( MB_LISTVIEW , $this->name, $this->package ,  $sub) ;
-			if ($parser->removeField ( $fieldName ) )
-	            $parser->handleSave(false) ; 
+			if ($parser->removeField ( $fieldName ) ) {
+				            $parser->handleSave(false) ;
+			}
         }
     }
 

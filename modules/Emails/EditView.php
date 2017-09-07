@@ -1,5 +1,7 @@
 <?php
-if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if(!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -98,8 +100,7 @@ if(!empty($_REQUEST['load_id']) && !empty($beanList[$_REQUEST['load_module']])) 
 	    			$focus->to_addrs = "$focus->contact_name <$account->email1>";
     		    }
     		}
-    	}
-    	else{
+    	} else{
     		$sugarEmailAddress->handleLegacyRetrieve($contact);
     		if(isset($contact->email1)){
 	    		$focus->to_addrs_emails = $contact->email1;
@@ -130,8 +131,7 @@ if(isset($_REQUEST['parent_id'])) {
 }
 if(isset($_REQUEST['parent_type'])) {
 	$focus->parent_type = $_REQUEST['parent_type'];
-}
-elseif(is_null($focus->parent_type)) {
+} elseif(is_null($focus->parent_type)) {
 	$focus->parent_type = $app_list_strings['record_type_default_key'];
 }
 if(isset($_REQUEST['to_email_addrs'])) {
@@ -156,8 +156,11 @@ $from = $current_user->getEmailInfo();
 ///////////////////////////////////////////////////////////////////////////////
 ////	XTEMPLATE ASSIGNMENT
 if($email_type == 'archived') {
-    if(isset($focus->name)) $params_module_title=array($mod_strings['LBL_ARCHIVED_EMAILS_CREATE'], $focus->name);
-    else $params_module_title=array($mod_strings['LBL_ARCHIVED_EMAILS_CREATE']);
+    if(isset($focus->name)) {
+        $params_module_title=array($mod_strings['LBL_ARCHIVED_EMAILS_CREATE'], $focus->name);
+    } else {
+        $params_module_title=array($mod_strings['LBL_ARCHIVED_EMAILS_CREATE']);
+    }
 	echo getClassicModuleTitle('Emails', $params_module_title, true);
 	$xtpl=new XTemplate('modules/Emails/EditViewArchive.html');
 } else {
@@ -372,8 +375,12 @@ if($email_type == 'forward') {
 $xtpl->assign('MOD', $mod_strings);
 $xtpl->assign('APP', $app_strings);
 $xtpl->assign('THEME', SugarThemeRegistry::current()->__toString());
-if(!isset($focus->id)) $xtpl->assign('USER_ID', $current_user->id);
-if(!isset($focus->id) && isset($_REQUEST['contact_id'])) $xtpl->assign('CONTACT_ID', $_REQUEST['contact_id']);
+if(!isset($focus->id)) {
+    $xtpl->assign('USER_ID', $current_user->id);
+}
+if(!isset($focus->id) && isset($_REQUEST['contact_id'])) {
+    $xtpl->assign('CONTACT_ID', $_REQUEST['contact_id']);
+}
 
 if(isset($_REQUEST['return_module']) && !empty($_REQUEST['return_module'])) {
 	$xtpl->assign('RETURN_MODULE', $_REQUEST['return_module']);
@@ -591,10 +598,12 @@ if(is_admin($current_user) && $_REQUEST['module'] != 'DynamicLayout' && !empty($
 	$xtpl->assign('ADMIN_EDIT',"<a href='index.php?action=index&module=DynamicLayout&from_action=".$_REQUEST['action'] ."&from_module=".$_REQUEST['module'] ."&record=".$record. "'>".SugarThemeRegistry::current()->getImage("EditLayout","border='0' align='bottom'",null,null,'.gif',$mod_strings['LBL_EDIT_LAYOUT'])."</a>");
 }
 
-if(empty($focus->assigned_user_id) && empty($focus->id))
+if(empty($focus->assigned_user_id) && empty($focus->id)) {
 	$focus->assigned_user_id = $current_user->id;
-if(empty($focus->assigned_name) && empty($focus->id))
+}
+if(empty($focus->assigned_name) && empty($focus->id)) {
 	$focus->assigned_user_name = $current_user->user_name;
+}
 $xtpl->assign('ASSIGNED_USER_OPTIONS', get_select_options_with_id(get_user_array(TRUE, 'Active', $focus->assigned_user_id), $focus->assigned_user_id));
 $xtpl->assign('ASSIGNED_USER_NAME', $focus->assigned_user_name);
 $xtpl->assign('ASSIGNED_USER_ID', $focus->assigned_user_id);

@@ -1,5 +1,7 @@
 <?php
-if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if(!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -92,16 +94,34 @@ if(!isset($_REQUEST['query'])){
 
 if(isset($_REQUEST['query'])) {
 	// we have a query
-	if(isset($_REQUEST['email_type']))				$email_type = $_REQUEST['email_type'];
-	if(isset($_REQUEST['assigned_to']))				$assigned_to = $_REQUEST['assigned_to'];
-	if(isset($_REQUEST['status']))					$status = $_REQUEST['status'];
-	if(isset($_REQUEST['name']))					$name = $_REQUEST['name'];
-	if(isset($_REQUEST['contact_name']))			$contact_name = $_REQUEST['contact_name'];
+	if(isset($_REQUEST['email_type'])) {
+	    $email_type = $_REQUEST['email_type'];
+	}
+	if(isset($_REQUEST['assigned_to'])) {
+	    $assigned_to = $_REQUEST['assigned_to'];
+	}
+	if(isset($_REQUEST['status'])) {
+	    $status = $_REQUEST['status'];
+	}
+	if(isset($_REQUEST['name'])) {
+	    $name = $_REQUEST['name'];
+	}
+	if(isset($_REQUEST['contact_name'])) {
+	    $contact_name = $_REQUEST['contact_name'];
+	}
 	
-	if(isset($email_type) && $email_type != "")		$whereClauses['emails.type'] = "emails.type = '".$GLOBALS['db']->quote($email_type)."'";
-	if(isset($assigned_to) && $assigned_to != "")	$whereClauses['emails.assigned_user_id'] = "emails.assigned_user_id = '".$GLOBALS['db']->quote($assigned_to)."'";
-	if(isset($status) && $status != "")				$whereClauses['emails.status'] = "emails.status = '".$GLOBALS['db']->quote($status)."'";
-	if(isset($name) && $name != "")					$whereClauses['emails.name'] = "emails.name like '".$GLOBALS['db']->quote($name)."%'";
+	if(isset($email_type) && $email_type != "") {
+	    $whereClauses['emails.type'] = "emails.type = '".$GLOBALS['db']->quote($email_type)."'";
+	}
+	if(isset($assigned_to) && $assigned_to != "") {
+	    $whereClauses['emails.assigned_user_id'] = "emails.assigned_user_id = '".$GLOBALS['db']->quote($assigned_to)."'";
+	}
+	if(isset($status) && $status != "") {
+	    $whereClauses['emails.status'] = "emails.status = '".$GLOBALS['db']->quote($status)."'";
+	}
+	if(isset($name) && $name != "") {
+	    $whereClauses['emails.name'] = "emails.name like '".$GLOBALS['db']->quote($name)."%'";
+	}
 	if(isset($contact_name) && $contact_name != '') {
 		$contact_names = explode(" ", $contact_name);
 		foreach ($contact_names as $name) {
@@ -123,10 +143,18 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$email_type_sel = '';
 	$assigned_to_sel = '';
 	$status_sel = '';
-	if(isset($_REQUEST['email_type']))		$email_type_sel = $_REQUEST['email_type'];
-	if(isset($_REQUEST['assigned_to']))		$assigned_to_sel = $_REQUEST['assigned_to'];
-	if(isset($_REQUEST['status']))			$status_sel = $_REQUEST['status'];
-	if(isset($_REQUEST['search']))			$search_adv = $_REQUEST['search'];
+	if(isset($_REQUEST['email_type'])) {
+	    $email_type_sel = $_REQUEST['email_type'];
+	}
+	if(isset($_REQUEST['assigned_to'])) {
+	    $assigned_to_sel = $_REQUEST['assigned_to'];
+	}
+	if(isset($_REQUEST['status'])) {
+	    $status_sel = $_REQUEST['status'];
+	}
+	if(isset($_REQUEST['search'])) {
+	    $search_adv = $_REQUEST['search'];
+	}
 
 	// drop-downs values
 	$r = $focus->db->query("SELECT id, user_name FROM users WHERE deleted = 0 AND status = 'Active' OR users.is_group = 1 ORDER BY status");
@@ -156,9 +184,15 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign('SEARCH_ADV', $search_adv);
 	$search_form->assign('SEARCH_ACTION', 'ListViewGroup');
 
-	if(isset($_REQUEST['name']))			$search_form->assign('NAME', $_REQUEST['name']);
-	if(isset($_REQUEST['contact_name']))	$search_form->assign('CONTACT_NAME', $_REQUEST['contact_name']);
-	if(isset($current_user_only))			$search_form->assign('CURRENT_USER_ONLY', "checked");
+	if(isset($_REQUEST['name'])) {
+	    $search_form->assign('NAME', $_REQUEST['name']);
+	}
+	if(isset($_REQUEST['contact_name'])) {
+	    $search_form->assign('CONTACT_NAME', $_REQUEST['contact_name']);
+	}
+	if(isset($current_user_only)) {
+	    $search_form->assign('CURRENT_USER_ONLY', "checked");
+	}
 
 	// adding custom fields:
 	$focus->custom_fields->populateXTPL($search_form, 'search' );

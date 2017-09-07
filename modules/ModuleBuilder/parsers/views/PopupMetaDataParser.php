@@ -1,5 +1,7 @@
 <?php
-if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if(!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -95,12 +97,12 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
     	foreach($defs as $key=>$value) {
     			if(!is_array($value)){
     				$temp[$value] = array('name'=>$value);
-    			}else{
+    			} else{
     				$temp[$key] = $value;
     				if(isset($value['name']) && $value['name'] != $key){
     					$temp[$value['name']] = $value;
     					unset($temp[$key] );
-    				}else if( !isset($value['name']) ){
+    				} else if( !isset($value['name']) ){
     					$temp[$key]['name'] = $key;
     				}
     			}
@@ -120,10 +122,10 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
         {
             if (isset($this->_fielddefs [ $key ] )) {
 				$searchFields [ $key ] = self::_trimFieldDefs ( $this->_fielddefs [ $key ] ) ;
-				if (!empty($def['label']))
-				   $searchFields [ $key ]['label'] = $def['label'];
-            }
-			else {
+				if (!empty($def['label'])) {
+								   $searchFields [ $key ]['label'] = $def['label'];
+				}
+            } else {
 				$searchFields [ $key ] = $def;
 			}
         }
@@ -145,13 +147,13 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
         	if(!file_exists($writeFile)){
         		mkdir_recursive ( dirname ( $writeFile ) ) ;
     		}
-    	}
-    	else{
+    	} else{
     		$writeFile = $file = $this->implementation->getFileName(MB_POPUPLIST, $this->_moduleName, $this->_packageName);
     	}
     	$this->implementation->_history->append ( $file ) ;
-    	if ($populate)
-    	   $this->_populateFromRequest() ;
+    	if ($populate) {
+    	    	   $this->_populateFromRequest() ;
+    	}
     	$out = "<?php\n" ;
 
 		//Load current module languages
@@ -212,7 +214,7 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
     	foreach($newDefs as $key =>$def){
     		if(!isset($targetDefs[$key]) && $forWhere){
     			$targetDefs[$key] = $this->__getTargetModuleName($def).'.'.$key;
-    		}else if( !in_array($key , $targetDefs ) && !$forWhere){
+    		} else if( !in_array($key , $targetDefs ) && !$forWhere){
 				array_push($targetDefs , $key);
     		}
     	}
@@ -221,10 +223,11 @@ if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
     		foreach(array_diff(  array_keys($targetDefs) , array_keys($newDefs) ) as $key ){
 	    		unset($targetDefs[$key]);
 	    	}
-    	}else{
+    	} else{
     		foreach($targetDefs as $key =>$value){
-    			if(!isset($newDefs[$value])) 
-	    			unset($targetDefs[$key]);
+    			if(!isset($newDefs[$value])) {
+    				    			unset($targetDefs[$key]);
+    			}
 	    	}
     	}
     	

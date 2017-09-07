@@ -180,8 +180,7 @@ class SugarController{
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if(isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
-        }
-        else {
+        } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
@@ -194,11 +193,13 @@ class SugarController{
 	 *
 	 */
 	public function setup($module = ''){
-		if(empty($module) && !empty($_REQUEST['module']))
-			$module = $_REQUEST['module'];
+		if(empty($module) && !empty($_REQUEST['module'])) {
+					$module = $_REQUEST['module'];
+		}
 		//set the module
-		if(!empty($module))
-			$this->setModule($module);
+		if(!empty($module)) {
+					$this->setModule($module);
+		}
 
 		if(!empty($_REQUEST['target_module']) && $_REQUEST['target_module'] != 'undefined') {
 			$this->target_module = $_REQUEST['target_module'];
@@ -222,18 +223,24 @@ class SugarController{
 	 *
 	 */
 	private function loadPropertiesFromRequest(){
-		if(!empty($_REQUEST['action']))
-			$this->action = $_REQUEST['action'];
-		if(!empty($_REQUEST['record']))
-			$this->record = $_REQUEST['record'];
-		if(!empty($_REQUEST['view']))
-			$this->view = $_REQUEST['view'];
-		if(!empty($_REQUEST['return_module']))
-			$this->return_module = $_REQUEST['return_module'];
-		if(!empty($_REQUEST['return_action']))
-			$this->return_action = $_REQUEST['return_action'];
-		if(!empty($_REQUEST['return_id']))
-			$this->return_id = $_REQUEST['return_id'];
+		if(!empty($_REQUEST['action'])) {
+					$this->action = $_REQUEST['action'];
+		}
+		if(!empty($_REQUEST['record'])) {
+					$this->record = $_REQUEST['record'];
+		}
+		if(!empty($_REQUEST['view'])) {
+					$this->view = $_REQUEST['view'];
+		}
+		if(!empty($_REQUEST['return_module'])) {
+					$this->return_module = $_REQUEST['return_module'];
+		}
+		if(!empty($_REQUEST['return_action'])) {
+					$this->return_action = $_REQUEST['return_action'];
+		}
+		if(!empty($_REQUEST['return_id'])) {
+					$this->return_id = $_REQUEST['return_id'];
+		}
 	}
 
 	/**
@@ -258,8 +265,9 @@ class SugarController{
 				$this->bean = new $class();
 				if(!empty($this->record)){
 					$this->bean->retrieve($this->record);
-					if($this->bean)
-						$GLOBALS['FOCUS'] = $this->bean;
+					if($this->bean) {
+											$GLOBALS['FOCUS'] = $this->bean;
+					}
 				}
 			}
 		}
@@ -273,7 +281,7 @@ class SugarController{
 		if(!$$var){
 			if($merge && !empty($this->$var)){
 				$$var = $this->$var;
-			}else{
+			} else{
 				$$var = array();
 			}
 			if(file_exists('include/MVC/Controller/'. $var . '.php')){
@@ -316,13 +324,11 @@ class SugarController{
             if(!empty($this->view))
             {
                 $this->processView();
-            }
-            elseif(!empty($this->redirect_url))
+            } elseif(!empty($this->redirect_url))
             {
             			$this->redirect();
             }
-        }
-        catch (Exception $e)
+        } catch (Exception $e)
         {
             $this->handleException($e);
         }
@@ -344,8 +350,7 @@ class SugarController{
         {
             $logicHook->setBean($this->bean);
             $logicHook->call_custom_logic($this->bean->module_dir, "handle_exception", $e);
-        }
-        else
+        } else
         {
             $logicHook->call_custom_logic('', "handle_exception", $e);
         }
@@ -407,7 +412,7 @@ class SugarController{
             }
 
 			$this->redirect();
-		}else{
+		} else{
 			$this->no_access();
 		}
 	}
@@ -514,8 +519,9 @@ class SugarController{
 	 */
 	protected function redirect(){
 
-		if(!empty($this->redirect_url))
-			SugarApplication::redirect($this->redirect_url);
+		if(!empty($this->redirect_url)) {
+					SugarApplication::redirect($this->redirect_url);
+		}
 	}
 
 	////////////////////////////////////////////////////////
@@ -608,7 +614,7 @@ class SugarController{
 				sugar_cleanup(true);
 			}
 			$this->bean->mark_deleted($_REQUEST['record']);
-		}else{
+		} else{
 			sugar_die("A record number must be specified to delete");
 		}
 	}
@@ -674,7 +680,7 @@ class SugarController{
             unset($_REQUEST[$seed->module_dir.'2_'.strtoupper($seed->object_name).'_offset']);//after massupdate, the page should redirect to no offset page
             $storeQuery->saveFromRequest($_REQUEST['module']);
             $_REQUEST = array('return_module' => $temp_req['return_module'], 'return_action' => $temp_req['return_action']);//for post_massupdate, to go back to original page.
-		}else{
+		} else{
 			sugar_die("You must massupdate at least one record");
 		}
 	}
@@ -733,8 +739,7 @@ class SugarController{
 
 		        if(method_exists($dashlet, $requestedMethod) || method_exists($dashlet, '__call')) {
 		            echo $dashlet->$requestedMethod();
-		        }
-		        else {
+		        } else {
 		            echo 'no method';
 		        }
 		    }
@@ -756,15 +761,13 @@ class SugarController{
 		    if(!empty($_REQUEST['configure']) && $_REQUEST['configure']) { // save settings
 		        $dashletDefs[$id]['options'] = $dashlet->saveOptions($_REQUEST);
 		        $current_user->setPreference('dashlets', $dashletDefs, 0, $_REQUEST['module']);
-		    }
-		    else { // display options
+		    } else { // display options
 		        $json = getJSONobj();
 		        return 'result = ' . $json->encode((array('header' => $dashlet->title . ' : ' . $mod_strings['LBL_OPTIONS'],
 		                                                 'body'  => $dashlet->displayOptions())));
 
 		    }
-		}
-		else {
+		} else {
 		    return '0';
 		}
 	}
@@ -846,13 +849,14 @@ class SugarController{
 						$this->_processed = true;
 						$this->no_access();
 					}
-				}else{
+				} else{
 					$this->_processed = true;
 					$this->no_access();
 				}
 			}
-		}else
-			$this->_processed = false;
+		} else {
+					$this->_processed = false;
+		}
 	}
 
 	/**
@@ -887,8 +891,9 @@ class SugarController{
         $this->loadMapping('entry_point_registry');
 
         if ( isset($this->entry_point_registry[$entryPoint]['auth'])
-                && !$this->entry_point_registry[$entryPoint]['auth'] )
-            return false;
+                && !$this->entry_point_registry[$entryPoint]['auth'] ) {
+                    return false;
+        }
         return true;
     }
 
@@ -901,8 +906,7 @@ class SugarController{
 		$file = self::getActionFilename($this->do_action);
 		if ( isset($this->action_view_map[strtolower($this->do_action)]) ) {
 	        $action = $this->action_view_map[strtolower($this->do_action)];
-	    }
-	    else {
+	    } else {
 	        $action = $this->do_action;
 	    }
 	    // index actions actually maps to the view.list.php view
@@ -935,12 +939,13 @@ class SugarController{
 			$GLOBALS['log']->debug('Using Action File Map:' . $this->action_file_map[strtolower($this->do_action)]);
 			require_once($this->action_file_map[strtolower($this->do_action)]);
 			$this->_processed = true;
-		}elseif(!empty($this->action_view_map[strtolower($this->do_action)])){
+		} elseif(!empty($this->action_view_map[strtolower($this->do_action)])){
 			$GLOBALS['log']->debug('Using Action View Map:' . $this->action_view_map[strtolower($this->do_action)]);
 			$this->view = $this->action_view_map[strtolower($this->do_action)];
 			$this->_processed = true;
-		}else
-			$this->no_action();
+		} else {
+					$this->no_action();
+		}
 	}
 
 	/**

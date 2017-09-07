@@ -44,10 +44,11 @@ class sendEmail{
 		$email->type = "draft";
 		$email->status = "draft";
 	
-		if(!empty($module->billing_contact_id) && $module->billing_contact_id!="")
-            $contact_id = $module->billing_contact_id;
-        else if(!empty($module->contact_id) && $module->contact_id!="")
-            $contact_id = $module->contact_id;
+		if(!empty($module->billing_contact_id) && $module->billing_contact_id!="") {
+		            $contact_id = $module->billing_contact_id;
+		} else if(!empty($module->contact_id) && $module->contact_id!="") {
+                    $contact_id = $module->contact_id;
+        }
 
             require_once('modules/Contacts/Contact.php');
             $contact = new Contact;

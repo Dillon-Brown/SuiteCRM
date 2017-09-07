@@ -1,5 +1,7 @@
 <?php
-if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
+if(!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -107,8 +109,9 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
      */
     function handleSave ($populate = true)
     {
-        if ($populate)
-            $this->_populateFromRequest () ;
+        if ($populate) {
+                    $this->_populateFromRequest () ;
+        }
         $this->implementation->deploy ( array_change_key_case ( $this->_viewdefs, CASE_UPPER ) ) ; // force the field names back to upper case so the list view will work correctly
     }
 
@@ -132,10 +135,10 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
             {
                 if (isset($this->_fielddefs [ $key ] )) {
 					$defaultFields [ $key ] = self::_trimFieldDefs ( $this->_fielddefs [ $key ] ) ;
-					if (!empty($def['label']))
-					   $defaultFields [ $key ]['label'] = $def['label'];
-                }
-				else {
+					if (!empty($def['label'])) {
+										   $defaultFields [ $key ]['label'] = $def['label'];
+					}
+                } else {
 					$defaultFields [ $key ] = $def;
 				}
             }
@@ -160,10 +163,11 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
         	
             if (empty ( $def [ 'default' ] ))
             {
-                if (isset($this->_fielddefs [ $key ] ))
-					$additionalFields [ $key ] = self::_trimFieldDefs ( $this->_fielddefs [ $key ] ) ;
-				else
-					$additionalFields [ $key ] = $def;
+                if (isset($this->_fielddefs [ $key ] )) {
+                					$additionalFields [ $key ] = self::_trimFieldDefs ( $this->_fielddefs [ $key ] ) ;
+                } else {
+									$additionalFields [ $key ] = $def;
+				}
             }
         }
         return $additionalFields ;
@@ -179,15 +183,17 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
         // Select available fields from the field definitions - don't need to worry about checking if ok to include as the Implementation has done that already in its constructor
         foreach ( $this->_fielddefs as $key => $def )
         {
-            if ($this->isValidField($key, $def) && !isset($this->_viewdefs[$key]))
-        	    $availableFields [ $key ] = self::_trimFieldDefs( $this->_fielddefs [ $key ] ) ;
+            if ($this->isValidField($key, $def) && !isset($this->_viewdefs[$key])) {
+                    	    $availableFields [ $key ] = self::_trimFieldDefs( $this->_fielddefs [ $key ] ) ;
+            }
         }
     	$origDefs = $this->getOriginalViewDefs();
         foreach($origDefs as $key => $def)
         {
         	if (!isset($this->_viewdefs[$key]) || 
-        		(isset($this->_viewdefs[$key]['enabled']) && $this->_viewdefs[$key]['enabled'] == false))
-        	$availableFields [ $key ] = $def;
+        		(isset($this->_viewdefs[$key]['enabled']) && $this->_viewdefs[$key]['enabled'] == false)) {
+        	        	$availableFields [ $key ] = $def;
+        	}
         }
 
         return $availableFields;
@@ -245,8 +251,9 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
     	if (isset($def['type']))
         {
             if ($def['type'] == 'html' || ($def['type'] == 'parent' && !$this->allowParent) 
-             || $def['type'] == "id" || $def['type'] == "link" || $def['type'] == 'image')
-                return false;
+             || $def['type'] == "id" || $def['type'] == "link" || $def['type'] == 'image') {
+                            return false;
+            }
         }
 
     	//hide currency_id, deleted, and _name fields by key-name
@@ -303,13 +310,15 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
                 else
                 {
 	                // if we don't have a valid fieldname then just ignore it and move on...
-					if ( ! isset ( $this->_fielddefs [ $fieldname ] ) )
-						continue ;
+					if ( ! isset ( $this->_fielddefs [ $fieldname ] ) ) {
+											continue ;
+					}
 
                     $newViewdefs[$fieldname] = self::createViewDefsByFieldDefs($this->_fielddefs[$fieldname], get_class($this));
                 }
-                if (isset($newViewdefs [ $fieldname ]['enabled']))
-                		$newViewdefs [ $fieldname ]['enabled'] = true;
+                if (isset($newViewdefs [ $fieldname ]['enabled'])) {
+                                		$newViewdefs [ $fieldname ]['enabled'] = true;
+                }
 
                 if (isset ( $_REQUEST [ strtolower ( $fieldname ) . 'width' ] ))
                 {
@@ -326,8 +335,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
                 } else if (isset ( $this->_viewdefs [ $fieldname ] [ 'width' ] ))
                 {
                     $newViewdefs [ $fieldname ] [ 'width' ] = $this->_viewdefs [ $fieldname ] [ 'width' ] ;
-                }
-                else {
+                } else {
                 	$newViewdefs [ $fieldname ] [ 'width' ] = "10%";
                 }
 
@@ -413,8 +421,9 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
 
    static function _trimFieldDefs ( $def )
 	{
-		if ( isset ( $def [ 'vname' ] ) )
-			$def [ 'label' ] = $def [ 'vname' ] ;
+		if ( isset ( $def [ 'vname' ] ) ) {
+					$def [ 'label' ] = $def [ 'vname' ] ;
+		}
 		return array_intersect_key ( $def , array ( 'type' => true, 'studio' => true , 'label' => true , 'width' => true , 'sortable' => true , 'related_fields' => true , 'default' => true , 'link' => true , 'align' => true , 'orderBy' => true ,'hideLabel' => true, 'customLable' => true , 'currency_format' => true ) ) ;
 	}
 

@@ -62,8 +62,7 @@ class TemplateHandler {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if(isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
-        }
-        else {
+        } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
@@ -101,7 +100,9 @@ class TemplateHandler {
         $cacheDir = create_cache_directory('modules/'. $module . '/');
         $d = dir($cacheDir);
         while($e = $d->read()){
-            if(!empty($view) && $e != $view )continue;
+            if(!empty($view) && $e != $view ) {
+                continue;
+            }
             $end =strlen($e) - 4;
             if(is_file($cacheDir . $e) && $end > 1 && substr($e, $end) == '.tpl'){
                 unlink($cacheDir . $e);
@@ -119,10 +120,14 @@ class TemplateHandler {
 
         foreach($themesDir as $theme) {
             $tplDir = $theme.'/modules/'. $module . '/';
-            if(!file_exists($tplDir)) continue;
+            if(!file_exists($tplDir)) {
+                continue;
+            }
             $d = dir($tplDir);
             while($e = $d->read()) {
-                if(!empty($view) && $e != $view ) continue;
+                if(!empty($view) && $e != $view ) {
+                    continue;
+                }
                 $end =strlen($e) - 4;
                 if(is_file($tplDir. $e) && $end > 1 && substr($e, $end) == '.tpl') {
                     unlink($tplDir . $e);
@@ -221,8 +226,9 @@ class TemplateHandler {
             $javascript->setFormName($view);
 
             $javascript->setSugarBean($sugarbean);
-            if ($view != "ConvertLead")
-                $javascript->addAllFields('', null,true);
+            if ($view != "ConvertLead") {
+                            $javascript->addAllFields('', null,true);
+            }
 
             $validatedFields = array();
             $javascript->addToValidateBinaryDependency('assigned_user_name', 'alpha', $javascript->buildStringToTranslateInSmarty('ERR_SQS_NO_MATCH_FIELD').': '.$javascript->buildStringToTranslateInSmarty('LBL_ASSIGNED_TO'), 'false', '', 'assigned_user_id');
@@ -245,8 +251,7 @@ class TemplateHandler {
                         || isset($app_strings[$def['vname']])
                         || translate($def['vname'],$sugarbean->module_dir) != $def['vname']) {
                      $vname = $def['vname'];
-                  }
-                  else{
+                  } else{
                      $vname = "undefined";
                   }
                   $javascript->addToValidateBinaryDependency($name, 'alpha', $javascript->buildStringToTranslateInSmarty('ERR_SQS_NO_MATCH_FIELD').': '.$javascript->buildStringToTranslateInSmarty($vname), (!empty($def['required']) ? 'true' : 'false'), '', $def['id_name']);
@@ -258,7 +263,7 @@ class TemplateHandler {
             $contents .= $javascript->getScript();
             $contents .= $this->createQuickSearchCode($defs, $defs2, $view, $module);
             $contents .= "{/literal}\n";
-        }else if(preg_match('/^SearchForm_.+/', $view)){
+        } else if(preg_match('/^SearchForm_.+/', $view)){
             global $dictionary, $beanList, $app_strings, $mod_strings;
             $mod = $beanList[$module];
 
@@ -363,10 +368,12 @@ class TemplateHandler {
     {
         $sqs_objects = array();
         require_once('include/QuickSearchDefaults.php');
-        if(isset($this) && $this instanceof TemplateHandler) //If someone calls createQuickSearchCode as a static method (@see ImportViewStep3) $this becomes anoter object, not TemplateHandler
+        if(isset($this) && $this instanceof TemplateHandler) {
+            //If someone calls createQuickSearchCode as a static method (@see ImportViewStep3) $this becomes anoter object, not TemplateHandler
         {
             $qsd = QuickSearchDefaults::getQuickSearchDefaults($this->getQSDLookup());
-        }else
+        }
+        } else
         {
             $qsd = QuickSearchDefaults::getQuickSearchDefaults(array());
         }
@@ -375,7 +382,7 @@ class TemplateHandler {
         	if(strpos($view, 'popup_query_form')){
         		$qsd->setFormName('popup_query_form');
             	$parsedView = 'advanced';
-        	}else{
+        	} else{
         		$qsd->setFormName('search_form');
             	$parsedView = preg_replace("/^SearchForm_/", "", $view);
         	}
@@ -393,8 +400,7 @@ class TemplateHandler {
 
                             if(!empty($f['name']) && !empty($f['id_name'])) {
                                 $sqs_objects[$name.'_'.$parsedView] = $qsd->getQSUser($f['name'],$f['id_name']);
-                            }
-                            else {
+                            } else {
                                 $sqs_objects[$name.'_'.$parsedView] = $qsd->getQSUser();
                             }
                         } else if($matches[0] == 'Campaigns') {
@@ -430,13 +436,16 @@ class TemplateHandler {
                 } //if-else
             } //foreach
 
-            foreach ( $sqs_objects as $name => $field )
-               foreach ( $field['populate_list'] as $key => $fieldname )
+            foreach ( $sqs_objects as $name => $field ) {
+                           foreach ( $field['populate_list'] as $key => $fieldname )
                     $sqs_objects[$name]['populate_list'][$key] = $sqs_objects[$name]['populate_list'][$key] . '_'.$parsedView;
-        }else{
+            }
+        } else{
             //Loop through the Meta-Data fields to see which ones need quick search support
             foreach($defs2 as $f) {
-                if(!isset($defs[$f['name']])) continue;
+                if(!isset($defs[$f['name']])) {
+                    continue;
+                }
 
                 $field = $defs[$f['name']];
                 if ($view == "ConvertLead")
@@ -447,13 +456,13 @@ class TemplateHandler {
                         $ida_suffix = "_".$lc_module.$lc_module."_ida";
                         if (preg_match('/'.$ida_suffix.'$/', $field['id_name']) > 0) {
                             $field['id_name'] = $module . $field['id_name'];
+                        } else {
+                                                    $field['id_name'] = $field['name'] . "_" . $field['id_name'];
                         }
-                        else
-                            $field['id_name'] = $field['name'] . "_" . $field['id_name'];
-                    }
-                    else {
-                        if (!empty($field['id_name']))
-                            $field['id_name'] = $module.$field['id_name'];
+                    } else {
+                        if (!empty($field['id_name'])) {
+                                                    $field['id_name'] = $module.$field['id_name'];
+                        }
                     }
                 }
 				$name = $qsd->form_name . '_' . $field['name'];
@@ -471,10 +480,9 @@ class TemplateHandler {
                             if($field['name'] == 'reports_to_name'){
                                 $sqs_objects[$name] = $qsd->getQSUser('reports_to_name','reports_to_id');
                              // Bug #52994 : QuickSearch for a 1-M User relationship changes assigned to user
-                            }elseif($field['name'] == 'assigned_user_name'){
+                            } elseif($field['name'] == 'assigned_user_name'){
                                  $sqs_objects[$name] = $qsd->getQSUser('assigned_user_name','assigned_user_id');
-                             }
-                             else
+                             } else
                              {
                                  $sqs_objects[$name] = $qsd->getQSUser($field['name'], $field['id_name']);
 
@@ -505,9 +513,9 @@ class TemplateHandler {
                         if(!isset($field['field_list']) && !isset($field['populate_list'])) {
                             $sqs_objects[$name]['populate_list'] = array($field['name'], $field['id_name']);
                             // now handle quicksearches where the column to match is not 'name' but rather specified in 'rname'
-                            if (!isset($field['rname']))
-                                $sqs_objects[$name]['field_list'] = array('name', 'id');
-                            else
+                            if (!isset($field['rname'])) {
+                                                            $sqs_objects[$name]['field_list'] = array('name', 'id');
+                            } else
                             {
                                 $sqs_objects[$name]['field_list'] = array($field['rname'], 'id');
                                 $sqs_objects[$name]['order'] = $field['rname'];
