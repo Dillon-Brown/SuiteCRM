@@ -2899,7 +2899,7 @@ class Email extends Basic
         }
 
         if ($where != "") {
-            $query .= "WHERE $where AND " . $where_auto;
+            $query .= "where $where AND " . $where_auto;
         } else {
             $query .= "WHERE " . $where_auto;
         }
@@ -3349,7 +3349,7 @@ class Email extends Basic
 
         $query['where'] = " WHERE (emails.type= 'inbound' OR emails.type='archived' OR emails.type='out') AND emails.deleted = 0 ";
         if (!empty($additionalWhereClause)) {
-            $query['where'] .= "AND $additionalWhereClause";
+            $query['where'] .= "and $additionalWhereClause";
         }
 
         //If we are explicitly looking for attachments.  Do not use a distinct query as the to_addr is defined

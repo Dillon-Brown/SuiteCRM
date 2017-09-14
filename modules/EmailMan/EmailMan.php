@@ -115,7 +115,7 @@ class EmailMan extends SugarBean
         $query = array('select' => '', 'from' => '', 'where' => '', 'order_by' => '');
 
 
-        $query['select'] = "SELECT $this->table_name.* ,
+        $query['select'] = "select $this->table_name.* ,
 					campaigns.name as campaign_name,
 					email_marketing.name as message_name,
 					(CASE related_type
@@ -141,7 +141,7 @@ class EmailMan extends SugarBean
         $where_auto = " $this->table_name.deleted=0";
 
         if ($where != "") {
-            $query['where'] = "WHERE $where AND " . $where_auto;
+            $query['where'] = "where $where AND " . $where_auto;
         } else {
             $query['where'] = "WHERE " . $where_auto;
         }
@@ -180,7 +180,7 @@ class EmailMan extends SugarBean
                 $return_array, $parentbean, $singleSelect);
         }
 
-        $query = "SELECT $this->table_name.* ,
+        $query = "select $this->table_name.* ,
 					campaigns.name as campaign_name,
 					email_marketing.name as message_name,
 					(CASE related_type
@@ -214,7 +214,7 @@ class EmailMan extends SugarBean
         $where_auto = " $this->table_name.deleted=0";
 
         if ($where != "") {
-            $query .= "WHERE $where AND " . $where_auto;
+            $query .= "where $where AND " . $where_auto;
         } else {
             $query .= "WHERE " . $where_auto;
         }
@@ -231,7 +231,7 @@ class EmailMan extends SugarBean
     function create_list_query($order_by, $where, $show_deleted = 0)
     {
 
-        $query = "SELECT $this->table_name.* ,
+        $query = "select $this->table_name.* ,
 					campaigns.name as campaign_name,
 					email_marketing.name as message_name,
 					(CASE related_type

@@ -858,7 +858,7 @@ class MBModule
                     $contents = preg_replace($search_array, $replace_array, $contents);
                     $search_array = array(
                         "{$old_name}_",
-                        "{$old_name}Dashlet"
+                        "{$old_name}dashlet"
                     );
                     $replace_array = array(
                         $this->key_name . '_',
@@ -1053,7 +1053,7 @@ class MBModule
                 $fieldVarDefs['type'] = 'varchar';
             }
             $field = get_widget($fieldVarDefs['type']);
-            foreach ($fieldVarDefs AS $key => $opt) {
+            foreach ($fieldVarDefs as $key => $opt) {
                 $field->$key = $opt;
             }
         }

@@ -148,7 +148,7 @@ SUGAR.util.doWhen("typeof addImage != 'undefined'", function(){
     addImage('{$this->id}_img','{$this->id}_img_map','index.php?module=AOR_Charts&action=getImageMap&to_pdf=1&imageMapId={$index}');
 });
 </script>
-EOF;
+eof;
 
         return $html;
     }
@@ -383,7 +383,7 @@ EOF;
             });
         });
         </script>
-EOF;
+eof;
 
         return $html;
     }
@@ -622,7 +622,7 @@ EOF;
             }
         }).draw();
         </script>
-EOF;
+eof;
 
         return $html;
     }
@@ -665,7 +665,7 @@ EOF;
             }
         }).draw();
         </script>
-EOF;
+eof;
 
         return $html;
     }
@@ -715,7 +715,7 @@ EOF;
             }
         }).draw();
         </script>
-EOF;
+eof;
 
         return $html;
     }
@@ -759,7 +759,7 @@ EOF;
             data: $chartDataValues
         }).draw();
         </script>
-EOF;
+eof;
 
         return $html;
     }
@@ -886,7 +886,7 @@ EOF;
             }
         }).draw();
         </script>
-EOF;
+eof;
 
         return $html;
     }
@@ -938,7 +938,7 @@ EOF;
             }
         }).draw();
         </script>
-EOF;
+eof;
 
         return $html;
     }

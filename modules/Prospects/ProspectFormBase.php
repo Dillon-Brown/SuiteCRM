@@ -286,7 +286,7 @@ class ProspectFormBase
 		</table>
 		<input type='hidden' name='${prefix}alt_address_city' value='{$prospect->alt_address_city}'><input type='hidden' name='${prefix}alt_address_state'   value='{$prospect->alt_address_state}'><input type='hidden' name='${prefix}alt_address_postalcode'   value='{$prospect->alt_address_postalcode}'><input type='hidden' name='${prefix}alt_address_country'  value='{$prospect->alt_address_country}'>
 		<input type='hidden' name='${prefix}do_not_call'  value='{$prospect->do_not_call}'><input type='hidden' name='${prefix}email_opt_out'  value='{$prospect->email_opt_out}'>
-EOQ;
+eoq;
 
 
         $javascript = new javascript();
@@ -325,13 +325,13 @@ EOQ;
 		<form name="${prefix}ProspectSave" onSubmit="return check_form('${prefix}ProspectSave')" method="POST" action="index.php">
 			<input type="hidden" name="${prefix}module" value="Prospects">
 			<input type="hidden" name="${prefix}action" value="Save">
-EOQ;
-        $the_form .= $this->getFormBody($prefix, 'Prospects', "${prefix}ProspectSave");
+eoq;
+        $the_form .= $this->getFormBody($prefix, 'Prospects', "${prefix}prospectsave");
         $the_form .= <<<EOQ
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="${prefix}button" value="  $lbl_save_button_label  " >
 		</form>
 
-EOQ;
+eoq;
         $the_form .= get_left_form_footer();
         $the_form .= get_validate_record_js();
 
@@ -372,7 +372,7 @@ EOQ;
 		$lbl_email_address&nbsp;<span class="required">$lbl_required_symbol</span><br>
 		<input name='${prefix}email1' type="text" value=""><br><br>
 
-EOQ;
+eoq;
         } else {
             $form = <<<EOQ
 		<input type="hidden" name="${prefix}record" value="">
@@ -387,7 +387,7 @@ EOQ;
 		$lbl_email_address<br>
 		<input name='${prefix}email1' type="text" value=""><br><br>
 
-EOQ;
+eoq;
         }
 
 

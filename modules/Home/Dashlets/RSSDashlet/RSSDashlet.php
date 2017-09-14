@@ -144,7 +144,7 @@ class RSSDashlet extends Dashlet
     {$item->description}
 </td>
 </tr>
-EOHTML;
+eohtml;
                     }
                 }
             }
@@ -164,7 +164,7 @@ EOHTML;
     {$entry->summary}
 </td>
 </tr>
-EOHTML;
+eohtml;
             }
         }
         $output .= "</table>";

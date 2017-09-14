@@ -80,7 +80,7 @@ foreach ($modules as $the_module => $fields) {
             $mod->custom_fields->createCustomTable();
         }
 
-        $result = $db->query("DESCRIBE $mod->table_name" . "_cstm");
+        $result = $db->query("describe $mod->table_name" . "_cstm");
 
         while ($row = $db->fetchByAssoc($result)) {
 

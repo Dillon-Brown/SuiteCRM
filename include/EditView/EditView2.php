@@ -966,14 +966,14 @@ class EditView
     </tr>
     </tbody></table>
 </div>
-EOQ;
+eoq;
                     $group_panel = preg_replace("/[\r\n]+/", "", $group_panel);
 
                     $group_panel_append = <<<EOQ
 <script>
     $('#${form_name}_tabs div:first').append($('${group_panel}'));
 </script>
-EOQ;
+eoq;
                     $str .= $group_panel_append;
                 }
             }

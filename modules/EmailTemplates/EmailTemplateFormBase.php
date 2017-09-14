@@ -72,13 +72,13 @@ class EmailTemplateFormBase
 				<form name="${prefix}EmailTemplateSave" onSubmit="return check_form('${prefix}EmailTemplateSave')" method="POST" action="index.php">
 					<input type="hidden" name="${prefix}module" value="EmailTemplates">
 					<input type="hidden" name="${prefix}action" value="Save">
-EOQ;
-        $the_form .= $this->getFormBody($prefix, $mod, "${prefix}EmailTemplateSave", "20");
+eoq;
+        $the_form .= $this->getFormBody($prefix, $mod, "${prefix}emailtemplatesave", "20");
         $the_form .= <<<EOQ
 				<p><input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " ></p>
 				</form>
 
-EOQ;
+eoq;
 
         $the_form .= get_left_form_footer();
         $the_form .= get_validate_record_js();
@@ -125,7 +125,7 @@ EOQ;
 				    <td ><textarea name='${prefix}description' cols='${size}' rows='4' ></textarea></td>
 				</tr>
 				</table></p>
-EOF;
+eof;
 
         $javascript = new javascript();
         $javascript->setFormName($formname);
@@ -292,7 +292,7 @@ EOF;
                 $oldId = $preProcessedImages[$file['name']];
                 $note->id = $oldId;
                 $note->new_with_id = true;
-                $GLOBALS['log']->debug("Image {$file['name']} has already been processed.");
+                $GLOBALS['log']->debug("image {$file['name']} has already been processed.");
             }
 
             $i = preg_replace("/email_attachment(.+)/", '$1', $key);

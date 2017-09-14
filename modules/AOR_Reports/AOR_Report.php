@@ -898,7 +898,7 @@ class AOR_Report extends Basic
                     }
 
                     //handle like conditions
-                    Switch ($condition->operator) {
+                    switch ($condition->operator) {
                         case 'Contains':
                             $value = "CONCAT('%', " . $value . " ,'%')";
                             break;
@@ -1048,7 +1048,7 @@ class AOR_Report extends Basic
                         $html = '';
                         foreach ($path as $pth) {
                             $_fieldIdName = $this->db->quoteIdentifier($pth['field_id_name']);
-                            $query = "SELECT $_fieldIdName FROM " . $this->db->quoteIdentifier($pth['module_path'][0]) . " GROUP BY $_fieldIdName;";
+                            $query = "select $_fieldIdName FROM " . $this->db->quoteIdentifier($pth['module_path'][0]) . " GROUP BY $_fieldIdName;";
                             $values = $this->dbSelect($query);
 
                             foreach ($values as $value) {

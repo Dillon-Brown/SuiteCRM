@@ -3588,7 +3588,7 @@ function upgradeTeamColumn($bean, $column_name)
         }
 
         //Update the table's team_set_id column to have the same values as team_id
-        $GLOBALS['db']->query("UPDATE {$bean->table_name} SET team_set_id = {$column_name}");
+        $GLOBALS['db']->query("update {$bean->table_name} SET team_set_id = {$column_name}");
     }
 }
 

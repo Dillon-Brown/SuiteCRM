@@ -4371,14 +4371,14 @@ class SugarBean
         }
         $custom_join = $this->getCustomJoin();
 
-        $query = "SELECT $this->table_name.*" . $custom_join['select'] . " FROM $this->table_name ";
+        $query = "select $this->table_name.*" . $custom_join['select'] . " FROM $this->table_name ";
 
         $query .= $custom_join['join'];
         $query .= " WHERE $this->table_name.id = " . $this->db->quoted($id);
         if ($deleted) {
             $query .= " AND $this->table_name.deleted=0";
         }
-        $GLOBALS['log']->debug("Retrieve $this->object_name : " . $query);
+        $GLOBALS['log']->debug("retrieve $this->object_name : " . $query);
         $result = $this->db->limitQuery($query, 0, 1, true, "Retrieving record by id $this->table_name:$id found ");
         if (empty($result)) {
             return null;
@@ -4808,9 +4808,9 @@ class SugarBean
                 } else {
                     $this->modified_user_id = 1;
                 }
-                $query = "UPDATE $this->table_name set deleted=1 , date_modified = '$date_modified', modified_user_id = '$this->modified_user_id' where id='$id'";
+                $query = "update $this->table_name set deleted=1 , date_modified = '$date_modified', modified_user_id = '$this->modified_user_id' where id='$id'";
             } else {
-                $query = "UPDATE $this->table_name set deleted=1 , date_modified = '$date_modified' where id='$id'";
+                $query = "update $this->table_name set deleted=1 , date_modified = '$date_modified' where id='$id'";
             }
             $this->db->query($query, true, "Error marking record deleted: ");
 
@@ -4841,7 +4841,7 @@ class SugarBean
         $this->call_custom_logic("before_restore", $custom_logic_arguments);
 
         $date_modified = $GLOBALS['timedate']->nowDb();
-        $query = "UPDATE $this->table_name set deleted=0 , date_modified = '$date_modified' where id='" . $this->db->quote($id) . "'";
+        $query = "update $this->table_name set deleted=0 , date_modified = '$date_modified' where id='" . $this->db->quote($id) . "'";
         $this->db->query($query, true, "Error marking record undeleted: ");
 
         $this->restoreFiles();
@@ -5329,9 +5329,9 @@ class SugarBean
     {
         $where_clause = $this->get_where($fields_array, $deleted);
         $custom_join = $this->getCustomJoin();
-        $query = "SELECT $this->table_name.*" . $custom_join['select'] . " FROM $this->table_name " . $custom_join['join'];
+        $query = "select $this->table_name.*" . $custom_join['select'] . " FROM $this->table_name " . $custom_join['join'];
         $query .= " $where_clause";
-        $GLOBALS['log']->debug("Retrieve $this->object_name: " . $query);
+        $GLOBALS['log']->debug("retrieve $this->object_name: " . $query);
         $result = $this->db->limitQuery($query, 0, 1, true, "Retrieving record $where_clause:");
 
         if (empty($result)) {
@@ -5372,9 +5372,9 @@ class SugarBean
         }
         if (!empty($where_clause)) {
             if ($deleted) {
-                return "WHERE $where_clause AND deleted=0";
+                return "where $where_clause AND deleted=0";
             } else {
-                return "WHERE $where_clause";
+                return "where $where_clause";
             }
         } else {
             return "";
@@ -5516,7 +5516,7 @@ class SugarBean
             foreach ($data_values as $key => $value) {
                 array_push($conds, $key . "='" . $this->db->quote($value) . "'");
             }
-            $query = "UPDATE $table SET " . implode(',', $conds) . ",date_modified=" . $date_modified . " " . $where;
+            $query = "update $table SET " . implode(',', $conds) . ",date_modified=" . $date_modified . " " . $where;
             $this->db->query($query, false, "Updating Relationship:" . $query);
         }
     }
@@ -5530,7 +5530,7 @@ class SugarBean
      */
     public function retrieve_relationships($table, $values, $select_id)
     {
-        $query = "SELECT $select_id FROM $table WHERE deleted = 0  ";
+        $query = "select $select_id FROM $table WHERE deleted = 0  ";
         foreach ($values as $name => $value) {
             $query .= " AND $name = '$value' ";
         }

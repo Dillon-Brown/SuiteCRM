@@ -204,7 +204,7 @@ $formSel span.required {color: #FF0000;}
 <form action='$webPostUrl' name='WebToLeadForm' method='POST' id='WebToLeadForm'>
     <h2>$webFormHeader</h2>
     <p>$webFormDescription</p>
-HTML;
+html;
 
         return $html;
     }
@@ -488,7 +488,7 @@ $webRedirectURLInput
 $webAssignedUserInput
 $booleanFieldsInput
 $moduleDirInput
-HTML;
+html;
 
         return $html;
     }
@@ -526,7 +526,7 @@ HTML;
         }
     }
 </script>
-HTML;
+html;
 
         return $html;
     }

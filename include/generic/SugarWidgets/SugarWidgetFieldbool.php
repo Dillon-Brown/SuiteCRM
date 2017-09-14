@@ -110,7 +110,7 @@ class SugarWidgetFieldBool extends SugarWidgetReportField
  <option value = "off" {$no}> {$app_strings['LBL_SEARCH_DROPDOWN_NO']}</option>
  <option value = "1" {$yes}> {$app_strings['LBL_SEARCH_DROPDOWN_YES']}</option>
 </select>
-EOHTML;
+eohtml;
 
         return $str;
     }

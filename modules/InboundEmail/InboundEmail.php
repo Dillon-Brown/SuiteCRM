@@ -1161,7 +1161,7 @@ class InboundEmail extends SugarBean
                 $this->pop3_sendCommand("PASS", $this->email_password);
 
                 // get UIDL for this msgNo
-                $this->pop3_sendCommand("UIDL {$msgNo}", '', false); // leave socket buffer alone until the while()
+                $this->pop3_sendCommand("uidl {$msgNo}", '', false); // leave socket buffer alone until the while()
                 $buf = fgets($this->pop3socket, 1024); // handle "OK+ msgNo UIDL(UIDL for this messageno)";
 
                 // if it returns OK then we have found the message else get all the UIDL
@@ -1791,7 +1791,7 @@ class InboundEmail extends SugarBean
             }
 
             foreach ($update as $overview) {
-                $q = "UPDATE {$table} SET ";
+                $q = "update {$table} SET ";
 
                 $set = '';
                 foreach ($this->overview->fieldDefs as $colDef) {
@@ -4163,7 +4163,7 @@ eoq;
                                 <a href="{$url}">{$a['filename']}</a>
                             </td>
                         </tr>
-EOQ;
+eoq;
                 $this->email->cid2Link($a['id'], $a['file_mime_type']);
             } // while
 

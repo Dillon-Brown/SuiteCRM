@@ -404,7 +404,7 @@ $divScript = <<<EOQ
     
     
 </script>
-EOQ;
+eoq;
 
 if (isset($_REQUEST['error'])) {
     //if there is an error flagged, then we are coming here after a save where there was an error detected

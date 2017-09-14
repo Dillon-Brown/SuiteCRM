@@ -524,7 +524,7 @@ eoq;
 
         foreach ($QCModules as $module) {
             $seed = SugarModule::get($module)->loadBean();
-            if (($seed instanceOf SugarBean) && $seed->ACLAccess('edit')) {
+            if (($seed instanceof SugarBean) && $seed->ACLAccess('edit')) {
                 $QCAvailableModules[] = $module;
             }
         }
@@ -2473,11 +2473,11 @@ eoq;
             }
 
             if ($person === 'accounts') {
-                $t = "SELECT {$table}.id, '' first_name, {$table}.name, eabr.primary_address, ea.email_address, '{$module}' module ";
+                $t = "select {$table}.id, '' first_name, {$table}.name, eabr.primary_address, ea.email_address, '{$module}' module ";
             } else {
-                $t = "SELECT {$table}.id, {$table}.first_name, {$table}.last_name, eabr.primary_address, ea.email_address, '{$module}' module ";
+                $t = "select {$table}.id, {$table}.first_name, {$table}.last_name, eabr.primary_address, ea.email_address, '{$module}' module ";
             }
-            $t .= "FROM {$table} ";
+            $t .= "from {$table} ";
             $t .= "JOIN email_addr_bean_rel eabr ON ({$table}.id = eabr.bean_id and eabr.deleted=0) ";
             $t .= "JOIN email_addresses ea ON (eabr.email_address_id = ea.id) ";
             $t .= " WHERE {$where}";
@@ -2621,12 +2621,12 @@ eoq;
             }
 
             if ($beanType === 'accounts') {
-                $t = "SELECT {$table}.id, '' first_name, {$table}.name last_name, eabr.primary_address, ea.email_address, '{$module}' module ";
+                $t = "select {$table}.id, '' first_name, {$table}.name last_name, eabr.primary_address, ea.email_address, '{$module}' module ";
             } else {
-                $t = "SELECT {$table}.id, {$table}.first_name, {$table}.last_name, eabr.primary_address, ea.email_address, '{$module}' module ";
+                $t = "select {$table}.id, {$table}.first_name, {$table}.last_name, eabr.primary_address, ea.email_address, '{$module}' module ";
             }
 
-            $t .= "FROM {$table} ";
+            $t .= "from {$table} ";
             $t .= "JOIN email_addr_bean_rel eabr ON ({$table}.id = eabr.bean_id and eabr.deleted=0) ";
             $t .= "JOIN email_addresses ea ON (eabr.email_address_id = ea.id) ";
             $t .= " WHERE {$where}";

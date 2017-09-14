@@ -75,7 +75,7 @@ var passwordToggle = function(elem, sel) {
 </div>
 <a href="javascript:;" onclick="passwordToggle(this, '#password_toggle');">{$mod_strings['LBL_CHANGE_PASSWORD']}</a>
 
-HTML;
+html;
 
         return $html;
     }
@@ -219,7 +219,7 @@ HTML;
 					</form>
 				</div>
 			</div>
-HTML;
+html;
 
         return $html;
     }

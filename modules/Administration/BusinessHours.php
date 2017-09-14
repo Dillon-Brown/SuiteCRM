@@ -125,7 +125,7 @@ $buttons = <<<EOQ
                        onclick="return check_form('ConfigureSettings');"
                        value="  {$app_strings['LBL_SAVE_BUTTON_LABEL']}  " >
                 &nbsp;<input title="{$mod_strings['LBL_CANCEL_BUTTON_TITLE']}"  onclick="document.location.href='index.php?module=Administration&action=index'" class="button"  type="button" name="cancel" value="  {$app_strings['LBL_CANCEL_BUTTON_LABEL']}  " >
-EOQ;
+eoq;
 
 $sugar_smarty->assign("BUTTONS", $buttons);
 
@@ -151,7 +151,7 @@ $(document).ready(function(){
     $(".open_check").change();
 });
 </script>
-EOF;
+eof;
 
 
 ?>

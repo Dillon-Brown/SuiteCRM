@@ -304,10 +304,10 @@ public $addresses = array();
                         if (!empty($result)) {
                             $row = $this->db->fetchByAssoc($result);
                             if (!empty($row['opt_out'])) {
-                                $optOutValues[$k] = "emailAddress$count";
+                                $optOutValues[$k] = "emailaddress$count";
                             }
                             if (!empty($row['invalid_email'])) {
-                                $invalidValues[$k] = "emailAddress$count";
+                                $invalidValues[$k] = "emailaddress$count";
                             }
                         }
                     }
@@ -925,7 +925,7 @@ public $addresses = array();
      */
     function getEmailAddressWidgetEditView($id, $module, $asMetadata = false, $tpl = '', $tabindex = '0')
     {
-        if (!($this->smarty instanceOf Sugar_Smarty)) {
+        if (!($this->smarty instanceof Sugar_Smarty)) {
             $this->smarty = new Sugar_Smarty();
         }
 
@@ -1040,7 +1040,7 @@ public $addresses = array();
      */
     function getEmailAddressWidgetDetailView($focus, $tpl = '')
     {
-        if (!($this->smarty instanceOf Sugar_Smarty)) {
+        if (!($this->smarty instanceof Sugar_Smarty)) {
             $this->smarty = new Sugar_Smarty();
         }
 
@@ -1082,7 +1082,7 @@ public $addresses = array();
      */
     function getEmailAddressWidgetDuplicatesView($focus)
     {
-        if (!($this->smarty instanceOf Sugar_Smarty)) {
+        if (!($this->smarty instanceof Sugar_Smarty)) {
             $this->smarty = new Sugar_Smarty();
         }
 

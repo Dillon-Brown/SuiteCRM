@@ -1849,7 +1849,7 @@ function clear_form(form) {
 	document.location.href= newLoc;
 }
 </script>
-EOQ;
+eoq;
 
     return $the_script;
 }
@@ -1887,7 +1887,7 @@ function set_focus() {
 }
 -->
 </script>
-EOQ;
+eoq;
 
     return $the_script;
 }
@@ -2905,7 +2905,7 @@ function get_bean_select_array(
         $db = DBManagerFactory::getInstance();
 
         $temp_result = array();
-        $query = "SELECT {$focus->table_name}.id, {$display_columns} as display from {$focus->table_name} ";
+        $query = "select {$focus->table_name}.id, {$display_columns} as display from {$focus->table_name} ";
         $query .= 'where ';
         if ($where != '') {
             $query .= $where . ' AND ';
@@ -5097,7 +5097,7 @@ function verify_image_file($path, $jpeg = false)
         fclose($fp);
         if (preg_match("/<(\?php|html|!doctype|script|body|head|plaintext|table|img |pre(>| )|frameset|iframe|object|link|base|style|font|applet|meta|center|form|isindex)/i",
             $data, $m)) {
-            $GLOBALS['log']->fatal("Found {$m[0]} in $path, not allowing upload");
+            $GLOBALS['log']->fatal("found {$m[0]} in $path, not allowing upload");
 
             return false;
         }
