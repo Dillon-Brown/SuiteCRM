@@ -42,7 +42,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract {
+class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
+{
 
 
 
@@ -60,7 +61,8 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract {
      * @param string $limitPerPage
      * @return array
      */
-    public function search($seed, &$request, $where, $id, $inboundEmail, $filter, $folderObj, $currentUser, $folder, $limit, $limitPerPage) {
+    public function search($seed, &$request, $where, $id, $inboundEmail, $filter, $folderObj, $currentUser, $folder, $limit, $limitPerPage)
+    {
 
 
         // Create the data structure which are required to view a list view.

@@ -425,7 +425,8 @@ class DynamicField
             if ($field['type'] == 'relate') {
                 $related_module = $field['ext2'];
                 $name = $field['name'];
-                if (empty($this->bean->$name)) { //Don't load the relationship twice
+                if (empty($this->bean->$name)) {
+//Don't load the relationship twice
                     $id_name = $field['id_name'];
                     $mod = BeanFactory::getBean($related_module);
                     if (is_object($mod) && isset($this->bean->$name)) {
@@ -984,7 +985,8 @@ class DynamicField
         $count = 0;
         $field_key = $this->getDBName($displayLabel, false);
         $systemLabel = $field_key;
-        if (!$this->use_existing_labels) { // use_existing_labels defaults to false in this module; as of today, only set to true by ModuleInstaller.php
+        if (!$this->use_existing_labels) {
+// use_existing_labels defaults to false in this module; as of today, only set to true by ModuleInstaller.php
             while (isset($mod_strings [$systemLabel]) && $count <= $limit) {
                 $systemLabel = $field_key . "_$count";
                 ++$count;

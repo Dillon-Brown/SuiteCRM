@@ -88,7 +88,8 @@ abstract class SuiteEditorSettings
      *
      * @param $settings array or object
      */
-    public function __construct($settings = null) {
+    public function __construct($settings = null)
+    {
         if($settings) {
             $this->extend($settings);
         }
@@ -99,7 +100,8 @@ abstract class SuiteEditorSettings
      *
      * @param $settings array or object
      */
-    public function extend($settings) {
+    public function extend($settings)
+    {
         foreach ($settings as $key => $value) {
             $this->$key = $value;
         }

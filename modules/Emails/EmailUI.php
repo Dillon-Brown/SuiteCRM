@@ -735,7 +735,7 @@ eoq;
     }
 
 function getMailBoxesFromCacheValue($mailAccount)
-    {
+{
         $foldersCache = $this->getCacheValue($mailAccount->id, 'folders', "folders.php", 'foldersCache');
         $mailboxes = $foldersCache['mailboxes'];
         $mailboxesArray = $mailAccount->generateFlatArrayFromMultiDimArray($mailboxes,
@@ -1394,7 +1394,7 @@ eoq;
     }
 
 function createCopyOfInboundAttachment($ie, $ret, $uid)
-    {
+{
         global $sugar_config;
         if ($ie->isPop3Protocol()) {
             // get the UIDL from database;
@@ -1436,7 +1436,7 @@ function createCopyOfInboundAttachment($ie, $ret, $uid)
     }
 
         function parseAttachmentInfo(&$actualAttachmentInfo, $attachmentHtmlData)
-    {
+        {
         $downLoadPHP = strpos($attachmentHtmlData, "index.php?entryPoint=download&");
         while ($downLoadPHP) {
             $attachmentHtmlData = substr($attachmentHtmlData, $downLoadPHP + 30);
@@ -1773,7 +1773,7 @@ function createCopyOfInboundAttachment($ie, $ret, $uid)
     }
 
 function doAssignment($distributeMethod, $ieid, $folder, $uids, $users)
-    {
+{
         global $app_strings;
         $users = explode(",", $users);
         $emailIds = explode($app_strings['LBL_EMAIL_DELIMITER'], $uids);
@@ -1819,7 +1819,7 @@ function doAssignment($distributeMethod, $ieid, $folder, $uids, $users)
     }
 
 function doDistributionWithMethod($users, $emailIds, $distributionMethod)
-    {
+{
         // we have users and the items to distribute
         if ($distributionMethod == 'roundRobin') {
             $this->distRoundRobin($users, $emailIds);
@@ -1924,7 +1924,7 @@ function doDistributionWithMethod($users, $emailIds, $distributionMethod)
     }
 
 function getAssignedEmailsCountForUsers($userIds)
-    {
+{
         $counts = array();
         foreach ($userIds as $id) {
             $r = $this->db->query("SELECT count(*) AS c FROM emails WHERE assigned_user_id = '$id' AND status = 'unread'");
@@ -1936,7 +1936,7 @@ function getAssignedEmailsCountForUsers($userIds)
     }
 
 function getLastRobin($ie)
-    {
+{
         $lastRobin = "";
         if ($this->validCacheFileExists($ie->id, 'folders', "robin.cache.php")) {
             $lastRobin = $this->getCacheValue($ie->id, 'folders', "robin.cache.php", 'robin');
@@ -1946,7 +1946,7 @@ function getLastRobin($ie)
     }
 
 function setLastRobin($ie, $lastRobin)
-    {
+{
         global $sugar_config;
         $cacheFolderPath = sugar_cached("modules/Emails/{$ie->id}/folders");
         if (!file_exists($cacheFolderPath)) {
@@ -2574,7 +2574,7 @@ eoq;
     } // fn
 
         function findEmailFromBeanIds($beanIds, $beanType, $whereArr)
-    {
+        {
         global $current_user;
         $q = '';
         $whereAdd = "";
@@ -2790,7 +2790,7 @@ eoq;
     }
 
 function clearInboundAccountCache($ieId)
-    {
+{
         global $sugar_config;
         $cacheRoot = sugar_cached("modules/Emails/{$ieId}");
         $files = findAllFiles($cacheRoot . "/messages/", array());
@@ -2804,7 +2804,7 @@ function clearInboundAccountCache($ieId)
     }
 
 function getFromAccountsArray($ie)
-    {
+{
         global $current_user;
         global $app_strings;
 

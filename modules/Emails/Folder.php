@@ -74,7 +74,8 @@ class Folder
     /**
      * Folder constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = DBManagerFactory::getInstance();
         $this->id = null;
         $this->type = "inbound";
@@ -124,7 +125,8 @@ class Folder
      * @return Folder
      * @throws SuiteException
      */
-    public function retrieveFromRequest($request) {
+    public function retrieveFromRequest($request)
+    {
 
         if (isset($request['folders_id']) && !empty($request['folders_id'])) {
 
@@ -140,14 +142,16 @@ class Folder
     /**
      * @return string
      */
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
     /**
      * @return null|string
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 

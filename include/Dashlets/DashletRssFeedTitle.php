@@ -42,7 +42,8 @@
  * Class for parsing title from RSS feed, and keep default encoding (UTF-8)
  * Created: Sep 12, 2011
  */
-class DashletRssFeedTitle {
+class DashletRssFeedTitle
+{
 	public $defaultEncoding = "UTF-8";
 	public $readBytes = 8192;
 	public $url;
@@ -53,11 +54,13 @@ class DashletRssFeedTitle {
 	public $xmlEncoding = false;
 	public $fileOpen = false;
 
-	public function __construct($url) {
+	public function __construct($url)
+	{
 		$this->url = $url;
 	}
 
-	public function generateTitle() {
+	public function generateTitle()
+	{
 		if ($this->readFeed()) {
 			$this->getTitle();
 			if (!empty($this->title)) {
@@ -71,7 +74,8 @@ class DashletRssFeedTitle {
 	/**
 	 * @todo use curl with waiting timeout instead of fopen
 	 */
-	public function readFeed() {
+	public function readFeed()
+	{
 		if ($this->url) {
                     if (!in_array(strtolower(parse_url($this->url, PHP_URL_SCHEME)), array("http", "https"), true)) {
                         return false;
@@ -90,7 +94,8 @@ class DashletRssFeedTitle {
 	/**
 	 *
 	 */
-	public function getTitle() {
+	public function getTitle()
+	{
 		$matches = array ();
 		preg_match("/<title>.*?<\/title>/i", $this->contents, $matches);
 		if (isset($matches[0])) {
@@ -98,13 +103,15 @@ class DashletRssFeedTitle {
 		}
 	}
 
-	public function cutLength() {
+	public function cutLength()
+	{
 		if (mb_strlen(trim($this->title), $this->defaultEncoding) > $this->cut) {
 			$this->title = mb_substr($this->title, 0, $this->cut, $this->defaultEncoding) . $this->endWith;
 		}
 	}
 
-	private function _identifyXmlEncoding() {
+	private function _identifyXmlEncoding()
+	{
 		$matches = array ();
 		preg_match('/encoding\=*\".*?\"/', $this->contents, $matches);
 		if (isset($matches[0])) {
@@ -112,7 +119,8 @@ class DashletRssFeedTitle {
 		}
 	}
 
-	public function convertEncoding() {
+	public function convertEncoding()
+	{
 		$this->_identifyXmlEncoding();
 		if ($this->xmlEncoding && $this->xmlEncoding != $this->defaultEncoding) {
 			$this->title = iconv($this->xmlEncoding, $this->defaultEncoding, $this->title);

@@ -46,7 +46,9 @@ require_once('include/ytree/Tree.php');
 require_once('include/ytree/ExtNode.php');
 
 
-class SugarFolderEmptyException extends Exception { }
+class SugarFolderEmptyException extends Exception
+{
+}
 
 /**
  * Polymorphic buckets - place any item in a folder
@@ -698,7 +700,8 @@ class SugarFolder
      * @param array $folders - array of folders table rows
      * @return array
      */
-    private function removeDeletedFolders($folders) {
+    private function removeDeletedFolders($folders)
+    {
 
         $ret = array();
 

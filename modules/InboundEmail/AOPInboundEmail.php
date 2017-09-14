@@ -49,7 +49,7 @@ class AOPInboundEmail extends InboundEmail
 {
 
 function handleCreateCase($email, $userId)
-    {
+{
         global $current_user, $mod_strings, $current_language;
         $mod_strings = return_module_language($current_language, "Emails");
         $GLOBALS['log']->debug('In handleCreateCase in AOPInboundEmail');

@@ -171,7 +171,8 @@ EOD;
 
     usort(
         $updates,
-        function ($a, $b) {
+        function ($a, $b)
+        {
             $aDate = $a->fetched_row['date_entered'];
             $bDate = $b->fetched_row['date_entered'];
             if ($aDate < $bDate) {
