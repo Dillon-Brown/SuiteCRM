@@ -646,7 +646,8 @@ if ($has_campaign || $inboundEmail) {
     //$ss->assign("INPOPUPWINDOW", 'true');
     $ss->assign("INSERT_URL_ONCLICK", "insert_variable_html_link(document.wizform.tracker_url.value)");
 
-    $get_campaign_urls = function ($campaign_id) {
+    $get_campaign_urls = function ($campaign_id)
+    {
 
         $return_array = array();
 
@@ -677,7 +678,8 @@ if ($has_campaign || $inboundEmail) {
     }
     if ($has_campaign) {
 
-        $get_tracker_options = function ($label_list, $key_list, $selected_key, $massupdate = false) {
+        $get_tracker_options = function ($label_list, $key_list, $selected_key, $massupdate = false)
+        {
             global $app_strings;
             $select_options = '';
 

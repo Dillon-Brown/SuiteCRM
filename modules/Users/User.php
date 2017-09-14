@@ -1233,7 +1233,7 @@ EOQ;
     }
 
         function create_export_query($order_by, $where, $relate_link_join = '')
-    {
+        {
         include('modules/Users/field_arrays.php');
 
         $cols = '';
@@ -1388,7 +1388,7 @@ EOQ;
     }
 
 function getUsersNameAndEmail()
-    {
+{
         // Bug #48555 Not User Name Format of User's locale.
         $this->_create_proper_name_field();
 
@@ -1410,7 +1410,7 @@ function getUsersNameAndEmail()
      */
 
 function getSystemDefaultNameAndEmail()
-    {
+{
 
         $email = new Email();
         $return = $email->getSystemDefaultEmail();
@@ -1706,7 +1706,8 @@ function getSystemDefaultNameAndEmail()
         $parentbean = null,
         $singleSelect = false,
         $ifListForExport = false
-    ) {    //call parent method, specifying for array to be returned
+    ) {
+//call parent method, specifying for array to be returned
         $ret_array = parent::create_new_list_query($order_by, $where, $filter, $params, $show_deleted, $join_type, true,
             $parentbean, $singleSelect, $ifListForExport);
 

@@ -178,7 +178,7 @@ EOQ;
     }
 
         function getFormBody($prefix, $mod = 'Opportunities', $formname = '')
-    {
+        {
         if (!ACLController::checkAccess('Opportunities', 'edit', true)) {
             return '';
         }
@@ -290,7 +290,7 @@ EOQ;
     } // end getWideFormBody
 
 function getWideFormBody($prefix, $mod = 'Opportunities', $formname = '', $lead = '', $showaccount = true)
-    {
+{
         if (!ACLController::checkAccess('Opportunities', 'edit', true)) {
             return '';
         }

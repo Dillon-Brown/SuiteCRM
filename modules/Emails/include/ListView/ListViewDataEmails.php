@@ -139,7 +139,8 @@ class ListViewDataEmails extends ListViewData
      * @return InboundEmail
      * @throws SuiteException
      */
-    protected function getInboundEmail($currentUser, $folder) {
+    protected function getInboundEmail($currentUser, $folder)
+    {
 
         $inboundEmailID = $currentUser->getPreference('defaultIEAccount', 'Emails');
         $id = $folder->getId();
@@ -203,7 +204,8 @@ class ListViewDataEmails extends ListViewData
      * @param InboundEmail $inboundEmail
      * @return string $this->searchType
      */
-    protected function getSearchType($folder, $inboundEmail) {
+    protected function getSearchType($folder, $inboundEmail)
+    {
 
         switch ($folder->getType()) {
 
@@ -241,7 +243,8 @@ class ListViewDataEmails extends ListViewData
      * @param array $request
      * @return array
      */
-    protected function getFilter($filterFields, $where, $request) {
+    protected function getFilter($filterFields, $where, $request)
+    {
         // Create a list of fields to filter and decide based on the field which type of filter to carry out
 
         $filter = array();
@@ -317,7 +320,8 @@ class ListViewDataEmails extends ListViewData
      * @param string $where
      * @return array
      */
-    public function fixFieldsInFilter($filterFields, $request, &$where) {
+    public function fixFieldsInFilter($filterFields, $request, &$where)
+    {
         // Fix fields in filter fields
         foreach (self::$mapEmailFieldsToEmailTextFields as $EmailSearchField => $EmailTextSearchField) {
             if(array_search($EmailSearchField, self::$alwaysIncludeSearchFields) !== false) {
@@ -368,7 +372,8 @@ class ListViewDataEmails extends ListViewData
      * @param bool $singleSelect
      * @return array|string
      */
-    public function getCrmQueryArray($crmWhere, $filterFields, $params, $seed, $singleSelect) {
+    public function getCrmQueryArray($crmWhere, $filterFields, $params, $seed, $singleSelect)
+    {
 
         $crmQueryArray = $seed->create_new_list_query(
             'id',
@@ -401,7 +406,8 @@ class ListViewDataEmails extends ListViewData
      * @param array $params
      * @return string
      */
-    public function getCrmEmailsQuery($crmQueryArray, &$params) {
+    public function getCrmEmailsQuery($crmQueryArray, &$params)
+    {
 
         if (!is_array($params)) {
             $params = array();
@@ -475,7 +481,8 @@ class ListViewDataEmails extends ListViewData
      * @param Folder $folderObj
      * @return bool|string
      */
-    protected function getEmailRecordFieldValue($field, $emailHeader, $inboundEmail, $currentUser, $folder, $folderObj) {
+    protected function getEmailRecordFieldValue($field, $emailHeader, $inboundEmail, $currentUser, $folder, $folderObj)
+    {
 
         switch ($field) {
             case 'from_addr_name':
@@ -565,7 +572,8 @@ class ListViewDataEmails extends ListViewData
      * @param string $folder
      * @return array|bool
      */
-    public function getEmailRecord($folderObj, $emailHeader, $seed, $inboundEmail, $currentUser, $folder) {
+    public function getEmailRecord($folderObj, $emailHeader, $seed, $inboundEmail, $currentUser, $folder)
+    {
         $emailRecord = array();
 
         if ($folderObj->getType() === 'draft' && $emailHeader['draft'] === 0) {
@@ -585,7 +593,8 @@ class ListViewDataEmails extends ListViewData
      * @param array $request $_REQUEST
      * @return bool
      */
-    public function isRequestedSearchAdvanced($request) {
+    public function isRequestedSearchAdvanced($request)
+    {
         return
             (isset($request["searchFormTab"]) && $request["searchFormTab"] == "advanced_search") ||
             (
@@ -599,7 +608,8 @@ class ListViewDataEmails extends ListViewData
      * @param array $request $_REQUEST
      * @return bool
      */
-    public function isRequestedSearchBasic($request) {
+    public function isRequestedSearchBasic($request)
+    {
         return isset($request["searchFormTab"]) && $request["searchFormTab"] == "basic_search";
     }
 
@@ -609,7 +619,8 @@ class ListViewDataEmails extends ListViewData
      * @param array $data
      * @return array
      */
-    public function getEmailUIds($data) {
+    public function getEmailUIds($data)
+    {
         $emailUIds = array();
         foreach ($data as $row) {
             $emailUIds[] = $row['UID'];
@@ -735,7 +746,8 @@ class ListViewDataEmails extends ListViewData
      * @param int $totalCounted
      * @return array of queries orderBy and baseURL are always returned the others are only returned  according to values passed in.
      */
-    public function callGenerateQueries($sortOrder, $offset, $prevOffset, $nextOffset, $endOffset, $totalCounted) {
+    public function callGenerateQueries($sortOrder, $offset, $prevOffset, $nextOffset, $endOffset, $totalCounted)
+    {
         return $this->generateQueries($sortOrder, $offset, $prevOffset, $nextOffset, $endOffset, $totalCounted);
     }
 
@@ -745,7 +757,8 @@ class ListViewDataEmails extends ListViewData
      * @param array $queries
      * @return array of urls orderBy and baseURL are always returned the others are only returned  according to values passed in.
      */
-    public function callGenerateURLS($queries) {
+    public function callGenerateURLS($queries)
+    {
         return $this->generateURLS($queries);
     }
 

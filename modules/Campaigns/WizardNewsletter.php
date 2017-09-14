@@ -258,7 +258,8 @@ if ($campaign_type == 'general') {
         //if the selected flag is set to true, then just populate
         if ($selected) {
             $type_option_html .= "<option value='$optionKey' >$optionName</option>";
-        } else {//if not selected yet, check to see if this option should be selected
+        } else {
+//if not selected yet, check to see if this option should be selected
             //if the campaign type is not empty, then select the retrieved type
             if (!empty($focus->campaign_type)) {
                 //check to see if key matches campaign type
@@ -713,7 +714,8 @@ function create_wiz_menu_items(
     $campaign_id = null,
     $marketing_id = null,
     $template_id = null
-) {
+)
+{
 
     global $mod_strings;
 

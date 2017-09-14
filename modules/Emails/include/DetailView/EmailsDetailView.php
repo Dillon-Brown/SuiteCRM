@@ -73,8 +73,7 @@ class EmailsDetailView extends DetailView2
         $tpl = 'include/DetailView/DetailView.tpl',
         $createFocus = true,
         $metadataFileName = 'detail'
-    )
-    {
+    ) {
         parent::setup($module, $focus, $metadataFile, $tpl, $createFocus, $metadataFileName);
     }
 

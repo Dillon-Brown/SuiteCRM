@@ -39,11 +39,12 @@
 
 require_once('modules/Calls_Reschedule/Calls_Reschedule.php');
 
-function reschedule_history($focus, $field, $value, $view){
+function reschedule_history($focus, $field, $value, $view)
+{
 
     global $app_list_strings;
 
-    if($view == 'DetailView'){
+    if($view == 'DetailView') {
 
         $html = '';
         $html .= '<ul id="history_list">';
@@ -69,7 +70,8 @@ function reschedule_history($focus, $field, $value, $view){
 
 }
 
-function reschedule_count($focus, $field, $value, $view){
+function reschedule_count($focus, $field, $value, $view)
+{
 
         $query = "SELECT COUNT(*) FROM calls_reschedule WHERE call_id='".$focus->id."'";
         $result = $focus->db->getOne($query);

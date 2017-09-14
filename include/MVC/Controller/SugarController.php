@@ -812,7 +812,8 @@ class SugarController
             $_REQUEST['return_action'] :
             $GLOBALS['sugar_config']['default_action'];
         $url = "index.php?module=" . $return_module . "&action=" . $return_action;
-        if ($return_module == 'Emails') {//specificly for My Achieves
+        if ($return_module == 'Emails') {
+//specificly for My Achieves
             if (!empty($this->req_for_email['type']) && !empty($this->req_for_email['ie_assigned_user_id'])) {
                 $url = $url . "&type=" . $this->req_for_email['type'] . "&assigned_user_id=" . $this->req_for_email['ie_assigned_user_id'];
             }
@@ -882,10 +883,12 @@ class SugarController
 
             $dashlet = new $dashletDefs[$id]['className']($id,
                 (isset($dashletDefs[$id]['options']) ? $dashletDefs[$id]['options'] : array()));
-            if (!empty($_REQUEST['configure']) && $_REQUEST['configure']) { // save settings
+            if (!empty($_REQUEST['configure']) && $_REQUEST['configure']) {
+// save settings
                 $dashletDefs[$id]['options'] = $dashlet->saveOptions($_REQUEST);
                 $current_user->setPreference('dashlets', $dashletDefs, 0, $_REQUEST['module']);
-            } else { // display options
+            } else {
+// display options
                 $json = getJSONobj();
 
                 return 'result = ' . $json->encode((array(

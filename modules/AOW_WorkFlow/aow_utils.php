@@ -156,7 +156,8 @@ function getModuleTreeData($module)
                     }
                 }
             } //End loop.
-            uasort($sort_fields, function ($a, $b) {
+            uasort($sort_fields, function ($a, $b)
+            {
                 return strcmp($a['label'], $b['label']);
             });
 
@@ -267,7 +268,8 @@ function getModuleField(
     $alt_type = '',
     $currency_id = '',
     $params = array()
-) {
+)
+{
     global $current_language, $app_strings, $app_list_strings, $current_user, $beanFiles, $beanList;
 
     // use the mod_strings for this module

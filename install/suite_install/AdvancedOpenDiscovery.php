@@ -1,5 +1,6 @@
 <?php
-function install_aod() {
+function install_aod()
+{
 
     require_once('modules/Administration/Administration.php');
 

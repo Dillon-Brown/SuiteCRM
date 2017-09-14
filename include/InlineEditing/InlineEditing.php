@@ -44,7 +44,8 @@ function getEditFieldHTML(
     $id = '',
     $alt_type = '',
     $currency_id = ''
-) {
+)
+{
 
     global $current_language, $app_strings, $app_list_strings, $current_user, $beanFiles, $beanList;
 

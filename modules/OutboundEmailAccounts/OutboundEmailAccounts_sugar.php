@@ -44,7 +44,8 @@
  */
 
 
-class OutboundEmailAccounts_sugar extends Basic {
+class OutboundEmailAccounts_sugar extends Basic
+{
 	var $new_schema = true;
 	var $module_dir = 'OutboundEmailAccounts';
 	var $object_name = 'OutboundEmailAccounts';
@@ -74,12 +75,14 @@ class OutboundEmailAccounts_sugar extends Basic {
 //	var $smtp_port;
 //	var $smtp_protocol;
 	
-	function __construct(){
+	function __construct()
+	{
 		parent::__construct();
 	}
 	
-	function bean_implements($interface){
-		switch($interface){
+	function bean_implements($interface)
+	{
+		switch($interface) {
 			case 'ACL': return true;
 		}
 		return false;

@@ -51,7 +51,7 @@ global $mod_strings, $sugar_config;
 
 $bean = BeanFactory::getBean($_REQUEST['module'], $_REQUEST['uid']);
 
-if(!$bean){
+if(!$bean) {
     sugar_die("Invalid Record");
 }
 
@@ -114,7 +114,8 @@ $footer = preg_replace($search, $replace, $template->pdffooter);
 $text = preg_replace($search, $replace, $template->description);
 $text = str_replace("<p><pagebreak /></p>", "<pagebreak />", $text);
 $text = preg_replace_callback('/\{DATE\s+(.*?)\}/',
-    function ($matches) {
+    function ($matches)
+    {
         return date($matches[1]);
     },
     $text);

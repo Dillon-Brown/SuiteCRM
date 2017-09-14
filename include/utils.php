@@ -477,7 +477,8 @@ function getRunningUser()
     // disabled_functions in php.ini (typical in shared hosting)
     $runningUser = exec('whoami');
 
-    if ($runningUser == null) {  // matches null, false and ""
+    if ($runningUser == null) {
+// matches null, false and ""
         if (is_windows()) {
             $runningUser = getenv('USERDOMAIN') . '\\' . getenv('USERNAME');
         } else {
@@ -751,7 +752,8 @@ function get_user_array(
     $user_name_filter = '',
     $portal_filter = ' AND portal_only=0 ',
     $from_cache = true
-) {
+)
+{
     global $locale, $sugar_config, $current_user;
 
     if (empty($locale)) {
@@ -825,7 +827,8 @@ function get_user_array(
         // Get the id and the name.
         while ($row = $db->fetchByAssoc($result)) {
             if ($use_real_name == true || showFullName()) {
-                if (isset($row['last_name'])) { // cn: we will ALWAYS have both first_name and last_name (empty value if blank in db)
+                if (isset($row['last_name'])) {
+// cn: we will ALWAYS have both first_name and last_name (empty value if blank in db)
                     $temp_result[$row['id']] = $locale->getLocaleFormattedName($row['first_name'], $row['last_name']);
                 } else {
                     $temp_result[$row['id']] = $row['user_name'];
@@ -2887,7 +2890,8 @@ function get_bean_select_array(
     $where = '',
     $order_by = '',
     $blank_is_none = false
-) {
+)
+{
     global $beanFiles;
 
     // set $add_blank = true by default
@@ -2943,7 +2947,8 @@ function get_bean_select_array(
 
         if ($add_blank == true) {
             // Add in a blank row
-            if ($blank_is_none == true) { // set 'blank row' to "--None--"
+            if ($blank_is_none == true) {
+// set 'blank row' to "--None--"
                 global $app_strings;
                 $temp_result[''] = $app_strings['LBL_NONE'];
             } else {
@@ -3959,9 +3964,11 @@ function getPhpInfo($level = -1)
                 $vPat3 = "/$vPat\s*$vPat\s*$vPat/";
                 $vPat2 = "/$vPat\s*$vPat/";
 
-                if (preg_match($vPat3, $vOne, $match)) { // 3cols
+                if (preg_match($vPat3, $vOne, $match)) {
+// 3cols
                     $returnInfo[$vName][trim($match[1])] = array(trim($match[2]), trim($match[3]));
-                } elseif (preg_match($vPat2, $vOne, $match)) { // 2cols
+                } elseif (preg_match($vPat2, $vOne, $match)) {
+// 2cols
                     $returnInfo[$vName][trim($match[1])] = trim($match[2]);
                 }
             }
@@ -4544,7 +4551,8 @@ function getStudioIcon(
     $height = '48',
     $align = 'baseline',
     $alt = ''
-) {
+)
+{
     global $app_strings, $theme;
 
     $iconName = _getIcon($iconFileName);
@@ -4592,11 +4600,13 @@ function html_entity_decode_utf8($string)
     //php will have issues with numbers with leading zeros, so do not include them in what we send to code2utf.
 
     $string = preg_replace_callback('~&#x0*([0-9a-f]+);~i',
-        function ($matches) {
+        function ($matches)
+        {
             return code2utf(hexdec($matches[1]));
         }, $string);
     $string = preg_replace_callback('~&#0*([0-9]+);~',
-        function ($matches) {
+        function ($matches)
+        {
             return code2utf($matches[1]);
         }, $string);
 
@@ -4687,7 +4697,8 @@ function ajaxInit()
 function getAbsolutePath(
     $path,
     $currentServer = false
-) {
+)
+{
     $path = trim($path);
 
     // try to match absolute paths like \\server\share, /directory or c:\
@@ -4713,7 +4724,8 @@ function getAbsolutePath(
  */
 function loadBean(
     $module
-) {
+)
+{
     return SugarModule::get($module)->loadBean();
 }
 
@@ -5337,7 +5349,8 @@ function get_help_url(
     $dev_status = '',
     $send_key = '',
     $send_anchor = ''
-) {
+)
+{
     global $sugar_config;
 
     if (!empty($sugar_config['custom_help_url'])) {

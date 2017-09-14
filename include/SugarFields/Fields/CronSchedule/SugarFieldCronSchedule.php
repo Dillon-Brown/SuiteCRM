@@ -1,34 +1,39 @@
 <?php
 require_once('include/SugarFields/Fields/Base/SugarFieldBase.php');
 
-class SugarFieldCronSchedule extends SugarFieldBase {
+class SugarFieldCronSchedule extends SugarFieldBase
+{
 
-    private function getDays(){
+    private function getDays()
+    {
         $days = array();
         $date = new DateTime("1986-05-01");
         $period = new DateInterval('P1D');
-        for($x = 1; $x <= 31; $x++){
+        for($x = 1; $x <= 31; $x++) {
             $days[$x] = $date->format('jS');;
             $date->add($period);
         }
         return $days;
     }
-    private function getWeekDays(){
+    private function getWeekDays()
+    {
         $days = array();
         $date = new DateTime("1986-05-04");
         $period = new DateInterval('P1D');
-        for($x = 0; $x < 7; $x++){
+        for($x = 0; $x < 7; $x++) {
             $days[$x] = $date->format('D');
             $date->add($period);
         }
         return $days;
     }
 
-    function getHumanReadable($schedule){
+    function getHumanReadable($schedule)
+    {
 
     }
 
-    function setup($parentFieldArray, $vardef, $displayParams, $tabindex, $twopass = true) {
+    function setup($parentFieldArray, $vardef, $displayParams, $tabindex, $twopass = true)
+    {
         global $app_list_strings,$app_strings;
         parent::setup($parentFieldArray, $vardef, $displayParams, $tabindex, $twopass);
         $this->ss->assign('APP',$app_strings);
@@ -38,7 +43,8 @@ class SugarFieldCronSchedule extends SugarFieldBase {
         $this->ss->assign('weekdays',get_select_options($weekdays,''));
         $days = $this->getDays();
         $this->ss->assign('days',get_select_options($days,''));
-        function padNumbers($x){
+        function padNumbers($x)
+        {
             return str_pad($x,2,'0',STR_PAD_LEFT);
         }
         $minutes = array_map('padNumbers',range(0,59));
