@@ -144,6 +144,6 @@ function onLangSelect(e) {
 
 </body>
 </html>
-EOQ;
+eoq;
 
 echo $out;

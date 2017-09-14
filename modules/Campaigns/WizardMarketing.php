@@ -472,7 +472,7 @@ $divScript = <<<EOQ
 
     showfirst('marketing')
 </script>
-EOQ;
+eoq;
 
 //$ss->assign("WIZ_JAVASCRIPT", print_wizard_jscript());
 $ss->assign("DIV_JAVASCRIPT", $divScript);
@@ -551,7 +551,7 @@ $(function(){
     document.location.href = $('#nav_step2 a').first().attr('href');
 });
 </script>
-JS;
+js;
 }
 
 $ss->assign('WIZMENU', $dotListWizardMenu);

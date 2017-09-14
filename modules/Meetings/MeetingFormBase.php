@@ -77,12 +77,12 @@ class MeetingFormBase extends FormBase
 
 			<input type="hidden" name="${prefix}action" value="Save">
 
-EOQ;
-        $the_form .= $this->getFormBody($prefix, 'Meetings', "{$prefix}MeetingSave");
+eoq;
+        $the_form .= $this->getFormBody($prefix, 'Meetings', "{$prefix}meetingsave");
         $the_form .= <<<EOQ
 		<p><input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " ></p>
 		</form>
-EOQ;
+eoq;
 
         $the_form .= get_left_form_footer();
         $the_form .= get_validate_record_js();
@@ -148,7 +148,7 @@ EOQ;
 						inputField : "jscal_field", daFormat : "$cal_dateformat", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1, weekNumbers:false
 					});
 					</script>
-EOF;
+eof;
 
 
         $javascript = new javascript();

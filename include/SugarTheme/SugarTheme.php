@@ -577,7 +577,7 @@ class SugarTheme
         $defaultFileName = $this->getDefaultCSSPath() . '/' . $cssFileName;
         $fullFileName = $this->getCSSPath() . '/' . $cssFileName;
         if (isset($this->parentTheme)
-            && SugarThemeRegistry::get($this->parentTheme) instanceOf SugarTheme
+            && SugarThemeRegistry::get($this->parentTheme) instanceof SugarTheme
             && ($filename = SugarThemeRegistry::get($this->parentTheme)->getCSSURL($cssFileName, false)) != ''
         ) {
             $cssFileContents .= file_get_contents($filename);
@@ -677,7 +677,7 @@ class SugarTheme
 
         return <<<EOHTML
 <script type="text/javascript" src="$styleJS"></script>
-EOHTML;
+eohtml;
     }
 
     /**
@@ -702,7 +702,7 @@ EOHTML;
         $fullFileName = $this->getJSPath() . '/' . $jsFileName;
         $defaultFileName = $this->getDefaultJSPath() . '/' . $jsFileName;
         if (isset($this->parentTheme)
-            && SugarThemeRegistry::get($this->parentTheme) instanceOf SugarTheme
+            && SugarThemeRegistry::get($this->parentTheme) instanceof SugarTheme
             && ($filename = SugarThemeRegistry::get($this->parentTheme)->getJSURL($jsFileName,
                 false)) != '' && !in_array($jsFileName, $this->ignoreParentFiles)
         ) {
@@ -789,7 +789,7 @@ EOHTML;
         } elseif (is_file($this->getTemplatePath() . '/' . $templateName)) {
             $templatePath = $this->getTemplatePath() . '/' . $templateName;
         } elseif (isset($this->parentTheme)
-            && SugarThemeRegistry::get($this->parentTheme) instanceOf SugarTheme
+            && SugarThemeRegistry::get($this->parentTheme) instanceof SugarTheme
             && ($filename = SugarThemeRegistry::get($this->parentTheme)->getTemplate($templateName)) != ''
         ) {
             $templatePath = $filename;
@@ -798,7 +798,7 @@ EOHTML;
         } elseif (is_file($this->getDefaultTemplatePath() . '/' . $templateName)) {
             $templatePath = $this->getDefaultTemplatePath() . '/' . $templateName;
         } else {
-            $GLOBALS['log']->warn("Template $templateName not found");
+            $GLOBALS['log']->warn("template $templateName not found");
 
             return false;
         }
@@ -1044,7 +1044,7 @@ EOHTML;
         } elseif (($filename = $this->_getImageFileName($this->getImagePath() . '/' . $imageName)) != '') {
             $imagePath = $filename;
         } elseif (isset($this->parentTheme)
-            && SugarThemeRegistry::get($this->parentTheme) instanceOf SugarTheme
+            && SugarThemeRegistry::get($this->parentTheme) instanceof SugarTheme
             && ($filename = SugarThemeRegistry::get($this->parentTheme)->getImageURL($imageName, false)) != ''
         ) {
             $imagePath = $filename;
@@ -1055,7 +1055,7 @@ EOHTML;
         } elseif (($filename = $this->_getImageFileName('include/images/' . $imageName)) != '') {
             $imagePath = $filename;
         } else {
-            $GLOBALS['log']->warn("Image $imageName not found");
+            $GLOBALS['log']->warn("image $imageName not found");
 
             return false;
         }
@@ -1149,7 +1149,7 @@ EOHTML;
         // first, lets get all the paths of where to look
         $pathsToSearch = array($this->getImagePath());
         $theme = $this;
-        while (isset($theme->parentTheme) && SugarThemeRegistry::get($theme->parentTheme) instanceOf SugarTheme) {
+        while (isset($theme->parentTheme) && SugarThemeRegistry::get($theme->parentTheme) instanceof SugarTheme) {
             $theme = SugarThemeRegistry::get($theme->parentTheme);
             $pathsToSearch[] = $theme->getImagePath();
         }

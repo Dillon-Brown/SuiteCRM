@@ -104,7 +104,7 @@ class User extends Person
     public $importable = true;
     public $_userPreferenceFocus;
 
-    public $encodeFields = Array("first_name", "last_name", "description");
+    public $encodeFields = array("first_name", "last_name", "description");
 
     // This is used to retrieve related fields from form posts.
     public $additional_column_fields = array(
@@ -795,7 +795,7 @@ class User extends Person
 		select id from users where id in ( SELECT  er.bean_id AS id FROM email_addr_bean_rel er,
 			email_addresses ea WHERE ea.id = er.email_address_id
 		    AND ea.deleted = 0 AND er.deleted = 0 AND er.bean_module = 'Users' AND email_address_caps IN ('{$email1}') )
-EOQ;
+eoq;
 
 
         $res = $this->db->query($q);
@@ -999,7 +999,7 @@ EOQ;
             }
 
             $focus = SugarModule::get($module)->loadBean();
-            if ($focus instanceOf SugarBean) {
+            if ($focus instanceof SugarBean) {
                 $key = $focus->acltype;
             } else {
                 $key = 'module';
@@ -1044,7 +1044,7 @@ EOQ;
         $this->savePreferencesToDB();
         //set new password
         $now = TimeDate::getInstance()->nowDb();
-        $query = "UPDATE $this->table_name SET user_hash='$user_hash', system_generated_password='$system_generated', pwd_last_changed='$now' where id='$this->id'";
+        $query = "update $this->table_name SET user_hash='$user_hash', system_generated_password='$system_generated', pwd_last_changed='$now' where id='$this->id'";
         $this->db->query($query, true, "Error setting new password for $this->user_name: ");
         $_SESSION['hasExpiredPassword'] = '0';
     }
@@ -1242,7 +1242,7 @@ EOQ;
             $cols .= $field;
         }
 
-        $query = "SELECT {$cols} FROM users ";
+        $query = "select {$cols} FROM users ";
 
         $where_auto = " users.deleted = 0";
 

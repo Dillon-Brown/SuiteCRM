@@ -73,14 +73,14 @@ class ProspectListFormBase
 			<input type="hidden" name="${prefix}module" value="ProspectLists">
 			<input type="hidden" name="${prefix}action" value="Save">
 			<input type="hidden" name="assigned_user_id" value='${user_id}'>
-EOQ;
+eoq;
 
         $the_form .= $this->getFormBody($prefix, $mod, $prefix . "ProspectListSave");
         $the_form .= <<<EOQ
 		<p><input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " ></p>
 		</form>
 
-EOQ;
+eoq;
 
         $the_form .= get_left_form_footer();
         $the_form .= get_validate_record_js();
@@ -120,7 +120,7 @@ EOQ;
 			<input name='name' type="text" value=""><br>
 			$lbl_list_type&nbsp;<span class="required">$lbl_required_symbol</span><br>
 			<select name="list_type">$list_options</select></p>
-EOQ;
+eoq;
 
 
         $javascript = new javascript();

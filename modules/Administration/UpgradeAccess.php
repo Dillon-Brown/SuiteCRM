@@ -70,7 +70,7 @@ RedirectMatch 403 {$ignoreCase}/+files\.md5\$
     RewriteRule ^cache/jsLanguage/(\w*)/(.._..).js$ index.php?entryPoint=jslang&module=$1&lang=$2 [L,QSA]
 </IfModule>
 # END SUGARCRM RESTRICTIONS
-EOQ;
+eoq;
 
 if (file_exists($htaccess_file)) {
     $fp = fopen($htaccess_file, 'r');

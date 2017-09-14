@@ -164,7 +164,7 @@ class Company extends Basic
         if ($custom_join) {
             $custom_join['join'] .= $relate_link_join;
         }
-        $query = "SELECT
+        $query = "select
 					$table.*,
 					email_addresses.email_address email_address,
 					'' email_addresses_non_primary, " .

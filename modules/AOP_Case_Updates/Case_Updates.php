@@ -145,7 +145,7 @@ function caseUpdates(record){
 
 }
 </script>
-A;
+a;
 
     $updates = $focus->get_linked_beans('aop_case_updates', 'AOP_Case_Updates');
     if (!$updates || is_null($focus->id)) {
@@ -167,7 +167,7 @@ $(document).ready(function(){
 <a href='' onclick='collapseAllUpdates(); return false;'>{$mod_strings['LBL_CASE_UPDATES_COLLAPSE_ALL']}</a>
 <a href='' onclick='expandAllUpdates(); return false;'>{$mod_strings['LBL_CASE_UPDATES_EXPAND_ALL']}</a>
 <div>
-EOD;
+eod;
 
     usort(
         $updates,
@@ -364,7 +364,7 @@ function quick_edit_case_updates($case)
     </form>
 
 
-EOD;
+eod;
 
     return $html;
 }

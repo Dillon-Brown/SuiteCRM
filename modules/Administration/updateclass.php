@@ -112,7 +112,7 @@ else{
 	}
 }
 ?>
-FABRICE;
+fabrice;
         fwrite($fileHandle, $newclass);
         fclose($fileHandle);
     }

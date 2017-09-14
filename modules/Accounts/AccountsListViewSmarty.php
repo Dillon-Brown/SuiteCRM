@@ -155,7 +155,7 @@ class AccountsListViewSmarty extends ListViewSmarty
  			    form.appendChild ( input ) ;
  			}
  			open_popup('ProspectLists','600','400','',true,false,{ 'call_back_function':'set_return_and_save_targetlist', 'form_name':'targetlist_form','field_to_name_array':{'id':'prospect_list'}, 'passthru_data':{'do_contacts' : 1 }   } );
-EOF;
+eof;
         $js = str_replace(array("\r", "\n"), '', $js);
 
         return "<a href='javascript:void(0)' class=\"parent-dropdown-action-handler\" id=\"targetlist_listview \" onclick=\"$js\">{$app_strings['LBL_ADD_TO_PROSPECT_LIST_BUTTON_LABEL_ACCOUNTS_CONTACTS']}</a>";

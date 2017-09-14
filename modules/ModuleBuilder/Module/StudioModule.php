@@ -284,7 +284,7 @@ class StudioModule
                 'name' => $def['name'],
                 'action' => "module=ModuleBuilder&action=editLayout&view={$view}&view_module={$this->module}",
                 'imageTitle' => $def['image'],
-                'help' => "viewBtn{$def['type']}",
+                'help' => "viewbtn{$def['type']}",
                 'size' => '48'
             );
         }
@@ -370,8 +370,8 @@ class StudioModule
      */
     public function isValidDashletModule($moduleName)
     {
-        $fileName = "My{$moduleName}Dashlet";
-        $customFileName = "{$moduleName}Dashlet";
+        $fileName = "my{$moduleName}dashlet";
+        $customFileName = "{$moduleName}dashlet";
         if (file_exists("modules/{$moduleName}/Dashlets/{$fileName}/{$fileName}.php")
             || file_exists("custom/modules/{$moduleName}/Dashlets/{$fileName}/{$fileName}.php")
             || file_exists("modules/{$moduleName}/Dashlets/{$customFileName}/{$customFileName}.php")
@@ -410,7 +410,7 @@ class StudioModule
                     'action' => "module=ModuleBuilder&action=editLayout&view={$view}&view_module={$this->module}",
                     'imageTitle' => $title,
                     'imageName' => $name,
-                    'help' => "{$name}Btn",
+                    'help' => "{$name}btn",
                     'size' => '48'
                 );
             } catch (Exception $e) {

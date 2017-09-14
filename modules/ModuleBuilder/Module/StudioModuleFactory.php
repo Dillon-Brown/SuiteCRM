@@ -64,7 +64,7 @@ class StudioModuleFactory
             return self::$loadedMods[$module];
         }
 
-        $studioModClass = "{$module}StudioModule";
+        $studioModClass = "{$module}studiomodule";
         if (file_exists("custom/modules/{$module}/{$studioModClass}.php")) {
             require_once "custom/modules/{$module}/{$studioModClass}.php";
             $sm = new $studioModClass($module);

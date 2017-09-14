@@ -57,7 +57,7 @@ if (empty($_FILES)) {
    {$mod_strings['LBL_IMPORT_CUSTOM_FIELDS_STRUCT']}: <input name="sugfile" type="file" />
     <input type="submit" value="{$mod_strings['LBL_ICF_IMPORT_S']}" class='button'/>
 </form>
-EOQ;
+eoq;
 } else {
     $fmd = BeanFactory::getBean('EditCustomFields');
 

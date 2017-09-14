@@ -537,7 +537,7 @@ function cleanJobQueue($job)
         $soft_cutoff = $GLOBALS['sugar_config']['jobs']['soft_lifetime'];
     }
     $soft_cutoff_date = $job->db->quoted($td->getNow()->modify("- $soft_cutoff days")->asDb());
-    $job->db->query("UPDATE {$job->table_name} SET deleted=1 WHERE status='done' AND date_modified < " . $job->db->convert($soft_cutoff_date,
+    $job->db->query("update {$job->table_name} SET deleted=1 WHERE status='done' AND date_modified < " . $job->db->convert($soft_cutoff_date,
             'datetime'));
     // hard delete all jobs that are older than hard cutoff
     $hard_cutoff = 21;
@@ -819,7 +819,7 @@ class AORScheduledReportJob implements RunnableSchedulerJob
             padding: 9px 8px 0px 8px;
         }
         </style>
-EOF;
+eof;
         $emailObj = new Email();
         $defaults = $emailObj->getSystemDefaultEmail();
         $mail = new SugarPHPMailer();

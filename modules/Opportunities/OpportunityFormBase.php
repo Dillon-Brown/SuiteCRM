@@ -164,13 +164,13 @@ class OpportunityFormBase
 		<form name="{$prefix}OppSave" onSubmit="return check_form('{$prefix}OppSave')" method="POST" action="index.php">
 			<input type="hidden" name="{$prefix}module" value="Opportunities">
 			<input type="hidden" name="${prefix}action" value="Save">
-EOQ;
-        $the_form .= $this->getFormBody($prefix, $mod, "{$prefix}OppSave");
+eoq;
+        $the_form .= $this->getFormBody($prefix, $mod, "{$prefix}oppsave");
         $the_form .= <<<EOQ
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
 		</form>
 
-EOQ;
+eoq;
         $the_form .= get_left_form_footer();
         $the_form .= get_validate_record_js();
 
@@ -221,7 +221,7 @@ EOQ;
 
 		$lbl_opportunity_name&nbsp;<span class="required">$lbl_required_symbol</span><br>
 		<input name='{$prefix}name' type="text" value="">
-EOQ;
+eoq;
         if ($sugar_config['require_accounts']) {
 
 ///////////////////////////////////////
@@ -230,7 +230,7 @@ EOQ;
 
             $popup_request_data = array(
                 'call_back_function' => 'set_return',
-                'form_name' => "{$prefix}OppSave",
+                'form_name' => "{$prefix}oppsave",
                 'field_to_name_array' => array(
                     'id' => 'account_id',
                     'name' => 'account_name',
@@ -247,7 +247,7 @@ EOQ;
 		${mod_strings['LBL_ACCOUNT_NAME']}&nbsp;<span class="required">${lbl_required_symbol}</span><br>
 		<input class='sqsEnabled' autocomplete='off' id='qc_account_name' name='account_name' type='text' value="" size="16"><input id='qc_account_id' name='account_id' type="hidden" value=''>&nbsp;<input title="{$app_strings['LBL_SELECT_BUTTON_TITLE']}" type="button" class="button" value='{$app_strings['LBL_SELECT_BUTTON_LABEL']}' name=btn1
 			onclick='open_popup("Accounts", 600, 400, "", true, false, {$encoded_popup_request_data});' /><br>
-EOQ;
+eoq;
         }
         $jsCalendarImage = SugarThemeRegistry::current()->getImageURL('jscalendar.gif');
         $the_form .= <<<EOQ
@@ -255,7 +255,7 @@ EOQ;
 		<input name='{$prefix}date_closed' size='12' maxlength='10' id='{$prefix}jscal_field' type="text" value=""> <!--not_in_theme!--><img src="{$jsCalendarImage}" alt="{$app_strings['LBL_ENTER_DATE']}"  id="jscal_trigger" align="absmiddle"><br>
 		$lbl_sales_stage&nbsp;<span class="required">$lbl_required_symbol</span><br>
 		<select name='{$prefix}sales_stage'>
-EOQ;
+eoq;
         $the_form .= get_select_options_with_id($app_list_strings['sales_stage_dom'], "");
         $the_form .= <<<EOQ
 		</select><br>
@@ -267,7 +267,7 @@ EOQ;
 			inputField : "{$prefix}jscal_field", daFormat : "$cal_dateformat", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1, weekNumbers:false
 		});
 		</script>
-EOQ;
+eoq;
 
 
         require_once('include/QuickSearchDefaults.php');
@@ -336,7 +336,7 @@ function getWideFormBody($prefix, $mod = 'Opportunities', $formname = '', $lead 
 		};
 	$prePopProb
 	</script>
-EOQ;
+eoq;
 
         $ntc_date_format = $timedate->get_user_date_format();
         $cal_dateformat = $timedate->get_cal_date_format();
@@ -381,7 +381,7 @@ EOQ;
 <tr>
 <td ><input name='{$prefix}date_closed' onblur="parseDate(this, '$cal_dateformat');" size='12' maxlength='10' id='${prefix}jscal_field' type="text" value="">&nbsp;<!--not_in_theme!--><img src="{$jsCalendarImage}" alt="{$app_strings['LBL_ENTER_DATE']}"  id="${prefix}jscal_trigger" align="absmiddle"></td>
 </tr>
-EOQ;
+eoq;
         if ($showaccount) {
             $the_form .= <<<EOQ
 <tr>
@@ -390,7 +390,7 @@ EOQ;
 <tr>
     <td ><input readonly id='qc_account_name' name='account_name' type='text' value="" size="16"><input id='qc_account_id' name='account_id' type="hidden" value=''>&nbsp;<input  title="{$app_strings['LBL_SELECT_BUTTON_TITLE']}" type="button" class="button" value='{$app_strings['LBL_SELECT_BUTTON_LABEL']}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&html=Popup_picker&form={$formname}&form_submit=false","","width=600,height=400,resizable=1,scrollbars=1");'></td>
 </tr>
-EOQ;
+eoq;
         }
         $the_form .= <<<EOQ
 <tr>
@@ -398,7 +398,7 @@ EOQ;
 </tr>
 <tr>
     <td ><select name='{$prefix}sales_stage'>
-EOQ;
+eoq;
         $the_form .= get_select_options_with_id($app_list_strings['sales_stage_dom'], "");
         $the_form .= <<<EOQ
 		</select></td>
@@ -409,7 +409,7 @@ EOQ;
 <tr>
     <td ><input name='{$prefix}amount' type="text" value='{$opp_amount}'></td>
 </tr>
-EOQ;
+eoq;
 //carry forward custom lead fields to opportunities during Lead Conversion
         $tempOpp = new Opportunity();
         if (method_exists($lead, 'convertCustomFieldsForm')) {
@@ -428,7 +428,7 @@ EOQ;
 		</script>
 
 
-EOQ;
+eoq;
 
 
         $javascript = new javascript();

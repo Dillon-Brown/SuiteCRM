@@ -248,7 +248,7 @@ class UsersViewDetail extends ViewDetail
 <a href="{$url}" class="utilsLink">
 {$GLOBALS['app_strings']['LNK_CREATE']}
 </a>
-EOHTML;
+eohtml;
         }
 
         return $theTitle;

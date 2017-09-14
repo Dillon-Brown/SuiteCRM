@@ -233,7 +233,7 @@ class ContactFormBase extends PersonFormBase
 		</td>
 		</tr>
 
-EOQ;
+eoq;
 
         $form .= $sugarEmailAddress->getEmailAddressWidgetEditView($contact->id,
             $_REQUEST['action'] == 'ConvertLead' ? 'Leads' : 'Contacts', false,
@@ -250,7 +250,7 @@ EOQ;
 		<tr>
 		<td nowrap colspan='4' >{$description_text}</td>
 		</tr>
-EOQ;
+eoq;
 
 
         //carry forward custom lead fields common to contacts during Lead Conversion
@@ -268,7 +268,7 @@ EOQ;
 		<input type='hidden' name='${prefix}alt_address_city' value='{$contact->alt_address_city}'><input type='hidden' name='${prefix}alt_address_state'   value='{$contact->alt_address_state}'><input type='hidden' name='${prefix}alt_address_postalcode'   value='{$contact->alt_address_postalcode}'><input type='hidden' name='${prefix}alt_address_country'  value='{$contact->alt_address_country}'>
 		<input type='hidden' name='${prefix}do_not_call'  value='{$contact->do_not_call}'>
 		<input type='hidden' name='${prefix}email_opt_out'  value='{$contact->email_opt_out}'>
-EOQ;
+eoq;
 
         if ($portal == true) {
             if (isset($contact->portal_name)) {
@@ -304,7 +304,7 @@ EOQ;
 				inputField : "{$prefix}jscal_field", daFormat : "$cal_dateformat", ifFormat : "$cal_dateformat", showsTime : false, button : "{$prefix}jscal_trigger", singleClick : true, step : 1, weekNumbers:false
 				});
 			</script>
-EOQ;
+eoq;
 
 
         $javascript = new javascript();
@@ -353,13 +353,13 @@ EOQ;
 		<form name="${prefix}ContactSave" onSubmit="return check_form('${prefix}ContactSave')" method="POST" action="index.php">
 			<input type="hidden" name="${prefix}module" value="Contacts">
 			<input type="hidden" name="${prefix}action" value="Save">
-EOQ;
-        $the_form .= $this->getFormBody($prefix, 'Contacts', "${prefix}ContactSave");
+eoq;
+        $the_form .= $this->getFormBody($prefix, 'Contacts', "${prefix}contactsave");
         $the_form .= <<<EOQ
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="${prefix}button" value="  $lbl_save_button_label  " >
 		</form>
 
-EOQ;
+eoq;
         $the_form .= get_left_form_footer();
         $the_form .= get_validate_record_js();
 
@@ -400,7 +400,7 @@ EOQ;
 		$lbl_email_address&nbsp;<span class="required">$lbl_required_symbol</span><br>
 		<input name='${prefix}email1' type="text" value=""><br><br>
 
-EOQ;
+eoq;
         } else {
             $form = <<<EOQ
 		<input type="hidden" name="${prefix}record" value="">
@@ -415,7 +415,7 @@ EOQ;
 		$lbl_email_address<br>
 		<input name='${prefix}email1' type="text" value=""><br><br>
 
-EOQ;
+eoq;
         }
 
 

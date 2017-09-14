@@ -572,7 +572,7 @@ $divScript = <<<EOQ
 
     showfirst('newsletter');
 </script>
-EOQ;
+eoq;
 
 $ss->assign("DIV_JAVASCRIPT", $divScript);
 

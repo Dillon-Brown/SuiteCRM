@@ -61,7 +61,7 @@ Calendar.setup ({
     inputField : "{$layout_def['name']}", ifFormat : "{$cal_dateformat}", showsTime : false, button : "{$layout_def['name']}_trigger", singleClick : true, step : 1, weekNumbers:false
 });
 </script>
-EOHTML;
+eohtml;
 
         return $str;
     }

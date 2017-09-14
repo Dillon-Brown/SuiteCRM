@@ -204,7 +204,7 @@ class VardefManager
 
     public static function getLinkFieldForRelationship($module, $object, $relName)
     {
-        $cacheKey = "LFR{$module}{$object}{$relName}";
+        $cacheKey = "lfr{$module}{$object}{$relName}";
         $cacheValue = sugar_cache_retrieve($cacheKey);
         if (!empty($cacheValue)) {
             return $cacheValue;
