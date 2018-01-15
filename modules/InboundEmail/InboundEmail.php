@@ -415,6 +415,8 @@ class InboundEmail extends SugarBean
                     $lastMsg = $firstMsg + (int)$pageSize;
                 }
             }
+            $firstMsg = $firstMsg < 1 ? 1 : $firstMsg;
+            $lastMsg = $lastMsg < $firstMsg ? $firstMsg : $lastMsg;
 
             $sequence  = $firstMsg . ':' . $lastMsg;
             $emailSortedHeaders = imap_fetch_overview(
@@ -464,19 +466,10 @@ class InboundEmail extends SugarBean
         $emailHeaders = json_decode(json_encode($emailHeaders), true);
         // get attachment status
         foreach ($emailHeaders as $i=> $emailHeader) {
+            $structure = imap_fetchstructure($this->conn,  $emailHeader['uid'], FT_UID);
 
-            $structure = imap_fetchstructure($this->conn,  $emailHeader['msgno'], FT_UID);
-
-            if(isset($structure->parts[0]->parts))
-            {
-                // has attachment
-                $emailHeaders[$i]['has_attachment'] = true;
-            } else{
-                // no attachment
-                $emailHeaders[$i]['has_attachment'] = false;
-            }
+            $emailHeaders[$i]['has_attachment'] = $this->mesageStructureHasAttachment($structure);
         }
-
 
         usort(
             $emailHeaders,
@@ -502,6 +495,29 @@ class InboundEmail extends SugarBean
             "mailbox_info" => json_decode(json_encode($mailboxInfo), true),
         );
     }
+
+    /**
+     * @param $imapStructure
+     * @return bool
+     */
+    private function mesageStructureHasAttachment($imapStructure)
+    {
+        if (!isset($imapStructure->parts)
+            && isset($imapStructure->disposition)
+            && $imapStructure->disposition == 'attachment') {
+            return true;
+        }
+
+        if (isset($imapStructure->parts)) {
+            foreach ($imapStructure->parts as $part) {
+                if ($this->mesageStructureHasAttachment($part)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     ////	CUSTOM LOGIC HOOKS
     /**
@@ -3794,7 +3810,7 @@ class InboundEmail extends SugarBean
         // Bug 50241: can't process <?xml:namespace .../> properly. Strip <?xml ...> tag first.
         $msgPart = preg_replace("/<\?xml[^>]*>/", "", $msgPart);
 
-        return SugarCleaner::cleanHtml($msgPart, false);
+        return SugarCleaner::cleanHtml($msgPart, true);
     }
 
 
@@ -3889,7 +3905,7 @@ class InboundEmail extends SugarBean
         // Bug 50241: can't process <?xml:namespace .../> properly. Strip <?xml ...> tag first.
         $msgPart = preg_replace("/<\?xml[^>]*>/", "", $msgPart);
 
-        return SugarCleaner::cleanHtml($msgPart, false);
+        return SugarCleaner::cleanHtml($msgPart, true);
     }
 
     /**
