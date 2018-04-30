@@ -71,8 +71,10 @@ class SugarWidgetSubPanelTopComposeEmailButton extends SugarWidgetSubPanelTopBut
         } else {
             $client = $defaultPref;
         }
+        /** @var Person|Company|Opportunity $bean */
+        $bean = $defines['focus'];
+
         if ($client != 'sugar') {
-            $bean = $defines['focus'];
             // awu: Not all beans have emailAddress property, we must account for this
             if (isset($bean->emailAddress)) {
                 $to_addrs = $bean->emailAddress->getPrimaryAddress($bean);
@@ -84,14 +86,28 @@ class SugarWidgetSubPanelTopComposeEmailButton extends SugarWidgetSubPanelTopBut
             // Generate the compose package for the quick create options.
             require_once 'modules/Emails/EmailUI.php';
 
+
+            // Opportunities does not have an email1 field
+            // we need to use the related account email instead
+            if ($bean->module_name === 'Opportunities') {
+                $relatedAccountId = $bean->account_id;
+                /** @var Account $relatedAccountBean */
+                $relatedAccountBean = BeanFactory::getBean('Accounts', $relatedAccountId);
+                if(!empty($relatedAccountBean) && !empty($relatedAccountBean->email1)) {
+                    $bean->email1 = $relatedAccountBean->email1;
+                    $bean->name = $relatedAccountBean->name;
+                }
+            }
+
             $emailUI = new EmailUI();
             $emailUI->appendTick = false;
-            $button = $emailUI->populateComposeViewFields(
-                $defines['focus'],
-                'email1',
-                true,
-                $app_strings['LBL_COMPOSE_EMAIL_BUTTON_LABEL']
-            );
+            $button = '<a class="email-link" onclick="$(document).openComposeViewModal(this);" data-module="'
+            . $bean->module_name . '" data-record-id="'
+            . $bean->id . '" data-module-name="'
+            . $bean->name .'" data-email-address="'
+            . $bean->email1 .'">'
+            . $app_strings['LBL_COMPOSE_EMAIL_BUTTON_LABEL']
+            . '</a>';
         }
 
         return $button;
