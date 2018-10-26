@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca976455f4dd5b3a817e99d908b4cd7b",
+    "content-hash": "3506ca377a92391e4aca29a19aa85b5d",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -354,7 +354,7 @@
                 {
                     "name": "Luís Otávio Cobucci Oblonczyk",
                     "email": "lcobucci@gmail.com",
-                    "role": "Developer"
+                    "role": "developer"
                 }
             ],
             "description": "A simple library to work with JSON Web Token and JSON Web Signature",
@@ -2248,16 +2248,16 @@
         },
         {
             "name": "flow/jsonpath",
-            "version": "0.3.4",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FlowCommunications/JSONPath.git",
-                "reference": "00aa9c361e4d0a210dd95f3c917a1e0dde3a957f"
+                "reference": "f0222818d5c938e4ab668ab2e2c079bd51a27112"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FlowCommunications/JSONPath/zipball/00aa9c361e4d0a210dd95f3c917a1e0dde3a957f",
-                "reference": "00aa9c361e4d0a210dd95f3c917a1e0dde3a957f",
+                "url": "https://api.github.com/repos/FlowCommunications/JSONPath/zipball/f0222818d5c938e4ab668ab2e2c079bd51a27112",
+                "reference": "f0222818d5c938e4ab668ab2e2c079bd51a27112",
                 "shasum": ""
             },
             "require": {
@@ -2285,7 +2285,7 @@
                 }
             ],
             "description": "JSONPath implementation for parsing, searching and flattening arrays",
-            "time": "2016-09-06T17:43:18+00:00"
+            "time": "2018-03-04T16:39:47+00:00"
         },
         {
             "name": "fzaninotto/faker",
@@ -2746,12 +2746,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/scssphp.git",
-                "reference": "0fcbdf599f9f8289d033f327532b6a2230b1d77f"
+                "reference": "5caf261a0c618eeb123df944597df3ca7bdf0913"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp/zipball/0fcbdf599f9f8289d033f327532b6a2230b1d77f",
-                "reference": "0fcbdf599f9f8289d033f327532b6a2230b1d77f",
+                "url": "https://api.github.com/repos/leafo/scssphp/zipball/5caf261a0c618eeb123df944597df3ca7bdf0913",
+                "reference": "5caf261a0c618eeb123df944597df3ca7bdf0913",
                 "shasum": ""
             },
             "require": {
@@ -2790,7 +2790,7 @@
                 "scss",
                 "stylesheet"
             ],
-            "time": "2018-10-01T00:57:13+00:00"
+            "time": "2018-10-23T23:05:32+00:00"
         },
         {
             "name": "league/container",
@@ -4538,17 +4538,9 @@
             "time": "2018-01-29T19:49:41+00:00"
         }
     ],
-    "aliases": [
-        {
-            "alias": "3.0.0",
-            "alias_normalized": "3.0.0.0",
-            "version": "3.0.0.9999999-dev",
-            "package": "onelogin/php-saml"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "onelogin/php-saml": 20,
         "leafo/scssphp": 20,
         "browserstack/browserstack-local": 20
     },
