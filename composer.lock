@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca976455f4dd5b3a817e99d908b4cd7b",
+    "content-hash": "dd5888c856529f47682cd7ee2215d9e3",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -998,16 +998,16 @@
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v3.4.17",
+            "version": "v3.4.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "1cf7d8e704a9cc4164c92e430f2dfa3e6983661d"
+                "reference": "2cf5aa084338c1f67166013aebe87e2026bbe953"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/1cf7d8e704a9cc4164c92e430f2dfa3e6983661d",
-                "reference": "1cf7d8e704a9cc4164c92e430f2dfa3e6983661d",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/2cf5aa084338c1f67166013aebe87e2026bbe953",
+                "reference": "2cf5aa084338c1f67166013aebe87e2026bbe953",
                 "shasum": ""
             },
             "require": {
@@ -1048,7 +1048,7 @@
                 "configuration",
                 "options"
             ],
-            "time": "2018-09-17T17:29:18+00:00"
+            "time": "2018-11-11T19:48:54+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2746,12 +2746,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/scssphp.git",
-                "reference": "0fcbdf599f9f8289d033f327532b6a2230b1d77f"
+                "reference": "5caf261a0c618eeb123df944597df3ca7bdf0913"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp/zipball/0fcbdf599f9f8289d033f327532b6a2230b1d77f",
-                "reference": "0fcbdf599f9f8289d033f327532b6a2230b1d77f",
+                "url": "https://api.github.com/repos/leafo/scssphp/zipball/5caf261a0c618eeb123df944597df3ca7bdf0913",
+                "reference": "5caf261a0c618eeb123df944597df3ca7bdf0913",
                 "shasum": ""
             },
             "require": {
@@ -2790,7 +2790,7 @@
                 "scss",
                 "stylesheet"
             ],
-            "time": "2018-10-01T00:57:13+00:00"
+            "time": "2018-10-23T23:05:32+00:00"
         },
         {
             "name": "league/container",
@@ -4538,17 +4538,9 @@
             "time": "2018-01-29T19:49:41+00:00"
         }
     ],
-    "aliases": [
-        {
-            "alias": "3.0.0",
-            "alias_normalized": "3.0.0.0",
-            "version": "3.0.0.9999999-dev",
-            "package": "onelogin/php-saml"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "onelogin/php-saml": 20,
         "leafo/scssphp": 20,
         "browserstack/browserstack-local": 20
     },
