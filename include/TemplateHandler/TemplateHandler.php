@@ -516,8 +516,8 @@ class TemplateHandler
                             );
                             $sqs_objects[$name . '_' . $parsedView]['field_list'] = array('name', 'id');
                         } else {
-                            $sqs_objects[$name . '_' . $parsedView]['populate_list'] = $field['field_list'];
-                            $sqs_objects[$name . '_' . $parsedView]['field_list'] = $field['populate_list'];
+                            $sqs_objects[$name . '_' . $parsedView]['populate_list'] = $field['populate_list'];
+                            $sqs_objects[$name . '_' . $parsedView]['field_list'] = $field['field_list'];
                         }
                     }
                 } else {
