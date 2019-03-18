@@ -654,8 +654,8 @@ class TemplateHandler
                                 );
                             }
                         } else {
-                            $sqs_objects[$name]['populate_list'] = $field['field_list'];
-                            $sqs_objects[$name]['field_list'] = $field['populate_list'];
+                            $sqs_objects[$name]['populate_list'] = $field['populate_list'];
+                            $sqs_objects[$name]['field_list'] = $field['field_list'];
                         }
                     }
                 } else {
