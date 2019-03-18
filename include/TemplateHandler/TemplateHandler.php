@@ -514,8 +514,8 @@ class TemplateHandler {
                                 $sqs_objects[$name]['conditions'] = array(array('name'=>$field['rname'],'op'=>'like_custom','end'=>'%','value'=>''));
                             }
                         } else {
-                            $sqs_objects[$name]['populate_list'] = $field['field_list'];
-                            $sqs_objects[$name]['field_list'] = $field['populate_list'];
+                            $sqs_objects[$name]['populate_list'] = $field['populate_list'];
+                            $sqs_objects[$name]['field_list'] = $field['field_list'];
                         }
                     }
                 } else if($field['type'] == 'parent') {
