@@ -30,10 +30,7 @@
 require_once('modules/AOS_Products/AOS_Products_sugar.php');
 class AOS_Products extends AOS_Products_sugar
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

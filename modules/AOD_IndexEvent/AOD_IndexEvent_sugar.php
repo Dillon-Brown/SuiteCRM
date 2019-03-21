@@ -72,10 +72,7 @@ class AOD_IndexEvent_sugar extends Basic
     public $error;
     public $success;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

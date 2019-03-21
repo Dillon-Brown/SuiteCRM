@@ -156,16 +156,6 @@ class EmailMan extends SugarBean
     public $additional_column_fields = array();
 
     /**
-     * EmailMan constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
-
-    /**
      * @param string $order_by
      * @param string $where
      * @param array $filter

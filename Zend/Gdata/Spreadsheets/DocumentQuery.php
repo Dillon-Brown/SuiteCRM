@@ -55,14 +55,6 @@ class Zend_Gdata_Spreadsheets_DocumentQuery extends Zend_Gdata_Query
     protected $_worksheetId = null;
 
     /**
-     * Constructs a new Zend_Gdata_Spreadsheets_DocumentQuery object.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Sets the spreadsheet key for this query.
      * @param string $value
      * @return Zend_Gdata_Spreadsheets_CellQuery Provides a fluent interface

@@ -52,10 +52,7 @@ class AOW_Processed extends Basic
     public $parent_type;
     public $status;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

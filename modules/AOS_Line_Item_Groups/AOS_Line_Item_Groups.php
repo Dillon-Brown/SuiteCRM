@@ -42,10 +42,7 @@ require_once('modules/AOS_Line_Item_Groups/AOS_Line_Item_Groups_sugar.php');
 
 class AOS_Line_Item_Groups extends AOS_Line_Item_Groups_sugar
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

@@ -42,15 +42,4 @@ require_once 'include/ListView/ListViewSmarty.php';
 
 class SpotsListViewSmarty extends ListViewSmarty
 {
-
-    /**
-     * Constructor
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
 }

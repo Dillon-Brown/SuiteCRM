@@ -66,10 +66,7 @@ class SugarFeed extends Basic
     public $assigned_user_name;
     public $assigned_user_link;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

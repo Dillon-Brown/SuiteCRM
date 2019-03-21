@@ -6,10 +6,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class Jjwg_MapsViewMap_Markers extends SugarView
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

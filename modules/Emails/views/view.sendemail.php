@@ -51,14 +51,6 @@ class EmailsViewSendEmail extends ViewAjax
     public $bean;
 
     /**
-     * EmailsViewSendemail constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * @return string
      */
     public function display()

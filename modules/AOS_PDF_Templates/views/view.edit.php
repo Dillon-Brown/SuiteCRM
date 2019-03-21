@@ -7,10 +7,7 @@ require_once('include/MVC/View/views/view.edit.php');
 
 class AOS_PDF_TemplatesViewEdit extends ViewEdit
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
     public function display()
     {

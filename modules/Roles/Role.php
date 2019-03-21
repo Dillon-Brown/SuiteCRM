@@ -74,10 +74,7 @@ class Role extends SugarBean
     public $module_dir = 'Roles';
     public $new_schema = true;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

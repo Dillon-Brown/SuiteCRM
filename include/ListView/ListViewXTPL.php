@@ -57,10 +57,7 @@ class ListViewXTPL extends ListViewDisplay
     public $data;
     public $xtpl;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

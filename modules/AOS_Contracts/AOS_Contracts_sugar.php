@@ -65,10 +65,7 @@ class AOS_Contracts_sugar extends Basic
     public $renewal_reminder_date;
     public $contract_type;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

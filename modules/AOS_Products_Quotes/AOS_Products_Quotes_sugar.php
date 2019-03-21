@@ -84,10 +84,7 @@ class AOS_Products_Quotes_sugar extends Basic
     public $currency_id;
 
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

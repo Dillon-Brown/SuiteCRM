@@ -46,10 +46,7 @@ require_once('modules/Users/UserViewHelper.php');
 
 class UsersViewDetail extends ViewDetail
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

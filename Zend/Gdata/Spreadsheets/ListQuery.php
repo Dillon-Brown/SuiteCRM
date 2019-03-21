@@ -55,14 +55,6 @@ class Zend_Gdata_Spreadsheets_ListQuery extends Zend_Gdata_Query
     protected $_rowId = null;
 
     /**
-     * Constructs a new Zend_Gdata_Spreadsheets_ListQuery object.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Sets the spreadsheet key for the query.
      * @param string $value
      * @return Zend_Gdata_Spreadsheets_CellQuery Provides a fluent interface

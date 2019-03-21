@@ -47,10 +47,7 @@ require_once('include/MVC/View/views/view.detail.php');
 
 class BugsViewDetail extends ViewDetail
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

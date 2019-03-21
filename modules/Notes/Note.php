@@ -93,10 +93,7 @@ class Note extends File
     );
 
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

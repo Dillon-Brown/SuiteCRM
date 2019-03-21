@@ -112,10 +112,7 @@ class Prospect extends Person implements EmailInterface
     public $additional_column_fields = array('assigned_user_name');
 
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

@@ -42,10 +42,7 @@ require_once('include/SugarTinyMCE.php');
 
 class CasesViewEdit extends ViewEdit
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

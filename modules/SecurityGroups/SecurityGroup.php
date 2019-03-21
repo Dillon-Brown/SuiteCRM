@@ -4,14 +4,6 @@ require_once 'modules/SecurityGroups/SecurityGroup_sugar.php';
 
 class SecurityGroup extends SecurityGroup_sugar
 {
-    /**
-     * SecurityGroup constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public $last_run = array('module' => '', 'record' => '', 'action' => '', 'response' => '');
 
     /**

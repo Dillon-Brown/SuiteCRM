@@ -96,10 +96,7 @@ class AOS_Invoices_sugar extends Basic
 
 
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

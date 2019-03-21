@@ -69,10 +69,7 @@ class AOW_Condition extends Basic
     public $value_type;
     public $condition_operator;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

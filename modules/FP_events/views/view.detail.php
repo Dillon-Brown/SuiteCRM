@@ -8,10 +8,7 @@ require_once('include/MVC/View/views/view.detail.php');
 class FP_eventsViewDetail extends ViewDetail
 {
     public $currSymbol;
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

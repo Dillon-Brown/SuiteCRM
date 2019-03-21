@@ -40,10 +40,7 @@
 
 class LeadsController extends SugarController
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

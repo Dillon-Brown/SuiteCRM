@@ -55,16 +55,4 @@ class LDAPAuthenticate extends SugarAuthenticate
 {
     public $userAuthenticateClass = 'LDAPAuthenticateUser';
     public $authenticationDir = 'LDAPAuthenticate';
-    /**
-     * Constructs LDAPAuthenticate
-     * This will load the user authentication class
-     *
-     * @return LDAPAuthenticate
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
 }

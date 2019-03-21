@@ -48,10 +48,7 @@ require_once('modules/Users/UserViewHelper.php');
 class UsersViewEdit extends ViewEdit
 {
     public $useForSubpanel = true;
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

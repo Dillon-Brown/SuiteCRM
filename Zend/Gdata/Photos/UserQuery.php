@@ -69,14 +69,6 @@ class Zend_Gdata_Photos_UserQuery extends Zend_Gdata_Query
     protected $_user = Zend_Gdata_Photos::DEFAULT_USER;
 
     /**
-     * Create a new Query object with default values.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Set's the format of data returned in Atom feeds. Can be either
      * 'api' or 'base'. Normally, 'api' will be desired. Default is 'api'.
      *

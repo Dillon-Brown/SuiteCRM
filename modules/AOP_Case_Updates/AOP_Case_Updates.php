@@ -77,10 +77,7 @@ class AOP_Case_Updates extends Basic
     public $internal;
     public $notes;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

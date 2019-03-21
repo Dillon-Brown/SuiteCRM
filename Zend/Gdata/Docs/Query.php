@@ -79,14 +79,6 @@ class Zend_Gdata_Docs_Query extends Zend_Gdata_Query
     protected $_projection = 'full';
 
     /**
-     * Constructs a new instance of a Zend_Gdata_Docs_Query object.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Sets the projection for this query. Common values for projection
      * include 'full'.
      *

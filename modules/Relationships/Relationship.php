@@ -75,10 +75,7 @@ class Relationship extends SugarBean
 
     public $_self_referencing;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

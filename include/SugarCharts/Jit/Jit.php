@@ -47,11 +47,7 @@ class Jit extends JsChart
 {
     public $supports_image_export = true;
     public $print_html_legend_pdf = true;
-    
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
     
     public function getChartResources()
     {

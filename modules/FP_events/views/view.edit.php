@@ -7,10 +7,7 @@ require_once('include/MVC/View/views/view.edit.php');
 
 class FP_eventsViewEdit extends ViewEdit
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

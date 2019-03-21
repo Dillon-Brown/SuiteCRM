@@ -46,10 +46,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 class EmployeesViewEdit extends ViewEdit
 {
     public $useForSubpanel = true;
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

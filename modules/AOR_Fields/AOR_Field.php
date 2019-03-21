@@ -73,10 +73,7 @@ class AOR_Field extends Basic
     public $group_display;
     public $aor_report_id;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

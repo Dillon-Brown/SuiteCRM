@@ -69,10 +69,7 @@ class AOR_Condition extends Basic
     public $value;
     public $value_type;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

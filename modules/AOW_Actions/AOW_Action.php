@@ -65,10 +65,7 @@ class AOW_Action extends Basic
     public $action;
     public $parameters;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

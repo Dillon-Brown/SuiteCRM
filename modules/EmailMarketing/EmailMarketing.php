@@ -72,10 +72,7 @@ class EmailMarketing extends SugarBean
 
     public $new_schema = true;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

@@ -28,10 +28,7 @@ class jjwg_Areas_sugar extends Basic
     public $country;
     public $coordinates;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

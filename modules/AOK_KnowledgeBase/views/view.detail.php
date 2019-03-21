@@ -45,10 +45,7 @@ require_once('include/MVC/View/views/view.detail.php');
 
 class AOK_KnowledgeBaseViewDetail extends ViewDetail
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

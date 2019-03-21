@@ -57,17 +57,6 @@ class File extends Basic
     public $status;
     public $file_mime_type;
 
-
-    /**
-     * File constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
-
     /**
      * @see SugarBean::save()
      *

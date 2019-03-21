@@ -75,10 +75,7 @@ class FP_events_sugar extends Basic
     public $currency_id;
     public $invite_templates;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

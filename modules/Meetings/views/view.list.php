@@ -46,10 +46,7 @@ require_once('modules/Meetings/MeetingsListViewSmarty.php');
 
 class MeetingsViewList extends ViewList
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

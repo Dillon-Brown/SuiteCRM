@@ -42,10 +42,7 @@ require_once('modules/AOS_Products_Quotes/AOS_Products_Quotes_sugar.php');
 
 class AOS_Products_Quotes extends AOS_Products_Quotes_sugar
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

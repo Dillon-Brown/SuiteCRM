@@ -42,11 +42,6 @@ require_once('include/MVC/View/SugarView.php');
 
 class CalendarViewSaveSettings extends SugarView
 {
-    public function CalendarViewSettings()
-    {
-        parent::SugarView();
-    }
-    
     public function process()
     {
         $this->display();

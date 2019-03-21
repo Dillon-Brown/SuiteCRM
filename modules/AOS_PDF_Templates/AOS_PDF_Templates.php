@@ -30,10 +30,7 @@
 require_once('modules/AOS_PDF_Templates/AOS_PDF_Templates_sugar.php');
 class AOS_PDF_Templates extends AOS_PDF_Templates_sugar
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 }

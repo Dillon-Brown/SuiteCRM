@@ -45,10 +45,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class BugsViewEdit extends ViewEdit
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

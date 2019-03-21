@@ -52,16 +52,6 @@ class ViewPopup extends SugarView
     protected $override_popup = array();
 
     /**
-     * ViewPopup constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
-
-    /**
      * @inheritdoc
      */
     public function display()

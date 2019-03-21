@@ -26,10 +26,7 @@ class jjwg_Address_Cache_sugar extends Basic
     public $lat;
     public $lng;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

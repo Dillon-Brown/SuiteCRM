@@ -30,10 +30,7 @@ class jjwg_Markers_sugar extends Basic
     public $jjwg_maps_lng;
     public $marker_image;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

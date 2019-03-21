@@ -53,14 +53,6 @@ class AOS_QuotesViewDetail extends ViewDetail
      */
     public $bean;
 
-    /**
-     * AOS_QuotesViewDetail constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function display()
     {
         $this->populateQuoteTemplates();

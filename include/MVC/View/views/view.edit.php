@@ -74,17 +74,6 @@ class ViewEdit extends SugarView
     public $showTitle = true;
 
     /**
-     * ViewEdit constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
-
-
-    /**
      * @see SugarView::preDisplay()
      */
     public function preDisplay()

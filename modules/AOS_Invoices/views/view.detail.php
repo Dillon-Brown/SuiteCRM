@@ -7,10 +7,7 @@ require_once('include/MVC/View/views/view.detail.php');
 
 class AOS_InvoicesViewDetail extends ViewDetail
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

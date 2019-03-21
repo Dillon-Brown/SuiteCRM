@@ -73,10 +73,7 @@ class Calls_Reschedule_sugar extends Basic
     public $call_id_c;
     public $calls;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

@@ -81,14 +81,6 @@ class UsersLastImport extends SugarBean
     public $additional_column_fields = array();
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Extends SugarBean::listviewACLHelper
      *
      * @return array

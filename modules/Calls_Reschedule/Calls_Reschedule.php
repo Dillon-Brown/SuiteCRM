@@ -46,10 +46,7 @@ require_once('modules/Calls/Call.php');
 
 class Calls_Reschedule extends Calls_Reschedule_sugar
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 }

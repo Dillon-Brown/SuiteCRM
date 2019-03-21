@@ -8,10 +8,7 @@ class TemplateCronSchedule extends TemplateText
 {
     public $type='CronSchedule';
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

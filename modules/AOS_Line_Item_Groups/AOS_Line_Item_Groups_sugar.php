@@ -41,10 +41,7 @@ class AOS_Line_Item_Groups_sugar extends Basic
     public $importable = true;
     public $disable_row_level_security = true ;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

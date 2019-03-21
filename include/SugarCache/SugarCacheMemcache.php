@@ -83,14 +83,6 @@ class SugarCacheMemcache extends SugarCacheAbstract
     }
 
     /**
-     * @see SugarCacheAbstract::__construct()
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Get the memcache object; initialize if needed
      */
     protected function _getMemcacheObject()

@@ -43,16 +43,6 @@
 class ListViewPackages extends ListViewSmarty
 {
     public $secondaryDisplayColumns;
-    /**
-     * Constructor  Call ListViewSmarty
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
-
 
     /**
      * Override the setup method in ListViewSmarty since we are not passing in a bean

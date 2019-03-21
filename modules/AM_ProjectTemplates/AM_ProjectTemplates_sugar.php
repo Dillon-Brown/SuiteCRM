@@ -71,10 +71,7 @@ class AM_ProjectTemplates_sugar extends Basic
     public $status;
     public $priority;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

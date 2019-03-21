@@ -55,10 +55,7 @@ class ACLAction extends SugarBean
     public $new_schema = true;
     public $disable_custom_fields = true;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
     /**
     * static addActions($category, $type='module')

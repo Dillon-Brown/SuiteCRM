@@ -104,15 +104,6 @@ class CampaignTracker extends SugarBean
 
     public $required_fields =  array('tracker_name'=>1,'tracker_url'=>1);
 
-    /*This bean's constructor*/
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
-
-
     public function save($check_notify = false)
     {
         //make sure that the url has a scheme, if not then add http:// scheme

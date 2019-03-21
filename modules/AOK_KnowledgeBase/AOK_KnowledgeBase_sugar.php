@@ -75,10 +75,7 @@ class AOK_KnowledgeBase_sugar extends Basic
     public $user_id1_c;
     public $approver;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

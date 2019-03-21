@@ -30,10 +30,7 @@
 require_once('modules/AOS_Invoices/AOS_Invoices_sugar.php');
 class AOS_Invoices extends AOS_Invoices_sugar
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

@@ -43,10 +43,7 @@ require_once('include/json_config.php');
 
 class ProjectViewEdit extends ViewEdit
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

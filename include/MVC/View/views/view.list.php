@@ -100,16 +100,6 @@ class ViewList extends SugarView
     public $where = '';
 
     /**
-     * ViewList constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
-
-    /**
      * Prepare List View
      */
     public function listViewPrepare()

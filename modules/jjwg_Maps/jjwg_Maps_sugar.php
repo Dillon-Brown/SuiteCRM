@@ -30,10 +30,7 @@ class jjwg_Maps_sugar extends Basic
     public $parent_type;
     public $parent_id;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

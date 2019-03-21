@@ -57,14 +57,6 @@ class iCal extends vCal
     const UTC_FORMAT = 'Ymd\THi00\Z';
 
     /**
-    * Constructor for the iCal class.
-    */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
     * Gets a UTC formatted string from the given dateTime
     *
     * @param SugarDateTime $dateTime the dateTime to format

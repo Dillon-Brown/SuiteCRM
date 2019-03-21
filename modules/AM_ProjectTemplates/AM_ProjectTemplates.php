@@ -81,10 +81,7 @@
 require_once('modules/AM_ProjectTemplates/AM_ProjectTemplates_sugar.php');
 class AM_ProjectTemplates extends AM_ProjectTemplates_sugar
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
     public function save($check_notify = false)

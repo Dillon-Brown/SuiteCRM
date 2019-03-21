@@ -50,14 +50,6 @@ class Sale extends Basic
     public $currency_id;
 
     /**
-     * Sale constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * @param string $order_by
      * @param string $where
      * @param array $filter

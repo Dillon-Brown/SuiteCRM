@@ -65,10 +65,7 @@ class AOR_Scheduled_Reports extends basic
     public $last_run;
     public $aor_report_id;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

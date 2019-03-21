@@ -68,10 +68,7 @@ class Alert extends Basic
      */
     public $reminder_id;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

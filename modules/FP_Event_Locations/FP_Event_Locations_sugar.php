@@ -69,10 +69,7 @@ class FP_Event_Locations_sugar extends Basic
     public $assigned_user_name;
     public $assigned_user_link;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

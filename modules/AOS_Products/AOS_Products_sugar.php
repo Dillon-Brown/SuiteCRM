@@ -71,10 +71,7 @@ class AOS_Products_sugar extends Basic
 
 
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

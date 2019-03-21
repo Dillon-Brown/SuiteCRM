@@ -95,17 +95,6 @@ class Project extends SugarBean
     //////////////////////////////////////////////////////////////////
 
     /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
-
-
-    /**
      * overriding the base class function to do a join with users table
      */
 

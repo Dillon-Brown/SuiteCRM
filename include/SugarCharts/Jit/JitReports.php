@@ -47,11 +47,6 @@ class JitReports extends Jit
 {
     private $processed_report_keys = array();
     
-    public function __construct()
-    {
-        parent::__construct();
-    }
-    
     public function calculateReportGroupTotal($dataset)
     {
         $total = 0;

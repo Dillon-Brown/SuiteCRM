@@ -55,10 +55,7 @@ require_once('include/MVC/View/views/view.list.php');
 
 class ProjectTaskViewList extends ViewList
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

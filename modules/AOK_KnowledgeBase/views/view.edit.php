@@ -45,10 +45,7 @@ require_once('include/MVC/View/views/view.edit.php');
 
 class AOK_KnowledgeBaseViewEdit extends ViewEdit
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

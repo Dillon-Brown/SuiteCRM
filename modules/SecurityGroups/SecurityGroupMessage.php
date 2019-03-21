@@ -39,10 +39,7 @@ class SecurityGroupMessage extends Basic
     );
 
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

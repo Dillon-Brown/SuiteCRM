@@ -53,10 +53,7 @@ class Group extends User
     public $importable = false;
 
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

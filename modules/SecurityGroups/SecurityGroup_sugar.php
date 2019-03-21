@@ -27,10 +27,7 @@ class SecurityGroup_sugar extends Basic
 
 
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

@@ -44,10 +44,7 @@
 require_once('modules/FP_events/FP_events_sugar.php');
 class FP_events extends FP_events_sugar
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

@@ -71,10 +71,7 @@ class AOD_Index_sugar extends Basic
     public $assigned_user_link;
     public $last_optimised;
     public $location;
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

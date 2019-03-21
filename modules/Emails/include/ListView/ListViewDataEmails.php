@@ -126,16 +126,6 @@ class ListViewDataEmails extends ListViewData
         'date_sent_received' => 'emails.date_sent_received'
     );
 
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
     /**
      * @param User $currentUser
      * @param Folder $folder

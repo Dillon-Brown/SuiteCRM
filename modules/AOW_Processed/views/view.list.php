@@ -27,10 +27,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class AOW_ProcessedViewList extends ViewList
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

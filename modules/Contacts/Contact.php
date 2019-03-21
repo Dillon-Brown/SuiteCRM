@@ -170,10 +170,7 @@ class Contact extends Person implements EmailInterface
         'contacts_users_id' => 'user_sync'
     );
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

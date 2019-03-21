@@ -80,10 +80,7 @@ class AM_TaskTemplates_sugar extends Basic
     public $utilization;
     public $duration;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 

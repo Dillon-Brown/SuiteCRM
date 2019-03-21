@@ -71,10 +71,7 @@ class AOS_Product_Categories_sugar extends Basic
     public $is_parent;
     public $parent_category_id;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
 
 
 
