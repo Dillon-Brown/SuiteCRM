@@ -62,9 +62,7 @@ class SugarApplication
     public $default_module = 'Home';
     public $default_action = 'index';
 
-    public function __construct()
-    {
-    }
+
 
 
 

@@ -108,9 +108,7 @@ abstract class Zend_Gdata_App_Base
             )
         );
 
-    public function __construct()
-    {
-    }
+
 
     /**
      * Returns the child text node of this element

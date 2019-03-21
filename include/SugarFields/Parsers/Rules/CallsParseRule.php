@@ -46,13 +46,6 @@ require_once('include/SugarFields/Parsers/Rules/ActivitiesParseRule.php');
 
 class CallsParseRule extends ActivitiesParseRule
 {
-    public function __construct()
-    {
-    }
-
-
-
-
     public function preParse($panels, $view)
     {
         $panels = parent::preParse($panels, $view);

@@ -50,9 +50,7 @@ class component
     protected $_has_testing_enabled = false;
     protected $_source;
 
-    public function __construct()
-    {
-    }
+
 
     public function init()
     {

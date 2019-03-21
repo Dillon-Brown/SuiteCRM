@@ -51,9 +51,7 @@ class SugarRegistry
     private static $_instances = array();
     private $_data = array();
 
-    public function __construct()
-    {
-    }
+
 
     public static function getInstance($name = 'default')
     {

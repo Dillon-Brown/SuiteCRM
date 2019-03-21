@@ -48,9 +48,7 @@ require_once("include/templates/Template.php");
 class TemplateDragDropChooser extends Template
 {
     public $args;
-    public function __construct()
-    {
-    }
+
 
 
 

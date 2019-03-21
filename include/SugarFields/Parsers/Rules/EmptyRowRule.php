@@ -56,9 +56,7 @@ require_once('include/SugarFields/Parsers/Rules/BaseRule.php');
 
 class EmptyRowRule extends BaseRule
 {
-    public function __construct()
-    {
-    }
+
 
 
     public function parsePanels($panels, $view)

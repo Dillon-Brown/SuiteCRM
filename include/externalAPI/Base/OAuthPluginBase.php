@@ -51,9 +51,7 @@ class OAuthPluginBase extends ExternalAPIBase implements ExternalOAuthAPIPlugin
     protected $oauthParams = array();
     protected $oauth_keys_initialized = false;
 
-    public function __construct()
-    {
-    }
+
 
     /**
      * Setup oauth parameters from connector

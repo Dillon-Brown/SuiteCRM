@@ -54,9 +54,7 @@ class TemplatePhone extends TemplateText
      * Constructor for TemplatePhone class. This constructor ensures that TemplatePhone instances have the
      * validate_usa_format vardef value.
      */
-    public function __construct()
-    {
-    }
+
     
     /**
      * get_field_def

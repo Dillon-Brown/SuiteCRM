@@ -48,9 +48,7 @@ class Chart_outcome_by_month
 {
     public $modules = array('Opportunities');
     public $order = 0;
-    public function __construct()
-    {
-    }
+
 
 
 

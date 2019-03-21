@@ -226,12 +226,6 @@ class Employee extends Person
     }
     */
 
-    public function preprocess_fields_on_save()
-    {
-        parent::preprocess_fields_on_save();
-    }
-
-
     /**
      * create_new_list_query
      *

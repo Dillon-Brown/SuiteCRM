@@ -55,9 +55,7 @@ class PredefinedChart
 {
     public $params = array();
 
-    public function __construct()
-    {
-    }
+
 
 
 

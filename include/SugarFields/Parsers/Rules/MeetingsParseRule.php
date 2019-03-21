@@ -46,9 +46,7 @@ require_once('include/SugarFields/Parsers/Rules/ActivitiesParseRule.php');
 
 class MeetingsParseRule extends ActivitiesParseRule
 {
-    public function __construct()
-    {
-    }
+
 
 
 

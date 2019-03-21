@@ -52,9 +52,7 @@ class TemplateGroupChooser extends Template
     public $display_hide_tabs = true;
     public $display_third_tabs = false;
 
-    public function __construct()
-    {
-    }
+
 
     public function display()
     {

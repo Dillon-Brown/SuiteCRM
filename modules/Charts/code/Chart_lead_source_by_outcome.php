@@ -48,9 +48,7 @@ class Chart_lead_source_by_outcome
 {
     public $modules = array('Opportunities');
     public $order = 0;
-    public function __construct()
-    {
-    }
+
 
 
 

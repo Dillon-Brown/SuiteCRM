@@ -48,17 +48,6 @@ require_once('modules/Trackers/Trackable.php');
 
 class BlankMonitor extends Monitor implements Trackable
 {
-
-    /**
-     * BlankMonitor constructor
-     */
-    public function __construct()
-    {
-    }
-
-
-
-
     /**
      * setValue
      * Sets the value defined in the monitor's metrics for the given name

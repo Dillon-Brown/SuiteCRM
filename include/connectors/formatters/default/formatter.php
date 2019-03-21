@@ -53,9 +53,7 @@ class default_formatter
     protected $_module;
     protected $_hoverField;
 
-    public function __construct()
-    {
-    }
+
 
     public function getDetailViewFormat()
     {

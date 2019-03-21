@@ -48,9 +48,7 @@ class Chart_pipeline_by_sales_stage
 {
     public $modules = array('Opportunities');
     public $order = 0;
-    public function __construct()
-    {
-    }
+
 
 
 

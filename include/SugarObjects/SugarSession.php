@@ -55,9 +55,7 @@ class SugarSession
      * When constructing the session object, be sure to check if the session_id() already exists as is the case of session.auto_start = 1
      *
      */
-    public function __construct()
-    {
-    }
+
 
     public function setSessionId($sessionId)
     {

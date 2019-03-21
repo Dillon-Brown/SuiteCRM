@@ -21,9 +21,7 @@ class HTMLPurifier_Printer
     /**
      * Initialize $generator.
      */
-    public function __construct()
-    {
-    }
+
 
     /**
      * Give generator necessary configuration if possible

@@ -56,9 +56,7 @@ class Popup_Picker
     /*
      *
      */
-    public function __construct()
-    {
-    }
+
 
 
 

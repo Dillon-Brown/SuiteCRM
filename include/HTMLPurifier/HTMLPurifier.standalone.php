@@ -12524,9 +12524,7 @@ class HTMLPurifier_AttrDef_HTML_FrameTarget extends HTMLPurifier_AttrDef_Enum
      */
     protected $case_sensitive = false;
 
-    public function __construct()
-    {
-    }
+
 
     /**
      * @param string $string
@@ -14265,9 +14263,7 @@ class HTMLPurifier_ChildDef_Empty extends HTMLPurifier_ChildDef
      */
     public $type = 'empty';
 
-    public function __construct()
-    {
-    }
+
 
     /**
      * @param HTMLPurifier_Node[] $children
@@ -14702,9 +14698,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
         'col' => true
     );
 
-    public function __construct()
-    {
-    }
+
 
     /**
      * @param array $children
@@ -14888,9 +14882,7 @@ class HTMLPurifier_DefinitionCache_Decorator extends HTMLPurifier_DefinitionCach
      */
     public $name;
 
-    public function __construct()
-    {
-    }
+
 
     /**
      * Lazy decorator function

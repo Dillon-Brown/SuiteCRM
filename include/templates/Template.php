@@ -46,9 +46,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class Template
 {
-    public function __construct()
-    {
-    }
+
 
 
 

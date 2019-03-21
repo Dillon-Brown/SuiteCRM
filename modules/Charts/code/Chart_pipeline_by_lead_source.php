@@ -49,9 +49,7 @@ class Chart_pipeline_by_lead_source
     public $order = 0;
     public $modules = array('Opportunities');
 
-    public function __construct()
-    {
-    }
+
 
 
 

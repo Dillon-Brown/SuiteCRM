@@ -44,9 +44,7 @@
  */
 class SugarFieldHandler
 {
-    public function __construct()
-    {
-    }
+
 
 
 

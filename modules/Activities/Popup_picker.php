@@ -64,9 +64,7 @@ class Popup_Picker
     /**
      * sole constructor
      */
-    public function __construct()
-    {
-    }
+
 
     public function process_page()
     {

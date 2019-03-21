@@ -27,9 +27,7 @@
    var $pChartObject;
 
      /* Class creator */
-     public function __construct()
-     {
-     }
+
 
    /* Draw a radar chart */
    function drawRadar($Object,$Values,$Format="")

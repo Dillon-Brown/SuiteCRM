@@ -53,9 +53,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class BaseRule
 {
-    public function __construct()
-    {
-    }
+
 
     public function preParse($panels, $view)
     {

@@ -57,10 +57,6 @@ require_once('include/SugarFields/Parsers/Rules/BaseRule.php');
 
 class AddressRule extends BaseRule
 {
-    public function __construct()
-    {
-    }
-
     public function parsePanels($panels, $view)
     {
         $searchedAddressPanel = array();

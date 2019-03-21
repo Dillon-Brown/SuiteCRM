@@ -249,9 +249,7 @@ EOQ;
 
 class VardefBrowser
 {
-    public function __construct()
-    {
-    }
+
     
     public static function getModules()
     {

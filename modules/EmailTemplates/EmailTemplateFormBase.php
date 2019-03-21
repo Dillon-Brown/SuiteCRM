@@ -52,9 +52,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class EmailTemplateFormBase
 {
-    public function __construct()
-    {
-    }
+
 
     public function getFormBody($prefix, $mod='', $formname='', $size='30')
     {

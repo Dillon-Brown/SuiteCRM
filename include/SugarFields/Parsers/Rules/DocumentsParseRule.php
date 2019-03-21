@@ -46,9 +46,7 @@ require_once('include/SugarFields/Parsers/Rules/BaseRule.php');
 
 class DocumentsParseRule extends BaseRule
 {
-    public function __construct()
-    {
-    }
+
 
 
 

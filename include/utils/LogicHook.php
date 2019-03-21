@@ -70,9 +70,7 @@ class LogicHook
 {
     public $bean = null;
 
-    public function __construct()
-    {
-    }
+
 
 
 

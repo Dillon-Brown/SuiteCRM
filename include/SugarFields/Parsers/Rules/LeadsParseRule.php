@@ -46,9 +46,7 @@ require_once('include/SugarFields/Parsers/Rules/BaseRule.php');
 
 class LeadsParseRule extends BaseRule
 {
-    public function __construct()
-    {
-    }
+
 
 
 

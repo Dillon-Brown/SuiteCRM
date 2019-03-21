@@ -48,9 +48,7 @@ class jsLanguage
     /**
      * Creates javascript versions of language files
      */
-    public function __construct()
-    {
-    }
+
 
 
 

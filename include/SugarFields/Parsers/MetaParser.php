@@ -56,9 +56,7 @@ class MetaParser
     public $mModule;
     public $mCustomPanels;
 
-    public function __construct()
-    {
-    }
+
 
 
 

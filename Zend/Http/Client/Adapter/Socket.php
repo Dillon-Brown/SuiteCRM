@@ -98,9 +98,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
      * Adapter constructor, currently empty. Config is set using setConfig()
      *
      */
-    public function __construct()
-    {
-    }
+
 
     /**
      * Set the configuration array for the adapter

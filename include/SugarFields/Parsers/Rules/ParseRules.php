@@ -52,9 +52,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 class ParseRules
 {
-    public function __construct()
-    {
-    }
+
 
     /**
      * getRules

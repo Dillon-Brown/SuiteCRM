@@ -52,9 +52,7 @@ require_once('include/Popups/Popup_picker.php');
 
 class DocumentPopupPicker extends Popup_Picker
 {
-    public function __construct()
-    {
-    }
+
 
     public function _get_where_clause()
     {

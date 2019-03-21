@@ -44,13 +44,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class SpotsViewEdit extends ViewEdit
 {
-
-
-    public function display()
-    {
-        parent::display();
-    }
-
     /**
      * Return the "breadcrumbs" to display at the top of the page
      *

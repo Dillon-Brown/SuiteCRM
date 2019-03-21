@@ -46,13 +46,6 @@ require_once('include/SugarFields/Parsers/Rules/BaseRule.php');
 
 class BugsParseRule extends BaseRule
 {
-    public function __construct()
-    {
-    }
-
-
-
-
     public function preParse($panels, $view)
     {
         if ($view == 'DetailView') {
