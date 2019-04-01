@@ -12,7 +12,7 @@ function array_splice_reverse(&$arr, $offset, $length) {
 function array_insert(&$array, $value, $offset) {
 	if (is_array($array)) {
 		$array  = array_values($array);
-		$offset = intval($offset);
+		$offset = (int)$offset;
 		if ($offset < 0 || $offset >= count($array)) { array_push($array, $value); }
 		elseif ($offset == 0) { array_unshift($array, $value); }
 		else { 

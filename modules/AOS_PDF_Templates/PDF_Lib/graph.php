@@ -77,7 +77,7 @@ function print_graph($g,$pgwidth) {
 	elseif ($type=='line' || $type=='radar') { $antialias = false; }
 	else { $antialias = true; }
 
-	if ($g['attr']['DPI']) { $dpi = intval($g['attr']['DPI']); }
+	if ($g['attr']['DPI']) { $dpi = (int)$g['attr']['DPI']; }
 	if (!$dpi || $dpi < 50 || $dpi > 2400) { $dpi = 150; } 	// Default dpi 150
 	$k = (0.2645/25.4 * $dpi); 
 
@@ -156,7 +156,7 @@ function print_graph($g,$pgwidth) {
 	$totals = array();
 	for ($r=($rowbegin-1);$r<$rowend;$r++) {
 		for ($c=($colbegin-1);$c<$colend;$c++) {
-		    if (isset($g['data'][$r][$c])) { $g['data'][$r][$c] = floatval($g['data'][$r][$c] ); }
+		    if (isset($g['data'][$r][$c])) { $g['data'][$r][$c] = (float)$g['data'][$r][$c]; }
 		    else { $g['data'][$r][$c] = 0; }
 		    if ($dataseries=='rows') { 
 			$data[($r+1-$rowbegin)][($c+1-$colbegin)] = $g['data'][$r][$c] ; 

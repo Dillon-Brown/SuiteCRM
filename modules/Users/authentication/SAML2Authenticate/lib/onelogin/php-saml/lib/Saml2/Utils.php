@@ -691,12 +691,12 @@ class OneLogin_Saml2_Utils
          * matches in the regex. intval will ignore leading zeroes
          * in the string.
          */
-        $year = intval($matches[1]);
-        $month = intval($matches[2]);
-        $day = intval($matches[3]);
-        $hour = intval($matches[4]);
-        $minute = intval($matches[5]);
-        $second = intval($matches[6]);
+        $year = (int)$matches[1];
+        $month = (int)$matches[2];
+        $day = (int)$matches[3];
+        $hour = (int)$matches[4];
+        $minute = (int)$matches[5];
+        $second = (int)$matches[6];
 
         /* We use gmmktime because the timestamp will always be given
          * in UTC.

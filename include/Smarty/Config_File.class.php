@@ -376,7 +376,7 @@ class Config_File
         if (!isset($container[$var_name]) || $this->overwrite) {
             $container[$var_name] = $var_value;
         } else {
-            settype($container[$var_name], 'array');
+            $container[$var_name] = (array)$container[$var_name];
             $container[$var_name][] = $var_value;
         }
     }

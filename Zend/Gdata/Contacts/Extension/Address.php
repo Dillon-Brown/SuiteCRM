@@ -117,7 +117,7 @@ class Zend_Gdata_Contacts_Extension_Address extends Zend_Gdata_Extension
                 continue;
             }
             $elemKey = $elem->_rootElement == 'region' ? 'state' : $elem->_rootElement;
-            $elemKey = "$keyPrefix" . "_address_" . "$elemKey";
+            $elemKey = (string)$keyPrefix . "_address_" . (string)$elemKey;
             $results[$elemKey] = $elem->getText();
         }
 
