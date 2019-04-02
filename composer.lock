@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56a8c41dfcf23e74f04f5787f30801d5",
+    "content-hash": "983d60b4fc256e9a0e99ec026deeb85a",
     "packages": [
         {
             "name": "consolidation/annotated-command",
@@ -2023,21 +2023,21 @@
         },
         {
             "name": "onelogin/php-saml",
-            "version": "v3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/onelogin/php-saml.git",
-                "reference": "15016f9d633614c62fe6bb1d4ec86079b3e13a63"
+                "reference": "c9026b26395a65184550055d9a01bdf9dbd30861"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/onelogin/php-saml/zipball/15016f9d633614c62fe6bb1d4ec86079b3e13a63",
-                "reference": "15016f9d633614c62fe6bb1d4ec86079b3e13a63",
+                "url": "https://api.github.com/repos/onelogin/php-saml/zipball/c9026b26395a65184550055d9a01bdf9dbd30861",
+                "reference": "c9026b26395a65184550055d9a01bdf9dbd30861",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4",
-                "robrichards/xmlseclibs": "^3.0"
+                "robrichards/xmlseclibs": ">=3.0.3"
             },
             "require-dev": {
                 "pdepend/pdepend": "^2.5.0",
@@ -2069,7 +2069,7 @@
                 "onelogin",
                 "saml"
             ],
-            "time": "2019-01-28T13:04:13+00:00"
+            "time": "2019-03-11T09:41:32+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -3151,7 +3151,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -4164,12 +4164,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/scssphp.git",
-                "reference": "5caf261a0c618eeb123df944597df3ca7bdf0913"
+                "reference": "0617b607bd14bd02fa58e3d18d1f5d3a0957fb68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp/zipball/5caf261a0c618eeb123df944597df3ca7bdf0913",
-                "reference": "5caf261a0c618eeb123df944597df3ca7bdf0913",
+                "url": "https://api.github.com/repos/leafo/scssphp/zipball/0617b607bd14bd02fa58e3d18d1f5d3a0957fb68",
+                "reference": "0617b607bd14bd02fa58e3d18d1f5d3a0957fb68",
                 "shasum": ""
             },
             "require": {
@@ -4208,7 +4208,7 @@
                 "scss",
                 "stylesheet"
             ],
-            "time": "2018-10-23T23:05:32+00:00"
+            "time": "2019-03-15T16:20:55+00:00"
         },
         {
             "name": "mikey179/vfsStream",
@@ -4963,6 +4963,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2017-06-30T09:13:00+00:00"
         },
         {
