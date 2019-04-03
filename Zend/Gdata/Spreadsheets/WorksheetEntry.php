@@ -136,6 +136,7 @@ class Zend_Gdata_Spreadsheets_WorksheetEntry extends Zend_Gdata_Entry
      * Sets the row count for this entry.
      *
      * @param string $rowCount The new row count for the entry.
+     * @return Zend_Gdata_Spreadsheets_WorksheetEntry
      */
     public function setRowCount($rowCount)
     {
@@ -147,6 +148,7 @@ class Zend_Gdata_Spreadsheets_WorksheetEntry extends Zend_Gdata_Entry
      * Sets the column count for this entry.
      *
      * @param string $colCount The new column count for the entry.
+     * @return Zend_Gdata_Spreadsheets_WorksheetEntry
      */
     public function setColumnCount($colCount)
     {

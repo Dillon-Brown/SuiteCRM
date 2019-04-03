@@ -182,9 +182,10 @@ function create_custom_directory($file)
 /**
  * This function will recursively generates md5s of files and returns an array of all md5s.
  *
- * @param	$path The path of the root directory to scan - must end with '/'
- * @param	$ignore_dirs array of filenames/directory names to ignore running md5 on - default 'cache' and 'upload'
- * @result	$md5_array an array containing path as key and md5 as value
+ * @param    $path The path of the root directory to scan - must end with '/'
+ * @param    $ignore_dirs array of filenames/directory names to ignore running md5 on - default 'cache' and 'upload'
+ * @result    $md5_array an array containing path as key and md5 as value
+ * @return array
  */
 function generateMD5array($path, $ignore_dirs = array('cache', 'upload'))
 {
@@ -227,10 +228,11 @@ function generateMD5array($path, $ignore_dirs = array('cache', 'upload'))
 /**
  * Function to compare two directory structures and return the items in path_a that didn't match in path_b
  *
- * @param	$path_a The path of the first root directory to scan - must end with '/'
- * @param	$path_b The path of the second root directory to scan - must end with '/'
- * @param	$ignore_dirs array of filenames/directory names to ignore running md5 on - default 'cache' and 'upload'
- * @result	array containing all the md5s of everything in $path_a that didn't have a match in $path_b
+ * @param    $path_a The path of the first root directory to scan - must end with '/'
+ * @param    $path_b The path of the second root directory to scan - must end with '/'
+ * @param    $ignore_dirs array of filenames/directory names to ignore running md5 on - default 'cache' and 'upload'
+ * @result    array containing all the md5s of everything in $path_a that didn't have a match in $path_b
+ * @return array
  */
 function md5DirCompare($path_a, $path_b, $ignore_dirs = array('cache', 'upload'))
 {
@@ -277,6 +279,7 @@ function getFiles(&$arr, $dir, $pattern = null)
  * used in download.php
  * @param string $filename
  * @param int $retbytes
+ * @return bool|int
  */
 function readfile_chunked($filename, $retbytes=true)
 {
@@ -301,11 +304,13 @@ function readfile_chunked($filename, $retbytes=true)
     }
     return $status;
 }
+
 /**
  * Renames a file. If $new_file already exists, it will first unlink it and then rename it.
  * used in SugarLogger.php
  * @param string $old_filename
  * @param string $new_filename
+ * @return bool
  */
 function sugar_rename($old_filename, $new_filename)
 {

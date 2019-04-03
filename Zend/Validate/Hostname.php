@@ -447,6 +447,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
      * This only applies when DNS hostnames are validated
      *
      * @param boolean $allowed Set allowed to true to validate IDNs, and false to not validate them
+     * @return Zend_Validate_Hostname
      */
     public function setValidateIdn($allowed)
     {
@@ -470,6 +471,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
      * This only applies when DNS hostnames are validated
      *
      * @param boolean $allowed Set allowed to true to validate TLDs, and false to not validate them
+     * @return Zend_Validate_Hostname
      */
     public function setValidateTld($allowed)
     {

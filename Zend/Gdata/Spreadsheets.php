@@ -341,6 +341,7 @@ class Zend_Gdata_Spreadsheets extends Zend_Gdata
      *
      * @param ListEntry $entry The row entry to update
      * @param array $newRowData An array of column header to row data
+     * @return
      */
     public function updateRow($entry, $newRowData)
     {

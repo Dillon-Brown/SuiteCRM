@@ -114,11 +114,12 @@ class fpdi_pdf_parser extends pdf_parser
     function getPageResources() {
         return $this->_getPageResources($this->pages[$this->pageno]);
     }
-    
+
     /**
      * Get page-resources from /Page
      *
      * @param array $obj Array of pdf-data
+     * @return array|bool|mixed
      */
     function _getPageResources ($obj) { // $obj = /Page
     	$obj = $this->pdf_resolve_object($this->c, $obj);
@@ -326,13 +327,14 @@ class fpdi_pdf_parser extends pdf_parser
     		}
     	}
     }
-    
+
     /**
      * Read all /Page(es)
      *
      * @param object pdf_context
      * @param array /Pages
      * @param array the result-array
+     * @return bool
      */
     function read_pages (&$c, &$pages, &$result) {
         // Get the kids dictionary

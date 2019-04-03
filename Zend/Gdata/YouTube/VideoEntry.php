@@ -621,6 +621,7 @@ class Zend_Gdata_YouTube_VideoEntry extends Zend_Gdata_YouTube_MediaEntry
      *
      * @param string $recorded The date that the video was recorded, in the
      *          format of '2001-06-19'
+     * @return Zend_Gdata_YouTube_VideoEntry
      */
     public function setVideoRecorded($recorded)
     {

@@ -1894,6 +1894,7 @@ class Smarty_Compiler extends Smarty
      * parse configuration variable expression into PHP code
      *
      * @param string $conf_var_expr
+     * @return string
      */
     public function _parse_conf_var($conf_var_expr)
     {

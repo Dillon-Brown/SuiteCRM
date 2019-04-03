@@ -230,6 +230,7 @@ class Config_File
      * @param string $file_name file name to load
      * @param boolean $prepend_path whether current config path should be
      *                              prepended to the filename
+     * @return bool
      */
     public function load_file($file_name, $prepend_path = true)
     {
@@ -257,6 +258,7 @@ class Config_File
      *
      * @param string $config_file file name of the related contents
      * @param string $contents the file-contents to parse
+     * @return bool
      */
     public function set_file_contents($config_file, $contents)
     {
@@ -268,6 +270,7 @@ class Config_File
      * parse the source of a configuration file manually.
      *
      * @param string $contents the file-contents to parse
+     * @return array
      */
     public function parse_contents($contents)
     {

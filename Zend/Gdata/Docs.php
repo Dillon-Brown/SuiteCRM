@@ -204,6 +204,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
      *
      * @param string $id The URL id for the document. Example:
      *     dcmg89gw_62hfjj8m
+     * @return Zend_Gdata_Docs_DocumentListEntry
      * @deprecated Use getResource($resourceId) instead.
      */
     public function getDocument($id)
@@ -216,6 +217,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
      *
      * @param string $id The URL id for the spreadsheet. Example:
      *     pKq0CzjiF3YmGd0AIlHKqeg
+     * @return Zend_Gdata_Docs_DocumentListEntry
      * @deprecated Use getResource($resourceId) instead.
      */
     public function getSpreadsheet($id)
@@ -228,6 +230,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
      *
      * @param string $id The URL id for the presentation. Example:
      *     dcmg89gw_21gtrjcn
+     * @return Zend_Gdata_Docs_DocumentListEntry
      * @deprecated Use getResource($resourceId) instead.
      */
     public function getPresentation($id)

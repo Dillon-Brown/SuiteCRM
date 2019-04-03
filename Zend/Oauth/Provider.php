@@ -168,6 +168,7 @@ class Zend_Oauth_Provider
     /**
      * Check if all required parameters are there
      * @param array $params
+     * @return bool
      * @throws Zend_Oauth_Exception
      */
     protected function checkRequiredParams($params)
@@ -213,6 +214,7 @@ class Zend_Oauth_Provider
      * Collect request parameters from the environment
      * @param string $method HTTP method being used
      * @param string $params Extra parameters
+     * @return array|string
      */
     protected function assembleParams($method, $params = array())
     {
@@ -362,6 +364,7 @@ class Zend_Oauth_Provider
     /**
      * Generate new token
      * @param int $size How many characters?
+     * @return bool|string
      */
     public function generateToken($size)
     {

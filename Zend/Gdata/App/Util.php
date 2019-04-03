@@ -38,6 +38,7 @@ class Zend_Gdata_App_Util
      *  2005-04-19T15:30:00
      *
      * @param int $timestamp
+     * @return false|int|string
      * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public static function formatTimestamp($timestamp)
@@ -61,15 +62,16 @@ class Zend_Gdata_App_Util
     }
 
     /** Find the greatest key that is less than or equal to a given upper
-      * bound, and return the value associated with that key.
-      *
-      * @param integer|null $maximumKey The upper bound for keys. If null, the
-      *        maxiumum valued key will be found.
-      * @param array $collection An two-dimensional array of key/value pairs
-      *        to search through.
-      * @returns mixed The value corresponding to the located key.
-      * @throws Zend_Gdata_App_Exception Thrown if $collection is empty.
-      */
+     * bound, and return the value associated with that key.
+     *
+     * @param integer|null $maximumKey The upper bound for keys. If null, the
+     *        maxiumum valued key will be found.
+     * @param array $collection An two-dimensional array of key/value pairs
+     *        to search through.
+     * @returns mixed The value corresponding to the located key.
+     * @return int|mixed|null
+     * @throws Zend_Gdata_App_Exception Thrown if $collection is empty.
+     */
     public static function findGreatestBoundedValue($maximumKey, $collection)
     {
         $found = false;

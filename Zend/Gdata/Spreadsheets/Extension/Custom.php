@@ -81,6 +81,7 @@ class Zend_Gdata_Spreadsheets_Extension_Custom extends Zend_Gdata_Extension
     /**
      * Sets the column/tag name of the element.
      * @param string $column The new column name.
+     * @return Zend_Gdata_Spreadsheets_Extension_Custom
      */
     public function setColumnName($column)
     {

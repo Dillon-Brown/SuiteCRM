@@ -101,9 +101,10 @@ abstract class Zend_Gdata_Gapps_Query extends Zend_Gdata_Query
      * on the current domain. The current domain can be temporarily
      * overridden by providing a fully qualified domain as $domain.
      *
-     * @see setDomain
      * @param string $domain (optional) A fully-qualified domain to use
      *          instead of the default domain for this service instance.
+     * @return string
+     * @see setDomain
      */
     public function getBaseUrl($domain = null)
     {

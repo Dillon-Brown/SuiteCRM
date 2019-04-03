@@ -1122,6 +1122,7 @@ class Smarty
      * @param string $cache_id
      * @param string $compile_id
      * @param boolean $display
+     * @return bool|false|mixed|string|void
      */
     public function fetch($resource_name, $cache_id = null, $compile_id = null, $display = false)
     {
@@ -1777,6 +1778,7 @@ class Smarty
      *
      * @param string $resource
      * @param integer $exp_time
+     * @return bool
      */
     public function _unlink($resource, $exp_time = null)
     {

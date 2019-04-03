@@ -109,6 +109,7 @@ abstract class Zend_Gdata_App_BaseMediaSource implements Zend_Gdata_App_MediaSou
      * TODO Remove ability to bypass getFoo() methods??
      *
      * @param string $name The variable name sought
+     * @return mixed
      */
     public function __get($name)
     {
@@ -134,6 +135,7 @@ abstract class Zend_Gdata_App_BaseMediaSource implements Zend_Gdata_App_MediaSou
      *
      * @param string $name
      * @param string $value
+     * @return mixed
      */
     public function __set($name, $val)
     {
@@ -154,6 +156,7 @@ abstract class Zend_Gdata_App_BaseMediaSource implements Zend_Gdata_App_MediaSou
      * Magic __isset method
      *
      * @param string $name
+     * @return bool
      */
     public function __isset($name)
     {

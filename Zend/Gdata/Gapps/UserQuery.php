@@ -91,6 +91,7 @@ class Zend_Gdata_Gapps_UserQuery extends Zend_Gdata_Gapps_Query
      *
      * @param string $value The username to filter search results by, or
      *          null if disabled.
+     * @return string
      */
     public function getUsername()
     {

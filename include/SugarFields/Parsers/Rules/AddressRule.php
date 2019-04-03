@@ -139,6 +139,7 @@ class AddressRule extends BaseRule
      * @param $panels Array of the view's panels
      * @param $street String key value of the street to search for
      * @returns $panels Array of view's panels with street value substituted
+     * @return array
      */
     public function removeStreetFieldOverride($panels, $street)
     {

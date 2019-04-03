@@ -74,6 +74,7 @@ class Zend_Gdata_AuthSub
      *                     a session token (1) or not (0).
      * @param string $request_uri (optional) URI to which to direct the
      *                            authentication request.
+     * @return string
      */
     public static function getAuthSubTokenUri(
          $next,
@@ -197,6 +198,7 @@ class Zend_Gdata_AuthSub
      *                                 make the request
      * @param string $request_uri (optional) URI to which to direct
      *                            the information request
+     * @return string
      */
     public static function getAuthSubTokenInfo(
             $token,
@@ -232,6 +234,7 @@ class Zend_Gdata_AuthSub
      *
      * @param string $token The token to retrieve information about
      * @param Zend_Gdata_HttpClient $client (optional) HTTP client to use to make the request
+     * @return Zend_Gdata_HttpClient|null
      */
     public static function getHttpClient($token, $client = null)
     {

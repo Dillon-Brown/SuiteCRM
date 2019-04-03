@@ -1151,6 +1151,7 @@ HTML;
      * Creates a new Sugar folder
      * @param string $nodeLabel New sugar folder name
      * @param string $parentLabel Parent folder name
+     * @return array
      */
     public function saveNewFolder($nodeLabel, $parentId, $isGroup = 0)
     {
@@ -2345,6 +2346,7 @@ eoq;
     /**
      * Returns the templatized compose screen.  Used by reply, forwards and draft status messages.
      * @param object email Email bean in focus
+     * @return array
      */
     public function displayComposeEmail($email)
     {
@@ -2756,6 +2758,7 @@ eoq;
      *
      * @param object $user User in focus
      * @param array $folder_params Array of parameters for folder creation
+     * @return SugarFolder
      */
     protected function createFolder($user, $folder_params)
     {
@@ -3408,6 +3411,7 @@ eoq;
      * @param string $ieId
      * @param string $type Type of cache file: folders, messages, etc.
      * @param string $file The cachefile name
+     * @return bool
      */
     public function setCacheTimestamp($ieId, $type, $file)
     {
@@ -3436,6 +3440,7 @@ eoq;
      * @param string $ieId I-E focus ID
      * @param string $type Folder in cache
      * @param string $file Cache file name
+     * @return bool
      */
     public function writeCacheFile($key, $var, $ieId, $type, $file)
     {

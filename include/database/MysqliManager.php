@@ -405,6 +405,7 @@ class MysqliManager extends MysqlManager
     /**
      * Select database
      * @param string $dbname
+     * @return bool
      */
     protected function selectDb($dbname)
     {

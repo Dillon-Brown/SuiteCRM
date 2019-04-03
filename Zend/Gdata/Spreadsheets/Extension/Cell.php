@@ -166,6 +166,7 @@ class Zend_Gdata_Spreadsheets_Extension_Cell extends Zend_Gdata_Extension
     /**
      * Sets the row attribute of the Cell element.
      * @param string $row New row of the Cell.
+     * @return Zend_Gdata_Spreadsheets_Extension_Cell
      */
     public function setRow($row)
     {
@@ -176,6 +177,7 @@ class Zend_Gdata_Spreadsheets_Extension_Cell extends Zend_Gdata_Extension
     /**
      * Sets the column attribute of the Cell element.
      * @param string $col New column of the Cell.
+     * @return Zend_Gdata_Spreadsheets_Extension_Cell
      */
     public function setColumn($col)
     {
@@ -186,6 +188,7 @@ class Zend_Gdata_Spreadsheets_Extension_Cell extends Zend_Gdata_Extension
     /**
      * Sets the input value attribute of the Cell element.
      * @param string $inputValue New input value of the Cell.
+     * @return Zend_Gdata_Spreadsheets_Extension_Cell
      */
     public function setInputValue($inputValue)
     {

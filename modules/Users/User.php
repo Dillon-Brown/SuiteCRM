@@ -1153,6 +1153,7 @@ EOQ;
     /**
      * Generate a new hash from plaintext password
      * @param string $password
+     * @return string|null
      */
     public static function getPasswordHash($password)
     {
@@ -1173,6 +1174,7 @@ EOQ;
      * Check that password matches existing hash
      * @param string $password Plaintext password
      * @param string $user_hash DB hash
+     * @return bool
      */
     public static function checkPassword($password, $user_hash)
     {

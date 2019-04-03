@@ -289,9 +289,10 @@ class OneLogin_Saml2_Auth
      * Redirects the user to the url past by parameter
      * or to the url that we defined in our SSO Request.
      *
-     * @param string $url        The target URL to redirect the user.
-     * @param array  $parameters Extra parameters to be passed as part of the url
-     * @param bool   $stay       True if we want to stay (returns the url string) False to redirect
+     * @param string $url The target URL to redirect the user.
+     * @param array $parameters Extra parameters to be passed as part of the url
+     * @param bool $stay True if we want to stay (returns the url string) False to redirect
+     * @return string|null
      */
     public function redirectTo($url = '', $parameters = array(), $stay = false)
     {

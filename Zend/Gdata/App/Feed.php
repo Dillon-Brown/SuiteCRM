@@ -237,6 +237,7 @@ class Zend_Gdata_App_Feed extends Zend_Gdata_App_FeedSourceParent implements Ite
      *
      * @param int $key The index to get
      * @param Zend_Gdata_App_Entry $value The value to set
+     * @return mixed
      */
     public function offsetGet($key)
     {

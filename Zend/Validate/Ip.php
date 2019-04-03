@@ -141,6 +141,7 @@ class Zend_Validate_Ip extends Zend_Validate_Abstract
      * Validates an IPv4 address
      *
      * @param string $value
+     * @return bool
      */
     protected function _validateIPv4($value)
     {

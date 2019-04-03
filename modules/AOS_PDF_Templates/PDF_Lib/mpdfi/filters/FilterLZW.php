@@ -34,11 +34,12 @@ class FilterLZW
     function error($msg) {
         die($msg);
     }
-    
+
     /**
      * Method to decode LZW compressed data.
      *
      * @param string data    The compressed data.
+     * @return string
      */
     function decode($data) {
 

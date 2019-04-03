@@ -75,6 +75,7 @@ class Zend_Gdata_App_HttpException extends Zend_Gdata_App_Exception
      * Set the Zend_Http_Client_Exception.
      *
      * @param Zend_Http_Client_Exception $value
+     * @return Zend_Gdata_App_HttpException
      */
     public function setHttpClientException($value)
     {
@@ -86,6 +87,7 @@ class Zend_Gdata_App_HttpException extends Zend_Gdata_App_Exception
      * Set the Zend_Http_Response.
      *
      * @param Zend_Http_Response $response
+     * @return Zend_Gdata_App_HttpException
      */
     public function setResponse($response)
     {

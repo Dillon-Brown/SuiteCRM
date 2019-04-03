@@ -1115,6 +1115,7 @@ class Zend_Gdata_App
      *
      * @param string $method The method name being called
      * @param array $args The arguments passed to the call
+     * @return object
      * @throws Zend_Gdata_App_Exception
      */
     public function __call($method, $args)

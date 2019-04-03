@@ -90,6 +90,7 @@ class Zend_Gdata_Gapps_GroupQuery extends Zend_Gdata_Gapps_Query
      *
      * @param string $value The group id to filter search results by, or
      *          null if disabled.
+     * @return string
      */
     public function getGroupId()
     {

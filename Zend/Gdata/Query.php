@@ -134,6 +134,7 @@ class Zend_Gdata_Query
 
     /**
      * @param string $name
+     * @return mixed
      */
     public function getParam($name)
     {

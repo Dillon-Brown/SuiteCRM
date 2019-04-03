@@ -792,6 +792,7 @@ class MysqlManager extends DBManager
     /**
      * Does this type represent text (i.e., non-varchar) value?
      * @param string $type
+     * @return bool
      */
     public function isTextType($type)
     {
@@ -942,8 +943,9 @@ class MysqlManager extends DBManager
     /**
      * Sets the next auto-increment value of a column to a specific value.
      *
-     * @param  string $table tablename
-     * @param  string $field_name
+     * @param string $table tablename
+     * @param string $field_name
+     * @return resource
      */
     public function setAutoIncrementStart($table, $field_name, $start_value)
     {
@@ -1231,6 +1233,7 @@ class MysqlManager extends DBManager
     /**
      * Quote MySQL search term
      * @param unknown_type $term
+     * @return string|unknown_type
      */
     protected function quoteTerm($term)
     {
@@ -1247,6 +1250,7 @@ class MysqlManager extends DBManager
      * @param array $terms Search terms that may be or not be in the result
      * @param array $must_terms Search terms that have to be in the result
      * @param array $exclude_terms Search terms that have to be not in the result
+     * @return string
      */
     public function getFulltextQuery($field, $terms, $must_terms = array(), $exclude_terms = array())
     {
@@ -1444,6 +1448,7 @@ class MysqlManager extends DBManager
     /**
      * Check if certain database exists
      * @param string $dbname
+     * @return bool
      */
     public function dbExists($dbname)
     {
@@ -1455,6 +1460,7 @@ class MysqlManager extends DBManager
     /**
      * Select database
      * @param string $dbname
+     * @return bool
      */
     protected function selectDb($dbname)
     {
@@ -1464,6 +1470,7 @@ class MysqlManager extends DBManager
     /**
      * Check if certain DB user exists
      * @param string $username
+     * @return bool
      */
     public function userExists($username)
     {
@@ -1518,6 +1525,7 @@ class MysqlManager extends DBManager
     /**
      * Drop a database
      * @param string $dbname
+     * @return resource
      */
     public function dropDatabase($dbname)
     {
@@ -1571,6 +1579,7 @@ class MysqlManager extends DBManager
      * Disable keys on the table
      * @abstract
      * @param string $tableName
+     * @return resource
      */
     public function disableKeys($tableName)
     {
@@ -1581,6 +1590,7 @@ class MysqlManager extends DBManager
      * Re-enable keys on the table
      * @abstract
      * @param string $tableName
+     * @return resource
      */
     public function enableKeys($tableName)
     {

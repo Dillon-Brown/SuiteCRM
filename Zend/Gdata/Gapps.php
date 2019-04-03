@@ -340,6 +340,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
      *
      * @param string $domain (optional) A fully-qualified domain to use
      *          instead of the default domain for this service instance.
+     * @return string
      * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getBaseUrl($domain = null)
@@ -870,10 +871,11 @@ class Zend_Gdata_Gapps extends Zend_Gdata
      * do not need to have their domain manually set when created with
      * a magic factory method.
      *
-     * @see Zend_Gdata_App::__call()
      * @param string $method The method name being called
      * @param array $args The arguments passed to the call
+     * @return object
      * @throws Zend_Gdata_App_Exception
+     * @see Zend_Gdata_App::__call()
      */
     public function __call($method, $args)
     {
