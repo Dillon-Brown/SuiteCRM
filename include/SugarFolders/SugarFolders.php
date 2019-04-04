@@ -744,8 +744,9 @@ class SugarFolder
     /**
      * Preps object array for async call from user's Settings->Folders
      *
-     * @param  User|null $focusUser
+     * @param User|null $focusUser
      * @return array
+     * @throws SugarFolderEmptyException
      */
     public function getGroupFoldersForSettings($focusUser = null)
     {
@@ -932,11 +933,12 @@ class SugarFolder
     /**
      * Collects, sorts, and builds tree of user's folders
      *
-     * @param object  $rootNode     Reference to tree root node
-     * @param array   $folderStates User pref folder open/closed states
-     * @param User    $user         Optional User in focus, default current_user
+     * @param object $rootNode Reference to tree root node
+     * @param array $folderStates User pref folder open/closed states
+     * @param User $user Optional User in focus, default current_user
      *
      * @return array
+     * @throws SugarFolderEmptyException
      */
     public function getUserFolders(&$rootNode, $folderStates, $user = null, $forRefresh = false)
     {

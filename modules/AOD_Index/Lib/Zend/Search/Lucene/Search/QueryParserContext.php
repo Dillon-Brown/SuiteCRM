@@ -206,6 +206,7 @@ class Zend_Search_Lucene_Search_QueryParserContext
      * Set boost factor to the entry
      *
      * @param float $boostFactor
+     * @throws Zend_Search_Lucene_Search_QueryParserException
      */
     public function boost($boostFactor)
     {
@@ -232,6 +233,7 @@ class Zend_Search_Lucene_Search_QueryParserContext
      * Process logical operator
      *
      * @param integer $operator
+     * @throws Zend_Search_Lucene_Search_QueryParserException
      */
     public function addLogicalOperator($operator)
     {
@@ -280,6 +282,7 @@ class Zend_Search_Lucene_Search_QueryParserContext
      *
      * @return Zend_Search_Lucene_Search_Query
      * @throws Zend_Search_Lucene
+     * @throws Zend_Search_Lucene_Search_QueryParserException
      */
     private function _booleanExpressionQuery()
     {
@@ -389,6 +392,7 @@ class Zend_Search_Lucene_Search_QueryParserContext
      * Generate query from current context
      *
      * @return Zend_Search_Lucene_Search_Query
+     * @throws Zend_Search_Lucene_Search_QueryParserException
      */
     public function getQuery()
     {

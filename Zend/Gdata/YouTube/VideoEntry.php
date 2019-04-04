@@ -581,6 +581,7 @@ class Zend_Gdata_YouTube_VideoEntry extends Zend_Gdata_YouTube_MediaEntry
      * Gets the YouTube video ID based upon the atom:id value
      *
      * @return string The video ID
+     * @throws Zend_Gdata_App_Exception
      */
     public function getVideoId()
     {
@@ -1067,8 +1068,9 @@ class Zend_Gdata_YouTube_VideoEntry extends Zend_Gdata_YouTube_MediaEntry
      *
      * @param integer $ratingValue A number representing the rating. Must
      *          be between 1 and 5 inclusive.
-     * @throws Zend_Gdata_Exception
      * @return Zend_Gdata_YouTube_VideoEntry Provides a fluent interface.
+     * @throws Zend_Gdata_App_InvalidArgumentException
+     * @throws Zend_Gdata_Exception
      */
     public function setVideoRating($ratingValue)
     {

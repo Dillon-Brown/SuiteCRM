@@ -142,8 +142,9 @@
         /**
          * Retrieve access token from url
          * @param string $url
-         * @see Zend_Oauth_Consumer::getAccessToken()
          * @return array
+         * @throws Zend_Oauth_Exception
+         * @see Zend_Oauth_Consumer::getAccessToken()
          */
         public function getAccessToken(
             $url,

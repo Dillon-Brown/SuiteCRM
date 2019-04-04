@@ -210,6 +210,7 @@ abstract class ImportDataSource implements Iterator
      * @param string $error
      * @param string $fieldName
      * @param mixed $fieldValue
+     * @throws Exception
      */
     public function writeError($error, $fieldName, $fieldValue)
     {

@@ -197,6 +197,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      *        Company-AppName-Version
      * @param string $clientId The clientId issued by the YouTube dashboard
      * @param string $developerKey The developerKey issued by the YouTube dashboard
+     * @throws Zend_Gdata_App_HttpException
      */
     public function __construct(
         $client = null,
@@ -217,8 +218,9 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      * Set the Zend_Http_Client object used for communication
      *
      * @param Zend_Http_Client $client The client to use for communication
-     * @throws Zend_Gdata_App_HttpException
      * @return Zend_Gdata_App Provides a fluent interface
+     * @throws Zend_Http_Client_Exception
+     * @throws Zend_Gdata_App_HttpException
      */
     public function setHttpClient(
         $client,
@@ -254,6 +256,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      *         Zend_Gdata_Query object from which a URL can be determined
      * @return Zend_Gdata_YouTube_VideoFeed The feed of videos found at the
      *         specified URL.
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getVideoFeed($location = null)
     {
@@ -276,9 +279,10 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      * @param boolean $fullEntry (optional) Retrieve the full metadata for the
      *         entry. Only possible if entry belongs to currently authenticated
      *         user. An exception will be thrown otherwise.
-     * @throws Zend_Gdata_App_HttpException
      * @return Zend_Gdata_YouTube_VideoEntry The video entry found at the
      *         specified URL.
+     * @throws Zend_Gdata_App_InvalidArgumentException
+     * @throws Zend_Gdata_App_HttpException
      */
     public function getVideoEntry(
         $videoId = null,
@@ -303,10 +307,11 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      * Retrieves a video entry from the user's upload feed.
      *
      * @param mixed $videoID The ID of the video to retrieve.
-     * @throws Zend_Gdata_App_HttpException
      * @return Zend_Gdata_YouTube_VideoEntry|null The video entry to be
      *          retrieved, or null if it was not found or the user requesting it
      *          did not have the appropriate permissions.
+     * @throws Zend_Gdata_App_InvalidArgumentException
+     * @throws Zend_Gdata_App_HttpException
      */
     public function getFullVideoEntry($videoId)
     {
@@ -323,6 +328,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      *         Zend_Gdata_Query object from which a URL can be determined
      * @return Zend_Gdata_YouTube_VideoFeed The feed of videos found at the
      *         specified URL.
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getRelatedVideoFeed($videoId = null, $location = null)
     {
@@ -345,6 +351,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      *         Zend_Gdata_Query object from which a URL can be determined
      * @return Zend_Gdata_YouTube_VideoFeed The feed of videos found at the
      *         specified URL.
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getVideoResponseFeed($videoId = null, $location = null)
     {
@@ -367,6 +374,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      *         Zend_Gdata_Query object from which a URL can be determined
      * @return Zend_Gdata_YouTube_CommentFeed The feed of videos found at the
      *         specified URL.
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getVideoCommentFeed($videoId = null, $location = null)
     {
@@ -513,6 +521,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      * @param mixed $location (optional) The URL to query or a
      *         Zend_Gdata_Query object from which a URL can be determined
      * @return Zend_Gdata_YouTube_PlaylistListFeed The feed of playlists
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getPlaylistListFeed($user = null, $location = null)
     {
@@ -533,6 +542,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      *         Zend_Gdata_Query object from which a URL can be determined
      * @return Zend_Gdata_YouTube_PlaylistVideoFeed The feed of videos found at
      *         the specified URL.
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getPlaylistVideoFeed($location)
     {
@@ -551,6 +561,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      * @param mixed $location (optional) The URL to query or a
      *         Zend_Gdata_Query object from which a URL can be determined
      * @return Zend_Gdata_YouTube_SubscriptionListFeed The feed of subscriptions
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getSubscriptionFeed($user = null, $location = null)
     {
@@ -571,6 +582,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      * @param mixed $location (optional) The URL to query or a
      *         Zend_Gdata_Query object from which a URL can be determined
      * @return Zend_Gdata_YouTube_ContactFeed The feed of contacts
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getContactFeed($user = null, $location = null)
     {
@@ -591,6 +603,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      * @param mixed $location (optional) The URL to query or a
      *         Zend_Gdata_Query object from which a URL can be determined
      * @return Zend_Gdata_YouTube_VideoFeed The videos uploaded by the user
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getUserUploads($user = null, $location = null)
     {
@@ -612,6 +625,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      * @param mixed $location (optional) The URL to query or a
      *         Zend_Gdata_Query object from which a URL can be determined
      * @return Zend_Gdata_YouTube_VideoFeed The videos favorited by the user
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getUserFavorites($user = null, $location = null)
     {
@@ -633,6 +647,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      * @param mixed $location (optional) The URL to query or a
      *         Zend_Gdata_Query object from which a URL can be determined
      * @return Zend_Gdata_YouTube_UserProfileEntry The user profile entry
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getUserProfile($user = null, $location = null)
     {
@@ -725,8 +740,9 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      * @param mixed $usernames A string identifying the usernames for which to
      *              retrieve activity for. This can also be a Zend_Gdata_Query
      *              object from which a URL can be determined.
-     * @throws Zend_Gdata_App_VersionException if using version less than 2.
      * @return Zend_Gdata_YouTube_ActivityFeed
+     * @throws Zend_Gdata_App_InvalidArgumentException
+     * @throws Zend_Gdata_App_VersionException if using version less than 2.
      */
     public function getActivityForUser($username)
     {
@@ -805,11 +821,12 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
      * @param Zend_Gdata_YouTube_VideoEntry (optional) The video entry to send
      * @param string $videoId The id of the video to send
      * @param string $recipientUserName The username of the recipient
-     * @throws Zend_Gdata_App_InvalidArgumentException if no valid
-     *         Zend_Gdata_YouTube_VideoEntry or videoId were provided
      * @return Zend_Gdata_YouTube_InboxEntry|null The
      *         Zend_Gdata_YouTube_Inbox_Entry representing the sent message.
      *
+     * @throws Zend_Gdata_App_VersionException
+     *         Zend_Gdata_YouTube_VideoEntry or videoId were provided
+     * @throws Zend_Gdata_App_InvalidArgumentException if no valid
      */
     public function sendVideoMessage(
         $body,

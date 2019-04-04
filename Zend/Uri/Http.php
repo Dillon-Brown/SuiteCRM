@@ -271,6 +271,7 @@ class Zend_Uri_Http extends Zend_Uri
      * parts pass validation.
      *
      * @return boolean
+     * @throws Zend_Uri_Exception
      */
     public function valid()
     {
@@ -642,8 +643,9 @@ class Zend_Uri_Http extends Zend_Uri
      * Add or replace params in the query string for the current URI, and
      * return the old query.
      *
-     * @param  array $queryParams
+     * @param array $queryParams
      * @return string Old query string
+     * @throws Zend_Uri_Exception
      */
     public function addReplaceQueryParameters(array $queryParams)
     {
@@ -655,8 +657,9 @@ class Zend_Uri_Http extends Zend_Uri
      * Remove params in the query string for the current URI, and
      * return the old query.
      *
-     * @param  array $queryParamKeys
+     * @param array $queryParamKeys
      * @return string Old query string
+     * @throws Zend_Uri_Exception
      */
     public function removeQueryParameters(array $queryParamKeys)
     {

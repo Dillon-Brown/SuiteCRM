@@ -51,10 +51,11 @@ class ParserFactory
     /**
      * Create a new parser
      *
-     * @param string $view          The view, for example EditView or ListView. For search views, use advanced_search or basic_search
-     * @param string $moduleName    Module name
-     * @param string $packageName   Package name. If present implies that we are being called from ModuleBuilder
+     * @param string $view The view, for example EditView or ListView. For search views, use advanced_search or basic_search
+     * @param string $moduleName Module name
+     * @param string $packageName Package name. If present implies that we are being called from ModuleBuilder
      * @return AbstractMetaDataParser
+     * @throws Exception
      */
 
     public static function getParser($view, $moduleName, $packageName = null, $subpanelName = null)

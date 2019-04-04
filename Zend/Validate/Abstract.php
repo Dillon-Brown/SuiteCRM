@@ -384,6 +384,7 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
      * Get default translation object for all validate objects
      *
      * @return Zend_Translate_Adapter|null
+     * @throws Zend_Exception
      */
     public static function getDefaultTranslator()
     {

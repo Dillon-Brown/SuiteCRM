@@ -241,6 +241,7 @@ class Zend_Gdata_Spreadsheets_DocumentQuery extends Zend_Gdata_Query
     /**
      * Gets the full query URL for this query.
      * @return string url
+     * @throws Zend_Gdata_App_Exception
      */
     public function getQueryUrl()
     {

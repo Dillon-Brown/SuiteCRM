@@ -274,6 +274,7 @@ class RenameModules
      *
      * @param string $options
      * @return void
+     * @throws Exception
      */
     public function process($options = '')
     {
@@ -351,6 +352,7 @@ class RenameModules
      * Save function responsible executing all sub-save functions required to rename a module.
      *
      * @return void
+     * @throws Exception
      */
     public function save($redirect = true)
     {
@@ -800,6 +802,7 @@ class RenameModules
      * Save changes to the module names to the app string entries for both the moduleList and moduleListSingular entries.
      *
      * @return RenameModules
+     * @throws Exception
      */
     private function changeAppStringEntries()
     {

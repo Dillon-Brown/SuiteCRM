@@ -79,6 +79,8 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
      *
      * @param Zend_Search_Lucene_Interface $index
      * @return Zend_Search_Lucene_Search_Query
+     * @throws Zend_Search_Lucene_Exception
+     * @throws Zend_Search_Lucene_Search_QueryParserException
      */
     public function rewrite(Zend_Search_Lucene_Interface $index)
     {
@@ -240,7 +242,8 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
     /**
      * Query specific matches highlighting
      *
-     * @param Zend_Search_Lucene_Search_Highlighter_Interface $highlighter  Highlighter object (also contains doc for highlighting)
+     * @param Zend_Search_Lucene_Search_Highlighter_Interface $highlighter Highlighter object (also contains doc for highlighting)
+     * @throws Zend_Search_Lucene_Exception
      */
     protected function _highlightMatches(Zend_Search_Lucene_Search_Highlighter_Interface $highlighter)
     {

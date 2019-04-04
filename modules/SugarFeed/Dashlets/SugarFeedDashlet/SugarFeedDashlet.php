@@ -496,9 +496,11 @@ class SugarFeedDashlet extends DashletGeneric
 enableQS(false);
 </script>';
     }
+
     /**
      *
      * @return javascript including QuickSearch for SugarFeeds
+     * @throws \SuiteCRM\StateSaverException
      */
     public function displayScript()
     {
@@ -565,8 +567,9 @@ enableQS(false);
 
     /**
      *
-     * @param Object$text
-     *@return the title and the user post form
+     * @param Object $text
+     * @return the title and the user post form
+     * @throws \SuiteCRM\StateSaverException
      */
     public function getHeader($text='')
     {
@@ -591,6 +594,7 @@ enableQS(false);
     /**
      *
      * @return the form for users posting custom messages to the feed stream
+     * @throws \SuiteCRM\StateSaverException
      */
     public function getPostForm()
     {

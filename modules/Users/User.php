@@ -1782,7 +1782,6 @@ EOQ;
     /**
      * returns opening <a href=xxxx for a contact, account, etc
      * cascades from User set preference to System-wide default
-     * @return string    link
      * @param attribute the email addy
      * @param focus the parent bean
      * @param contact_id
@@ -1790,6 +1789,8 @@ EOQ;
      * @param return_action
      * @param return_id
      * @param class
+     * @return string    link
+     * @throws Exception
      */
     public function getEmailLink2(
     $emailAddress,
@@ -1845,7 +1846,6 @@ EOQ;
     /**
      * returns opening <a href=xxxx for a contact, account, etc
      * cascades from User set preference to System-wide default
-     * @return string    link
      * @param attribute the email addy
      * @param focus the parent bean
      * @param contact_id
@@ -1853,6 +1853,8 @@ EOQ;
      * @param return_action
      * @param return_id
      * @param class
+     * @return string    link
+     * @throws Exception
      */
     public function getEmailLink(
     $attribute,
@@ -2220,6 +2222,9 @@ EOQ;
      * @param string $templateId Id of email template
      * @param array $additionalData additional params: link, url, password
      * @return array status: true|false, message: error message, if status = false and message = '' it means that send method has returned false
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     public function sendEmailForPassword($templateId, array $additionalData = array())
     {

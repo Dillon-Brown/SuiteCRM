@@ -42,11 +42,12 @@ class Zend_Oauth_Token_Access extends Zend_Oauth_Token
     /**
      * Cast to HTTP header
      *
-     * @param  string $url
-     * @param  Zend_Oauth_Config_ConfigInterface $config
-     * @param  null|array $customParams
-     * @param  null|string $realm
+     * @param string $url
+     * @param Zend_Oauth_Config_ConfigInterface $config
+     * @param null|array $customParams
+     * @param null|string $realm
      * @return string
+     * @throws Zend_Oauth_Exception
      */
     public function toHeader(
         $url,
@@ -67,10 +68,11 @@ class Zend_Oauth_Token_Access extends Zend_Oauth_Token
     /**
      * Cast to HTTP query string
      *
-     * @param  mixed $url
-     * @param  Zend_Oauth_Config_ConfigInterface $config
-     * @param  null|array $params
+     * @param mixed $url
+     * @param Zend_Oauth_Config_ConfigInterface $config
+     * @param null|array $params
      * @return string
+     * @throws Zend_Oauth_Exception
      */
     public function toQueryString($url, Zend_Oauth_Config_ConfigInterface $config, array $params = null)
     {

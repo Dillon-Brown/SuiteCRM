@@ -169,6 +169,7 @@ class CalendarActivity
      * @param $start_date_time
      * @param $end_date_time
      * @return array
+     * @throws Exception
      */
     public static function get_freebusy_activities($user_focus, $start_date_time, $end_date_time)
     {

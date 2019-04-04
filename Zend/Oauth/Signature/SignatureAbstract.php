@@ -90,8 +90,9 @@ abstract class Zend_Oauth_Signature_SignatureAbstract
     /**
      * Normalize the base signature URL
      *
-     * @param  string $url
+     * @param string $url
      * @return string
+     * @throws Zend_Uri_Exception
      */
     public function normaliseBaseSignatureUrl($url)
     {

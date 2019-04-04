@@ -249,6 +249,7 @@ class Zend_Http_Response
      * $this->getRawBody() instead.
      *
      * @return string
+     * @throws Zend_Http_Exception
      */
     public function getBody()
     {
@@ -565,6 +566,7 @@ class Zend_Http_Response
      *
      * @param string $body
      * @return string
+     * @throws Zend_Http_Exception
      */
     public static function decodeChunkedBody($body)
     {
@@ -604,6 +606,7 @@ class Zend_Http_Response
      *
      * @param string $body
      * @return string
+     * @throws Zend_Http_Exception
      */
     public static function decodeGzip($body)
     {
@@ -624,6 +627,7 @@ class Zend_Http_Response
      *
      * @param string $body
      * @return string
+     * @throws Zend_Http_Exception
      */
     public static function decodeDeflate($body)
     {
@@ -658,6 +662,7 @@ class Zend_Http_Response
      *
      * @param string $response_str
      * @return Zend_Http_Response
+     * @throws Zend_Http_Exception
      */
     public static function fromString($response_str)
     {

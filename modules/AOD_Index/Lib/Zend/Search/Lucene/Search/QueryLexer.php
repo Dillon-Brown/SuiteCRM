@@ -338,6 +338,7 @@ class Zend_Search_Lucene_Search_QueryLexer extends Zend_Search_Lucene_FSM
      * @param string $encoding
      * @return array
      * @throws Zend_Search_Lucene_Search_QueryParserException
+     * @throws Zend_Search_Exception
      */
     public function tokenize($inputString, $encoding)
     {
@@ -388,6 +389,7 @@ class Zend_Search_Lucene_Search_QueryLexer extends Zend_Search_Lucene_FSM
      * Add query syntax lexeme
      *
      * @throws Zend_Search_Lucene_Search_QueryParserException
+     * @throws Zend_Search_Lucene_Exception
      */
     public function addQuerySyntaxLexeme()
     {

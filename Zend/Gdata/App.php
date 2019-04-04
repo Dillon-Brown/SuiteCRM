@@ -199,6 +199,7 @@ class Zend_Gdata_App
      *                                    mapping has been disabled explicitly
      *                                    by passing false to the
      *                                    useObjectMapping() function.
+     * @throws Zend_Gdata_App_Exception
      */
     public function getFeed($uri, $className='Zend_Gdata_App_Feed')
     {
@@ -214,6 +215,7 @@ class Zend_Gdata_App
      *                                     mapping has been disabled explicitly
      *                                     by passing false to the
      *                                     useObjectMapping() function.
+     * @throws Zend_Gdata_App_Exception
      */
     public function getEntry($uri, $className='Zend_Gdata_App_Entry')
     {
@@ -234,8 +236,9 @@ class Zend_Gdata_App
      * Set the Zend_Http_Client object used for communication
      *
      * @param Zend_Http_Client $client The client to use for communication
-     * @throws Zend_Gdata_App_HttpException
      * @return Zend_Gdata_App Provides a fluent interface
+     * @throws Zend_Http_Client_Exception
+     * @throws Zend_Gdata_App_HttpException
      */
     public function setHttpClient(
         $client,
@@ -281,6 +284,7 @@ class Zend_Gdata_App
      * Gets the HTTP client object. If none is set, a new Zend_Http_Client will be used.
      *
      * @return Zend_Http_Client
+     * @throws Zend_Http_Client_Exception
      */
     public static function getStaticHttpClient()
     {
@@ -329,8 +333,9 @@ class Zend_Gdata_App
     /**
      * Toggle requesting gzip encoded responses
      *
-     * @param  boolean $enabled Whether or not to enable gzipped responses
+     * @param boolean $enabled Whether or not to enable gzipped responses
      * @return void
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public static function setGzipEnabled($enabled = false)
     {
@@ -837,8 +842,9 @@ class Zend_Gdata_App
      *        of the data model object that is to be created.
      * @param integer $minorProcolVersion (optional) The minor protocol version
      *        of the data model object that is to be created.
-     * @throws Zend_Gdata_App_Exception
      * @return Zend_Gdata_App_Feed
+     * @throws Zend_Exception
+     * @throws Zend_Gdata_App_Exception
      */
     public static function importString(
         $string,
@@ -905,8 +911,9 @@ class Zend_Gdata_App
      * @param string $uri GET URI
      * @param array $extraHeaders Extra headers to add to the request, as an
      *        array of string-based key/value pairs.
-     * @throws Zend_Gdata_App_HttpException
      * @return Zend_Http_Response
+     * @throws Zend_Gdata_App_InvalidArgumentException
+     * @throws Zend_Gdata_App_HttpException
      */
     public function get($uri, $extraHeaders = array())
     {
@@ -1074,6 +1081,7 @@ class Zend_Gdata_App
      *        array of string-based key/value pairs.
      * @return Zend_Gdata_App_Entry The entry returned from the server
      * @throws Zend_Gdata_App_Exception
+     * @throws Zend_Exception
      */
     public function updateEntry(
         $data,
@@ -1117,6 +1125,7 @@ class Zend_Gdata_App
      * @param array $args The arguments passed to the call
      * @return object
      * @throws Zend_Gdata_App_Exception
+     * @throws ReflectionException
      */
     public function __call($method, $args)
     {
@@ -1173,6 +1182,7 @@ class Zend_Gdata_App
      * @param The $feed feed to iterate through.
      * @return mixed A new feed of the same type as the one originally
      *          passed in, containing all relevent entries.
+     * @throws ReflectionException
      */
     public function retrieveAllEntriesForFeed($feed)
     {
@@ -1201,6 +1211,7 @@ class Zend_Gdata_App
      * already to use a proxy server or other interface.
      *
      * @param The $logfile logfile to use when logging the requests
+     * @throws Zend_Http_Client_Exception
      */
     public function enableRequestDebugLogging($logfile)
     {

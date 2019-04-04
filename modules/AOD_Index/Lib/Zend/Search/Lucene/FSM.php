@@ -133,6 +133,7 @@ abstract class Zend_Search_Lucene_FSM
      * @param array $states
      * @param array $inputAphabet
      * @param array $rules
+     * @throws Zend_Search_Exception
      */
     public function __construct($states = array(), $inputAphabet = array(), $rules = array())
     {
@@ -228,6 +229,7 @@ abstract class Zend_Search_Lucene_FSM
      *      )
      *
      * @param array $rules
+     * @throws Zend_Search_Exception
      */
     public function addRules($rules)
     {
@@ -284,6 +286,7 @@ abstract class Zend_Search_Lucene_FSM
      *
      * @param integer|string $state
      * @param Zend_Search_Lucene_FSMAction $action
+     * @throws Zend_Search_Exception
      */
     public function addEntryAction($state, Zend_Search_Lucene_FSMAction $action)
     {
@@ -306,6 +309,7 @@ abstract class Zend_Search_Lucene_FSM
      *
      * @param integer|string $state
      * @param Zend_Search_Lucene_FSMAction $action
+     * @throws Zend_Search_Exception
      */
     public function addExitAction($state, Zend_Search_Lucene_FSMAction $action)
     {
@@ -329,6 +333,7 @@ abstract class Zend_Search_Lucene_FSM
      * @param integer|string $state
      * @param integer|string $input
      * @param Zend_Search_Lucene_FSMAction $action
+     * @throws Zend_Search_Exception
      */
     public function addInputAction($state, $inputSymbol, Zend_Search_Lucene_FSMAction $action)
     {
@@ -359,6 +364,7 @@ abstract class Zend_Search_Lucene_FSM
      * @param integer|string $sourceState
      * @param integer|string $targetState
      * @param Zend_Search_Lucene_FSMAction $action
+     * @throws Zend_Search_Exception
      */
     public function addTransitionAction($sourceState, $targetState, Zend_Search_Lucene_FSMAction $action)
     {

@@ -520,8 +520,9 @@ class XMLSecurityKey
     /**
      * Create key from an EncryptedKey-element.
      *
-     * @param DOMElement $element  The EncryptedKey-element.
+     * @param DOMElement $element The EncryptedKey-element.
      * @return XMLSecurityKey  The new key.
+     * @throws Exception
      */
     public static function fromEncryptedKeyElement(DOMElement $element)
     {
@@ -1435,9 +1436,10 @@ class XMLSecEnc
     /**
      * Encrypt the selected node with the given key.
      *
-     * @param XMLSecurityKey $objKey  The encryption key and algorithm.
-     * @param bool $replace  Whether the encrypted node should be replaced in the original tree. Default is true.
+     * @param XMLSecurityKey $objKey The encryption key and algorithm.
+     * @param bool $replace Whether the encrypted node should be replaced in the original tree. Default is true.
      * @return DOMElement  The <xenc:EncryptedData>-element.
+     * @throws Exception
      */
     public function encryptNode($objKey, $replace=true)
     {
@@ -1526,6 +1528,7 @@ class XMLSecEnc
      * Retrieve the CipherValue text from this encrypted node.
      *
      * @return string|null  The Ciphervalue text, or null if no CipherValue is found.
+     * @throws Exception
      */
     public function getCipherValue()
     {
@@ -1559,6 +1562,7 @@ class XMLSecEnc
      * @params XMLSecurityKey $objKey  The decryption key that should be used when decrypting the node.
      * @params boolean $replace  Whether we should replace the encrypted node in the XML document with the decrypted data. The default is true.
      * @return string|DOMElement  The decrypted data.
+     * @throws Exception
      */
     public function decryptNode($objKey, $replace=true)
     {

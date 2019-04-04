@@ -93,6 +93,7 @@ class Zend_Gdata_HttpClient extends Zend_Http_Client
      * @param bool $useIncludePath Whether to search the include_path
      *                             for the file
      * @return void
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function setAuthSubPrivateKeyFile(
         $file,
@@ -281,11 +282,12 @@ class Zend_Gdata_HttpClient extends Zend_Http_Client
     }
 
     /**
-      * Load the connection adapter
-      *
-      * @param Zend_Http_Client_Adapter_Interface $adapter
-      * @return void
-      */
+     * Load the connection adapter
+     *
+     * @param Zend_Http_Client_Adapter_Interface $adapter
+     * @return void
+     * @throws Zend_Http_Client_Exception
+     */
     public function setAdapter($adapter)
     {
         if ($adapter == null) {

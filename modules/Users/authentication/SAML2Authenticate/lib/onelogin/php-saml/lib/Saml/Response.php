@@ -8,7 +8,8 @@ class OneLogin_Saml_Response extends OneLogin_Saml2_Response
      * and an OneLogin_Saml2_Response.
      *
      * @param array|object $oldSettings Settings
-     * @param string       $assertion  SAML Response
+     * @param string $assertion SAML Response
+     * @throws Exception
      */
     public function __construct($oldSettings, $assertion)
     {
@@ -21,6 +22,7 @@ class OneLogin_Saml_Response extends OneLogin_Saml2_Response
      * Retrieves an Array with the logged user data.
      *
      * @return array
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function get_saml_attributes()
     {
@@ -31,6 +33,7 @@ class OneLogin_Saml_Response extends OneLogin_Saml2_Response
      * Retrieves the nameId
      *
      * @return string
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function get_nameid()
     {

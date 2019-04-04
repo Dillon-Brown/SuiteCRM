@@ -38,6 +38,7 @@ class Zend_Oauth_Http_UserAuthorization extends Zend_Oauth_Http
      * values.
      *
      * @return string
+     * @throws Zend_Uri_Exception
      */
     public function getUrl()
     {

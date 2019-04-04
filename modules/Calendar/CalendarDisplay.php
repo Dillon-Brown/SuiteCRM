@@ -525,6 +525,7 @@ class CalendarDisplay
     /**
      * display header
      * @param boolean $controls display ui contol itmes
+     * @throws \SuiteCRM\StateSaverException
      */
     public function display_calendar_header($controls = true)
     {

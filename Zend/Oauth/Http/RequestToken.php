@@ -44,6 +44,7 @@ class Zend_Oauth_Http_RequestToken extends Zend_Oauth_Http
      * Initiate a HTTP request to retrieve a Request Token.
      *
      * @return Zend_Oauth_Token_Request
+     * @throws Zend_Oauth_Exception
      */
     public function execute()
     {
@@ -97,6 +98,7 @@ class Zend_Oauth_Http_RequestToken extends Zend_Oauth_Http
      *
      * @param array $params
      * @return Zend_Http_Client
+     * @throws Zend_Http_Client_Exception
      */
     public function getRequestSchemeHeaderClient(array $params)
     {
@@ -118,8 +120,9 @@ class Zend_Oauth_Http_RequestToken extends Zend_Oauth_Http
      * Generate and return a HTTP Client configured for the POST Body Request
      * Scheme specified by OAuth, for use in requesting a Request Token.
      *
-     * @param  array $params
+     * @param array $params
      * @return Zend_Http_Client
+     * @throws Zend_Http_Client_Exception
      */
     public function getRequestSchemePostBodyClient(array $params)
     {
@@ -140,8 +143,9 @@ class Zend_Oauth_Http_RequestToken extends Zend_Oauth_Http
      * Attempt a request based on the current configured OAuth Request Scheme and
      * return the resulting HTTP Response.
      *
-     * @param  array $params
+     * @param array $params
      * @return Zend_Http_Response
+     * @throws Zend_Http_Client_Exception
      */
     protected function _attemptRequest(array $params)
     {

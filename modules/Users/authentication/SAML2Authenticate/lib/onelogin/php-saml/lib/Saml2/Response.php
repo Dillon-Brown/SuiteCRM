@@ -420,6 +420,7 @@ class OneLogin_Saml2_Response
 
     /**
      * @return the ID of the assertion in the Response
+     * @throws Exception
      */
     public function getAssertionId()
     {
@@ -472,6 +473,7 @@ class OneLogin_Saml2_Response
      * Checks that the samlp:Response/saml:Assertion/saml:Conditions element exists and is unique.
      *
      * @return boolean true if the Conditions element exists and is unique
+     * @throws Exception
      */
     public function checkOneCondition()
     {
@@ -486,6 +488,7 @@ class OneLogin_Saml2_Response
      * Checks that the samlp:Response/saml:Assertion/saml:AuthnStatement element exists and is unique.
      *
      * @return boolean true if the AuthnStatement element exists and is unique
+     * @throws Exception
      */
     public function checkOneAuthnStatement()
     {
@@ -500,6 +503,7 @@ class OneLogin_Saml2_Response
      * Gets the audiences.
      *
      * @return array @audience The valid audiences of the response
+     * @throws Exception
      */
     public function getAudiences()
     {
@@ -520,6 +524,7 @@ class OneLogin_Saml2_Response
      * Gets the Issuers (from Response and Assertion).
      *
      * @return array @issuers The issuers of the assertion/response
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function getIssuers()
     {
@@ -554,6 +559,7 @@ class OneLogin_Saml2_Response
      * Gets the NameID Data provided by the SAML response from the IdP.
      *
      * @return array Name ID Data (Value, Format, NameQualifier, SPNameQualifier)
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function getNameIdData()
     {
@@ -617,6 +623,7 @@ class OneLogin_Saml2_Response
      * Gets the NameID provided by the SAML response from the IdP.
      *
      * @return string Name ID Value
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function getNameId()
     {
@@ -632,6 +639,7 @@ class OneLogin_Saml2_Response
      * Gets the NameID Format provided by the SAML response from the IdP.
      *
      * @return string Name ID Format
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function getNameIdFormat()
     {
@@ -647,6 +655,7 @@ class OneLogin_Saml2_Response
      * Gets the NameID NameQualifier provided by the SAML response from the IdP.
      *
      * @return string Name ID NameQualifier
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function getNameIdNameQualifier()
     {
@@ -663,6 +672,7 @@ class OneLogin_Saml2_Response
      * Could be used to set the local session expiration
      *
      * @return int|null The SessionNotOnOrAfter value
+     * @throws Exception
      */
     public function getSessionNotOnOrAfter()
     {
@@ -681,6 +691,7 @@ class OneLogin_Saml2_Response
      * send to the SP, to set what specific session must be deleted
      *
      * @return string|null The SessionIndex value
+     * @throws Exception
      */
 
     public function getSessionIndex()
@@ -697,6 +708,7 @@ class OneLogin_Saml2_Response
      * Gets the Attributes from the AttributeStatement element.
      *
      * @return array The attributes of the SAML Assertion
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function getAttributes()
     {
@@ -768,6 +780,7 @@ class OneLogin_Saml2_Response
      *   - Check that IDs and reference URI are unique and consistent.
      *
      * @return array Signed element tags
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function processSignedElements()
     {
@@ -857,6 +870,7 @@ class OneLogin_Saml2_Response
      * Verifies that the document is still valid according Conditions Element.
      *
      * @return bool
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function validateTimestamps()
     {
@@ -890,6 +904,7 @@ class OneLogin_Saml2_Response
      * Verifies that the document has the expected signed nodes.
      *
      * @return bool
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function validateSignedElements($signedElements)
     {

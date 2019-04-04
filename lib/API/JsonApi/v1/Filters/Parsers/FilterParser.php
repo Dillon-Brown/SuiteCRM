@@ -114,6 +114,7 @@ class FilterParser
      * @param string $filterKey
      * @param string $filterValue
      * @return array
+     * @throws Exception
      */
     public function parseFilter($filterKey, $filterValue)
     {
@@ -133,6 +134,7 @@ class FilterParser
      * @param $fieldKey
      * @return array
      * @throws Exception
+     * @throws BadRequestException
      */
     protected function parseFieldKey($fieldKey)
     {

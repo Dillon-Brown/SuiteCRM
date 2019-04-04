@@ -30,6 +30,7 @@ class UserWizardCest
     }
 
     // tests
+
     /**
      * @param InstallTester $I
      * @param \Helper\WebDriverHelper $webDriverHelper
@@ -37,6 +38,7 @@ class UserWizardCest
      * As an administrative user, I want to use the install wizard (web based) to install SuiteCRM.
      * Given that that I install SuiteCRM with the default configuration settings I
      * Expect to be able to login as an administrator.
+     * @throws Exception
      */
     public function testScenarioInstallSuiteCRMWithDefaultConfiguration(InstallTester $I, Step\Acceptance\EmailManTester $I2, \Helper\WebDriverHelper $webDriverHelper)
     {

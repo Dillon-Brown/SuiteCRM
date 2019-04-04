@@ -102,6 +102,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
      * @param Zend_Http_Client $client (optional) The HTTP client to use when
      *          when communicating with the Google servers.
      * @param string $applicationId The identity of the app in the form of Company-AppName-Version
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function __construct($client = null, $applicationName)
     {
@@ -132,6 +133,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
      *
      * @param mixed $location The location for the feed, as a URL or Query
      * @return Zend_Gdata_Docs_DocumentListFeed
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getDocumentListFeed($location = null)
     {
@@ -150,6 +152,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
      *
      * @param mixed $location The location for the entry, as a URL or Query
      * @return Zend_Gdata_Docs_DocumentListEntry
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getDocumentListEntry($location = null)
     {
@@ -167,13 +170,14 @@ class Zend_Gdata_Docs extends Zend_Gdata
     }
 
     /**
-         * Retrieve a document entry representing a single document.
-         *
-         * @param string $resourceId The document resource id. Examples:
-         *     document:dcmg89gw_62hfjj8m, spreadsheet:pKq0CzjiF3YmGd0AIlHKqeg,
-         *     pdf:asdf89hfjjddfg
-         * @return Zend_Gdata_Docs_DocumentListEntry
-         */
+     * Retrieve a document entry representing a single document.
+     *
+     * @param string $resourceId The document resource id. Examples:
+     *     document:dcmg89gw_62hfjj8m, spreadsheet:pKq0CzjiF3YmGd0AIlHKqeg,
+     *     pdf:asdf89hfjjddfg
+     * @return Zend_Gdata_Docs_DocumentListEntry
+     * @throws Zend_Gdata_App_InvalidArgumentException
+     */
     public function getResource($resourceId)
     {
         $uri = 'https://docs.google.com/feeds/documents/private/full/' . $resourceId;
@@ -190,6 +194,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
      * @param string $docType The type of the document as used in the Google
      *     Document List URLs. Examples: document, spreadsheet, presentation
      * @return Zend_Gdata_Docs_DocumentListEntry
+     * @throws Zend_Gdata_App_InvalidArgumentException
      * @deprecated Use getResource($resourceId) instead.
      */
     public function getDoc($docId, $docType)

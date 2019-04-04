@@ -155,6 +155,7 @@ class Zend_Http_Response_Stream extends Zend_Http_Response
      * @param string $response_str
      * @param resource $stream
      * @return Zend_Http_Response_Stream
+     * @throws Zend_Http_Exception
      */
     public static function fromStream($response_str, $stream)
     {

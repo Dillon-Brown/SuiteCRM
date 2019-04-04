@@ -202,6 +202,8 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
      *
      * @param mixed $directory
      * @return Zend_Search_Lucene_Interface
+     * @throws Zend_Search_Lucene_Exception
+     * @throws Zend_Search_Exception
      */
     public static function create($directory)
     {
@@ -216,6 +218,8 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
      *
      * @param mixed $directory
      * @return Zend_Search_Lucene_Interface
+     * @throws Zend_Search_Lucene_Exception
+     * @throws Zend_Search_Exception
      */
     public static function open($directory)
     {
@@ -507,6 +511,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
      *
      * @param Zend_Search_Lucene_Storage_Directory_Filesystem|string $directory
      * @throws Zend_Search_Lucene_Exception
+     * @throws Zend_Search_Exception
      */
     public function __construct($directory = null, $create = false)
     {
@@ -920,6 +925,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
      * @param Zend_Search_Lucene_Search_QueryParser|string $query
      * @return array Zend_Search_Lucene_Search_QueryHit
      * @throws Zend_Search_Lucene_Exception
+     * @throws Zend_Search_Exception
      */
     public function find($query)
     {
@@ -1412,11 +1418,11 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
     }
 
 
-
     /**
      * Adds a document to this index.
      *
      * @param Zend_Search_Lucene_Document $document
+     * @throws Zend_Search_Lucene_Exception
      */
     public function addDocument(Zend_Search_Lucene_Document $document)
     {

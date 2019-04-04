@@ -111,6 +111,8 @@ class AOD_Index extends AOD_Index_sugar
     /**
      * @param $revision
      * @return bool|Zend_Search_Lucene_Document
+     * @throws Zend_Search_Lucene_Document_Exception
+     * @throws Zend_Search_Lucene_Exception
      */
     private function getDocumentForRevision($revision)
     {
@@ -353,6 +355,8 @@ class AOD_Index extends AOD_Index_sugar
     /**
      * Returns a handle on the actual lucene index.
      * @return Zend_Search_Lucene_Interface
+     * @throws Zend_Search_Lucene_Exception
+     * @throws Zend_Search_Exception
      */
     private function getLuceneIndex()
     {

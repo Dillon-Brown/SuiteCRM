@@ -13,6 +13,7 @@ class OneLogin_Saml_AuthRequest
      * the SP SAML instance.
      *
      * @param array|object $settings SAML Toolkit Settings
+     * @throws OneLogin_Saml2_Error
      */
     public function __construct($settings)
     {

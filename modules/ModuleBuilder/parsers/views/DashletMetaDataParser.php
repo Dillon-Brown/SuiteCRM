@@ -79,6 +79,7 @@ class DashletMetaDataParser extends ListLayoutMetaDataParser
      * @param string $view
      * @param string $moduleName The name of the module to which this listview belongs
      * @param string $packageName If not empty, the name of the package to which this listview belongs
+     * @throws Exception
      */
     public function __construct($view, $moduleName, $packageName = '')
     {
@@ -164,6 +165,7 @@ class DashletMetaDataParser extends ListLayoutMetaDataParser
 
     /**
      * @param bool $populate
+     * @throws Exception
      */
     public function handleSave($populate = true)
     {

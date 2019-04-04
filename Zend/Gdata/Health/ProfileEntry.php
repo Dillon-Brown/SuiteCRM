@@ -112,6 +112,7 @@ class Zend_Gdata_Health_ProfileEntry extends Zend_Gdata_Entry
      * Sets the profile entry's CCR data
      * @param string $ccrXMLStr The CCR as an xml string
      * @return Zend_Gdata_Health_Extension_Ccr
+     * @throws Zend_Gdata_App_Exception
      */
     public function setCcr($ccrXMLStr)
     {

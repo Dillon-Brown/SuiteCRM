@@ -108,6 +108,7 @@ class Zend_Gdata_Entry extends Zend_Gdata_App_MediaEntry
      * stored in an array.
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
+     * @throws Zend_Gdata_App_IOException
      */
     protected function takeAttributeFromDOM($attribute)
     {

@@ -65,6 +65,7 @@ class EmailsDetailView extends DetailView2
      * @param string $tpl
      * @param bool $createFocus
      * @param string $metadataFileName
+     * @throws Exception
      */
     public function setup(
         $module,

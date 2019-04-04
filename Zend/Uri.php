@@ -163,6 +163,7 @@ abstract class Zend_Uri
      * Set global configuration options
      *
      * @param Zend_Config|array $config
+     * @throws Zend_Uri_Exception
      */
     public static function setConfig($config)
     {

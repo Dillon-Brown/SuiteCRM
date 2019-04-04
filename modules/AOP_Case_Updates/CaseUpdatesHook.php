@@ -78,6 +78,9 @@ class CaseUpdatesHook
 
     /**
      * @param aCase $case
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     public function saveUpdate($case)
     {
@@ -218,6 +221,9 @@ class CaseUpdatesHook
      * Called when saving a new email and adds the case update to the case.
      *
      * @param Email $email
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     public function saveEmailUpdate($email)
     {
@@ -342,6 +348,9 @@ class CaseUpdatesHook
 
     /**
      * @param aCase $case
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     public function closureNotify($case)
     {
@@ -358,6 +367,9 @@ class CaseUpdatesHook
      * @param aCase $case
      *
      * @return bool
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     private function sendClosureEmail(aCase $case)
     {
@@ -427,6 +439,9 @@ class CaseUpdatesHook
      * @param $bean
      * @param $event
      * @param $arguments
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     public function creationNotify($bean, $event, $arguments)
     {
@@ -509,6 +524,9 @@ class CaseUpdatesHook
      * @param $contact
      *
      * @return bool
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     private function sendCreationEmail(aCase $bean, $contact)
     {
@@ -567,6 +585,8 @@ class CaseUpdatesHook
      * @param string $email
      * @param SugarPHPMailer $mailer
      * @param string $caseId
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     private function logEmail($email, SugarPHPMailer $mailer, $caseId = null)
     {
@@ -600,6 +620,9 @@ class CaseUpdatesHook
 
     /**
      * @param AOP_Case_Updates $caseUpdate
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     public function sendCaseUpdate(AOP_Case_Updates $caseUpdate)
     {

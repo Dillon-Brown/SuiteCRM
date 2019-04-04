@@ -887,6 +887,7 @@ class OneLogin_Saml2_Settings
      * @param string $xml Metadata's XML that will be validate
      *
      * @return Array The list of found errors
+     * @throws Exception
      */
     public function validateMetadata($xml)
     {
@@ -996,6 +997,7 @@ class OneLogin_Saml2_Settings
      * Activates or deactivates the strict mode.
      *
      * @param bool $value Strict parameter
+     * @throws Exception
      */
     public function setStrict($value)
     {

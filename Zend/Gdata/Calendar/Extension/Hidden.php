@@ -77,6 +77,7 @@ class Zend_Gdata_Calendar_Extension_Hidden extends Zend_Gdata_Extension
      * stored in an array.
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     protected function takeAttributeFromDOM($attribute)
     {

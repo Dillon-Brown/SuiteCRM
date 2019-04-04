@@ -245,6 +245,7 @@ class Zend_Http_Client
      *
      * @param Zend_Uri_Http|string $uri
      * @param array $config Configuration key-value pairs.
+     * @throws Zend_Http_Client_Exception
      */
     public function __construct($uri = null, $config = null)
     {
@@ -259,9 +260,10 @@ class Zend_Http_Client
     /**
      * Set the URI for the next request
      *
-     * @param  Zend_Uri_Http|string $uri
+     * @param Zend_Uri_Http|string $uri
      * @return Zend_Http_Client
      * @throws Zend_Http_Client_Exception
+     * @throws Zend_Uri_Exception
      */
     public function setUri($uri)
     {
@@ -545,6 +547,7 @@ class Zend_Http_Client
      * @param string $type Authentication type
      * @return Zend_Http_Client
      * @throws Zend_Http_Client_Exception
+     * @throws Zend_Uri_Exception
      */
     public function setAuth($user, $password = '', $type = self::AUTH_BASIC)
     {
@@ -585,6 +588,7 @@ class Zend_Http_Client
      * @param Zend_Http_CookieJar|boolean $cookiejar Existing cookiejar object, true to create a new one, false to disable
      * @return Zend_Http_Client
      * @throws Zend_Http_Client_Exception
+     * @throws Zend_Exception
      */
     public function setCookieJar($cookiejar = true)
     {
@@ -623,6 +627,7 @@ class Zend_Http_Client
      * @param string|null $value If "cookie" is a string, this is the cookie value.
      * @return Zend_Http_Client
      * @throws Zend_Http_Client_Exception
+     * @throws Zend_Exception
      */
     public function setCookie($cookie, $value = null)
     {
@@ -752,6 +757,7 @@ class Zend_Http_Client
      * @param string|resource $data
      * @param string $enctype
      * @return Zend_Http_Client
+     * @throws Zend_Http_Client_Exception
      */
     public function setRawData($data, $enctype = null)
     {
@@ -878,6 +884,7 @@ class Zend_Http_Client
      *
      * @param string|boolean $streamfile Stream file, true for temp file, false/null for no streaming
      * @return Zend_Http_Client
+     * @throws Zend_Http_Client_Exception
      */
     public function setStream($streamfile = true)
     {
@@ -898,6 +905,7 @@ class Zend_Http_Client
      * Create temporary stream
      *
      * @return resource
+     * @throws Zend_Http_Client_Exception
      */
     protected function _openTempStream()
     {
@@ -920,13 +928,14 @@ class Zend_Http_Client
         
         return $fp;
     }
-    
+
     /**
      * Send the HTTP request and return an HTTP response object
      *
      * @param string $method
      * @return Zend_Http_Response
      * @throws Zend_Http_Client_Exception
+     * @throws Zend_Uri_Exception
      */
     public function request($method = null)
     {
@@ -1079,6 +1088,7 @@ class Zend_Http_Client
      * Prepare the request headers
      *
      * @return array
+     * @throws Zend_Http_Client_Exception
      */
     protected function _prepareHeaders()
     {

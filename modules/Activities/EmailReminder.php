@@ -83,10 +83,11 @@ class EmailReminder
         $this->now = $GLOBALS['timedate']->nowDb();
         $this->max = $GLOBALS['timedate']->getNow()->modify("+{$max_time} seconds")->asDb();
     }
-    
+
     /**
      * main method that runs reminding process
      * @return boolean
+     * @throws phpmailerException
      */
     public function process()
     {
@@ -126,6 +127,7 @@ class EmailReminder
      * @param Administration $admin
      * @param array $recipients
      * @return boolean
+     * @throws phpmailerException
      */
     public function sendReminders(SugarBean $bean, Administration $admin, $recipients)
     {

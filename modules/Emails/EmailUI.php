@@ -113,6 +113,7 @@ class EmailUI
     /**
      * Renders the frame for emails
      * @throws \RuntimeException
+     * @throws \SuiteCRM\StateSaverException
      */
     public function displayEmailFrame($baseTpl = "modules/Emails/templates/_baseEmail.tpl")
     {
@@ -359,6 +360,7 @@ eoq;
      * by an ajax call.
      *
      * @return JSON An object containing html markup and js script variables.
+     * @throws \SuiteCRM\StateSaverException
      */
     public function displayQuickComposeEmailFrame()
     {
@@ -453,7 +455,6 @@ HTML;
 
     /**
      *
-     * @global SugarBean $focus
      * @param SugarBean|null $bean
      * @param string $emailField
      * @param bool $checkAllEmail
@@ -461,7 +462,9 @@ HTML;
      * @param string|null $composeData
      * @return string
      * @throws RuntimeException
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException*@throws Exception
+     * @throws Exception
+     * @global SugarBean $focus
      */
     public function populateComposeViewFields(
         $bean = null,
@@ -929,6 +932,7 @@ HTML;
      * @param string id ID of contact in question
      * @param string module Module in focus
      * @return array
+     * @throws \SuiteCRM\StateSaverException
      */
     public function getEditContact($id, $module)
     {
@@ -1601,6 +1605,7 @@ HTML;
      * @param object $email Fetched email object
      * @param bool $addToAddressBook
      * @return array
+     * @throws Exception
      */
     public function getQuickCreateForm($vars, $email, $addToAddressBookButton = false)
     {
@@ -1753,6 +1758,7 @@ HTML;
      * @param object $email Fetched email object
      * @param bool $addToAddressBook
      * @return array
+     * @throws \SuiteCRM\StateSaverException
      */
     public function getImportForm($vars, $email, $formName = 'ImportEditView')
     {
@@ -1948,6 +1954,9 @@ HTML;
      * @param string $ieId
      * @param string $folder IMAP folder structure or SugarFolder GUID
      * @param string $uids Comma sep list of UIDs or GUIDs
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function markEmails($type, $ieId, $folder, $uids)
     {
@@ -2128,6 +2137,8 @@ HTML;
      * @param array $userIds of users to dist to
      * @param array $mailIds of email ids to push on those users
      * @return  boolean        true on success
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function distRoundRobin($userIds, $mailIds)
     {
@@ -2159,6 +2170,8 @@ HTML;
      * @param array $userIds of users to dist to
      * @param array $mailIds of email ids to push on those users
      * @return  boolean        true on success
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function distLeastBusy($userIds, $mailIds)
     {
@@ -2186,6 +2199,8 @@ HTML;
      * @param users $user to dist to
      * @param array $mailIds of email ids to push
      * @return  boolean        true on success
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function distDirect($user, $mailIds)
     {
@@ -3300,6 +3315,7 @@ eoq;
     /**
      * Formats a display message on successful async call
      * @param string $type Type of message to display
+     * @throws \SuiteCRM\StateSaverException
      */
     public function displaySuccessMessage($type)
     {

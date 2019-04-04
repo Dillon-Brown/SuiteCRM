@@ -50,6 +50,7 @@ class ClientRepository implements ClientRepositoryInterface
     /**
      * {@inheritdoc}
      * @return null|ClientEntity
+     * @throws GrantTypeNotAllowedForClient
      */
     public function getClientEntity($clientIdentifier, $grantType, $clientSecret = null, $mustValidateSecret = true)
     {

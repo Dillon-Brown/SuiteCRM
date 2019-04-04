@@ -209,6 +209,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
     /**
      * @param int $value
      * @return Zend_Gdata_Calendar_EventQuery Provides a fluent interface
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function setStartMax($value)
     {
@@ -223,6 +224,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
     /**
      * @param int $value
      * @return Zend_Gdata_Calendar_EventQuery Provides a fluent interface
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function setStartMin($value)
     {
@@ -323,6 +325,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
 
     /**
      * @return string recurrence-expansion-start
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function setRecurrenceExpansionStart($value)
     {
@@ -349,6 +352,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
 
     /**
      * @return string recurrence-expansion-end
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function setRecurrenceExpansionEnd($value)
     {
@@ -363,6 +367,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
     /**
      * @param string $value Also accepts bools.
      * @return Zend_Gdata_Calendar_EventQuery Provides a fluent interface
+     * @throws Zend_Gdata_App_Exception
      */
     public function getSingleEvents()
     {
@@ -390,6 +395,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
     /**
      * @param string $value Also accepts bools. If using a string, must be either "true" or "false".
      * @return Zend_Gdata_Calendar_EventQuery Provides a fluent interface
+     * @throws Zend_Gdata_App_Exception
      */
     public function setSingleEvents($value)
     {
@@ -413,6 +419,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
 
     /**
      * @return string futureevents
+     * @throws Zend_Gdata_App_Exception
      */
     public function getFutureEvents()
     {
@@ -441,6 +448,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
      * @param string $value Also accepts bools. If using a string, must be either "true" or "false" or
      *                      an exception will be thrown on retrieval.
      * @return Zend_Gdata_Calendar_EventQuery Provides a fluent interface
+     * @throws Zend_Gdata_App_Exception
      */
     public function setFutureEvents($value)
     {

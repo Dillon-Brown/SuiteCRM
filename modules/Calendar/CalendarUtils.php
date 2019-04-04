@@ -106,6 +106,7 @@ class CalendarUtils
      * Get array of needed time data
      * @param SugarBean $bean
      * @return array
+     * @throws Exception
      */
     public static function get_time_data(SugarBean $bean, $start_field = "date_start", $end_field = "date_end")
     {
@@ -158,6 +159,7 @@ class CalendarUtils
      * Get array that will be sent back to ajax frontend
      * @param SugarBean $bean
      * @return array
+     * @throws Exception
      */
     public static function get_sendback_array(SugarBean $bean)
     {
@@ -216,6 +218,7 @@ class CalendarUtils
      * Get array of repeat data
      * @param SugarBean $bean
      * @return array
+     * @throws Exception
      */
     public static function get_sendback_repeat_data(SugarBean $bean)
     {
@@ -263,6 +266,7 @@ class CalendarUtils
      * @param string $date_start
      * @param array $params
      * @return array
+     * @throws Exception
      */
     public static function build_repeat_sequence($date_start, $params)
     {
@@ -376,6 +380,7 @@ class CalendarUtils
      * @param SugarBean $bean
      * @param array $time_arr array of datetimes
      * @return array
+     * @throws Exception
      */
     public static function save_repeat_activities(SugarBean $bean, $time_arr)
     {

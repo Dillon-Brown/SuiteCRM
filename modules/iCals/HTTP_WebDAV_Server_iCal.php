@@ -204,6 +204,7 @@ class HTTP_WebDAV_Server_iCal extends HTTP_WebDAV_Server
      *
      * @param void
      * @returns void
+     * @throws Exception
      */
     public function http_GET()
     {

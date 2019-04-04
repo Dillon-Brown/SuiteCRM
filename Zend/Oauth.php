@@ -64,6 +64,7 @@ class Zend_Oauth
      * Authorization header values.
      *
      * @return Zend_Http_Client
+     * @throws Zend_Http_Client_Exception
      */
     public static function getHttpClient()
     {

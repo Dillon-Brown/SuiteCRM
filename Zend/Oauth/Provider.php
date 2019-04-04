@@ -149,6 +149,7 @@ class Zend_Oauth_Provider
     /**
      * Check if this request needs token
      * @return bool
+     * @throws Zend_Uri_Exception
      */
     protected function needsToken()
     {
@@ -279,6 +280,7 @@ class Zend_Oauth_Provider
      * @param array $params Additional parameters
      * @return bool
      * @throws Zend_Oauth_Exception
+     * @throws Zend_Uri_Exception
      */
     public function checkOAuthRequest(Zend_Uri_Http $url = null, $params = array())
     {

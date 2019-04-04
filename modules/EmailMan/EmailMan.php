@@ -407,6 +407,7 @@ class EmailMan extends SugarBean
 
     /**
      * @return array
+     * @throws Exception
      */
     public function get_list_view_data()
     {
@@ -532,6 +533,7 @@ class EmailMan extends SugarBean
      * @param array  macro_nv array of name value pair, one row for each replacable macro in email template text.
      * @param string from_address_name The from address eg markeing <marketing@sugar.net>
      * @return
+     * @throws Exception
      */
     public function create_ref_email(
         $marketing_id,
@@ -707,6 +709,7 @@ class EmailMan extends SugarBean
      * @param $module
      * @param $mail
      * @return string
+     * @throws Exception
      */
     public function create_indiv_email($module, $mail)
     {
@@ -839,15 +842,16 @@ class EmailMan extends SugarBean
     }
 
     /**
+     * @param SugarPHPMailer $mail
+     * @param int $save_emails
+     * @param bool $testmode
+     * @return bool
+     * @throws phpmailerException
      * @global array $beanList ;
      * @global array $beanFiles ;
      * @global Configurator|array $sugar_config ;
      * @global array $mod_strings ;
      * @global Localization $locale ;
-     * @param SugarPHPMailer $mail
-     * @param int $save_emails
-     * @param bool $testmode
-     * @return bool
      */
     public function sendEmail(SugarPHPMailer $mail, $save_emails = 1, $testmode = false)
     {
@@ -1392,11 +1396,12 @@ class EmailMan extends SugarBean
 
     /**
      *
-     * @global LoggerManager $log
-     * @global array $app_strings
      * @param SugarBean|Person|Company $focus
      * @param EmailAddress $emailAddress
      * @return boolean return true on success otherwise false
+     * @throws phpmailerException
+     * @global LoggerManager $log
+     * @global array $app_strings
      */
     private function sendOptInEmailViaMailer(SugarBean $focus, EmailAddress $emailAddress)
     {

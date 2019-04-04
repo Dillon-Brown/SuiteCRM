@@ -89,12 +89,13 @@ class Calendar
      * @var bool $print Whether is print mode.
      */
     private $print = false;
-        
+
     /**
      * constructor
      * @param string $view
      * @param array $time_arr
      * @param array $views
+     * @throws Exception
      */
     public function __construct($view = "agendaWeek", $time_arr = array())
     {
@@ -388,11 +389,12 @@ class Calendar
         $this->scroll_slot = intval($hour_start * (60 / $this->time_step) + ($minute_start / $this->time_step));
         $this->celcount = (($hour_end * 60 + $minute_end) - ($hour_start * 60 + $minute_start)) / $this->time_step;
     }
-    
+
     /**
      * loads array of objects
      * @param User $user user object
      * @param string $type
+     * @throws Exception
      */
     public function add_activities($user, $type='sugar')
     {

@@ -50,6 +50,7 @@ require_once('include/utils/array_utils.php');
 /**
  * @return bool
  * @desc Creates the include language directory under the custom directory.
+ * @throws Exception
  */
 function create_include_lang_dir()
 {
@@ -61,9 +62,10 @@ function create_include_lang_dir()
 }
 
 /**
- * @return bool
  * @param module string
  * @desc Creates the module's language directory under the custom directory.
+ * @return bool
+ * @throws Exception
  */
 function create_module_lang_dir($module)
 {
@@ -114,9 +116,10 @@ function &create_dropdown_lang_pak_contents(&$the_array, $language)
 }
 
 /**
- * @return bool
  * @param module string, key string, value string
  * @desc Wrapper function that will create a field label for every language.
+ * @return bool
+ * @throws Exception
  */
 function create_field_label_all_lang($module, $key, $value, $overwrite = false)
 {
@@ -134,10 +137,11 @@ function create_field_label_all_lang($module, $key, $value, $overwrite = false)
 }
 
 /**
- * @return bool
  * @param module string, language string, key string, value string
  * @desc Returns true if new field label can be created, false otherwise.
  *       Probable reason for returning false: new_field_key already exists.
+ * @return bool
+ * @throws Exception
  */
 function create_field_label($module, $language, $key, $value, $overwrite=false)
 {
@@ -192,9 +196,10 @@ function create_field_label($module, $language, $key, $value, $overwrite=false)
 }
 
 /**
- * @return bool
  * @param dropdown_name string
  * @desc Wrapper function that creates a dropdown type for all languages.
+ * @return bool
+ * @throws Exception
  */
 function create_dropdown_type_all_lang($dropdown_name)
 {
@@ -212,9 +217,10 @@ function create_dropdown_type_all_lang($dropdown_name)
 }
 
 /**
- * @return bool
  * @param app_list_strings array
  * @desc Saves the app_list_strings to file in the 'custom' dir.
+ * @return bool
+ * @throws Exception
  */
 function save_custom_app_list_strings_contents(&$contents, $language, $custom_dir_name = '')
 {
@@ -256,9 +262,10 @@ function save_custom_app_list_strings_contents(&$contents, $language, $custom_di
 }
 
 /**
- * @return bool
  * @param app_list_strings array
  * @desc Saves the app_list_strings to file in the 'custom' dir.
+ * @return bool
+ * @throws Exception
  */
 function save_custom_app_list_strings(&$app_list_strings, $language)
 {
@@ -318,9 +325,10 @@ function return_custom_app_list_strings_file_contents($language, $custom_filenam
 }
 
 /**
- * @return bool
  * @param dropdown_name string, language string
  * @desc Creates a new dropdown type.
+ * @return bool
+ * @throws Exception
  */
 function create_dropdown_type($dropdown_name, $language)
 {

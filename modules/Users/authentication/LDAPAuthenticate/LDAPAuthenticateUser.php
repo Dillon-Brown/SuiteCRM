@@ -63,6 +63,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
      * @return string id - used for loading the user
      *
      * Contributions by Erik Mitchell erikm@logicpd.com
+     * @throws SuiteException
      */
     public function authenticateUser($name, $password, $fallback=false)
     {
@@ -258,6 +259,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
      *
      * @param STRING $name
      * @return STRING $id
+     * @throws SuiteException
      */
     public function createUser($name)
     {
@@ -273,6 +275,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
         $user->save();
         return $user->id;
     }
+
     /**
      * this is called when a user logs in
      *
@@ -281,6 +284,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
      * @param boolean $fallback - is this authentication a fallback from a failed authentication
      * @param array $params
      * @return boolean
+     * @throws SuiteException
      */
     public function loadUserOnLogin($name, $password, $fallback = false, $params = array())
     {

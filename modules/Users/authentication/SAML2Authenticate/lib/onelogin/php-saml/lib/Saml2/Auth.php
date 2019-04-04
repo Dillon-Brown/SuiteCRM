@@ -130,6 +130,7 @@ class OneLogin_Saml2_Auth
      * Initializes the SP SAML instance.
      *
      * @param array|object|null $oldSettings Setting data (You can provide a OneLogin_Saml_Settings, the settings object of the Saml folder implementation)
+     * @throws OneLogin_Saml2_Error
      */
     public function __construct($oldSettings = null)
     {
@@ -152,6 +153,7 @@ class OneLogin_Saml2_Auth
      * @param bool $value Strict parameter
      *
      * @return array The settings data.
+     * @throws OneLogin_Saml2_Error
      */
     public function setStrict($value)
     {
@@ -171,6 +173,7 @@ class OneLogin_Saml2_Auth
      * @param string|null $requestId The ID of the AuthNRequest sent by this SP to the IdP
      *
      * @throws OneLogin_Saml2_Error
+     * @throws OneLogin_Saml2_ValidationError
      */
     public function processResponse($requestId = null)
     {
@@ -293,6 +296,7 @@ class OneLogin_Saml2_Auth
      * @param array $parameters Extra parameters to be passed as part of the url
      * @param bool $stay True if we want to stay (returns the url string) False to redirect
      * @return string|null
+     * @throws OneLogin_Saml2_Error
      */
     public function redirectTo($url = '', $parameters = array(), $stay = false)
     {
@@ -417,14 +421,15 @@ class OneLogin_Saml2_Auth
     /**
      * Initiates the SSO process.
      *
-     * @param string|null $returnTo        The target URL the user should be returned to after login.
-     * @param array       $parameters      Extra parameters to be added to the GET
-     * @param bool        $forceAuthn      When true the AuthNReuqest will set the ForceAuthn='true'
-     * @param bool        $isPassive       When true the AuthNReuqest will set the Ispassive='true'
-     * @param bool        $stay            True if we want to stay (returns the url string) False to redirect
-     * @param bool        $setNameIdPolicy When true the AuthNReuqest will set a nameIdPolicy element
+     * @param string|null $returnTo The target URL the user should be returned to after login.
+     * @param array $parameters Extra parameters to be added to the GET
+     * @param bool $forceAuthn When true the AuthNReuqest will set the ForceAuthn='true'
+     * @param bool $isPassive When true the AuthNReuqest will set the Ispassive='true'
+     * @param bool $stay True if we want to stay (returns the url string) False to redirect
+     * @param bool $setNameIdPolicy When true the AuthNReuqest will set a nameIdPolicy element
      *
      * @return If $stay is True, it return a string with the SLO URL + LogoutRequest + parameters
+     * @throws OneLogin_Saml2_Error
      */
     public function login($returnTo = null, $parameters = array(), $forceAuthn = false, $isPassive = false, $stay = false, $setNameIdPolicy = true)
     {

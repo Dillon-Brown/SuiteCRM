@@ -57,6 +57,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     /**
      * {@inheritdoc}
      * @return bool
+     * @throws \Exception
      */
     public function isRefreshTokenRevoked($tokenId)
     {

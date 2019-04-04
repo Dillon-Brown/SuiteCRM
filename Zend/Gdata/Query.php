@@ -200,6 +200,7 @@ class Zend_Gdata_Query
     /**
      * @param string $value
      * @return Zend_Gdata_Query Provides a fluent interface
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function setUpdatedMax($value)
     {
@@ -214,6 +215,7 @@ class Zend_Gdata_Query
     /**
      * @param string $value
      * @return Zend_Gdata_Query Provides a fluent interface
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function setUpdatedMin($value)
     {
@@ -228,6 +230,7 @@ class Zend_Gdata_Query
     /**
      * @param string $value
      * @return Zend_Gdata_Query Provides a fluent interface
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function setPublishedMax($value)
     {
@@ -242,6 +245,7 @@ class Zend_Gdata_Query
     /**
      * @param string $value
      * @return Zend_Gdata_Query Provides a fluent interface
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function setPublishedMin($value)
     {

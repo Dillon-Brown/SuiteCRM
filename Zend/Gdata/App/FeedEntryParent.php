@@ -145,10 +145,11 @@ abstract class Zend_Gdata_App_FeedEntryParent extends Zend_Gdata_App_Base
      *
      * Sets the HTTP client object to use for retrieving the feed.
      *
+     * @param Zend_Http_Client $httpClient
+     * @return Zend_Gdata_App_FeedEntryParent Provides a fluent interface
+     * @throws Zend_Gdata_App_HttpException
      * @deprecated Deprecated as of Zend Framework 1.7. Use
      *             setService() instead.
-     * @param  Zend_Http_Client $httpClient
-     * @return Zend_Gdata_App_FeedEntryParent Provides a fluent interface
      */
     public function setHttpClient(Zend_Http_Client $httpClient)
     {

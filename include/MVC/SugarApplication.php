@@ -741,6 +741,7 @@ class SugarApplication
     /**
      * Storing messages into session
      * @param string $message
+     * @throws Exception
      */
     protected static function appendMessage($type, $message)
     {
@@ -757,6 +758,7 @@ class SugarApplication
     /**
      * picking up the messages from the session and clearing session storage array
      * @return array messages
+     * @throws Exception
      */
     protected static function getMessages($type)
     {

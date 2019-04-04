@@ -353,7 +353,8 @@ class Zend_Search_Lucene_Search_QueryParser extends Zend_Search_Lucene_FSM
      * @param string $strQuery
      * @param string $encoding
      * @return Zend_Search_Lucene_Search_Query
-     * @throws Zend_Search_Lucene_Search_QueryParserException
+     * @throws Zend_Search_Exception
+     * @throws Zend_Search_Lucene_Exception
      */
     public static function parse($strQuery, $encoding = null)
     {
@@ -550,6 +551,7 @@ class Zend_Search_Lucene_Search_QueryParser extends Zend_Search_Lucene_FSM
      * Process last range query term (opened interval)
      *
      * @throws Zend_Search_Lucene_Search_QueryParserException
+     * @throws Zend_Search_Lucene_Exception
      */
     public function openedRQLastTerm()
     {
@@ -599,6 +601,7 @@ class Zend_Search_Lucene_Search_QueryParser extends Zend_Search_Lucene_FSM
      * Process last range query term (closed interval)
      *
      * @throws Zend_Search_Lucene_Search_QueryParserException
+     * @throws Zend_Search_Lucene_Exception
      */
     public function closedRQLastTerm()
     {

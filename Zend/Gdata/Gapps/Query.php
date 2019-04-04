@@ -104,6 +104,7 @@ abstract class Zend_Gdata_Gapps_Query extends Zend_Gdata_Query
      * @param string $domain (optional) A fully-qualified domain to use
      *          instead of the default domain for this service instance.
      * @return string
+     * @throws Zend_Gdata_App_InvalidArgumentException
      * @see setDomain
      */
     public function getBaseUrl($domain = null)

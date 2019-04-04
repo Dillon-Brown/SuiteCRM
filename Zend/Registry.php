@@ -78,6 +78,7 @@ class Zend_Registry extends ArrayObject
      * Initialize the default registry instance.
      *
      * @return void
+     * @throws Zend_Exception
      */
     protected static function init()
     {

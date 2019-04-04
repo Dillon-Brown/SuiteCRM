@@ -72,6 +72,12 @@ class SyncInboundEmailAccountsPage
      *
      * @param array $includeData
      * @param ImapHandlerInterface $imap
+     * @throws ImapHandlerException
+     * @throws SyncInboundEmailAccountsEmptyException
+     * @throws SyncInboundEmailAccountsException
+     * @throws SyncInboundEmailAccountsInvalidMethodTypeException
+     * @throws SyncInboundEmailAccountsInvalidSubActionArgumentsException
+     * @throws SyncInboundEmailAccountsNoMethodException
      */
     public function __construct($includeData, ImapHandlerInterface $imap)
     {

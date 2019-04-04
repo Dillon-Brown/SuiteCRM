@@ -196,6 +196,7 @@ class SugarAuthenticate
     /**
      * On every page hit this will be called to ensure a user is authenticated
      * @return boolean
+     * @throws SuiteException
      */
     public function sessionAuthenticate()
     {
@@ -230,12 +231,11 @@ class SugarAuthenticate
     }
 
 
-
-
     /**
      * Called after a session is authenticated - if this returns false the sessionAuthenticate will return false and destroy the session
      * and it will load the  current user
      * @return boolean
+     * @throws SuiteException
      */
     public function postSessionAuthenticate()
     {

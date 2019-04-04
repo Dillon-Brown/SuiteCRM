@@ -73,6 +73,7 @@ class Zend_Gdata_App_MediaEntry extends Zend_Gdata_App_Entry
      * @return string|Zend_Gdata_MediaMimeStream The MIME multipart
      *         representation of this MediaEntry. If the entry consisted only
      *         of XML, a string is returned.
+     * @throws Zend_Gdata_App_IOException
      */
     public function encode()
     {
@@ -106,6 +107,7 @@ class Zend_Gdata_App_MediaEntry extends Zend_Gdata_App_Entry
      *
      * @param Zend_Gdata_App_MediaSource $value The attached MediaSource/file
      * @return Zend_Gdata_App_MediaEntry Provides a fluent interface
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function setMediaSource($value)
     {

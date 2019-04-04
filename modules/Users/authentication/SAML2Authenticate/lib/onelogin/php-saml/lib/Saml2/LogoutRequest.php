@@ -33,12 +33,13 @@ class OneLogin_Saml2_LogoutRequest
     /**
      * Constructs the Logout Request object.
      *
-     * @param OneLogin_Saml2_Settings $settings     Settings
-     * @param string|null             $request      A UUEncoded Logout Request.
-     * @param string|null             $nameId       The NameID that will be set in the LogoutRequest.
-     * @param string|null             $sessionIndex The SessionIndex (taken from the SAML Response in the SSO process).
-     * @param string|null             $nameIdFormat The NameID Format will be set in the LogoutRequest.
-     * @param string|null             $nameIdNameQualifier The NameID NameQualifier will be set in the LogoutRequest.
+     * @param OneLogin_Saml2_Settings $settings Settings
+     * @param string|null $request A UUEncoded Logout Request.
+     * @param string|null $nameId The NameID that will be set in the LogoutRequest.
+     * @param string|null $sessionIndex The SessionIndex (taken from the SAML Response in the SSO process).
+     * @param string|null $nameIdFormat The NameID Format will be set in the LogoutRequest.
+     * @param string|null $nameIdNameQualifier The NameID NameQualifier will be set in the LogoutRequest.
+     * @throws Exception
      */
     public function __construct(OneLogin_Saml2_Settings $settings, $request = null, $nameId = null, $sessionIndex = null, $nameIdFormat = null, $nameIdNameQualifier = null)
     {
@@ -149,6 +150,7 @@ LOGOUTREQUEST;
      * @param string|DOMDocument $request Logout Request Message
      *
      * @return string ID
+     * @throws Exception
      */
     public static function getID($request)
     {
@@ -228,9 +230,10 @@ LOGOUTREQUEST;
      * Gets the NameID of the Logout Request.
      *
      * @param string|DOMDocument $request Logout Request Message
-     * @param string|null        $key     The SP key
+     * @param string|null $key The SP key
      *
      * @return string Name ID Value
+     * @throws Exception
      */
     public static function getNameId($request, $key = null)
     {
@@ -244,6 +247,7 @@ LOGOUTREQUEST;
      * @param string|DOMDocument $request Logout Request Message
      *
      * @return string|null $issuer The Issuer
+     * @throws Exception
      */
     public static function getIssuer($request)
     {
@@ -271,6 +275,7 @@ LOGOUTREQUEST;
      * @param string|DOMDocument $request Logout Request Message
      *
      * @return array The SessionIndex value
+     * @throws Exception
      */
     public static function getSessionIndexes($request)
     {

@@ -168,12 +168,13 @@ class ImportView extends SugarView
     }
 
     /**
-    * Displays the Smarty template for an error
-    *
-    * @param string $message error message to show
-    * @param string $module what module we were importing into
-    * @param string $action what page we should go back to
-    */
+     * Displays the Smarty template for an error
+     *
+     * @param string $message error message to show
+     * @param string $module what module we were importing into
+     * @param string $action what page we should go back to
+     * @throws \SuiteCRM\StateSaverException
+     */
     protected function _showImportError($message, $module, $action = 'Step1')
     {
         $ss = new Sugar_Smarty();

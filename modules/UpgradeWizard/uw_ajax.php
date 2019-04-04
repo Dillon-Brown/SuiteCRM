@@ -80,6 +80,7 @@ function ajaxSqlProgress($persistence, $sql, $type)
  * does post-post-install stuff
  * @param array persistence
  * @return array persistence
+ * @throws Exception
  */
 function commitAjaxFinalTouches($persistence)
 {

@@ -76,6 +76,7 @@ class MergeRecord extends SugarBean
      *
      * @param string $merge_module
      * @param string $merge_id
+     * @throws Exception
      */
     public function __construct($merge_module = '', $merge_id = '')
     {
@@ -85,9 +86,10 @@ class MergeRecord extends SugarBean
     }
 
     /**
-     * @deprecated deprecated since version 7.6, PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code, use __construct instead
      * @param string $merge_module
      * @param string $merge_id
+     * @throws Exception
+     * @deprecated deprecated since version 7.6, PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code, use __construct instead
      */
     public function MergeRecord($merge_module = '', $merge_id = '')
     {
@@ -105,6 +107,7 @@ class MergeRecord extends SugarBean
      * @param bool $encode
      * @param bool $deleted
      * @return SugarBean|void
+     * @throws Exception
      */
     public function retrieve($id = -1, $encode = true, $deleted = true)
     {
@@ -121,6 +124,7 @@ class MergeRecord extends SugarBean
      * @param $merge_module
      * @param bool $load_module_strings
      * @param string $merge_id
+     * @throws Exception
      */
     public function load_merge_bean($merge_module, $load_module_strings = false, $merge_id = '')
     {

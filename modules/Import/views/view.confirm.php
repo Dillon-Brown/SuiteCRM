@@ -590,6 +590,7 @@ EOJAVASCRIPT;
      * @param string $message error message to show
      * @param string $module what module we were importing into
      * @param string $action what page we should go back to
+     * @throws \SuiteCRM\StateSaverException
      */
     protected function _showImportError($message, $module, $action = 'Step1', $showCancel = false, $cancelLabel = null, $display = false)
     {

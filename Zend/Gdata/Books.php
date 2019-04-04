@@ -100,6 +100,7 @@ class Zend_Gdata_Books extends Zend_Gdata
      *        determined.
      * @return Zend_Gdata_Books_VolumeFeed The feed of volumes found at the
      *         specified URL.
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getVolumeFeed($location = null)
     {
@@ -122,6 +123,7 @@ class Zend_Gdata_Books extends Zend_Gdata
      *        determined.
      * @return Zend_Gdata_Books_VolumeEntry The feed of volumes found at the
      *         specified URL.
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getVolumeEntry($volumeId = null, $location = null)
     {
@@ -142,6 +144,7 @@ class Zend_Gdata_Books extends Zend_Gdata
      *        query.
      * @return Zend_Gdata_Books_VolumeFeed The feed of volumes found at the
      *         specified URL.
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getUserLibraryFeed($location = null)
     {
@@ -160,6 +163,7 @@ class Zend_Gdata_Books extends Zend_Gdata
      *        query.
      * @return Zend_Gdata_Books_VolumeFeed The feed of volumes found at the
      *         specified URL.
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getUserAnnotationFeed($location = null)
     {
@@ -198,6 +202,7 @@ class Zend_Gdata_Books extends Zend_Gdata
      *
      * @param Zend_Gdata_Books_VolumeEntry $entry
      * @return void
+     * @throws Zend_Gdata_App_Exception
      */
     public function deleteVolume($entry)
     {

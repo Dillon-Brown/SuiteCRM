@@ -71,14 +71,15 @@ class OneLogin_Saml2_IdPMetadataParser
     /**
      * Get IdP Metadata Info from URL
      *
-     * @param string $xml                   XML that contains IdP metadata
-     * @param string $entityId              Entity Id of the desired IdP, if no
+     * @param string $xml XML that contains IdP metadata
+     * @param string $entityId Entity Id of the desired IdP, if no
      *                                      entity Id is provided and the XML
      *                                      metadata contains more than one
      *                                      IDPSSODescriptor, the first is returned
-     * @param string $desiredNameIdFormat   If available on IdP metadata, use that nameIdFormat
+     * @param string $desiredNameIdFormat If available on IdP metadata, use that nameIdFormat
      *
      * @return array metadata info in php-saml settings format
+     * @throws Exception
      */
     public static function parseXML($xml, $entityId = null, $desiredNameIdFormat = null)
     {

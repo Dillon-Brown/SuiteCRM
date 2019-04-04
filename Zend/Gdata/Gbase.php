@@ -112,6 +112,7 @@ class Zend_Gdata_Gbase extends Zend_Gdata
      *
      * @param mixed $location The location for the feed, as a URL or Query
      * @return Zend_Gdata_Gbase_ItemFeed
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getGbaseItemFeed($location = null)
     {
@@ -130,6 +131,7 @@ class Zend_Gdata_Gbase extends Zend_Gdata
      *
      * @param mixed $location The location for the feed, as a URL or Query
      * @return Zend_Gdata_Gbase_ItemEntry
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getGbaseItemEntry($location = null)
     {
@@ -170,6 +172,7 @@ class Zend_Gdata_Gbase extends Zend_Gdata
      * @param Zend_Gdata_Gbase_ItemEntry $entry The Base entry to be updated
      * @param boolean $dryRun Flag for the 'dry-run' parameter
      * @return Zend_Gdata_Gbase_ItemEntry
+     * @throws Zend_Gdata_App_Exception
      */
     public function updateGbaseItem($entry, $dryRun = false)
     {
@@ -183,6 +186,7 @@ class Zend_Gdata_Gbase extends Zend_Gdata
      * @param Zend_Gdata_Gbase_ItemEntry $entry The Base entry to remove
      * @param boolean $dryRun Flag for the 'dry-run' parameter
      * @return Zend_Gdata_Gbase_ItemFeed
+     * @throws Zend_Gdata_App_Exception
      */
     public function deleteGbaseItem($entry, $dryRun = false)
     {
@@ -195,6 +199,7 @@ class Zend_Gdata_Gbase extends Zend_Gdata
      *
      * @param mixed $location The location for the feed, as a URL or Query
      * @return Zend_Gdata_Gbase_SnippetFeed
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getGbaseSnippetFeed($location = null)
     {

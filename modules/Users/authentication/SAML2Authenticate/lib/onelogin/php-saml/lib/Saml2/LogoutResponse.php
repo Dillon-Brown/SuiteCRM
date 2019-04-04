@@ -41,7 +41,8 @@ class OneLogin_Saml2_LogoutResponse
      * load the Logout Response.
      *
      * @param OneLogin_Saml2_Settings $settings Settings.
-     * @param string|null             $response An UUEncoded SAML Logout response from the IdP.
+     * @param string|null $response An UUEncoded SAML Logout response from the IdP.
+     * @throws Exception
      */
     public function __construct(OneLogin_Saml2_Settings $settings, $response = null)
     {

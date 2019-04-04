@@ -1004,6 +1004,7 @@ class jjwg_MapsController extends SugarController
      * $param $mod_strings_display mod_strings from display module
      * TODO: Use a custom defined field for the $marker['group']
      * @return array|bool
+     * @throws Exception
      */
     public function getMarkerData($module_type, $display, $center_marker = false, $mod_strings_display = array())
     {

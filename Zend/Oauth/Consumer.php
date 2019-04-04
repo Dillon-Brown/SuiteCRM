@@ -92,10 +92,11 @@ class Zend_Oauth_Consumer extends Zend_Oauth
      * later exchanged for an authorized Access Token used to access the
      * protected resources exposed by a web service API.
      *
-     * @param  null|array $customServiceParameters Non-OAuth Provider-specified parameters
-     * @param  null|string $httpMethod
-     * @param  null|Zend_Oauth_Http_RequestToken $request
+     * @param null|array $customServiceParameters Non-OAuth Provider-specified parameters
+     * @param null|string $httpMethod
+     * @param null|Zend_Oauth_Http_RequestToken $request
      * @return Zend_Oauth_Token_Request
+     * @throws Zend_Oauth_Exception
      */
     public function getRequestToken(
         array $customServiceParameters = null,

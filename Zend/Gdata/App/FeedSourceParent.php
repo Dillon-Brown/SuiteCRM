@@ -126,8 +126,9 @@ abstract class Zend_Gdata_App_FeedSourceParent extends Zend_Gdata_App_FeedEntryP
      * using foreach ($feed->entries as $entry) or foreach
      * ($feed->entry as $entry).
      *
-     * @param  string $var The property to access.
+     * @param string $var The property to access.
      * @return mixed
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function __get($var)
     {

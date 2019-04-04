@@ -200,6 +200,7 @@ EOD;
 
 /**
  * @return mixed|string|void
+ * @throws \SuiteCRM\StateSaverException
  */
 function display_update_form()
 {

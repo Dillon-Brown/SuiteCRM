@@ -284,6 +284,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
     /**
      * Save a draft layout
      * @param array $layoutDefinitions Layout definition in the same format as received by the constructor
+     * @throws Exception
      */
     public function save($layoutDefinitions)
     {
@@ -317,6 +318,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
     /**
      * Deploy a layout
      * @param array $layoutDefinitions Layout definition in the same format as received by the constructor
+     * @throws Exception
      */
     public function deploy($layoutDefinitions)
     {
@@ -360,6 +362,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
      * @param string $packageName
      * @param string $type
      * @return string
+     * @throws Exception
      */
     public function getFileName($view, $moduleName, $packageName, $type = MB_CUSTOMMETADATALOCATION)
     {

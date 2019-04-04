@@ -73,10 +73,10 @@ class Zend_Gdata_ClientLogin
      * @param string $accountType An optional string to identify whether the
      * account to be authenticated is a google or a hosted account. Defaults to
      * 'HOSTED_OR_GOOGLE'. See: http://code.google.com/apis/accounts/docs/AuthForInstalledApps.html#Request
+     * @return Zend_Gdata_HttpClient
      * @throws Zend_Gdata_App_AuthException
      * @throws Zend_Gdata_App_HttpException
-     * @throws Zend_Gdata_App_CaptchaRequiredException
-     * @return Zend_Gdata_HttpClient
+     * @throws Zend_Gdata_App_CaptchaRequiredException*@throws Zend_Http_Client_Exception
      */
     public static function getHttpClient(
         $email,

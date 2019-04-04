@@ -172,6 +172,7 @@ class Zend_Gdata_Gapps_NicknameQuery extends Zend_Gdata_Gapps_Query
      * parameters.
      *
      * @return string A URL generated based on the state of this query.
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getQueryUrl()
     {

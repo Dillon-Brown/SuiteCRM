@@ -114,6 +114,7 @@ class Zend_Gdata_Photos_UserFeed extends Zend_Gdata_Feed
      * stores them in the $_entry array based upon DOM data.
      *
      * @param DOMNode $child The DOMNode to process
+     * @throws Zend_Gdata_App_Exception
      */
     protected function takeChildFromDOM($child)
     {

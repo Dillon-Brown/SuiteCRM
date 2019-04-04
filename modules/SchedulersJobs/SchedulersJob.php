@@ -126,6 +126,7 @@ class SchedulersJob extends Basic
         $this->execute_time_db = $this->db->fromConvert($this->execute_time, 'datetime');
         parent::check_date_relationships_load();
     }
+
     /**
      * handleDateFormat
      *
@@ -137,6 +138,7 @@ class SchedulersJob extends Basic
      * @param boolean $user_format Boolean indicating whether or not to convert to user's time format, defaults to false
      *
      * @return string Formatted datetime value
+     * @throws Exception
      */
     public function handleDateFormat($date='now', $user=null, $user_format=false)
     {

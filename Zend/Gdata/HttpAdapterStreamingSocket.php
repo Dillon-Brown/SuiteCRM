@@ -49,12 +49,13 @@ class Zend_Gdata_HttpAdapterStreamingSocket extends Zend_Http_Client_Adapter_Soc
     /**
      * Send request to the remote server with streaming support.
      *
-     * @param string        $method
+     * @param string $method
      * @param Zend_Uri_Http $uri
-     * @param string        $http_ver
-     * @param array         $headers
-     * @param string        $body
+     * @param string $http_ver
+     * @param array $headers
+     * @param string $body
      * @return string Request as string
+     * @throws Zend_Http_Client_Adapter_Exception
      */
     public function write(
         $method,

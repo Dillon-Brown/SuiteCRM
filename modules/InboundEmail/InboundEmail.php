@@ -219,6 +219,7 @@ class InboundEmail extends SugarBean
     /**
      *
      * @return ImapHandlerInterface
+     * @throws ImapHandlerException
      */
     public function getImap(ImapHandlerInterface $imap = null)
     {
@@ -318,6 +319,8 @@ class InboundEmail extends SugarBean
      * Renames an IMAP mailbox
      * @param string $newName
      * @return bool
+     * @throws \SuiteCRM\StateSaverException
+     * @throws ImapHandlerException
      */
     public function renameFolder($oldName, $newName)
     {
@@ -377,6 +380,7 @@ class InboundEmail extends SugarBean
      * @param array $order
      * @param array $filter
      * @return array
+     * @throws ImapHandlerException
      */
     public function checkWithPagination($offset = 0, $pageSize = 20, $order = array(), $filter = array(), $columns = array())
     {
@@ -607,6 +611,7 @@ class InboundEmail extends SugarBean
      * constructs a nicely formatted version of raw source
      * @param int $uid UID of email
      * @return string
+     * @throws ImapHandlerException
      */
     public function getFormattedRawSource($uid)
     {
@@ -664,6 +669,7 @@ class InboundEmail extends SugarBean
      * constructs a nicely formatted version of email headers.
      * @param int $uid
      * @return string
+     * @throws ImapHandlerException
      */
     public function getFormattedHeaders($uid)
     {
@@ -1627,6 +1633,7 @@ class InboundEmail extends SugarBean
      * This function is used by cron job for group mailbox without group folder
      * @param string $msgno for pop
      * @param string $uid for imap
+     * @throws ImapHandlerException
      */
     public function getMessagesInEmailCache($msgno, $uid)
     {
@@ -1655,7 +1662,11 @@ class InboundEmail extends SugarBean
      * Checks email (local caching too) for one mailbox
      * @param string $mailbox IMAP Mailbox path
      * @param bool $prefetch Flag to prefetch email body on check
+     * @param bool $synchronize
      * @return int
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function checkEmailOneMailbox($mailbox, $prefetch = true, $synchronize = false)
     {
@@ -1755,7 +1766,13 @@ class InboundEmail extends SugarBean
      * Checks email (local caching too) for one mailbox
      * @param string $mailbox IMAP Mailbox path
      * @param bool $prefetch Flag to prefetch email body on check
+     * @param bool $synchronize
+     * @param int $start
+     * @param int $max
      * @return array
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function checkEmailOneMailboxPartial($mailbox, $prefetch = true, $synchronize = false, $start = 0, $max = -1)
     {
@@ -2247,6 +2264,9 @@ class InboundEmail extends SugarBean
      * Check email prefetches email bodies for quicker display
      * @param array array of fetched overviews
      * @return bool
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function fetchCheckedEmails($fetchedOverviews)
     {
@@ -2294,6 +2314,7 @@ class InboundEmail extends SugarBean
      * @param string|array $uids Sequence of UIDs, comma separated string or array
      * @param string $type Flag to mark
      * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
+     * @throws ImapHandlerException
      */
     public function markEmails($uids, $type)
     {
@@ -2376,6 +2397,7 @@ class InboundEmail extends SugarBean
      * Deletes the specified folder
      * @param string $mbox "::" delimited IMAP mailbox path, ie, INBOX.saved.stuff
      * @return bool
+     * @throws ImapHandlerException
      */
     public function deleteFolder($mbox)
     {
@@ -2439,6 +2461,7 @@ class InboundEmail extends SugarBean
      * @param string $name Name of new IMAP mailbox
      * @param string $mbox "::" delimited IMAP mailbox path, ie, INBOX.saved.stuff
      * @return bool True on success
+     * @throws ImapHandlerException
      */
     public function saveNewFolder($name, $mbox)
     {
@@ -2636,6 +2659,7 @@ class InboundEmail extends SugarBean
     /**
      * repairs the encrypted password for a given I-E account
      * @return bool True on success
+     * @throws ImapHandlerException
      */
     public function repairAccount()
     {
@@ -3411,6 +3435,7 @@ class InboundEmail extends SugarBean
      * handles auto-responses to inbound emails
      *
      * @param object email Email passed as reference
+     * @throws Exception
      */
     public function handleAutoresponse(&$email, &$contactAddr)
     {
@@ -3829,9 +3854,10 @@ class InboundEmail extends SugarBean
 
     /**
      * takes a breadcrumb and returns the encoding at that level
-     * @param    string bc the breadcrumb string in format (1.1.1)
-     * @param    array parts the root level parts array
+     * @param string bc the breadcrumb string in format (1.1.1)
+     * @param array parts the root level parts array
      * @return    int retInt Int key to transfer encoding (see handleTranserEncoding())
+     * @throws ImapHandlerException
      */
     public function getEncodingFromBreadCrumb($bc, $parts)
     {
@@ -3884,6 +3910,7 @@ class InboundEmail extends SugarBean
      * @param string $section
      * @param stdObject $structure
      * @return string|boolean
+     * @throws ImapHandlerException
      */
     public function getMessageTextFromSingleMimePart($msgNo, $section, $structure)
     {
@@ -3958,6 +3985,7 @@ class InboundEmail extends SugarBean
      * @param int msgNo the relative message number for the monitored mailbox
      * @param string $type the type of text processed, either 'PLAIN' or 'HTML'
      * @return string UTF-8 encoded version of the requested message text
+     * @throws ImapHandlerException
      */
     public function getMessageTextWithUid($uid, $type, $structure, $fullHeader, $clean_email = true, $bcOffset = "")
     {
@@ -4053,6 +4081,7 @@ class InboundEmail extends SugarBean
      * @param bool $clean_email
      * @param string $bcOffset
      * @return string|false
+     * @throws ImapHandlerException
      */
     public function getMessageText($uid, $type, $structure, $fullHeader, $clean_email = true, $bcOffset = "")
     {
@@ -4321,6 +4350,7 @@ class InboundEmail extends SugarBean
      *
      * @param string name Name of attachment
      * @return string decoded name
+     * @throws ImapHandlerException
      */
     public function handleEncodedFilename($name)
     {
@@ -4405,6 +4435,7 @@ class InboundEmail extends SugarBean
      * @param string $emailId The GUID of the email saved prior to calling this method
      * @param array $breadcrumb Default 0, build up of the parts mapping
      * @param bool $forDisplay Default false
+     * @throws ImapHandlerException
      */
     public function saveAttachments($msgNo, $parts, $emailId, $breadcrumb, $forDisplay= null)
     {
@@ -4563,6 +4594,7 @@ class InboundEmail extends SugarBean
      * @param object part IMAP standard object that contains the "parts" of this section of email
      * @param bool $forDisplay
      * @return bool|void
+     * @throws ImapHandlerException
      */
     public function saveAttachmentBinaries($attach, $msgNo, $thisBc, $part, $forDisplay)
     {
@@ -4716,6 +4748,7 @@ class InboundEmail extends SugarBean
      * takes the output from imap_mime_hader_decode() and handles multiple types of encoding
      * @param string subject Raw subject string from email
      * @return string ret properly formatted UTF-8 string
+     * @throws ImapHandlerException
      */
     public function handleMimeHeaderDecode($subject)
     {
@@ -4919,11 +4952,15 @@ class InboundEmail extends SugarBean
 
     /**
      * shiny new importOneEmail() method
-     * @deprecated since - 7.9 use returnImportedEmail instead
-     * @param int msgNo
-     * @param bool forDisplay
-     * @param clean_email boolean, default true,
+     * @param $msgNo
+     * @param $uid
+     * @param bool $forDisplay
+     * @param bool $clean_email
      * @return boolean|string
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @deprecated since - 7.9 use returnImportedEmail instead
      */
     public function importOneEmail($msgNo, $uid, $forDisplay = false, $clean_email = true)
     {
@@ -5226,6 +5263,9 @@ class InboundEmail extends SugarBean
      * @param bool $clean_email
      * @param bool $isGroupFolderExists
      * @return boolean
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function returnImportedEmail($msgNo, $uid, $forDisplay = false, $clean_email = true, $isGroupFolderExists = false)
     {
@@ -5704,6 +5744,7 @@ class InboundEmail extends SugarBean
      * @param string raw The raw email body
      * @param string id Parent email ID
      * @return string The filtered email body, stripped of attachments
+     * @throws ImapHandlerException
      */
     public function handleUUEncodedEmailBody($raw, $id)
     {
@@ -5751,6 +5792,7 @@ class InboundEmail extends SugarBean
      * wrapper for UUDecode
      * @param string id Id of the email
      * @param string UUEncode Encode US-ASCII
+     * @throws ImapHandlerException
      */
     public function handleUUDecode($id, $fileName, $UUEncode)
     {
@@ -5875,6 +5917,7 @@ class InboundEmail extends SugarBean
      *
      * @param string from target address for auto-reply
      * @return bool true if target is valid/under limit
+     * @throws Exception
      */
     public function getAutoreplyStatus($from)
     {
@@ -5952,6 +5995,7 @@ class InboundEmail extends SugarBean
     /**
      * returns the HTML for InboundEmail system settings
      * @return string HTML
+     * @throws \SuiteCRM\StateSaverException
      */
     public function getSystemSettingsForm()
     {
@@ -6106,6 +6150,7 @@ class InboundEmail extends SugarBean
      * option is set
      *
      * @return array Array of messageNumbers (mail server's internal keys)
+     * @throws ImapHandlerException
      */
     public function getNewMessageIds()
     {
@@ -6174,6 +6219,7 @@ class InboundEmail extends SugarBean
      * @param bool test Flag to test connection
      * @param bool force Force reconnect
      * @return string "true" on success, "false" or $errorMessage on failure
+     * @throws ImapHandlerException
      */
     public function connectMailserver($test = false, $force = false)
     {
@@ -6323,6 +6369,8 @@ class InboundEmail extends SugarBean
 
     /**
      * @return mixed|string|void
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\StateSaverException
      */
     public function checkImap()
     {
@@ -6343,12 +6391,13 @@ class InboundEmail extends SugarBean
      * Attempt to create an IMAP connection using passed in parameters
      * return either the connection resource or false if unable to connect
      *
-     * @param  string $mailbox Mailbox to be used to create imap connection
-     * @param  string $username The user name
-     * @param  string $password The password associated with the username
-     * @param  integer $options Bitmask for options parameter to the imap_open function
+     * @param string $mailbox Mailbox to be used to create imap connection
+     * @param string $username The user name
+     * @param string $password The password associated with the username
+     * @param integer $options Bitmask for options parameter to the imap_open function
      *
      * @return resource|boolean  Connection resource on success, FALSE on failure
+     * @throws ImapHandlerException
      */
     protected function getImapConnection($mailbox, $username, $password, $options = 0)
     {
@@ -6630,6 +6679,9 @@ class InboundEmail extends SugarBean
      * @param string $toFolder
      * @param string $uids UIDs of emails to move, either Sugar GUIDS or IMAP
      * UIDs
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function copyEmails($fromIe, $fromFolder, $toIe, $toFolder, $uids)
     {
@@ -6646,6 +6698,9 @@ class InboundEmail extends SugarBean
      * UIDs
      * @param bool $copy Default false
      * @return bool True on successful execution
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function moveEmails($fromIe, $fromFolder, $toIe, $toFolder, $uids, $copy = false)
     {
@@ -6886,6 +6941,9 @@ class InboundEmail extends SugarBean
      * deletes and expunges emails on server
      * @param string $uid UID(s), comma delimited, of email(s) on server
      * @return bool true on success
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function deleteMessageOnMailServer($uid)
     {
@@ -6938,6 +6996,7 @@ class InboundEmail extends SugarBean
      * deletes and expunges emails on server
      * @param string $uid UID(s), comma delimited, of email(s) on server
      * @return bool
+     * @throws ImapHandlerException
      */
     public function deleteMessageOnMailServerForPop3($uid)
     {
@@ -7029,10 +7088,13 @@ class InboundEmail extends SugarBean
     /**
      * fills InboundEmail->email with an email's details
      * @param int uid Unique ID of email
-     * @param bool isMsgNo flag that passed ID is msgNo, default false
-     * @param bool setRead Sets the 'seen' flag in cache
-     * @param bool forceRefresh Skips cache file
+     * @param bool $isMsgNo
+     * @param bool $setRead
+     * @param bool $forceRefresh
      * @return string
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function setEmailForDisplay($uid, $isMsgNo = false, $setRead = false, $forceRefresh = false)
     {
@@ -7195,6 +7257,7 @@ class InboundEmail extends SugarBean
      * @param string mbox Mailbox to look in for the message
      * @param bool isMsgNo Flag to assume $uid is a MessageNo, not UniqueID, default false
      * @return array
+     * @throws ImapHandlerException
      */
     public function displayOneEmail($uid, $mbox, $isMsgNo = false)
     {
@@ -7400,6 +7463,7 @@ eoq;
      * @param string $sort Column to sort by
      * @param string direction Direction to sort by (asc/desc)
      * @return array Sorted array of obj.
+     * @throws ImapHandlerException
      */
     public function sortFetchedOverview($arr, $sort = 4, $direction = 'DESC', $forceSeen = false)
     {
@@ -7863,6 +7927,7 @@ eoq;
     /**
      * Get Email messages IDs from server which aren't in database
      * @return array Ids of messages, which aren't still in database
+     * @throws ImapHandlerException
      */
     public function getNewEmailsForSyncedMailbox()
     {
@@ -7997,6 +8062,9 @@ eoq;
      *
      * @param string $protocol Mailing protocol
      * @param string|null $mailbox Mailbox (if applied to protocol)
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     protected function importMailboxMessages($protocol, $mailbox = null)
     {
@@ -8030,6 +8098,7 @@ eoq;
      * @param int $msgNumber Number of the message in current sequence
      * @param string $protocol Mailing protocol
      * @return string
+     * @throws ImapHandlerException
      */
     protected function getMessageUID($msgNumber, $protocol)
     {

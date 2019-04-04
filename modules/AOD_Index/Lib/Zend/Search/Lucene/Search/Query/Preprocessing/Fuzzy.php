@@ -89,9 +89,10 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Fuzzy extends Zend_Search_Lu
 
     /**
      * Re-write query into primitive queries in the context of specified index
-     *
      * @param Zend_Search_Lucene_Interface $index
-     * @return Zend_Search_Lucene_Search_Query
+     * @return mixed|Zend_Search_Lucene_Search_Query|Zend_Search_Lucene_Search_Query_Boolean|Zend_Search_Lucene_Search_Query_Empty|Zend_Search_Lucene_Search_Query_Fuzzy|Zend_Search_Lucene_Search_Query_Insignificant
+     * @throws Zend_Search_Lucene_Exception
+     * @throws Zend_Search_Lucene_Search_QueryParserException
      */
     public function rewrite(Zend_Search_Lucene_Interface $index)
     {
@@ -217,7 +218,8 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Fuzzy extends Zend_Search_Lu
     /**
      * Query specific matches highlighting
      *
-     * @param Zend_Search_Lucene_Search_Highlighter_Interface $highlighter  Highlighter object (also contains doc for highlighting)
+     * @param Zend_Search_Lucene_Search_Highlighter_Interface $highlighter Highlighter object (also contains doc for highlighting)
+     * @throws Zend_Search_Lucene_Exception
      */
     protected function _highlightMatches(Zend_Search_Lucene_Search_Highlighter_Interface $highlighter)
     {

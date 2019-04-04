@@ -253,6 +253,7 @@ class UserPreference extends SugarBean
      * Loads users timedate preferences
      *
      * @return array 'date' - date format for user ; 'time' - time format for user
+     * @throws Exception
      */
     public function getUserDateTimePreferences()
     {

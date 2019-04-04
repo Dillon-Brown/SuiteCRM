@@ -388,6 +388,9 @@ class ModulesCest
     /**
      * Create a document resource and attaches a file
      * @param ApiTester $I
+     * @throws Exception
+     * @see \SuiteCRM\API\JsonApi\v1\Resource\SuiteBeanResource
+     * @see SugarFieldFile::save()
      * @see http://jsonapi.org/format/1.0/#crud-creating
      *
      * HTTP Verb: POST
@@ -395,8 +398,6 @@ class ModulesCest
      * URL: /api/v8/modules/{Documents}/{id}
      *
      * Also:
-     * @see \SuiteCRM\API\JsonApi\v1\Resource\SuiteBeanResource
-     * @see SugarFieldFile::save()
      */
     public function TestScenarioCreateDocumentWithAttachment(ApiTester $I)
     {

@@ -162,6 +162,7 @@ class Zend_Gdata_Feed extends Zend_Gdata_App_Feed
      * stored in an array.
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
+     * @throws Zend_Gdata_App_IOException
      */
     protected function takeAttributeFromDOM($attribute)
     {

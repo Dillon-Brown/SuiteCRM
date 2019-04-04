@@ -49,10 +49,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 class EmailMock extends Email
 {
-    
+
     /**
      *
      * @param int $err
+     * @throws EmailException
      */
     public function setLastSaveAndStoreInSentErrorPublic($err)
     {

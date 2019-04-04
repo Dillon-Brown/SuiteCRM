@@ -250,13 +250,14 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
     /**
      * Send request to the remote server
      *
-     * @param  string        $method
-     * @param  Zend_Uri_Http $uri
-     * @param  float         $http_ver
-     * @param  array         $headers
-     * @param  string        $body
+     * @param string $method
+     * @param Zend_Uri_Http $uri
+     * @param float $http_ver
+     * @param array $headers
+     * @param string $body
      * @return string        $request
      * @throws Zend_Http_Client_Adapter_Exception If connection fails, connected to wrong host, no PUT file defined, unsupported method, or unsupported cURL option
+     * @throws Zend_Http_Client_Exception
      */
     public function write($method, $uri, $httpVersion = 1.1, $headers = array(), $body = '')
     {

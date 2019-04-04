@@ -93,6 +93,7 @@ class Zend_Gdata_Calendar extends Zend_Gdata
      *
      * @param mixed $location The location for the feed, as a URL or Query
      * @return Zend_Gdata_Calendar_EventFeed
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getCalendarEventFeed($location = null)
     {
@@ -110,6 +111,7 @@ class Zend_Gdata_Calendar extends Zend_Gdata
      * Retreive entry object
      *
      * @return Zend_Gdata_Calendar_EventEntry
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getCalendarEventEntry($location = null)
     {
@@ -131,6 +133,7 @@ class Zend_Gdata_Calendar extends Zend_Gdata
      * Retrieve feed object
      *
      * @return Zend_Gdata_Calendar_ListFeed
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getCalendarListFeed()
     {
@@ -142,6 +145,7 @@ class Zend_Gdata_Calendar extends Zend_Gdata
      * Retreive entryobject
      *
      * @return Zend_Gdata_Calendar_ListEntry
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getCalendarListEntry($location = null)
     {

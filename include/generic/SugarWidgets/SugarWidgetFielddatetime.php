@@ -128,6 +128,7 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
      * @param String $date value of the date value to expand
      * @param bool $end Boolean value indicating whether or not this is for an end time period or not
      * @return $date TimeDate object with time value applied
+     * @throws Exception
      */
     protected function expandDate($date, $end = false)
     {

@@ -213,6 +213,7 @@ class FormulaCalculator
      * @param $node
      *
      * @return int|mixed|string
+     * @throws Exception
      */
     private function evaluateTreeLevel(&$node)
     {
@@ -266,6 +267,7 @@ class FormulaCalculator
      * @param array $childItems
      *
      * @return string
+     * @throws Exception
      */
     private function evaluateNode($text, $childItems = array())
     {
@@ -655,6 +657,7 @@ class FormulaCalculator
      * @param bool $isAdd
      *
      * @return string
+     * @throws Exception
      */
     private function modifyDate($format, $datestring, $ammount, $type, $isTime = false, $isAdd = true)
     {

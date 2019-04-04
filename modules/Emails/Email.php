@@ -481,6 +481,7 @@ class Email extends Basic
     /**
      *
      * @param int $err
+     * @throws EmailException
      */
     protected function setLastSaveAndStoreInSentError($err)
     {
@@ -807,9 +808,10 @@ class Email extends Basic
      * @param $toaddress
      * @param string $mail_sendtype
      * @param string $fromname
+     * @return array
+     * @throws phpmailerException
      * @global $current_user
      * @global $app_strings
-     * @return array
      */
     public function sendEmailTest(
         $mailserver_url,
@@ -907,6 +909,12 @@ class Email extends Basic
      * Sends Email for Email 2.0
      *
      * @param $request
+     * @return bool
+     * @throws EmailException
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      * @global $mod_strings
      * @global $app_strings
      * @global $current_user
@@ -915,7 +923,6 @@ class Email extends Basic
      * @global $timedate
      * @global $beanList
      * @global $beanFiles
-     * @return bool
      */
     public function email2Send($request)
     {
@@ -1552,8 +1559,9 @@ class Email extends Basic
     ////	SAVERS
     /**
      * @param bool $check_notify
-     * @global $current_user
      * @return bool|string
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
      */
     public function save($check_notify = false)
     {
@@ -2897,14 +2905,18 @@ class Email extends Basic
 
     /**
      * Sends Email
-     * @global array $mod_strings
-     * @global array $app_strings
-     * @global User $current_user
-     * @global array $sugar_config
-     * @global Localization $locale
-     * @param SugarPHPMailer $mail
-     * @param NonGmailSentFolderHandler $nonGmailSentFolder
-     * @return boolean True on success
+     * @param SugarPHPMailer|null $mail
+     * @param NonGmailSentFolderHandler|null $nonGmailSentFolder
+     * @param InboundEmail|null $ie
+     * @param Email|null $tempEmail
+     * @param bool $check_notify
+     * @param string $options
+     * @return bool
+     * @throws EmailException
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     public function send(
         SugarPHPMailer $mail = null,
@@ -3142,7 +3154,14 @@ class Email extends Basic
      * @param string $ieId
      * @param SugarPHPMailer $mail
      * @param NonGmailSentFolderHandler $nonGmailSentFolder
+     * @param bool $check_notify
+     * @param string $options
      * @return int|null null if error
+     * @throws EmailException
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     public function saveAndStoreInSentFolderIfNoGmail(
         InboundEmail $ie,
@@ -3177,7 +3196,13 @@ class Email extends Basic
      * @param InboundEmail $ie
      * @param NonGmailSentFolderHandler $nonGmailSentFolder
      * @param bool $check_notify
+     * @param string $options
      * @return string
+     * @throws EmailException
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     protected function saveAndStoreInSent(
         SugarPHPMailer $mail,
@@ -4393,6 +4418,7 @@ eoq;
      * @param Email $bean
      * @param array $request TODO: implement PSR 7 interface and refactor
      * @return bool|Email|SugarBean
+     * @throws EmailException
      */
     public function populateBeanFromRequest($bean, $request)
     {
@@ -4707,10 +4733,11 @@ eoq;
      * Send OptIn Email to EmailAddress By Id
      * return success state or false if it's disabled in config
      *
-     * @global array $sugar_config
-     * @global LoggerManager $log
      * @param string $id
      * @return bool
+     * @throws Exception
+     * @global LoggerManager $log
+     * @global array $sugar_config
      */
     private function sendOptInEmailToEmailAddressById($id)
     {

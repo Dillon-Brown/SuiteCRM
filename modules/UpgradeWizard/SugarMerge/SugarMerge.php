@@ -105,7 +105,6 @@ class SugarMerge
     }
 
 
-
     /**
      * This will run through all the modules that may need merging and determine if there is anything to merge
      * if $merge is set to true it will perform the merge
@@ -115,6 +114,7 @@ class SugarMerge
      * @param BOOLEAN $save - do we wish to save the merged files to true - $merge must be true for this to apply - otherwise it will simulate merging so you can view the log files of the merge
      * @param BOOLEAN $logHistory - do we wish to create history entries for any of the merges
      * @return ARRAY - an associative array of module names to files that were either merged or have the potential to be merged depeneding if $merge and $save  are set to true
+     * @throws Exception
      */
     public function mergeAll($merge=true, $save=true, $logHistory=true)
     {
@@ -160,8 +160,6 @@ class SugarMerge
     }
 
 
-
-
     /**
      * This will merge any files that need merging for a given module
      * if $merge is set to true it will perform the merge
@@ -172,6 +170,7 @@ class SugarMerge
      * @param BOOLEAN $save - do we wish to save the merged files to true - $merge must be true for this to apply - otherwise it will simulate merging so you can view the log files of the merge
      * @param BOOLEAN $logHistory - do we wish to create history entries for any of the merges
      * @return ARRAY - an associative array of files that were either merged or have the potential to be merged depeneding if $merge and $save  are set to true
+     * @throws Exception
      */
     public function mergeModule($module, $merge = true, $save=true, $logHistory=true)
     {
@@ -199,6 +198,7 @@ class SugarMerge
      * @param STRING $file - name of the file
      * @param STRING $save - should the merged file be saved to the custom directory
      * @return BOOLEAN - success or failure of the merge
+     * @throws Exception
      */
     public function mergeFile($module, $file, $save=true, $logHistory=true)
     {
@@ -226,6 +226,7 @@ class SugarMerge
      * @param STRING $module - name of the module
      * @param STRING $file - name of the file
      * @param STRING $customFile - Path to the custom file that will be merged
+     * @throws Exception
      */
     protected function createHistoryLog($module, $customFile, $file)
     {

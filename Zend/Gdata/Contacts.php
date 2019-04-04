@@ -82,6 +82,7 @@ class Zend_Gdata_Contacts extends Zend_Gdata
      * @param Zend_Http_Client $client (optional) The HTTP client to use when
      *          when communicating with the Google servers.
      * @param string $applicationId The identity of the app in the form of Company-AppName-Version
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function __construct($client = null, $applicationId = 'MyCompany-MyApp-1.0')
     {
@@ -96,6 +97,7 @@ class Zend_Gdata_Contacts extends Zend_Gdata
      * Retrieve feed object
      *
      * @return Zend_Gdata_Calendar_ListFeed
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getContactListFeed()
     {
@@ -110,6 +112,7 @@ class Zend_Gdata_Contacts extends Zend_Gdata
      *
      * @param string $entryID
      * @return string|Zend_Gdata_App_Feed
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getContactEntry($entryID)
     {

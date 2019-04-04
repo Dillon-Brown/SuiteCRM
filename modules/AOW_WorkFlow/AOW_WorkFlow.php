@@ -595,6 +595,7 @@ class AOW_WorkFlow extends Basic
     /**
      * @param SugarBean $bean
      * @return bool
+     * @throws Exception
      */
     public function check_valid_bean(SugarBean $bean)
     {

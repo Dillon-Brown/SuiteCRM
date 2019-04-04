@@ -452,6 +452,7 @@ class UnifiedSearchAdvanced
      * Retrieve the enabled and disabled modules used for global search.
      *
      * @return array
+     * @throws Exception
      */
     public function retrieveEnabledAndDisabledModules()
     {
@@ -566,6 +567,7 @@ class UnifiedSearchAdvanced
      * entries that have been selected to be allowed for searching.
      *
      * @return $unified_search_modules_display Array value of modules that have enabled for searching
+     * @throws Exception
      */
     public function getUnifiedSearchModulesDisplay()
     {

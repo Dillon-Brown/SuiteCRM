@@ -106,6 +106,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
      * Set the configuration array for the adapter
      *
      * @param Zend_Config | array $config
+     * @throws Zend_Http_Client_Adapter_Exception
      */
     public function setConfig($config = array())
     {
@@ -141,10 +142,11 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
      * stream_context_create() PHP function. In such case a new stream context
      * will be created using the passed options.
      *
+     * @param mixed $context Stream context or array of context options
+     * @return Zend_Http_Client_Adapter_Socket
+     * @throws Zend_Http_Client_Adapter_Exception
      * @since  Zend Framework 1.9
      *
-     * @param  mixed $context Stream context or array of context options
-     * @return Zend_Http_Client_Adapter_Socket
      */
     public function setStreamContext($context)
     {
@@ -182,9 +184,10 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
     /**
      * Connect to the remote server
      *
-     * @param string  $host
-     * @param int     $port
+     * @param string $host
+     * @param int $port
      * @param boolean $secure
+     * @throws Zend_Http_Client_Adapter_Exception
      */
     public function connect($host, $port = 80, $secure = false)
     {
@@ -262,12 +265,13 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
     /**
      * Send request to the remote server
      *
-     * @param string        $method
+     * @param string $method
      * @param Zend_Uri_Http $uri
-     * @param string        $http_ver
-     * @param array         $headers
-     * @param string        $body
+     * @param string $http_ver
+     * @param array $headers
+     * @param string $body
      * @return string Request as string
+     * @throws Zend_Http_Client_Adapter_Exception
      */
     public function write($method, $uri, $http_ver = '1.1', $headers = array(), $body = '')
     {
@@ -327,6 +331,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
      * Read response from server
      *
      * @return string
+     * @throws Zend_Http_Client_Adapter_Exception
      */
     public function read()
     {

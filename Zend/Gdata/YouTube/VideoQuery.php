@@ -532,6 +532,7 @@ class Zend_Gdata_YouTube_VideoQuery extends Zend_Gdata_Query
      * @param integer $majorProtocolVersion The major protocol version
      * @param integer $minorProtocolVersion The minor protocol version
      * @return string The URL
+     * @throws Zend_Gdata_App_VersionException
      */
     public function getQueryUrl(
         $majorProtocolVersion = null,

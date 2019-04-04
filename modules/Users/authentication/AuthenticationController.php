@@ -201,6 +201,7 @@ class AuthenticationController
      * It returns true if the current session is authenticated or false otherwise
      *
      * @return booelan
+     * @throws SuiteException
      */
     public function sessionAuthenticate()
     {

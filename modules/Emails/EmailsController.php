@@ -649,6 +649,7 @@ class EmailsController extends SugarController
 
     /**
      * @throws SugarControllerException
+     * @throws ImapHandlerException
      */
     public function action_MarkEmails()
     {
@@ -660,6 +661,7 @@ class EmailsController extends SugarController
     /**
      * @param array $request
      * @throws SugarControllerException
+     * @throws ImapHandlerException
      */
     public function markEmails($request)
     {

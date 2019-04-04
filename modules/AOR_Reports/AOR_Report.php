@@ -1507,6 +1507,7 @@ class AOR_Report extends Basic
     /**
      * @param array $query
      * @return array
+     * @throws Exception
      */
     public function build_report_query_where($query = array())
     {

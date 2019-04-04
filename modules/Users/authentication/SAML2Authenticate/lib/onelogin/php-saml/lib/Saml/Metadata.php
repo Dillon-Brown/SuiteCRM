@@ -8,6 +8,7 @@ class OneLogin_Saml_Metadata
 
     /**
      * @param array|object|null $settings Setting data
+     * @throws OneLogin_Saml2_Error
      */
     public function __construct($settings = null)
     {

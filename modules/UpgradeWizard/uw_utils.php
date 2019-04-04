@@ -110,6 +110,7 @@ function getUploadRelativeName($path)
  * @param array errors Collection of errors to be displayed at end of process
  * @param string path Optional full path to the log file.
  * @return array errors
+ * @throws Exception
  */
 function commitMakeBackupFiles($rest_dir, $install_file, $unzip_dir, $zip_from_dir, $errors, $path='')
 {
@@ -573,7 +574,12 @@ function removeMd5MatchingFiles($deleteNot=array())
 /**
  * Handles requirements for creating reminder Tasks and Emails
  * @param array skippedFiles Array of files that were not overwriten and must be manually mereged.
- * @param string path Optional full path to alternate upgradeWizard log.
+ * @param string $path
+ * @throws EmailException
+ * @throws EmailValidatorException
+ * @throws ImapHandlerException
+ * @throws \SuiteCRM\ErrorMessageException
+ * @throws phpmailerException
  */
 function commitHandleReminders($skippedFiles, $path='')
 {
@@ -1097,9 +1103,11 @@ function getModuleLanguagePack($lang, $module)
 
     return $mod_strings;
 }
+
 /**
  * checks system compliance for 4.5+ codebase
  * @return array Mixed values
+ * @throws ImapHandlerException
  */
 function checkSystemCompliance()
 {

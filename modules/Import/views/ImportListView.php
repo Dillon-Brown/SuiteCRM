@@ -117,6 +117,7 @@ class ImportListView
      *
      * @param bool $return True if we should return the content rather than echoing.
      * @return
+     * @throws \SuiteCRM\StateSaverException
      */
     public function display($return = false)
     {

@@ -203,6 +203,7 @@ class Reminder extends Basic
      * @param EmailReminder $emailReminder Caller EmailReminder
      * @param Administration $admin Administration module for EmailRemainder->sendReminders() function
      * @param boolean $checkDecline (optional) Send email if user accept status is not decline. Default is TRUE.
+     * @throws phpmailerException
      */
     public static function sendEmailReminders(EmailReminder $emailReminder, Administration $admin, $checkDecline = true)
     {
@@ -275,15 +276,16 @@ class Reminder extends Basic
      * Show a popup and/or desktop notification alert for related users with related Event information.
      * Call in jsAlerts class and use original jsAlerts for show notifications.
      *
+     * @param jsAlerts $alert caller jsAlerts object
+     * @param boolean $checkDecline (optional) Send email if user accept status is not decline. Default is TRUE.
+     * @return ???
+     * @throws Exception
      * @global ??? $current_user
      * @global ??? $timedate
      * @global ??? $app_list_strings
      * @global ??? $db
      * @global ??? $sugar_config
      * @global ??? $app_strings
-     * @param jsAlerts $alert caller jsAlerts object
-     * @param boolean $checkDecline (optional) Send email if user accept status is not decline. Default is TRUE.
-     * @return ???
      */
     public static function addNotifications(jsAlerts $alert, $checkDecline = true)
     {

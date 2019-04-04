@@ -103,6 +103,7 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
      * Set the configuration array for the adapter
      *
      * @param Zend_Config | array $config
+     * @throws Zend_Http_Client_Adapter_Exception
      */
     public function setConfig($config = array())
     {
@@ -230,6 +231,7 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
      * response will be returned on the next call to read().
      *
      * @param integer $index
+     * @throws Zend_Http_Client_Adapter_Exception
      */
     public function setResponseIndex($index)
     {

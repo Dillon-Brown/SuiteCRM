@@ -47,12 +47,13 @@ require_once('modules/ModuleBuilder/parsers/ModuleBuilderParser.php');
  class ParserDropDown extends ModuleBuilderParser
  {
 
-    /**
-     * Takes in the request params from a save request and processes
-     * them for the save.
-     *
-     * @param REQUEST params  $params
-     */
+     /**
+      * Takes in the request params from a save request and processes
+      * them for the save.
+      *
+      * @param REQUEST params  $params
+      * @throws Exception
+      */
      public function saveDropDown($params)
      {
          require_once('modules/Administration/Common.php');
@@ -136,14 +137,15 @@ require_once('modules/ModuleBuilder/parsers/ModuleBuilderParser.php');
      }
 
      /**
-     * function synchDropDown
-     * 	Ensures that the set of dropdown keys is consistant accross all languages.
-     *
-     * @param The $dropdown_name name of the dropdown to be synched
-     * @param array $dropdown The dropdown currently being saved
-     * @param String $selected_lang the language currently selected in Studio/MB
-     * @param String $saveLov the path to the directory to save the new lang file in.
-     */
+      * function synchDropDown
+      *    Ensures that the set of dropdown keys is consistant accross all languages.
+      *
+      * @param The $dropdown_name name of the dropdown to be synched
+      * @param array $dropdown The dropdown currently being saved
+      * @param String $selected_lang the language currently selected in Studio/MB
+      * @param String $saveLov the path to the directory to save the new lang file in.
+      * @throws Exception
+      */
      public function synchDropDown($dropdown_name, $dropdown, $selected_lang, $saveLoc)
      {
          $allLanguages =  get_languages();
