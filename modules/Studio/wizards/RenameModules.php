@@ -351,6 +351,7 @@ class RenameModules
     /**
      * Save function responsible executing all sub-save functions required to rename a module.
      *
+     * @param bool $redirect
      * @return void
      * @throws Exception
      */
@@ -769,9 +770,10 @@ class RenameModules
     /**
      * Replace a label with a new value based on metadata which specifies the label as either singular or plural.
      *
-     * @param  string $oldStringValue
-     * @param  string $replacementLabels
-     * @param  array $replacementMetaData
+     * @param string $oldStringValue
+     * @param string $replacementLabels
+     * @param array $replacementMetaData
+     * @param string $modifier
      * @return string
      */
     private function replaceSingleLabel($oldStringValue, $replacementLabels, $replacementMetaData, $modifier = '')
@@ -837,9 +839,9 @@ class RenameModules
      * Create an array entry that can be passed to the DropDownHelper:saveDropDown function so we can re-utilize
      * the save logic.
      *
-     * @param  array $params
-     * @param  array $changedModules
-     * @return
+     * @param array $params
+     * @param array $changedModules
+     * @return array
      */
     private function createModuleListSingularPackage($params, $changedModules)
     {

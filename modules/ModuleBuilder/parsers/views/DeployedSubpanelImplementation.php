@@ -206,7 +206,7 @@ class DeployedSubpanelImplementation extends AbstractMetaDataImplementation impl
      * @param string $moduleName The name of the module that will use this layout
      * @param string $packageName
      * @param string $type
-     * @return array
+     * @return string
      * @throws Exception
      */
     public function getFileName($view, $moduleName, $packageName, $type = MB_CUSTOMMETADATALOCATION)

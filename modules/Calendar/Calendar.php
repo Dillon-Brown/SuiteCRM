@@ -94,7 +94,6 @@ class Calendar
      * constructor
      * @param string $view
      * @param array $time_arr
-     * @param array $views
      * @throws Exception
      */
     public function __construct($view = "agendaWeek", $time_arr = array())

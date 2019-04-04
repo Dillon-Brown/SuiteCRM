@@ -603,6 +603,7 @@ class OneLogin_Saml2_Utils
     /**
      * Returns the part of the URL with the BaseURLPath.
      *
+     * @param $info
      * @return string
      */
     protected static function buildWithBaseURLPath($info)
@@ -885,6 +886,7 @@ class OneLogin_Saml2_Utils
      *
      * @param string $x509cert x509 cert
      *
+     * @param string $alg
      * @return null|string Formatted fingerprint
      */
     public static function calculateX509Fingerprint($x509cert, $alg = 'sha1')

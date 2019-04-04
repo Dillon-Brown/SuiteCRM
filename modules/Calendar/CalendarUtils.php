@@ -105,6 +105,8 @@ class CalendarUtils
     /**
      * Get array of needed time data
      * @param SugarBean $bean
+     * @param string $start_field
+     * @param string $end_field
      * @return array
      * @throws Exception
      */

@@ -1059,7 +1059,7 @@ class Zend_Search_Lucene_Index_SegmentInfo implements Zend_Search_Lucene_Index_T
      * @param Zend_Search_Lucene_Index_Term $term
      * @param integer $shift
      * @param Zend_Search_Lucene_Index_DocsFilter|null $docsFilter
-     * @return Zend_Search_Lucene_Index_TermInfo
+     * @return array
      * @throws Zend_Search_Lucene_Exception
      */
     public function termFreqs(Zend_Search_Lucene_Index_Term $term, $shift = 0, $docsFilter = null)
@@ -1187,7 +1187,7 @@ class Zend_Search_Lucene_Index_SegmentInfo implements Zend_Search_Lucene_Index_T
      * @param Zend_Search_Lucene_Index_Term $term
      * @param integer $shift
      * @param Zend_Search_Lucene_Index_DocsFilter|null $docsFilter
-     * @return Zend_Search_Lucene_Index_TermInfo
+     * @return array
      * @throws Zend_Search_Lucene_Exception
      */
     public function termPositions(Zend_Search_Lucene_Index_Term $term, $shift = 0, $docsFilter = null)
@@ -1765,10 +1765,8 @@ class Zend_Search_Lucene_Index_SegmentInfo implements Zend_Search_Lucene_Index_T
      *
      * Returns start document id for the next segment
      *
-     * @param integer $startId
-     * @param integer $mode
-     * @throws Zend_Search_Lucene_Exception
      * @return integer
+     * @throws Zend_Search_Lucene_Exception
      */
     public function resetTermsStream(/** $startId = 0, $mode = self::SM_TERMS_ONLY */)
     {

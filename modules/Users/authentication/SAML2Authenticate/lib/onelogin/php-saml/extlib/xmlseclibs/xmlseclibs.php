@@ -1561,6 +1561,8 @@ class XMLSecEnc
      *
      * @params XMLSecurityKey $objKey  The decryption key that should be used when decrypting the node.
      * @params boolean $replace  Whether we should replace the encrypted node in the XML document with the decrypted data. The default is true.
+     * @param $objKey
+     * @param bool $replace
      * @return string|DOMElement  The decrypted data.
      * @throws Exception
      */

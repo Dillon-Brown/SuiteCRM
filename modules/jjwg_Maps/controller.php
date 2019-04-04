@@ -1003,6 +1003,8 @@ class jjwg_MapsController extends SugarController
      * @param bean $display fields array
      * $param $mod_strings_display mod_strings from display module
      * TODO: Use a custom defined field for the $marker['group']
+     * @param bool $center_marker
+     * @param array $mod_strings_display
      * @return array|bool
      * @throws Exception
      */

@@ -54,7 +54,7 @@ abstract class Zend_Search_Lucene_Search_Query_Preprocessing extends Zend_Search
      * Optimize query in the context of specified index
      *
      * @param Zend_Search_Lucene_Interface $index
-     * @return Zend_Search_Lucene_Search_Query
+     * @return void
      * @throws Zend_Search_Lucene_Exception
      */
     public function optimize(Zend_Search_Lucene_Interface $index)
@@ -67,7 +67,7 @@ abstract class Zend_Search_Lucene_Search_Query_Preprocessing extends Zend_Search
      * Constructs an appropriate Weight implementation for this query.
      *
      * @param Zend_Search_Lucene_Interface $reader
-     * @return Zend_Search_Lucene_Search_Weight
+     * @return void
      * @throws Zend_Search_Lucene_Exception
      */
     public function createWeight(Zend_Search_Lucene_Interface $reader)
@@ -95,7 +95,7 @@ abstract class Zend_Search_Lucene_Search_Query_Preprocessing extends Zend_Search
      *
      * It's an array with document ids as keys (performance considerations)
      *
-     * @return array
+     * @return void
      * @throws Zend_Search_Lucene_Exception
      */
     public function matchedDocs()
@@ -109,7 +109,7 @@ abstract class Zend_Search_Lucene_Search_Query_Preprocessing extends Zend_Search
      *
      * @param integer $docId
      * @param Zend_Search_Lucene_Interface $reader
-     * @return float
+     * @return void
      * @throws Zend_Search_Lucene_Exception
      */
     public function score($docId, Zend_Search_Lucene_Interface $reader)
@@ -121,7 +121,7 @@ abstract class Zend_Search_Lucene_Search_Query_Preprocessing extends Zend_Search
     /**
      * Return query terms
      *
-     * @return array
+     * @return void
      * @throws Zend_Search_Lucene_Exception
      */
     public function getQueryTerms()

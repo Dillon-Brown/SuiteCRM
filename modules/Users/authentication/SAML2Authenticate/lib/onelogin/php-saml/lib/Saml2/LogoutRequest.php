@@ -297,6 +297,7 @@ LOGOUTREQUEST;
     /**
      * Checks if the Logout Request recieved is valid.
      *
+     * @param bool $retrieveParametersFromServer
      * @return bool If the Logout Request is or not valid
      */
     public function isValid($retrieveParametersFromServer = false)

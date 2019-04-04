@@ -152,7 +152,7 @@ class OneLogin_Saml2_Auth
      *
      * @param bool $value Strict parameter
      *
-     * @return array The settings data.
+     * @return void The settings data.
      * @throws OneLogin_Saml2_Error
      */
     public function setStrict($value)
@@ -657,7 +657,7 @@ class OneLogin_Saml2_Auth
     }
 
     /**
-     * @return The NotOnOrAfter value of the valid
+     * @return DateTime NotOnOrAfter value of the valid
      *         SubjectConfirmationData node (if any)
      *         of the last assertion processed
      */

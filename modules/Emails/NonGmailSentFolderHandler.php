@@ -127,9 +127,10 @@ class NonGmailSentFolderHandler
      *
      * @param InboundEmail $ie
      * @param SugarPHPMailer $mail
+     * @param string $options
      * @return bool
-     * @throws phpmailerException
      * @throws ImapHandlerException
+     * @throws phpmailerException
      */
     public function storeInSentFolder(InboundEmail $ie, SugarPHPMailer $mail, $options = "\\Seen")
     {
@@ -162,9 +163,10 @@ class NonGmailSentFolderHandler
      *
      * @param InboundEmail $ie
      * @param SugarPHPMailer $mail
+     * @param string $options
      * @return bool
-     * @throws phpmailerException
      * @throws ImapHandlerException
+     * @throws phpmailerException
      */
     protected function storeInNonGmailSentMailBox(InboundEmail $ie, SugarPHPMailer $mail, $options = "\\Seen")
     {
@@ -213,9 +215,10 @@ class NonGmailSentFolderHandler
      * @param InboundEmail $ie
      * @param SugarPHPMailer $mail
      * @param string $sentFolder
+     * @param string $options
      * @return bool
-     * @throws phpmailerException
      * @throws ImapHandlerException
+     * @throws phpmailerException
      */
     protected function connectToNonGmailServer(InboundEmail $ie, SugarPHPMailer $mail, $sentFolder, $options = "\\Seen")
     {
@@ -240,9 +243,10 @@ class NonGmailSentFolderHandler
      * @param InboundEmail $ie
      * @param SugarPHPMailer $mail
      * @param string $sentFolder
-     * @return @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
-     * @throws phpmailerException
+     * @param string $options
+     * @return bool @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
      * @throws ImapHandlerException
+     * @throws phpmailerException
      */
     protected function copyToNonGmailSentFolder(InboundEmail $ie, SugarPHPMailer $mail, $sentFolder, $options = "\\Seen")
     {

@@ -112,7 +112,9 @@ class EmailUI
     ////	CORE
     /**
      * Renders the frame for emails
-     * @throws \RuntimeException
+     * @param string $baseTpl
+     * @return string
+     * @throws ImapHandlerException
      * @throws \SuiteCRM\StateSaverException
      */
     public function displayEmailFrame($baseTpl = "modules/Emails/templates/_baseEmail.tpl")
@@ -360,6 +362,7 @@ eoq;
      * by an ajax call.
      *
      * @return JSON An object containing html markup and js script variables.
+     * @throws ImapHandlerException
      * @throws \SuiteCRM\StateSaverException
      */
     public function displayQuickComposeEmailFrame()
@@ -410,7 +413,9 @@ eoq;
      * UI.
      *
      * @param String $emailLinkUrl
+     * @param bool $lazyLoad
      * @return JSON Object containing the composePackage and full link url
+     * @throws ImapHandlerException
      */
     public function generateComposePackageForQuickCreateFromComposeUrl($emailLinkUrl, $lazyLoad = false)
     {
@@ -665,8 +670,10 @@ HTML;
      * @param Array $composeData Associative array read and processed by generateComposeDataPackage.
      * @param String $fullLinkUrl A link that contains all pertinant information so the user can be
      *                              directed to the full compose screen if needed
+     * @param bool $lazyLoad
      * @param SugarBean $bean Optional - the parent object bean with data
      * @return JSON Object containg composePackage and fullLinkUrl
+     * @throws ImapHandlerException
      */
     public function generateComposePackageForQuickCreate($composeData, $fullLinkUrl, $lazyLoad = false, $bean = null)
     {
@@ -701,7 +708,7 @@ HTML;
      * returned is the minimum set needed by the quick compose UI.
      *
      * @param String $type Drives which tinyMCE options will be included.
-     * @throws \RuntimeException
+     * @throws ImapHandlerException
      */
     public function _generateComposeConfigData($type = "email_compose_light")
     {
@@ -1154,7 +1161,8 @@ HTML;
     /**
      * Creates a new Sugar folder
      * @param string $nodeLabel New sugar folder name
-     * @param string $parentLabel Parent folder name
+     * @param $parentId
+     * @param int $isGroup
      * @return array
      */
     public function saveNewFolder($nodeLabel, $parentId, $isGroup = 0)
@@ -1182,6 +1190,10 @@ HTML;
 
     /**
      * Saves user sort prefernces
+     * @param $ieId
+     * @param $focusFolder
+     * @param $sortBy
+     * @param $sortDir
      */
     public function saveListViewSortOrder($ieId, $focusFolder, $sortBy, $sortDir)
     {
@@ -1202,6 +1214,8 @@ HTML;
 
     /**
      * Stickies folder collapse/open state
+     * @param $focusFolder
+     * @param $focusFolderOpen
      */
     public function saveFolderOpenState($focusFolder, $focusFolderOpen)
     {
@@ -1221,6 +1235,8 @@ HTML;
 
     /**
      * saves a folder's view state
+     * @param $ieId
+     * @param $folder
      */
     public function saveListView($ieId, $folder)
     {
@@ -1235,6 +1251,7 @@ HTML;
 
     /**
      * Generates cache folder structure
+     * @param $cacheRoot
      */
     public function preflightEmailCache($cacheRoot)
     {
@@ -1293,6 +1310,7 @@ HTML;
      * @param bool $forceRefresh
      * @param User|null $user User
      * @return object TreeView object
+     * @throws ImapHandlerException
      */
     public function getMailboxNodes($forceRefresh = false, $user = null)
     {
@@ -1510,6 +1528,9 @@ HTML;
 
     /**
      * Totals the unread emails
+     * @param $ie
+     * @param $mailbox
+     * @return mixed
      */
     public function getUnreadCount(&$ie, $mailbox)
     {
@@ -1603,7 +1624,7 @@ HTML;
      * Renders the QuickCreate form from Smarty and returns HTML
      * @param array $vars request variable global
      * @param object $email Fetched email object
-     * @param bool $addToAddressBook
+     * @param bool $addToAddressBookButton
      * @return array
      * @throws Exception
      */
@@ -1756,7 +1777,7 @@ HTML;
      * Renders the Import form from Smarty and returns HTML
      * @param array $vars request variable global
      * @param object $email Fetched email object
-     * @param bool $addToAddressBook
+     * @param string $formName
      * @return array
      * @throws \SuiteCRM\StateSaverException
      */
@@ -1814,7 +1835,9 @@ HTML;
 
     /**
      * This function returns the detail view for email in new 2.0 interface
-     *
+     * @param $emailId
+     * @return mixed
+     * @throws \SuiteCRM\StateSaverException
      */
     public function getDetailViewForEmail2($emailId)
     {
@@ -1941,6 +1964,14 @@ HTML;
 
     /**
      * Sets the "read" flag in the overview cache
+     * @param $ieId
+     * @param $mbox
+     * @param $uid
+     * @throws EmailException
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     public function setReadFlag($ieId, $mbox, $uid)
     {
@@ -1954,9 +1985,11 @@ HTML;
      * @param string $ieId
      * @param string $folder IMAP folder structure or SugarFolder GUID
      * @param string $uids Comma sep list of UIDs or GUIDs
+     * @throws EmailException
      * @throws EmailValidatorException
      * @throws ImapHandlerException
      * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     public function markEmails($type, $ieId, $folder, $uids)
     {
@@ -2108,7 +2141,7 @@ HTML;
 
     /**
      * get team id and team set id from request
-     * @return  array
+     * @return void
      */
     public function getTeams()
     {
@@ -2238,7 +2271,13 @@ HTML;
 
     /**
      * returns the metadata defining a single email message for display.  Uses cache file if it exists
+     * @param $ie
      * @return array
+     * @throws EmailException
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
      */
     public function getSingleMessage($ie)
     {
@@ -2345,7 +2384,9 @@ eoq;
      * @param GUID $ieId GUID to InboundEmail instance
      * @param string $mbox Mailbox path name in dot notation
      * @param int $folderListCacheOffset Seconds for valid cache file
-     * @return string HTML render of list.
+     * @param string $forceRefresh
+     * @return array HTML render of list.
+     * @throws ImapHandlerException
      */
     public function getListEmails($ieId, $mbox, $folderListCacheOffset, $forceRefresh = 'false')
     {
@@ -2514,6 +2555,9 @@ eoq;
     /**
      * Generates a UNION query to get one list of users, contacts, leads, and
      * prospects; used specifically for the addressBook
+     * @param $whereArr
+     * @param $person
+     * @return array
      */
     public function _getPeopleUnionQuery($whereArr, $person)
     {
@@ -2597,7 +2641,8 @@ eoq;
     /**
      * get emails of related bean for a given bean id
      * @param $beanType
-     * @param array $condition of conditions inclued bean id
+     * @param $whereArr
+     * @param string $relatedBeanInfoArr
      * @return array('query' => $q, 'countQuery' => $countq);
      */
     public function getRelatedEmail($beanType, $whereArr, $relatedBeanInfoArr = '')
@@ -3061,6 +3106,7 @@ eoq;
      * match of the emailId passed in as a parameter
      * @deprecate 7.9
      * @param unknown_type $ie
+     * @param $ret
      * @return unknown
      */
     public function getFromAllAccountsArray($ie, $ret)
@@ -3213,6 +3259,9 @@ eoq;
 
     /**
      * Re-used option getter for Show Accounts multiselect pane
+     * @param $ie
+     * @return array
+     * @throws SugarFolderEmptyException
      */
     public function getShowAccountsOptions(&$ie)
     {
@@ -3509,6 +3558,9 @@ eoq;
      *
      * @param array $data
      * @param string $resultsParam The resultsList name
+     * @param int $count
+     * @param bool $fromCache
+     * @param int $unread
      * @return string
      */
     public function jsonOuput($data, $resultsParam, $count = 0, $fromCache = true, $unread = -1)
@@ -3539,8 +3591,11 @@ eoq;
 
     /**
      * generates XML output from an array
-     * @param array
-     * @param string master list Item
+     * @param $a
+     * @param $paramName
+     * @param int $count
+     * @param bool $fromCache
+     * @param int $unread
      * @return string
      */
     public function xmlOutput($a, $paramName, $count = 0, $fromCache = true, $unread = -1)
@@ -3579,8 +3634,6 @@ eoq;
      * Generate to/cc addresses string in email detailview.
      *
      * @param string $str
-     * @param string $target values: to, cc
-     * @param int $defaultNum
      * @return string $str
      */
     public function generateExpandableAddrs($str)

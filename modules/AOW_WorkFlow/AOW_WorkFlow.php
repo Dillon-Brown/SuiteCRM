@@ -201,6 +201,9 @@ class AOW_WorkFlow extends Basic
 
     /**
      * Select and run all active flows for the specified bean
+     * @param SugarBean $bean
+     * @return bool
+     * @throws Exception
      */
     public function run_bean_flows(SugarBean $bean)
     {
@@ -878,6 +881,9 @@ class AOW_WorkFlow extends Basic
 
     /**
      * Run the actions against the passed $bean
+     * @param SugarBean $bean
+     * @param bool $in_save
+     * @return bool
      */
     public function run_actions(SugarBean &$bean, $in_save = false)
     {

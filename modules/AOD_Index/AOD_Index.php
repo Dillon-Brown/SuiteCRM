@@ -110,7 +110,7 @@ class AOD_Index extends AOD_Index_sugar
 
     /**
      * @param $revision
-     * @return bool|Zend_Search_Lucene_Document
+     * @return array
      * @throws Zend_Search_Lucene_Document_Exception
      * @throws Zend_Search_Lucene_Exception
      */

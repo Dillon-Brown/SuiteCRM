@@ -75,6 +75,7 @@ class ImportFileSplitter
      * Constructor
      *
      * @param string $source filename we are splitting
+     * @param int $recordThreshold
      */
     public function __construct(
         $source = null,
@@ -117,6 +118,7 @@ class ImportFileSplitter
      * @param string $enclosure
      * @param bool $has_header true if file has a header row
      * @return bool
+     * @throws Exception
      */
     public function splitSourceFile(
         $delimiter = ',',

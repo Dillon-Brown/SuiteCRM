@@ -291,9 +291,9 @@ function removeFileFromPath($file, $path, $deleteNot=array())
 /**
  * This function copies/overwrites between directories
  *
- * @param string the directory name to remove
- * @param boolean whether to just empty the given directory, without deleting the given directory.
- * @return boolean True/False whether the directory was deleted.
+ * @param $from
+ * @param $to
+ * @return void True/False whether the directory was deleted.
  */
 
 function copyRecursiveBetweenDirectories($from, $to)
@@ -361,10 +361,15 @@ function deleteDirectory($dirname, $only_empty=false)
     }
     return (($only_empty)? (count(scandir)<=2) : (!is_dir($dirname)));
 }
+
 /**
  * Get all the customized modules. Compare the file md5s with the base md5s
  * If a file has been modified then put the module in the list of customized
  * modules. Show the list in the preflight check UI.
+ * @param $unzip_dir
+ * @param $zip_from_dir
+ * @param $delete_dirs
+ * @return array
  */
 
 function deleteAndOverWriteSelectedFiles($unzip_dir, $zip_from_dir, $delete_dirs)
@@ -529,7 +534,7 @@ function getAllCustomizedModules()
 /**
  * Array of all Modules in the version bein upgraded
  * This method returns an Array of all modules
- * @return $modules Array of modules.
+ * @return array $modules Array of modules.
  */
 function getAllModules()
 {
@@ -893,9 +898,10 @@ function upgradeUWFilesCopy($allFiles, $from_dir)
 }
 
 
-
 /**
  * gets valid patch file names that exist in upload/upgrade/patch/
+ * @param bool $returnFull
+ * @return array
  */
 function getValidPatchName($returnFull = true)
 {
@@ -1043,6 +1049,7 @@ eoq;
 
 /**
  * finalizes upgrade by setting upgrade versions in DB (config table) and sugar_version.php
+ * @param $version
  * @return bool true on success
  */
 function updateVersions($version)
@@ -1259,6 +1266,8 @@ function checkSystemCompliance()
 
 /**
  * is a file that we blow away automagically
+ * @param $file
+ * @return bool
  */
 function isAutoOverwriteFile($file)
 {
@@ -1282,6 +1291,8 @@ function isAutoOverwriteFile($file)
 
 /**
  * flatfile logger
+ * @param $entry
+ * @param string $path
  */
 function logThis($entry, $path='')
 {
@@ -1387,6 +1398,9 @@ function updateQuickCreateDefs()
 
 /**
  * test perms for CREATE queries
+ * @param $db
+ * @param $out
+ * @return mixed
  */
 function testPermsCreate($db, $out)
 {
@@ -1403,6 +1417,10 @@ function testPermsCreate($db, $out)
 
 /**
  * test perms for INSERT
+ * @param $db
+ * @param $out
+ * @param bool $skip
+ * @return mixed
  */
 function testPermsInsert($db, $out, $skip=false)
 {
@@ -1420,6 +1438,10 @@ function testPermsInsert($db, $out, $skip=false)
 
 /**
  * test perms for UPDATE TABLE
+ * @param $db
+ * @param $out
+ * @param bool $skip
+ * @return mixed
  */
 function testPermsUpdate($db, $out, $skip=false)
 {
@@ -1436,6 +1458,10 @@ function testPermsUpdate($db, $out, $skip=false)
 
 /**
  * test perms for SELECT
+ * @param $db
+ * @param $out
+ * @param bool $skip
+ * @return mixed
  */
 function testPermsSelect($db, $out, $skip=false)
 {
@@ -1451,6 +1477,10 @@ function testPermsSelect($db, $out, $skip=false)
 
 /**
  * test perms for DELETE
+ * @param $db
+ * @param $out
+ * @param bool $skip
+ * @return mixed
  */
 function testPermsDelete($db, $out, $skip=false)
 {
@@ -1467,6 +1497,10 @@ function testPermsDelete($db, $out, $skip=false)
 
 /**
  * test perms for ALTER TABLE ADD COLUMN
+ * @param $db
+ * @param $out
+ * @param bool $skip
+ * @return mixed
  */
 function testPermsAlterTableAdd($db, $out, $skip=false)
 {
@@ -1482,6 +1516,10 @@ function testPermsAlterTableAdd($db, $out, $skip=false)
 
 /**
  * test perms for ALTER TABLE ADD COLUMN
+ * @param $db
+ * @param $out
+ * @param bool $skip
+ * @return mixed
  */
 function testPermsAlterTableChange($db, $out, $skip=false)
 {
@@ -1497,6 +1535,10 @@ function testPermsAlterTableChange($db, $out, $skip=false)
 
 /**
  * test perms for ALTER TABLE DROP COLUMN
+ * @param $db
+ * @param $out
+ * @param bool $skip
+ * @return mixed
  */
 function testPermsAlterTableDrop($db, $out, $skip=false)
 {
@@ -1513,6 +1555,10 @@ function testPermsAlterTableDrop($db, $out, $skip=false)
 
 /**
  * test perms for DROP TABLE
+ * @param $db
+ * @param $out
+ * @param bool $skip
+ * @return mixed
  */
 function testPermsDropTable($db, $out, $skip=false)
 {
@@ -2297,10 +2343,11 @@ function unlinkUWTempFiles()
 
 /**
  * finds all files in the passed path, but skips select directories
- * @param string dir Relative path
- * @param array the_array Collections of found files/dirs
- * @param bool include_dir True if we want to include directories in the
- * returned collection
+ * @param $dir
+ * @param $theArray
+ * @param bool $includeDirs
+ * @param array $skipDirs
+ * @param bool $echo
  * @return array
  */
 function uwFindAllFiles($dir, $theArray, $includeDirs=false, $skipDirs=array(), $echo=false)
@@ -2623,6 +2670,7 @@ function getFilesForPermsCheck()
 /**
  * checks files for permissions
  * @param array files Array of files with absolute paths
+ * @param bool $echo
  * @return string result of check
  */
 function checkFiles($files, $echo=false)
@@ -3365,7 +3413,7 @@ function add_custom_modules_favorites_search()
  * added through the SugarCRM 5.5.x upgrade process.  It also adds the values into the team_sets and
  * team_sets_teams tables.
  *
- * @param filter Array of modules to process; empty by default
+ * @param array $filter
  */
 function upgradeModulesForTeamsets($filter=array())
 {
@@ -3855,6 +3903,8 @@ function update_iframe_dashlets()
 
 /**
  * convertImageToText
+ * @param $table_name
+ * @param $column_name
  * @deprecated
  * This method attempts to convert date type image to text on Microsoft SQL Server.
  * This method could NOT be used in any other type of datebases.
@@ -3974,7 +4024,7 @@ function upgradeDateTimeFields($path)
 
 /**
  * upgradeDocumentTypeFields
- *
+ * @param $path
  */
 function upgradeDocumentTypeFields($path)
 {
@@ -3998,10 +4048,10 @@ function upgradeDocumentTypeFields($path)
  * supplied it will attempt to discover the config_si.php file location from where the executing script
  * was invoked.
  *
- * @param write_to_upgrade_log boolean optional value to write to the upgradeWizard.log file
- * @param config_location String optional value to config.php file location
- * @param config_si_location String optional value to config_si.php file location
- * @param path String file of the location of log file to write to
+ * @param bool $write_to_upgrade_log
+ * @param string $config_location
+ * @param string $config_si_location
+ * @param string $path
  * @return boolean value indicating whether or not a merge was attempted with config_si.php file
  */
 function merge_config_si_settings($write_to_upgrade_log=false, $config_location='', $config_si_location='', $path='')
@@ -4203,6 +4253,7 @@ function remove_linkedin_connector()
 
 /**
  * Enable the InsideView connector for the four default modules.
+ * @param string $path
  */
 function upgradeEnableInsideViewConnector($path='')
 {
@@ -4369,6 +4420,7 @@ function add_unified_search_to_custom_modules_vardefs()
 
 /**
  * change from using the older SugarCache in 6.1 and below to the new one in 6.2
+ * @param $file
  */
 function upgradeSugarCache($file)
 {

@@ -79,7 +79,7 @@ class quicksearchQuery
      *        'order' => 'name', // order by
      *        'limit' => '30', // limit, number of records to return
      *       )
-     * @return array list of elements returned
+     * @return string list of elements returned
      */
     public function query($args)
     {
@@ -92,7 +92,8 @@ class quicksearchQuery
 
     /**
      * get_contact_array
-     *
+     * @param $args
+     * @return string
      */
     public function get_contact_array($args)
     {
@@ -108,7 +109,7 @@ class quicksearchQuery
      * Returns the list of users, faster than using query method for Users module
      *
      * @param array $args arguments used to construct query, see query() for example
-     * @return array list of users returned
+     * @return string list of users returned
      */
     public function get_user_array($args)
     {
@@ -123,7 +124,7 @@ class quicksearchQuery
      * Returns search results from external API
      *
      * @param array $args
-     * @return array
+     * @return string
      */
     public function externalApi($args)
     {
@@ -463,7 +464,7 @@ class quicksearchQuery
      *
      * @param array $result
      * @param array $args
-     * @return string
+     * @return array
      */
     protected function updateContactName($result, $args)
     {
@@ -501,7 +502,7 @@ class quicksearchQuery
     /**
      * Returns prepared arguments. Should be redefined in child classes.
      *
-     * @param array $arguments
+     * @param $args
      * @return array
      */
     protected function prepareArguments($args)

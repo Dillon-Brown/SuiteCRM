@@ -910,7 +910,6 @@ class Email extends Basic
      *
      * @param $request
      * @return bool
-     * @throws EmailException
      * @throws EmailValidatorException
      * @throws ImapHandlerException
      * @throws \SuiteCRM\ErrorMessageException
@@ -1953,6 +1952,8 @@ class Email extends Basic
 
     /**
      * retrieves Notes that belong to this Email and stuffs them into the "attachments" attribute
+     * @param $id
+     * @param bool $duplicate
      */
     public function getNotes($id, $duplicate = false)
     {
@@ -2834,8 +2835,8 @@ class Email extends Basic
     /**
      * Preps SugarPHPMailer object for HTML or Plain text sends
      * @param SugarPHPMailer $mail
+     * @return SugarPHPMailer
      * @global $current_user
-     * @return Email
      */
     public function handleBody($mail)
     {

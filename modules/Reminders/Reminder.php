@@ -150,6 +150,7 @@ class Reminder extends Basic
      *
      * @param string $eventModule Related event module name (Meetings/Calls)
      * @param string $eventModuleId Related event GUID
+     * @param bool $isDuplicate
      * @return string JSON string contains the remainders
      * @throws Exception
      */
@@ -169,8 +170,8 @@ class Reminder extends Basic
      *
      * @param string $eventModule Related event module name (Meetings/Calls)
      * @param string $eventModuleId Related event GUID
+     * @param bool $isDuplicate
      * @return array contains the remainders
-     * @throws Exception
      */
     public static function loadRemindersData($eventModule, $eventModuleId, $isDuplicate = false)
     {
@@ -278,7 +279,7 @@ class Reminder extends Basic
      *
      * @param jsAlerts $alert caller jsAlerts object
      * @param boolean $checkDecline (optional) Send email if user accept status is not decline. Default is TRUE.
-     * @return ???
+     * @return void ???
      * @throws Exception
      * @global ??? $current_user
      * @global ??? $timedate
@@ -688,6 +689,7 @@ class Reminder extends Basic
      * @param int $oldReminderPopupTimer
      * @param bool $oldReminderEmailChecked
      * @param int $oldReminderEmailTimer
+     * @param $oldReminderEmailSent
      * @param array $oldInvitees
      */
     private static function migrateReminder($eventModule, $eventModuleId, $oldReminderPopupChecked, $oldReminderPopupTimer, $oldReminderEmailChecked, $oldReminderEmailTimer, $oldReminderEmailSent, $oldInvitees)

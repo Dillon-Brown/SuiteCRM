@@ -438,7 +438,7 @@ class OneLogin_Saml2_Response
     }
 
     /**
-     * @return the NotOnOrAfter value of the valid SubjectConfirmationData *         node if any
+     * @return DateTime NotOnOrAfter value of the valid SubjectConfirmationData *         node if any
      */
     public function getAssertionNotOnOrAfter()
     {
@@ -903,6 +903,7 @@ class OneLogin_Saml2_Response
     /**
      * Verifies that the document has the expected signed nodes.
      *
+     * @param $signedElements
      * @return bool
      * @throws OneLogin_Saml2_ValidationError
      */

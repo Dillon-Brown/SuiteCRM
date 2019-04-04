@@ -59,6 +59,8 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
      * @param int $limit
      * @param string $limitPerPage
      * @param array $params
+     * @param $pageData
+     * @param $filter_fields
      * @return array
      * @throws ImapHandlerException
      */

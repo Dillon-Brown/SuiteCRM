@@ -48,6 +48,8 @@ require_once('include/MVC/View/views/view.detail.php');
 class DocumentsViewDetail extends ViewDetail
 {
     /**
+     * @param bool $browserTitle
+     * @return array
      * @see SugarView::_getModuleTitleParams()
      */
     protected function _getModuleTitleParams($browserTitle = false)

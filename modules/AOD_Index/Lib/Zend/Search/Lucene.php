@@ -510,8 +510,9 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
      * a string with a path to the index folder or a Directory object.
      *
      * @param Zend_Search_Lucene_Storage_Directory_Filesystem|string $directory
-     * @throws Zend_Search_Lucene_Exception
+     * @param bool $create
      * @throws Zend_Search_Exception
+     * @throws Zend_Search_Lucene_Exception
      */
     public function __construct($directory = null, $create = false)
     {
@@ -910,7 +911,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
      *
      * Default value is 10
      *
-     * @param integer $maxMergeDocs
+     * @param $mergeFactor
      */
     public function setMergeFactor($mergeFactor)
     {
@@ -1268,7 +1269,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
      *
      * @param Zend_Search_Lucene_Index_Term $term
      * @param Zend_Search_Lucene_Index_DocsFilter|null $docsFilter
-     * @return integer
+     * @return array
      */
     public function termFreqs(Zend_Search_Lucene_Index_Term $term, $docsFilter = null)
     {

@@ -61,8 +61,10 @@ class EmailManViewList extends ViewList
         $this->lv->export = false;
         $this->lv->quickViewLinks = false;
     }
-    
+
     /**
+     * @param bool $browserTitle
+     * @return array
      * @see SugarView::_getModuleTitleParams()
      */
     protected function _getModuleTitleParams($browserTitle = false)

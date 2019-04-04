@@ -301,6 +301,9 @@ class User extends Person implements EmailInterface
 
     /**
      * returns buttons and JS for signatures
+     * @param string $jscall
+     * @param bool $defaultDisplay
+     * @return string
      */
     public function getSignatureButtons($jscall = '', $defaultDisplay = false)
     {
@@ -325,6 +328,7 @@ class User extends Person implements EmailInterface
      * InboundEmail
      *
      * @return bool
+     * @throws ImapHandlerException
      */
     public function hasPersonalEmail()
     {
@@ -365,12 +369,12 @@ class User extends Person implements EmailInterface
     /**
      * Interface for the User object to calling the UserPreference::setPreference() method in modules/UserPreferences/UserPreference.php
      *
-     * @see UserPreference::setPreference()
-     *
      * @param string $name Name of the preference to set
      * @param string $value Value to set preference to
-     * @param null $nosession For BC, ignored
+     * @param int $nosession For BC, ignored
      * @param string $category Name of the category to retrieve
+     * @see UserPreference::setPreference()
+     *
      */
     public function setPreference(
     $name,
@@ -537,7 +541,7 @@ class User extends Person implements EmailInterface
      * UserPreference::incrementETag("mainMenuETag");
      *
      * @param string $tag ETag seed name.
-     * @return nothing
+     * @return void
      */
     public function incrementETag($tag)
     {
@@ -1013,11 +1017,10 @@ class User extends Person implements EmailInterface
     }
 
     /**
-     * @deprecated
-     * @param string $user_name - Must be non null and at least 2 characters
      * @param string $username_password - Must be non null and at least 1 character.
-     * @desc Take an unencrypted username and password and return the encrypted password
      * @return string encrypted password for storage in DB and comparison against DB password.
+     * @desc Take an unencrypted username and password and return the encrypted password
+     * @deprecated
      */
     public function encrypt_password($username_password)
     {
@@ -1104,7 +1107,7 @@ EOQ;
      * Load a user based on the user_name in $this
      * @param string $username_password Password
      * @param bool $password_encoded Is password md5-encoded or plain text?
-     * @return -- this if load was successul and null if load failed.
+     * @return User|null -- this if load was successul and null if load failed.
      */
     public function load_user($username_password, $password_encoded = false)
     {
@@ -1183,7 +1186,7 @@ EOQ;
 
     /**
      * Check that md5-encoded password matches existing hash
-     * @param string $password MD5-encoded password
+     * @param $password_md5
      * @param string $user_hash DB hash
      * @return bool Match or not?
      */
@@ -1239,6 +1242,7 @@ EOQ;
     /**
      * Sets new password and resets password expiration timers
      * @param string $new_password
+     * @param string $system_generated
      */
     public function setNewPassword($new_password, $system_generated = '0')
     {
@@ -1409,7 +1413,8 @@ EOQ;
     }
 
     /**
-     * @return -- returns a list of all users in the system.
+     * @param bool $ieVerified
+     * @return bool -- returns a list of all users in the system.
      * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
      * All Rights Reserved..
      * Contributor(s): ______________________________________..
@@ -1782,13 +1787,13 @@ EOQ;
     /**
      * returns opening <a href=xxxx for a contact, account, etc
      * cascades from User set preference to System-wide default
-     * @param attribute the email addy
-     * @param focus the parent bean
-     * @param contact_id
-     * @param return_module
-     * @param return_action
-     * @param return_id
-     * @param class
+     * @param $emailAddress
+     * @param $focus
+     * @param string $contact_id
+     * @param string $ret_module
+     * @param string $ret_action
+     * @param string $ret_id
+     * @param string $class
      * @return string    link
      * @throws Exception
      */
@@ -1846,13 +1851,13 @@ EOQ;
     /**
      * returns opening <a href=xxxx for a contact, account, etc
      * cascades from User set preference to System-wide default
-     * @param attribute the email addy
-     * @param focus the parent bean
-     * @param contact_id
-     * @param return_module
-     * @param return_action
-     * @param return_id
-     * @param class
+     * @param $attribute
+     * @param $focus
+     * @param string $contact_id
+     * @param string $ret_module
+     * @param string $ret_action
+     * @param string $ret_id
+     * @param string $class
      * @return string    link
      * @throws Exception
      */
@@ -1917,6 +1922,7 @@ EOQ;
     /**
      * Helper function to remap some modules around ACL wise
      *
+     * @param $module
      * @return string
      */
     protected function _fixupModuleForACL($module)
@@ -1935,6 +1941,7 @@ EOQ;
      * Helper function that enumerates the list of modules and checks if they are an admin/dev.
      * The code was just too similar to copy and paste.
      *
+     * @param string $type
      * @return array
      */
     protected function _getModulesForACL($type = 'dev')
@@ -2034,6 +2041,7 @@ EOQ;
     /**
      * Is this user a developer for the specified module
      *
+     * @param $module
      * @return bool
      */
     public function isDeveloperForModule($module)
@@ -2074,6 +2082,7 @@ EOQ;
     /**
      * Is this user an admin for the specified module
      *
+     * @param $module
      * @return bool
      */
     public function isAdminForModule($module)

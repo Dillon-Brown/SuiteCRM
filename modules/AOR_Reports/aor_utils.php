@@ -46,6 +46,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Returns the display labels for a module path and field.
  * @param $modulePath
  * @param $field
+ * @param $reportModule
  * @return array
  */
 function getDisplayForField($modulePath, $field, $reportModule)
@@ -330,7 +331,7 @@ function getPeriodDate($date_time_period_list_selected)
 
 /**
  * getPeriodDate
- * @param $date_time_period_list_selected
+ * @param $dateTimePeriodListSelected
  * @return DateTime
  * @throws Exception
  */

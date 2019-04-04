@@ -77,8 +77,12 @@ function create_module_lang_dir($module)
 }
 
 /**
+ * @param $old_contents
+ * @param $key
+ * @param $value
+ * @param $language
+ * @param $module
  * @return string&
- * @param the_array array, language string, module string
  * @desc Returns the contents of the customized language pack.
  */
 function &create_field_lang_pak_contents($old_contents, $key, $value, $language, $module)
@@ -99,8 +103,9 @@ function &create_field_lang_pak_contents($old_contents, $key, $value, $language,
 }
 
 /**
+ * @param $the_array
+ * @param $language
  * @return string&
- * @param the_array array, language string
  * @desc Returns the contents of the customized language pack.
  */
 function &create_dropdown_lang_pak_contents(&$the_array, $language)
@@ -116,10 +121,13 @@ function &create_dropdown_lang_pak_contents(&$the_array, $language)
 }
 
 /**
- * @param module string, key string, value string
- * @desc Wrapper function that will create a field label for every language.
+ * @param $module
+ * @param $key
+ * @param $value
+ * @param bool $overwrite
  * @return bool
  * @throws Exception
+ * @desc Wrapper function that will create a field label for every language.
  */
 function create_field_label_all_lang($module, $key, $value, $overwrite = false)
 {
@@ -137,11 +145,15 @@ function create_field_label_all_lang($module, $key, $value, $overwrite = false)
 }
 
 /**
- * @param module string, language string, key string, value string
- * @desc Returns true if new field label can be created, false otherwise.
- *       Probable reason for returning false: new_field_key already exists.
+ * @param $module
+ * @param $language
+ * @param $key
+ * @param $value
+ * @param bool $overwrite
  * @return bool
  * @throws Exception
+ * @desc Returns true if new field label can be created, false otherwise.
+ *       Probable reason for returning false: new_field_key already exists.
  */
 function create_field_label($module, $language, $key, $value, $overwrite=false)
 {
@@ -217,10 +229,12 @@ function create_dropdown_type_all_lang($dropdown_name)
 }
 
 /**
- * @param app_list_strings array
- * @desc Saves the app_list_strings to file in the 'custom' dir.
+ * @param $contents
+ * @param $language
+ * @param string $custom_dir_name
  * @return bool
  * @throws Exception
+ * @desc Saves the app_list_strings to file in the 'custom' dir.
  */
 function save_custom_app_list_strings_contents(&$contents, $language, $custom_dir_name = '')
 {
@@ -262,10 +276,11 @@ function save_custom_app_list_strings_contents(&$contents, $language, $custom_di
 }
 
 /**
- * @param app_list_strings array
- * @desc Saves the app_list_strings to file in the 'custom' dir.
+ * @param $app_list_strings
+ * @param $language
  * @return bool
  * @throws Exception
+ * @desc Saves the app_list_strings to file in the 'custom' dir.
  */
 function save_custom_app_list_strings(&$app_list_strings, $language)
 {
@@ -325,10 +340,11 @@ function return_custom_app_list_strings_file_contents($language, $custom_filenam
 }
 
 /**
- * @param dropdown_name string, language string
- * @desc Creates a new dropdown type.
+ * @param $dropdown_name
+ * @param $language
  * @return bool
  * @throws Exception
+ * @desc Creates a new dropdown type.
  */
 function create_dropdown_type($dropdown_name, $language)
 {
@@ -356,8 +372,11 @@ function create_dropdown_type($dropdown_name, $language)
 }
 
 /**
+ * @param $identifier
+ * @param $pairs
+ * @param string $first_entry
+ * @param string $selected_key
  * @return string&
- * @param identifier string, pairs array, first_entry string, selected_key string
  * @desc Generates the HTML for a dropdown list.
  */
 function &create_dropdown_html($identifier, &$pairs, $first_entry='', $selected_key='')

@@ -112,6 +112,7 @@ class Zend_Search_Lucene_Document
     /**
      * Returns the string value of a named field in this document.
      *
+     * @param $fieldName
      * @return string
      * @throws Zend_Search_Lucene_Exception
      * @see __get()
@@ -124,6 +125,7 @@ class Zend_Search_Lucene_Document
     /**
      * Returns the string value of a named field in UTF-8 encoding.
      *
+     * @param $fieldName
      * @return string
      * @throws Zend_Search_Lucene_Exception
      * @see __get()

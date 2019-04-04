@@ -217,9 +217,8 @@ class Scheduler extends SugarBean
      * script.
      *
      * @param Scheduler $focus object
-     * @return    $dateTimes    array loaded with DB datetime strings derived from
+     * @return array|bool $dateTimes    array loaded with DB datetime strings derived from
      *                        the     job_interval attribute
-     * @return    false        If we the Scheduler is not in scope, return false.
      * @throws Exception
      */
     public function deriveDBDateTimes($focus)
@@ -1011,6 +1010,10 @@ class Scheduler extends SugarBean
     ////	STANDARD SUGARBEAN OVERRIDES
     /**
      * function overrides the one in SugarBean.php
+     * @param $order_by
+     * @param $where
+     * @param int $show_deleted
+     * @return String
      */
     public function create_export_query($order_by, $where, $show_deleted = 0)
     {

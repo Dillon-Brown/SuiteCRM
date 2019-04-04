@@ -151,6 +151,7 @@ class Favorites extends Basic
 
     /**
      * @parm string $module
+     * @param $module
      * @return array Representing an array of \SuiteCRM\API\JsonApi\Resource\Resource
      * @throws \SuiteCRM\Exception\Exception
      */

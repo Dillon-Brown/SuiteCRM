@@ -99,8 +99,8 @@ class OneLogin_Saml2_Settings
      *
      * @param array|object|null $settings SAML Toolkit Settings
      *
+     * @param bool $spValidationOnly
      * @throws OneLogin_Saml2_Error If any settings parameter is invalid
-     * @throws Exception If OneLogin_Saml2_Settings is incorrectly supplied
      */
     public function __construct($settings = null, $spValidationOnly = false)
     {
@@ -1030,6 +1030,7 @@ class OneLogin_Saml2_Settings
 
     /**
      * Set a baseurl value.
+     * @param $baseurl
      */
     public function setBaseURL($baseurl)
     {
@@ -1049,7 +1050,7 @@ class OneLogin_Saml2_Settings
     /**
      * Sets the IdP certificate.
      *
-     * @param string $value IdP certificate
+     * @param $cert
      */
     public function setIdPCert($cert)
     {

@@ -694,7 +694,7 @@ class EmailsController extends SugarController
     /**
      * @param array $request
      * @param int $mode
-     * @throws InvalidArgumentException
+     * @throws ImapHandlerException
      * @see EmailsController::COMPOSE_BEAN_MODE_UNDEFINED
      * @see EmailsController::COMPOSE_BEAN_MODE_REPLY_TO
      * @see EmailsController::COMPOSE_BEAN_MODE_REPLY_TO_ALL
@@ -851,6 +851,7 @@ class EmailsController extends SugarController
     }
 
     /**
+     * @param $importedEmailId
      * @param array $request
      * @return bool|Email
      * @see Email::id
@@ -882,6 +883,7 @@ class EmailsController extends SugarController
      * @param InboundEmail $requestedInboundEmail
      * @param Email $requestedEmail
      * @return bool false if user doesn't have access
+     * @throws ImapHandlerException
      */
     protected function userIsAllowedToSendEmail($requestedUser, $requestedInboundEmail, $requestedEmail)
     {
