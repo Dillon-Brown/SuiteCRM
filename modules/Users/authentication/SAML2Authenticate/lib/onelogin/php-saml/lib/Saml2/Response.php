@@ -718,7 +718,7 @@ class OneLogin_Saml2_Response
 
         $entries = $this->_queryAssertion('/saml:AttributeStatement/saml:Attribute');
 
-        /** @var $entry DOMNode */
+        /** @var DOMNode $entry */
         foreach ($entries as $entry) {
             $attributeName = $entry->attributes->getNamedItem('Name')->nodeValue;
 

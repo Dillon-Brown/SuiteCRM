@@ -222,7 +222,7 @@ class jjwg_Areas extends jjwg_Areas_sugar
     /**
      *
      * Define Marker Location
-     * @param $marker mixed (array or object)
+     * @param mixed $marker (array or object)
      * @return array
      */
     public function define_loc($marker = array())
@@ -257,7 +257,7 @@ class jjwg_Areas extends jjwg_Areas_sugar
     /**
      *
      * Check for valid longitude
-     * @param $lng float
+     * @param float $lng
      * @return bool
      */
     public function is_valid_lng($lng)
@@ -268,7 +268,7 @@ class jjwg_Areas extends jjwg_Areas_sugar
     /**
      *
      * Check for valid latitude
-     * @param $lat float
+     * @param float $lat
      * @return bool
      */
     public function is_valid_lat($lat)

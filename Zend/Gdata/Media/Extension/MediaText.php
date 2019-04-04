@@ -63,11 +63,11 @@ class Zend_Gdata_Media_Extension_MediaText extends Zend_Gdata_Extension
     /**
      * Constructs a new MediaText element
      *
-     * @param $text string
-     * @param $type string
-     * @param $lang string
-     * @param $start string
-     * @param $end string
+     * @param string $text
+     * @param string $type
+     * @param string $lang
+     * @param string $start
+     * @param string $end
      */
     public function __construct(
         $text = null,

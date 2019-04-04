@@ -72,7 +72,7 @@ class SugarThemeRegistry
     /**
      * Adds a new theme to the registry
      *
-     * @param $themedef array
+     * @param array $themedef
      * @return bool
      */
     public static function add(
@@ -118,7 +118,7 @@ class SugarThemeRegistry
     /**
      * Removes a new theme from the registry
      *
-     * @param $themeName string
+     * @param string $themeName
      */
     public static function remove(
         $themeName
@@ -131,7 +131,7 @@ class SugarThemeRegistry
     /**
      * Returns a theme object in the registry specified by the given $themeName
      *
-     * @param $themeName string
+     * @param string $themeName
      * @return mixed
      */
     public static function get(
@@ -183,7 +183,7 @@ class SugarThemeRegistry
     /**
      * Returns true if a theme object specified by the given $themeName exists in the registry
      *
-     * @param  $themeName string
+     * @param string $themeName
      * @return bool
      */
     public static function exists(
@@ -195,7 +195,7 @@ class SugarThemeRegistry
     /**
      * Sets the given $themeName to be the current theme
      *
-     * @param  $themeName string
+     * @param string $themeName
      * @return bool
      */
     public static function set(
@@ -388,7 +388,7 @@ class SugarThemeRegistry
     /**
      * get the configurable options for $themeName
      *
-     * @param  $themeName string
+     * @param string $themeName
      * @return array|bool
      */
     public static function getThemeConfig($themeName)

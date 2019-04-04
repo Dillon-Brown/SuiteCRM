@@ -91,7 +91,7 @@ class Zend_Http_Response_Stream extends Zend_Http_Response
     /**
      * Set the cleanup trigger
      *
-     * @param $cleanup Set cleanup trigger
+     * @param Set $cleanup cleanup trigger
      */
     public function setCleanup($cleanup = true)
     {

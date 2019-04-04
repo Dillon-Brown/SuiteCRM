@@ -74,7 +74,7 @@ class tracker_monitor extends Monitor
      * save
      * This method retrieves the Store instances associated with monitor and calls
      * the flush method passing with the montior ($this) instance.
-     * @param $flush boolean parameter indicating whether or not to flush the instance data to store or possibly cache
+     * @param boolean $flush parameter indicating whether or not to flush the instance data to store or possibly cache
      * @return bool
      */
     public function save($flush=true)

@@ -1172,8 +1172,8 @@ class XMLSecurityDSig
      * The signature element will be appended to the element, unless $beforeNode is specified. If $beforeNode
      * is specified, the signature element will be inserted as the last element before $beforeNode.
      *
-     * @param $node  The node the signature element should be inserted into.
-     * @param $beforeNode  The node the signature element should be located before.
+     * @param The $node node the signature element should be inserted into.
+     * @param The $beforeNode node the signature element should be located before.
      *
      * @return DOMNode The signature element node
      */

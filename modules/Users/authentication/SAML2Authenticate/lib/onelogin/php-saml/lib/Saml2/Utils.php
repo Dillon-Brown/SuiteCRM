@@ -298,7 +298,7 @@ class OneLogin_Saml2_Utils
     }
 
     /**
-     * @param $baseurl string The base url to be used when constructing URLs
+     * @param string $baseurl The base url to be used when constructing URLs
      */
     public static function setBaseURL($baseurl)
     {
@@ -338,7 +338,7 @@ class OneLogin_Saml2_Utils
     }
 
     /**
-     * @param $proxyVars bool Whether to use `X-Forwarded-*` headers to determine port/domain/protocol
+     * @param bool $proxyVars Whether to use `X-Forwarded-*` headers to determine port/domain/protocol
      */
     public static function setProxyVars($proxyVars)
     {
@@ -381,7 +381,7 @@ class OneLogin_Saml2_Utils
     }
 
     /**
-     * @param $host string The host to use when constructing URLs
+     * @param string $host The host to use when constructing URLs
      */
     public static function setSelfHost($host)
     {
@@ -389,7 +389,7 @@ class OneLogin_Saml2_Utils
     }
 
     /**
-     * @param $baseurlpath string The baseurl path to use when constructing URLs
+     * @param string $baseurlpath The baseurl path to use when constructing URLs
      */
     public static function setBaseURLPath($baseurlpath)
     {
@@ -434,7 +434,7 @@ class OneLogin_Saml2_Utils
     }
 
     /**
-     * @param $port int The port number to use when constructing URLs
+     * @param int $port The port number to use when constructing URLs
      */
     public static function setSelfPort($port)
     {
@@ -442,7 +442,7 @@ class OneLogin_Saml2_Utils
     }
 
     /**
-     * @param $protocol string The protocol to identify as using, usually http or https
+     * @param string $protocol The protocol to identify as using, usually http or https
      */
     public static function setSelfProtocol($protocol)
     {

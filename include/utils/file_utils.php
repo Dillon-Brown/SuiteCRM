@@ -182,8 +182,8 @@ function create_custom_directory($file)
 /**
  * This function will recursively generates md5s of files and returns an array of all md5s.
  *
- * @param    $path The path of the root directory to scan - must end with '/'
- * @param    $ignore_dirs array of filenames/directory names to ignore running md5 on - default 'cache' and 'upload'
+ * @param The $path path of the root directory to scan - must end with '/'
+ * @param array $ignore_dirs of filenames/directory names to ignore running md5 on - default 'cache' and 'upload'
  * @result    $md5_array an array containing path as key and md5 as value
  * @return array
  */
@@ -228,9 +228,9 @@ function generateMD5array($path, $ignore_dirs = array('cache', 'upload'))
 /**
  * Function to compare two directory structures and return the items in path_a that didn't match in path_b
  *
- * @param    $path_a The path of the first root directory to scan - must end with '/'
- * @param    $path_b The path of the second root directory to scan - must end with '/'
- * @param    $ignore_dirs array of filenames/directory names to ignore running md5 on - default 'cache' and 'upload'
+ * @param The $path_a path of the first root directory to scan - must end with '/'
+ * @param The $path_b path of the second root directory to scan - must end with '/'
+ * @param array $ignore_dirs of filenames/directory names to ignore running md5 on - default 'cache' and 'upload'
  * @result    array containing all the md5s of everything in $path_a that didn't have a match in $path_b
  * @return array
  */
@@ -349,8 +349,8 @@ function hashToFile($hash)
  * get_file_extension
  * This function returns the file extension portion of a given filename
  *
- * @param $filename String of filename to return extension
- * @param $string_to_lower boolean value indicating whether or not to return value as lowercase, true by default
+ * @param String $filename of filename to return extension
+ * @param boolean $string_to_lower value indicating whether or not to return value as lowercase, true by default
  *
  * @return extension String value, blank if no extension found
  */
@@ -379,7 +379,7 @@ function get_file_extension($filename, $string_to_lower=true)
  * file or path location.  Instead, the function merely checks the filename
  * extension and returns a best guess mime content type.
  *
- * @param $filename String of filename to return mime content type
+ * @param String $filename of filename to return mime content type
  * @return mime content type as String value (defaults to 'application/octet-stream' for filenames with extension, empty otherwise)
  *
  */
