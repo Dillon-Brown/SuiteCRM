@@ -67,6 +67,10 @@ class Chart_lead_source_by_outcome
     }
 
 
+    /**
+     * @param $extra_tools
+     * @throws Exception
+     */
     public function draw($extra_tools)
     {
         global $app_list_strings, $current_language, $sugar_config, $currentModule, $action,$theme;
@@ -366,6 +370,9 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
     }
 
 
+    /**
+     * @return string
+     */
     public function constructQuery()
     {
         global $current_user;
@@ -450,6 +457,9 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
         return $query;
     }
 
+    /**
+     * @return array
+     */
     public function constructGroupBy()
     {
         return array( 'lead_source', 'sales_stage' );

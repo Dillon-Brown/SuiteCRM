@@ -72,6 +72,10 @@ class AOW_Processed extends Basic
     }
 
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {

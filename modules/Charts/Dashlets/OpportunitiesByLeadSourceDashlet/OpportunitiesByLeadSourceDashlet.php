@@ -204,6 +204,10 @@ EOD;
         */
     }
 
+    /**
+     * @param $query
+     * @return array
+     */
     public function getChartData($query)
     {
         global $app_list_strings, $db;
@@ -223,6 +227,12 @@ EOD;
         return $dataSet;
     }
 
+    /**
+     * @param $data
+     * @param $currency_symbol
+     * @param $thousands_symbol
+     * @return mixed
+     */
     protected function prepareChartData($data, $currency_symbol, $thousands_symbol)
     {
         //return $data;

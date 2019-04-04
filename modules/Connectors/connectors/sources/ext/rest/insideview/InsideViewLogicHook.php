@@ -47,6 +47,11 @@ class InsideViewLogicHook
 {
     const URL_BASE = 'https://my.insideview.com/iv/crm/';
 
+    /**
+     * @param $bean
+     * @param $mapping
+     * @return string
+     */
     protected function handleFieldMap($bean, $mapping)
     {
         $outArray = array();
@@ -80,6 +85,11 @@ class InsideViewLogicHook
         return $outStr;
     }
 
+    /**
+     * @param $bean
+     * @param $extraUrl
+     * @return string
+     */
     protected function getAccountFrameUrl($bean, $extraUrl)
     {
         $url = self::URL_BASE.'analyseAccount.do?crm_context=account&';
@@ -98,6 +108,11 @@ class InsideViewLogicHook
         return $url;
     }
 
+    /**
+     * @param $bean
+     * @param $extraUrl
+     * @return string
+     */
     protected function getOpportunityFrameUrl($bean, $extraUrl)
     {
         $url = self::URL_BASE.'analyseAccount.do?crm_context=opportunity&';
@@ -110,6 +125,12 @@ class InsideViewLogicHook
         
         return $url;
     }
+
+    /**
+     * @param $bean
+     * @param $extraUrl
+     * @return string
+     */
     protected function getLeadFrameUrl($bean, $extraUrl)
     {
         $url = self::URL_BASE.'analyseAccount.do?crm_context=lead&';
@@ -126,6 +147,12 @@ class InsideViewLogicHook
         
         return $url;
     }
+
+    /**
+     * @param $bean
+     * @param $extraUrl
+     * @return string
+     */
     protected function getContactFrameUrl($bean, $extraUrl)
     {
         $url = self::URL_BASE.'analyseExecutive.do?crm_context=contact&';
@@ -143,6 +170,11 @@ class InsideViewLogicHook
     }
 
 
+    /**
+     * @param $event
+     * @param $args
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function showFrame($event, $args)
     {
         if ($GLOBALS['app']->controller->action != 'DetailView') {

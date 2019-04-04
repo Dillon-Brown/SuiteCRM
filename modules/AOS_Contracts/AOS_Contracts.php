@@ -72,6 +72,10 @@ class AOS_Contracts extends AOS_Contracts_sugar
         self::__construct();
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         if (empty($this->id) || (isset($_POST['duplicateSave']) && $_POST['duplicateSave'] == 'true')) {
@@ -100,6 +104,9 @@ class AOS_Contracts extends AOS_Contracts_sugar
         return $return_id;
     }
 
+    /**
+     * @param string $id
+     */
     public function mark_deleted($id)
     {
         $productQuote = new AOS_Products_Quotes();

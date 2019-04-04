@@ -71,6 +71,9 @@ class AOR_ReportsViewEdit extends ViewEdit
         parent::preDisplay();
     }
 
+    /**
+     * @return array
+     */
     private function getConditionLines()
     {
         if (!$this->bean->id) {
@@ -104,6 +107,9 @@ class AOR_ReportsViewEdit extends ViewEdit
         return $conditions;
     }
 
+    /**
+     * @return array
+     */
     private function getFieldLines()
     {
         if (!$this->bean->id) {
@@ -130,6 +136,9 @@ class AOR_ReportsViewEdit extends ViewEdit
         return $fields;
     }
 
+    /**
+     * @return array
+     */
     private function getChartLines()
     {
         $charts = array();

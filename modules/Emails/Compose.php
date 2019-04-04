@@ -295,6 +295,10 @@ function generateComposeDataPackage($data, $forFullCompose = true)
     }
 }
 
+/**
+ * @param $data
+ * @return array
+ */
 function getQuotesRelatedData($data)
 {
     $return = array();

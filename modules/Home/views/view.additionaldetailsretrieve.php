@@ -118,7 +118,11 @@ class HomeViewAdditionaldetailsretrieve extends SugarView
             }
         }
     }
-    
+
+    /**
+     * @param $moduleName
+     * @return string
+     */
     protected function getAdditionalDetailsMetadataFile(
         $moduleName
         ) {

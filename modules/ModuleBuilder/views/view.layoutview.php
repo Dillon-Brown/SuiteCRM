@@ -102,6 +102,10 @@ class ViewLayoutView extends SugarView
     {
     }
 
+    /**
+     * @param bool $preview
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function display($preview = false)
     {
         global $mod_strings ;

@@ -17,6 +17,11 @@ namespace Cron;
  */
 class DayOfWeekField extends AbstractField
 {
+    /**
+     * @param \DateTime $date
+     * @param string $value
+     * @return bool
+     */
     public function isSatisfiedBy(\DateTime $date, $value)
     {
         if ($value == '?') {
@@ -97,6 +102,11 @@ class DayOfWeekField extends AbstractField
         return $this->isSatisfied($fieldValue, $value);
     }
 
+    /**
+     * @param \DateTime $date
+     * @param bool $invert
+     * @return $this|FieldInterface
+     */
     public function increment(\DateTime $date, $invert = false)
     {
         if ($invert) {
@@ -110,6 +120,10 @@ class DayOfWeekField extends AbstractField
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @return bool
+     */
     public function validate($value)
     {
         $value = $this->convertLiterals($value);
@@ -123,6 +137,10 @@ class DayOfWeekField extends AbstractField
         return true;
     }
 
+    /**
+     * @param $string
+     * @return mixed|string|string[]|null
+     */
     private function convertLiterals($string)
     {
         return str_ireplace(

@@ -186,6 +186,10 @@ class SearchViewMetaDataParser extends ListLayoutMetaDataParser
         $this->implementation->deploy($this->_saved) ;
     }
 
+    /**
+     * @param $viewdefs
+     * @return array
+     */
     private function convertSearchViewToListView($viewdefs)
     {
         $temp = array( ) ;

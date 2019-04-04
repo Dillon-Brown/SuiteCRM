@@ -99,6 +99,10 @@ class TemplateEnum extends TemplateText
             unset($this->action) ;
         }
     }
+
+    /**
+     * @return array|string
+     */
     public function get_xtpl_edit()
     {
         $name = $this->name;
@@ -125,6 +129,9 @@ class TemplateEnum extends TemplateText
         return $returnXTPL;
     }
 
+    /**
+     * @return array|mixed|void
+     */
     public function get_xtpl_search()
     {
         $searchFor = '';
@@ -141,6 +148,9 @@ class TemplateEnum extends TemplateText
         return $returnXTPL;
     }
 
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();
@@ -159,6 +169,9 @@ class TemplateEnum extends TemplateText
         return $def;
     }
 
+    /**
+     * @return string
+     */
     public function get_xtpl_detail()
     {
         $name = $this->name;
@@ -189,6 +202,9 @@ class TemplateEnum extends TemplateText
         return '';
     }
 
+    /**
+     * @param $df
+     */
     public function save($df)
     {
         if (!empty($this->default_value) && is_array($this->default_value)) {

@@ -179,18 +179,27 @@ class Account extends Company implements EmailInterface
         self::__construct();
     }
 
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return $this->name;
     }
 
+    /**
+     * @return SugarBean[]
+     */
     public function get_contacts()
     {
         return $this->get_linked_beans('contacts', 'Contact');
     }
 
 
-
+    /**
+     * @param string $account_id
+     * @param string $case_id
+     */
     public function clear_account_case_relationship($account_id='', $case_id='')
     {
         if (empty($case_id)) {
@@ -252,6 +261,9 @@ class Account extends Company implements EmailInterface
         }
     }
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         $temp_array = parent::get_list_view_data();
@@ -298,6 +310,12 @@ class Account extends Company implements EmailInterface
     }
 
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @param string $relate_link_join
+     * @return string
+     */
     public function create_export_query($order_by, $where, $relate_link_join='')
     {
         $relatedJoins = [];
@@ -361,6 +379,11 @@ class Account extends Company implements EmailInterface
         return $query;
     }
 
+    /**
+     * @param $xtpl
+     * @param $account
+     * @return mixed
+     */
     public function set_notification_body($xtpl, $account)
     {
         $xtpl->assign("ACCOUNT_NAME", $account->name);
@@ -370,6 +393,10 @@ class Account extends Company implements EmailInterface
         return $xtpl;
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -377,6 +404,11 @@ class Account extends Company implements EmailInterface
         }
         return false;
     }
+
+    /**
+     * @param array $type
+     * @return string
+     */
     public function get_unlinked_email_query($type=array())
     {
         return get_unlinked_email_query($type, $this);

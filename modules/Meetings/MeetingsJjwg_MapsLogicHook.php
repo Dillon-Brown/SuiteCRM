@@ -28,6 +28,11 @@ class MeetingsJjwg_MapsLogicHook
     }
 
 
+    /**
+     * @param $bean
+     * @param $event
+     * @param $arguments
+     */
     public function updateMeetingGeocodeInfo(&$bean, $event, $arguments)
     {
         // after_save

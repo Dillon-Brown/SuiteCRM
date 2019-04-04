@@ -53,18 +53,28 @@ class TemplateURL extends TemplateText
     }
     
     public $type='url';
+
+    /**
+     * @return string
+     */
     public function get_html_edit()
     {
         $this->prepare();
         return "<input type='text' name='". $this->name. "' id='".$this->name."' size='".$this->size."' title='{" . strtoupper($this->name) ."_HELP}' value='{". strtoupper($this->name). "}'>";
     }
-    
+
+    /**
+     * @return string
+     */
     public function get_html_detail()
     {
         $xtpl_var = strtoupper($this->name);
         return "<a href='{" . $xtpl_var . "}' target='_blank'>{" . $xtpl_var . "}</a>";
     }
-    
+
+    /**
+     * @return string
+     */
     public function get_xtpl_detail()
     {
         $value = parent::get_xtpl_detail();
@@ -74,6 +84,9 @@ class TemplateURL extends TemplateText
         return $value;
     }
 
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();

@@ -49,6 +49,11 @@ require_once('include/Dashlets/DashletGeneric.php');
 
 class MyCasesDashlet extends DashletGeneric
 {
+    /**
+     * MyCasesDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

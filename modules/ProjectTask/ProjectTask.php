@@ -103,6 +103,10 @@ class ProjectTask extends SugarBean
     /*
      *
      */
+    /**
+     * ProjectTask constructor.
+     * @param bool $init
+     */
     public function __construct($init=true)
     {
         parent::__construct();
@@ -145,6 +149,11 @@ class ProjectTask extends SugarBean
     {
         $this->_skipParentUpdate = $skip;
     }
+
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         //Bug 46012.  When saving new Project Tasks instance in a workflow, make sure we set a project_task_id value
@@ -198,6 +207,9 @@ class ProjectTask extends SugarBean
     /*
      *
      */
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return $this->name;
@@ -205,6 +217,10 @@ class ProjectTask extends SugarBean
 
     /*
      *
+     */
+    /**
+     * @param $depends_on_id
+     * @return string
      */
     public function _get_depends_on_name($depends_on_id)
     {
@@ -222,6 +238,10 @@ class ProjectTask extends SugarBean
         return $return_value;
     }
 
+    /**
+     * @param $project_id
+     * @return string
+     */
     public function _get_project_name($project_id)
     {
         $return_value = '';
@@ -239,6 +259,10 @@ class ProjectTask extends SugarBean
     }
     /*
      *
+     */
+    /**
+     * @param $parent_id
+     * @return string
      */
     public function _get_parent_name($parent_id)
     {
@@ -259,6 +283,10 @@ class ProjectTask extends SugarBean
     /*
      *
      */
+    /**
+     * @param $the_query_string
+     * @return string|void
+     */
     public function build_generic_where_clause($the_query_string)
     {
         $where_clauses = array();
@@ -276,6 +304,10 @@ class ProjectTask extends SugarBean
         return $the_where;
     }
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     public function get_list_view_data()
     {
         global $action, $currentModule, $focus, $current_module_strings, $app_list_strings, $timedate, $locale;
@@ -315,6 +347,10 @@ class ProjectTask extends SugarBean
         return $task_fields;
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -322,6 +358,10 @@ class ProjectTask extends SugarBean
         }
         return false;
     }
+
+    /**
+     * @return string[]
+     */
     public function listviewACLHelper()
     {
         $array_assign = parent::listviewACLHelper();
@@ -371,6 +411,12 @@ class ProjectTask extends SugarBean
         return $array_assign;
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @param string $relate_link_join
+     * @return string
+     */
     public function create_export_query($order_by, $where, $relate_link_join='')
     {
         $custom_join = $this->getCustomJoin(true, true, $where);
@@ -682,6 +728,13 @@ class ProjectTask extends SugarBean
     }
 }
 
+/**
+ * @param $focus
+ * @param $field
+ * @param $value
+ * @param $view
+ * @return mixed|string
+ */
 function getUtilizationDropdown($focus, $field, $value, $view)
 {
     global $app_list_strings;

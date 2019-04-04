@@ -135,6 +135,13 @@ class UndeployedSubpanelImplementation extends AbstractMetaDataImplementation im
         $this->module->saveAvailibleSubpanelDef($this->_subpanelName, $outputDefs) ;
     }
 
+    /**
+     * @param string $view
+     * @param string $moduleName
+     * @param string $packageName
+     * @param string $type
+     * @return string|void
+     */
     public function getFileName($view, $moduleName, $packageName, $type = MB_CUSTOMMETADATALOCATION)
     {
         // TODO: Implement getFileName() method.

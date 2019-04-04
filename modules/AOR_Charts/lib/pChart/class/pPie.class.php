@@ -36,6 +36,11 @@
      public $LabelPos = "" ;
 
      /* Class creator */
+     /**
+      * pPie constructor.
+      * @param $Object
+      * @param $pDataObject
+      */
      public function pPie($Object, $pDataObject)
      {
          /* Cache the pChart object reference */
@@ -46,6 +51,12 @@
      }
 
      /* Draw a pie chart */
+     /**
+      * @param $X
+      * @param $Y
+      * @param string $Format
+      * @return int
+      */
      public function draw2DPie($X, $Y, $Format="")
      {
          $Radius		= isset($Format["Radius"]) ? $Format["Radius"] : 60;
@@ -342,6 +353,12 @@
      }
 
      /* Draw a 3D pie chart */
+     /**
+      * @param $X
+      * @param $Y
+      * @param string $Format
+      * @return int
+      */
      public function draw3DPie($X, $Y, $Format="")
      {
          /* Rendering layout */
@@ -832,6 +849,12 @@
      }
 
      /* Draw the legend of pie chart */
+     /**
+      * @param $X
+      * @param $Y
+      * @param string $Format
+      * @return int
+      */
      public function drawPieLegend($X, $Y, $Format="")
      {
          $FontName		= isset($Format["FontName"]) ? $Format["FontName"] : $this->pChartObject->FontName;
@@ -940,6 +963,10 @@
      }
 
      /* Set the color of the specified slice */
+     /**
+      * @param $SliceID
+      * @param string $Format
+      */
      public function setSliceColor($SliceID, $Format="")
      {
          $R		= isset($Format["R"]) ? $Format["R"] : 0;
@@ -954,6 +981,18 @@
      }
 
      /* Internally used compute the label positions */
+     /**
+      * @param $X
+      * @param $Y
+      * @param $Label
+      * @param $Angle
+      * @param $Settings
+      * @param $Stacked
+      * @param int $Xc
+      * @param int $Yc
+      * @param int $Radius
+      * @param bool $Reversed
+      */
      public function writePieLabel($X, $Y, $Label, $Angle, $Settings, $Stacked, $Xc=0, $Yc=0, $Radius=0, $Reversed=false)
      {
          $LabelOffset	= 30;
@@ -1011,6 +1050,12 @@
      }
 
      /* Internally used to shift label positions */
+     /**
+      * @param $StartAngle
+      * @param $EndAngle
+      * @param $Offset
+      * @param $Reversed
+      */
      public function shift($StartAngle, $EndAngle, $Offset, $Reversed)
      {
          if ($Reversed) {
@@ -1026,6 +1071,9 @@
      }
 
      /* Internally used to write the re-computed labels */
+     /**
+      * @return int
+      */
      public function writeShiftedLabels()
      {
          if ($this->LabelPos == "") {
@@ -1052,6 +1100,12 @@
      }
 
      /* Draw a ring chart */
+     /**
+      * @param $X
+      * @param $Y
+      * @param string $Format
+      * @return int
+      */
      public function draw2DRing($X, $Y, $Format="")
      {
          $OuterRadius	= isset($Format["Radius"]) ? $Format["Radius"] : 60;
@@ -1319,6 +1373,12 @@
      }
 
      /* Draw a 3D ring chart */
+     /**
+      * @param $X
+      * @param $Y
+      * @param string $Format
+      * @return int
+      */
      public function draw3DRing($X, $Y, $Format="")
      {
          $OuterRadius	= isset($Format["OuterRadius"]) ? $Format["OuterRadius"] : 100;
@@ -1803,6 +1863,10 @@
      }
 
      /* Serialize an array */
+     /**
+      * @param $Data
+      * @return float|string
+      */
      public function arraySerialize($Data)
      {
          $Result = "";
@@ -1818,6 +1882,10 @@
      }
 
      /* Reverse an array */
+     /**
+      * @param $Plots
+      * @return string
+      */
      public function arrayReverse($Plots)
      {
          $Result = "";
@@ -1831,6 +1899,13 @@
      }
 
      /* Remove unused series & values */
+     /**
+      * @param $Data
+      * @param $Palette
+      * @param $DataSerie
+      * @param $AbscissaSerie
+      * @return array
+      */
      public function clean0Values($Data, $Palette, $DataSerie, $AbscissaSerie)
      {
          $NewPalette = "";

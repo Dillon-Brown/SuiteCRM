@@ -72,6 +72,11 @@ class OAuthToken extends SugarBean
     const ACCESS = 2;
     const INVALID = 3;
 
+    /**
+     * OAuthToken constructor.
+     * @param string $token
+     * @param string $secret
+     */
     public function __construct($token='', $secret='')
     {
         parent::__construct();
@@ -135,6 +140,10 @@ class OAuthToken extends SugarBean
         return new self($t, $s);
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         $this->token_ts = time();
@@ -303,6 +312,14 @@ class OAuthToken extends SugarBean
     }
 }
 
+/**
+ * @param $focus
+ * @param $field
+ * @param $value
+ * @param string $view
+ * @return string
+ * @throws Exception
+ */
 function displayDateFromTs($focus, $field, $value, $view='ListView')
 {
     $field = strtoupper($field);

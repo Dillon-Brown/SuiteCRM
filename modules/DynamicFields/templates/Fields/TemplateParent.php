@@ -49,7 +49,10 @@ class TemplateParent extends TemplateEnum
 {
     public $max_size = 25;
     public $type='parent';
-    
+
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();
@@ -60,7 +63,10 @@ class TemplateParent extends TemplateEnum
         $def['studio'] = 'visible';
         return $def;
     }
-    
+
+    /**
+     * @param DynamicField $df
+     */
     public function delete($df)
     {
         parent::delete($df);
@@ -73,7 +79,10 @@ class TemplateParent extends TemplateEnum
         $parent_id->name = 'parent_id';
         $parent_id->delete($df);
     }
-    
+
+    /**
+     * @param DynamicField $df
+     */
     public function save($df)
     {
         $this->ext1 = 'parent_type_display';
@@ -99,7 +108,11 @@ class TemplateParent extends TemplateEnum
         $parent_id->importable = $this->importable;
         $parent_id->save($df);
     }
-    
+
+    /**
+     * @param $table
+     * @return string
+     */
     public function get_db_add_alter_table($table)
     {
         return '';

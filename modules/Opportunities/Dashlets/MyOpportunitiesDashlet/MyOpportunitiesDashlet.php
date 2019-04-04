@@ -50,6 +50,11 @@ require_once('include/Dashlets/DashletGeneric.php');
 
 class MyOpportunitiesDashlet extends DashletGeneric
 {
+    /**
+     * MyOpportunitiesDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings, $dashletData;
@@ -87,6 +92,10 @@ class MyOpportunitiesDashlet extends DashletGeneric
     //4.5.0g fix for upgrade issue where user_preferences table still refer to column as 'amount'
 
     //Bug fix for dashlet issue with amount_us and amount fields.
+    /**
+     * @param array $lvsParams
+     * @param null $id
+     */
     public function process($lvsParams = array(), $id = null)
     {
 //     	if(!empty($this->displayColumns)) {

@@ -60,6 +60,10 @@ class ManyToManyRelationship extends AbstractRelationship
      * Constructor
      * @param array $definition Parameters passed in as array with keys defined in parent::keys
      */
+    /**
+     * ManyToManyRelationship constructor.
+     * @param $definition
+     */
     public function __construct($definition)
     {
         parent::__construct($definition) ;
@@ -74,6 +78,9 @@ class ManyToManyRelationship extends AbstractRelationship
      * The format is that of TO_MODULE => relationship, FROM_MODULE, FROM_MODULES_SUBPANEL, mimicking the format in the layoutdefs.php
      * @return array    An array of subpanel definitions, keyed by module
      */
+    /**
+     * @return array
+     */
     public function buildSubpanelDefinitions()
     {
         $subpanelDefinitions = array( ) ;
@@ -87,6 +94,9 @@ class ManyToManyRelationship extends AbstractRelationship
 
     /*
      * @return array    An array of field definitions, ready for the vardefs, keyed by module
+     */
+    /**
+     * @return array
      */
     public function buildVardefs()
     {
@@ -108,6 +118,9 @@ class ManyToManyRelationship extends AbstractRelationship
     
     /*
      * @return array    An array of relationship metadata definitions
+     */
+    /**
+     * @return array
      */
     public function buildRelationshipMetaData()
     {

@@ -62,6 +62,12 @@ class MBRelationship
      * @param string $path      The base path of the module directory within the ModuleBuilder package directory
      * @param string $key_name  The Fully Qualified Name for this module - that is, $packageName_$name
      */
+    /**
+     * MBRelationship constructor.
+     * @param $name
+     * @param $path
+     * @param $key_name
+     */
     public function __construct($name, $path, $key_name)
     {
         $this->implementation = new UndeployedRelationships($path) ;
@@ -81,6 +87,9 @@ class MBRelationship
      * At 5.1 this has been changed to the "new" format of lhs_module, rhs_module, lhs_subpanel, rhs_subpanel, label
      * @return AbstractRelationship
      */
+    /**
+     * @return ActivitiesRelationship|ManyToManyRelationship|ManyToOneRelationship|OneToManyRelationship|OneToOneRelationship
+     */
     public function addFromPost()
     {
         return $this->implementation->addFromPost() ;
@@ -89,11 +98,18 @@ class MBRelationship
     /*
      * New function to replace the old MBModule subpanel property - now we obtain the 'subpanels' (actually related modules) from the relationships object
      */
+    /**
+     * @return array
+     */
     public function getRelationshipList()
     {
         return $this->implementation->getRelationshipList() ;
     }
 
+    /**
+     * @param $relationshipName
+     * @return bool|mixed
+     */
     public function get($relationshipName)
     {
         return $this->implementation->get($relationshipName) ;
@@ -116,6 +132,10 @@ class MBRelationship
      * Original MBRelationships could only support one relationship between this module and any other
      * @param array $rel    Relationship definition in the old format (defined by self::oldFormatKeys)
      */
+    /**
+     * @param $rel
+     * @return ActivitiesRelationship|ManyToManyRelationship|ManyToOneRelationship|OneToManyRelationship|OneToOneRelationship
+     */
     public function add($rel)
     {
         // convert old format definition to new format
@@ -134,6 +154,9 @@ class MBRelationship
         return $relationship;
     }
 
+    /**
+     * @param $name
+     */
     public function delete($name)
     {
         $this->implementation->delete($name) ;
@@ -145,11 +168,17 @@ class MBRelationship
         $this->implementation->save() ;
     }
 
+    /**
+     * @param $path
+     */
     public function build($path)
     {
         $this->implementation->build() ;
     }
 
+    /**
+     * @param $installDef
+     */
     public function addInstallDefs(&$installDef)
     {
         $this->implementation->addInstallDefs($installDef) ;

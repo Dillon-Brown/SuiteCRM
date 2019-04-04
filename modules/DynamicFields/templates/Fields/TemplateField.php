@@ -121,6 +121,9 @@ class TemplateField
     /*
     	HTML FUNCTIONS
     	*/
+    /**
+     * @return string
+     */
     public function get_html()
     {
         $view = $this->view;
@@ -135,6 +138,10 @@ class TemplateField
 
         }
     }
+
+    /**
+     * @param $values
+     */
     public function set($values)
     {
         foreach ($values as $name=>$value) {
@@ -142,25 +149,41 @@ class TemplateField
         }
     }
 
+    /**
+     * @return string
+     */
     public function get_html_edit()
     {
         return 'not implemented';
     }
 
+    /**
+     * @return string
+     */
     public function get_html_list()
     {
         return $this->get_html_detail();
     }
 
+    /**
+     * @return string
+     */
     public function get_html_detail()
     {
         return 'not implemented';
     }
 
+    /**
+     * @return string
+     */
     public function get_html_search()
     {
         return $this->get_html_edit();
     }
+
+    /**
+     * @return string
+     */
     public function get_html_label()
     {
         $label =  "{MOD." .$this->vname . "}";
@@ -192,6 +215,10 @@ class TemplateField
     	XTPL FUNCTIONS
     	*/
 
+    /**
+     * @param bool $bean
+     * @return mixed|string|void
+     */
     public function get_xtpl($bean = false)
     {
         if ($bean) {
@@ -210,16 +237,25 @@ class TemplateField
         }
     }
 
+    /**
+     * @return string
+     */
     public function get_xtpl_edit()
     {
         return '/*not implemented*/';
     }
 
+    /**
+     * @return mixed
+     */
     public function get_xtpl_list()
     {
         return get_xtpl_detail();
     }
 
+    /**
+     * @return string
+     */
     public function get_xtpl_detail()
     {
         return '/*not implemented*/';
@@ -230,6 +266,9 @@ class TemplateField
         //return get_xtpl_edit();
     }
 
+    /**
+     * @return bool
+     */
     public function is_required()
     {
         if ($this->required) {
@@ -245,6 +284,9 @@ class TemplateField
     	DB FUNCTIONS
     	*/
 
+    /**
+     * @return string
+     */
     public function get_db_type()
     {
         if (!empty($this->type)) {
@@ -257,6 +299,10 @@ class TemplateField
         return " $type({$this->len})";
     }
 
+    /**
+     * @param bool $modify
+     * @return string
+     */
     public function get_db_default($modify=false)
     {
         $GLOBALS['log']->debug('get_db_default(): default_value='.$this->default_value);
@@ -279,6 +325,10 @@ class TemplateField
      * So if not called by Studio we want to return NULL if required=true (because we are changing FROM this setting)
      */
 
+    /**
+     * @param bool $modify
+     * @return string
+     */
     public function get_db_required($modify=false)
     {
         //		$GLOBALS['log']->debug('get_db_required required='.$this->required." and ".(($modify)?"true":"false")." and ".print_r($this->new_field_definition,true));
@@ -332,6 +382,10 @@ class TemplateField
         return DBManagerFactory::getInstance()->getHelper()->addColumnSQL($table, $this->get_field_def(), true);
     }
 
+    /**
+     * @param $table
+     * @return string
+     */
     public function get_db_delete_alter_table($table)
     {
         return DBManagerFactory::getInstance()->getHelper()->dropColumnSQL(
@@ -354,6 +408,9 @@ class TemplateField
     /*
      * BEAN FUNCTIONS
      *
+     */
+    /**
+     * @return array
      */
     public function get_field_def()
     {
@@ -392,6 +449,10 @@ class TemplateField
         return $array;
     }
 
+    /**
+     * @param $value
+     * @return bool
+     */
     protected function convertBooleanValue($value)
     {
         if ($value === 'true' || $value === '1' || $value === 1) {
@@ -404,6 +465,9 @@ class TemplateField
 
 
     /* if the field is duplicate merge enabled this function will return the vardef entry for the same.
+     */
+    /**
+     * @param $def
      */
     public function get_dup_merge_def(&$def)
     {
@@ -545,11 +609,17 @@ class TemplateField
     {
     }
 
+    /**
+     * @return array
+     */
     public function get_additional_defs()
     {
         return array();
     }
 
+    /**
+     * @param $df
+     */
     public function delete($df)
     {
         $df->deleteField($this);

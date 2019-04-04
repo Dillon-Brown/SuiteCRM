@@ -58,6 +58,10 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
      * Automatically loads in any saved relationships
      * @param string $path  The pathname of the base module directory
      */
+    /**
+     * UndeployedRelationships constructor.
+     * @param $path
+     */
     public function __construct($path)
     {
         $this->basepath = $path ;
@@ -74,6 +78,10 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
     /*
      * Find all modules, deployed and undeployed, that can participate in a relationship
      * @return array    Array of [$module][$subpanel]
+     */
+    /**
+     * @param bool $includeActivitiesSubmodules
+     * @return array
      */
     public static function findRelatableModules($includeActivitiesSubmodules = true)
     {
@@ -102,6 +110,10 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
      * that the admin may move them around or otherwise edit them before the module is deployed
      * @param AbstractRelationship $relationship    The relationship to add
      */
+    /**
+     * @param $relationship
+     * @throws Exception
+     */
     public function add($relationship)
     {
         parent::add($relationship) ;
@@ -112,6 +124,10 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
      * Delete a relationship by name
      * In future, if we need to actually track deleted relationships then just call $relationship->delete() instead
      * @param string $relationshipName  The unique name for this relationship, as returned by $relationship->getName()
+     */
+    /**
+     * @param $relationshipName
+     * @throws Exception
      */
     public function delete($relationshipName)
     {
@@ -142,6 +158,10 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
      * @param array definition  The 5.0 relationship definition
      * @return array            The definition updated to 5.1 format
      */
+    /**
+     * @param $definition
+     * @return mixed
+     */
     protected function _updateRelationshipDefinition($definition)
     {
         if (isset($definition [ 'relate' ])) {
@@ -163,6 +183,9 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
      * Implementation of getAllRelationships() for Undeployed modules
      * The set of all relevant relationships for undeployed modules is the superset of that for deployed modules and all of the relationships known to ModuleBuilder
      * @return array Set of all relevant relationships
+     */
+    /**
+     * @return array
      */
     protected function getAllRelationships()
     {
@@ -192,6 +215,9 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
      * This function is called from the view when constructing a new relationship
      * @param AbstractRelationship $relationship The relationship to be enforced
      */
+    /**
+     * @param $relationship
+     */
     public function enforceRelationshipOnly($relationship)
     {
         // if we already have a relationship between this lhs_module and this rhs_module then set RelationshipOnly flag
@@ -210,6 +236,12 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
     /*
      * Translate the set of relationship objects into files that the Module Loader can work with
      * @param $basepath string Pathname of the directory to contain the build
+     */
+    /**
+     * @param null $basepath
+     * @param null $installDefPrefix
+     * @param null $relationships
+     * @return array|void
      */
     public function build($basepath = null, $installDefPrefix = null, $relationships = null)
     {
@@ -270,6 +302,9 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
      * Required by MBModule
      * @param reference installDef  Reference to the set of installDefs to which this relationship's installDefs should be added
      */
+    /**
+     * @param $installDef
+     */
     public function addInstallDefs(&$installDef)
     {
         foreach ($this->installDefs as $name => $def) {
@@ -281,11 +316,21 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
         }
     }
 
+    /**
+     * @param $relationship
+     * @return bool
+     * @throws Exception
+     */
     private function addFieldsToUndeployedLayouts($relationship)
     {
         return $this->updateUndeployedLayout($relationship, true) ;
     }
 
+    /**
+     * @param $relationship
+     * @return bool
+     * @throws Exception
+     */
     private function removeFieldsFromUndeployedLayouts($relationship)
     {
         return $this->updateUndeployedLayout($relationship, false) ;
@@ -317,6 +362,12 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
      * @param AbstractRelationship $relationship The relationship whose fields we are to add or remove
      * @param boolean $actionAdd True if we are to add; false if to remove
      * return null
+     */
+    /**
+     * @param $relationship
+     * @param bool $actionAdd
+     * @return bool
+     * @throws Exception
      */
     private function updateUndeployedLayout($relationship, $actionAdd = true)
     {
@@ -357,6 +408,13 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
      * @param string $relationshipName      Name of this relationship (for uniqueness)
      * @param array $layoutAdditions  An array of module => fieldname
      * return null
+     */
+    /**
+     * @param $basepath
+     * @param $dummy
+     * @param $relationshipName
+     * @param $layoutAdditions
+     * @return array
      */
     protected function saveFieldsToLayouts($basepath, $dummy, $relationshipName, $layoutAdditions)
     {

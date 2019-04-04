@@ -264,6 +264,9 @@ LOGOUTRESPONSE;
      *
      * @return string Cause
      */
+    /**
+     * @return string
+     */
     public function getError()
     {
         return $this->_error;

@@ -60,6 +60,13 @@ class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation im
       * @throws Exception Thrown if the provided view doesn't exist for this module
       */
 
+    /**
+     * UndeployedMetaDataImplementation constructor.
+     * @param $view
+     * @param $moduleName
+     * @param $packageName
+     * @throws Exception
+     */
     public function __construct($view, $moduleName, $packageName)
     {
 
@@ -137,6 +144,9 @@ class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation im
         $this->_history = new History($this->getFileNameInPackage($view, $moduleName, $packageName, MB_HISTORYMETADATALOCATION)) ;
     }
 
+    /**
+     * @return string
+     */
     public function getLanguage()
     {
         return $this->_packageName . $this->_moduleName ;
@@ -145,6 +155,11 @@ class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation im
     /*
      * Deploy a layout
      * @param array defs    Layout definition in the same format as received by the constructor
+     */
+    /**
+     * @param $defs
+     * @return mixed|void
+     * @throws Exception
      */
     public function deploy($defs)
     {
@@ -216,7 +231,10 @@ class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation im
                 return $module->getModuleDir() . '/metadata/' . $filenames [ $view ] . '.php' ;
         }
     }
-    
+
+    /**
+     * @return mixed
+     */
     public function getModuleDir()
     {
         return $this->module->key_name;

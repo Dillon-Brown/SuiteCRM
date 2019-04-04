@@ -174,6 +174,9 @@ class Currency extends SugarBean
         return '';
     }
 
+    /**
+     * @param $list_form
+     */
     public function list_view_parse_additional_sections(&$list_form)
     {
         global $isMerge;
@@ -184,6 +187,10 @@ class Currency extends SugarBean
         return $list_form;
     }
 
+    /**
+     * @param $name
+     * @return string
+     */
     public function retrieve_id_by_name($name)
     {
         $nameQuoted = $this->db->quote($name);
@@ -198,6 +205,12 @@ class Currency extends SugarBean
         return '';
     }
 
+    /**
+     * @param int $id
+     * @param bool $encode
+     * @param bool $deleted
+     * @return $this|SugarBean|null
+     */
     public function retrieve($id = -99, $encode = true, $deleted = true)
     {
         if ($id == '-99') {
@@ -242,12 +255,21 @@ class Currency extends SugarBean
         }
         return $this->symbol;
     }
+
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         $this->conversion_rate = format_number($this->conversion_rate, 10, 10);
         $data = parent::get_list_view_data();
         return $data;
     }
+
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         sugar_cache_clear('currency_list');
@@ -425,7 +447,12 @@ function format_number($amount, $round = null, $decimals = null, $params = array
 } //end function format_number
 
 
-
+/**
+ * @param $amount
+ * @param $symbol
+ * @param $symbol_space
+ * @return string
+ */
 function format_place_symbol($amount, $symbol, $symbol_space)
 {
     if ($symbol != '') {
@@ -438,6 +465,10 @@ function format_place_symbol($amount, $symbol, $symbol_space)
     return $amount;
 }
 
+/**
+ * @param $string
+ * @return float|string
+ */
 function unformat_number($string)
 {
     // Just in case someone passes an already unformatted number through.
@@ -476,6 +507,11 @@ function unformat_number($string)
 }
 
 // deprecated use format_number() above
+/**
+ * @param $amount
+ * @param bool $for_display
+ * @return string|void
+ */
 function format_money($amount, $for_display = true)
 {
     // This function formats an amount for display.
@@ -555,6 +591,13 @@ function toString($echo = true)
     return $s;
 }
 
+/**
+ * @param $focus
+ * @param string $field
+ * @param string $value
+ * @param string $view
+ * @return string
+ */
 function getCurrencyDropDown($focus, $field='currency_id', $value='', $view='DetailView')
 {
     $view = ucfirst($view);
@@ -615,6 +658,13 @@ function getCurrencyDropDown($focus, $field='currency_id', $value='', $view='Det
     return $currency->name;
 }
 
+/**
+ * @param $focus
+ * @param string $field
+ * @param string $value
+ * @param string $view
+ * @return string
+ */
 function getCurrencyNameDropDown($focus, $field='currency_name', $value='', $view='DetailView')
 {
     if ($view == 'EditView' || $view == 'MassUpdate' || $view == 'QuickCreate') {
@@ -660,6 +710,13 @@ function getCurrencyNameDropDown($focus, $field='currency_name', $value='', $vie
     return $currency->name;
 }
 
+/**
+ * @param $focus
+ * @param string $field
+ * @param string $value
+ * @param string $view
+ * @return string
+ */
 function getCurrencySymbolDropDown($focus, $field='currency_name', $value='', $view='DetailView')
 {
     if ($view == 'EditView' || $view == 'MassUpdate' || $view == 'QuickCreate') {

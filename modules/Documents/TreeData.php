@@ -46,6 +46,11 @@ require_once('include/ytree/Node.php');
 
 
 //function returns an array of objects of Node type.
+/**
+ * @param $params
+ * @param bool $get_array
+ * @return string
+ */
 function get_node_data($params, $get_array=false)
 {
     $ret=array();
@@ -69,7 +74,11 @@ function get_node_data($params, $get_array=false)
  *
  *
  */
- function get_category_nodes($href_string)
+/**
+ * @param $href_string
+ * @return array
+ */
+function get_category_nodes($href_string)
  {
      $nodes=array();
      global $mod_strings;
@@ -118,7 +127,13 @@ function get_node_data($params, $get_array=false)
 
      return $nodes;
  }
- 
+
+/**
+ * @param $cat_id
+ * @param $subcat_id
+ * @param bool $href
+ * @return array
+ */
 function get_documents($cat_id, $subcat_id, $href=true)
 {
     $nodes=array();

@@ -47,6 +47,9 @@ class TemplateMultiEnum extends TemplateEnum
 {
     public $type = 'text';
 
+    /**
+     * @return string
+     */
     public function get_html_edit()
     {
         $this->prepare();
@@ -55,6 +58,9 @@ class TemplateMultiEnum extends TemplateEnum
         return "<input type='hidden' name='". $this->name. "' value='0'><select name='". $this->name . "[]' size='5' title='{" . $xtpl_var ."_HELP}' MULTIPLE=true>{OPTIONS_".$xtpl_var. "}</select>";
     }
 
+    /**
+     * @return array|string
+     */
     public function get_xtpl_edit()
     {
         $name = $this->name;
@@ -84,10 +90,18 @@ class TemplateMultiEnum extends TemplateEnum
     public function prepSave()
     {
     }
+
+    /**
+     * @return array|string
+     */
     public function get_xtpl_list()
     {
         return $this->get_xtpl_detail();
     }
+
+    /**
+     * @return array|string
+     */
     public function get_xtpl_detail()
     {
         $name = $this->name;
@@ -119,6 +133,9 @@ class TemplateMultiEnum extends TemplateEnum
         return $returnXTPL;
     }
 
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();
@@ -150,11 +167,18 @@ class TemplateMultiEnum extends TemplateEnum
         return $def;
     }
 
+    /**
+     * @param bool $modify
+     * @return string
+     */
     public function get_db_default($modify = false)
     {
         return '';
     }
 
+    /**
+     * @param $df
+     */
     public function save($df)
     {
         if (isset($this->default)) {

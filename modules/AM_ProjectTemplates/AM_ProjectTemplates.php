@@ -99,6 +99,11 @@ class AM_ProjectTemplates extends AM_ProjectTemplates_sugar
         }
         self::__construct();
     }
+
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         $focus = $this;

@@ -51,12 +51,20 @@ require_once('modules/DynamicFields/templates/Fields/TemplateField.php');
 class TemplateEncrypt extends TemplateField
 {
     public $type='encrypt';
+
+    /**
+     * @param DynamicField $df
+     */
     public function save($df)
     {
         $this->type = 'encrypt';
         $this->ext3 = 'varchar';
         parent::save($df);
     }
+
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $vardef = parent::get_field_def();

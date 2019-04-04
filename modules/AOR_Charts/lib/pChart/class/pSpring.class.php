@@ -83,6 +83,9 @@
      }
 
      /* Set default links options */
+     /**
+      * @param string $Settings
+      */
      public function setLinkDefaults($Settings="")
      {
          if (isset($Settings["R"])) {
@@ -100,6 +103,9 @@
      }
 
      /* Set default links options */
+     /**
+      * @param string $Settings
+      */
      public function setLabelsSettings($Settings="")
      {
          if (isset($Settings["Type"])) {
@@ -133,6 +139,12 @@
      }
 
      /* Set link properties */
+     /**
+      * @param $FromNode
+      * @param $ToNode
+      * @param $Settings
+      * @return int
+      */
      public function linkProperties($FromNode, $ToNode, $Settings)
      {
          if (!isset($this->Data[$FromNode])) {
@@ -163,6 +175,9 @@
          $this->Links[$ToNode][$FromNode]["Ticks"] = $Ticks;
      }
 
+     /**
+      * @param string $Settings
+      */
      public function setNodeDefaults($Settings="")
      {
          if (isset($Settings["R"])) {
@@ -219,6 +234,11 @@
      }
 
      /* Add a node */
+     /**
+      * @param $NodeID
+      * @param string $Settings
+      * @return int
+      */
      public function addNode($NodeID, $Settings="")
      {
          /* if the node already exists, ignore */
@@ -284,6 +304,10 @@
      }
 
      /* Set color attribute for a list of nodes */
+     /**
+      * @param $Nodes
+      * @param string $Settings
+      */
      public function setNodesColor($Nodes, $Settings="")
      {
          if (is_array($Nodes)) {
@@ -354,12 +378,20 @@
      }
 
      /* Returns all the nodes details */
+     /**
+      * @return string
+      */
      public function dumpNodes()
      {
          return($this->Data);
      }
 
      /* Check if a connection exists and create it if required */
+     /**
+      * @param $SourceID
+      * @param $TargetID
+      * @return bool
+      */
      public function checkConnection($SourceID, $TargetID)
      {
          if (isset($this->Data[$SourceID]["Connections"])) {
@@ -372,6 +404,12 @@
          $this->Data[$SourceID]["Connections"][] = $TargetID;
      }
      /* Get the median linked nodes position */
+     /**
+      * @param $Key
+      * @param $X
+      * @param $Y
+      * @return array
+      */
      public function getMedianOffset($Key, $X, $Y)
      {
          $Cpt = 1;
@@ -388,6 +426,10 @@
      }
 
      /* Return the ID of the attached partner with the biggest weight */
+     /**
+      * @param $Key
+      * @return mixed|string
+      */
      public function getBiggestPartner($Key)
      {
          if (!isset($this->Data[$Key]["Connections"])) {
@@ -406,6 +448,9 @@
      }
 
      /* Do the initial node positions computing pass */
+     /**
+      * @param $Algorithm
+      */
      public function firstPass($Algorithm)
      {
          $CenterX = ($this->X2 - $this->X1) / 2 + $this->X1;
@@ -633,6 +678,9 @@
          }
      }
 
+     /**
+      * @return float|int
+      */
      public function lastPass()
      {
          /* Put everything inside the graph area */
@@ -752,6 +800,11 @@
      }
 
      /* Create the encoded string */
+     /**
+      * @param $Object
+      * @param string $Settings
+      * @return array
+      */
      public function drawSpring($Object, $Settings="")
      {
          $this->pChartObject = $Object;
@@ -946,12 +999,26 @@
      }
 
      /* Return the distance between two points */
+     /**
+      * @param $X1
+      * @param $Y1
+      * @param $X2
+      * @param $Y2
+      * @return float
+      */
      public function getDistance($X1, $Y1, $X2, $Y2)
      {
          return (sqrt(($X2-$X1)*($X2-$X1)+($Y2-$Y1)*($Y2-$Y1)));
      }
 
      /* Return the angle made by a line and the X axis */
+     /**
+      * @param $X1
+      * @param $Y1
+      * @param $X2
+      * @param $Y2
+      * @return float|int
+      */
      public function getAngle($X1, $Y1, $X2, $Y2)
      {
          $Opposite = $Y2 - $Y1;
@@ -963,6 +1030,17 @@
          return(360-abs($Angle));
      }
 
+     /**
+      * @param $X1
+      * @param $Y1
+      * @param $X2
+      * @param $Y2
+      * @param $X3
+      * @param $Y3
+      * @param $X4
+      * @param $Y4
+      * @return bool
+      */
      public function intersect($X1, $Y1, $X2, $Y2, $X3, $Y3, $X4, $Y4)
      {
          $A = (($X3 * $Y4 - $X4 * $Y3) * ($X1 - $X2) - ($X1 * $Y2 - $X2 * $Y1) * ($X3 - $X4));

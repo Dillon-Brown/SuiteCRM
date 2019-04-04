@@ -83,11 +83,19 @@ class Audit extends SugarBean
 
     public $new_schema = true;
 
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return $this->name;
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @return string|void
+     */
     public function create_export_query($order_by, $where)
     {
     }
@@ -100,10 +108,16 @@ class Audit extends SugarBean
     {
     }
 
+    /**
+     * @return bool|void
+     */
     public function fill_in_additional_parent_fields()
     {
     }
 
+    /**
+     * @return array|void
+     */
     public function get_list_view_data()
     {
     }
@@ -112,6 +126,10 @@ class Audit extends SugarBean
     {
     }
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     public function get_audit_list()
     {
         global $focus, $genericAssocFieldsArray, $moduleAssocFieldsArray, $current_user, $timedate, $app_strings;
@@ -194,6 +212,11 @@ class Audit extends SugarBean
         return $audit_list;
     }
 
+    /**
+     * @param $fieldName
+     * @param $fieldValue
+     * @return string
+     */
     public function getAssociatedFieldName($fieldName, $fieldValue)
     {
         global $focus,  $genericAssocFieldsArray, $moduleAssocFieldsArray;

@@ -39,6 +39,10 @@ class jjwg_Areas extends jjwg_Areas_sugar
      */
     public $centroid = null;
 
+    /**
+     * jjwg_Areas constructor.
+     * @param bool $init
+     */
     public function __construct($init=true)
     {
         parent::__construct();
@@ -379,6 +383,11 @@ class jjwg_Areas extends jjwg_Areas_sugar
         return false;
     }
 
+    /**
+     * @param $point
+     * @param $vertices
+     * @return bool
+     */
     public function point_on_vertex($point, $vertices)
     {
         foreach ($vertices as $vertex) {
@@ -388,6 +397,10 @@ class jjwg_Areas extends jjwg_Areas_sugar
         }
     }
 
+    /**
+     * @param $pointString
+     * @return array
+     */
     public function point_string_to_coordinates($pointString)
     {
 

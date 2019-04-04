@@ -65,6 +65,11 @@ function perform_aos_save($focus)
     }
 }
 
+/**
+ * @param $focus
+ * @param $fieldName
+ * @return bool
+ */
 function amountToConvertIsDatabaseValue($focus, $fieldName)
 {
     if (isset($focus->fetched_row)

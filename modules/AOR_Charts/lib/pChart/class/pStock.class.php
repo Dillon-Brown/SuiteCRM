@@ -22,6 +22,11 @@
      public $pDataObject;
 
      /* Class creator */
+     /**
+      * pStock constructor.
+      * @param $pChartObject
+      * @param $pDataObject
+      */
      public function pStock($pChartObject, $pDataObject)
      {
          $this->pChartObject = $pChartObject;
@@ -29,6 +34,10 @@
      }
 
      /* Draw a stock chart */
+     /**
+      * @param string $Format
+      * @return int
+      */
      public function drawStockChart($Format="")
      {
          $SerieOpen		= isset($Format["SerieOpen"]) ? $Format["SerieOpen"] : "Open";

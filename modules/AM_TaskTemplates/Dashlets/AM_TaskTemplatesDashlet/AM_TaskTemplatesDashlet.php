@@ -54,6 +54,11 @@ require_once('modules/AM_TaskTemplates/AM_TaskTemplates.php');
 
 class AM_TaskTemplatesDashlet extends DashletGeneric
 {
+    /**
+     * AM_TaskTemplatesDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

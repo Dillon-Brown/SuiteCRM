@@ -683,6 +683,9 @@ function create_newsletter_steps()
     return  $steps;
 }
 
+/**
+ * @return mixed
+ */
 function create_campaign_steps()
 {
     global $mod_strings;
@@ -692,6 +695,9 @@ function create_campaign_steps()
     return  $steps;
 }
 
+/**
+ * @return mixed
+ */
 function create_email_steps()
 {
     global $mod_strings;
@@ -703,6 +709,11 @@ function create_email_steps()
 }
 
 
+/**
+ * @param $steps
+ * @param $ss
+ * @return string
+ */
 function create_wiz_step_divs($steps, $ss)
 {
     $step_html = '';
@@ -718,6 +729,17 @@ function create_wiz_step_divs($steps, $ss)
     return $step_html;
 }
 
+/**
+ * @param $steps
+ * @param $type
+ * @param $mrkt_string
+ * @param $summ_url
+ * @param null $view
+ * @param null $campaign_id
+ * @param null $marketing_id
+ * @param null $template_id
+ * @return DotListWizardMenu|string
+ */
 function create_wiz_menu_items($steps, $type, $mrkt_string, $summ_url, $view = null, $campaign_id = null, $marketing_id = null, $template_id = null)
 {
     global $mod_strings;

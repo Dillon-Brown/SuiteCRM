@@ -47,6 +47,13 @@ class WebToLeadFormBuilder
 
     // ---- html outputs ----
 
+    /**
+     * @param $suiteGrp1Js
+     * @param $webPostUrl
+     * @param $webFormHeader
+     * @param $webFormDescription
+     * @return string
+     */
     private static function getFormStartHTML($suiteGrp1Js, $webPostUrl, $webFormHeader, $webFormDescription)
     {
         $formSel = 'form#WebToLeadForm';
@@ -86,6 +93,16 @@ HTML;
         return $html;
     }
 
+    /**
+     * @param $webFormFooter
+     * @param $webFormSubmitLabel
+     * @param $webFormCampaign
+     * @param $webRedirectURL
+     * @param $webAssignedUser
+     * @param $booleanFields
+     * @param $moduleDir
+     * @return string
+     */
     private static function getFormFooterHTML($webFormFooter, $webFormSubmitLabel, $webFormCampaign, $webRedirectURL, $webAssignedUser, $booleanFields, $moduleDir)
     {
         $webFormCampaignInput = $webFormCampaign ? "<input type='hidden' id='campaign_id' name='campaign_id' value='$webFormCampaign'>" : '';
@@ -110,6 +127,10 @@ HTML;
         return $html;
     }
 
+    /**
+     * @param $webFormRequiredFieldsMsg
+     * @return string
+     */
     private static function getFormFinishHTML($webFormRequiredFieldsMsg)
     {
         $html = <<<HTML
@@ -145,22 +166,34 @@ HTML;
         return $html;
     }
 
+    /**
+     * @return string
+     */
     private static function getRowStartHTML()
     {
         return '<div class="row">';
     }
 
+    /**
+     * @return string
+     */
     private static function getRowFinishHTML()
     {
         return '    <div class="clear">&nbsp;</div>
                 </div>';
     }
 
+    /**
+     * @return string
+     */
     private static function getColFieldStartHTML()
     {
         return '<div class="col">';
     }
 
+    /**
+     * @return string
+     */
     private static function getColFieldFinishHTML()
     {
         return '</div>';
@@ -168,12 +201,21 @@ HTML;
 
     // -- fields
 
+    /**
+     * @param $fieldLabel
+     * @param $fieldRequired
+     * @param $webRequiredSymbol
+     * @return string
+     */
     private static function getFieldLabelHTML($fieldLabel, $fieldRequired, $webRequiredSymbol)
     {
         $html = '<label>' . $fieldLabel . ($fieldRequired ? "<span class='required'>$webRequiredSymbol</span>" : '') . '</label>';
         return $html;
     }
 
+    /**
+     * @return string
+     */
     private static function getFieldEmptyHTML()
     {
         $html = '&nbsp;';
@@ -182,6 +224,16 @@ HTML;
 
     // enums
 
+    /**
+     * @param $lead
+     * @param $fieldName
+     * @param $appListStringsFieldOptions
+     * @param $fieldRequired
+     * @param $fieldLabel
+     * @param $webRequiredSymbol
+     * @param $colsField
+     * @return string
+     */
     private static function getFieldEnumHTML($lead, $fieldName, $appListStringsFieldOptions, $fieldRequired, $fieldLabel, $webRequiredSymbol, $colsField)
     {
         $html = '';
@@ -200,6 +252,12 @@ HTML;
         return $html;
     }
 
+    /**
+     * @param $fieldName
+     * @param $leadOptions
+     * @param $fieldRequired
+     * @return string
+     */
     private static function getFieldEnumMultiSelectHTML($fieldName, $leadOptions, $fieldRequired)
     {
         $_required = $fieldRequired ? ' required' : '';
@@ -207,6 +265,14 @@ HTML;
         return $html;
     }
 
+    /**
+     * @param $appListStringsFieldOptions
+     * @param $lead
+     * @param $fieldName
+     * @param $colsField
+     * @param $fieldRequired
+     * @return string
+     */
     private static function getFieldEnumRadioGroupHTML($appListStringsFieldOptions, $lead, $fieldName, $colsField, $fieldRequired)
     {
         $_required = $fieldRequired ? ' required' : '';
@@ -226,6 +292,12 @@ HTML;
         return $html;
     }
 
+    /**
+     * @param $fieldName
+     * @param $leadOptions
+     * @param $fieldRequired
+     * @return string
+     */
     private static function getFieldEnumSelectHTML($fieldName, $leadOptions, $fieldRequired)
     {
         $_required = $fieldRequired ? ' required' : '';
@@ -235,6 +307,13 @@ HTML;
 
     // bool
 
+    /**
+     * @param $fieldName
+     * @param $fieldRequired
+     * @param $fieldLabel
+     * @param $webRequiredSymbol
+     * @return string
+     */
     private static function getFieldBoolHTML($fieldName, $fieldRequired, $fieldLabel, $webRequiredSymbol)
     {
         $_required = $fieldRequired ? ' required' : '';
@@ -245,6 +324,13 @@ HTML;
 
     // date
 
+    /**
+     * @param $fieldName
+     * @param $fieldRequired
+     * @param $fieldLabel
+     * @param $webRequiredSymbol
+     * @return string
+     */
     private static function getFieldDateHTML($fieldName, $fieldRequired, $fieldLabel, $webRequiredSymbol)
     {
         $_required = $fieldRequired ? ' required' : '';
@@ -281,6 +367,13 @@ HTML;
 
     // text
 
+    /**
+     * @param $fieldName
+     * @param $fieldLabel
+     * @param $fieldRequired
+     * @param $webRequiredSymbol
+     * @return string
+     */
     private static function getFieldTextHTML($fieldName, $fieldLabel, $fieldRequired, $webRequiredSymbol)
     {
         $_required = $fieldRequired ? ' required' : '';
@@ -291,6 +384,13 @@ HTML;
 
     // relate
 
+    /**
+     * @param $fieldName
+     * @param $fieldLabel
+     * @param $fieldRequired
+     * @param $webRequiredSymbol
+     * @return string
+     */
     private static function getFieldRelateHTML($fieldName, $fieldLabel, $fieldRequired, $webRequiredSymbol)
     {
         $_required = $fieldRequired ? ' required' : '';
@@ -346,6 +446,11 @@ HTML;
 
     // ----------------
 
+    /**
+     * @param $request
+     * @param $formCols
+     * @return int
+     */
     private static function getFormTwoColumns($request, $formCols)
     {
         $colsFirst = isset($request[$formCols[0]]) ? $request[$formCols[0]] : null;
@@ -365,6 +470,10 @@ HTML;
         return $columns;
     }
 
+    /**
+     * @param $boolFields
+     * @return string
+     */
     private static function getBooleanFields($boolFields)
     {
         $boolean_fields='';
@@ -376,6 +485,12 @@ HTML;
         return $boolean_fields;
     }
 
+    /**
+     * @param $lead
+     * @param $colsField
+     * @param $requiredFields
+     * @return array
+     */
     private static function getArrayOfFieldInfo($lead, $colsField, &$requiredFields)
     {
         $field_vname= preg_replace('/:$/', '', translate($lead->field_defs[$colsField]['vname'], $lead->module_dir));
@@ -414,6 +529,26 @@ HTML;
 
     // --------------- generate form ------------------
 
+    /**
+     * @param $request
+     * @param $lead
+     * @param $moduleDir
+     * @param $siteURL
+     * @param $webPostURL
+     * @param $webFormHeader
+     * @param $webFormDescription
+     * @param $appListStrings
+     * @param $webRequiredSymbol
+     * @param $webFormFooter
+     * @param $webFormSubmitLabel
+     * @param $webFormCampaign
+     * @param $webRedirectURL
+     * @param $webAssignedUser
+     * @param $webFormRequiredFieldsMsg
+     * @param array $formCols
+     * @return string
+     * @throws \SuiteCRM\StateSaverException
+     */
     public static function generate(
         $request,
                                     $lead,

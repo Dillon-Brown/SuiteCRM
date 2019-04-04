@@ -24,6 +24,11 @@
      public $MOD43;
 
      /* Class creator */
+     /**
+      * pBarcode39 constructor.
+      * @param string $BasePath
+      * @param bool $EnableMOD43
+      */
      public function pBarcode39($BasePath="", $EnableMOD43=false)
      {
          $this->MOD43  = $EnableMOD43;
@@ -48,6 +53,11 @@
      }
 
      /* Return the projected size of a barcode */
+     /**
+      * @param $TextString
+      * @param string $Format
+      * @return array
+      */
      public function getSize($TextString, $Format="")
      {
          $Angle		= isset($Format["Angle"]) ? $Format["Angle"] : 0;
@@ -85,6 +95,10 @@
      }
 
      /* Create the encoded string */
+     /**
+      * @param $Value
+      * @return string
+      */
      public function encode39($Value)
      {
          $this->Result = "100101101101"."0";
@@ -113,6 +127,13 @@
      }
 
      /* Create the encoded string */
+     /**
+      * @param $Object
+      * @param $Value
+      * @param $X
+      * @param $Y
+      * @param string $Format
+      */
      public function draw($Object, $Value, $X, $Y, $Format="")
      {
          $this->pChartObject = $Object;
@@ -182,6 +203,10 @@
          }
      }
 
+     /**
+      * @param $string
+      * @return bool|string
+      */
      public function checksum($string)
      {
          $checksum = 0;
@@ -195,14 +220,32 @@
          return substr($charset, ($checksum % 43), 1);
      }
 
+     /**
+      * @param $value
+      * @param $NbChar
+      * @return bool|string
+      */
      public function left($value, $NbChar)
      {
          return substr($value, 0, $NbChar);
      }
+
+     /**
+      * @param $value
+      * @param $NbChar
+      * @return bool|string
+      */
      public function right($value, $NbChar)
      {
          return substr($value, strlen($value)-$NbChar, $NbChar);
      }
+
+     /**
+      * @param $value
+      * @param $Depart
+      * @param $NbChar
+      * @return bool|string
+      */
      public function mid($value, $Depart, $NbChar)
      {
          return substr($value, $Depart-1, $NbChar);

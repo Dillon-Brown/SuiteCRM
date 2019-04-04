@@ -241,6 +241,9 @@ require_once 'include/HTTP_WebDAV_Server/Server.php';
         }
 
 
+        /**
+         * @return bool
+         */
         public function GET()
         {
             return true;

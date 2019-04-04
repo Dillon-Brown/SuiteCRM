@@ -116,6 +116,11 @@ class Reminder_Invitee extends Basic
         return $ret;
     }
 
+    /**
+     * @param $module
+     * @param $moduleId
+     * @return string
+     */
     private static function getInviteeName($module, $moduleId)
     {
         $retValue = "unknown";

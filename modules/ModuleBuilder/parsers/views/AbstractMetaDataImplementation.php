@@ -493,6 +493,9 @@ abstract class AbstractMetaDataImplementation
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function getModuleDir()
     {
         return $this->module->key_name;

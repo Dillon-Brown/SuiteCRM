@@ -186,6 +186,11 @@ class Call extends SugarBean
 
     // save date_end by calculating user input
     // this is for calendar
+    /**
+     * @param bool $check_notify
+     * @return string
+     * @throws Exception
+     */
     public function save($check_notify = false)
     {
         global $timedate;
@@ -312,11 +317,20 @@ class Call extends SugarBean
     }
 
 
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return "$this->name";
     }
 
+    /**
+     * @param $order_by
+     * @param $where
+     * @param int $show_deleted
+     * @return string
+     */
     public function create_list_query($order_by, $where, $show_deleted=0)
     {
         $custom_join = $this->getCustomJoin();
@@ -378,6 +392,12 @@ class Call extends SugarBean
         return $query;
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @param string $relate_link_join
+     * @return string
+     */
     public function create_export_query($order_by, $where, $relate_link_join='')
     {
         $custom_join = $this->getCustomJoin(true, true, $where);
@@ -498,6 +518,10 @@ class Call extends SugarBean
     }
 
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     public function get_list_view_data()
     {
         $call_fields = $this->get_list_view_array();
@@ -569,6 +593,11 @@ class Call extends SugarBean
         return $call_fields;
     }
 
+    /**
+     * @param $xtpl
+     * @param $call
+     * @return mixed
+     */
     public function set_notification_body($xtpl, $call)
     {
         global $sugar_config;
@@ -608,6 +637,9 @@ class Call extends SugarBean
     }
 
 
+    /**
+     * @return array
+     */
     public function get_call_users()
     {
         $template = new User();
@@ -632,6 +664,10 @@ class Call extends SugarBean
     }
 
 
+    /**
+     * @param $user
+     * @return array
+     */
     public function get_invite_calls(&$user)
     {
         $template = $this;
@@ -661,6 +697,10 @@ class Call extends SugarBean
     }
 
 
+    /**
+     * @param $user
+     * @param $status
+     */
     public function set_accept_status(&$user, $status)
     {
         if ($user->object_name == 'User') {
@@ -684,7 +724,9 @@ class Call extends SugarBean
     }
 
 
-
+    /**
+     * @return array|User[]
+     */
     public function get_notification_recipients()
     {
         if ($this->special_notification) {
@@ -739,6 +781,10 @@ class Call extends SugarBean
         return $list;
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -747,6 +793,9 @@ class Call extends SugarBean
         return false;
     }
 
+    /**
+     * @return string[]
+     */
     public function listviewACLHelper()
     {
         $array_assign = parent::listviewACLHelper();
@@ -815,6 +864,10 @@ class Call extends SugarBean
         return $array_assign;
     }
 
+    /**
+     * @param bool $is_update
+     * @param array $exclude
+     */
     public function save_relationship_changes($is_update, $exclude = array())
     {
         if (empty($this->in_workflow)) {
@@ -833,6 +886,9 @@ class Call extends SugarBean
         parent::save_relationship_changes($is_update, $exclude);
     }
 
+    /**
+     * @return string
+     */
     public function getDefaultStatus()
     {
         $def = $this->field_defs['status'];
@@ -848,6 +904,9 @@ class Call extends SugarBean
         return '';
     }
 
+    /**
+     * @param $id
+     */
     public function mark_deleted($id)
     {
         require_once("modules/Calendar/CalendarUtils.php");

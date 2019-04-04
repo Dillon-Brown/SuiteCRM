@@ -40,6 +40,11 @@ require_once('modules/AOS_Contracts/AOS_Contracts.php');
 
 class AOS_ContractsDashlet extends DashletGeneric
 {
+    /**
+     * AOS_ContractsDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

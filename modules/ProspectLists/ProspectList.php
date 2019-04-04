@@ -117,11 +117,20 @@ class ProspectList extends SugarBean
 
     public $new_schema = true;
 
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return "$this->name";
     }
 
+    /**
+     * @param $order_by
+     * @param $where
+     * @param int $show_deleted
+     * @return string
+     */
     public function create_list_query($order_by, $where, $show_deleted = 0)
     {
         $custom_join = $this->getCustomJoin();
@@ -161,6 +170,11 @@ class ProspectList extends SugarBean
     }
 
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @return string
+     */
     public function create_export_query($order_by, $where)
     {
         $query = "SELECT
@@ -186,6 +200,10 @@ class ProspectList extends SugarBean
         return $query;
     }
 
+    /**
+     * @param $record_id
+     * @return string
+     */
     public function create_export_members_query($record_id)
     {
         global $beanList, $beanFiles;
@@ -314,6 +332,10 @@ FROM prospect_lists_prospects plp
         return $query;
     }
 
+    /**
+     * @param bool $is_update
+     * @param array $exclude
+     */
     public function save_relationship_changes($is_update, $exclude = array())
     {
         parent::save_relationship_changes($is_update, $exclude);
@@ -328,6 +350,11 @@ FROM prospect_lists_prospects plp
         }
     }
 
+    /**
+     * @param $prospect_list_id
+     * @param $link_ids
+     * @param $link_name
+     */
     public function set_prospect_relationship($prospect_list_id, &$link_ids, $link_name)
     {
         $link_field = sprintf("%s_id", $link_name);
@@ -337,6 +364,11 @@ FROM prospect_lists_prospects plp
         }
     }
 
+    /**
+     * @param $prospect_list_id
+     * @param $link_id
+     * @param $link_name
+     */
     public function set_prospect_relationship_single($prospect_list_id, $link_id, $link_name)
     {
         $link_field = sprintf("%s_id", $link_name);
@@ -345,6 +377,11 @@ FROM prospect_lists_prospects plp
     }
 
 
+    /**
+     * @param $prospect_list_id
+     * @param $link_id
+     * @param $link_name
+     */
     public function clear_prospect_relationship($prospect_list_id, $link_id, $link_name)
     {
         $link_field = sprintf("%s_id", $link_name);
@@ -356,6 +393,9 @@ FROM prospect_lists_prospects plp
     }
 
 
+    /**
+     * @param int $id
+     */
     public function mark_relationships_deleted($id)
     {
     }
@@ -371,11 +411,18 @@ FROM prospect_lists_prospects plp
     }
 
 
+    /**
+     * @param $fromid
+     * @param $toid
+     */
     public function update_currency_id($fromid, $toid)
     {
     }
 
 
+    /**
+     * @return int
+     */
     public function get_entry_count()
     {
         $query = "SELECT count(*) AS num FROM prospect_lists_prospects WHERE prospect_list_id='$this->id' AND deleted = '0'";
@@ -390,6 +437,9 @@ FROM prospect_lists_prospects plp
     }
 
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         $temp_array = $this->get_list_view_array();
@@ -421,11 +471,18 @@ FROM prospect_lists_prospects plp
         return $the_where;
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         return parent::save($check_notify);
     }
 
+    /**
+     * @param string $id
+     */
     public function mark_deleted($id)
     {
         $query = "UPDATE prospect_lists_prospects SET deleted = 1 WHERE prospect_list_id = '{$id}' ";
@@ -433,6 +490,10 @@ FROM prospect_lists_prospects plp
         return parent::mark_deleted($id);
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {

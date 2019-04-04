@@ -59,6 +59,11 @@ class FieldViewer
         self::__construct();
     }
 
+    /**
+     * @param $vardef
+     * @return mixed|string
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function getLayout($vardef)
     {
         if (empty($vardef['type'])) {

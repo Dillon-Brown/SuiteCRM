@@ -49,6 +49,11 @@ class ParserSearchFields extends ModuleBuilderParser
     public $searchFields;
     public $packageKey;
 
+    /**
+     * ParserSearchFields constructor.
+     * @param $moduleName
+     * @param string $packageName
+     */
     public function __construct($moduleName, $packageName='')
     {
         $this->moduleName = $moduleName;
@@ -77,6 +82,10 @@ class ParserSearchFields extends ModuleBuilderParser
         self::__construct($moduleName, $packageName);
     }
 
+    /**
+     * @param $name
+     * @param $searchField
+     */
     public function addSearchField($name, $searchField)
     {
         if (empty($name) || empty($searchField) || !is_array($searchField)) {
@@ -87,6 +96,9 @@ class ParserSearchFields extends ModuleBuilderParser
         $this->searchFields[$key][$name] = $searchField;
     }
 
+    /**
+     * @param $name
+     */
     public function removeSearchField($name)
     {
         $key = isset($this->packageKey) ? $this->packageKey . '_' . $this->moduleName : $this->moduleName;
@@ -96,6 +108,9 @@ class ParserSearchFields extends ModuleBuilderParser
         }
     }
 
+    /**
+     * @return array
+     */
     public function getSearchFields()
     {
         $searchFields = array();
@@ -110,6 +125,9 @@ class ParserSearchFields extends ModuleBuilderParser
         return $searchFields;
     }
 
+    /**
+     * @param $searchFields
+     */
     public function saveSearchFields($searchFields)
     {
         if (!empty($this->packageName)) { //we are in Module builder

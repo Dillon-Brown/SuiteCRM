@@ -62,6 +62,11 @@ class AOS_Line_Item_Groups extends AOS_Line_Item_Groups_sugar
     }
 
 
+    /**
+     * @param $post_data
+     * @param $parent
+     * @param string $key
+     */
     public function save_groups($post_data, $parent, $key = '')
     {
         $groups = array();
@@ -113,6 +118,10 @@ class AOS_Line_Item_Groups extends AOS_Line_Item_Groups_sugar
         $productQuote->save_lines($post_data, $parent, $groups, 'service_');
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         require_once('modules/AOS_Products_Quotes/AOS_Utils.php');

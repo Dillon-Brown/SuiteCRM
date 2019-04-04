@@ -91,6 +91,11 @@ class SecurityGroupUserRelationship extends SugarBean
         }
     }
 
+    /**
+     * @param $order_by
+     * @param $where
+     * @return string
+     */
     public function create_list_query(&$order_by, &$where)
     {
         $query = "SELECT id, first_name, last_name, user_name FROM users ";

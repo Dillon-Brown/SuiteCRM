@@ -163,6 +163,10 @@ $xtpl->out("main");
 
 //This is a generic method to allow for returning all of the sub-classes of a particular class
 //This is used to allow for us to pass in person and get [Lead,Contact,Prospect,...]
+/**
+ * @param $superclass
+ * @return array
+ */
 function getListOfExtendingClasses($superclass)
 {
     $subclasses = array();

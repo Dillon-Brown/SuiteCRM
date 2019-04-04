@@ -82,6 +82,10 @@ class AbstractRelationships
      * @param boolean $includeActivitiesSubmodules True if the list should include Calls, Meetings etc; false if they should be replaced by the parent, Activities
      * @return array    Array of [$module][$subpanel]
      */
+    /**
+     * @param bool $includeActivitiesSubmodules
+     * @return array
+     */
     public static function findRelatableModules($includeActivitiesSubmodules = true)
     {
         $relatableModules = array( ) ;
@@ -109,6 +113,10 @@ class AbstractRelationships
         return $relatableModules ;
     }
 
+    /**
+     * @param $filename
+     * @return bool
+     */
     public static function validSubpanel($filename)
     {
         if (! file_exists($filename)) {
@@ -122,6 +130,9 @@ class AbstractRelationships
     /*
      * Get a list of all relationships (which have not been deleted)
      * @return array    Array of relationship names, ready for use in get()
+     */
+    /**
+     * @return array
      */
     public function getRelationshipList()
     {
@@ -139,6 +150,10 @@ class AbstractRelationships
      * @param string $relationshipName  The unique name for this relationship, as returned by $relationship->getName()
      * @return AbstractRelationship or false if $relationshipName is not in this set of relationships
      */
+    /**
+     * @param $relationshipName
+     * @return bool|mixed
+     */
     public function get($relationshipName)
     {
         if (isset($this->relationships [ $relationshipName ])) {
@@ -152,6 +167,9 @@ class AbstractRelationships
      * If a relationship_name is provided, and that relationship is not read only, then modify the existing relationship, overriding the definition with any AbstractRelationship::$definitionkeys entries set in the $_REQUEST
      * Otherwise, create and add a new relationship with the information in the $_REQUEST
      * @return AbstractRelationship
+     */
+    /**
+     * @return ActivitiesRelationship|ManyToManyRelationship|ManyToOneRelationship|OneToManyRelationship|OneToOneRelationship
      */
     public function addFromPost()
     {
@@ -184,6 +202,9 @@ class AbstractRelationships
      * Add a relationship to the set
      * @param AbstractRelationship $relationship    The relationship to add
      */
+    /**
+     * @param $relationship
+     */
     public function add($relationship)
     {
         $name = $this->getUniqueName($relationship) ;
@@ -196,6 +217,10 @@ class AbstractRelationships
      * The saved relationships are stored as AbstractRelationship objects, which isn't the same as the old MBRelationships definition
      * @param string $basepath  Base directory in which to store the relationships information
      * @return Array of AbstractRelationship objects
+     */
+    /**
+     * @param $basepath
+     * @return array
      */
     protected function _load($basepath)
     {
@@ -224,6 +249,10 @@ class AbstractRelationships
      * Save the set of relationships to a file
      * @param string $basepath  Base directory in which to store the relationships information
      */
+    /**
+     * @param $relationships
+     * @param $basepath
+     */
     protected function _save($relationships, $basepath)
     {
         $GLOBALS [ 'log' ]->info(get_class($this) . ": saving relationships to " . $basepath . '/relationships.php') ;
@@ -251,6 +280,9 @@ class AbstractRelationships
      * relationship (products-products) uses it (and there it makes no difference from our POV) and we don't use it when creating new ones
      * @return array Array of $relationshipName => $relationshipDefinition as an array
      */
+    /**
+     * @return mixed
+     */
     protected function getDeployedRelationships()
     {
         $db = DBManagerFactory::getInstance() ;
@@ -270,6 +302,10 @@ class AbstractRelationships
      * We make the name unique by simply adding on a suffix until we achieve uniqueness
      * @param AbstractRelationship The relationship object
      * @return string A globally unique relationship name
+     */
+    /**
+     * @param $relationship
+     * @return string
      */
     protected function getUniqueName($relationship)
     {
@@ -314,6 +350,12 @@ class AbstractRelationships
      * @param string $basepath          Pathname of the directory to contain the build
      * @param string $installDefPrefix  Pathname prefix for the installdefs, for example for ModuleBuilder use "<basepath>/SugarModules"
      * @param array $relationships      Relationships to implement
+     */
+    /**
+     * @param $basepath
+     * @param $installDefPrefix
+     * @param $relationships
+     * @return array
      */
     protected function build($basepath, $installDefPrefix, $relationships)
     {
@@ -365,6 +407,13 @@ class AbstractRelationships
      * @param string $relationshipName      Name of this relationship (for uniqueness)
      * @param array $labelDefinitions       Array of System label => Display label pairs
      * @return null Nothing to be added to the installdefs for an undeployed module
+     */
+    /**
+     * @param $basepath
+     * @param $installDefPrefix
+     * @param $relationshipName
+     * @param $labelDefinitions
+     * @return array
      */
     protected function saveLabels($basepath, $installDefPrefix, $relationshipName, $labelDefinitions)
     {
@@ -432,6 +481,13 @@ class AbstractRelationships
      * @param array $relationshipMetaData   Set of metadata definitions in the form $relationshipMetaData[$relationshipName]
      * @return array $installDefs           Set of new installDefs
      */
+    /**
+     * @param $basepath
+     * @param $installDefPrefix
+     * @param $relationshipName
+     * @param $relationshipMetaData
+     * @return array
+     */
     protected function saveRelationshipMetaData($basepath, $installDefPrefix, $relationshipName, $relationshipMetaData)
     {
         mkdir_recursive("$basepath/relationships") ;
@@ -452,6 +508,13 @@ class AbstractRelationships
      * @param $installDefPrefix             Pathname prefix for the installdefs, for example for ModuleBuilder use "<basepath>/SugarModules"
      * @param array $subpanelDefinitions    Set of subpanel definitions in the form $subpanelDefinitions[$for_module][]
      * @return array $installDefs           Set of new installDefs
+     */
+    /**
+     * @param $basepath
+     * @param $installDefPrefix
+     * @param $relationshipName
+     * @param $subpanelDefinitions
+     * @return mixed
      */
     protected function saveSubpanelDefinitions($basepath, $installDefPrefix, $relationshipName, $subpanelDefinitions)
     {
@@ -489,6 +552,13 @@ class AbstractRelationships
      * @param string $relationshipName      Name of this relationship (for uniqueness)
      * @param array $linkFieldDefinitions   Set of link field definitions in the form $linkFieldDefinitions[$for_module]
      * @return array $installDefs           Set of new installDefs
+     */
+    /**
+     * @param $basepath
+     * @param $installDefPrefix
+     * @param $relationshipName
+     * @param $vardefs
+     * @return mixed
      */
     protected function saveVardefs($basepath, $installDefPrefix, $relationshipName, $vardefs)
     {
@@ -539,6 +609,10 @@ class AbstractRelationships
      * and ModuleBuilder doesn't have any accessor methods based around keys, so we must convert keynames to packagenames
      * @param $deployedName Name of the module in the deployed form - that is, keyname_modulename or modulename
      * @return array ('moduleName'=>name, 'packageName'=>package) if undeployed, ('moduleName'=>name) if deployed
+     */
+    /**
+     * @param $deployedName
+     * @return array
      */
     public static function parseDeployedModuleName($deployedName)
     {

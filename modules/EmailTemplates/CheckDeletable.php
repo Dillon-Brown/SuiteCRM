@@ -78,6 +78,10 @@ if ($_REQUEST['from'] == 'DetailView') {
     echo '';
 }
 
+/**
+ * @param $focus
+ * @return bool
+ */
 function check_email_template_in_use($focus)
 {
     if ($focus->is_used_by_email_marketing()) {

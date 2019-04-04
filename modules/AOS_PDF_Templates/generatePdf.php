@@ -172,6 +172,14 @@ if ($task == 'pdf' || $task == 'emailpdf') {
 }
 
 
+/**
+ * @param $text
+ * @param $lineItemsGroups
+ * @param $lineItems
+ * @param string $element
+ * @return bool|string
+ * @throws Exception
+ */
 function populate_group_lines($text, $lineItemsGroups, $lineItems, $element = 'table')
 {
     $firstValue = '';
@@ -260,6 +268,13 @@ function populate_group_lines($text, $lineItemsGroups, $lineItems, $element = 't
     return $text;
 }
 
+/**
+ * @param $text
+ * @param $lineItems
+ * @param string $element
+ * @return string
+ * @throws Exception
+ */
 function populate_product_lines($text, $lineItems, $element = 'tr')
 {
     $firstValue = '';
@@ -356,6 +371,13 @@ function populate_product_lines($text, $lineItems, $element = 'tr')
     return $text;
 }
 
+/**
+ * @param $text
+ * @param $lineItems
+ * @param string $element
+ * @return mixed|string
+ * @throws Exception
+ */
 function populate_service_lines($text, $lineItems, $element = 'tr')
 {
     $firstValue = '';

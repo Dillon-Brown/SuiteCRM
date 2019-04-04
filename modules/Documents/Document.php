@@ -123,6 +123,10 @@ class Document extends File
     }
 
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         if (empty($this->doc_type)) {
@@ -219,11 +223,17 @@ class Document extends File
         return parent:: save($check_notify);
     }
 
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return "$this->document_name";
     }
 
+    /**
+     * @return |null
+     */
     public function is_authenticated()
     {
         if (!isset($this->authenticated)) {
@@ -338,11 +348,20 @@ class Document extends File
         }
     }
 
+    /**
+     * @param $list_form
+     */
     public function list_view_parse_additional_sections(&$list_form/*, $xTemplateSection*/)
     {
         return $list_form;
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @param string $relate_link_join
+     * @return string
+     */
     public function create_export_query($order_by, $where, $relate_link_join = '')
     {
         $custom_join = $this->getCustomJoin(true, true, $where);
@@ -370,6 +389,9 @@ class Document extends File
         return $query;
     }
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         global $current_language;
@@ -439,6 +461,10 @@ class Document extends File
     }
 
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -452,6 +478,11 @@ class Document extends File
     }
 
     //static function.
+
+    /**
+     * @param $doc_id
+     * @return |null
+     */
     public function get_document_name($doc_id)
     {
         if (empty($doc_id)) {

@@ -225,6 +225,17 @@ EOD;
         //   return $this->getTitle('<div align="center"></div>') . '<div align="center">' . $returnStr . '</div>'. $this->processAutoRefresh();
     }
 
+    /**
+     * @param array $datay
+     * @param array $targets
+     * @param null $campaign_id
+     * @param string $cache_file_name
+     * @param bool $refresh
+     * @param string $marketing_id
+     * @param bool $is_dashlet
+     * @param string $dashlet_id
+     * @return array|bool|string
+     */
     protected function constructQuery($datay= array(), $targets=array(), $campaign_id = null, $cache_file_name='a_file', $refresh=false, $marketing_id='', $is_dashlet=false, $dashlet_id='')
     {
         //global $app_strings,$mod_strings, $current_module_strings, $charset, $lang, $app_list_strings, $current_language,$sugar_config;
@@ -327,6 +338,12 @@ EOD;
         return $chartData;
     }
 
+    /**
+     * @param $data
+     * @param $currency_symbol
+     * @param $thousands_symbol
+     * @return mixed
+     */
     protected function prepareChartData($data, $currency_symbol, $thousands_symbol)
     {
         //Use the  lead_source to categorise the data for the charts

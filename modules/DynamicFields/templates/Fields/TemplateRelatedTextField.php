@@ -51,7 +51,10 @@ class TemplateRelatedTextField extends TemplateText
     public $type = 'relate';
     //ext1 is the name field
     //ext2 is the related module
-    
+
+    /**
+     * @return string
+     */
     public function get_html_edit()
     {
         $this->prepare();
@@ -62,6 +65,9 @@ class TemplateRelatedTextField extends TemplateText
         return "<input type='text' name='$name' id='$name' size='".$this->size."' readonly value='$value_name'><input type='button' onclick='open_popup(\"{". strtoupper($this->name). "_MODULE}\", 600, 400,\" \", true, false, {ENCODED_". strtoupper($this->name). "_POPUP_REQUEST_DATA})' type='button'  class='button' value='{APP.LBL_SELECT_BUTTON_LABEL}' ><input type='hidden' name='$id' value='$value_id'>";
     }
 
+    /**
+     * @return string
+     */
     public function get_html_detail()
     {
         $name = $this->name .'_name';
@@ -71,7 +77,10 @@ class TemplateRelatedTextField extends TemplateText
         
         return "<a href='index.php?module=$this->ext2&action=DetailView&record={$value_id}'>{$value_name}</a>" ;
     }
-    
+
+    /**
+     * @return string
+     */
     public function get_html_list()
     {
         if (isset($this->bean)) {
@@ -82,6 +91,9 @@ class TemplateRelatedTextField extends TemplateText
         return '{'. strtoupper($name) . '}';
     }
 
+    /**
+     * @return string
+     */
     public function get_html_search()
     {
         $searchable=array();
@@ -94,6 +106,9 @@ class TemplateRelatedTextField extends TemplateText
         return $this->get_html_edit();
     }
 
+    /**
+     * @return array|mixed|void
+     */
     public function get_xtpl_search()
     {
         $searchable=array();
@@ -140,6 +155,9 @@ class TemplateRelatedTextField extends TemplateText
     }
 
 
+    /**
+     * @return array|string
+     */
     public function get_xtpl_edit()
     {
         global $beanList;
@@ -192,7 +210,10 @@ class TemplateRelatedTextField extends TemplateText
         
         return $returnXTPL;
     }
-    
+
+    /**
+     * @return array|string
+     */
     public function get_xtpl_detail()
     {
         return $this->get_xtpl_edit();
@@ -201,7 +222,10 @@ class TemplateRelatedTextField extends TemplateText
     public function get_related_info()
     {
     }
-    
+
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();
@@ -266,6 +290,9 @@ class TemplateRelatedTextField extends TemplateText
         }
     }
 
+    /**
+     * @param DynamicField $df
+     */
     public function save($df)
     {
         // create the new ID field associated with this relate field - this will hold the id of the related record
@@ -334,17 +361,29 @@ class TemplateRelatedTextField extends TemplateText
             }
         }
     }
-    
+
+    /**
+     * @param $table
+     * @return string
+     */
     public function get_db_add_alter_table($table)
     {
         return "";
     }
-    
+
+    /**
+     * @param $table
+     * @return string
+     */
     public function get_db_delete_alter_table($table)
     {
         return "";
     }
-    
+
+    /**
+     * @param $table
+     * @return array|string
+     */
     public function get_db_modify_alter_table($table)
     {
         return "";

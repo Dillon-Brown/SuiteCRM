@@ -553,6 +553,20 @@ class FP_eventsController extends SugarController
     }
 
     //handles sending the emails
+
+    /**
+     * @param $emailTo
+     * @param $emailSubject
+     * @param $emailToname
+     * @param $emailBody
+     * @param $altemailBody
+     * @param SugarBean|null $relatedBean
+     * @param array $attachments
+     * @return bool
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
+     */
     public function sendEmail($emailTo, $emailSubject, $emailToname, $emailBody, $altemailBody, SugarBean $relatedBean = null, $attachments = array())
     {
         $emailObj = new Email();

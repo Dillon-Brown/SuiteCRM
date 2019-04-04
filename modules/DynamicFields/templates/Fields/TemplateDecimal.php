@@ -68,6 +68,9 @@ class TemplateDecimal extends TemplateFloat
     }
 
 
+    /**
+     * @return string
+     */
     public function get_db_type()
     {
         if (empty($this->len)) {

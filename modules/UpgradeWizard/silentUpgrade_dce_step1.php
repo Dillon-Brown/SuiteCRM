@@ -63,6 +63,10 @@ function prepSystemForUpgradeSilent()
 }
 
 //local function for clearing cache
+/**
+ * @param $thedir
+ * @param $extension
+ */
 function clearCacheSU($thedir, $extension)
 {
     if ($current = @opendir($thedir)) {
@@ -153,6 +157,9 @@ function checkResourceSettings()
 
 
 //rebuild all relationships...
+/**
+ * @param string $pre_path
+ */
 function rebuildRelations($pre_path = '')
 {
     $_REQUEST['silent'] = true;
@@ -242,6 +249,9 @@ function merge_passwordsetting($sugar_config, $sugar_version)
     return false;
 }
 
+/**
+ * @param array $defaultRoles
+ */
 function addDefaultModuleRoles($defaultRoles = array())
 {
     foreach ($defaultRoles as $roleName=>$role) {
@@ -262,6 +272,12 @@ function addDefaultModuleRoles($defaultRoles = array())
     }
 }
 
+/**
+ * @param $argv
+ * @param $usage_dce
+ * @param $usage_regular
+ * @return mixed|string
+ */
 function verifyArguments($argv, $usage_dce, $usage_regular)
 {
     $upgradeType = '';
@@ -330,6 +346,10 @@ function verifyArguments($argv, $usage_dce, $usage_regular)
     return $upgradeType;
 }
 
+/**
+ * @param $argv
+ * @param $instanceUpgradePath
+ */
 function upgradeDCEFiles($argv, $instanceUpgradePath)
 {
     //copy and update following files from upgrade package

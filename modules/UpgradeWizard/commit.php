@@ -300,6 +300,9 @@ eoq;
     logThis('Starting post_install()...');
     if (!function_exists('inDeveloperMode')) {
         //this function was introduced from tokyo in the file include/utils.php, so when upgrading from 5.1x and 5.2x we should declare the this function
+        /**
+         * @return bool
+         */
         function inDeveloperMode()
         {
             return isset($GLOBALS['sugar_config']['developerMode']) && $GLOBALS['sugar_config']['developerMode'];

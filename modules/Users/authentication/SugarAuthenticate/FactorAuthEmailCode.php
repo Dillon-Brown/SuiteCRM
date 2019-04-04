@@ -140,6 +140,9 @@ class FactorAuthEmailCode implements FactorAuthInterface
         return $ret;
     }
 
+    /**
+     * @return bool
+     */
     public function validateTokenMessage()
     {
         global $sugar_config, $mod_strings;

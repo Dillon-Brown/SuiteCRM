@@ -46,7 +46,10 @@ class TemplateParentType extends TemplateText
 {
     public $max_size = 25;
     public $type='parent_type';
-    
+
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();

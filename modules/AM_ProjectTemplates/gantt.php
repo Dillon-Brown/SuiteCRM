@@ -25,6 +25,13 @@ class Gantt
     private $end_date;
     private $tasks;
 
+    /**
+     * Gantt constructor.
+     * @param $start_date
+     * @param $end_date
+     * @param $tasks
+     * @throws Exception
+     */
     public function __construct($start_date, $end_date, $tasks)
     {
         $this->start_date = $start_date;
@@ -34,6 +41,12 @@ class Gantt
         $this->draw($this->start_date, $this->end_date, $this->tasks);
     }
 
+    /**
+     * @param $start_date
+     * @param $end_date
+     * @param $tasks
+     * @throws Exception
+     */
     public function draw($start_date, $end_date, $tasks)
     {
         $time_span = $this->year_month($start_date, $end_date);
@@ -189,6 +202,13 @@ class Gantt
 
 
     //Returns an array containing the years, months and days between two dates
+
+    /**
+     * @param $start_date
+     * @param $end_date
+     * @return array
+     * @throws Exception
+     */
     public function year_month($start_date, $end_date)
     {
         $begin = new DateTime($start_date);
@@ -206,6 +226,13 @@ class Gantt
     }
 
     //Returns the total number of days between two dates
+
+    /**
+     * @param $start_date
+     * @param $end_date
+     * @return int|mixed
+     * @throws Exception
+     */
     public function count_days($start_date, $end_date)
     {
         $d1 = new DateTime($start_date);
@@ -221,6 +248,13 @@ class Gantt
         return $difference->days;
     }
     //Returns the time span between two dates in years  months and days
+
+    /**
+     * @param $start_date
+     * @param $end_date
+     * @return string
+     * @throws Exception
+     */
     public function time_range($start_date, $end_date)
     {
         $datetime1 = new DateTime($start_date);
@@ -230,6 +264,12 @@ class Gantt
         return $interval->format('%y years %m months and %d days');
     }
 
+    /**
+     * @param $str
+     * @param $s
+     * @param null $l
+     * @return string
+     */
     public function substr_unicode($str, $s, $l = null)
     {
         return join("", array_slice(
@@ -240,6 +280,11 @@ class Gantt
     }
 
     // Function for basic field validation (present and neither empty nor only white space
+
+    /**
+     * @param $question
+     * @return bool
+     */
     public function IsNullOrEmptyString($question)
     {
         return (!isset($question) || trim($question)==='');

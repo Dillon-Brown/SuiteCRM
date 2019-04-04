@@ -53,6 +53,14 @@ require_once('include/SugarObjects/forms/FormBase.php');
 
 class CallFormBase extends FormBase
 {
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @param string $cal_date
+     * @param string $cal_time
+     * @return string
+     */
     public function getFormBody($prefix, $mod='', $formname='', $cal_date='', $cal_time='')
     {
         if (!ACLController::checkAccess('Calls', 'edit', true)) {
@@ -146,6 +154,13 @@ EOQ;
         $mod_strings = $temp_strings;
         return $form;
     }
+
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $title
+     * @return string
+     */
     public function getFormHeader($prefix, $mod='', $title='')
     {
         if (!ACLController::checkAccess('Calls', 'edit', true)) {
@@ -176,6 +191,12 @@ EOQ;
 EOQ;
         return $the_form;
     }
+
+    /**
+     * @param $prefic
+     * @param string $mod
+     * @return string
+     */
     public function getFormFooter($prefic, $mod='')
     {
         if (!ACLController::checkAccess('Calls', 'edit', true)) {
@@ -191,6 +212,11 @@ EOQ;
         return $the_form;
     }
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @return string
+     */
     public function getForm($prefix, $mod='')
     {
         if (!ACLController::checkAccess('Calls', 'edit', true)) {
@@ -204,6 +230,12 @@ EOQ;
     }
 
 
+    /**
+     * @param $prefix
+     * @param bool $redirect
+     * @param bool $useRequired
+     * @return Call|SugarBean|null
+     */
     public function handleSave($prefix, $redirect=true, $useRequired=false)
     {
         require_once('include/formbase.php');
@@ -528,6 +560,13 @@ EOQ;
         }
     } // end handleSave();
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @param bool $wide
+     * @return string
+     */
     public function getWideFormBody($prefix, $mod='', $formname='', $wide =true)
     {
         if (!ACLController::checkAccess('Calls', 'edit', true)) {

@@ -86,6 +86,9 @@ class CampaignLog extends SugarBean
     }
 
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         global $locale;
@@ -129,6 +132,10 @@ class CampaignLog extends SugarBean
         return $temp_array;
     }
 
+    /**
+     * @param string $trgt_id
+     * @return string
+     */
     public function retrieve_email_address($trgt_id = '')
     {
         $return_str = '';
@@ -155,6 +162,12 @@ class CampaignLog extends SugarBean
 
 
     //this function is called statically by the campaign_log subpanel.
+
+    /**
+     * @param $related_id
+     * @param $related_type
+     * @return string
+     */
     public static function get_related_name($related_id, $related_type)
     {
         global $locale;

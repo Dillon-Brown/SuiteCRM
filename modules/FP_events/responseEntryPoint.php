@@ -130,7 +130,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
         }
     }
     // Function for basic field validation (present and neither empty nor only white space nor just 'http://')
-    function IsNullOrEmptyString($question)
+/**
+ * @param $question
+ * @return bool
+ */
+function IsNullOrEmptyString($question)
     {
         return (!isset($question) || trim($question)==='' || $question =='http://');
     }

@@ -30,6 +30,10 @@
      public $Points;
 
      /* Class creator */
+     /**
+      * pSurface constructor.
+      * @param $pChartObject
+      */
      public function pSurface($pChartObject)
      {
          $this->pChartObject = $pChartObject;
@@ -38,6 +42,10 @@
      }
 
      /* Define the grid size and initialise the 2D matrix */
+     /**
+      * @param int $XSize
+      * @param int $YSize
+      */
      public function setGrid($XSize=10, $YSize=10)
      {
          for ($X=0; $X<=$XSize; $X++) {
@@ -51,6 +59,13 @@
      }
 
      /* Add a point on the grid */
+     /**
+      * @param $X
+      * @param $Y
+      * @param $Value
+      * @param bool $Force
+      * @return int
+      */
      public function addPoint($X, $Y, $Value, $Force=true)
      {
          if ($X < 0 || $X >$this->GridSizeX) {
@@ -70,6 +85,10 @@
      }
 
      /* Write the X labels */
+     /**
+      * @param string $Format
+      * @return int
+      */
      public function writeXLabels($Format="")
      {
          $R			= isset($Format["R"]) ? $Format["R"] : $this->pChartObject->FontColorR;
@@ -126,6 +145,10 @@
      }
 
      /* Write the Y labels */
+     /**
+      * @param string $Format
+      * @return int
+      */
      public function writeYLabels($Format="")
      {
          $R			= isset($Format["R"]) ? $Format["R"] : $this->pChartObject->FontColorR;
@@ -172,6 +195,10 @@
      }
 
      /* Draw the area arround the specified Threshold */
+     /**
+      * @param $Threshold
+      * @param string $Format
+      */
      public function drawContour($Threshold, $Format="")
      {
          $R		= isset($Format["R"]) ? $Format["R"] : 0;
@@ -216,6 +243,9 @@
      }
 
      /* Draw the surface chart */
+     /**
+      * @param string $Format
+      */
      public function drawSurface($Format="")
      {
          $Palette		= isset($Format["Palette"]) ? $Format["Palette"] : null;
@@ -335,6 +365,11 @@
      }
 
      /* Return the nearest Neighbor distance of a point */
+     /**
+      * @param $Xp
+      * @param $Yp
+      * @return float|mixed
+      */
      public function getNearestNeighbor($Xp, $Yp)
      {
          $Nearest = UNKNOWN;

@@ -1750,6 +1750,11 @@ class Email extends Basic
         }
     }
 
+    /**
+     * @param $id
+     * @param $type
+     * @return string
+     */
     public function linkEmailToAddress($id, $type)
     {
         // TODO: make this update?
@@ -1780,6 +1785,10 @@ class Email extends Basic
         "bcc_addrs" => "bcc_addrs_names",
     );
 
+    /**
+     * @param $emails
+     * @return string
+     */
     public function cleanEmails($emails)
     {
         if (empty($emails)) {
@@ -1819,6 +1828,12 @@ class Email extends Basic
 
     ///////////////////////////////////////////////////////////////////////////
     ////	RETRIEVERS
+    /**
+     * @param int $id
+     * @param bool $encoded
+     * @param bool $deleted
+     * @return SugarBean|null
+     */
     public function retrieve($id = -1, $encoded = true, $deleted = true)
     {
         // cn: bug 11915, return SugarBean's retrieve() call bean instead of $this

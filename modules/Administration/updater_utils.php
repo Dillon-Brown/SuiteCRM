@@ -46,6 +46,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
 ********************************************************************************/
 require_once('include/utils/encryption_utils.php');
 
+/**
+ * @param bool $send_usage_info
+ * @return array
+ * @throws Exception
+ */
 function getSystemInfo($send_usage_info=true)
 {
     global $sugar_config;
@@ -124,6 +129,10 @@ function getSystemInfo($send_usage_info=true)
     return $info;
 }
 
+/**
+ * @param bool $send_usage_info
+ * @return array
+ */
 function getBaseSystemInfo($send_usage_info=true)
 {
     include('sugar_version.php');
@@ -141,6 +150,13 @@ function getBaseSystemInfo($send_usage_info=true)
     return $info;
 }
 
+/**
+ * @param bool $send_usage_info
+ * @param bool $get_request_data
+ * @param bool $response_data
+ * @param bool $from_install
+ * @return array|mixed|string
+ */
 function check_now($send_usage_info=true, $get_request_data=false, $response_data = false, $from_install=false)
 {
     global $sugar_config, $timedate;
@@ -258,10 +274,19 @@ function check_now($send_usage_info=true, $get_request_data=false, $response_dat
 /*
  * returns true if $ver1 > $ver2
  */
+/**
+ * @param $ver1
+ * @param $ver2
+ * @return bool
+ */
 function compareVersions($ver1, $ver2)
 {
     return (version_compare($ver1, $ver2) === 1);
 }
+
+/**
+ * @param $value
+ */
 function set_CheckUpdates_config_setting($value)
 {
     $admin=new Administration();
@@ -270,6 +295,9 @@ function set_CheckUpdates_config_setting($value)
 /* return's value for the 'CheckUpdates' config setting
 * if the setting does not exist one gets created with a default value of automatic.
 */
+/**
+ * @return string
+ */
 function get_CheckUpdates_config_setting()
 {
     $checkupdates='automatic';
@@ -285,11 +313,18 @@ function get_CheckUpdates_config_setting()
     return $checkupdates;
 }
 
+/**
+ * @param $value
+ */
 function set_last_check_version_config_setting($value)
 {
     $admin=new Administration();
     $admin->saveSetting('Update', 'last_check_version', $value);
 }
+
+/**
+ * @return |null
+ */
 function get_last_check_version_config_setting()
 {
     $admin=new Administration();
@@ -301,11 +336,18 @@ function get_last_check_version_config_setting()
 }
 
 
+/**
+ * @param $value
+ */
 function set_last_check_date_config_setting($value)
 {
     $admin=new Administration();
     $admin->saveSetting('Update', 'last_check_date', $value);
 }
+
+/**
+ * @return int
+ */
 function get_last_check_date_config_setting()
 {
     $admin=new Administration();
@@ -316,6 +358,9 @@ function get_last_check_date_config_setting()
     return $admin->settings['Update_last_check_date'];
 }
 
+/**
+ * @param $value
+ */
 function set_sugarbeat($value)
 {
     global $sugar_config;
@@ -323,6 +368,10 @@ function set_sugarbeat($value)
     $sugar_config[$_SUGARBEAT] = $value;
     write_array_to_file("sugar_config", $sugar_config, "config.php");
 }
+
+/**
+ * @return bool
+ */
 function get_sugarbeat()
 {
     global $sugar_config;
@@ -335,7 +384,9 @@ function get_sugarbeat()
 }
 
 
-
+/**
+ * @return bool
+ */
 function shouldCheckSugar()
 {
     global $license, $timedate;
@@ -349,7 +400,9 @@ function shouldCheckSugar()
 }
 
 
-
+/**
+ * @param bool $firstLogin
+ */
 function loadLicense($firstLogin=false)
 {
     $GLOBALS['license']=new Administration();

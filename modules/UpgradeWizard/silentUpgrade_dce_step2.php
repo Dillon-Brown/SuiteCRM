@@ -218,6 +218,9 @@ function merge_passwordsetting($sugar_config, $sugar_version)
     return false;
 }
 
+/**
+ * @param array $defaultRoles
+ */
 function addDefaultModuleRoles($defaultRoles = array())
 {
     foreach ($defaultRoles as $roleName=>$role) {
@@ -238,6 +241,12 @@ function addDefaultModuleRoles($defaultRoles = array())
     }
 }
 
+/**
+ * @param $argv
+ * @param $usage_dce
+ * @param $usage_regular
+ * @return mixed|string
+ */
 function verifyArguments($argv, $usage_dce, $usage_regular)
 {
     $upgradeType = '';
@@ -306,6 +315,10 @@ function verifyArguments($argv, $usage_dce, $usage_regular)
     return $upgradeType;
 }
 
+/**
+ * @param $argv
+ * @param $instanceUpgradePath
+ */
 function upgradeDCEFiles($argv, $instanceUpgradePath)
 {
     //copy and update following files from upgrade package

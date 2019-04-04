@@ -68,7 +68,12 @@ class EmployeesSearchForm extends SearchForm
         
         $this->lv = $oldSearchForm->lv;
     }
-    
+
+    /**
+     * @param bool $add_custom_fields
+     * @param string $module
+     * @return array|string
+     */
     public function generateSearchWhere($add_custom_fields = false, $module = '')
     {
         $onlyActive = false;

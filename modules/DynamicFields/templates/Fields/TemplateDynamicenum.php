@@ -69,6 +69,9 @@ class TemplateDynamicenum extends TemplateEnum
     }
 
 
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();
@@ -77,6 +80,9 @@ class TemplateDynamicenum extends TemplateEnum
         return $def;
     }
 
+    /**
+     * @return array|string
+     */
     public function get_xtpl_edit()
     {
         $name = $this->name;

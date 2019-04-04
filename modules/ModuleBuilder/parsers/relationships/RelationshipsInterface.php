@@ -51,9 +51,17 @@ interface RelationshipsInterface
     //  public function build () ;
     
     public function getRelationshipList();
-    
+
+    /**
+     * @param $relationshipName
+     * @return mixed
+     */
     public function get($relationshipName) ;
 
+    /**
+     * @param $relationship
+     * @return mixed
+     */
     public function add($relationship) ;
 
 //    public function delete ($relationshipName) ;

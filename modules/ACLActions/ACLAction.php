@@ -407,6 +407,11 @@ class ACLAction extends SugarBean
         return $selected_actions;
     }
 
+    /**
+     * @param $a
+     * @param $b
+     * @return int
+     */
     private static function langCompare($a, $b)
     {
         global $app_list_strings;

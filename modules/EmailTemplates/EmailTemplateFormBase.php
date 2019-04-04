@@ -56,6 +56,13 @@ class EmailTemplateFormBase
     {
     }
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @param string $size
+     * @return string
+     */
     public function getFormBody($prefix, $mod='', $formname='', $size='30')
     {
         global $mod_strings;
@@ -103,6 +110,11 @@ EOF;
         return $form;
     }
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @return string
+     */
     public function getForm($prefix, $mod='')
     {
         if (!empty($mod)) {
@@ -141,6 +153,16 @@ EOQ;
     }
 
 
+    /**
+     * @param $prefix
+     * @param bool $redirect
+     * @param bool $useRequired
+     * @param bool $useSiteURL
+     * @param string $entryPoint
+     * @param bool $useUploadFolder
+     * @return EmailTemplate|SugarBean|null
+     * @throws Exception
+     */
     public function handleSave($prefix, $redirect=true, $useRequired=false, $useSiteURL = false, $entryPoint = 'download', $useUploadFolder = false)
     {
         require_once('include/formbase.php');
@@ -172,12 +194,29 @@ EOQ;
         return $focus;
     }
 
+    /**
+     * @param $focus
+     * @param $redirect
+     * @param bool $useSiteURL
+     * @param string $entryPoint
+     * @param bool $useUploadFolder
+     * @return mixed
+     * @throws Exception
+     */
     public function handleAttachmentsProcessImages($focus, $redirect, $useSiteURL = false, $entryPoint = 'download', $useUploadFolder = false)
     {
         $return_id = $this->processImages($focus, $useSiteURL, $entryPoint, $useUploadFolder);
         return $this->handleAttachments($focus, $redirect, $return_id);
     }
 
+    /**
+     * @param $focus
+     * @param $useSiteURL
+     * @param $entryPoint
+     * @param $useUploadFolder
+     * @return mixed
+     * @throws Exception
+     */
     public function processImages(&$focus, $useSiteURL, $entryPoint, $useUploadFolder)
     {
         global $sugar_config;
@@ -239,6 +278,12 @@ EOQ;
         return $return_id;
     }
 
+    /**
+     * @param $focus
+     * @param $redirect
+     * @param $return_id
+     * @return mixed
+     */
     public function handleAttachments($focus, $redirect, $return_id)
     {
         ///////////////////////////////////////////////////////////////////////////////

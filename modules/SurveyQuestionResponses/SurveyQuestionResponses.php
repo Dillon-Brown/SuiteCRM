@@ -68,6 +68,10 @@ class SurveyQuestionResponses extends Basic
         parent::__construct();
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {

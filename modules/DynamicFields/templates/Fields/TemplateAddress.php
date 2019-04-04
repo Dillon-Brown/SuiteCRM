@@ -49,6 +49,9 @@ class TemplateAddress extends TemplateField
     public $type = 'varchar';
     public $supports_unified_search = true;
 
+    /**
+     * @param DynamicField $df
+     */
     public function save($df)
     {
         $this->type = 'varchar' ;

@@ -28,12 +28,24 @@
      public $pChartObject;
 
      /* Class creator */
+     /**
+      * pIndicator constructor.
+      * @param $pChartObject
+      */
      public function pIndicator($pChartObject)
      {
          $this->pChartObject = $pChartObject;
      }
 
      /* Draw an indicator */
+     /**
+      * @param $X
+      * @param $Y
+      * @param $Width
+      * @param $Height
+      * @param string $Format
+      * @return int
+      */
      public function draw($X, $Y, $Width, $Height, $Format="")
      {
          $Values			= isset($Format["Values"]) ? $Format["Values"] : VOID;

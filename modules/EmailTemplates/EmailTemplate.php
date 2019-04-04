@@ -213,6 +213,9 @@ class EmailTemplate extends SugarBean
         return $ret;
     }
 
+    /**
+     * @return string
+     */
     public function generateFieldDefsJS2()
     {
         global $current_user;
@@ -287,11 +290,19 @@ class EmailTemplate extends SugarBean
         return $ret;
     }
 
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return "$this->name";
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @return String
+     */
     public function create_export_query($order_by, $where)
     {
         return $this->create_new_list_query($order_by, $where);
@@ -326,6 +337,9 @@ class EmailTemplate extends SugarBean
         $this->fill_in_additional_parent_fields();
     }
 
+    /**
+     * @return bool|void
+     */
     public function fill_in_additional_parent_fields()
     {
     }
@@ -336,6 +350,13 @@ class EmailTemplate extends SugarBean
     //$url_template is used to construct the url for the email message. the template should have place holder for 1 variable parameter, represented by %1
     //$template_text_array is a list of text strings that need to be searched. usually the subject, html body and text body of the email message.
     //$removeme_url_template, if the url has is_optout property checked then use this template.
+    /**
+     * @param $template_text_array
+     * @param $url_template
+     * @param $tracked_urls
+     * @param $removeme_url_template
+     * @return mixed
+     */
     public function parse_tracker_urls($template_text_array, $url_template, $tracked_urls, $removeme_url_template)
     {
         global $beanFiles, $beanList, $app_list_strings, $sugar_config;
@@ -411,6 +432,13 @@ class EmailTemplate extends SugarBean
         return array($result);
     }
 
+    /**
+     * @param $template_text_array
+     * @param $focus_name
+     * @param $focus
+     * @param $macro_nv
+     * @return array
+     */
     public function parse_email_template($template_text_array, $focus_name, $focus, &$macro_nv)
     {
         global $beanList, $app_list_strings;
@@ -565,6 +593,12 @@ class EmailTemplate extends SugarBean
     }
 
 
+    /**
+     * @param $string
+     * @param $bean_name
+     * @param $focus
+     * @return mixed
+     */
     public function parse_template_bean($string, $bean_name, &$focus)
     {
         global $current_user;
@@ -807,6 +841,11 @@ class EmailTemplate extends SugarBean
         return $data;
     }
 
+    /**
+     * @param $string
+     * @param $bean_arr
+     * @return mixed
+     */
     public function parse_template($string, &$bean_arr)
     {
         foreach ($bean_arr as $bean_name => $bean_id) {
@@ -825,6 +864,10 @@ class EmailTemplate extends SugarBean
         return $string;
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -834,6 +877,9 @@ class EmailTemplate extends SugarBean
         return false;
     }
 
+    /**
+     * @return mixed
+     */
     public static function getTypeOptionsForSearch()
     {
         $template = new EmailTemplate();
@@ -846,6 +892,9 @@ class EmailTemplate extends SugarBean
         return $options;
     }
 
+    /**
+     * @return bool
+     */
     public function is_used_by_email_marketing()
     {
         $query = "select id from email_marketing where template_id='$this->id' and deleted=0";
@@ -881,12 +930,22 @@ class EmailTemplate extends SugarBean
         return $this->storedVariables[$text[0]];
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         $this->repairMozaikClears();
         return parent::save($check_notify);
     }
 
+    /**
+     * @param int $id
+     * @param bool $encode
+     * @param bool $deleted
+     * @return SugarBean|null
+     */
     public function retrieve($id = -1, $encode = true, $deleted = true)
     {
         $ret = parent::retrieve($id, $encode, $deleted);
@@ -900,6 +959,9 @@ class EmailTemplate extends SugarBean
         return $ret;
     }
 
+    /**
+     * @return string|string[]|null
+     */
     public function addDomainToRelativeImagesSrc()
     {
         global $sugar_config;
@@ -936,6 +998,11 @@ class EmailTemplate extends SugarBean
         }
     }
 
+    /**
+     * @param $id
+     * @param string $ext
+     * @throws Exception
+     */
     private function makePublicImage($id, $ext = 'jpg')
     {
         $toFile = 'public/' . $id . '.' . $ext;
@@ -955,6 +1022,9 @@ class EmailTemplate extends SugarBean
         }
     }
 
+    /**
+     * @return SugarBean[]|null
+     */
     public function getAttachments()
     {
         return BeanFactory::getBean('Notes')->get_full_list('', "parent_id = '" . $this->id . "'");

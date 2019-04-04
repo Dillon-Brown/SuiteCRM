@@ -69,6 +69,11 @@ class DocumentSoap
     }
 
 
+    /**
+     * @param $document
+     * @param bool $portal
+     * @return string
+     */
     public function saveFile($document, $portal = false)
     {
         global $sugar_config;

@@ -50,6 +50,11 @@ require_once('include/Dashlets/DashletGeneric.php');
 
 class MyEmailsDashlet extends DashletGeneric
 {
+    /**
+     * MyEmailsDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings, $dashletData;
@@ -86,6 +91,10 @@ class MyEmailsDashlet extends DashletGeneric
     }
 
 
+    /**
+     * @param array $lvsParams
+     * @param null $id
+     */
     public function process($lvsParams = array(), $id = null)
     {
         global $current_language, $app_list_strings, $image_path, $current_user;
@@ -104,6 +113,9 @@ class MyEmailsDashlet extends DashletGeneric
         parent::process($lvsParams);
     }
 
+    /**
+     * @return string
+     */
     public function displayScript()
     {
         global $current_language;

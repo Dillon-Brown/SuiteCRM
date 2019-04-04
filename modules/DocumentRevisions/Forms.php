@@ -99,6 +99,9 @@ EOQ;
     return $the_script;
 }
 
+/**
+ * @return string
+ */
 function get_chooser_js()
 {
     $the_script  = <<<EOQ
@@ -129,6 +132,10 @@ EOQ;
 
     return $the_script;
 }
+
+/**
+ * @return string
+ */
 function get_validate_record_js()
 {
     global $mod_strings;

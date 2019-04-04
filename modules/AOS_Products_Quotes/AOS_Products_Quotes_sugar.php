@@ -104,6 +104,10 @@ class AOS_Products_Quotes_sugar extends Basic
     }
 
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {

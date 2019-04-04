@@ -54,6 +54,11 @@ require_once('modules/AOK_KnowledgeBase/AOK_KnowledgeBase.php');
 
 class AOK_KnowledgeBaseDashlet extends DashletGeneric
 {
+    /**
+     * AOK_KnowledgeBaseDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

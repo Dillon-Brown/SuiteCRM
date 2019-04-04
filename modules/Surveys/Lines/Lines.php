@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @param Surveys $focus
+ * @param $field
+ * @param $value
+ * @param $view
+ * @return string
+ * @throws \SuiteCRM\StateSaverException
+ */
 function survey_questions_display(Surveys $focus, $field, $value, $view)
 {
     $hasResponses = !empty($focus->id) && $focus->get_linked_beans('surveys_surveyresponses');
@@ -10,6 +18,14 @@ function survey_questions_display(Surveys $focus, $field, $value, $view)
     return survey_questions_display_detail($focus, $field, $value, $view);
 }
 
+/**
+ * @param Surveys $focus
+ * @param $field
+ * @param $value
+ * @param $view
+ * @return string
+ * @throws \SuiteCRM\StateSaverException
+ */
 function survey_questions_display_detail(Surveys $focus, $field, $value, $view)
 {
     global $app_list_strings, $mod_strings;
@@ -36,6 +52,14 @@ function survey_questions_display_detail(Surveys $focus, $field, $value, $view)
     return $html;
 }
 
+/**
+ * @param Surveys $focus
+ * @param $field
+ * @param $value
+ * @param $view
+ * @return string
+ * @throws \SuiteCRM\StateSaverException
+ */
 function survey_questions_display_edit(Surveys $focus, $field, $value, $view)
 {
     global $mod_strings, $app_list_strings;

@@ -29,6 +29,11 @@ class ContactsJjwg_MapsLogicHook
     }
 
 
+    /**
+     * @param $bean
+     * @param $event
+     * @param $arguments
+     */
     public function updateGeocodeInfo(&$bean, $event, $arguments)
     {
         // before_save
@@ -37,6 +42,11 @@ class ContactsJjwg_MapsLogicHook
         }
     }
 
+    /**
+     * @param $bean
+     * @param $event
+     * @param $arguments
+     */
     public function updateRelatedMeetingsGeocodeInfo(&$bean, $event, $arguments)
     {
         // after_save

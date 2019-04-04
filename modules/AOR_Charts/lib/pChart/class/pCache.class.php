@@ -21,6 +21,10 @@
      public $CacheDB;
 
      /* Class creator */
+     /**
+      * pCache constructor.
+      * @param string $Settings
+      */
      public function pCache($Settings="")
      {
          $CacheFolder	= isset($Settings["CacheFolder"]) ? $Settings["CacheFolder"] : "cache";
@@ -53,12 +57,21 @@
      }
 
      /* Return the MD5 of the data array to clearly identify the chart */
+     /**
+      * @param $Data
+      * @param string $Marker
+      * @return string
+      */
      public function getHash($Data, $Marker="")
      {
          return(md5($Marker.serialize($Data->Data)));
      }
 
      /* Write the generated picture to the cache */
+     /**
+      * @param $ID
+      * @param $pChartObject
+      */
      public function writeToCache($ID, $pChartObject)
      {
          /* Compute the paths */
@@ -93,18 +106,28 @@
      }
 
      /* Remove object older than the specified TS */
+     /**
+      * @param $Expiry
+      */
      public function removeOlderThan($Expiry)
      {
          $this->dbRemoval(array("Expiry"=>$Expiry));
      }
 
      /* Remove an object from the cache */
+     /**
+      * @param $ID
+      */
      public function remove($ID)
      {
          $this->dbRemoval(array("Name"=>$ID));
      }
 
      /* Remove with specified criterias */
+     /**
+      * @param $Settings
+      * @return int
+      */
      public function dbRemoval($Settings)
      {
          $ID     = isset($Settings["Name"]) ? $Settings["Name"] : null;
@@ -182,6 +205,12 @@
          rename($IndexTemp, $Index);
      }
 
+     /**
+      * @param $ID
+      * @param bool $Verbose
+      * @param bool $UpdateHitsCount
+      * @return array|bool
+      */
      public function isInCache($ID, $Verbose=false, $UpdateHitsCount=false)
      {
          /* Compute the paths */
@@ -229,6 +258,10 @@
      }
 
      /* Automatic output method based on the calling interface */
+     /**
+      * @param $ID
+      * @param string $Destination
+      */
      public function autoOutput($ID, $Destination="output.png")
      {
          if (php_sapi_name() == "cli") {
@@ -238,6 +271,10 @@
          }
      }
 
+     /**
+      * @param $ID
+      * @return bool
+      */
      public function strokeFromCache($ID)
      {
          /* Get the raw picture from the cache */
@@ -254,6 +291,11 @@
          return(true);
      }
 
+     /**
+      * @param $ID
+      * @param $Destination
+      * @return bool
+      */
      public function saveFromCache($ID, $Destination)
      {
          /* Get the raw picture from the cache */
@@ -273,6 +315,10 @@
          return(true);
      }
 
+     /**
+      * @param $ID
+      * @return bool|string|null
+      */
      public function getFromCache($ID)
      {
          /* Compute the path */

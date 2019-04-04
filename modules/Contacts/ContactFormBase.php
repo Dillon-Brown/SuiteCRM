@@ -87,6 +87,14 @@ class ContactFormBase extends PersonFormBase
     }
 
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @param string $contact
+     * @param bool $portal
+     * @return string
+     */
     public function getWideFormBody($prefix, $mod='', $formname='', $contact = '', $portal = true)
     {
         if (!ACLController::checkAccess('Contacts', 'edit', true)) {
@@ -322,6 +330,12 @@ EOQ;
         return $form;
     }
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @return string
+     */
     public function getFormBody($prefix, $mod='', $formname='')
     {
         if (!ACLController::checkAccess('Contacts', 'edit', true)) {
@@ -383,6 +397,12 @@ EOQ;
         $mod_strings = $temp_strings;
         return $form;
     }
+
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @return string
+     */
     public function getForm($prefix, $mod='')
     {
         if (!ACLController::checkAccess('Contacts', 'edit', true)) {
@@ -421,6 +441,14 @@ EOQ;
     }
 
 
+    /**
+     * @param $prefix
+     * @param bool $redirect
+     * @param bool $useRequired
+     * @return Contact|SugarBean|void|null
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     */
     public function handleSave($prefix, $redirect=true, $useRequired=false)
     {
         global $theme, $current_user;
@@ -639,6 +667,9 @@ EOQ;
         }
     }
 
+    /**
+     * @param $return_id
+     */
     public function handleRedirect($return_id)
     {
         if (isset($_POST['return_module']) && $_POST['return_module'] != "") {

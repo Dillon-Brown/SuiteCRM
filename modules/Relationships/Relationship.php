@@ -98,6 +98,9 @@ class Relationship extends SugarBean
     /*returns true if the relationship is self referencing. equality check is performed for both table and
      * key names.
      */
+    /**
+     * @return bool
+     */
     public function is_self_referencing()
     {
         if (empty($this->_self_referencing)) {
@@ -112,6 +115,11 @@ class Relationship extends SugarBean
     }
 
     /*returns true if a relationship with provided name exists*/
+    /**
+     * @param $relationship_name
+     * @param $db
+     * @return bool
+     */
     public static function exists($relationship_name, $db)
     {
         if ($db instanceof DBManager) {
@@ -128,6 +136,10 @@ class Relationship extends SugarBean
         return false;
     }
 
+    /**
+     * @param $relationship_name
+     * @param $db
+     */
     public static function delete($relationship_name, $db)
     {
         if ($db instanceof DBManager) {
@@ -139,6 +151,12 @@ class Relationship extends SugarBean
     }
 
 
+    /**
+     * @param $relationship_name
+     * @param $base_module
+     * @param $db
+     * @return bool
+     */
     public function get_other_module($relationship_name, $base_module, &$db)
     {
         //give it the relationship_name and base module
@@ -162,6 +180,12 @@ class Relationship extends SugarBean
         //end function get_other_module
     }
 
+    /**
+     * @param $lhs_module
+     * @param $rhs_module
+     * @param $db
+     * @return |null
+     */
     public function retrieve_by_sides($lhs_module, $rhs_module, &$db)
     {
         //give it the relationship_name and base module
@@ -180,6 +204,13 @@ class Relationship extends SugarBean
         //end function retrieve_by_sides
     }
 
+    /**
+     * @param $lhs_module
+     * @param $rhs_module
+     * @param $db
+     * @param string $type
+     * @return |null
+     */
     public static function retrieve_by_modules($lhs_module, $rhs_module, &$db, $type ='')
     {
         //give it the relationship_name and base module
@@ -209,6 +240,10 @@ class Relationship extends SugarBean
     }
 
 
+    /**
+     * @param $relationship_name
+     * @return bool
+     */
     public function retrieve_by_name($relationship_name)
     {
         if (empty($GLOBALS['relationships'])) {
@@ -254,10 +289,17 @@ class Relationship extends SugarBean
     }
 
 
+    /**
+     * @return string
+     */
     public static function cache_file_dir()
     {
         return sugar_cached("modules/Relationships");
     }
+
+    /**
+     * @return string
+     */
     public static function cache_file_name_only()
     {
         return 'relationships.cache.php';
@@ -274,6 +316,12 @@ class Relationship extends SugarBean
     }
 
 
+    /**
+     * @param $base_module
+     * @param $rel_module1_name
+     * @param string $rel_module2_name
+     * @return mixed
+     */
     public function trace_relationship_module($base_module, $rel_module1_name, $rel_module2_name="")
     {
         global $beanList;

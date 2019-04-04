@@ -14,6 +14,11 @@ class AORReportsDashlet extends Dashlet
     public $charts;
     public $onlyCharts;
 
+    /**
+     * AORReportsDashlet constructor.
+     * @param $id
+     * @param array $def
+     */
     public function __construct($id, $def = array())
     {
         global $current_user, $app_strings;
@@ -62,6 +67,10 @@ class AORReportsDashlet extends Dashlet
         self::__construct($id, $def);
     }
 
+    /**
+     * @return string
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function display()
     {
         global $current_language,$mod_strings;
@@ -83,6 +92,9 @@ class AORReportsDashlet extends Dashlet
         return $dashletSmarty->fetch($dashletTemplate);
     }
 
+    /**
+     * @return string
+     */
     public function getChartHTML()
     {
         if (!empty($this->report->id)) {
@@ -96,6 +108,10 @@ class AORReportsDashlet extends Dashlet
     {
     }
 
+    /**
+     * @return string|void
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function displayOptions()
     {
         ob_start();
@@ -140,6 +156,10 @@ class AORReportsDashlet extends Dashlet
         return $optionsSmarty->fetch($optionsTemplate);
     }
 
+    /**
+     * @param array $req
+     * @return array
+     */
     public function saveOptions($req)
     {
         $allowedKeys = array_flip(array(
@@ -172,6 +192,9 @@ class AORReportsDashlet extends Dashlet
         return $intersected;
     }
 
+    /**
+     * @return bool
+     */
     public function hasAccess()
     {
         return true;

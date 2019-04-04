@@ -76,7 +76,13 @@ class CalendarViewSaveSettings extends SugarView
             header("Location: index.php?module=Calendar&action=index");
         }
     }
-    
+
+    /**
+     * @param $hours
+     * @param $minutes
+     * @param $mer
+     * @return string
+     */
     private function to_db_time($hours, $minutes, $mer)
     {
         $hours = intval($hours);

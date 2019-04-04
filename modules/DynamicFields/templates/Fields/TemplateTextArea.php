@@ -53,6 +53,9 @@ class TemplateTextArea extends TemplateText
         $this->vardef_map['cols'] = 'ext3';
     }
 
+    /**
+     * @param $values
+     */
     public function set($values)
     {
         parent::set($values);
@@ -68,12 +71,18 @@ class TemplateTextArea extends TemplateText
     }
 
 
+    /**
+     * @return string
+     */
     public function get_xtpl_detail()
     {
         $name = $this->name;
         return nl2br($this->bean->$name);
     }
 
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();
@@ -90,6 +99,10 @@ class TemplateTextArea extends TemplateText
         return $def;
     }
 
+    /**
+     * @param bool $modify
+     * @return string|null
+     */
     public function get_db_default($modify = false)
     {
         // TEXT columns in MySQL cannot have a DEFAULT value - let the Bean handle it on save

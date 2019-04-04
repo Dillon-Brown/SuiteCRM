@@ -50,6 +50,11 @@ require_once('include/Dashlets/DashletGeneric.php');
 
 class MyProjectTaskDashlet extends DashletGeneric
 {
+    /**
+     * MyProjectTaskDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;
@@ -84,6 +89,9 @@ class MyProjectTaskDashlet extends DashletGeneric
     }
 
 
+    /**
+     * @return array
+     */
     public function buildWhere()
     {
         $resultArray = parent::buildWhere();

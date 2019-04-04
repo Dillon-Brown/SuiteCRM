@@ -27,6 +27,10 @@
 require_once('modules/AOW_Actions/actions/actionCreateRecord.php');
 class actionModifyRecord extends actionCreateRecord
 {
+    /**
+     * actionModifyRecord constructor.
+     * @param string $id
+     */
     public function __construct($id = '')
     {
         parent::__construct($id);
@@ -48,11 +52,20 @@ class actionModifyRecord extends actionCreateRecord
     }
 
 
+    /**
+     * @return array
+     */
     public function loadJS()
     {
         return parent::loadJS();
     }
 
+    /**
+     * @param $line
+     * @param SugarBean|null $bean
+     * @param array $params
+     * @return string
+     */
     public function edit_display($line, SugarBean $bean = null, $params = array())
     {
         require_once("modules/AOW_WorkFlow/aow_utils.php");
@@ -123,6 +136,13 @@ EOS;
         return $html;
     }
 
+    /**
+     * @param SugarBean $bean
+     * @param array $params
+     * @param bool $in_save
+     * @return bool
+     * @throws Exception
+     */
     public function run_action(SugarBean $bean, $params = array(), $in_save=false)
     {
         if (isset($params['rel_type']) && $params['rel_type'] != '' && $bean->module_dir != $params['rel_type']) {

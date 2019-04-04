@@ -49,6 +49,11 @@ class ViewConvertLead extends SugarView
     protected $fileName = "modules/Leads/metadata/convertdefs.php";
     protected $new_contact = false;
 
+    /**
+     * ViewConvertLead constructor.
+     * @param null $bean
+     * @param array $view_object_map
+     */
     public function __construct(
         $bean = null,
         $view_object_map = array()
@@ -514,6 +519,10 @@ class ViewConvertLead extends SugarView
         $this->displaySaveResults($beans);
     }
 
+    /**
+     * @param $bean
+     * @return bool
+     */
     public function setMeetingsUsersRelationship($bean)
     {
         global $current_user;
@@ -525,6 +534,10 @@ class ViewConvertLead extends SugarView
         }
         return false;
     }
+
+    /**
+     * @param $beans
+     */
     protected function displaySaveResults(
         $beans
         ) {
@@ -557,6 +570,10 @@ class ViewConvertLead extends SugarView
         echo "</ul></div>";
     }
 
+    /**
+     * @param $lead
+     * @param $beans
+     */
     protected function handleActivities(
         $lead,
         $beans
@@ -690,6 +707,11 @@ class ViewConvertLead extends SugarView
         return $activities;
     }
 
+    /**
+     * @param $activity
+     * @param $bean
+     * @param array $parentArr
+     */
     protected function copyActivityAndRelateToBean(
         $activity,
         $bean,
@@ -819,6 +841,10 @@ class ViewConvertLead extends SugarView
         }
     }
 
+    /**
+     * @param $bean
+     * @param $contact
+     */
     protected function copyAddressFields($bean, $contact)
     {
         //Copy over address info from the contact to any beans with address not set
@@ -857,6 +883,11 @@ class ViewConvertLead extends SugarView
     }
 
 
+    /**
+     * @param $from
+     * @param $to
+     * @return bool|int|string
+     */
     protected function findRelationship(
         $from,
         $to
@@ -887,6 +918,11 @@ class ViewConvertLead extends SugarView
         return false;
     }
 
+    /**
+     * @param $from
+     * @param $rel_name
+     * @return bool|int|string
+     */
     protected function findRelationshipByName($from, $rel_name)
     {
         global $dictionary;
@@ -914,6 +950,10 @@ class ViewConvertLead extends SugarView
     }
 
 
+    /**
+     * @param $lead
+     * @return bool
+     */
     protected function checkForDuplicates(
         $lead
         ) {

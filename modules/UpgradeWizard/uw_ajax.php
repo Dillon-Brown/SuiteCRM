@@ -323,6 +323,10 @@ function commitAjaxPostInstall($persistence)
 ///////////////////////////////////////////////////////////////////////////////
 ////	PREFLIGHT JSON STYLE
 
+/**
+ * @param $persistence
+ * @return mixed
+ */
 function preflightCheckJsonFindUpgradeFiles($persistence)
 {
     global $sugar_config;
@@ -383,6 +387,10 @@ function preflightCheckJsonFindUpgradeFiles($persistence)
     return $persistence;
 }
 
+/**
+ * @param $persistence
+ * @return mixed
+ */
 function preflightCheckJsonDiffFiles($persistence)
 {
     global $sugar_version;
@@ -463,6 +471,10 @@ function preflightCheckJsonDiffFiles($persistence)
 }
 
 
+/**
+ * @param $persistence
+ * @return mixed
+ */
 function preflightCheckJsonGetDiff($persistence)
 {
     global $mod_strings;
@@ -659,6 +671,10 @@ function preflightCheckJsonPrepSchemaCheck($persistence, $preflight=true)
     return $persistence;
 }
 
+/**
+ * @param $persistence
+ * @return mixed
+ */
 function preflightCheckJsonSchemaCheck($persistence)
 {
     global $mod_strings;
@@ -694,6 +710,10 @@ function preflightCheckJsonSchemaCheck($persistence)
 }
 
 
+/**
+ * @param $persistence
+ * @return mixed
+ */
 function preflightCheckJsonGetSchemaErrors($persistence)
 {
     global $mod_strings;
@@ -785,6 +805,10 @@ function preflightCheckJsonAlterTableCharset()
 ///////////////////////////////////////////////////////////////////////////////
 ////	SYSTEMCHECK AJAX FUNCTIONS
 
+/**
+ * @param $persistence
+ * @return mixed
+ */
 function systemCheckJsonGetFiles($persistence)
 {
     global $sugar_config;

@@ -140,6 +140,10 @@ class UpgradeMetaHelper
         return $return_array;
     }
 
+    /**
+     * @param $currStep
+     * @param $value
+     */
     public function saveMatchingFilesQueries($currStep, $value)
     {
         $upgrade_progress_dir = sugar_cached('upgrades/temp');
@@ -169,6 +173,9 @@ class UpgradeMetaHelper
         }
     }
 
+    /**
+     * @return array
+     */
     public function getAllCustomizedModulesBeyondStudio()
     {
         require_once('modules/UpgradeWizard/uw_utils.php');

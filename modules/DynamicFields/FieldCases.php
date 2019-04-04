@@ -68,6 +68,10 @@ require_once('modules/DynamicFields/templates/Fields/TemplateEncrypt.php');
 require_once('modules/DynamicFields/templates/Fields/TemplateId.php');
 require_once('modules/DynamicFields/templates/Fields/TemplateImage.php');
 require_once('modules/DynamicFields/templates/Fields/TemplateDecimal.php');
+/**
+ * @param $type
+ * @return TemplateDate|TemplateDecimal|TemplateFloat|TemplateInt|TemplateText|TemplateTextArea|null
+ */
 function get_widget($type)
 {
     $local_temp = null;

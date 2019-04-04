@@ -52,6 +52,9 @@ class TemplateText extends TemplateField
         parent::__construct();
     }
 
+    /**
+     * @return array|string
+     */
     public function get_xtpl_edit()
     {
         $name = $this->name;
@@ -70,6 +73,10 @@ class TemplateText extends TemplateField
         }
         return $returnXTPL;
     }
+
+    /**
+     * @return mixed|void
+     */
     public function get_xtpl_search()
     {
         if (!empty($_REQUEST[$this->name])) {
@@ -78,7 +85,9 @@ class TemplateText extends TemplateField
     }
 
 
-
+    /**
+     * @return string
+     */
     public function get_xtpl_detail()
     {
         $name = $this->name;

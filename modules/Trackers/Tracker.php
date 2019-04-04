@@ -99,6 +99,11 @@ if (!class_exists('Tracker')) {
          * @param mixed module_name Optional - return only items from this module, a string of the module or array of modules
          * @return array list
          */
+        /**
+         * @param $user_id
+         * @param string $modules
+         * @return array
+         */
         public function get_recently_viewed($user_id, $modules = '')
         {
             $path = 'modules/Trackers/BreadCrumbStack.php';
@@ -132,6 +137,9 @@ if (!class_exists('Tracker')) {
             return $list;
         }
 
+        /**
+         * @param $item_id
+         */
         public function makeInvisibleForAll($item_id)
         {
             $query = "UPDATE $this->table_name SET visible = 0 WHERE item_id = '$item_id' AND visible = 1";

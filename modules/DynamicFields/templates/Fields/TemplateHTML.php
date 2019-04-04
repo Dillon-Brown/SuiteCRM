@@ -47,13 +47,19 @@ class TemplateHTML extends TemplateField
     public $data_type = 'html';
     public $type = 'html';
     public $inline_edit = 0;
-    
+
+    /**
+     * @param DynamicField $df
+     */
     public function save($df)
     {
         $this->ext3 = 'text';
         parent::save($df);
     }
-    
+
+    /**
+     * @param $values
+     */
     public function set($values)
     {
         parent::set($values);
@@ -62,62 +68,102 @@ class TemplateHTML extends TemplateField
             $this->default = $this->ext4;
         }
     }
-    
+
+    /**
+     * @return string
+     */
     public function get_html_detail()
     {
         return '<div title="' . strtoupper($this->name . '_HELP'). '" >{'.strtoupper($this->name) . '}</div>';
     }
-    
+
+    /**
+     * @return string
+     */
     public function get_html_edit()
     {
         return $this->get_html_detail();
     }
-    
+
+    /**
+     * @return string
+     */
     public function get_html_list()
     {
         return $this->get_html_detail();
     }
-    
+
+    /**
+     * @return string
+     */
     public function get_html_search()
     {
         return $this->get_html_detail();
     }
-    
+
+    /**
+     * @return string
+     */
     public function get_xtpl_detail()
     {
         return from_html(nl2br($this->ext4));
     }
-    
+
+    /**
+     * @return string
+     */
     public function get_xtpl_edit()
     {
         return  $this->get_xtpl_detail();
     }
-    
+
+    /**
+     * @return string
+     */
     public function get_xtpl_list()
     {
         return  $this->get_xtpl_detail();
     }
+
+    /**
+     * @return string|void
+     */
     public function get_xtpl_search()
     {
         return  $this->get_xtpl_detail();
     }
-    
+
+    /**
+     * @param $table
+     * @return string
+     */
     public function get_db_add_alter_table($table)
     {
         return '';
     }
 
+    /**
+     * @param $table
+     * @return array|string
+     */
     public function get_db_modify_alter_table($table)
     {
         return '';
     }
-    
 
+
+    /**
+     * @param $table
+     * @return string
+     */
     public function get_db_delete_alter_table($table)
     {
         return '' ;
     }
-    
+
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();

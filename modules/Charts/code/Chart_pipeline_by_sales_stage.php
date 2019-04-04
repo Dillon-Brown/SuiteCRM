@@ -67,6 +67,10 @@ class Chart_pipeline_by_sales_stage
     }
 
 
+    /**
+     * @param $extra_tools
+     * @throws Exception
+     */
     public function draw($extra_tools)
     {
         global $action;
@@ -477,6 +481,9 @@ echo get_validate_chart_js();
         return $return;
     }
 
+    /**
+     * @return string
+     */
     public function constructQuery()
     {
         global $current_user;
@@ -621,6 +628,9 @@ echo get_validate_chart_js();
         return $query;
     }
 
+    /**
+     * @return array
+     */
     public function constructGroupBy()
     {
         return array( 'sales_stage', 'user_name' );

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @param Surveys $survey
+ * @return string
+ */
 function survey_url_display(Surveys $survey)
 {
     if ($survey->status != 'Public') {

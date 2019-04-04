@@ -67,6 +67,10 @@ class Chart_outcome_by_month
     }
 
 
+    /**
+     * @param $extra_tools
+     * @throws Exception
+     */
     public function draw($extra_tools)
     {
         global $app_list_strings, $current_language, $sugar_config, $currentModule, $action, $theme;
@@ -382,6 +386,9 @@ echo get_validate_chart_js();
         return $return;
     }
 
+    /**
+     * @return string
+     */
     public function constructQuery()
     {
         global $current_user;
@@ -464,6 +471,9 @@ echo get_validate_chart_js();
         return $query;
     }
 
+    /**
+     * @return array
+     */
     public function constructGroupBy()
     {
         return array( 'm', 'sales_stage', );

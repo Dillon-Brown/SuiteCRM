@@ -47,6 +47,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class SugarFeedFlush
 {
+    /**
+     * @param $bean
+     * @param $event
+     * @param $arguments
+     * @throws Exception
+     */
     public function flushStaleEntries($bean, $event, $arguments)
     {
         $admin = new Administration();

@@ -150,14 +150,20 @@ class Bug extends SugarBean
     public $new_schema = true;
 
 
-
-
-
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return "$this->name";
     }
 
+    /**
+     * @param $order_by
+     * @param $where
+     * @param int $show_deleted
+     * @return string
+     */
     public function create_list_query($order_by, $where, $show_deleted = 0)
     {
         // Fill in the assigned_user_name
@@ -203,6 +209,12 @@ class Bug extends SugarBean
         return $query;
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @param string $relate_link_join
+     * @return string
+     */
     public function create_export_query($order_by, $where, $relate_link_join='')
     {
         $custom_join = $this->getCustomJoin(true, true, $where);
@@ -319,6 +331,9 @@ class Bug extends SugarBean
     }
 
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         global $current_language;
@@ -368,6 +383,11 @@ class Bug extends SugarBean
         return $the_where;
     }
 
+    /**
+     * @param $xtpl
+     * @param $bug
+     * @return mixed
+     */
     public function set_notification_body($xtpl, $bug)
     {
         global $mod_strings, $app_list_strings;
@@ -386,6 +406,10 @@ class Bug extends SugarBean
         return $xtpl;
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -394,12 +418,19 @@ class Bug extends SugarBean
         return false;
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         return parent::save($check_notify);
     }
 }
 
+/**
+ * @return array|null
+ */
 function getReleaseDropDown()
 {
     static $releases = null;

@@ -236,6 +236,10 @@ class ConnectorsController extends SugarController
         }
     }
 
+    /**
+     * @param $url
+     * @return bool
+     */
     private function remoteFileExists($url)
     {
         $curl = curl_init($url);
@@ -751,6 +755,11 @@ class ConnectorsController extends SugarController
         echo $json->encode($results);
     }
 
+    /**
+     * @param $module
+     * @param $field_name
+     * @throws Exception
+     */
     public function add_social_field($module, $field_name)
     {
         $field = array(
@@ -783,6 +792,13 @@ class ConnectorsController extends SugarController
         $this->create_panel_on_view('editview', $field, $module, 'LBL_PANEL_SOCIAL_FEED');
     }
 
+    /**
+     * @param $view
+     * @param $field
+     * @param $module
+     * @param $panel_name
+     * @throws Exception
+     */
     private function create_panel_on_view($view, $field, $module, $panel_name)
     {
         //require and create object.

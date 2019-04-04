@@ -101,7 +101,10 @@ class ViewModule extends SugarView
         
         echo $ajax->getJavascript();
     }
-    
+
+    /**
+     * @param $name
+     */
     public function loadPackageHelp(
         $name
         ) {

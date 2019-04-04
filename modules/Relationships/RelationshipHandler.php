@@ -88,6 +88,11 @@ class RelationshipHandler extends Relationship
 
     ///////////////////////////Setup and populate functions//////////////////////////////
 
+    /**
+     * RelationshipHandler constructor.
+     * @param $db
+     * @param string $base_module
+     */
     public function __construct(& $db, $base_module="")
     {
         $this->db = $db;
@@ -113,6 +118,10 @@ class RelationshipHandler extends Relationship
     }
 
 
+    /**
+     * @param $base_vardef_field
+     * @param string $rel1_vardef_field
+     */
     public function set_rel_vardef_fields($base_vardef_field, $rel1_vardef_field="")
     {
         $this->base_vardef_field = $base_vardef_field;
@@ -122,6 +131,9 @@ class RelationshipHandler extends Relationship
     }
 
 
+    /**
+     * @param bool $build_rel2
+     */
     public function set_rel_relationship_names($build_rel2=false)
     {
         $this->rel1_relationship_name = $this->base_bean->field_defs[$this->base_vardef_field]['relationship'];
@@ -144,6 +156,9 @@ class RelationshipHandler extends Relationship
     This function will build all the relationship info it can based on values set in the setup functions
     When you use the info arrays (rel1_array) or (rel2_array), make sure you always check for empty values
     */
+    /**
+     * @param bool $build_rel2
+     */
     public function build_info($build_rel2=false)
     {
         if ($this->base_bean == null) {
@@ -185,6 +200,9 @@ class RelationshipHandler extends Relationship
     the info arrays.  Does it for base, rel1, and rel2 if specified
     */
 
+    /**
+     * @param bool $build_rel2
+     */
     public function build_module_labels($build_rel2=false)
     {
         global $app_list_strings;
@@ -234,9 +252,13 @@ class RelationshipHandler extends Relationship
     }
 
 
-
-
-
+    /**
+     * @param string $query
+     * @param object $template
+     * @param int $row_offset
+     * @param int $limit
+     * @return array|string
+     */
     public function build_related_list($query = 'base', &$template, $row_offset = 0, $limit = -1)
     {
         $type = $query;
@@ -273,6 +295,10 @@ class RelationshipHandler extends Relationship
 
     ///////BEGIN Functions to find relationships/////////////////////////////////
 
+    /**
+     * @param $target_bean
+     * @param bool $get_upstream_rel_field_name
+     */
     public function get_relationship_information(& $target_bean, $get_upstream_rel_field_name = false)
     {
         $target_module_name = $target_bean->module_dir;
@@ -351,6 +377,12 @@ class RelationshipHandler extends Relationship
         //end function get_relationship_information
     }
 
+    /**
+     * @param $base_module
+     * @param $target_bean
+     * @param $target_rel_name
+     * @return int|string|null
+     */
     public function traverse_rel_meta($base_module, & $target_bean, $target_rel_name)
     {
         $id_name = null;
@@ -373,6 +405,11 @@ class RelationshipHandler extends Relationship
     }
 
 
+    /**
+     * @param $target_bean
+     * @param $field_name
+     * @return int|string|null
+     */
     public function get_id_name(& $target_bean, $field_name)
     {
         foreach ($target_bean->relationship_fields as $target_id => $rel_name) {
@@ -391,6 +428,9 @@ class RelationshipHandler extends Relationship
     ///////////////////////////END functions to find relationships //////////////////////
 
 
+    /**
+     * @param $rel1_module
+     */
     public function process_by_rel_bean($rel1_module)
     {
         $this->rel1_relationship_name = $this::retrieve_by_modules($this->base_module, $rel1_module, $this->db);
@@ -401,6 +441,10 @@ class RelationshipHandler extends Relationship
     }
 
 
+    /**
+     * @param $field_defs
+     * @return |null
+     */
     public function get_rel1_vardef_field_base($field_defs)
     {
         foreach ($field_defs as $field_array) {
@@ -419,6 +463,9 @@ class RelationshipHandler extends Relationship
     }
 
 
+    /**
+     * @return mixed
+     */
     public function get_farthest_reach()
     {
         if ($this->rel1_vardef_field!="") {

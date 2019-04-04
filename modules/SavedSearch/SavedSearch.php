@@ -71,6 +71,12 @@ class SavedSearch extends SugarBean
 
     public $columns;
 
+    /**
+     * SavedSearch constructor.
+     * @param array $columns
+     * @param null $orderBy
+     * @param string $sortOrder
+     */
     public function __construct($columns = array(), $orderBy = null, $sortOrder = 'DESC')
     {
         parent::__construct();
@@ -101,6 +107,14 @@ class SavedSearch extends SugarBean
     }
 
     // Saved Search Form
+
+    /**
+     * @param $module
+     * @param bool $inline
+     * @param bool $orderBySelectOnly
+     * @return string
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function getForm($module, $inline = true, $orderBySelectOnly = false)
     {
         global $current_user, $currentModule, $current_language, $app_strings;
@@ -151,6 +165,10 @@ class SavedSearch extends SugarBean
         return $sugarSmarty->fetch('modules/SavedSearch/SavedSearchForm.tpl');
     }
 
+    /**
+     * @param $module
+     * @return TemplateGroupChooser
+     */
     public function getTemplateGroupChooser($module)
     {
         global $app_strings;
@@ -222,6 +240,12 @@ class SavedSearch extends SugarBean
         return $chooser;
     }
 
+    /**
+     * @param $module
+     * @param null $savedSearchData
+     * @return string
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function getSelect($module, &$savedSearchData = null)
     {
         global $current_user, $currentModule, $current_lang, $app_strings;
@@ -262,6 +286,11 @@ class SavedSearch extends SugarBean
         return $sugarSmarty->fetch('modules/SavedSearch/SavedSearchSelects.tpl');
     }
 
+    /**
+     * @param $id
+     * @param string $searchFormTab
+     * @param string $showDiv
+     */
     public function returnSavedSearch($id, $searchFormTab = 'advanced_search', $showDiv = 'no')
     {
         global $current_user, $currentModule;
@@ -320,6 +349,10 @@ class SavedSearch extends SugarBean
         );
     }
 
+    /**
+     * @param $id
+     * @return mixed|string
+     */
     public function returnSavedSearchContents($id)
     {
         global $current_user, $currentModule;
@@ -347,6 +380,9 @@ class SavedSearch extends SugarBean
         return $contents;
     }
 
+    /**
+     * @param $id
+     */
     public function handleDelete($id)
     {
         $this->mark_deleted($id);
@@ -361,6 +397,14 @@ class SavedSearch extends SugarBean
         SugarApplication::headerRedirect("Location: index.php?action=index&module={$requestSearchModule}&advanced={$_REQUEST['advanced']}&query=true&clear_query=true");
     }
 
+    /**
+     * @param $prefix
+     * @param bool $redirect
+     * @param bool $useRequired
+     * @param null $id
+     * @param null $searchModuleBean
+     * @return |null
+     */
     public function handleSave($prefix, $redirect = true, $useRequired = false, $id = null, $searchModuleBean = null)
     {
         global $current_user, $timedate;
@@ -481,6 +525,12 @@ class SavedSearch extends SugarBean
         }
     }
 
+    /**
+     * @param $return_module
+     * @param $search_query
+     * @param $saved_search_id
+     * @param string $advanced
+     */
     public function handleRedirect($return_module, $search_query, $saved_search_id, $advanced = 'false')
     {
         $_SESSION['LastSavedView'][$return_module] = $saved_search_id;
@@ -500,6 +550,9 @@ class SavedSearch extends SugarBean
     }
 
 
+    /**
+     * @param $id
+     */
     public function retrieveSavedSearch($id)
     {
         parent::retrieve($id);

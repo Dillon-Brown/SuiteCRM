@@ -23,6 +23,11 @@
      public $pDataObject;
 
      /* Class creator */
+     /**
+      * pScatter constructor.
+      * @param $pChartObject
+      * @param $pDataObject
+      */
      public function pScatter($pChartObject, $pDataObject)
      {
          $this->pChartObject = $pChartObject;
@@ -30,6 +35,10 @@
      }
 
      /* Prepare the scale */
+     /**
+      * @param string $Format
+      * @return int
+      */
      public function drawScatterScale($Format="")
      {
          $Mode		= isset($Format["Mode"]) ? $Format["Mode"] : SCALE_MODE_FLOATING;
@@ -470,6 +479,9 @@
      }
 
      /* Draw a scatter plot chart */
+     /**
+      * @param null $Format
+      */
      public function drawScatterPlotChart($Format=null)
      {
          $PlotSize		= isset($Format["PlotSize"]) ? $Format["PlotSize"] : 3;
@@ -553,6 +565,9 @@
      }
 
      /* Draw a scatter line chart */
+     /**
+      * @param null $Format
+      */
      public function drawScatterLineChart($Format=null)
      {
          $Data		= $this->pDataObject->getData();
@@ -626,6 +641,9 @@
      }
 
      /* Draw a scatter spline chart */
+     /**
+      * @param null $Format
+      */
      public function drawScatterSplineChart($Format=null)
      {
          $Data		= $this->pDataObject->getData();
@@ -711,6 +729,11 @@
      }
 
      /* Return the scaled plot position */
+     /**
+      * @param $Values
+      * @param $AxisID
+      * @return mixed|string
+      */
      public function getPosArray($Values, $AxisID)
      {
          $Data = $this->pDataObject->getData();
@@ -758,6 +781,11 @@
      }
 
      /* Draw the legend of the active series */
+     /**
+      * @param $X
+      * @param $Y
+      * @param string $Format
+      */
      public function drawScatterLegend($X, $Y, $Format="")
      {
          $Family		= isset($Format["Family"]) ? $Format["Family"] : LEGEND_FAMILY_BOX;
@@ -932,6 +960,10 @@
      }
 
      /* Get the legend box size */
+     /**
+      * @param string $Format
+      * @return array
+      */
      public function getScatterLegendSize($Format="")
      {
          $FontName	= isset($Format["FontName"]) ? $Format["FontName"] : $this->pChartObject->FontName;
@@ -1027,6 +1059,9 @@
      }
 
      /* Draw the line of best fit */
+     /**
+      * @param string $Format
+      */
      public function drawScatterBestFit($Format="")
      {
          $Ticks	= isset($Format["Ticks"]) ? $Format["Ticks"] : 0;
@@ -1103,6 +1138,12 @@
          }
      }
 
+     /**
+      * @param $ScatterSerieID
+      * @param $Points
+      * @param string $Format
+      * @return int
+      */
      public function writeScatterLabel($ScatterSerieID, $Points, $Format="")
      {
          $OverrideTitle	= isset($Format["OverrideTitle"]) ? $Format["OverrideTitle"] : null;
@@ -1197,6 +1238,11 @@
      }
 
      /* Draw a Scatter threshold */
+     /**
+      * @param $Value
+      * @param string $Format
+      * @return array|int
+      */
      public function drawScatterThreshold($Value, $Format="")
      {
          $AxisID		= isset($Format["AxisID"]) ? $Format["AxisID"] : 0;
@@ -1301,6 +1347,12 @@
      }
 
      /* Draw a Scatter threshold area */
+     /**
+      * @param $Value1
+      * @param $Value2
+      * @param string $Format
+      * @return array|int
+      */
      public function drawScatterThresholdArea($Value1, $Value2, $Format="")
      {
          $AxisID	= isset($Format["AxisID"]) ? $Format["AxisID"] : 0;

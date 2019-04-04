@@ -95,11 +95,20 @@ class Release extends SugarBean
     }
 
 
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return "$this->name";
     }
 
+    /**
+     * @param bool $add_blank
+     * @param string $status
+     * @param string $where
+     * @return array
+     */
     public function get_releases($add_blank=false, $status='Active', $where='')
     {
         if ($where!='') {
@@ -142,6 +151,9 @@ class Release extends SugarBean
     {
     }
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         global $app_list_strings;

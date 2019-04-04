@@ -54,6 +54,11 @@ require_once('modules/AM_ProjectTemplates/AM_ProjectTemplates.php');
 
 class AM_ProjectTemplatesDashlet extends DashletGeneric
 {
+    /**
+     * AM_ProjectTemplatesDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

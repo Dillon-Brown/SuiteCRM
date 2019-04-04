@@ -155,6 +155,10 @@ class RSSDashlet extends Dashlet
         return $options;
     }
 
+    /**
+     * @param $url
+     * @return string
+     */
     protected function getRSSOutput(
         $url
         ) {

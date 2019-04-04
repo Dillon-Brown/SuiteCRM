@@ -170,11 +170,18 @@ if (isset($_REQUEST['record']) &&  !empty($_REQUEST['record'])) {
     /********** FINAL END OF PAGE UI Stuff ********/
     $ss->display(file_exists('custom/modules/Campaigns/WizardHome.html') ? 'custom/modules/Campaigns/WizardHome.html' : 'modules/Campaigns/WizardHome.html');
 
+    /**
+     * @return bool
+     */
     function isWizardSummary()
     {
         return $_REQUEST['action'] == 'WizardHome';
     }
 
+    /**
+     * @param $campaignId
+     * @return string
+     */
     function getFirstMarketingId($campaignId)
     {
         $db = DBManagerFactory::getInstance();
@@ -185,6 +192,9 @@ if (isset($_REQUEST['record']) &&  !empty($_REQUEST['record'])) {
         return $ret;
     }
 
+    /**
+     * @return mixed|string
+     */
     function getMarketingId()
     {
         $campaignId = isset($_REQUEST['campaign_id']) && $_REQUEST['campaign_id'] ? $_REQUEST['campaign_id'] : $_REQUEST['record'];
@@ -228,8 +238,10 @@ if (isset($_REQUEST['record']) &&  !empty($_REQUEST['record'])) {
 }
 
 
-
-
+/**
+ * @param $focus
+ * @return string
+ */
 function create_campaign_summary($focus)
 {
     global $mod_strings,$app_strings;
@@ -307,6 +319,10 @@ function create_campaign_summary($focus)
     return $cmpgn_tbl ;
 }
 
+/**
+ * @param $focus
+ * @return string
+ */
 function create_marketing_summary($focus)
 {
     global $mod_strings,$app_strings;
@@ -398,6 +414,10 @@ function create_marketing_summary($focus)
     return $mrkt_tbl ;
 }
 
+/**
+ * @param $focus
+ * @return string
+ */
 function create_target_summary($focus)
 {
     global $mod_strings,$app_strings,$app_list_strings;
@@ -469,6 +489,10 @@ function create_target_summary($focus)
     return $pl_tbl;
 }
 
+/**
+ * @param $focus
+ * @return string
+ */
 function create_tracker_summary($focus)
 {
     global $mod_strings,$app_strings;
@@ -515,6 +539,13 @@ function create_tracker_summary($focus)
 }
 
 
+/**
+ * @param $type
+ * @param $mrkt_string
+ * @param $camp_url
+ * @param $summ_url
+ * @return string
+ */
 function create_wiz_menu_items($type, $mrkt_string, $camp_url, $summ_url)
 {
     global $mod_strings;

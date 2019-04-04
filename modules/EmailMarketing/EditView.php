@@ -226,6 +226,9 @@ $IEStoredOptionsJSON = (!empty($IEStoredOptions)) ? $json->encode($IEStoredOptio
 $xtpl->assign("IEStoredOptions", $IEStoredOptionsJSON);
 
 
+/**
+ * @return mixed
+ */
 function getOutboundEmailAccountOptions()
 {
     global $mod_strings;
@@ -239,6 +242,10 @@ function getOutboundEmailAccountOptions()
     return $ret;
 }
 
+/**
+ * @param EmailMarketing $emailMarketing
+ * @return int
+ */
 function getOutboundEmailAccountSelected(EmailMarketing $emailMarketing)
 {
     $ret = 0;

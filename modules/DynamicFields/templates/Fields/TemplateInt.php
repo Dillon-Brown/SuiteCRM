@@ -60,6 +60,9 @@ class TemplateInt extends TemplateRange
         $this->vardef_map['disable_num_format'] = 'ext3';
     }
 
+    /**
+     * @return string
+     */
     public function get_html_edit()
     {
         $this->prepare();
@@ -74,6 +77,9 @@ class TemplateInt extends TemplateRange
         }
     }
 
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $vardef = parent::get_field_def();
@@ -103,6 +109,9 @@ class TemplateInt extends TemplateRange
         return $vardef;
     }
 
+    /**
+     * @param DynamicField $df
+     */
     public function save($df)
     {
         $next = false;

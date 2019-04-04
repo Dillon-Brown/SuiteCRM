@@ -62,6 +62,10 @@ class ViewRelationship extends SugarView
            );
     }
 
+    /**
+     * @param $definition
+     * @return mixed
+     */
     public function overrideDefinitionFromPOST(
         $definition
         ) {

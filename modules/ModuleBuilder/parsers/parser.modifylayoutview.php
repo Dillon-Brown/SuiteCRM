@@ -118,6 +118,9 @@ class ParserModifyLayoutView extends ModuleBuilderParser
 //      $GLOBALS['log']->debug($this->_viewdefs['panels']);
     }
 
+    /**
+     * @return array
+     */
     public function getAvailableFields()
     {
         // Available fields are those that are in the Model and the original layout definition, but not already shown in the View
@@ -139,6 +142,9 @@ class ParserModifyLayoutView extends ModuleBuilderParser
         return $availableFields;
     }
 
+    /**
+     * @return mixed
+     */
     public function getLayout()
     {
         return $this->_viewdefs ['panels'];
@@ -162,6 +168,10 @@ class ParserModifyLayoutView extends ModuleBuilderParser
         }
     }
 
+    /**
+     * @param $module
+     * @param $view
+     */
     public function loadModule($module, $view)
     {
         $this->_viewdefs = array();
@@ -280,6 +290,10 @@ class ParserModifyLayoutView extends ModuleBuilderParser
 
     // add a new field to the end of a panel
     // don't write out (caller should call handleSave() when ready)
+    /**
+     * @param $properties
+     * @param bool $panelID
+     */
     public function _addField($properties, $panelID = false)
     {
 
@@ -321,6 +335,9 @@ class ParserModifyLayoutView extends ModuleBuilderParser
     }
 
     /* getModelFields returns an array of all fields stored in the database for this module plus those fields in the original layout definition (so we get fields such as Team ID)*/
+    /**
+     * @return array
+     */
     public function _getModelFields()
     {
         $modelFields = array();
@@ -356,6 +373,10 @@ class ParserModifyLayoutView extends ModuleBuilderParser
         return $modelFields;
     }
 
+    /**
+     * @param $panels
+     * @return array
+     */
     public function _parseData($panels)
     {
         $fields = array();
@@ -408,6 +429,9 @@ class ParserModifyLayoutView extends ModuleBuilderParser
         return $displayData;
     }
 
+    /**
+     * @return array
+     */
     public function _getOrigFieldViewDefs()
     {
         $origFieldDefs = array();

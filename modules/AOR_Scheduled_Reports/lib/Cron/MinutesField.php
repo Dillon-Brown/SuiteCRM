@@ -7,11 +7,21 @@ namespace Cron;
  */
 class MinutesField extends AbstractField
 {
+    /**
+     * @param \DateTime $date
+     * @param string $value
+     * @return bool
+     */
     public function isSatisfiedBy(\DateTime $date, $value)
     {
         return $this->isSatisfied($date->format('i'), $value);
     }
 
+    /**
+     * @param \DateTime $date
+     * @param bool $invert
+     * @return $this|FieldInterface
+     */
     public function increment(\DateTime $date, $invert = false)
     {
         if ($invert) {
@@ -23,6 +33,10 @@ class MinutesField extends AbstractField
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @return bool
+     */
     public function validate($value)
     {
         return (bool) preg_match('/^[\*,\/\-0-9]+$/', $value);

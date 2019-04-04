@@ -32,6 +32,10 @@ if ($trackerId) {
     log_campaign_activity($trackerId, 'link', true, $surveyLinkTracker);
 }
 
+/**
+ * @param $trackerId
+ * @return bool
+ */
 function getSurveyLinkTracker($trackerId)
 {
     $db = DBManagerFactory::getInstance();
@@ -118,6 +122,11 @@ EOF;
 
 
 <?php
+/**
+ * @param $survey
+ * @param $contactId
+ * @param $trackerId
+ */
 function displaySurvey($survey, $contactId, $trackerId)
 {
     ?>
@@ -142,6 +151,10 @@ function displaySurvey($survey, $contactId, $trackerId)
     <?php
 }
 
+/**
+ * @param $survey
+ * @param $question
+ */
 function displayQuestion($survey, $question)
 {
     ?>
@@ -235,6 +248,9 @@ function displayQuestion($survey, $question)
     <?php
 }
 
+/**
+ * @param $question
+ */
 function displayTextField($question)
 {
     echo "<input class=\"form-control\" id='question" .
@@ -244,6 +260,9 @@ function displayTextField($question)
          "]' type='text'/>";
 }
 
+/**
+ * @param $question
+ */
 function displayScaleField($question)
 {
     echo "<table class='table'><tr>";
@@ -264,6 +283,9 @@ function displayScaleField($question)
     echo "</tr></table>";
 }
 
+/**
+ * @param $question
+ */
 function displayRatingField($question)
 {
     $ratingMax = 5;
@@ -280,6 +302,11 @@ function displayRatingField($question)
     echo "</div>";
 }
 
+/**
+ * @param $survey
+ * @param $question
+ * @param $options
+ */
 function displayMatrixField($survey, $question, $options)
 {
     $matrixOptions = $survey->getMatrixOptions();
@@ -314,6 +341,9 @@ value='" .
     echo "</table>";
 }
 
+/**
+ * @param $question
+ */
 function displayDateTimeField($question)
 {
     echo "<div class=\"input-group\">";
@@ -325,6 +355,9 @@ function displayDateTimeField($question)
     echo "<div class=\"input-group-addon ui-datetimepicker-trigger\"><span class=\"suitepicon suitepicon-module-calendar\"></span></div></div>";
 }
 
+/**
+ * @param $question
+ */
 function displayDateField($question)
 {
     echo "<div class=\"input-group\">";
@@ -336,6 +369,9 @@ function displayDateField($question)
     echo "<div class=\"input-group-addon ui-datepicker-trigger\"><span class=\"suitepicon suitepicon-module-calendar\"></span></div></div>";
 }
 
+/**
+ * @param $survey
+ */
 function displayClosedPage($survey)
 {
     ?>

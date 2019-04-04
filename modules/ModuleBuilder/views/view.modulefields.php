@@ -214,6 +214,9 @@ class ViewModulefields extends SugarView
         }
     }
 
+    /**
+     * @param $name
+     */
     public function loadPackageHelp(
         $name
         ) {
@@ -222,6 +225,10 @@ class ViewModulefields extends SugarView
         $this->mbModule->help['group'] = 'module';
     }
 
+    /**
+     * @param $def
+     * @return mixed
+     */
     public function cullFields(
         $def
         ) {
@@ -236,7 +243,11 @@ class ViewModulefields extends SugarView
         }
         return $def;
     }
-    
+
+    /**
+     * @param $def
+     * @return bool
+     */
     public function isValidStudioField(
         $def
         ) {

@@ -56,6 +56,11 @@ class SugarFeedDashlet extends DashletGeneric
     public $selectedCategories = array();
 
 
+    /**
+     * SugarFeedDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings, $app_list_strings;
@@ -156,6 +161,10 @@ class SugarFeedDashlet extends DashletGeneric
         self::__construct($id, $def);
     }
 
+    /**
+     * @param array $lvsParams
+     * @param null $id
+     */
     public function process($lvsParams = array(), $id = null)
     {
         global $current_user;
@@ -420,6 +429,10 @@ class SugarFeedDashlet extends DashletGeneric
         }
     }
 
+    /**
+     * @return string
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function displayOptions()
     {
         global $app_strings;
@@ -491,6 +504,9 @@ class SugarFeedDashlet extends DashletGeneric
     }
 
 
+    /**
+     * @return string
+     */
     public function sugarFeedDisplayScript()
     {
         // Forces the quicksearch to reload anytime the dashlet gets refreshed
@@ -640,6 +656,10 @@ enableQS(false);
     }
 
     // This is called from the include/MySugar/DashletsDialog/DashletsDialog.php and determines if we should display the SugarFeed dashlet as an option or not
+
+    /**
+     * @return bool
+     */
     public static function shouldDisplay()
     {
         $admin = new Administration();
@@ -651,6 +671,10 @@ enableQS(false);
         return true;
     }
 
+    /**
+     * @param $type
+     * @return bool
+     */
     public function check_enabled($type)
     {
         $db = DBManagerFactory::getInstance();

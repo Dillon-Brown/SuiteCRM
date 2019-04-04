@@ -28,6 +28,11 @@ class CasesJjwg_MapsLogicHook
     }
 
 
+    /**
+     * @param $bean
+     * @param $event
+     * @param $arguments
+     */
     public function updateGeocodeInfo(&$bean, $event, $arguments)
     {
         // before_save
@@ -36,6 +41,11 @@ class CasesJjwg_MapsLogicHook
         }
     }
 
+    /**
+     * @param $bean
+     * @param $event
+     * @param $arguments
+     */
     public function updateRelatedMeetingsGeocodeInfo(&$bean, $event, $arguments)
     {
         // after_save
@@ -44,6 +54,11 @@ class CasesJjwg_MapsLogicHook
         }
     }
 
+    /**
+     * @param $bean
+     * @param $event
+     * @param $arguments
+     */
     public function addRelationship(&$bean, $event, $arguments)
     {
         // after_relationship_add
@@ -61,6 +76,11 @@ class CasesJjwg_MapsLogicHook
         }
     }
 
+    /**
+     * @param $bean
+     * @param $event
+     * @param $arguments
+     */
     public function deleteRelationship(&$bean, $event, $arguments)
     {
         // after_relationship_delete

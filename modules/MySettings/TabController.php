@@ -51,6 +51,9 @@ class TabController
      */
     protected static $isCacheValid = false;
 
+    /**
+     * @return bool
+     */
     public function is_system_tabs_in_db()
     {
         $administration = new Administration();
@@ -61,6 +64,9 @@ class TabController
         return false;
     }
 
+    /**
+     * @return array|mixed|null
+     */
     public function get_system_tabs()
     {
         global $moduleList;
@@ -99,6 +105,9 @@ class TabController
         return $system_tabs_result;
     }
 
+    /**
+     * @return array
+     */
     public function get_tabs_system()
     {
         global $moduleList;
@@ -121,8 +130,9 @@ class TabController
     }
 
 
-
-
+    /**
+     * @param $tabs
+     */
     public function set_system_tabs($tabs)
     {
         $administration = new Administration();
@@ -131,6 +141,9 @@ class TabController
         self::$isCacheValid = false;
     }
 
+    /**
+     * @return bool
+     */
     public function get_users_can_edit()
     {
         $administration = new Administration();
@@ -143,6 +156,9 @@ class TabController
         return true;
     }
 
+    /**
+     * @param $boolean
+     */
     public function set_users_can_edit($boolean)
     {
         global $current_user;
@@ -157,6 +173,10 @@ class TabController
     }
 
 
+    /**
+     * @param $arr
+     * @return array
+     */
     public function get_key_array($arr)
     {
         $new = array();
@@ -168,6 +188,11 @@ class TabController
         return $new;
     }
 
+    /**
+     * @param $tabs
+     * @param $user
+     * @param string $type
+     */
     public function set_user_tabs($tabs, &$user, $type='display')
     {
         if (empty($user)) {
@@ -178,6 +203,11 @@ class TabController
         }
     }
 
+    /**
+     * @param $user
+     * @param string $type
+     * @return array|mixed|null
+     */
     public function get_user_tabs(&$user, $type='display')
     {
         $system_tabs = $this->get_system_tabs();
@@ -195,6 +225,10 @@ class TabController
         return array();
     }
 
+    /**
+     * @param $user
+     * @return array
+     */
     public function get_unset_tabs($user)
     {
         global $moduleList;
@@ -206,6 +240,10 @@ class TabController
         return $unsetTabs;
     }
 
+    /**
+     * @param $user
+     * @return array|mixed|null
+     */
     public function get_old_user_tabs($user)
     {
         $system_tabs = $this->get_system_tabs();
@@ -225,6 +263,10 @@ class TabController
         return $system_tabs;
     }
 
+    /**
+     * @param $user
+     * @return array
+     */
     public function get_old_tabs($user)
     {
         global $moduleList;
@@ -237,6 +279,10 @@ class TabController
         return array($tabs,$system_tabs);
     }
 
+    /**
+     * @param $user
+     * @return array
+     */
     public function get_tabs($user)
     {
         $display_tabs = $this->get_user_tabs($user, 'display');
@@ -283,6 +329,9 @@ class TabController
         return array($display_tabs, $hide_tabs, $remove_tabs);
     }
 
+    /**
+     * @param $user
+     */
     public function restore_tabs($user)
     {
         global $moduleList;

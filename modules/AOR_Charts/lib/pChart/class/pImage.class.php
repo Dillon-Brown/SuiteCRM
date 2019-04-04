@@ -81,6 +81,13 @@
      public $LastChartLayout	= CHART_LAST_LAYOUT_REGULAR;	// Last layout : regular or stacked
 
      /* Class constructor */
+     /**
+      * pImage constructor.
+      * @param $XSize
+      * @param $YSize
+      * @param null $DataSet
+      * @param bool $TransparentBackground
+      */
      public function pImage($XSize, $YSize, $DataSet=null, $TransparentBackground=false)
      {
          $this->TransparentBackground = $TransparentBackground;
@@ -105,6 +112,10 @@
      }
 
      /* Enable / Disable and set shadow properties */
+     /**
+      * @param bool $Enabled
+      * @param string $Format
+      */
      public function setShadow($Enabled=true, $Format="")
      {
          $X	    = isset($Format["X"]) ? $Format["X"] : 2;
@@ -124,6 +135,13 @@
      }
 
      /* Set the graph area position */
+     /**
+      * @param $X1
+      * @param $Y1
+      * @param $X2
+      * @param $Y2
+      * @return int
+      */
      public function setGraphArea($X1, $Y1, $X2, $Y2)
      {
          if ($X2 < $X1 || $X1 == $X2 || $Y2 < $Y1 || $Y1 == $Y2) {
@@ -141,18 +159,27 @@
      }
 
      /* Return the width of the picture */
+     /**
+      * @return |null
+      */
      public function getWidth()
      {
          return($this->XSize);
      }
 
      /* Return the heigth of the picture */
+     /**
+      * @return |null
+      */
      public function getHeight()
      {
          return($this->YSize);
      }
 
      /* Render the picture to a file */
+     /**
+      * @param $FileName
+      */
      public function render($FileName)
      {
          if ($this->TransparentBackground) {
@@ -163,6 +190,9 @@
      }
 
      /* Render the picture to a web browser stream */
+     /**
+      * @param bool $BrowserExpire
+      */
      public function stroke($BrowserExpire=false)
      {
          if ($this->TransparentBackground) {
@@ -181,6 +211,9 @@
      }
 
      /* Automatic output method based on the calling interface */
+     /**
+      * @param string $FileName
+      */
      public function autoOutput($FileName="output.png")
      {
          if (php_sapi_name() == "cli") {
@@ -191,12 +224,26 @@
      }
 
      /* Return the length between two points */
+     /**
+      * @param $X1
+      * @param $Y1
+      * @param $X2
+      * @param $Y2
+      * @return float
+      */
      public function getLength($X1, $Y1, $X2, $Y2)
      {
          return(sqrt(pow(max($X1, $X2)-min($X1, $X2), 2)+pow(max($Y1, $Y2)-min($Y1, $Y2), 2)));
      }
 
      /* Return the orientation of a line */
+     /**
+      * @param $X1
+      * @param $Y1
+      * @param $X2
+      * @param $Y2
+      * @return float|int
+      */
      public function getAngle($X1, $Y1, $X2, $Y2)
      {
          $Opposite = $Y2 - $Y1;
@@ -209,6 +256,15 @@
      }
 
      /* Return the surrounding box of text area */
+     /**
+      * @param $X
+      * @param $Y
+      * @param $FontName
+      * @param $FontSize
+      * @param $Angle
+      * @param $Text
+      * @return mixed
+      */
      public function getTextBox_deprecated($X, $Y, $FontName, $FontSize, $Angle, $Text)
      {
          $Size    = imagettfbbox($FontSize, $Angle, $FontName, $Text);
@@ -233,6 +289,15 @@
      }
 
      /* Return the surrounding box of text area */
+     /**
+      * @param $X
+      * @param $Y
+      * @param $FontName
+      * @param $FontSize
+      * @param $Angle
+      * @param $Text
+      * @return array
+      */
      public function getTextBox($X, $Y, $FontName, $FontSize, $Angle, $Text)
      {
          $coords = imagettfbbox($FontSize, 0, $FontName, $Text);
@@ -269,6 +334,9 @@
      }
 
      /* Set current font properties */
+     /**
+      * @param string $Format
+      */
      public function setFontProperties($Format="")
      {
          $R		= isset($Format["R"]) ? $Format["R"] : -1;
@@ -301,6 +369,10 @@
      }
 
      /* Returns the 1st decimal values (used to correct AA bugs) */
+     /**
+      * @param $Value
+      * @return bool|int|string
+      */
      public function getFirstDecimal($Value)
      {
          $Values = preg_split("/\./", $Value);
@@ -311,6 +383,9 @@
      }
 
      /* Attach a dataset to your pChart Object */
+     /**
+      * @param $DataSet
+      */
      public function setDataSet(&$DataSet)
      {
          $this->DataSet = $DataSet;
@@ -323,6 +398,12 @@
      }
 
      /* Initialise the image map methods */
+     /**
+      * @param string $Name
+      * @param int $StorageMode
+      * @param string $UniqueID
+      * @param string $StorageFolder
+      */
      public function initialiseImageMap($Name="pChart", $StorageMode=IMAGE_MAP_STORAGE_SESSION, $UniqueID="imageMap", $StorageFolder="tmp")
      {
          $this->ImageMapIndex 		= $Name;
@@ -344,6 +425,14 @@
      }
 
      /* Add a zone to the image map */
+     /**
+      * @param $Type
+      * @param $Plots
+      * @param null $Color
+      * @param null $Title
+      * @param null $Message
+      * @param bool $HTMLEncode
+      */
      public function addToImageMap($Type, $Plots, $Color=null, $Title=null, $Message=null, $HTMLEncode=false)
      {
          if ($this->ImageMapStorageMode == null) {
@@ -372,6 +461,11 @@
      }
 
      /* Remove VOID values from an imagemap custom values array */
+     /**
+      * @param $SerieName
+      * @param $Values
+      * @return int|string
+      */
      public function removeVOIDFromArray($SerieName, $Values)
      {
          if (!isset($this->DataSet->Data["Series"][$SerieName])) {
@@ -388,6 +482,11 @@
      }
 
      /* Replace the title of one image map serie */
+     /**
+      * @param $OldTitle
+      * @param $NewTitle
+      * @return int
+      */
      public function replaceImageMapTitle($OldTitle, $NewTitle)
      {
          if ($this->ImageMapStorageMode == null) {
@@ -453,6 +552,11 @@
      }
 
      /* Replace the values of the image map contents */
+     /**
+      * @param $Title
+      * @param $Values
+      * @return int
+      */
      public function replaceImageMapValues($Title, $Values)
      {
          if ($this->ImageMapStorageMode == null) {
@@ -502,6 +606,12 @@
      }
 
      /* Dump the image map */
+     /**
+      * @param string $Name
+      * @param int $StorageMode
+      * @param string $UniqueID
+      * @param string $StorageFolder
+      */
      public function dumpImageMap($Name="pChart", $StorageMode=IMAGE_MAP_STORAGE_SESSION, $UniqueID="imageMap", $StorageFolder="tmp")
      {
          $this->ImageMapIndex 		= $Name;
@@ -537,6 +647,12 @@
      }
 
      /* Return the HTML converted color from the RGB composite values */
+     /**
+      * @param $R
+      * @param $G
+      * @param $B
+      * @return string
+      */
      public function toHTMLColor($R, $G, $B)
      {
          $R=intval($R);
@@ -552,6 +668,10 @@
      }
 
      /* Reverse an array of points */
+     /**
+      * @param $Plots
+      * @return string
+      */
      public function reversePlots($Plots)
      {
          $Result = "";
@@ -563,6 +683,13 @@
      }
 
      /* Mirror Effect */
+     /**
+      * @param $X
+      * @param $Y
+      * @param $Width
+      * @param $Height
+      * @param string $Format
+      */
      public function drawAreaMirror($X, $Y, $Width, $Height, $Format="")
      {
          $StartAlpha	= isset($Format["StartAlpha"]) ? $Format["StartAlpha"] : 80;

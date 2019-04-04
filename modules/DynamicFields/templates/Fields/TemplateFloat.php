@@ -73,6 +73,9 @@ class TemplateFloat extends TemplateRange
     }
 
 
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();
@@ -80,6 +83,9 @@ class TemplateFloat extends TemplateRange
         return $def;
     }
 
+    /**
+     * @return string
+     */
     public function get_db_type()
     {
         $precision = (!empty($this->precision))? $this->precision: 6;

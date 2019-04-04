@@ -40,6 +40,11 @@ require_once('modules/AOS_Invoices/AOS_Invoices.php');
 
 class AOS_InvoicesDashlet extends DashletGeneric
 {
+    /**
+     * AOS_InvoicesDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

@@ -43,6 +43,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class updateDependencies
 {
+    /**
+     * @param $bean
+     * @param $event
+     * @param $arguments
+     * @throws Exception
+     */
     public function update_dependency(&$bean, $event, $arguments)
     {
         //Get all tasks that are dependant on the current task being saved.
@@ -95,6 +101,13 @@ class updateDependencies
     }
 
     //Gets the difference in days between two dates
+
+    /**
+     * @param $start_date
+     * @param $end_date
+     * @return string
+     * @throws Exception
+     */
     public function count_days($start_date, $end_date)
     {
         $d1 = new DateTime($start_date);

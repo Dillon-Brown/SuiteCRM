@@ -180,6 +180,9 @@ class SugarAuthenticateUser
         return $ret;
     }
 
+    /**
+     * @return bool
+     */
     public function factorAuthenticateCheck()
     {
         if ($_SESSION['user_factor_authenticated'] || $_REQUEST['factor_token'] == $_SESSION['factor_token']) {

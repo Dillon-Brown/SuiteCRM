@@ -45,7 +45,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
 interface FactorAuthInterface
 {
     public function showTokenInput();
-    
+
+    /**
+     * @param $token
+     * @return mixed
+     */
     public function sendToken($token);
     
     public function validateTokenMessage();

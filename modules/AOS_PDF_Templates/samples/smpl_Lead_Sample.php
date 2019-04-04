@@ -4,11 +4,17 @@ require_once __DIR__ . '/../TemplateSampleService.php';
 
 class smpl_Lead_Sample
 {
+    /**
+     * @return string
+     */
     public function getType()
     {
         return 'Leads';
     }
-        
+
+    /**
+     * @return string
+     */
     public function getBody()
     {
         global $locale;
@@ -48,11 +54,17 @@ class smpl_Lead_Sample
 </table>';
     }
 
+    /**
+     * @return string
+     */
     public function getHeader()
     {
         return '';
     }
 
+    /**
+     * @return string
+     */
     public function getFooter()
     {
         return '';

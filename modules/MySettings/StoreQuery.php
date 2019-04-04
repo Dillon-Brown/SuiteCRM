@@ -45,6 +45,10 @@ class StoreQuery
 {
     public $query = array();
 
+    /**
+     * @param $name
+     * @param $val
+     */
     public function addToQuery($name, $val)
     {
         $this->query[$name] = $val;
@@ -105,12 +109,18 @@ class StoreQuery
         $current_user->setPreference($name . 'Q', $this->query);
     }
 
+    /**
+     * @param $name
+     */
     public function clearQuery($name)
     {
         $this->query = array();
         $this->saveQuery($name);
     }
 
+    /**
+     * @param $name
+     */
     public function loadQuery($name)
     {
         $saveType = $this->getSaveType($name);
@@ -163,6 +173,10 @@ class StoreQuery
         }
     }
 
+    /**
+     * @param $name
+     * @return mixed|string
+     */
     public function getSaveType($name)
     {
         global $sugar_config;
@@ -189,6 +203,9 @@ class StoreQuery
     }
 
 
+    /**
+     * @param $name
+     */
     public function saveFromRequest($name)
     {
         if (isset($_REQUEST['query'])) {
@@ -226,6 +243,9 @@ class StoreQuery
         }
     }
 
+    /**
+     * @param $name
+     */
     public function saveFromGet($name)
     {
         if (isset($_GET['query'])) {

@@ -59,7 +59,9 @@ class SecurityGroupMessage extends Basic
     }
 
 
-
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         $data = parent::get_list_view_data();
@@ -102,6 +104,10 @@ class SecurityGroupMessage extends Basic
     }
 
 
+    /**
+     * @param $text
+     * @param $securitygroup_id
+     */
     public static function saveMessage($text, $securitygroup_id)
     {
         //if no security group id then must be admin. Otherwise, make sure the user is a member of the group
@@ -123,6 +129,10 @@ class SecurityGroupMessage extends Basic
         $message->save();
     }
 
+    /**
+     * @param $startDate
+     * @return string
+     */
     public function getTimeLapse($startDate)
     {
         $startDate = $GLOBALS['timedate']->to_db($startDate);
@@ -179,6 +189,10 @@ class SecurityGroupMessage extends Basic
         return $result . ' ' . translate('LBL_TIME_AGO', 'SugarFeed');
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {

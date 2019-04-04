@@ -44,6 +44,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class Metric
 {
+    /**
+     * Metric constructor.
+     * @param $type
+     * @param $name
+     */
     public function __construct($type, $name)
     {
         $this->_name = $name;
@@ -78,6 +83,9 @@ class Metric
         return $this->_name;
     }
 
+    /**
+     * @return bool
+     */
     public function isMutable()
     {
         return $this->_mutable;

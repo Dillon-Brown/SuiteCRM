@@ -160,6 +160,11 @@ function checkBouncedEmailForIdentifier($email_description)
     return array('found' => $found, 'matches' => $matches, 'identifiers' => $identifiers);
 }
 
+/**
+ * @param $email
+ * @param $email_header
+ * @return bool
+ */
 function campaign_process_bounced_emails(&$email, &$email_header)
 {
     global $sugar_config;

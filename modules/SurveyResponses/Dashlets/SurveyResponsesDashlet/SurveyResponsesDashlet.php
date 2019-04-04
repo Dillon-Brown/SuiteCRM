@@ -46,6 +46,11 @@ require_once('modules/SurveyResponses/SurveyResponses.php');
 
 class SurveyResponsesDashlet extends DashletGeneric
 {
+    /**
+     * SurveyResponsesDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

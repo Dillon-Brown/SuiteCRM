@@ -29,6 +29,12 @@ use SuiteCRM\Utility\SuiteValidator as SuiteValidator;
 
 class templateParser
 {
+    /**
+     * @param $string
+     * @param $bean_arr
+     * @return mixed
+     * @throws Exception
+     */
     public static function parse_template($string, $bean_arr)
     {
         foreach ($bean_arr as $bean_name => $bean_id) {
@@ -49,6 +55,13 @@ class templateParser
         return $string;
     }
 
+    /**
+     * @param $string
+     * @param $key
+     * @param $focus
+     * @return mixed
+     * @throws Exception
+     */
     public function parse_template_bean($string, $key, &$focus)
     {
         global $app_strings, $sugar_config;

@@ -190,6 +190,10 @@ class Contact extends Person implements EmailInterface
     }
 
 
+    /**
+     * @param string $query
+     * @param string $where
+     */
     public function add_list_count_joins(&$query, $where)
     {
         // accounts.name
@@ -206,6 +210,9 @@ class Contact extends Person implements EmailInterface
         $query .= $custom_join['join'];
     }
 
+    /**
+     * @return string[]
+     */
     public function listviewACLHelper()
     {
         $array_assign = parent::listviewACLHelper();
@@ -226,6 +233,19 @@ class Contact extends Person implements EmailInterface
         return $array_assign;
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @param array $filter
+     * @param array $params
+     * @param int $show_deleted
+     * @param string $join_type
+     * @param bool $return_array
+     * @param null $parentbean
+     * @param bool $singleSelect
+     * @param bool $ifListForExport
+     * @return String
+     */
     public function create_new_list_query(
         $order_by,
         $where,
@@ -275,6 +295,18 @@ class Contact extends Person implements EmailInterface
     }
 
 
+    /**
+     * @param $order_by
+     * @param $where
+     * @param array $filter
+     * @param array $params
+     * @param int $show_deleted
+     * @param string $join_type
+     * @param bool $return_array
+     * @param null $parentbean
+     * @param bool $singleSelect
+     * @return String
+     */
     public function address_popup_create_new_list_query(
         $order_by,
         $where,
@@ -362,6 +394,12 @@ class Contact extends Person implements EmailInterface
     }
 
 
+    /**
+     * @param $order_by
+     * @param $where
+     * @param string $relate_link_join
+     * @return string
+     */
     public function create_export_query($order_by, $where, $relate_link_join = '')
     {
         $custom_join = $this->getCustomJoin(true, true, $where);
@@ -523,6 +561,10 @@ class Contact extends Person implements EmailInterface
         }
     }
 
+    /**
+     * @param array $filter_fields
+     * @return array
+     */
     public function get_list_view_data($filter_fields = array())
     {
         $temp_array = parent::get_list_view_data();
@@ -575,6 +617,11 @@ class Contact extends Person implements EmailInterface
         return $the_where;
     }
 
+    /**
+     * @param $xtpl
+     * @param $contact
+     * @return mixed
+     */
     public function set_notification_body($xtpl, $contact)
     {
         global $locale;
@@ -585,6 +632,10 @@ class Contact extends Person implements EmailInterface
         return $xtpl;
     }
 
+    /**
+     * @param $email
+     * @return array|null
+     */
     public function get_contact_id_by_email($email)
     {
         $email = trim($email);
@@ -602,6 +653,10 @@ class Contact extends Person implements EmailInterface
         return empty($result) ? null : $result;
     }
 
+    /**
+     * @param bool $is_update
+     * @param array $exclude
+     */
     public function save_relationship_changes($is_update, $exclude = array())
     {
 
@@ -617,6 +672,10 @@ class Contact extends Person implements EmailInterface
         parent::save_relationship_changes($is_update);
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -627,6 +686,10 @@ class Contact extends Person implements EmailInterface
         return false;
     }
 
+    /**
+     * @param array $type
+     * @return string
+     */
     public function get_unlinked_email_query($type = array())
     {
         return get_unlinked_email_query($type, $this);

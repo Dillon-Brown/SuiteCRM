@@ -78,6 +78,10 @@ class ViewSearchView extends ViewListView
     {
     }
 
+    /**
+     * @param bool $preview
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function display(
         $preview = false
         ) {
@@ -100,6 +104,9 @@ class ViewSearchView extends ViewListView
         }
     }
 
+    /**
+     * @return AjaxCompose
+     */
     public function constructAjax()
     {
         require_once('modules/ModuleBuilder/MB/AjaxCompose.php') ;

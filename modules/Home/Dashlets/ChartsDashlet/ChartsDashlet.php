@@ -187,6 +187,9 @@ class ChartsDashlet extends Dashlet
     {
     }
 
+    /**
+     * @return string
+     */
     public function setConfigureIcon()
     {
         if ($this->isConfigurable) {
@@ -201,6 +204,9 @@ class ChartsDashlet extends Dashlet
         return $additionalTitle;
     }
 
+    /**
+     * @return string
+     */
     public function setRefreshIcon()
     {
         $additionalTitle = '';

@@ -54,6 +54,11 @@ require_once('modules/FP_Event_Locations/FP_Event_Locations.php');
 
 class FP_Event_LocationsDashlet extends DashletGeneric
 {
+    /**
+     * FP_Event_LocationsDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

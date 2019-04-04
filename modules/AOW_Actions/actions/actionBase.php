@@ -27,6 +27,10 @@ class actionBase
 {
     public $id;
 
+    /**
+     * actionBase constructor.
+     * @param string $id
+     */
     public function __construct($id = '')
     {
         $this->id = $id;
@@ -48,16 +52,31 @@ class actionBase
     }
 
 
+    /**
+     * @return array
+     */
     public function loadJS()
     {
         return array();
     }
 
+    /**
+     * @param $line
+     * @param SugarBean|null $bean
+     * @param array $params
+     * @return string
+     */
     public function edit_display($line, SugarBean $bean = null, $params = array())
     {
         return '';
     }
 
+    /**
+     * @param SugarBean $bean
+     * @param array $params
+     * @param bool $in_save
+     * @return bool
+     */
     public function run_action(SugarBean $bean, $params = array(), $in_save=false)
     {
         return true;

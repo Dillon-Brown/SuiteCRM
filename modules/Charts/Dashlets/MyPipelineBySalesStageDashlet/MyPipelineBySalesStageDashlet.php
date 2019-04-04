@@ -401,6 +401,12 @@ EOD;
         return $groupBy;
     }
 
+    /**
+     * @param $dataset
+     * @param $currency_symbol
+     * @param $thousands_symbol
+     * @return mixed
+     */
     protected function prepareChartData($dataset, $currency_symbol, $thousands_symbol)
     {
         //Use the  lead_source to categorise the data for the charts

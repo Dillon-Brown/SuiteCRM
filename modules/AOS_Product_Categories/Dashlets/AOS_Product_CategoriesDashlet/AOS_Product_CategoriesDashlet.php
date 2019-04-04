@@ -54,6 +54,11 @@ require_once('modules/AOS_Product_Categories/AOS_Product_Categories.php');
 
 class AOS_Product_CategoriesDashlet extends DashletGeneric
 {
+    /**
+     * AOS_Product_CategoriesDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

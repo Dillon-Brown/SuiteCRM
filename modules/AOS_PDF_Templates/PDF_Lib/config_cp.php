@@ -1,6 +1,11 @@
 <?php
 
 
+/**
+ * @param $llcc
+ * @param $adobeCJK
+ * @return array
+ */
 function GetLangOpts($llcc, $adobeCJK) {
 	if (strlen($llcc) == 5) {
 		$lang = substr(strtolower($llcc),0,2);

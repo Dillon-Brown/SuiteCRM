@@ -1106,6 +1106,9 @@ class OneLogin_Saml2_Response
      *
      * @return string Cause
      */
+    /**
+     * @return string
+     */
     public function getError()
     {
         return $this->_error;
@@ -1115,6 +1118,9 @@ class OneLogin_Saml2_Response
      * Returns the SAML Response document (If contains an encrypted assertion, decrypts it)
      *
      * @return DomDocument SAML Response
+     */
+    /**
+     * @return DOMDocument
      */
     public function getXMLDocument()
     {

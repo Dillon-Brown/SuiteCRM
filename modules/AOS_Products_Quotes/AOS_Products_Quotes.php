@@ -62,6 +62,12 @@ class AOS_Products_Quotes extends AOS_Products_Quotes_sugar
     }
 
 
+    /**
+     * @param $post_data
+     * @param $parent
+     * @param array $groups
+     * @param string $key
+     */
     public function save_lines($post_data, $parent, $groups = array(), $key = '')
     {
         $line_count = isset($post_data[$key . 'name']) ? count($post_data[$key . 'name']) : 0;
@@ -122,6 +128,10 @@ class AOS_Products_Quotes extends AOS_Products_Quotes_sugar
         }
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         require_once('modules/AOS_Products_Quotes/AOS_Utils.php');

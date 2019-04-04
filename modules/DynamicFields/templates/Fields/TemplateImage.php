@@ -45,7 +45,10 @@ require_once('modules/DynamicFields/templates/Fields/TemplateText.php');
 class TemplateImage extends TemplateText
 {
     public $type = 'image';
-        
+
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();
@@ -82,7 +85,10 @@ class TemplateImage extends TemplateText
         $this->vardef_map['width'] = 'ext2';
         $this->vardef_map['height'] = 'ext3';
     }
-    
+
+    /**
+     * @param $values
+     */
     public function set($values)
     {
         parent::set($values);

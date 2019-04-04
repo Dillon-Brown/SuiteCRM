@@ -45,6 +45,10 @@ require_once('modules/SugarFeed/linkHandlers/Link.php');
 
 class FeedLinkHandlerImage extends FeedLinkHandlerLink
 {
+    /**
+     * @param $data
+     * @return string
+     */
     public function getDisplay(&$data)
     {
         $imageData = unserialize(base64_decode($data['LINK_URL']));
@@ -58,6 +62,11 @@ class FeedLinkHandlerImage extends FeedLinkHandlerLink
         return '<div style="padding-left:10px"><!--not_in_theme!--><img src="'. $imageData['url']. '" style="'.$image_style.'"></div>';
     }
 
+    /**
+     * @param $feed
+     * @param $link_type
+     * @param $link_url
+     */
     public function handleInput($feed, $link_type, $link_url)
     {
         parent::handleInput($feed, $link_type, $link_url);

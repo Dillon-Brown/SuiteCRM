@@ -53,6 +53,11 @@ class iFrameDashlet extends Dashlet
     public $url;
     protected $allowed_schemes = array("http", "https");
 
+    /**
+     * iFrameDashlet constructor.
+     * @param $id
+     * @param null $options
+     */
     public function __construct($id, $options = null)
     {
         parent::__construct($id);
@@ -103,6 +108,9 @@ class iFrameDashlet extends Dashlet
         self::__construct($id, $options);
     }
 
+    /**
+     * @return bool
+     */
     protected function checkURL()
     {
         $scheme = parse_url($this->url, PHP_URL_SCHEME);
@@ -113,6 +121,10 @@ class iFrameDashlet extends Dashlet
         return true;
     }
 
+    /**
+     * @return string|void
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function displayOptions()
     {
         global $app_strings;
@@ -136,6 +148,10 @@ class iFrameDashlet extends Dashlet
         return  $ss->fetch($this->configureTpl);
     }
 
+    /**
+     * @param array $req
+     * @return array
+     */
     public function saveOptions($req)
     {
         $options = array();
@@ -154,6 +170,9 @@ class iFrameDashlet extends Dashlet
         return $options;
     }
 
+    /**
+     * @return string
+     */
     public function display()
     {
         $sugar_edition = 'COM';

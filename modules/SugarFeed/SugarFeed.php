@@ -86,6 +86,10 @@ class SugarFeed extends Basic
     }
 
 
+    /**
+     * @param $module
+     * @param bool $updateDB
+     */
     public static function activateModuleFeed($module, $updateDB = true)
     {
         if ($module != 'UserFeed') {
@@ -107,6 +111,10 @@ class SugarFeed extends Basic
         }
     }
 
+    /**
+     * @param $module
+     * @param bool $updateDB
+     */
     public static function disableModuleFeed($module, $updateDB = true)
     {
         if ($module != 'UserFeed') {
@@ -144,6 +152,10 @@ class SugarFeed extends Basic
     }
 
 
+    /**
+     * @param $module
+     * @return array
+     */
     public static function getModuleFeedFiles($module)
     {
         $baseDirList = array('modules/'.$module.'/SugarFeeds/', 'custom/modules/'.$module.'/SugarFeeds/');
@@ -171,6 +183,9 @@ class SugarFeed extends Basic
         return($fileList);
     }
 
+    /**
+     * @return array|The
+     */
     public static function getActiveFeedModules()
     {
         // Stored in a cache somewhere
@@ -217,6 +232,9 @@ class SugarFeed extends Basic
         return $feedModules;
     }
 
+    /**
+     * @return array
+     */
     public static function getAllFeedModules()
     {
         // Uncached, only used from the admin panel and during installation currently
@@ -268,6 +286,14 @@ class SugarFeed extends Basic
         );
     }
 
+    /**
+     * @param $text
+     * @param $module
+     * @param $id
+     * @param bool $record_assigned_user_id
+     * @param bool $link_type
+     * @param bool $link_url
+     */
     public static function pushFeed(
         $text,
         $module,
@@ -305,6 +331,9 @@ class SugarFeed extends Basic
         $feed->save();
     }
 
+    /**
+     * @return array|The|null
+     */
     public static function getLinkTypes()
     {
         static $linkTypeList = null;
@@ -360,6 +389,10 @@ class SugarFeed extends Basic
         return $linkTypeList;
     }
 
+    /**
+     * @param $linkName
+     * @return bool
+     */
     public static function getLinkClass($linkName)
     {
         $linkTypeList = SugarFeed::getLinkTypes();
@@ -383,6 +416,10 @@ class SugarFeed extends Basic
         return($linkClass);
     }
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     public function get_list_view_data()
     {
         $data = parent::get_list_view_data();
@@ -458,6 +495,11 @@ class SugarFeed extends Basic
         return  $data ;
     }
 
+    /**
+     * @param $data
+     * @return string
+     * @throws Exception
+     */
     public function fetchReplies($data)
     {
         $seedBean = new SugarFeed;
@@ -516,6 +558,11 @@ class SugarFeed extends Basic
         return $replyHTML;
     }
 
+    /**
+     * @param $startDate
+     * @return string
+     * @throws Exception
+     */
     public static function getTimeLapse($startDate)
     {
         global $timedate;

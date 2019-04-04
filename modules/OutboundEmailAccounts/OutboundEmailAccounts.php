@@ -55,6 +55,10 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
         parent::__construct();
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         if (!$this->mail_smtppass && $this->id) {
@@ -73,6 +77,12 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
         return $results;
     }
 
+    /**
+     * @param int $id
+     * @param bool $encode
+     * @param bool $deleted
+     * @return SugarBean|null
+     */
     public function retrieve($id = -1, $encode = true, $deleted = true)
     {
         $results = parent::retrieve($id, $encode, $deleted);
@@ -80,6 +90,9 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
         return $results;
     }
 
+    /**
+     * @return string
+     */
     public static function getPasswordChange()
     {
         global $mod_strings;
@@ -99,6 +112,14 @@ HTML;
         return $html;
     }
 
+    /**
+     * @param $focus
+     * @param $name
+     * @param $value
+     * @param $view
+     * @return string
+     * @throws \SuiteCRM\StateSaverException
+     */
     public static function getEmailProviderChooser($focus, $name, $value, $view)
     {
         global $app_strings, $mod_strings;
@@ -110,6 +131,9 @@ HTML;
         return $html;
     }
 
+    /**
+     * @return string
+     */
     public static function getSendTestEmailBtn()
     {
         global $app_strings, $current_user;

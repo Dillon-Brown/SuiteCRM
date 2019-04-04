@@ -40,6 +40,11 @@ require_once('modules/AOS_PDF_Templates/AOS_PDF_Templates.php');
 
 class AOS_PDF_TemplatesDashlet extends DashletGeneric
 {
+    /**
+     * AOS_PDF_TemplatesDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

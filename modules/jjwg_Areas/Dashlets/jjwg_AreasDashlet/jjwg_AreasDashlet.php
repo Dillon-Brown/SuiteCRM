@@ -9,6 +9,11 @@ require_once('modules/jjwg_Areas/jjwg_Areas.php');
 
 class jjwg_AreasDashlet extends DashletGeneric
 {
+    /**
+     * jjwg_AreasDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         require('modules/jjwg_Areas/metadata/dashletviewdefs.php');

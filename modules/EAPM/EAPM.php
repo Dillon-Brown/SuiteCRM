@@ -77,6 +77,10 @@ class EAPM extends Basic
     public $disable_row_level_security = true;
     public static $passwordPlaceholder = '::PASSWORD::';
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -86,6 +90,11 @@ class EAPM extends Basic
         return false;
     }
 
+    /**
+     * @param $application
+     * @param bool $includeInactive
+     * @return EAPM|object|void
+     */
     public static function getLoginInfo($application, $includeInactive = false)
     {
         global $current_user;
@@ -125,6 +134,19 @@ class EAPM extends Basic
         return $eapmBean;
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @param array $filter
+     * @param array $params
+     * @param int $show_deleted
+     * @param string $join_type
+     * @param bool $return_array
+     * @param null $parentbean
+     * @param bool $singleSelect
+     * @param bool $ifListForExport
+     * @return String
+     */
     public function create_new_list_query($order_by, $where, $filter = array(), $params = array(), $show_deleted = 0, $join_type = '', $return_array = false, $parentbean = null, $singleSelect = false, $ifListForExport = false)
     {
         global $current_user;
@@ -143,6 +165,10 @@ class EAPM extends Basic
         return parent::create_new_list_query($order_by, $where, $filter, $params, $show_deleted, $join_type, $return_array, $parentbean, $singleSelect);
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         $this->fillInName();
@@ -164,6 +190,9 @@ class EAPM extends Basic
         return $parentRet;
     }
 
+    /**
+     * @param string $id
+     */
     public function mark_deleted($id)
     {
         // Nuke the EAPM cache for this record
@@ -174,6 +203,9 @@ class EAPM extends Basic
         return parent::mark_deleted($id);
     }
 
+    /**
+     * @return bool
+     */
     public function validated()
     {
         if (empty($this->id)) {
@@ -236,6 +268,9 @@ class EAPM extends Basic
 }
 
 // External API integration, for the dropdown list of what external API's are available
+/**
+ * @return array
+ */
 function getEAPMExternalApiDropDown()
 {
     $apiList = ExternalAPIFactory::getModuleDropDown('', true, true);

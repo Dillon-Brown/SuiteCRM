@@ -77,6 +77,13 @@ function getEmployeeStatusOptions($focus, $name = 'employee_status', $value = nu
     return $focus->employee_status;
 }
 
+/**
+ * @param $focus
+ * @param string $name
+ * @param null $value
+ * @param string $view
+ * @return string
+ */
 function getMessengerTypeOptions($focus, $name = 'messenger_type', $value = null, $view = 'DetailView')
 {
     global $current_user, $app_list_strings;

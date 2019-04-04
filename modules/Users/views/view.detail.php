@@ -169,6 +169,9 @@ class UsersViewDetail extends ViewDetail
         }
     }
 
+    /**
+     * @return string
+     */
     public function getMetaDataFile()
     {
         $userType = 'Regular';

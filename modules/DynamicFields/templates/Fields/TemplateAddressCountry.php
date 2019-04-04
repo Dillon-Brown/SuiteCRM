@@ -46,7 +46,10 @@ require_once('include/utils/array_utils.php');
 class TemplateAddressCountry extends TemplateEnum
 {
     public $group = '';
-    
+
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();

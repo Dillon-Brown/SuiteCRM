@@ -81,6 +81,12 @@ class ModuleBuilderParser
     {
     }
 
+    /**
+     * @param $view
+     * @param $file
+     * @param $moduleName
+     * @return array
+     */
     public function _loadFromFile($view, $file, $moduleName)
     {
         $variables = array();
@@ -118,6 +124,12 @@ class ModuleBuilderParser
         return (array('viewdefs' => $defs, 'variables' => $variables));
     }
 
+    /**
+     * @param $file
+     * @param $view
+     * @param $moduleName
+     * @param $defs
+     */
     public function handleSave($file, $view, $moduleName, $defs)
     {
     }
@@ -125,6 +137,13 @@ class ModuleBuilderParser
 
     /*
      * Save the new layout
+     */
+    /**
+     * @param $file
+     * @param $view
+     * @param $moduleName
+     * @param $defs
+     * @param $variables
      */
     public function _writeToFile($file, $view, $moduleName, $defs, $variables)
     {
@@ -173,6 +192,9 @@ class ModuleBuilderParser
     }
 
 
+    /**
+     * @param $msg
+     */
     public function _fatalError($msg)
     {
         $GLOBALS ['log']->fatal($msg);

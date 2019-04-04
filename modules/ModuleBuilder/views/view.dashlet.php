@@ -89,6 +89,10 @@ class ViewDashlet extends ViewListView
     {
     }
 
+    /**
+     * @param bool $preview
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function display(
         $preview = false
         ) {
@@ -105,6 +109,9 @@ class ViewDashlet extends ViewListView
         }
     }
 
+    /**
+     * @return AjaxCompose
+     */
     public function constructAjax()
     {
         require_once('modules/ModuleBuilder/MB/AjaxCompose.php') ;
@@ -129,6 +136,10 @@ class ViewDashlet extends ViewListView
         return $ajax ;
     }
 
+    /**
+     * @param $parser
+     * @return Sugar_Smarty
+     */
     public function constructSmarty($parser)
     {
         $smarty = new Sugar_Smarty() ;
@@ -205,6 +216,9 @@ class ViewDashlet extends ViewListView
         return $smarty ;
     }
 
+    /**
+     * @return string
+     */
     public function _constructTitle()
     {
         global $app_list_strings ;

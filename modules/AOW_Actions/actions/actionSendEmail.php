@@ -41,6 +41,10 @@ class actionSendEmail extends actionBase
      */
     protected $lastEmailsSuccess;
 
+    /**
+     * actionSendEmail constructor.
+     * @param string $id
+     */
     public function __construct($id = '')
     {
         parent::__construct($id);
@@ -63,11 +67,20 @@ class actionSendEmail extends actionBase
     }
 
 
+    /**
+     * @return array
+     */
     public function loadJS()
     {
         return array('modules/AOW_Actions/actions/actionSendEmail.js');
     }
 
+    /**
+     * @param $line
+     * @param SugarBean|null $bean
+     * @param array $params
+     * @return string
+     */
     public function edit_display($line, SugarBean $bean = null, $params = array())
     {
         global $app_list_strings;
@@ -166,6 +179,11 @@ class actionSendEmail extends actionBase
         return $html;
     }
 
+    /**
+     * @param SugarBean $bean
+     * @param $params
+     * @return array
+     */
     private function getEmailsFromParams(SugarBean $bean, $params)
     {
         $emails = array();
@@ -396,6 +414,11 @@ class actionSendEmail extends actionBase
         return $this->lastEmailsSuccess;
     }
 
+    /**
+     * @param SugarBean $bean
+     * @param $template
+     * @param array $object_override
+     */
     public function parse_template(SugarBean $bean, &$template, $object_override = array())
     {
         global $sugar_config;
@@ -458,6 +481,10 @@ class actionSendEmail extends actionBase
         $template->body = str_replace('$sugarurl', $sugar_config['site_url'], $template->body);
     }
 
+    /**
+     * @param EmailTemplate $template
+     * @return array
+     */
     public function getAttachments(EmailTemplate $template)
     {
         $attachments = array();
@@ -474,6 +501,20 @@ class actionSendEmail extends actionBase
         return $attachments;
     }
 
+    /**
+     * @param $emailTo
+     * @param $emailSubject
+     * @param $emailBody
+     * @param $altemailBody
+     * @param SugarBean|null $relatedBean
+     * @param array $emailCc
+     * @param array $emailBcc
+     * @param array $attachments
+     * @return bool
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
+     */
     public function sendEmail($emailTo, $emailSubject, $emailBody, $altemailBody, SugarBean $relatedBean = null, $emailCc = array(), $emailBcc = array(), $attachments = array())
     {
         require_once('modules/Emails/Email.php');

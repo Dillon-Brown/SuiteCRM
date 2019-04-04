@@ -74,6 +74,10 @@ class Administration extends SugarBean
         $this->setupCustomFields('Administration');
     }
 
+    /**
+     * @param bool $displayWarning
+     * @return bool
+     */
     public function checkSmtpError($displayWarning = true)
     {
         global $sugar_config;
@@ -250,6 +254,10 @@ class Administration extends SugarBean
         return $this->db->getAffectedRowCount($result);
     }
 
+    /**
+     * @param $str
+     * @return array
+     */
     public function get_config_prefix($str)
     {
         return $str ? array(substr($str, 0, strpos($str, "_")), substr($str, strpos($str, "_") + 1)) : array(false, false);

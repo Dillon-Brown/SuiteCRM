@@ -55,6 +55,12 @@ class MailMerge
     public $list;
     public $fieldList;
 
+    /**
+     * MailMerge constructor.
+     * @param null $list
+     * @param null $fieldList
+     * @param string $data_dir
+     */
     public function __construct($list = null, $fieldList = null, $data_dir = 'data')
     {
         // this is the path to your data dir.
@@ -81,6 +87,9 @@ class MailMerge
     }
 
 
+    /**
+     * @return string
+     */
     public function Execute()
     {
         $this->Initialize();
@@ -96,6 +105,9 @@ class MailMerge
         }
     }
 
+    /**
+     * @param null $template
+     */
     public function Template($template = null)
     {
         if (is_array($template)) {
@@ -142,6 +154,10 @@ class MailMerge
         $this->obj->ActiveDocument->Close();
     }
 
+    /**
+     * @param $template
+     * @return string
+     */
     public function CreateDocument($template)
     {
         //$this->obj->Documents->Open($this->mm_data_dir.'/Templates/'.$template[0].'.dot');
@@ -176,6 +192,9 @@ class MailMerge
         $this->obj->Quit();
     }
 
+    /**
+     * @param null $list
+     */
     public function SetDataList($list = null)
     {
         if (is_array($list)) {
@@ -183,6 +202,9 @@ class MailMerge
         }
     }
 
+    /**
+     * @param null $list
+     */
     public function SetFieldList($list = null)
     {
         if (is_array($list)) {

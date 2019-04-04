@@ -89,6 +89,10 @@ class AOK_Knowledge_Base_Categories_sugar extends Basic
     }
 
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {

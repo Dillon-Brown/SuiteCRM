@@ -71,6 +71,10 @@ class SurveyResponses extends Basic
         parent::__construct();
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -81,6 +85,13 @@ class SurveyResponses extends Basic
         return false;
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
+     */
     public function save($check_notify = false)
     {
         global $sugar_config;
@@ -137,6 +148,16 @@ class SurveyResponses extends Basic
         return $res;
     }
 
+    /**
+     * @param $contact
+     * @param $email
+     * @param $emailTemplateId
+     * @param $case
+     * @return bool
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
+     */
     private function sendEmail($contact, $email, $emailTemplateId, $case)
     {
         require_once("include/SugarPHPMailer.php");
@@ -176,6 +197,12 @@ class SurveyResponses extends Basic
         return true;
     }
 
+    /**
+     * @param EmailTemplate $template
+     * @param $contact
+     * @param $case
+     * @return array
+     */
     private function populateTemplate(EmailTemplate $template, $contact, $case)
     {
         global $sugar_config;
@@ -201,6 +228,13 @@ class SurveyResponses extends Basic
         return $ret;
     }
 
+    /**
+     * @param $email
+     * @param $mailer
+     * @param null $contactId
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     */
     private function logEmail($email, $mailer, $contactId = null)
     {
         require_once('modules/Emails/Email.php');

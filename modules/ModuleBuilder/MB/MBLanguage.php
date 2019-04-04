@@ -42,6 +42,14 @@ class MBLanguage
 {
     public $iTemplates = array();
     public $templates = array();
+
+    /**
+     * MBLanguage constructor.
+     * @param $name
+     * @param $path
+     * @param $label
+     * @param $key_name
+     */
     public function __construct($name, $path, $label, $key_name)
     {
         $this->path = $path;
@@ -75,6 +83,9 @@ class MBLanguage
         $this->generateAppStrings();
     }
 
+    /**
+     * @param $file
+     */
     public function loadStrings($file)
     {
         $module = strtoupper($this->name);
@@ -97,6 +108,9 @@ class MBLanguage
         }
     }
 
+    /**
+     * @param $file
+     */
     public function loadAppListStrings($file)
     {
         if (!file_exists($file)) {
@@ -135,6 +149,10 @@ class MBLanguage
         $this->loadStrings($this->path . '/language');
     }
 
+    /**
+     * @param string $language
+     * @return array
+     */
     public function getModStrings($language='en_us')
     {
         $language .= '.lang.php';
@@ -147,6 +165,11 @@ class MBLanguage
         $empty = array();
         return $empty;
     }
+
+    /**
+     * @param string $language
+     * @return array
+     */
     public function getAppListStrings($language='en_us')
     {
         $language .= '.lang.php';
@@ -160,6 +183,9 @@ class MBLanguage
         return $empty;
     }
 
+    /**
+     * @param bool $buildFromTemplate
+     */
     public function generateAppStrings($buildFromTemplate = true)
     {
         $this->appListStrings = array('en_us.lang.php'=>array());
@@ -179,6 +205,12 @@ class MBLanguage
             }
         }
     }
+
+    /**
+     * @param $key_name
+     * @param bool $duplicate
+     * @param bool $rename
+     */
     public function save($key_name, $duplicate=false, $rename=false)
     {
         $header = file_get_contents('modules/ModuleBuilder/MB/header.php');
@@ -278,6 +310,9 @@ class MBLanguage
         }
     }
 
+    /**
+     * @param $path
+     */
     public function build($path)
     {
         if (file_exists($this->path.'/language/')) {

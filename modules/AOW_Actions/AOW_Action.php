@@ -85,6 +85,11 @@ class AOW_Action extends Basic
     }
 
 
+    /**
+     * @param $post_data
+     * @param $parent
+     * @param string $key
+     */
     public function save_lines($post_data, $parent, $key = '')
     {
         if (!isset($post_data[$key . 'action'])) {
@@ -134,6 +139,10 @@ class AOW_Action extends Basic
         }
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         return false;

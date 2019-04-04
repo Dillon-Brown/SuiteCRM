@@ -58,6 +58,10 @@ abstract class ListViewDataEmailsSearchAbstract
      */
     public $seed;
 
+    /**
+     * ListViewDataEmailsSearchAbstract constructor.
+     * @param $listViewDataEmails
+     */
     public function __construct($listViewDataEmails)
     {
         $this->lvde = $listViewDataEmails;

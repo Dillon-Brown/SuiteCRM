@@ -11,6 +11,9 @@ class SurveysViewReports extends SugarView
         parent::__construct();
     }
 
+    /**
+     * @return array
+     */
     private function getSurveyStats()
     {
         $db = DBManagerFactory::getInstance();
@@ -129,6 +132,10 @@ EOF;
         echo $html;
     }
 
+    /**
+     * @param $arr
+     * @return mixed
+     */
     private function getCheckboxQuestionSkeleton($arr)
     {
         global $mod_strings;
@@ -146,6 +153,11 @@ EOF;
         return $arr;
     }
 
+    /**
+     * @param $arr
+     * @param $options
+     * @return mixed
+     */
     private function getMatrixQuestionSkeleton($arr, $options)
     {
         global $app_list_strings;
@@ -165,6 +177,11 @@ EOF;
         return $arr;
     }
 
+    /**
+     * @param $arr
+     * @param $options
+     * @return mixed
+     */
     private function getChoiceQuestionSkeleton($arr, $options)
     {
         foreach ($options as $option) {
@@ -180,6 +197,10 @@ EOF;
         return $arr;
     }
 
+    /**
+     * @param $arr
+     * @return mixed
+     */
     private function getRatingQuestionSkeleton($arr)
     {
         for ($x = 1; $x <= 5; $x++) {
@@ -195,6 +216,10 @@ EOF;
         return $arr;
     }
 
+    /**
+     * @param $arr
+     * @return mixed
+     */
     private function getScaleQuestionSkeleton($arr)
     {
         for ($x = 1; $x <= 10; $x++) {
@@ -210,6 +235,10 @@ EOF;
         return $arr;
     }
 
+    /**
+     * @param Surveys $survey
+     * @return array
+     */
     private function generateSkeletonData(Surveys $survey)
     {
         $data = array();

@@ -44,6 +44,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once('modules/DynamicFields/templates/Fields/TemplateDate.php');
 
+/**
+ * @param $ss
+ * @param $vardef
+ * @return mixed
+ */
 function get_body(&$ss, $vardef)
 {
     $td = new TemplateDate();

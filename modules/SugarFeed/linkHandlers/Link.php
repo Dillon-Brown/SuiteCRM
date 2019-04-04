@@ -44,11 +44,20 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class FeedLinkHandlerLink
 {
+    /**
+     * @param $data
+     * @return string
+     */
     public function getDisplay(&$data)
     {
         return '<div style="padding-left:10px"><a href="' . $data['LINK_URL'] . '" target="_blank">' .$data['LINK_URL'] .'</a></div>';
     }
 
+    /**
+     * @param $feed
+     * @param $link_type
+     * @param $link_url
+     */
     public function handleInput($feed, $link_type, $link_url)
     {
         $feed->link_type = $link_type;

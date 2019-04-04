@@ -77,6 +77,11 @@ class UserPreference extends SugarBean
     protected $_userFocus;
 
     // Do not actually declare, use the functions statically
+
+    /**
+     * UserPreference constructor.
+     * @param User|null $user
+     */
     public function __construct(
         User $user = null
         ) {

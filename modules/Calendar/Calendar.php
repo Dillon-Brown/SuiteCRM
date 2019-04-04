@@ -454,11 +454,17 @@ class Calendar
         return $day->get_date_str();
     }
 
+    /**
+     * @param $print
+     */
     public function setPrint($print)
     {
         $this->print = $print;
     }
-    
+
+    /**
+     * @return bool
+     */
     public function isPrint()
     {
         return $this->print;

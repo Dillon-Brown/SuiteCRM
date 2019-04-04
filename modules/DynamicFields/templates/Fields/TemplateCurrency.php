@@ -52,6 +52,9 @@ class TemplateCurrency extends TemplateRange
     public $precision = 6;
     public $type='currency';
 
+    /**
+     * @param $df
+     */
     public function delete($df)
     {
         parent::delete($df);
@@ -61,6 +64,9 @@ class TemplateCurrency extends TemplateRange
         $currency_id->delete($df);
     }
 
+    /**
+     * @param DynamicField $df
+     */
     public function save($df)
     {
         //the currency field
@@ -77,6 +83,9 @@ class TemplateCurrency extends TemplateRange
         //$df->addLabel($currency_id->vname);
     }
 
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();
@@ -84,6 +93,9 @@ class TemplateCurrency extends TemplateRange
         return $def;
     }
 
+    /**
+     * @return string
+     */
     public function get_db_type()
     {
         $precision = (!empty($this->precision)) ? $this->precision : 6;

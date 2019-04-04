@@ -288,6 +288,11 @@ class GridLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
 
         //eggsurplus: Bug 10329 - sort on intuitive display labels
         //sort by translatedLabel
+        /**
+         * @param $a
+         * @param $b
+         * @return int|lt
+         */
         function cmpLabel($a, $b)
         {
             return strcmp($a["translatedLabel"], $b["translatedLabel"]);

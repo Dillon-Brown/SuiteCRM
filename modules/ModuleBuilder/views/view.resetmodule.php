@@ -224,7 +224,10 @@ class ViewResetmodule extends SugarView
         
         return $out;
     }
-    
+
+    /**
+     * @return string
+     */
     public function removeCustomLabels()
     {
         $out = "";
@@ -245,7 +248,10 @@ class ViewResetmodule extends SugarView
         
         return $out;
     }
-    
+
+    /**
+     * @return string
+     */
     public function removeCustomExtensions()
     {
         $out = "";

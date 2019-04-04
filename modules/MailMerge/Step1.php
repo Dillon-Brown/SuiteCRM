@@ -219,6 +219,9 @@ $xtpl->out("main");
     return $modules;
 }*/
 
+/**
+ * @return array
+ */
 function getDocumentRevisions()
 {
     $document = new Document();

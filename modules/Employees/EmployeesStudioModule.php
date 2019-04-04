@@ -42,12 +42,18 @@ require_once 'modules/ModuleBuilder/Module/StudioModule.php' ;
 
 class EmployeesStudioModule extends StudioModule
 {
+    /**
+     * @return array|bool
+     */
     public function getProvidedSubpanels()
     {
         // Much like pointy haired bosses, other modules should not be able to relate to Employees.
         return false;
     }
 
+    /**
+     * @return array
+     */
     public function getModule()
     {
         $normalModules = parent::getModule();

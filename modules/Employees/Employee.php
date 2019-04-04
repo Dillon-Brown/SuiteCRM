@@ -125,7 +125,9 @@ class Employee extends Person
     }
 
 
-
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         $this->_create_proper_name_field();
@@ -153,6 +155,10 @@ class Employee extends Person
         }
     }
 
+    /**
+     * @param $employee_name
+     * @return mixed
+     */
     public function retrieve_employee_id($employee_name)
     {
         $query = "SELECT id from users where user_name='$user_name' AND deleted=0";
@@ -174,6 +180,9 @@ class Employee extends Person
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         $user_fields = parent::get_list_view_data();
@@ -190,12 +199,21 @@ class Employee extends Person
         return $user_fields;
     }
 
+    /**
+     * @param $list_form
+     */
     public function list_view_parse_additional_sections(&$list_form/*, $xTemplateSection*/)
     {
         return $list_form;
     }
 
 
+    /**
+     * @param $order_by
+     * @param $where
+     * @param string $relate_link_join
+     * @return string
+     */
     public function create_export_query($order_by, $where, $relate_link_join = '')
     {
         include('modules/Employees/field_arrays.php');
@@ -278,6 +296,9 @@ class Employee extends Person
 
     /*
      * Overwrite Sugar bean which returns the current objects custom fields.  Lets return User custom fields instead
+     */
+    /**
+     * @return bool
      */
     public function hasCustomFields()
     {

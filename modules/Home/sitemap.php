@@ -78,6 +78,9 @@ if (is_file('custom/modules/Home/sitemap.tpl')) {
 }
 echo $sm_smarty->fetch($tpl);
 
+/**
+ * @return array|mixed
+ */
 function sm_build_array()
 {
     //if the sitemap array is already stored, then pass it back

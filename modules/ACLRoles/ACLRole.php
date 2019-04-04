@@ -77,6 +77,10 @@ class ACLRole extends SugarBean
 
 
     // bug 16790 - missing get_summary_text method led Tracker to display SugarBean's "base implementation"
+
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return "$this->name";
@@ -251,6 +255,11 @@ class ACLRole extends SugarBean
         return $role_actions;
     }
 
+    /**
+     * @param $a
+     * @param $b
+     * @return int
+     */
     private static function langCompare($a, $b)
     {
         global $app_list_strings;

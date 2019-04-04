@@ -86,6 +86,11 @@ class Importer
     protected $sugarToExternalSourceFieldMap = array();
 
 
+    /**
+     * Importer constructor.
+     * @param $importSource
+     * @param $bean
+     */
     public function __construct($importSource, $bean)
     {
         global $mod_strings, $sugar_config;
@@ -133,6 +138,10 @@ class Importer
     }
 
 
+    /**
+     * @param $row
+     * @throws Exception
+     */
     protected function importRow($row)
     {
         global $sugar_config, $mod_strings, $current_user;
@@ -398,6 +407,14 @@ class Importer
     }
 
 
+    /**
+     * @param $rowValue
+     * @param $fieldDef
+     * @param $defaultRowValue
+     * @param $focus
+     * @param $fieldTranslated
+     * @return bool
+     */
     protected function sanitizeFieldValueByType($rowValue, $fieldDef, $defaultRowValue, $focus, $fieldTranslated)
     {
         $fieldtype = $fieldDef['type'];
@@ -458,6 +475,10 @@ class Importer
         }
     }
 
+    /**
+     * @param $focus
+     * @return bool
+     */
     protected function cloneExistingBean($focus)
     {
         $existing_focus = clone $this->bean;
@@ -474,6 +495,10 @@ class Importer
         return $existing_focus;
     }
 
+    /**
+     * @param $focus
+     * @throws Exception
+     */
     protected function removeDeletedBean($focus)
     {
         global $mod_strings;
@@ -486,6 +511,11 @@ class Importer
         }
     }
 
+    /**
+     * @param $focus
+     * @param $newRecord
+     * @throws Exception
+     */
     protected function saveImportBean($focus, $newRecord)
     {
         global $timedate, $current_user;
@@ -653,6 +683,12 @@ class Importer
     }
 
 
+    /**
+     * @param $field
+     * @param $fieldValue
+     * @param $fieldDef
+     * @return mixed|string
+     */
     protected function populateDefaultMapValue($field, $fieldValue, $fieldDef)
     {
         global $timedate, $current_user;
@@ -691,6 +727,9 @@ class Importer
         return $defaultRowValue;
     }
 
+    /**
+     * @return array
+     */
     protected function getImportColumns()
     {
         $importable_fields = $this->bean->get_importable_fields();
@@ -713,6 +752,9 @@ class Importer
         return $importColumns;
     }
 
+    /**
+     * @return ImportFieldSanitize
+     */
     protected function getFieldSanitizer()
     {
         $ifs = new ImportFieldSanitize();
@@ -773,6 +815,9 @@ class Importer
         );
     }
 
+    /**
+     * @return array
+     */
     public function retrieveAdvancedMapping()
     {
         $advancedMappingSettings = array();
@@ -796,6 +841,9 @@ class Importer
         return $advancedMappingSettings;
     }
 
+    /**
+     * @return array
+     */
     public static function getImportableModules()
     {
         global $beanList;

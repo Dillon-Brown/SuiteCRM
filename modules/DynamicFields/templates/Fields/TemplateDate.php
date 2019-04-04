@@ -72,12 +72,21 @@ class TemplateDate extends TemplateRange
     }
 
 
+    /**
+     * @param bool $modify
+     * @return string
+     */
     public function get_db_default($modify=false)
     {
         return '';
     }
 
     //BEGIN BACKWARDS COMPATABILITY
+
+    /**
+     * @return array|string
+     * @throws Exception
+     */
     public function get_xtpl_edit()
     {
         global $timedate;
@@ -98,6 +107,9 @@ class TemplateDate extends TemplateRange
         return $returnXTPL;
     }
 
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();

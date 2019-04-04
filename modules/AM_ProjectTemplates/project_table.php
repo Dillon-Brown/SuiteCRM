@@ -23,6 +23,13 @@ class AM_ProjectTemplatesTable
 {
     private $tasks;
     private $project_template_id;
+
+    /**
+     * AM_ProjectTemplatesTable constructor.
+     * @param $project_template_id
+     * @param $tasks
+     * @throws Exception
+     */
     public function __construct($project_template_id, $tasks)
     {
         $this->tasks = $tasks;
@@ -31,6 +38,11 @@ class AM_ProjectTemplatesTable
         $this->draw($this->project_template_id, $this->tasks);
     }
 
+    /**
+     * @param $project_template_id
+     * @param $tasks
+     * @throws Exception
+     */
     public function draw($project_template_id, $tasks)
     {
         global $mod_strings, $app_list_strings;
@@ -158,6 +170,11 @@ class AM_ProjectTemplatesTable
     }
 
     // Function for basic field validation (present and neither empty nor only white space
+
+    /**
+     * @param $question
+     * @return bool
+     */
     public function IsNullOrEmptyString($question)
     {
         return (!isset($question) || trim($question)==='');

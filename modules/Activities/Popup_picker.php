@@ -84,6 +84,10 @@ class Popup_Picker
         self::__construct();
     }
 
+    /**
+     * @return string
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function process_page()
     {
         global $focus;

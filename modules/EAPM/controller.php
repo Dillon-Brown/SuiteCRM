@@ -59,6 +59,9 @@ class EAPMController extends SugarController
         parent::process();
     }
 
+    /**
+     * @param $error
+     */
     protected function failed($error)
     {
         SugarApplication::appendErrorMessage($error);
@@ -133,6 +136,9 @@ class EAPMController extends SugarController
         }
     }
 
+    /**
+     * @return bool|void
+     */
     protected function action_oauth()
     {
         if (empty($this->bean->id)) {

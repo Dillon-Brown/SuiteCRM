@@ -4,6 +4,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 
+/**
+ * @return string
+ */
 function generateFieldDefsJS2()
 {
     global $app_list_strings, $beanList, $beanFiles;
@@ -110,6 +113,9 @@ function generateFieldDefsJS2()
     return $ret;
 }
 
+/**
+ * @return string
+ */
 function genDropDownJS2()
 {
     global $app_list_strings, $beanList, $beanFiles;

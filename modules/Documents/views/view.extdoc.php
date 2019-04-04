@@ -51,6 +51,10 @@ class DocumentsViewExtdoc extends SugarView
 {
     public $options = array('show_header' => false, 'show_title' => false, 'show_subpanels' => false, 'show_search' => true, 'show_footer' => false, 'show_javascript' => false, 'view_print' => false,);
 
+    /**
+     * @param SugarBean|null $bean
+     * @param array $view_object_map
+     */
     public function init($bean, $view_object_map)
     {
         $this->seed = $bean;

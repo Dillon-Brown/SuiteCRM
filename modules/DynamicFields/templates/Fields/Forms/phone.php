@@ -44,6 +44,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once('modules/DynamicFields/templates/Fields/TemplatePhone.php');
 
+/**
+ * @param $ss
+ * @param $vardef
+ * @return mixed
+ */
 function get_body(&$ss, $vardef)
 {
     return $ss->fetch('modules/DynamicFields/templates/Fields/Forms/phone.tpl');

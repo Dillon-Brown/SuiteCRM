@@ -140,6 +140,10 @@ class DocumentRevision extends SugarBean
     }
 
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         $saveRet = parent::save($check_notify);
@@ -157,11 +161,21 @@ class DocumentRevision extends SugarBean
 
         return $saveRet;
     }
+
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return "$this->filename";
     }
 
+    /**
+     * @param int $id
+     * @param bool $encode
+     * @param bool $deleted
+     * @return SugarBean|null
+     */
     public function retrieve($id = -1, $encode=false, $deleted=true)
     {
         $ret = parent::retrieve($id, $encode, $deleted);
@@ -169,6 +183,9 @@ class DocumentRevision extends SugarBean
         return $ret;
     }
 
+    /**
+     * @return |null
+     */
     public function is_authenticated()
     {
         if (!isset($this->authenticated)) {
@@ -274,6 +291,9 @@ class DocumentRevision extends SugarBean
         return $return;
     }
 
+    /**
+     * @param $doc_id
+     */
     public function fill_document_name_revision($doc_id)
     {
 
@@ -288,11 +308,17 @@ class DocumentRevision extends SugarBean
         }
     }
 
+    /**
+     * @param $list_form
+     */
     public function list_view_parse_additional_sections(&$list_form/*, $xTemplateSection*/)
     {
         return $list_form;
     }
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         $revision_fields = $this->get_list_view_array();
@@ -302,6 +328,11 @@ class DocumentRevision extends SugarBean
     }
 
     //static function..
+
+    /**
+     * @param $doc_revision_id
+     * @return |null
+     */
     public function get_document_revision_name($doc_revision_id)
     {
         if (empty($doc_revision_id)) {
@@ -321,6 +352,11 @@ class DocumentRevision extends SugarBean
     }
 
     //static function.
+
+    /**
+     * @param $doc_id
+     * @return array
+     */
     public function get_document_revisions($doc_id)
     {
         $return_array= array();
@@ -339,6 +375,10 @@ class DocumentRevision extends SugarBean
         return $return_array;
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {

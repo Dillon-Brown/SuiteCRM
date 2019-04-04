@@ -230,11 +230,24 @@ function display_lines($focus, $field, $value, $view)
 //field was 0.
 //The approach below will strip off the fractional part if it is only zeroes (and in this case the decimal separator
 //will also be stripped off) The custom decimal separator is passed in to the function from the locale settings
+/**
+ * @param $inputString
+ * @param $decimalSeparator
+ * @return string|string[]|null
+ */
 function stripDecimalPointsAndTrailingZeroes($inputString, $decimalSeparator)
 {
     return preg_replace('/'.preg_quote($decimalSeparator).'[0]+$/', '', $inputString);
 }
 
+/**
+ * @param $type
+ * @param $amount
+ * @param $params
+ * @param $locale
+ * @param $sep
+ * @return string
+ */
 function get_discount_string($type, $amount, $params, $locale, $sep)
 {
     if ($amount != '' && $amount != '0.00') {
@@ -248,6 +261,13 @@ function get_discount_string($type, $amount, $params, $locale, $sep)
     return "-";
 }
 
+/**
+ * @param $focus
+ * @param $field
+ * @param $value
+ * @param $view
+ * @return string
+ */
 function display_shipping_vat($focus, $field, $value, $view)
 {
     if ($view == 'EditView') {

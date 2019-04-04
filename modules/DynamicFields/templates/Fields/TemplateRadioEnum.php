@@ -46,14 +46,20 @@ require_once('include/utils/array_utils.php');
 class TemplateRadioEnum extends TemplateEnum
 {
     public $type = 'radioenum';
-    
+
+    /**
+     * @return string
+     */
     public function get_html_edit()
     {
         $this->prepare();
         $xtpl_var = strtoupper($this->name);
         return "{RADIOOPTIONS_".$xtpl_var. "}";
     }
-    
+
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();
@@ -61,8 +67,12 @@ class TemplateRadioEnum extends TemplateEnum
         $def['separator'] = '<br>';
         return $def;
     }
-    
-    
+
+
+    /**
+     * @param bool $add_blank
+     * @return array|string
+     */
     public function get_xtpl_edit($add_blank = false)
     {
         $name = $this->name;
@@ -86,8 +96,13 @@ class TemplateRadioEnum extends TemplateEnum
         $returnXTPL[strtoupper('RADIOOPTIONS_'.$this->name)] = $this->generateRadioButtons($value, false);
         return $returnXTPL;
     }
-    
 
+
+    /**
+     * @param string $value
+     * @param bool $add_blank
+     * @return string
+     */
     public function generateRadioButtons($value = '', $add_blank =false)
     {
         global $app_list_strings;
@@ -103,7 +118,10 @@ class TemplateRadioEnum extends TemplateEnum
         }
         return $radiooptions;
     }
-    
+
+    /**
+     * @return array|mixed|void
+     */
     public function get_xtpl_search()
     {
         $searchFor = '';
@@ -116,7 +134,10 @@ class TemplateRadioEnum extends TemplateEnum
         $returnXTPL[strtoupper('RADIOOPTIONS_'.$this->name)] = $this->generateRadioButtons($searchFor, true);
         return $returnXTPL;
     }
-    
+
+    /**
+     * @return string
+     */
     public function get_xtpl_detail()
     {
         $name = $this->name;
@@ -134,7 +155,11 @@ class TemplateRadioEnum extends TemplateEnum
         }
         return '';
     }
-    
+
+    /**
+     * @param bool $modify
+     * @return string
+     */
     public function get_db_default($modify = false)
     {
         return '';

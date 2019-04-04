@@ -63,6 +63,10 @@ function prepSystemForUpgradeSilent()
 }
 
 //local function for clearing cache
+/**
+ * @param $thedir
+ * @param $extension
+ */
 function clearCacheSU($thedir, $extension)
 {
     if ($current = @opendir($thedir)) {
@@ -283,6 +287,9 @@ function merge_passwordsetting($sugar_config, $sugar_version)
     return false;
 }
 
+/**
+ * @param array $defaultRoles
+ */
 function addDefaultModuleRoles($defaultRoles = array())
 {
     foreach ($defaultRoles as $roleName=>$role) {
@@ -303,6 +310,11 @@ function addDefaultModuleRoles($defaultRoles = array())
     }
 }
 
+/**
+ * @param $argv
+ * @param $usage_regular
+ * @return mixed|string
+ */
 function verifyArguments($argv, $usage_regular)
 {
     $upgradeType = '';
@@ -753,6 +765,9 @@ logThis("*** SILENT UPGRADE INITIATED.", $path);
 
         if (!function_exists("inDeveloperMode")) {
             //this function was introduced from tokyo in the file include/utils.php, so when upgrading from 5.1x and 5.2x we should declare the this function
+            /**
+             * @return bool
+             */
             function inDeveloperMode()
             {
                 return isset($GLOBALS['sugar_config']['developerMode']) && $GLOBALS['sugar_config']['developerMode'];

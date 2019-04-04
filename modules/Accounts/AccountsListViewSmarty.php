@@ -26,7 +26,9 @@ class AccountsListViewSmarty extends ListViewSmarty
     }
 
 
-
+    /**
+     * @return string
+     */
     protected function buildAddAccountContactsToTargetList()
     {
         global $app_strings;
@@ -152,7 +154,11 @@ EOF;
 
         return $ret;
     }
-    
+
+    /**
+     * @param string $id
+     * @return string
+     */
     public function buildExportLink($id = 'export_link')
     {
         global $app_strings;

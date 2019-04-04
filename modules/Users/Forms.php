@@ -63,12 +63,18 @@ function user_get_validate_record_js()
     return '';
 }
 
+/**
+ * @return string
+ */
 function user_get_chooser_js()
 {
     // NO LONGER USED, MOVED TO UserEditView.js
     return '';
 }
 
+/**
+ * @return string
+ */
 function user_get_confsettings_js()
 {
     // NO LONGER USED, MOVED TO UserEditView.js

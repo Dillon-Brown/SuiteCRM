@@ -27,6 +27,11 @@
      }
 
      /* Create the encoded string */
+     /**
+      * @param $Object
+      * @param $Values
+      * @param string $Format
+      */
      public function drawSplitPath($Object, $Values, $Format="")
      {
          $this->pChartObject = $Object;

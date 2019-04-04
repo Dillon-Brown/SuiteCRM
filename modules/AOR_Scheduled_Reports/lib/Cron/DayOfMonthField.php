@@ -54,6 +54,11 @@ class DayOfMonthField extends AbstractField
         }
     }
 
+    /**
+     * @param \DateTime $date
+     * @param string $value
+     * @return bool
+     */
     public function isSatisfiedBy(\DateTime $date, $value)
     {
         // ? states that the field value is to be skipped
@@ -83,6 +88,11 @@ class DayOfMonthField extends AbstractField
         return $this->isSatisfied($date->format('d'), $value);
     }
 
+    /**
+     * @param \DateTime $date
+     * @param bool $invert
+     * @return $this|FieldInterface
+     */
     public function increment(\DateTime $date, $invert = false)
     {
         if ($invert) {
@@ -96,6 +106,10 @@ class DayOfMonthField extends AbstractField
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @return bool
+     */
     public function validate($value)
     {
         return (bool) preg_match('/^[\*,\/\-\?LW0-9A-Za-z]+$/', $value);

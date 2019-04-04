@@ -24,6 +24,10 @@ class OpportunitiesListViewSmarty extends ListViewSmarty
     }
 
 
+    /**
+     * @param string $id
+     * @return string
+     */
     public function buildExportLink($id = 'export_link')
     {
         global $app_strings;

@@ -69,6 +69,12 @@ class SugarMerge
     private $merged = array();
     private $fp = null;
 
+    /**
+     * SugarMerge constructor.
+     * @param string $new_path
+     * @param string $original_path
+     * @param string $custom_path
+     */
     public function __construct($new_path='', $original_path='', $custom_path='custom')
     {
         $this->new_path = empty($new_path) || preg_match('/[\/]$/', $new_path) ? $new_path : $new_path . '/';
@@ -102,6 +108,9 @@ class SugarMerge
     }
 
 
+    /**
+     * @param $fp
+     */
     public function setLogFilePointer($fp)
     {
         $this->fp = $fp;

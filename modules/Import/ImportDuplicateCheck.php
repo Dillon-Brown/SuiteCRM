@@ -309,6 +309,9 @@ class ImportDuplicateCheck
     }
 
 
+    /**
+     * @return array
+     */
     public function getDuplicateCheckIndexedFiles()
     {
         require_once('include/export_utils.php');

@@ -88,6 +88,10 @@ class Alert extends Basic
     }
 
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {

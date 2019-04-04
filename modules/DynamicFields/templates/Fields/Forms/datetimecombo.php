@@ -43,6 +43,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once('modules/DynamicFields/templates/Fields/TemplateDatetimecombo.php');
 
+/**
+ * @param $ss
+ * @param $vardef
+ * @return mixed
+ */
 function get_body(&$ss, $vardef)
 {
     $defaultTime = '';

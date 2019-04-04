@@ -50,6 +50,11 @@ require_once('include/Dashlets/DashletGeneric.php');
 
 class MyMeetingsDashlet extends DashletGeneric
 {
+    /**
+     * MyMeetingsDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;
@@ -97,6 +102,10 @@ class MyMeetingsDashlet extends DashletGeneric
         self::__construct($id, $def);
     }
 
+    /**
+     * @param array $lvsParams
+     * @param null $id
+     */
     public function process($lvsParams = array(), $id = null)
     {
         global $current_language, $app_list_strings, $current_user;
@@ -179,6 +188,9 @@ class MyMeetingsDashlet extends DashletGeneric
     {
     }
 
+    /**
+     * @return string
+     */
     public function displayOptions()
     {
         $this->processDisplayOptions();

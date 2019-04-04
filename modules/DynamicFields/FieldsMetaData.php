@@ -140,6 +140,9 @@ class FieldsMetaData extends SugarBean
     }
 
 
+    /**
+     * @param string $id
+     */
     public function mark_deleted($id)
     {
         $query = "DELETE FROM $this->table_name WHERE  id='$id'";
@@ -147,6 +150,9 @@ class FieldsMetaData extends SugarBean
         $this->mark_relationships_deleted($id);
     }
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         $data = parent::get_list_view_data();
@@ -156,6 +162,9 @@ class FieldsMetaData extends SugarBean
     }
 
 
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return $this->name;

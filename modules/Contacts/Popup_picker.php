@@ -49,6 +49,9 @@ class Popup_Picker
     /*
      *
      */
+    /**
+     * @return string
+     */
     public function _get_where_clause()
     {
         $where = '';
@@ -235,6 +238,9 @@ EOJS;
         return $output_html;
     }
 
+    /**
+     * @return string
+     */
     public function process_page_for_merge()
     {
         global $theme;

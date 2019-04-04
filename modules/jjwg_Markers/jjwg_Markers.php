@@ -16,6 +16,10 @@ class jjwg_Markers extends jjwg_Markers_sugar
      */
     public $settings = array();
 
+    /**
+     * jjwg_Markers constructor.
+     * @param bool $init
+     */
     public function __construct($init=true)
     {
         parent::__construct();

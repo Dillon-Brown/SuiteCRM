@@ -56,6 +56,9 @@ class EmailTemplatesViewClassic extends ViewClassic
     {
     }
 
+    /**
+     * @return bool|void
+     */
     public function display()
     {
         /* BEGIN - SECURITY GROUPS - The whole file is custom but the purpose is the following code */

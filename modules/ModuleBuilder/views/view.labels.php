@@ -174,6 +174,11 @@ class ViewLabels extends ViewModulefields
     }
     
     // fixing bug #39749: Quick Create in Studio
+
+    /**
+     * @param $module
+     * @return array
+     */
     public function getVariableMap($module)
     {
         $variableMap = array(MB_EDITVIEW => 'EditView',

@@ -121,6 +121,9 @@ function get_campaign_mailboxes(&$emails, $get_name=true)
     return $return_array;
 }
 
+/**
+ * @return array
+ */
 function get_campaign_mailboxes_with_stored_options()
 {
     $ret = array();
@@ -141,6 +144,9 @@ function get_campaign_mailboxes_with_stored_options()
     return $ret;
 }
 
+/**
+ * @return array
+ */
 function get_campaign_mailboxes_with_stored_options_outbound()
 {
     $ret = array();
@@ -161,6 +167,13 @@ function get_campaign_mailboxes_with_stored_options_outbound()
     return $ret;
 }
 
+/**
+ * @param $identifier
+ * @param $activity
+ * @param bool $update
+ * @param null $clicked_url_key
+ * @return array
+ */
 function log_campaign_activity($identifier, $activity, $update = true, $clicked_url_key = null)
 {
     $return_array = array();
@@ -365,6 +378,12 @@ function campaign_log_lead_entry($campaign_id, $parent_bean, $child_bean, $activ
 }
 
 
+/**
+ * @param $campaign_id
+ * @param $parent_bean
+ * @param $child_bean
+ * @param $activity_type
+ */
 function campaign_log_lead_or_contact_entry($campaign_id, $parent_bean, $child_bean, $activity_type)
 {
     global $timedate;
@@ -386,6 +405,10 @@ function campaign_log_lead_or_contact_entry($campaign_id, $parent_bean, $child_b
 }
 
 
+/**
+ * @param $campaign_id
+ * @return array
+ */
 function get_campaign_urls($campaign_id)
 {
     $return_array=array();
@@ -465,6 +488,11 @@ function get_subscription_lists_query($focus, $additional_fields = null)
  * To parse these information string into something more usable, use the "process subscriptions()" function
  *
  * */
+/**
+ * @param $focus
+ * @param bool $descriptions
+ * @return mixed
+ */
 function get_subscription_lists($focus, $descriptions = false)
 {
     $subs_arr = array();
@@ -601,6 +629,10 @@ function get_subscription_lists_keyed($focus)
  * "prospect_list2", "campaign2"
  *
  * */
+/**
+ * @param $subscription_string_to_parse
+ * @return array
+ */
 function process_subscriptions($subscription_string_to_parse)
 {
     $subs_change = array();
@@ -626,7 +658,13 @@ function process_subscriptions($subscription_string_to_parse)
      * Takes in campaign and prospect list id's we are subscribing to.
      * It also takes in a bean of the user (lead,target,prospect) we are subscribing
      * */
-    function subscribe($campaign, $prospect_list, $focus, $default_list = false)
+/**
+ * @param $campaign
+ * @param $prospect_list
+ * @param $focus
+ * @param bool $default_list
+ */
+function subscribe($campaign, $prospect_list, $focus, $default_list = false)
     {
         $relationship = strtolower($focus->getObjectName()).'s';
 
@@ -719,7 +757,11 @@ function process_subscriptions($subscription_string_to_parse)
      * to the exempt prospect lists of the passed in campaign
      * Takes in campaign and focus parameters.
      * */
-    function unsubscribe($campaign, $focus)
+/**
+ * @param $campaign
+ * @param $focus
+ */
+function unsubscribe($campaign, $focus)
     {
         $relationship = strtolower($focus->getObjectName()).'s';
         //--grab all the list for this campaign id
@@ -801,7 +843,12 @@ function process_subscriptions($subscription_string_to_parse)
      *This function will return a string to the newsletter wizard if campaign check
      *does not return 100% healthy.
      */
-    function diagnose(&$errors = array(), &$links = array())
+/**
+ * @param array $errors
+ * @param array $links
+ * @return string
+ */
+function diagnose(&$errors = array(), &$links = array())
     {
         global $mod_strings;
         global $current_user;
@@ -995,7 +1042,11 @@ function write_mail_merge_log_entry($campaign_id, $pl_row)
     }
 }
 
-    function track_campaign_prospects($focus)
+/**
+ * @param $focus
+ * @return mixed
+ */
+function track_campaign_prospects($focus)
     {
         $campaign_id = DBManagerFactory::getInstance()->quote($focus->id);
         $delete_query="delete from campaign_log where campaign_id='".$campaign_id."' and activity_type='targeted'";
@@ -1021,7 +1072,14 @@ function write_mail_merge_log_entry($campaign_id, $pl_row)
         return $mod_strings['LBL_DEFAULT_LIST_ENTRIES_WERE_PROCESSED'];
     }
 
-    function create_campaign_log_entry($campaign_id, $focus, $rel_name, $rel_bean, $target_id = '')
+/**
+ * @param $campaign_id
+ * @param $focus
+ * @param $rel_name
+ * @param $rel_bean
+ * @param string $target_id
+ */
+function create_campaign_log_entry($campaign_id, $focus, $rel_name, $rel_bean, $target_id = '')
     {
         global $timedate;
 
@@ -1068,7 +1126,13 @@ function write_mail_merge_log_entry($campaign_id, $pl_row)
     /*
      * This function will return an array that has been formatted to work as a Quick Search Object for prospect lists
      */
-    function getProspectListQSObjects($source = '', $return_field_name='name', $return_field_id='id')
+/**
+ * @param string $source
+ * @param string $return_field_name
+ * @param string $return_field_id
+ * @return array
+ */
+function getProspectListQSObjects($source = '', $return_field_name='name', $return_field_id='id')
     {
         global $app_strings;
         //if source has not been specified, then search across all prospect lists
@@ -1103,6 +1167,10 @@ function write_mail_merge_log_entry($campaign_id, $pl_row)
     }
 
 
+/**
+ * @param $beans
+ * @return array
+ */
 function filterFieldsFromBeans($beans)
 {
     global $app_strings;

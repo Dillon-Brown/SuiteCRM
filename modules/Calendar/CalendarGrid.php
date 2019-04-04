@@ -189,6 +189,9 @@ class CalendarGrid
         return $str;
     }
 
+    /**
+     * @return string
+     */
     public function display_mobile()
     {
         global $mod_strings;
@@ -235,6 +238,10 @@ class CalendarGrid
         return $str;
     }
 
+    /**
+     * @param $day_item
+     * @return string
+     */
     public function mobile_display_items($day_item)
     {
         $end_time = $this->mobile_get_end_time($day_item);
@@ -283,6 +290,10 @@ class CalendarGrid
         return $display;
     }
 
+    /**
+     * @param $day_item
+     * @return string
+     */
     public function mobile_get_end_time($day_item)
     {
         $start_time = DateTime::createFromFormat("h:ia", $day_item['time_start']);
@@ -291,6 +302,10 @@ class CalendarGrid
     }
 
 
+    /**
+     * @param $type
+     * @return string
+     */
     public function mobile_get_type_colour($type)
     {
         switch ($type) {
@@ -310,6 +325,10 @@ class CalendarGrid
         return $colour;
     }
 
+    /**
+     * @param $type
+     * @return string
+     */
     public function mobile_get_status_colour($type)
     {
         switch ($type) {
@@ -333,6 +352,10 @@ class CalendarGrid
         return $colour;
     }
 
+    /**
+     * @param $agenda_array
+     * @return mixed
+     */
     public function mobile_sort_items($agenda_array)
     {
         $times = "";

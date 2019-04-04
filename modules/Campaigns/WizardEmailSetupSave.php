@@ -119,6 +119,9 @@ if (isset($_REQUEST['wiz_new_mbox']) && ($_REQUEST['wiz_new_mbox']=='1')) {
  * which does not expect the prefix, and still use the generic create summary functionality in wizard, which
  * does expect the prefix.
  */
+/**
+ * @param $prefix
+ */
 function clean_up_post($prefix)
 {
     foreach ($_REQUEST as $key => $val) {

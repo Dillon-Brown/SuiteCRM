@@ -28,6 +28,9 @@ class TemplateCronSchedule extends TemplateText
     }
 
 
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();

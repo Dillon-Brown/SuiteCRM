@@ -124,6 +124,11 @@ function checkResourceSettings()
 }
 
 
+/**
+ * @param $argv
+ * @param $usage_regular
+ * @return mixed|string
+ */
 function verifyArguments($argv, $usage_regular)
 {
     $upgradeType = '';
@@ -175,6 +180,9 @@ function verifyArguments($argv, $usage_regular)
 ////	END UTILITIES THAT MUST BE LOCAL :(
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @param string $pre_path
+ */
 function rebuildRelations($pre_path = '')
 {
     $_REQUEST['silent'] = true;

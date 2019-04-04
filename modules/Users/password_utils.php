@@ -87,6 +87,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
      return $mod_strings['LBL_EMAIL_NOT_SENT'];
  }
 
+/**
+ * @param $username
+ * @return bool
+ * @throws SuiteException
+ */
 function hasPasswordExpired($username)
 {
     $current_user= new user();

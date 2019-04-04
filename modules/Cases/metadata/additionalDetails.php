@@ -47,6 +47,11 @@ function additionaldetailscase($fields)
 {
     return additionalDetailsaCase($fields);
 }
+
+/**
+ * @param $fields
+ * @return array
+ */
 function additionalDetailsaCase($fields)
 {
     static $mod_strings;

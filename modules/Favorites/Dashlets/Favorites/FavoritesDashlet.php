@@ -54,6 +54,11 @@ require_once('modules/Favorites/Favorites.php');
 
 class FavoritesDashlet extends DashletGeneric
 {
+    /**
+     * FavoritesDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

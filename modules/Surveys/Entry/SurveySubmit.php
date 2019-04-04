@@ -20,6 +20,10 @@ if ($trackerId) {
 }
 processSurvey($survey, $trackerId, $contactId, $_REQUEST);
 
+/**
+ * @param $trackerId
+ * @return bool
+ */
 function getCampaignIdFromTracker($trackerId)
 {
     $db = DBManagerFactory::getInstance();
@@ -37,6 +41,12 @@ EOF;
     return false;
 }
 
+/**
+ * @param Surveys $survey
+ * @param $trackerId
+ * @param $contactId
+ * @param $request
+ */
 function processSurvey(Surveys $survey, $trackerId, $contactId, $request)
 {
     $contactName = 'Unknown Contact';

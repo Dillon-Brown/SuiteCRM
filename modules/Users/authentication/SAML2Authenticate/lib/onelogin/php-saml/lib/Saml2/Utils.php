@@ -1350,6 +1350,15 @@ class OneLogin_Saml2_Utils
         return $valid;
     }
 
+    /**
+     * @param $messageType
+     * @param $getData
+     * @param $idpData
+     * @param bool $retrieveParametersFromServer
+     * @return bool
+     * @throws OneLogin_Saml2_Error
+     * @throws OneLogin_Saml2_ValidationError
+     */
     public static function validateBinarySign($messageType, $getData, $idpData, $retrieveParametersFromServer = false)
     {
         if (!isset($getData['SigAlg'])) {

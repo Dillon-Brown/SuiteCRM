@@ -51,6 +51,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class ProspectFormBase
 {
+    /**
+     * @param $prefix
+     * @return array|null
+     */
     public function checkForDuplicates($prefix)
     {
         global $local_log;
@@ -98,6 +102,11 @@ class ProspectFormBase
     }
 
 
+    /**
+     * @param $rows
+     * @param string $mod
+     * @return string
+     */
     public function buildTableForm($rows, $mod='')
     {
         global $action;
@@ -167,6 +176,14 @@ class ProspectFormBase
         }
         return $form;
     }
+
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @param string $prospect
+     * @return string
+     */
     public function getWideFormBody($prefix, $mod='', $formname='', $prospect = '')
     {
         if (!ACLController::checkAccess('Prospects', 'edit', true)) {
@@ -299,6 +316,12 @@ EOQ;
         return $form;
     }
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @return string
+     */
     public function getFormBody($prefix, $mod='', $formname='')
     {
         if (!ACLController::checkAccess('Prospects', 'edit', true)) {
@@ -360,6 +383,12 @@ EOQ;
         $mod_strings = $temp_strings;
         return $form;
     }
+
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @return string
+     */
     public function getForm($prefix, $mod='')
     {
         if (!ACLController::checkAccess('Prospects', 'edit', true)) {
@@ -398,6 +427,12 @@ EOQ;
     }
 
 
+    /**
+     * @param $prefix
+     * @param bool $redirect
+     * @param bool $useRequired
+     * @return Prospect|SugarBean|void|null
+     */
     public function handleSave($prefix, $redirect=true, $useRequired=false)
     {
         global $theme;

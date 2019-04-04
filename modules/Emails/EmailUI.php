@@ -1150,6 +1150,10 @@ HTML;
         return $userPreferences;
     }
 
+    /**
+     * @param bool $useRequestedRecord
+     * @return array
+     */
     public function getUserPrefsJS($useRequestedRecord = false)
     {
         return $this->getUserPreferencesJS($useRequestedRecord);
@@ -1276,6 +1280,9 @@ HTML;
         }
     }
 
+    /**
+     * @param $cacheRoot
+     */
     public function deleteEmailCacheForFolders($cacheRoot)
     {
         $filePath = $cacheRoot . "/folders/folders.php";
@@ -1442,6 +1449,10 @@ HTML;
         return $tree;
     }
 
+    /**
+     * @param $mailAccount
+     * @return mixed
+     */
     public function getMailBoxesFromCacheValue($mailAccount)
     {
         $foldersCache = $this->getCacheValue($mailAccount->id, 'folders', "folders.php", 'foldersCache');
@@ -1568,6 +1579,12 @@ HTML;
         return $ret;
     }
 
+    /**
+     * @param $ie
+     * @param $ret
+     * @param $uid
+     * @return mixed
+     */
     public function createCopyOfInboundAttachment($ie, $ret, $uid)
     {
         global $sugar_config;
@@ -1608,6 +1625,10 @@ HTML;
         return $ret;
     } // fn
 
+    /**
+     * @param $actualAttachmentInfo
+     * @param $attachmentHtmlData
+     */
     public function parseAttachmentInfo(&$actualAttachmentInfo, $attachmentHtmlData)
     {
         $downLoadPHP = strpos($attachmentHtmlData, "index.php?entryPoint=download&");
@@ -2093,6 +2114,19 @@ HTML;
         }
     }
 
+    /**
+     * @param $distributeMethod
+     * @param $ieid
+     * @param $folder
+     * @param $uids
+     * @param $users
+     * @return string
+     * @throws EmailException
+     * @throws EmailValidatorException
+     * @throws ImapHandlerException
+     * @throws \SuiteCRM\ErrorMessageException
+     * @throws phpmailerException
+     */
     public function doAssignment($distributeMethod, $ieid, $folder, $uids, $users)
     {
         global $app_strings;
@@ -2147,6 +2181,13 @@ HTML;
     {
     }
 
+    /**
+     * @param $users
+     * @param $emailIds
+     * @param $distributionMethod
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     */
     public function doDistributionWithMethod($users, $emailIds, $distributionMethod)
     {
         // we have users and the items to distribute
@@ -2249,6 +2290,10 @@ HTML;
         return true;
     }
 
+    /**
+     * @param $ie
+     * @return mixed|string
+     */
     public function getLastRobin($ie)
     {
         $lastRobin = "";
@@ -2259,6 +2304,10 @@ HTML;
         return $lastRobin;
     } // fn
 
+    /**
+     * @param $ie
+     * @param $lastRobin
+     */
     public function setLastRobin($ie, $lastRobin)
     {
         global $sugar_config;
@@ -2706,6 +2755,12 @@ eoq;
         return array('query' => $finalQuery, 'countQuery' => $countq);
     }
 
+    /**
+     * @param $beanIds
+     * @param $beanType
+     * @param $whereArr
+     * @return string
+     */
     public function findEmailFromBeanIds($beanIds, $beanType, $whereArr)
     {
         global $current_user;
@@ -2975,6 +3030,9 @@ eoq;
         }
     }
 
+    /**
+     * @param $ieId
+     */
     public function clearInboundAccountCache($ieId)
     {
         global $sugar_config;
@@ -3022,6 +3080,10 @@ eoq;
         return $email_templates_arr;
     }
 
+    /**
+     * @param $ie
+     * @return array
+     */
     public function getFromAccountsArray($ie)
     {
         global $current_user;
@@ -3335,6 +3397,10 @@ eoq;
         return $ieAccountsShowOptionsMeta;
     }
 
+    /**
+     * @param $ie
+     * @return array
+     */
     public function getShowAccountsOptionsForSearch(&$ie)
     {
         global $current_user;

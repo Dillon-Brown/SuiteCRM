@@ -58,6 +58,15 @@ class EmailsDraftDetailView extends EmailsDetailView
      */
     public $formName = 'DraftDetailView';
 
+    /**
+     * @param String $module
+     * @param null $focus
+     * @param null $metadataFile
+     * @param string $tpl
+     * @param bool $createFocus
+     * @param string $metadataFileName
+     * @throws Exception
+     */
     public function setup(
         $module,
         $focus  = null,

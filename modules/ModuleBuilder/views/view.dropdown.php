@@ -78,7 +78,10 @@ class ViewDropdown extends SugarView
         $ajax->addSection('east2', $mod_strings['LBL_SECTION_DROPDOWNED'], $body);
         echo $ajax->getJavascript();
     }
-    
+
+    /**
+     * @return Sugar_Smarty
+     */
     public function generateSmarty()
     {
         //get the selected language

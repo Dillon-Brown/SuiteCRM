@@ -76,8 +76,11 @@ class EmailManViewList extends ViewList
            translate('LBL_MASS_EMAIL_MANAGER_TITLE', 'Administration'),
            );
     }
-    
-    
+
+
+    /**
+     * @return bool|void
+     */
     public function listViewPrepare()
     {
         $this->options['show_title'] = false;

@@ -158,6 +158,10 @@ foreach($hits as $hit){
 ?>
 
 <?php
+/**
+ * @param SugarBean $bean
+ * @return string
+ */
 function getRecordSummary(SugarBean $bean)
 {
     global $listViewDefs;
@@ -187,19 +191,40 @@ function getRecordSummary(SugarBean $bean)
     $summary = array_filter($summary);
     return implode(' || ', $summary);
 }
+
+/**
+ * @param $hit
+ * @return string
+ */
 function getScoreDisplay($hit)
 {
     return number_format(100*$hit->score, 2);
 }
+
+/**
+ * @param $input
+ * @param string $sep
+ * @return string
+ */
 function unCamelCase($input, $sep = " ")
 {
     $output = preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), $sep.'$0', $input);
     return ucwords($output);
 }
+
+/**
+ * @param $module
+ * @return mixed|string
+ */
 function getModuleLabel($module)
 {
     return translate('LBL_MODULE_NAME', $module);
 }
+
+/**
+ * @param $queryString
+ * @param $resArray
+ */
 function cacheQuery($queryString, $resArray)
 {
     $file = create_cache_directory('modules/AOD_Index/QueryCache/' . md5($queryString));
@@ -207,6 +232,10 @@ function cacheQuery($queryString, $resArray)
     sugar_file_put_contents_atomic($file, $out);
 }
 
+/**
+ * @param $filePath
+ * @return false|int
+ */
 function getCorrectMTime($filePath)
 {
     $time = filemtime($filePath);
@@ -223,6 +252,13 @@ function getCorrectMTime($filePath)
     return ($time + $adjustment);
 }
 
+/**
+ * @param $index
+ * @param $queryString
+ * @param int $start
+ * @param int $amount
+ * @return array
+ */
 function doSearch($index, $queryString, $start = 0, $amount = 20)
 {
     global $current_user;
@@ -272,6 +308,12 @@ function doSearch($index, $queryString, $start = 0, $amount = 20)
     return $res;
 }
 
+/**
+ * @param $queryString
+ * @param $start
+ * @param $amount
+ * @param $total
+ */
 function getPaginateHTML($queryString, $start, $amount, $total)
 {
     $first = !$start;

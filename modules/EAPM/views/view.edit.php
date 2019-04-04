@@ -62,6 +62,9 @@ class EAPMViewEdit extends ViewEdit
         $this->_returnId = $returnId;
     }
 
+    /**
+     * @return int|mixed|string|null
+     */
     protected function _getModuleTab()
     {
         return 'Users';

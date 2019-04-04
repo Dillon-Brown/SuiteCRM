@@ -60,6 +60,10 @@ class EmployeesController extends SugarController
     }
 
 
+    /**
+     * @return bool
+     * @throws Exception
+     */
     public function action_editview()
     {
         if (is_admin($GLOBALS['current_user']) || $_REQUEST['record'] == $GLOBALS['current_user']->id) {

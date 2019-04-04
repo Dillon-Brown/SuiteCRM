@@ -43,6 +43,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 $db = DBManagerFactory::getInstance();
 
+/**
+ * @param $templateId
+ * @return array
+ */
 function getTemplateValidationMessages($templateId)
 {
     $msgs = array();

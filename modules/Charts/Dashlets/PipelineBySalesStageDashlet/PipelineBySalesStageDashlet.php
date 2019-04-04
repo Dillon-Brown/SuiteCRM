@@ -338,6 +338,12 @@ EOD;
         return $query;
     }
 
+    /**
+     * @param $data
+     * @param $currency_symbol
+     * @param $thousands_symbol
+     * @return mixed
+     */
     protected function prepareChartData($data, $currency_symbol, $thousands_symbol)
     {
         //return $data;
@@ -357,6 +363,10 @@ EOD;
         return $chart;
     }
 
+    /**
+     * @param $label
+     * @return string
+     */
     protected function resizeLabel($label)
     {
         if (strlen($label) < $this->maxLabelSizeBeforeTotal) {

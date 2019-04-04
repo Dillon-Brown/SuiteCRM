@@ -172,6 +172,9 @@ class CalendarDashlet extends Dashlet
         return $options;
     }
 
+    /**
+     * @return string
+     */
     public function displayScript()
     {
         return '';

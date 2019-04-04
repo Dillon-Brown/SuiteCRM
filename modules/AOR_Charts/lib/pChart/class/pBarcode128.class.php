@@ -23,6 +23,10 @@
      public $CRC;
 
      /* Class creator */
+     /**
+      * pBarcode128 constructor.
+      * @param string $BasePath
+      */
      public function pBarcode128($BasePath="")
      {
          $this->Codes   = "";
@@ -49,6 +53,11 @@
      }
 
      /* Return the projected size of a barcode */
+     /**
+      * @param $TextString
+      * @param string $Format
+      * @return array
+      */
      public function getSize($TextString, $Format="")
      {
          $Angle		= isset($Format["Angle"]) ? $Format["Angle"] : 0;
@@ -85,6 +94,11 @@
          return(array("Width"=>$AreaWidth,"Height"=>$AreaHeight));
      }
 
+     /**
+      * @param $Value
+      * @param string $Format
+      * @return string
+      */
      public function encode128($Value, $Format="")
      {
          $this->Result  = "11010010000";
@@ -108,6 +122,13 @@
      }
 
      /* Create the encoded string */
+     /**
+      * @param $Object
+      * @param $Value
+      * @param $X
+      * @param $Y
+      * @param string $Format
+      */
      public function draw($Object, $Value, $X, $Y, $Format="")
      {
          $this->pChartObject = $Object;
@@ -177,14 +198,32 @@
          }
      }
 
+     /**
+      * @param $value
+      * @param $NbChar
+      * @return bool|string
+      */
      public function left($value, $NbChar)
      {
          return substr($value, 0, $NbChar);
      }
+
+     /**
+      * @param $value
+      * @param $NbChar
+      * @return bool|string
+      */
      public function right($value, $NbChar)
      {
          return substr($value, strlen($value)-$NbChar, $NbChar);
      }
+
+     /**
+      * @param $value
+      * @param $Depart
+      * @param $NbChar
+      * @return bool|string
+      */
      public function mid($value, $Depart, $NbChar)
      {
          return substr($value, $Depart-1, $NbChar);

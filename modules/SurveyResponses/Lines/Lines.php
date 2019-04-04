@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @param SurveyResponses $focus
+ * @param $field
+ * @param $value
+ * @param $view
+ * @return string
+ * @throws \SuiteCRM\StateSaverException
+ */
 function question_responses_display(SurveyResponses $focus, $field, $value, $view)
 {
     if ($view == 'EditView') {
@@ -38,6 +46,11 @@ function question_responses_display(SurveyResponses $focus, $field, $value, $vie
     return $html;
 }
 
+/**
+ * @param $responseArr
+ * @param $type
+ * @return string
+ */
 function convertQuestionResponseForDisplay($responseArr, $type)
 {
     global $timedate, $app_list_strings;

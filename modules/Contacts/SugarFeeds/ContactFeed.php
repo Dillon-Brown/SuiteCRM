@@ -48,6 +48,12 @@ require_once('modules/SugarFeed/feedLogicBase.php');
 class ContactFeed extends FeedLogicBase
 {
     public $module = 'Contacts';
+
+    /**
+     * @param $bean
+     * @param $event
+     * @param $arguments
+     */
     public function pushFeed($bean, $event, $arguments)
     {
         global $locale;

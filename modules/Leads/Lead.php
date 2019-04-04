@@ -224,6 +224,12 @@ class Lead extends Person implements EmailInterface
         }
     }
 
+    /**
+     * @param $order_by
+     * @param $where
+     * @param int $show_deleted
+     * @return string
+     */
     public function create_list_query($order_by, $where, $show_deleted=0)
     {
         $custom_join = $this->getCustomJoin();
@@ -259,6 +265,19 @@ class Lead extends Person implements EmailInterface
         return $query;
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @param array $filter
+     * @param array $params
+     * @param int $show_deleted
+     * @param string $join_type
+     * @param bool $return_array
+     * @param null $parentbean
+     * @param bool $singleSelect
+     * @param bool $ifListForExport
+     * @return string
+     */
     public function create_new_list_query($order_by, $where, $filter=array(), $params=array(), $show_deleted = 0, $join_type='', $return_array = false, $parentbean=null, $singleSelect = false, $ifListForExport = false)
     {
         $ret_array = parent::create_new_list_query($order_by, $where, $filter, $params, $show_deleted, $join_type, true, $parentbean, $singleSelect, $ifListForExport);
@@ -271,6 +290,12 @@ class Lead extends Person implements EmailInterface
         return $ret_array;
     }
 
+    /**
+     * @param $leadid
+     * @param $contactid
+     * @param $accountid
+     * @param $opportunityid
+     */
     public function converted_lead($leadid, $contactid, $accountid, $opportunityid)
     {
         $query = "UPDATE leads set converted='1', contact_id=$contactid, account_id=$accountid, opportunity_id=$opportunityid where  id=$leadid and deleted=0";
@@ -312,6 +337,9 @@ class Lead extends Person implements EmailInterface
         }
     }
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         $temp_array = parent::get_list_view_data();
@@ -390,6 +418,11 @@ class Lead extends Person implements EmailInterface
         return $the_where;
     }
 
+    /**
+     * @param $xtpl
+     * @param $lead
+     * @return mixed
+     */
     public function set_notification_body($xtpl, $lead)
     {
         global $app_list_strings;
@@ -403,6 +436,10 @@ class Lead extends Person implements EmailInterface
         return $xtpl;
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -410,6 +447,10 @@ class Lead extends Person implements EmailInterface
         }
         return false;
     }
+
+    /**
+     * @return string[]
+     */
     public function listviewACLHelper()
     {
         $array_assign = parent::listviewACLHelper();
@@ -508,6 +549,13 @@ class Lead extends Person implements EmailInterface
     }
 
     //carrys forward custom lead fields to contacts, accounts, opportunities during Lead Conversion
+
+    /**
+     * @param $form
+     * @param $tempBean
+     * @param $prefix
+     * @return bool
+     */
     public function convertCustomFieldsForm(&$form, &$tempBean, &$prefix)
     {
         global $mod_strings, $app_list_strings, $app_strings, $lbl_required_symbol;
@@ -580,6 +628,10 @@ class Lead extends Person implements EmailInterface
         return true;
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         if (empty($this->status)) {
@@ -589,6 +641,11 @@ class Lead extends Person implements EmailInterface
         $value = parent::save($check_notify);
         return $value;
     }
+
+    /**
+     * @param array $type
+     * @return string
+     */
     public function get_unlinked_email_query($type=array())
     {
         return get_unlinked_email_query($type, $this);

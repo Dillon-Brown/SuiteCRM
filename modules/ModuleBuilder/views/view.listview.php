@@ -84,6 +84,10 @@ class ViewListView extends SugarView
     {
     }
 
+    /**
+     * @param bool $preview
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function display($preview = false)
     {
         $packageName = (! empty($_REQUEST [ 'view_package' ])) ? $_REQUEST [ 'view_package' ] : null ;
@@ -102,6 +106,9 @@ class ViewListView extends SugarView
         }
     }
 
+    /**
+     * @return AjaxCompose
+     */
     public function constructAjax()
     {
         require_once('modules/ModuleBuilder/MB/AjaxCompose.php') ;
@@ -170,6 +177,10 @@ class ViewListView extends SugarView
         return $ajax ;
     }
 
+    /**
+     * @param $parser
+     * @return Sugar_Smarty
+     */
     public function constructSmarty($parser)
     {
         global $mod_strings;
@@ -277,6 +288,9 @@ class ViewListView extends SugarView
         return $smarty ;
     }
 
+    /**
+     * @return string
+     */
     public function _constructTitle()
     {
         global $app_list_strings ;
@@ -292,6 +306,11 @@ class ViewListView extends SugarView
         return $GLOBALS [ 'mod_strings' ] [ 'LBL_LISTVIEW_EDIT' ] . ':&nbsp;' . $title ;
     }
 
+    /**
+     * @param $buttons
+     * @param bool $horizontal
+     * @return string
+     */
     public function _buildImageButtons($buttons, $horizontal = true)
     {
         $text = '<table cellspacing=2><tr>' ;

@@ -49,6 +49,11 @@ require_once('include/Dashlets/DashletGeneric.php');
 
 class MyBugsDashlet extends DashletGeneric
 {
+    /**
+     * MyBugsDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;
@@ -82,6 +87,9 @@ class MyBugsDashlet extends DashletGeneric
     }
 
 
+    /**
+     * @return string
+     */
     public function displayOptions()
     {
         $this->processDisplayOptions();

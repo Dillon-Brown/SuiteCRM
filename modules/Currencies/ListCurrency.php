@@ -105,7 +105,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
              }
          }
      }
-    
+
+     /**
+      * @return string
+      */
      public function getJavascript()
      {
          // wp: DO NOT add formatting and unformatting numbers in here, add them prior to calling these to avoid double calling
@@ -162,8 +165,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
 				</script>
 EOQ;
      }
-    
-    
+
+
+     /**
+      * @param string $id
+      * @return string
+      */
      public function getSelectOptions($id = '')
      {
          global $current_user;
@@ -193,6 +200,10 @@ EOQ;
          }
          return $options;
      }
+
+     /**
+      * @return string
+      */
      public function getTable()
      {
          $this->lookupCurrencies();
@@ -230,7 +241,10 @@ EOQ;
 EOQ;
          return $form;
      }
-    
+
+     /**
+      * @param $fields
+      */
      public function setCurrencyFields($fields)
      {
          $json = getJSONobj();

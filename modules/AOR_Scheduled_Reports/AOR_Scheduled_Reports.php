@@ -85,6 +85,10 @@ class AOR_Scheduled_Reports extends basic
     }
 
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -93,6 +97,10 @@ class AOR_Scheduled_Reports extends basic
         return false;
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         if (isset($_POST['email_recipients']) && is_array($_POST['email_recipients'])) {
@@ -102,6 +110,9 @@ class AOR_Scheduled_Reports extends basic
         return parent::save($check_notify);
     }
 
+    /**
+     * @return array
+     */
     public function get_email_recipients()
     {
         $params = unserialize(base64_decode($this->email_recipients));
@@ -174,6 +185,11 @@ class AOR_Scheduled_Reports extends basic
         return $emails;
     }
 
+    /**
+     * @param DateTime $date
+     * @return bool
+     * @throws Exception
+     */
     public function shouldRun(DateTime $date)
     {
         global $timedate;

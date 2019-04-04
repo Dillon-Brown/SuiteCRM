@@ -108,6 +108,9 @@ class Campaign extends SugarBean
      */
     public $survey_name;
 
+    /**
+     * @param $listTmpl
+     */
     public function list_view_parse_additional_sections(&$listTmpl)
     {
         global $locale;
@@ -131,11 +134,20 @@ class Campaign extends SugarBean
     }
 
 
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return $this->name;
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @param string $relate_link_join
+     * @return string
+     */
     public function create_export_query($order_by, $where, $relate_link_join='')
     {
         $custom_join = $this->getCustomJoin(true, true, $where);
@@ -166,7 +178,10 @@ class Campaign extends SugarBean
     }
 
 
-
+    /**
+     * @param $campaign_id
+     * @param string $prospect_list_id
+     */
     public function clear_campaign_prospect_list_relationship($campaign_id, $prospect_list_id='')
     {
         if (!empty($prospect_list_id)) {
@@ -180,7 +195,9 @@ class Campaign extends SugarBean
     }
 
 
-
+    /**
+     * @param int $id
+     */
     public function mark_relationships_deleted($id)
     {
         $this->clear_campaign_prospect_list_relationship($id);
@@ -204,11 +221,18 @@ class Campaign extends SugarBean
     }
 
 
+    /**
+     * @param $fromid
+     * @param $toid
+     */
     public function update_currency_id($fromid, $toid)
     {
     }
 
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         $temp_array = $this->get_list_view_array();
@@ -249,6 +273,10 @@ class Campaign extends SugarBean
         return $the_where;
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
 
@@ -269,6 +297,9 @@ class Campaign extends SugarBean
     }
 
 
+    /**
+     * @param string $id
+     */
     public function mark_deleted($id)
     {
         $query = "update contacts set campaign_id = null where campaign_id = '{$id}' ";
@@ -281,6 +312,11 @@ class Campaign extends SugarBean
         return parent::mark_deleted($id);
     }
 
+    /**
+     * @param $xtpl
+     * @param $camp
+     * @return mixed
+     */
     public function set_notification_body($xtpl, $camp)
     {
         $xtpl->assign("CAMPAIGN_NAME", $camp->name);
@@ -292,6 +328,9 @@ class Campaign extends SugarBean
         return $xtpl;
     }
 
+    /**
+     * @return string
+     */
     public function track_log_leads()
     {
         $this->load_relationship('log_entries');
@@ -303,6 +342,10 @@ class Campaign extends SugarBean
         return implode(' ', $query_array);
     }
 
+    /**
+     * @param array $type
+     * @return string
+     */
     public function track_log_entries($type=array())
     {
         //get arguments being passed in
@@ -357,6 +400,9 @@ class Campaign extends SugarBean
     }
 
 
+    /**
+     * @return string
+     */
     public function get_queue_items()
     {
         //get arguments being passed in
@@ -413,6 +459,10 @@ class Campaign extends SugarBean
     //		return $query;
     //	}
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {

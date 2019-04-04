@@ -45,11 +45,20 @@ require_once('modules/SugarFeed/linkHandlers/Link.php');
 
 class FeedLinkHandlerYoutube extends FeedLinkHandlerLink
 {
+    /**
+     * @param $data
+     * @return string
+     */
     public function getDisplay(&$data)
     {
         return '<div style="padding-left:10px"><object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/' . $data['LINK_URL'] . '&hl=en&fs=1"></param><param name="allowFullScreen" value="true"></param><param name="wmode" value="opaque" /><embed src="http://www.youtube.com/v/' . $data['LINK_URL'] . '&hl=en&fs=1" type="application/x-shockwave-flash" allowfullscreen="false" wmode="opaque" width="425" height="344"></embed></object></div>';
     }
-    
+
+    /**
+     * @param $feed
+     * @param $link_type
+     * @param $link_url
+     */
     public function handleInput($feed, $link_type, $link_url)
     {
         $match = array();

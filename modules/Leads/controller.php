@@ -59,6 +59,9 @@ class LeadsController extends SugarController
         self::__construct();
     }
 
+    /**
+     * @return bool
+     */
     public function pre_editview()
     {
         //IF we have a prospect id leads convert it to a lead
@@ -77,6 +80,10 @@ class LeadsController extends SugarController
         }
         return true;
     }
+
+    /**
+     * @return bool
+     */
     public function action_editview()
     {
         $this->view = 'edit';

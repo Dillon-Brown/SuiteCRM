@@ -23,6 +23,11 @@
      public $pDataObject;
 
      /* Class creator */
+     /**
+      * pBubble constructor.
+      * @param $pChartObject
+      * @param $pDataObject
+      */
      public function pBubble($pChartObject, $pDataObject)
      {
          $this->pChartObject = $pChartObject;
@@ -30,6 +35,10 @@
      }
 
      /* Prepare the scale */
+     /**
+      * @param $DataSeries
+      * @param $WeightSeries
+      */
      public function bubbleScale($DataSeries, $WeightSeries)
      {
          if (!is_array($DataSeries)) {
@@ -120,6 +129,11 @@
      }
 
      /* Prepare the scale */
+     /**
+      * @param $DataSeries
+      * @param $WeightSeries
+      * @param string $Format
+      */
      public function drawBubbleChart($DataSeries, $WeightSeries, $Format="")
      {
          $ForceAlpha	= isset($Format["ForceAlpha"]) ? $Format["ForceAlpha"] : VOID;
@@ -289,6 +303,13 @@
          }
      }
 
+     /**
+      * @param $SerieName
+      * @param $SerieWeightName
+      * @param $Points
+      * @param string $Format
+      * @return int
+      */
      public function writeBubbleLabel($SerieName, $SerieWeightName, $Points, $Format="")
      {
          $OverrideTitle	= isset($Format["OverrideTitle"]) ? $Format["OverrideTitle"] : null;

@@ -95,6 +95,11 @@ class Reminder extends Basic
         }
     }
 
+    /**
+     * @param $eventModule
+     * @param $eventModuleId
+     * @param $remindersData
+     */
     private static function saveRemindersData($eventModule, $eventModuleId, $remindersData)
     {
         $db = DBManagerFactory::getInstance();
@@ -220,6 +225,11 @@ class Reminder extends Basic
         }
     }
 
+    /**
+     * @param $reminderId
+     * @param bool $checkDecline
+     * @return array
+     */
     private static function getEmailReminderInviteesRecipients($reminderId, $checkDecline = true)
     {
         $emails = array();
@@ -249,6 +259,10 @@ class Reminder extends Basic
         return $emails;
     }
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     private static function getUnsentEmailReminders()
     {
         global $timedate;
@@ -454,6 +468,10 @@ class Reminder extends Basic
         return 'index.php?action=DetailView&module=' . $module . '&record=' . $record_id;
     }
 
+    /**
+     * @param $timestr
+     * @return string
+     */
     private static function unQuoteTime($timestr)
     {
         $ret = '';
@@ -467,11 +485,22 @@ class Reminder extends Basic
 
     // --- test for accept status decline is?
 
+    /**
+     * @param SugarBean $event
+     * @param SugarBean $person
+     * @return bool
+     */
     private static function isDecline(SugarBean $event, SugarBean $person)
     {
         return self::testEventPersonAcceptStatus($event, $person, 'decline');
     }
 
+    /**
+     * @param SugarBean $event
+     * @param SugarBean $person
+     * @param string $acceptStatus
+     * @return bool
+     */
     private static function testEventPersonAcceptStatus(SugarBean $event, SugarBean $person, $acceptStatus = 'decline')
     {
         if ($acceptStats = self::getEventPersonAcceptStatus($event, $person)) {
@@ -485,6 +514,11 @@ class Reminder extends Basic
         return false;
     }
 
+    /**
+     * @param SugarBean $event
+     * @param SugarBean $person
+     * @return array|null
+     */
     private static function getEventPersonAcceptStatus(SugarBean $event, SugarBean $person)
     {
         $db = DBManagerFactory::getInstance();
@@ -505,6 +539,11 @@ class Reminder extends Basic
         return null;
     }
 
+    /**
+     * @param SugarBean $event
+     * @param $person_table
+     * @return string
+     */
     private function upgradeEventPersonQuery(SugarBean $event, $person_table)
     {
         $eventIdField = strtolower($event->object_name) . '_id';
@@ -517,6 +556,11 @@ class Reminder extends Basic
         return $query;
     }
 
+    /**
+     * @param SugarBean $event
+     * @param SugarBean $person
+     * @return string
+     */
     private static function getEventPersonQuery(SugarBean $event, SugarBean $person)
     {
         $eventIdField = array_search($event->table_name, $event->relationship_fields);
@@ -667,6 +711,10 @@ class Reminder extends Basic
     }
 
 
+    /**
+     * @param SugarBean $event
+     * @return array
+     */
     private static function getOldEventInvitees(SugarBean $event)
     {
         $db = DBManagerFactory::getInstance();
@@ -709,6 +757,12 @@ class Reminder extends Basic
         self::removeOldReminder($eventModule, $eventModuleId);
     }
 
+    /**
+     * @param $reminderId
+     * @param $invitees
+     * @return array
+     * @throws Exception
+     */
     private static function migrateReminderInvitees($reminderId, $invitees)
     {
         $ret = array();
@@ -722,6 +776,11 @@ class Reminder extends Basic
         return $ret;
     }
 
+    /**
+     * @param $invitee
+     * @return string
+     * @throws Exception
+     */
     private static function getRelatedInviteeModuleFromInviteeArray($invitee)
     {
         if (array_key_exists('user_id', $invitee)) {
@@ -738,6 +797,11 @@ class Reminder extends Basic
         //return null;
     }
 
+    /**
+     * @param $invitee
+     * @return mixed
+     * @throws Exception
+     */
     private static function getRelatedInviteeModuleIdFromInviteeArray($invitee)
     {
         if (array_key_exists('user_id', $invitee)) {
@@ -790,6 +854,10 @@ class Reminder extends Basic
 
     /*
      * @todo implenent it
+     */
+    /**
+     * @param SugarBean $event
+     * @throws Exception
      */
     public static function getRemindersListInlineEditView(SugarBean $event)
     {

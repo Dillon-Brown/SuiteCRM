@@ -120,6 +120,9 @@ class SchedulersJob extends Basic
         self::__construct();
     }
 
+    /**
+     * @return mixed|void
+     */
     public function check_date_relationships_load()
     {
         // Hack to work around the mess with dates being auto-converted to user format on retrieve

@@ -89,6 +89,10 @@ class Scheduler extends SugarBean
 
     public static $job_strings;
 
+    /**
+     * Scheduler constructor.
+     * @param bool $init
+     */
     public function __construct($init=true)
     {
         parent::__construct();
@@ -96,6 +100,9 @@ class Scheduler extends SugarBean
         $this->job_queue_table = $job->table_name;
     }
 
+    /**
+     * @return bool|User
+     */
     protected function getUser()
     {
         if (empty($this->user)) {
@@ -556,6 +563,13 @@ class Scheduler extends SugarBean
         return $validJobTime;
     }
 
+    /**
+     * @param $type
+     * @param $value
+     * @param $mins
+     * @param $hours
+     * @return false|mixed|string|void
+     */
     public function handleIntervalType($type, $value, $mins, $hours)
     {
         global $mod_strings;
@@ -1067,6 +1081,9 @@ class Scheduler extends SugarBean
     }
     ////	END STANDARD SUGARBEAN OVERRIDES
     ///////////////////////////////////////////////////////////////////////////
+    /**
+     * @return array
+     */
     public static function getJobsList()
     {
         if (empty(self::$job_strings)) {

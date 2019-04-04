@@ -100,6 +100,10 @@ class AccountsViewDetail extends ViewDetail
         echo $this->dv->display();
     }
 
+    /**
+     * @param $param
+     * @return string
+     */
     public function generatePushCode($param)
     {
         global $mod_strings;

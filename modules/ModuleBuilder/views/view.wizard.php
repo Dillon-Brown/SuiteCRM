@@ -100,6 +100,9 @@ class ModuleBuilderViewWizard extends SugarView
         echo $this->ajax->getJavascript() ;
     }
 
+    /**
+     * @param $ajax
+     */
     public function processStudio(
         $ajax
         ) {
@@ -182,6 +185,10 @@ class ModuleBuilderViewWizard extends SugarView
         }
     }
 
+    /**
+     * @param $ajax
+     * @throws Exception
+     */
     public function processMB(
         $ajax
         ) {

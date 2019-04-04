@@ -47,6 +47,11 @@ interface MetaDataImplementationInterface
     public function getViewdefs() ;
     public function getFielddefs() ;
     public function getLanguage() ;
+
+    /**
+     * @param $layoutDefinitions
+     * @return mixed
+     */
     public function deploy($layoutDefinitions) ;
     public function getHistory() ;
 }

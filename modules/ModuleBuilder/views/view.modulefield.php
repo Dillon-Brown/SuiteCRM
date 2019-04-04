@@ -64,6 +64,11 @@ class ViewModulefield extends SugarView
         echo $ac->getJavascript();
     }
 
+    /**
+     * @param bool $ac
+     * @return AjaxCompose|bool
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function fetch(
         $ac = false
         ) {

@@ -4,6 +4,11 @@ class reschedule_count
 {
 
     //Counts the number of call attempts made, for displaying in calls list view
+    /**
+     * @param $focus
+     * @param $event
+     * @param $args
+     */
     public function count($focus, $event, $args)
     {
         require_once('modules/Calls/reschedule_history.php');

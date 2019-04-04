@@ -61,7 +61,11 @@ class ParserModifySubPanel extends ParserModifyListView
     public $additional = array( ) ;
     public $available = array( ) ;
     public $columns = array( 'LBL_DEFAULT' => 'getDefaultFields' , 'LBL_HIDDEN' => 'getAvailableFields' ) ;
-    
+
+    /**
+     * @param string $module_name
+     * @param string $subPanelName
+     */
     public function init($module_name, $subPanelName)
     {
         $GLOBALS [ 'log' ]->debug("in ParserModifySubPanel: module_name={$module_name} child_module={$subPanelName}") ;
@@ -150,7 +154,11 @@ class ParserModifySubPanel extends ParserModifyListView
         
         return $this->availableFields ;
     }
-    
+
+    /**
+     * @param $fieldName
+     * @return array|mixed
+     */
     public function getField($fieldName)
     {
         foreach ($this->listViewDefs as $key => $def) {

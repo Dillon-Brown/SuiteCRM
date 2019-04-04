@@ -54,6 +54,15 @@ class EmailsNonImportedDetailView extends EmailsDetailView
      */
     public $formName = 'EmailsNonImportedDetailView';
 
+    /**
+     * @param String $module
+     * @param null $focus
+     * @param null $metadataFile
+     * @param string $tpl
+     * @param bool $createFocus
+     * @param string $metadataFileName
+     * @throws Exception
+     */
     public function setup(
         $module,
         $focus  = null,

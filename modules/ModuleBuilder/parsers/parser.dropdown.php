@@ -191,6 +191,11 @@ require_once('modules/ModuleBuilder/parsers/ModuleBuilderParser.php');
          }
      }
 
+     /**
+      * @param $dom
+      * @param $sub
+      * @return mixed
+      */
      private function synchDDKeys($dom, $sub)
      {
          //check for extra keys
@@ -208,12 +213,22 @@ require_once('modules/ModuleBuilder/parsers/ModuleBuilderParser.php');
          return $sub;
      }
 
+     /**
+      * @param $dropdown_name
+      * @return string
+      */
      public function getPatternMatch($dropdown_name)
      {
          return '/\s*\$GLOBALS\s*\[\s*\'app_list_strings\s*\'\s*\]\[\s*\''
              . $dropdown_name.'\'\s*\]\s*=\s*array\s*\([^\)]*\)\s*;\s*/ism';
      }
 
+     /**
+      * @param $dropdown_name
+      * @param $dropdown
+      * @param $lang
+      * @return false|mixed|string|string[]|null
+      */
      public function getNewCustomContents($dropdown_name, $dropdown, $lang)
      {
          $contents = return_custom_app_list_strings_file_contents($lang);

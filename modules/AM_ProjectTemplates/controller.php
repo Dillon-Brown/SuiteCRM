@@ -450,6 +450,24 @@ class AM_ProjectTemplatesController extends SugarController
     }
 
 
+    /**
+     * @param $name
+     * @param $start
+     * @param $end
+     * @param $project_id
+     * @param $milestone_flag
+     * @param $status
+     * @param $project_task_id
+     * @param $predecessors
+     * @param $rel_type
+     * @param $duration
+     * @param $duration_unit
+     * @param $resource
+     * @param $percent_complete
+     * @param $description
+     * @param $actual_duration
+     * @param $order_number
+     */
     public function create_task($name, $start, $end, $project_id, $milestone_flag, $status, $project_task_id, $predecessors, $rel_type, $duration, $duration_unit, $resource, $percent_complete, $description, $actual_duration, $order_number)
     {
         $task = new AM_TaskTemplates();
@@ -478,6 +496,23 @@ class AM_ProjectTemplatesController extends SugarController
         $project_template->am_tasktemplates_am_projecttemplates->add($task_id);
     }
 
+    /**
+     * @param $id
+     * @param $name
+     * @param $start
+     * @param $end
+     * @param $project_id
+     * @param $milestone_flag
+     * @param $status
+     * @param $predecessors
+     * @param $rel_type
+     * @param $duration
+     * @param $duration_unit
+     * @param $resource
+     * @param $percent_complete
+     * @param $description
+     * @param $actual_duration
+     */
     public function update_task($id, $name, $start, $end, $project_id, $milestone_flag, $status, $predecessors, $rel_type, $duration, $duration_unit, $resource, $percent_complete, $description, $actual_duration)
     {
         $task = new AM_TaskTemplates();
@@ -504,6 +539,11 @@ class AM_ProjectTemplatesController extends SugarController
 
 
     // Function for basic field validation (present and neither empty nor only white space
+
+    /**
+     * @param $question
+     * @return bool
+     */
     public function IsNullOrEmptyString($question)
     {
         return (!isset($question) || trim($question)==='');

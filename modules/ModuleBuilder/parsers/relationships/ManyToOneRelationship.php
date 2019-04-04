@@ -60,6 +60,10 @@ class ManyToOneRelationship extends AbstractRelationship
      * @param array $definition Parameters passed in as array defined in parent::$definitionKeys
      * The lhs_module value is for the One side; the rhs_module value is for the Many
      */
+    /**
+     * ManyToOneRelationship constructor.
+     * @param $definition
+     */
     public function __construct($definition)
     {
         parent::__construct($definition) ;
@@ -84,7 +88,11 @@ class ManyToOneRelationship extends AbstractRelationship
     /*
      * BUILD methods called during the build
      */
-    
+
+    /**
+     * @param bool $update
+     * @return array
+     */
     public function buildLabels($update = false)
     {
         return $this->one_to_many->buildLabels();
@@ -95,6 +103,9 @@ class ManyToOneRelationship extends AbstractRelationship
      * The format is that of TO_MODULE => relationship, FROM_MODULE, FROM_MODULES_SUBPANEL, mimicking the format in the layoutdefs.php
      * @return array    An array of subpanel definitions, keyed by the module
      */
+    /**
+     * @return array
+     */
     public function buildSubpanelDefinitions()
     {
         return $this->one_to_many->buildSubpanelDefinitions();
@@ -104,6 +115,9 @@ class ManyToOneRelationship extends AbstractRelationship
     /*
      * @return array    An array of field definitions, ready for the vardefs, keyed by module
      */
+    /**
+     * @return array
+     */
     public function buildVardefs()
     {
         return $this->one_to_many->buildVardefs();
@@ -112,6 +126,9 @@ class ManyToOneRelationship extends AbstractRelationship
     /*
      * Define what fields to add to which modules layouts
      * @return array    An array of module => fieldname
+     */
+    /**
+     * @return array
      */
     public function buildFieldsToLayouts()
     {
@@ -125,17 +142,26 @@ class ManyToOneRelationship extends AbstractRelationship
     /*
      * @return array    An array of relationship metadata definitions
      */
+    /**
+     * @return array
+     */
     public function buildRelationshipMetaData()
     {
         return $this->one_to_many->buildRelationshipMetaData();
     }
-    
+
+    /**
+     * @param $relationshipName
+     */
     public function setName($relationshipName)
     {
         parent::setName($relationshipName);
         $this->one_to_many->setname($relationshipName);
     }
-    
+
+    /**
+     * @param bool $set
+     */
     public function setReadonly($set = true)
     {
         parent::setReadonly($set);

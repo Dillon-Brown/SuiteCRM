@@ -74,6 +74,11 @@ class PredefinedChart
     }
 
 
+    /**
+     * @param $chart
+     * @param array $params
+     * @return bool|string|void
+     */
     public function predefinedChartQuery($chart, $params=array())
     {
         switch ($chart) {
@@ -94,6 +99,9 @@ class PredefinedChart
         return;
     }
 
+    /**
+     * @return string
+     */
     public function pipelineBySalesStageQuery()
     {
         global $current_user;
@@ -242,6 +250,10 @@ class PredefinedChart
         return $query;
     }
 
+    /**
+     * @param $filters
+     * @return string
+     */
     public function leadSourceByOutcomeQuery($filters)
     {
         global $current_user;
@@ -326,6 +338,9 @@ class PredefinedChart
         return $query;
     }
 
+    /**
+     * @return string
+     */
     public function outcomeByMonthQuery()
     {
         global $current_user;
@@ -408,6 +423,10 @@ class PredefinedChart
         return $query;
     }
 
+    /**
+     * @param $filters
+     * @return string
+     */
     public function pipelineByLeadSourceQuery($filters)
     {
         global $current_user;
@@ -491,6 +510,9 @@ class PredefinedChart
         return $query;
     }
 
+    /**
+     * @return string
+     */
     public function myModuleUsageLast30Days()
     {
         global $current_user;
@@ -506,6 +528,11 @@ class PredefinedChart
 
 
     // This function will grab a query from the custom directory to be used for charting
+
+    /**
+     * @param $chart
+     * @return bool
+     */
     public function customChartQuery($chart)
     {
         if (file_exists('custom/Charts/' . $chart . '.php')) {

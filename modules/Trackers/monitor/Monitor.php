@@ -149,6 +149,10 @@ class Monitor implements Trackable
         }
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function getValue($name)
     {
         return $this->$name;
@@ -254,6 +258,9 @@ class Monitor implements Trackable
         return $s;
     }
 
+    /**
+     * @return string
+     */
     public function getSessionId()
     {
         $sessionid = session_id();
@@ -277,11 +284,17 @@ class Monitor implements Trackable
         return $to_arr;
     }
 
+    /**
+     * @param bool $enable
+     */
     public function setEnabled($enable=true)
     {
         $this->enabled = $enable;
     }
 
+    /**
+     * @return bool
+     */
     public function isEnabled()
     {
         return $this->enabled;

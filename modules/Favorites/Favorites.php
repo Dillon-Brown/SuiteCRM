@@ -204,6 +204,10 @@ class Favorites extends Basic
         return $response;
     }
 
+    /**
+     * @param bool $notify
+     * @return string|void
+     */
     public function save($notify = false)
     {
         global $current_user;

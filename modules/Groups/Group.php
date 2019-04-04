@@ -82,6 +82,12 @@ class Group extends User
         SugarBean::mark_deleted($id);
     }
 
+    /**
+     * @param $order_by
+     * @param $where
+     * @param string $relate_link_join
+     * @return string
+     */
     public function create_export_query($order_by, $where, $relate_link_join = '')
     {
         $query = "SELECT users.*";

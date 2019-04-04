@@ -99,6 +99,10 @@ $GLOBALS['log']->debug("Saved record with id of ".$return_id);
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 
 
+/**
+ * @param $focus
+ * @param $row
+ */
 function populateFromRow(&$focus, $row)
 {
     

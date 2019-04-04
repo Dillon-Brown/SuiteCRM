@@ -50,6 +50,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
      public $module_dir = 'Connector';
 
 
+     /**
+      * ConnectorRecord constructor.
+      * @param string $merge_module
+      * @param string $merge_id
+      * @throws Exception
+      */
      public function __construct($merge_module = '', $merge_id = '')
      {
          parent::__construct($merge_module, $merge_id);

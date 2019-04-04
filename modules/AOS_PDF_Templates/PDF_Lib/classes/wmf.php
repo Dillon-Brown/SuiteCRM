@@ -6,12 +6,20 @@ class wmf
 var $mpdf = null;
 var $gdiObjectArray;
 
-function wmf(&$mpdf) {
+    /**
+     * wmf constructor.
+     * @param $mpdf
+     */
+    function wmf(&$mpdf) {
 	$this->mpdf = $mpdf;
 }
 
 
-function _getWMFimage($data) {
+    /**
+     * @param $data
+     * @return array
+     */
+    function _getWMFimage($data) {
 	$k = _MPDFK;
 
 		$this->gdiObjectArray = array();
@@ -199,16 +207,30 @@ function _getWMFimage($data) {
 }
 
 
-function _MoveTo($x, $y) {
+    /**
+     * @param $x
+     * @param $y
+     * @return string
+     */
+    function _MoveTo($x, $y) {
 	return "$x $y m\n";
 }
 
 // a line must have been started using _MoveTo() first
-function _LineTo($x, $y) {
+
+    /**
+     * @param $x
+     * @param $y
+     * @return string
+     */
+    function _LineTo($x, $y) {
 	return "$x $y l\n";
 }
 
-function _AddGDIObject($obj) {
+    /**
+     * @param $obj
+     */
+    function _AddGDIObject($obj) {
 	// find next available slot
 	$idx = 0;
 	if (!empty($this->gdiObjectArray)) {
@@ -223,11 +245,18 @@ function _AddGDIObject($obj) {
 	$this->gdiObjectArray[$idx] = $obj;
 }
 
-function _GetGDIObject($idx) {
+    /**
+     * @param $idx
+     * @return mixed
+     */
+    function _GetGDIObject($idx) {
 	return $this->gdiObjectArray[$idx];
 }
 
-function _DeleteGDIObject($idx) {
+    /**
+     * @param $idx
+     */
+    function _DeleteGDIObject($idx) {
 	unset($this->gdiObjectArray[$idx]);
 }
 

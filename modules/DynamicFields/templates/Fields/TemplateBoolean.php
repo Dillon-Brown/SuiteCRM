@@ -49,6 +49,10 @@ class TemplateBoolean extends TemplateField
     public $type = 'bool';
 
     //BEGIN BACKWARDS COMPATABILITY
+
+    /**
+     * @return array|string
+     */
     public function get_xtpl_edit()
     {
         $name = $this->name;
@@ -79,8 +83,9 @@ class TemplateBoolean extends TemplateField
     }
 
 
-
-
+    /**
+     * @return array|string|void
+     */
     public function get_xtpl_search()
     {
         if (!empty($_REQUEST[$this->name])) {
@@ -95,6 +100,9 @@ class TemplateBoolean extends TemplateField
         return '';
     }
 
+    /**
+     * @return array|string
+     */
     public function get_xtpl_detail()
     {
         $name = $this->name;
@@ -113,6 +121,10 @@ class TemplateBoolean extends TemplateField
         }
         return $returnXTPL;
     }
+
+    /**
+     * @return array|string
+     */
     public function get_xtpl_list()
     {
         return $this->get_xtpl_edit();

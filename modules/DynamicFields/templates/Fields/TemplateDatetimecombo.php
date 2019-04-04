@@ -122,11 +122,18 @@ class TemplateDatetimecombo extends TemplateRange
         'pm' => 'pm',
     );
 
+    /**
+     * @param bool $modify
+     * @return string
+     */
     public function get_db_default($modify=false)
     {
         return '';
     }
 
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();

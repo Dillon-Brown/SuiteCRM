@@ -91,6 +91,10 @@ class EmailsViewDetailNonImported extends ViewDetail
         echo $this->dv->display();
     }
 
+    /**
+     * @param $metadataFile
+     * @return array|bool
+     */
     private function getFieldsInViewDefinitions($metadataFile)
     {
         require_once $metadataFile;

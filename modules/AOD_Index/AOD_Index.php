@@ -69,12 +69,21 @@ class AOD_Index extends AOD_Index_sugar
     }
 
 
+    /**
+     * @return bool
+     */
     public function isEnabled()
     {
         global $sugar_config;
         return !empty($sugar_config['aod']['enable_aod']);
     }
 
+    /**
+     * @param $queryString
+     * @return array
+     * @throws Zend_Search_Exception
+     * @throws Zend_Search_Lucene_Exception
+     */
     public function find($queryString)
     {
         $queryString = strtolower($queryString);
@@ -93,6 +102,9 @@ class AOD_Index extends AOD_Index_sugar
         $this->save();
     }
 
+    /**
+     * @return AOD_Index|bool|SugarBean
+     */
     public function getIndex()
     {
         $index = BeanFactory::getBean('AOD_Index', 1);
@@ -164,6 +176,12 @@ class AOD_Index extends AOD_Index_sugar
         return array("error"=>false,"document"=>$document);
     }
 
+    /**
+     * @param SugarBean $bean
+     * @return array
+     * @throws Zend_Search_Lucene_Document_Exception
+     * @throws Zend_Search_Lucene_Exception
+     */
     public function getDocumentForBean(SugarBean $bean)
     {
         if ($bean->module_name == 'DocumentRevisions') {
@@ -225,6 +243,11 @@ class AOD_Index extends AOD_Index_sugar
         return $document;
     }
 
+    /**
+     * @param $module
+     * @param $field
+     * @return int|mixed
+     */
     private function getBoost($module, $field)
     {
         $fieldBoosts = array('name' =>0.5, 'first_name' => 0.5, 'last_name' => 0.5);
@@ -239,6 +262,12 @@ class AOD_Index extends AOD_Index_sugar
         return $boost;
     }
 
+    /**
+     * @param $module
+     * @param $beanId
+     * @return bool|SugarBean
+     * @throws Exception
+     */
     private function getIndexEvent($module, $beanId)
     {
         global $timedate;
@@ -275,6 +304,11 @@ class AOD_Index extends AOD_Index_sugar
         $this->getLuceneIndex()->commit();
     }
 
+    /**
+     * @param $module
+     * @param $beanName
+     * @return bool
+     */
     public static function isModuleSearchable($module, $beanName)
     {
         $whiteList = array("DocumentRevisions","Cases");
@@ -293,6 +327,11 @@ class AOD_Index extends AOD_Index_sugar
         return true;
     }
 
+    /**
+     * @param $module
+     * @param $beanId
+     * @return bool|void
+     */
     public function index($module, $beanId)
     {
         try {
@@ -337,11 +376,23 @@ class AOD_Index extends AOD_Index_sugar
         }
         return true;
     }
+
+    /**
+     * @param $module
+     * @param $beanId
+     * @return string
+     */
     private function getIdForDoc($module, $beanId)
     {
         return $module . " " . $beanId;
     }
 
+    /**
+     * @param $module
+     * @param $beanId
+     * @throws Zend_Search_Exception
+     * @throws Zend_Search_Lucene_Exception
+     */
     public function remove($module, $beanId)
     {
         $term  = new Zend_Search_Lucene_Index_Term($module.' '.$beanId, 'aod_id');
@@ -373,6 +424,9 @@ class AOD_Index extends AOD_Index_sugar
     }
 
 
+    /**
+     * @return array
+     */
     public function getIndexableModules()
     {
         $modules = array();

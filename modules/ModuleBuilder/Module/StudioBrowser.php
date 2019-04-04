@@ -40,6 +40,11 @@
 
 require_once 'modules/ModuleBuilder/Module/StudioModuleFactory.php' ;
 
+/**
+ * @param $a
+ * @param $b
+ * @return int|lt
+ */
 function cmp($a, $b)
 {
     return strcasecmp($a, $b);
@@ -76,7 +81,10 @@ class StudioBrowser
             }
         }
     }
-        
+
+    /**
+     * @return array
+     */
     public function getNodes()
     {
         $this->loadModules();

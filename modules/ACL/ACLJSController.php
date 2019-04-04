@@ -45,6 +45,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class ACLJSController
 {
+    /**
+     * ACLJSController constructor.
+     * @param $module
+     * @param string $form
+     * @param bool $is_owner
+     */
     public function __construct($module, $form='', $is_owner=false)
     {
         $this->module = $module;
@@ -70,6 +76,9 @@ class ACLJSController
     }
 
 
+    /**
+     * @return string
+     */
     public function getJavascript()
     {
         global $action;
@@ -127,6 +136,10 @@ EOQ;
         return $script;
     }
 
+    /**
+     * @param $def
+     * @return array
+     */
     public function getHTMLValues($def)
     {
         $return_array = array();
@@ -143,6 +156,11 @@ EOQ;
         return $return_array;
     }
 
+    /**
+     * @param $name
+     * @param $def
+     * @return string
+     */
     public function getFieldByIdScript($name, $def)
     {
         $script = '';
@@ -154,6 +172,11 @@ EOQ;
         return $script;
     }
 
+    /**
+     * @param $name
+     * @param $def
+     * @return string
+     */
     public function getFieldByNameScript($name, $def)
     {
         $script = '';
@@ -170,6 +193,12 @@ EOQ;
         return $script;
     }
 
+    /**
+     * @param $form
+     * @param $name
+     * @param $def
+     * @return string
+     */
     public function getFieldByFormScript($form, $name, $def)
     {
         $script = '';

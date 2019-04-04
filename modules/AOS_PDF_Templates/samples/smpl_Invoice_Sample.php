@@ -4,11 +4,17 @@ require_once __DIR__ . '/../TemplateSampleService.php';
 
 class smpl_Invoice_Sample
 {
+    /**
+     * @return string
+     */
     public function getType()
     {
         return 'AOS_Invoices';
     }
-        
+
+    /**
+     * @return string
+     */
     public function getBody()
     {
         global $locale;
@@ -129,11 +135,17 @@ class smpl_Invoice_Sample
 <p>&nbsp;</p>';
     }
 
+    /**
+     * @return string
+     */
     public function getHeader()
     {
         return '';
     }
 
+    /**
+     * @return string
+     */
     public function getFooter()
     {
         global $locale;

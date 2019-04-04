@@ -80,11 +80,21 @@ class ext_rest_twitter extends ext_rest
         return $outModuleList;
     }
 
+    /**
+     * @param array $args
+     * @param null $module
+     * @return array|null
+     */
     public function getItem($args = array(), $module = null)
     {
         return null;
     }
 
+    /**
+     * @param array $args
+     * @param null $module
+     * @return array|null
+     */
     public function getList($args = array(), $module = null)
     {
         return null;

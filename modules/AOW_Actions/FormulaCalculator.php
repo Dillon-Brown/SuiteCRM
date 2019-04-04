@@ -50,6 +50,12 @@ class FormulaNode
     public $children = array();
     public $evaluatedValue;
 
+    /**
+     * FormulaNode constructor.
+     * @param $text
+     * @param $level
+     * @param null $parent
+     */
     public function __construct($text, $level, $parent = null)
     {
         $this->text = $text;
@@ -57,11 +63,17 @@ class FormulaNode
         $this->parent = $parent;
     }
 
+    /**
+     * @param $childNode
+     */
     public function addChild($childNode)
     {
         $this->children [] = $childNode;
     }
 
+    /**
+     * @return bool
+     */
     public function isLeaf()
     {
         return count($this->children) === 0;

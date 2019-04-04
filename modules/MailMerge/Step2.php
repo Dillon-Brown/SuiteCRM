@@ -152,7 +152,11 @@ if (!empty($_POST['document_id'])) {
 $xtpl->parse("main");
 $xtpl->out("main");
 
-function displaySelectionBox($objectList)
+ /**
+  * @param $objectList
+  * @return string
+  */
+ function displaySelectionBox($objectList)
 {
     $html = '<select id="display_objs" name="display_objs[]" size="10" multiple="multiple" size="10" >';
     foreach ($objectList as $key=>$value) {

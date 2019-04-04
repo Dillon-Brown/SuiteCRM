@@ -2773,6 +2773,11 @@ function handleExecuteSqlKeys($db, $tableName, $disable)
     return $db->query("ALTER TABLE $tableName $op KEYS");
 }
 
+/**
+ * @param $sqlScript
+ * @param string $forStepQuery
+ * @param string $resumeFromQuery
+ */
 function parseAndExecuteSqlFile($sqlScript, $forStepQuery='', $resumeFromQuery='')
 {
     global $sugar_config;
@@ -2864,6 +2869,10 @@ function parseAndExecuteSqlFile($sqlScript, $forStepQuery='', $resumeFromQuery='
 }
 
 
+/**
+ * @param $query
+ * @return string
+ */
 function getAlterTable($query)
 {
     $query = strtolower($query);
@@ -2959,6 +2968,12 @@ function initialize_session_vars()
 }
 //track the upgrade progress on each step
 //track the upgrade progress on each step
+/**
+ * @param $currStep
+ * @param $currState
+ * @param string $currStepSub
+ * @param string $currStepSubState
+ */
 function set_upgrade_progress($currStep, $currState, $currStepSub='', $currStepSubState='')
 {
     $upgrade_progress_dir = sugar_cached('upgrades/temp');
@@ -3030,6 +3045,9 @@ function set_upgrade_progress($currStep, $currState, $currStepSub='', $currStepS
     }
 }
 
+/**
+ * @return int|string
+ */
 function get_upgrade_progress()
 {
     $upgrade_progress_dir = sugar_cached('upgrades/temp');
@@ -3052,6 +3070,11 @@ function get_upgrade_progress()
     }
     return $currState;
 }
+
+/**
+ * @param $currStep
+ * @return int|string
+ */
 function currSubStep($currStep)
 {
     $currSubStep = '';
@@ -3064,6 +3087,11 @@ function currSubStep($currStep)
     }
     return $currState;
 }
+
+/**
+ * @param $currState
+ * @return int|string
+ */
 function currUpgradeState($currState)
 {
     $currState = '';
@@ -3083,6 +3111,11 @@ function currUpgradeState($currState)
     return $currState;
 }
 
+/**
+ * @param $step
+ * @param string $SubStep
+ * @return bool|void
+ */
 function didThisStepRunBefore($step, $SubStep='')
 {
     if ($step == null) {
@@ -3136,6 +3169,11 @@ function didThisStepRunBefore($step, $SubStep='')
 
 
 //get and set post install status
+/**
+ * @param string $progArray
+ * @param string $action
+ * @return array
+ */
 function post_install_progress($progArray='', $action='')
 {
     $upgrade_progress_dir = sugar_cached('upgrades/temp');
@@ -3180,6 +3218,11 @@ function post_install_progress($progArray='', $action='')
     }
 }
 
+/**
+ * @param bool $execute
+ * @param string $path
+ * @return mixed|string
+ */
 function repairDBForUpgrade($execute=false, $path='')
 {
     global $current_user, $beanFiles;
@@ -3608,6 +3651,9 @@ function upgradeModulesForTeam()
 }
 
 
+/**
+ * @param $from_dir
+ */
 function addNewSystemTabsFromUpgrade($from_dir)
 {
     global $path;
@@ -4292,6 +4338,9 @@ function upgradeEnableInsideViewConnector($path='')
     logThis('End upgradeEnableInsideViewConnector', $path);
 }
 
+/**
+ * @param string $path
+ */
 function repair_long_relationship_names($path='')
 {
     logThis("Begin repair_long_relationship_names", $path);
@@ -4317,6 +4366,9 @@ function repair_long_relationship_names($path='')
     logThis("End repair_long_relationship_names", $path);
 }
 
+/**
+ * @return bool
+ */
 function removeSilentUpgradeVarsCache()
 {
     global $silent_upgrade_vars_loaded;
@@ -4333,6 +4385,9 @@ function removeSilentUpgradeVarsCache()
     return true;
 }
 
+/**
+ * @return bool
+ */
 function loadSilentUpgradeVars()
 {
     global $silent_upgrade_vars_loaded;
@@ -4352,6 +4407,9 @@ function loadSilentUpgradeVars()
     return true;
 }
 
+/**
+ * @return bool
+ */
 function writeSilentUpgradeVars()
 {
     global $silent_upgrade_vars_loaded;
@@ -4377,6 +4435,11 @@ function writeSilentUpgradeVars()
     return true;
 }
 
+/**
+ * @param $var
+ * @param $value
+ * @return bool
+ */
 function setSilentUpgradeVar($var, $value)
 {
     if (!loadSilentUpgradeVars()) {
@@ -4390,6 +4453,10 @@ function setSilentUpgradeVar($var, $value)
     return true;
 }
 
+/**
+ * @param $var
+ * @return bool|null
+ */
 function getSilentUpgradeVar($var)
 {
     if (!loadSilentUpgradeVars()) {
@@ -4558,6 +4625,12 @@ if (!function_exists("getValidDBName")) {
      * @param string $ensureUnique
      * @return string Valid column name trimmed to right length and with invalid characters removed
      */
+    /**
+     * @param $name
+     * @param bool $ensureUnique
+     * @param int $maxLen
+     * @return string
+     */
     function getValidDBName($name, $ensureUnique = false, $maxLen = 30)
     {
         // first strip any invalid characters - all but alphanumerics and -
@@ -4614,6 +4687,10 @@ function whetherNeedToSkipDir($dir, $skipDirs)
  * rebuildSprites
  * @param silentUpgrade boolean flag indicating whether or not we should treat running the SugarSpriteBuilder as an upgrade operation
  *
+ */
+/**
+ * @param bool $fromUpgrade
+ * @throws Exception
  */
 function rebuildSprites($fromUpgrade=true)
 {

@@ -48,6 +48,12 @@ class MBVardefs
     public $name = '';
     public $errors = array();
 
+    /**
+     * MBVardefs constructor.
+     * @param $name
+     * @param $path
+     * @param $key_name
+     */
     public function __construct($name, $path, $key_name)
     {
         $this->path = $path;
@@ -74,6 +80,11 @@ class MBVardefs
     }
 
 
+    /**
+     * @param $by_group
+     * @param $template
+     * @param $file
+     */
     public function loadTemplate($by_group, $template, $file)
     {
         $module = $this->name;
@@ -104,6 +115,9 @@ class MBVardefs
         }
     }
 
+    /**
+     * @param bool $by_group
+     */
     public function mergeVardefs($by_group=false)
     {
         $this->vardefs = array(
@@ -133,23 +147,35 @@ class MBVardefs
         }
     }
 
+    /**
+     * @param bool $by_group
+     */
     public function updateVardefs($by_group=false)
     {
         $this->mergeVardefs($by_group);
     }
 
 
+    /**
+     * @return array
+     */
     public function getVardefs()
     {
         return $this->vardefs;
     }
 
+    /**
+     * @return array
+     */
     public function getVardef()
     {
         return $this->vardef;
     }
 
 
+    /**
+     * @param $vardef
+     */
     public function addFieldVardef($vardef)
     {
         if (!isset($vardef['default']) || strlen($vardef['default']) == 0) {
@@ -158,6 +184,9 @@ class MBVardefs
         $this->vardef['fields'][$vardef['name']] = $vardef;
     }
 
+    /**
+     * @param $field
+     */
     public function deleteField($field)
     {
         unset($this->vardef['fields'][$field->name]);
@@ -169,6 +198,9 @@ class MBVardefs
         write_array_to_file('vardefs', $this->vardef, $this->path . '/vardefs.php', 'w', $header);
     }
 
+    /**
+     * @param $path
+     */
     public function build($path)
     {
         $header = file_get_contents('modules/ModuleBuilder/MB/header.php');

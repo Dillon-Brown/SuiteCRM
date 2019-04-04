@@ -49,7 +49,10 @@ class StandardField extends DynamicField
     public $custom_def = array();
     public $base_def = array();
     public $baseField;
-    
+
+    /**
+     * @param $field
+     */
     protected function loadCustomDef($field)
     {
         global $beanList;
@@ -63,6 +66,9 @@ class StandardField extends DynamicField
         }
     }
 
+    /**
+     * @param $field
+     */
     protected function loadBaseDef($field)
     {
         global $beanList;

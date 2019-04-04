@@ -65,6 +65,9 @@ class StudioTree extends MBPackageTree
     }
 
 
+    /**
+     * @return mixed|string
+     */
     public function getName()
     {
         return translate('LBL_SECTION_MODULES');

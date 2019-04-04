@@ -78,6 +78,9 @@ class ModuleBuilderController extends SugarController
         return $mod_strings['LBL_DEVELOPER_TOOLS'];
     }
 
+    /**
+     * @return bool
+     */
     public function fromModuleBuilder()
     {
         return (isset($_REQUEST [ 'MB' ]) && ($_REQUEST [ 'MB' ] == '1')) ;
@@ -629,6 +632,14 @@ class ModuleBuilderController extends SugarController
         }
     }
 
+    /**
+     * @param $language
+     * @param $label
+     * @param $labelvalue
+     * @param $modulename
+     * @param null $basepath
+     * @param bool $forRelationshipLabel
+     */
     public function DeleteLabel($language, $label, $labelvalue, $modulename, $basepath = null, $forRelationshipLabel = false)
     {
         // remove the label

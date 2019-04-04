@@ -158,6 +158,10 @@ $xtpl->parse("main.variable_button");
 $xtpl->parse("main");
 $xtpl->out("main");
 
+/**
+ * @param $customFieldName
+ * @return array|null
+ */
 function ifRadioButton($customFieldName)
 {
     $custRow = null;

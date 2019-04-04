@@ -222,6 +222,10 @@ class CalendarDisplay
         echo $ss->fetch($main);
     }
 
+    /**
+     * @param string $activity
+     * @return array|string
+     */
     public function checkActivity($activity = "")
     {
         global $current_user;
@@ -591,6 +595,10 @@ class CalendarDisplay
         echo $ss->fetch($footer);
     }
 
+    /**
+     * @param $format
+     * @return string
+     */
     public function convertPHPToMomentFormat($format)
     {
         $replacements = array(

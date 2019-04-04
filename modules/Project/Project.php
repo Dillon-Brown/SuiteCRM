@@ -253,6 +253,9 @@ class Project extends SugarBean
         return $the_where;
     }
 
+    /**
+     * @return array
+     */
     public function get_list_view_data()
     {
         $field_list = $this->get_list_view_array();
@@ -260,6 +263,11 @@ class Project extends SugarBean
         $field_list['ASSIGNED_USER_NAME'] = $this->assigned_user_name;
         return $field_list;
     }
+
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -268,6 +276,12 @@ class Project extends SugarBean
         return false;
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @param string $relate_link_join
+     * @return string
+     */
     public function create_export_query($order_by, $where, $relate_link_join='')
     {
         $custom_join = $this->getCustomJoin(true, true, $where);
@@ -304,6 +318,10 @@ class Project extends SugarBean
         }
         return $query;
     }
+
+    /**
+     * @return array
+     */
     public function getAllProjectTasks()
     {
         $projectTasks = array();
@@ -324,6 +342,9 @@ class Project extends SugarBean
         return $projectTasks;
     }
 
+    /**
+     * @return string
+     */
     public function getDefaultStatus()
     {
         $def = $this->field_defs['status'];
@@ -339,6 +360,10 @@ class Project extends SugarBean
         return '';
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         global $current_user, $db;

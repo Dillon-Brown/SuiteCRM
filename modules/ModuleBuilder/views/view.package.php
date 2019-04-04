@@ -135,6 +135,10 @@ class Viewpackage extends SugarView
             }
         }
     }
+
+    /**
+     * @param $name
+     */
     public function loadPackageHelp(
         $name
         ) {
@@ -142,6 +146,9 @@ class Viewpackage extends SugarView
         $this->package->help['group'] = 'package';
     }
 
+    /**
+     * @param $packages
+     */
     public function generatePackageButtons(
         $packages
         ) {

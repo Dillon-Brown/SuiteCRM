@@ -31,6 +31,11 @@ require_once('modules/AOW_Processed/AOW_Processed.php');
 
 class AOW_ProcessedDashlet extends DashletGeneric
 {
+    /**
+     * AOW_ProcessedDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

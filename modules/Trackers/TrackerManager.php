@@ -101,6 +101,9 @@ class TrackerManager
         }
     }
 
+    /**
+     * @param $id
+     */
     public function setMonitorId($id)
     {
         self::$monitor_id = $id;
@@ -175,6 +178,14 @@ class TrackerManager
         }
     }
 
+    /**
+     * @param string $name
+     * @param string $monitorId
+     * @param string $metadata
+     * @param string $store
+     * @return Monitor|null
+     * @throws Exception
+     */
     private function _getMonitor($name='', $monitorId='', $metadata='', $store='')
     {
         $class = strtolower($name.'_monitor');

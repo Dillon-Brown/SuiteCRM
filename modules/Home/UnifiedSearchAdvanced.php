@@ -73,6 +73,11 @@ class UnifiedSearchAdvanced
         $this->cache_display = sugar_cached('modules/unified_search_modules_display.php');
     }
 
+    /**
+     * @param string $tpl
+     * @return string
+     * @throws \SuiteCRM\StateSaverException
+     */
     public function getDropDownDiv($tpl = 'modules/Home/UnifiedSearchAdvanced.tpl')
     {
         global $app_list_strings, $app_strings;
@@ -597,6 +602,11 @@ class UnifiedSearchAdvanced
      * @return boolean value indication whether or not file was successfully written
      * @throws Exception Thrown if the file write operation fails
      */
+    /**
+     * @param $unified_search_modules_display
+     * @return bool
+     * @throws Exception
+     */
     private function writeUnifiedSearchModulesDisplayFile($unified_search_modules_display)
     {
         if (is_null($unified_search_modules_display) || empty($unified_search_modules_display)) {
@@ -616,6 +626,11 @@ class UnifiedSearchAdvanced
 }
 
 
+/**
+ * @param $a
+ * @param $b
+ * @return int
+ */
 function unified_search_modules_cmp($a, $b)
 {
     if (!isset($a['translated']) || !isset($b['translated'])) {

@@ -81,6 +81,9 @@ class Popup_Picker
     /*
      *
      */
+    /**
+     * @return string
+     */
     public function _get_where_clause()
     {
         $where = '';

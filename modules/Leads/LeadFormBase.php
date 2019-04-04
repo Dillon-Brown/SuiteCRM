@@ -77,6 +77,12 @@ class LeadFormBase extends PersonFormBase
     }
 
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @return string
+     */
     public function getWideFormBody($prefix, $mod='', $formname='')
     {
         if (!ACLController::checkAccess('Leads', 'edit', true)) {
@@ -129,6 +135,12 @@ EOQ;
         return $form;
     }
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @return string
+     */
     public function getFormBody($prefix, $mod='', $formname='')
     {
         if (!ACLController::checkAccess('Leads', 'edit', true)) {
@@ -175,6 +187,12 @@ EOQ;
         $mod_strings = $temp_strings;
         return $form;
     }
+
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @return string
+     */
     public function getForm($prefix, $mod='Leads')
     {
         if (!ACLController::checkAccess('Leads', 'edit', true)) {
@@ -213,6 +231,16 @@ EOQ;
     }
 
 
+    /**
+     * @param $prefix
+     * @param bool $redirect
+     * @param bool $useRequired
+     * @param bool $do_save
+     * @param null $exist_lead
+     * @return Lead|SugarBean|null
+     * @throws EmailValidatorException
+     * @throws \SuiteCRM\ErrorMessageException
+     */
     public function handleSave($prefix, $redirect=true, $useRequired=false, $do_save=true, $exist_lead=null)
     {
         require_once('modules/Campaigns/utils.php');

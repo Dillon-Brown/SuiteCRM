@@ -95,6 +95,9 @@
         }
 
 
+        /**
+         * @return string
+         */
         public function get_summary_text()
         {
             return "";
@@ -109,11 +112,19 @@
         {
         }
 
+        /**
+         * @return array|void
+         */
         public function get_list_view_data()
         {
         }
 
         // combines all freebusy vcals and returns just the FREEBUSY lines as a string
+
+        /**
+         * @param $user_bean
+         * @return string
+         */
         public function get_freebusy_lines_cache(&$user_bean)
         {
             $ical_array = array();
@@ -136,6 +147,12 @@
 
         // query and create the FREEBUSY lines for SugarCRM Meetings and Calls and
         // return the string
+        /**
+         * @param $user_bean
+         * @param $start_date_time
+         * @param $end_date_time
+         * @return string
+         */
         public function create_sugar_freebusy($user_bean, $start_date_time, $end_date_time)
         {
             $ical_array = array();
@@ -175,6 +192,13 @@
         }
 
         // return a freebusy vcal string
+
+        /**
+         * @param $user_focus
+         * @param bool $cached
+         * @return string
+         * @throws Exception
+         */
         public function get_vcal_freebusy($user_focus, $cached = true)
         {
             global $locale, $timedate;
@@ -242,6 +266,9 @@
 
         // static function:
         // cache vcals
+        /**
+         * @param $user_focus
+         */
         public static function cache_sugar_vcal(&$user_focus)
         {
             self::cache_sugar_vcal_freebusy($user_focus);
@@ -249,6 +276,9 @@
 
         // static function:
         // caches vcal for Activities in Sugar database
+        /**
+         * @param $user_focus
+         */
         public static function cache_sugar_vcal_freebusy(&$user_focus)
         {
             $focus = new vCal();
@@ -268,6 +298,11 @@
         /*
          * Lines of text SHOULD NOT be longer than 75 octets, excluding the line break.
          * Long content lines SHOULD be split into a multiple line representations using a line "folding" technique
+         */
+        /**
+         * @param $key
+         * @param $value
+         * @return string
          */
         public static function fold_ical_lines($key, $value)
         {

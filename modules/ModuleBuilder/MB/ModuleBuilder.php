@@ -57,6 +57,9 @@ class ModuleBuilder
 {
     public $packages = array( ) ;
 
+    /**
+     * @return array
+     */
     public function getPackageList()
     {
         static $list = array( ) ;
@@ -85,7 +88,11 @@ class ModuleBuilder
 
         return $this->packages [ $name ] ;
     }
-    
+
+    /**
+     * @param $name
+     * @return bool|mixed
+     */
     public function getPackageKey($name)
     {
         $manifestPath = MB_PACKAGE_PATH . '/' . $name . '/manifest.php' ;
@@ -143,6 +150,9 @@ class ModuleBuilder
         }
     }
 
+    /**
+     * @return array
+     */
     public function getNodes()
     {
         $this->getPackages() ;

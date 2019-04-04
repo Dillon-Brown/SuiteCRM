@@ -69,6 +69,10 @@ class ext_rest_insideview extends ext_rest
         parent::__construct();
     }
 
+    /**
+     * @param array $moduleList
+     * @return array
+     */
     public function filterAllowedModules($moduleList)
     {
         // InsideView currently has no ability to talk to modules other than these four
@@ -82,6 +86,9 @@ class ext_rest_insideview extends ext_rest
         return $outModuleList;
     }
 
+    /**
+     * @param $mapping
+     */
     public function saveMappingHook($mapping)
     {
         $removeList = array();
@@ -104,16 +111,30 @@ class ext_rest_insideview extends ext_rest
         return parent::saveMappingHook($mapping);
     }
 
-    
 
+    /**
+     * @param array $args
+     * @param null $module
+     * @return array|void
+     */
     public function getItem($args=array(), $module=null)
     {
     }
+
+    /**
+     * @param array $args
+     * @param null $module
+     * @return array|void
+     */
     public function getList($args=array(), $module=null)
     {
     }
 
 
+    /**
+     * @param $request
+     * @return bool
+     */
     public function ext_allowInsideView($request)
     {
         $GLOBALS['current_user']->setPreference('allowInsideView', 1, 0, 'Connectors');

@@ -44,6 +44,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class formLetter
 {
+    /**
+     * @return string
+     */
     public static function LVSmarty()
     {
         global $app_strings, $sugar_config;
@@ -58,6 +61,10 @@ class formLetter
         return $script;
     }
 
+    /**
+     * @param $module
+     * @return array
+     */
     public static function getModuleTemplates($module)
     {
         $db = DBManagerFactory::getInstance();
@@ -72,6 +79,9 @@ class formLetter
         return $templates;
     }
 
+    /**
+     * @param $module
+     */
     public static function LVPopupHtml($module)
     {
         global $app_strings;
@@ -127,6 +137,9 @@ class formLetter
         }
     }
 
+    /**
+     * @param $module
+     */
     public static function DVPopupHtml($module)
     {
         global $app_strings;

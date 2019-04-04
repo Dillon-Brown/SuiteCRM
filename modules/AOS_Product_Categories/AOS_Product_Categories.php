@@ -72,6 +72,10 @@ class AOS_Product_Categories extends AOS_Product_Categories_sugar
     }
 
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         if ($this->is_parent) {

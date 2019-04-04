@@ -94,6 +94,10 @@ function getDisplayForField($modulePath, $field, $reportModule)
     return array('field' => $fieldDisplay, 'type'=>$fieldType, 'module' => str_replace(' ', '&nbsp;', implode(' : ', $modulePathDisplay)));
 }
 
+/**
+ * @param null $reportBean
+ * @return array
+ */
 function requestToUserParameters($reportBean = null)
 {
     global $app_list_strings;
@@ -173,6 +177,11 @@ function requestToUserParameters($reportBean = null)
     return $params;
 }
 
+/**
+ * @param $report
+ * @param array $override
+ * @return array
+ */
 function getConditionsAsParameters($report, $override = array())
 {
     if (empty($report)) {

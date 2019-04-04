@@ -4,6 +4,12 @@ class DotListWizardMenu
 {
     private $html;
 
+    /**
+     * DotListWizardMenu constructor.
+     * @param $mod_strings
+     * @param $steps
+     * @param bool $showLinks
+     */
     public function __construct($mod_strings, $steps, $showLinks = false)
     {
         $nav_html = '';
@@ -20,6 +26,12 @@ class DotListWizardMenu
         $this->html = $nav_html;
     }
 
+    /**
+     * @param $i
+     * @param $label
+     * @param bool $link
+     * @return string
+     */
     private function getWizardMenuItemHTML($i, $label, $link = false)
     {
         if ($i >= 4) {
@@ -37,6 +49,10 @@ class DotListWizardMenu
         return $html;
     }
 
+    /**
+     * @param $innerHTML
+     * @return false|string
+     */
     private function getWizardMenuHTML($innerHTML)
     {
         $html = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'tpls'.DIRECTORY_SEPARATOR.'progressStepsStyle.html');
@@ -49,6 +65,9 @@ class DotListWizardMenu
         return $html;
     }
 
+    /**
+     * @return false|string
+     */
     public function __toString()
     {
         return $this->html;

@@ -46,6 +46,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class OpportunityFormBase
 {
+    /**
+     * @param $prefix
+     * @return array|null
+     */
     public function checkForDuplicates($prefix)
     {
         require_once('include/formbase.php');
@@ -78,6 +82,11 @@ class OpportunityFormBase
     }
 
 
+    /**
+     * @param $rows
+     * @param string $mod
+     * @return string
+     */
     public function buildTableForm($rows, $mod='Opportunities')
     {
         if (!empty($mod)) {
@@ -135,6 +144,11 @@ class OpportunityFormBase
         return $form;
     }
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @return string
+     */
     public function getForm($prefix, $mod='Opportunities')
     {
         if (!ACLController::checkAccess('Opportunities', 'edit', true)) {
@@ -173,6 +187,14 @@ EOQ;
         return $the_form;
     }
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @param string $lead
+     * @param bool $showaccount
+     * @return string
+     */
     public function getWideFormBody($prefix, $mod='Opportunities', $formname='', $lead='', $showaccount = true)
     {
         if (!ACLController::checkAccess('Opportunities', 'edit', true)) {
@@ -324,6 +346,12 @@ EOQ;
         return $the_form;
     } // end getWideFormBody
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @return string
+     */
     public function getFormBody($prefix, $mod='Opportunities', $formname='')
     {
         if (!ACLController::checkAccess('Opportunities', 'edit', true)) {
@@ -436,6 +464,12 @@ EOQ;
     }
 
 
+    /**
+     * @param $prefix
+     * @param bool $redirect
+     * @param bool $useRequired
+     * @return Opportunity|SugarBean|null
+     */
     public function handleSave($prefix, $redirect=true, $useRequired=false)
     {
         global $current_user;

@@ -124,6 +124,13 @@ class ParserFactory
         $GLOBALS [ 'log' ]->fatal("ParserFactory: cannot create ModuleBuilder Parser $view") ;
     }
 
+    /**
+     * @param $view
+     * @param $moduleName
+     * @param $packageName
+     * @param bool $nameOverride
+     * @return bool
+     */
     protected static function checkForParserClass($view, $moduleName, $packageName, $nameOverride = false)
     {
         $prefix = '';

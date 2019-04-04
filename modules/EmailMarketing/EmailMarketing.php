@@ -92,6 +92,10 @@ class EmailMarketing extends SugarBean
     }
 
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         global $current_user;
@@ -116,6 +120,12 @@ class EmailMarketing extends SugarBean
         return parent::save($check_notify);
     }
 
+    /**
+     * @param int $id
+     * @param bool $encode
+     * @param bool $deleted
+     * @return $this|SugarBean|null
+     */
     public function retrieve($id = -1, $encode=true, $deleted=true)
     {
         parent::retrieve($id, $encode, $deleted);
@@ -130,16 +140,27 @@ class EmailMarketing extends SugarBean
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function get_summary_text()
     {
         return $this->name;
     }
 
+    /**
+     * @param string $order_by
+     * @param string $where
+     * @return String
+     */
     public function create_export_query($order_by, $where)
     {
         return $this->create_new_list_query($order_by, $where);
     }
 
+    /**
+     * @return array|mixed
+     */
     public function get_list_view_data()
     {
         $temp_array = $this->get_list_view_array();
@@ -201,6 +222,9 @@ class EmailMarketing extends SugarBean
         return $temp_array;
     }
 
+    /**
+     * @return bool
+     */
     private function isCampaignDetailView()
     {
         $module = isset($_REQUEST['module']) ? $_REQUEST['module'] : null;
@@ -209,6 +233,10 @@ class EmailMarketing extends SugarBean
         return $isCampaignDetailView;
     }
 
+    /**
+     * @param $tempArray
+     * @return mixed
+     */
     private function makeCampaignWizardEditLink($tempArray)
     {
         $campaignId = $_REQUEST['record'];
@@ -222,6 +250,10 @@ class EmailMarketing extends SugarBean
         return $tempArray;
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
     public function bean_implements($interface)
     {
         switch ($interface) {
@@ -230,6 +262,9 @@ class EmailMarketing extends SugarBean
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function get_all_prospect_lists()
     {
         $query="select prospect_lists.* from prospect_lists ";
@@ -242,6 +277,9 @@ class EmailMarketing extends SugarBean
         return $query;
     }
 
+    /**
+     * @return array
+     */
     public function validate()
     {
         global $mod_strings;

@@ -76,6 +76,9 @@ class UsersViewEdit extends ViewEdit
         parent::preDisplay();
     }
 
+    /**
+     * @return string
+     */
     public function getMetaDataFile()
     {
         $userType = 'Regular';

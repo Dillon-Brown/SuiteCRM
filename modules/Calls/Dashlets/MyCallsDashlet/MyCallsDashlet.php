@@ -49,6 +49,11 @@ require_once('include/Dashlets/DashletGeneric.php');
 
 class MyCallsDashlet extends DashletGeneric
 {
+    /**
+     * MyCallsDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;
@@ -92,6 +97,10 @@ class MyCallsDashlet extends DashletGeneric
         self::__construct($id, $def);
     }
 
+    /**
+     * @param array $lvsParams
+     * @param null $id
+     */
     public function process($lvsParams = array(), $id = null)
     {
         global $current_language, $app_list_strings, $current_user;
@@ -164,6 +173,9 @@ class MyCallsDashlet extends DashletGeneric
         $this->displayColumns[]= "set_accept_links";
     }
 
+    /**
+     * @return string
+     */
     public function displayOptions()
     {
         $this->processDisplayOptions();

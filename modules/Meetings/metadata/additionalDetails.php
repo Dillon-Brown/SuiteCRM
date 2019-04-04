@@ -45,6 +45,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once "include/utils/additional_details.php";
 
 
+/**
+ * @param $fields
+ * @param SugarBean|null $bean
+ * @param array $params
+ * @return array
+ */
 function additionalDetailsMeeting($fields, SugarBean $bean = null, $params = array())
 {
     return additional_details($fields, $bean, $params);

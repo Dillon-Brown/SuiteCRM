@@ -52,6 +52,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 class ProspectListFormBase
 {
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $form
+     * @return string
+     */
     public function getForm($prefix, $mod='', $form='')
     {
         if (!ACLController::checkAccess('ProspectLists', 'edit', true)) {
@@ -93,6 +99,14 @@ EOQ;
         return $the_form;
     }
 
+    /**
+     * @param $prefix
+     * @param string $mod
+     * @param string $formname
+     * @param string $size
+     * @param bool $script
+     * @return string
+     */
     public function getFormBody($prefix, $mod='', $formname='', $size='30', $script=true)
     {
         if (!ACLController::checkAccess('ProspectLists', 'edit', true)) {
@@ -138,6 +152,12 @@ EOQ;
         return $form;
     }
 
+    /**
+     * @param $prefix
+     * @param bool $redirect
+     * @param bool $useRequired
+     * @return ProspectList|SugarBean|null
+     */
     public function handleSave($prefix, $redirect=true, $useRequired=false)
     {
         require_once('include/formbase.php');

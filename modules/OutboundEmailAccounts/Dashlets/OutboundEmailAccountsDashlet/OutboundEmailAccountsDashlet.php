@@ -54,6 +54,11 @@ require_once('modules/OutboundEmailAccounts/OutboundEmailAccounts.php');
 
 class OutboundEmailAccountsDashlet extends DashletGeneric
 {
+    /**
+     * OutboundEmailAccountsDashlet constructor.
+     * @param $id
+     * @param null $def
+     */
     public function __construct($id, $def = null)
     {
         global $current_user, $app_strings;

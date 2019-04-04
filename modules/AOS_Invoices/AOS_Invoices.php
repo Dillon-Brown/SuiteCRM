@@ -50,6 +50,10 @@ class AOS_Invoices extends AOS_Invoices_sugar
     }
 
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify = false)
     {
         global $sugar_config;
@@ -90,6 +94,9 @@ class AOS_Invoices extends AOS_Invoices_sugar
         return $return_id;
     }
 
+    /**
+     * @param string $id
+     */
     public function mark_deleted($id)
     {
         $productQuote = new AOS_Products_Quotes();

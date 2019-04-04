@@ -124,6 +124,9 @@ class MeetingsViewListbytype extends ViewList
         }
     }
 
+    /**
+     * @return bool|void
+     */
     public function listViewPrepare()
     {
         $oldRequest = $_REQUEST;

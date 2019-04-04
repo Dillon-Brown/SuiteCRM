@@ -46,7 +46,10 @@ class TemplateCurrencyId extends TemplateId
 {
     public $max_size = 25;
     public $type='currency_id';
-    
+
+    /**
+     * @return array
+     */
     public function get_field_def()
     {
         $def = parent::get_field_def();
@@ -56,14 +59,20 @@ class TemplateCurrencyId extends TemplateId
         $def['function'] = array('name'=>'getCurrencyDropDown', 'returns'=>'html');
         return $def;
     }
-    
+
+    /**
+     * @param DynamicField $df
+     */
     public function save($df)
     {
         if (!$df->fieldExists($this->name)) {
             parent::save($df);
         }
     }
-    
+
+    /**
+     * @param $df
+     */
     public function delete($df)
     {
         if (!$df->fieldExists(null, 'currency')) {

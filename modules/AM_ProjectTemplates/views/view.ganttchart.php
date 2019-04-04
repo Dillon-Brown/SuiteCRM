@@ -283,6 +283,13 @@ class AM_ProjectTemplatesViewGanttChart extends ViewDetail
     }
 
     //Returns the time span between two dates in years  months and days
+
+    /**
+     * @param $start_date
+     * @param $end_date
+     * @return string
+     * @throws Exception
+     */
     public function time_range($start_date, $end_date)
     {
         global $mod_strings;

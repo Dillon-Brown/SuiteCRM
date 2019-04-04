@@ -51,9 +51,11 @@ class MBField
     public $reportable = true;
     public $default = 'MSI1';
     public $comment = '';
-    
-    
-    
+
+
+    /**
+     * @return array|bool
+     */
     public function getFieldVardef()
     {
         if (empty($this->name)) {
@@ -106,12 +108,18 @@ class MBField
             
         }
     }
-    
+
+    /**
+     * @return bool
+     */
     public function addDropDown()
     {
         return $this->options;
     }
-    
+
+    /**
+     * @return bool
+     */
     public function addLabel()
     {
         return $this->vname;

@@ -49,6 +49,9 @@ class AOS_Products extends AOS_Products_sugar
         self::__construct();
     }
 
+    /**
+     * @return string
+     */
     public function getGUID()
     {
         if (function_exists('com_create_guid')) {
@@ -65,6 +68,10 @@ class AOS_Products extends AOS_Products_sugar
         return $uuid;
     }
 
+    /**
+     * @param bool $check_notify
+     * @return string
+     */
     public function save($check_notify=false)
     {
         global $sugar_config,$mod_strings;
@@ -93,6 +100,9 @@ class AOS_Products extends AOS_Products_sugar
         return parent::save($check_notify);
     }
 
+    /**
+     * @return string
+     */
     public function getCustomersPurchasedProductsQuery()
     {
         $query = "

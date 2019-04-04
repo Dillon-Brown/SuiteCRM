@@ -182,6 +182,11 @@ $xtpl->parse("main");
 $xtpl->out("main");
 
 
+/**
+ * @param $seed
+ * @param $relModule
+ * @return string
+ */
 function generateSelect($seed, $relModule)
 {
     $lowerRelModule = strtolower($relModule);

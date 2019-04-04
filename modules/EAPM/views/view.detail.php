@@ -49,6 +49,9 @@ class EAPMViewDetail extends ViewDetail
 {
     private $_returnId;
 
+    /**
+     * @return int|mixed|string|null
+     */
     protected function _getModuleTab()
     {
         return 'Users';

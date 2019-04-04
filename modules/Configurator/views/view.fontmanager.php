@@ -224,7 +224,11 @@ BSOFR;
         }
         return $return;
     }
-    
+
+    /**
+     * @param $type
+     * @return string
+     */
     private function formatType($type)
     {
         global $mod_strings;
