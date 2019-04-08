@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 $module_name = 'Spots';

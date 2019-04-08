@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -150,7 +150,7 @@ EOQ;
         global $sugar_config;
 
         $focus = new EmailTemplate();
-        if ($useRequired && !checkRequired($prefix, array_keys($focus->required_fields))) {
+        if ($useRequired && !checkRequired($prefix, \array_keys($focus->required_fields))) {
             return null;
         }
         $focus = populateFromPost($prefix, $focus);
@@ -183,20 +183,20 @@ EOQ;
         global $sugar_config;
         $preProcessedImages = array();
         $emailTemplateBodyHtml = from_html($focus->body_html);
-        if (strpos($emailTemplateBodyHtml, '"cache/images/')) {
+        if (\strpos($emailTemplateBodyHtml, '"cache/images/')) {
             $matches = array();
-            preg_match_all('#<img[^>]*[\s]+src[^=]*=[\s]*["\']cache/images/(.+?)["\']#si', $emailTemplateBodyHtml, $matches);
+            \preg_match_all('#<img[^>]*[\s]+src[^=]*=[\s]*["\']cache/images/(.+?)["\']#si', $emailTemplateBodyHtml, $matches);
             foreach ($matches[1] as $match) {
-                $filename = urldecode($match);
-                if ($filename != pathinfo($filename, PATHINFO_BASENAME)) {
+                $filename = \urldecode($match);
+                if ($filename != \pathinfo($filename, PATHINFO_BASENAME)) {
                     // don't allow paths there
-                    $emailTemplateBodyHtml = str_replace("cache/images/$match", "", $emailTemplateBodyHtml);
+                    $emailTemplateBodyHtml = \str_replace("cache/images/$match", "", $emailTemplateBodyHtml);
                     continue;
                 }
                 $file_location = sugar_cached("images/{$filename}");
-                $mime_type = pathinfo($filename, PATHINFO_EXTENSION);
+                $mime_type = \pathinfo($filename, PATHINFO_EXTENSION);
 
-                if (file_exists($file_location)) {
+                if (\file_exists($file_location)) {
                     //$id = create_guid();
 
                     $note = new Note();
@@ -204,23 +204,23 @@ EOQ;
                     $id = $note->id;
 
                     $newFileLocation = "upload://$id";
-                    if (!copy($file_location, $newFileLocation)) {
+                    if (!\copy($file_location, $newFileLocation)) {
                         $GLOBALS['log']->debug("EMAIL Template could not copy attachment to $newFileLocation");
                     } else {
                         if ($useUploadFolder) {
                             $secureLink = ($useSiteURL ? $sugar_config['site_url'] . '/' : '') . "public/{$id}";
                             // create a copy with correct extension by mime type
-                            if (!file_exists('public')) {
+                            if (!\file_exists('public')) {
                                 sugar_mkdir('public', 0777);
                             }
-                            if (copy($file_location, "public/{$id}.{$mime_type}")) {
+                            if (\copy($file_location, "public/{$id}.{$mime_type}")) {
                                 $secureLink .= ".{$mime_type}";
                             }
                         } else {
                             $secureLink = ($useSiteURL ? $sugar_config['site_url'] . '/' : '') . "index.php?entryPoint=" . $entryPoint . "&type=Notes&id={$id}&filename=" . $match;
                         }
 
-                        $emailTemplateBodyHtml = str_replace("cache/images/$match", $secureLink, $emailTemplateBodyHtml);
+                        $emailTemplateBodyHtml = \str_replace("cache/images/$match", $secureLink, $emailTemplateBodyHtml);
                         //unlink($file_location);
                         $preProcessedImages[$filename] = $id;
                     }
@@ -249,13 +249,13 @@ EOQ;
 
         global $mod_strings;
 
-        $max_files_upload = count($_FILES);
+        $max_files_upload = \count($_FILES);
 
         if (!empty($focus->id)) {
             $note = new Note();
             $where = "notes.parent_id='{$focus->id}'";
             if (!empty($_REQUEST['old_id'])) { // to support duplication of email templates
-                $where .= " OR notes.parent_id='".htmlspecialchars($_REQUEST['old_id'], ENT_QUOTES)."'";
+                $where .= " OR notes.parent_id='".\htmlspecialchars($_REQUEST['old_id'], ENT_QUOTES)."'";
             }
             $notes_list = $note->get_full_list("", $where, true);
         }
@@ -264,10 +264,10 @@ EOQ;
             $notes_list = array();
         }
 
-        if (!is_array($focus->attachments)) { // PHP5 does not auto-create arrays(). Need to initialize it here.
+        if (!\is_array($focus->attachments)) { // PHP5 does not auto-create arrays(). Need to initialize it here.
             $focus->attachments = array();
         }
-        $focus->attachments = array_merge($focus->attachments, $notes_list);
+        $focus->attachments = \array_merge($focus->attachments, $notes_list);
 
 
 
@@ -284,10 +284,10 @@ EOQ;
                 $GLOBALS['log']->debug("Image {$file['name']} has already been processed.");
             }
 
-            $i=preg_replace("/email_attachment(.+)/", '$1', $key);
+            $i=\preg_replace("/email_attachment(.+)/", '$1', $key);
             $upload_file = new UploadFile($key);
 
-            if (isset($_FILES[$key]) && $upload_file->confirm_upload() && preg_match("/^email_attachment/", $key)) {
+            if (isset($_FILES[$key]) && $upload_file->confirm_upload() && \preg_match("/^email_attachment/", $key)) {
                 $note->filename = $upload_file->get_stored_file_name();
                 $note->file = $upload_file;
                 $note->name = $mod_strings['LBL_EMAIL_ATTACHMENT'].': '.$note->file->original_file_name;
@@ -298,7 +298,7 @@ EOQ;
                         $note->embed_flag =false;
                     }
                 }
-                array_push($focus->attachments, $note);
+                \array_push($focus->attachments, $note);
             }
         }
 
@@ -306,7 +306,7 @@ EOQ;
         foreach ($focus->attachments as $note) {
             if (!empty($note->id) && $note->new_with_id === false) {
                 if (empty($_REQUEST['old_id'])) {
-                    array_push($focus->saved_attachments, $note);
+                    \array_push($focus->saved_attachments, $note);
                 } // to support duplication of email templates
                 else {
                     // we're duplicating a template with attachments
@@ -338,7 +338,7 @@ EOQ;
             $note->assigned_user_id = $current_user->id;
             /* END - SECURITY GROUPS */
             $note_id = $note->save();
-            array_push($focus->saved_attachments, $note);
+            \array_push($focus->saved_attachments, $note);
             $note->id = $note_id;
 
             if ($note->new_with_id === false) {
@@ -357,7 +357,7 @@ EOQ;
         //_pp($_REQUEST);
         //_ppd(count($_REQUEST['document']));
         if (!empty($_REQUEST['document'])) {
-            $count = count($_REQUEST['document']);
+            $count = \count($_REQUEST['document']);
         } else {
             $count=10;
         }
@@ -371,7 +371,7 @@ EOQ;
                 $doc->retrieve($_REQUEST['documentId'.$i]);
                 $docRev->retrieve($doc->document_revision_id);
 
-                array_push($focus->saved_attachments, $docRev);
+                \array_push($focus->saved_attachments, $docRev);
 
                 $docNote->name = $doc->document_name;
                 $docNote->filename = $docRev->filename;

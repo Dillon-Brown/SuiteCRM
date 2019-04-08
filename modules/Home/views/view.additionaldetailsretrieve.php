@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -64,7 +64,7 @@ class HomeViewAdditionaldetailsretrieve extends SugarView
         $additionalDetailsFile = $this->getAdditionalDetailsMetadataFile($moduleDir);
         
         if (empty($beanFiles[$beanName]) ||
-            empty($id) || !is_file($additionalDetailsFile)) {
+            empty($id) || !\is_file($additionalDetailsFile)) {
             echo 'bad data';
             die();
         }
@@ -73,7 +73,7 @@ class HomeViewAdditionaldetailsretrieve extends SugarView
         require_once($additionalDetailsFile);
         $adFunction = 'additionalDetails' . $beanName;
         
-        if (function_exists($adFunction)) { // does the additional details function exist
+        if (\function_exists($adFunction)) { // does the additional details function exist
             $json = getJSONobj();
             $bean = new $beanName();
             $bean->retrieve($id);
@@ -85,12 +85,12 @@ class HomeViewAdditionaldetailsretrieve extends SugarView
                 }
             }
             
-            $arr = array_change_key_case($bean->toArray(), CASE_UPPER);
+            $arr = \array_change_key_case($bean->toArray(), CASE_UPPER);
         
             $results = $adFunction($arr, $bean, $_REQUEST);
 
             $retArray = array();
-            $retArray['body'] = str_replace(array("\rn", "\r", "\n"), array('','','<br />'), $results['string']);
+            $retArray['body'] = \str_replace(array("\rn", "\r", "\n"), array('','','<br />'), $results['string']);
             if (!$bean->ACLAccess('EditView')) {
                 $results['editLink'] = '';
             }
@@ -123,7 +123,7 @@ class HomeViewAdditionaldetailsretrieve extends SugarView
         $moduleName
         ) {
         $additionalDetailsFile = 'modules/' . $moduleName . '/metadata/additionalDetails.php';
-        if (file_exists('custom/'.$additionalDetailsFile)) {
+        if (\file_exists('custom/'.$additionalDetailsFile)) {
             $additionalDetailsFile = 'custom/'.$additionalDetailsFile;
         }
         

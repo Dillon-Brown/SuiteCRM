@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -66,7 +66,7 @@ class QuickSearchDefaults
     {
         $lookup['custom/include/QuickSearchDefaults.php'] = 'QuickSearchDefaultsCustom';
         foreach ($lookup as $file => $class) {
-            if (file_exists($file)) {
+            if (\file_exists($file)) {
                 require_once($file);
                 return new $class();
             }
@@ -108,24 +108,24 @@ class QuickSearchDefaults
         $field_list = array('name', 'id');
         $populate_list = array($nameKey, $idKey);
         if ($billingKey != null) {
-            $field_list = array_merge($field_list, array('billing_address_street', 'billing_address_city',
+            $field_list = \array_merge($field_list, array('billing_address_street', 'billing_address_city',
                                                            'billing_address_state', 'billing_address_postalcode', 'billing_address_country'));
 
-            $populate_list = array_merge($populate_list, array($billingKey . "_address_street", $billingKey . "_address_city",
+            $populate_list = \array_merge($populate_list, array($billingKey . "_address_street", $billingKey . "_address_city",
                                                                 $billingKey . "_address_state", $billingKey . "_address_postalcode", $billingKey . "_address_country"));
         } //if
 
         if ($shippingKey != null) {
-            $field_list = array_merge($field_list, array('shipping_address_street', 'shipping_address_city',
+            $field_list = \array_merge($field_list, array('shipping_address_street', 'shipping_address_city',
                                                            'shipping_address_state', 'shipping_address_postalcode', 'shipping_address_country'));
 
-            $populate_list = array_merge($populate_list, array($shippingKey . "_address_street", $shippingKey . "_address_city",
+            $populate_list = \array_merge($populate_list, array($shippingKey . "_address_street", $shippingKey . "_address_city",
                                                                 $shippingKey . "_address_state", $shippingKey . "_address_postalcode", $shippingKey . "_address_country"));
         }
 
-        if (!empty($additionalFields) && is_array($additionalFields)) {
-            $field_list = array_merge($field_list, array_keys($additionalFields));
-            $populate_list = array_merge($populate_list, array_values($additionalFields));
+        if (!empty($additionalFields) && \is_array($additionalFields)) {
+            $field_list = \array_merge($field_list, \array_keys($additionalFields));
+            $populate_list = \array_merge($populate_list, \array_values($additionalFields));
         }
 
         $qsParent = array(
@@ -220,16 +220,16 @@ class QuickSearchDefaults
     {
         $result = array();
         VardefManager::loadVardef($module, $object);
-        if (isset($GLOBALS['dictionary'][$object]['relationships']) && array_key_exists($relationName, $GLOBALS['dictionary'][$object]['relationships'])) {
-            if (method_exists($this, 'getQS' . $module)) {
+        if (isset($GLOBALS['dictionary'][$object]['relationships']) && \array_key_exists($relationName, $GLOBALS['dictionary'][$object]['relationships'])) {
+            if (\method_exists($this, 'getQS' . $module)) {
                 $result = $this->{'getQS' . $module};
-            } elseif (method_exists($this, 'getQS' . $object)) {
+            } elseif (\method_exists($this, 'getQS' . $object)) {
                 $result = $this->{'getQS' . $object};
             }
         } else {
-            if (method_exists($this, 'getQS' . $module)) {
+            if (\method_exists($this, 'getQS' . $module)) {
                 $result = $this->{'getQS' . $module}($nameField, $idField);
-            } elseif (method_exists($this, 'getQS' . $object)) {
+            } elseif (\method_exists($this, 'getQS' . $object)) {
                 $result = $this->{'getQS' . $object}($nameField, $idField);
             }
         }

@@ -48,7 +48,7 @@ class Zend_Search_Lucene_Search_Similarity_Default extends Zend_Search_Lucene_Se
             return 1E10;
         }
 
-        return 1.0/sqrt($numTerms);
+        return 1.0/\sqrt($numTerms);
     }
 
     /**
@@ -59,7 +59,7 @@ class Zend_Search_Lucene_Search_Similarity_Default extends Zend_Search_Lucene_Se
      */
     public function queryNorm($sumOfSquaredWeights)
     {
-        return 1.0/sqrt($sumOfSquaredWeights);
+        return 1.0/\sqrt($sumOfSquaredWeights);
     }
 
     /**
@@ -70,7 +70,7 @@ class Zend_Search_Lucene_Search_Similarity_Default extends Zend_Search_Lucene_Se
      */
     public function tf($freq)
     {
-        return sqrt($freq);
+        return \sqrt($freq);
     }
 
     /**
@@ -93,7 +93,7 @@ class Zend_Search_Lucene_Search_Similarity_Default extends Zend_Search_Lucene_Se
      */
     public function idfFreq($docFreq, $numDocs)
     {
-        return log($numDocs/(float)($docFreq+1)) + 1.0;
+        return \log($numDocs/(float)($docFreq+1)) + 1.0;
     }
 
     /**

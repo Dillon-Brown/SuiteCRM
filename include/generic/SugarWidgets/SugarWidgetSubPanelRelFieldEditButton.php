@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -55,7 +55,7 @@ class SugarWidgetSubPanelRelFieldEditButton extends SugarWidgetField
 
     public function displayList($layout_def)
     {
-        die("<pre>" . print_r($layout_def, true) . "</pre>");
+        die("<pre>" . \print_r($layout_def, true) . "</pre>");
 
         $rel = $layout_def['linked_field'];
         $module = $layout_def['module'];

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -75,7 +75,7 @@ class ConfiguratorViewSugarpdfsettings extends SugarView
         global $mod_strings, $app_strings, $app_list_strings;
 
         require_once("modules/Configurator/metadata/SugarpdfSettingsdefs.php");
-        if (file_exists('custom/modules/Configurator/metadata/SugarpdfSettingsdefs.php')) {
+        if (\file_exists('custom/modules/Configurator/metadata/SugarpdfSettingsdefs.php')) {
             require_once('custom/modules/Configurator/metadata/SugarpdfSettingsdefs.php');
         }
 
@@ -93,12 +93,12 @@ class ConfiguratorViewSugarpdfsettings extends SugarView
                 }
                 if (!empty($_POST["sugarpdf_pdf_class"]) && $_POST["sugarpdf_pdf_class"] != PDF_CLASS) {
                     // clear the cache for quotes detailview in order to switch the pdf class.
-                    if (is_file($cachedfile = sugar_cached('modules/Quotes/DetailView.tpl'))) {
-                        unlink($cachedfile);
+                    if (\is_file($cachedfile = sugar_cached('modules/Quotes/DetailView.tpl'))) {
+                        \unlink($cachedfile);
                     }
                 }
                 $focus->saveConfig();
-                header('Location: index.php?module=Administration&action=index');
+                \header('Location: index.php?module=Administration&action=index');
             }
         }
 
@@ -106,7 +106,7 @@ class ConfiguratorViewSugarpdfsettings extends SugarView
             $focus = new Administration();
             foreach ($_POST as $key => $val) {
                 $prefix = $focus->get_config_prefix($key);
-                if (in_array($prefix[0], $focus->config_categories)) {
+                if (\in_array($prefix[0], $focus->config_categories)) {
                     $result = $focus->db->query("SELECT count(*) AS the_count FROM config WHERE category = '{$prefix[0]}' AND name = '{$prefix[1]}'");
                     $row = $focus->db->fetchByAssoc($result);
                     if ($row['the_count'] != 0) {
@@ -114,7 +114,7 @@ class ConfiguratorViewSugarpdfsettings extends SugarView
                     }
                 }
             }
-            header('Location: index.php?module=Configurator&action=SugarpdfSettings');
+            \header('Location: index.php?module=Configurator&action=SugarpdfSettings');
         }
 
         echo getClassicModuleTitle(
@@ -143,7 +143,7 @@ class ConfiguratorViewSugarpdfsettings extends SugarView
         if (!empty($error)) {
             $this->ss->assign("error", $mod_strings[$error]);
         }
-        if (!function_exists('imagecreatefrompng')) {
+        if (!\function_exists('imagecreatefrompng')) {
             $this->ss->assign("GD_WARNING", 1);
         } else {
             $this->ss->assign("GD_WARNING", 0);
@@ -169,8 +169,8 @@ class ConfiguratorViewSugarpdfsettings extends SugarView
         $files = array('sugarpdf_pdf_header_logo'=>$_FILES['new_header_logo'], 'sugarpdf_pdf_small_header_logo'=>$_FILES['new_small_header_logo']);
         foreach ($files as $k=>$v) {
             if (empty($error) && isset($v) && !empty($v['name'])) {
-                $file_name = K_PATH_CUSTOM_IMAGES .'pdf_logo_'. basename($v['name']);
-                if (file_exists($file_name)) {
+                $file_name = K_PATH_CUSTOM_IMAGES .'pdf_logo_'. \basename($v['name']);
+                if (\file_exists($file_name)) {
                     rmdir_recursive($file_name);
                 }
                 if (!empty($v['error'])) {
@@ -180,10 +180,10 @@ class ConfiguratorViewSugarpdfsettings extends SugarView
                     $error='ERR_ALERT_FILE_UPLOAD';
                 }
                 if (empty($error)) {
-                    if (!move_uploaded_file($v['tmp_name'], $file_name)) {
+                    if (!\move_uploaded_file($v['tmp_name'], $file_name)) {
                         die("Possible file upload attack!\n");
                     }
-                    if (file_exists($file_name) && is_file($file_name)) {
+                    if (\file_exists($file_name) && \is_file($file_name)) {
                         if (!empty($_REQUEST['sugarpdf_pdf_class']) && $_REQUEST['sugarpdf_pdf_class'] == "EZPDF") {
                             if (!verify_uploaded_image($file_name, true)) {
                                 $error='LBL_ALERT_TYPE_IMAGE_EZPDF';
@@ -196,7 +196,7 @@ class ConfiguratorViewSugarpdfsettings extends SugarView
                         if (!empty($error)) {
                             rmdir_recursive($file_name);
                         } else {
-                            $_POST[$k]='pdf_logo_'. basename($v['name']);
+                            $_POST[$k]='pdf_logo_'. \basename($v['name']);
                         }
                     } else {
                         $error='ERR_ALERT_FILE_UPLOAD';

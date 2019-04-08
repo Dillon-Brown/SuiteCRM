@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -104,9 +104,9 @@ class ImportViewDupcheck extends ImportView
         global $mod_strings, $sugar_config;
 
         $has_header = $_REQUEST['has_header'] == 'on' ? true : false;
-        $uploadFileName = "upload://".basename($_REQUEST['tmp_file']);
+        $uploadFileName = "upload://".\basename($_REQUEST['tmp_file']);
         $splitter = new ImportFileSplitter($uploadFileName, $sugar_config['import_max_records_per_file']);
-        $splitter->splitSourceFile($_REQUEST['custom_delimiter'], html_entity_decode($_REQUEST['custom_enclosure'], ENT_QUOTES), $has_header);
+        $splitter->splitSourceFile($_REQUEST['custom_delimiter'], \html_entity_decode($_REQUEST['custom_enclosure'], ENT_QUOTES), $has_header);
         $count = $splitter->getFileCount()-1;
         $recCount = $splitter->getRecordCount();
 
@@ -125,7 +125,7 @@ class ImportViewDupcheck extends ImportView
 
         //grab the list of user mapped fields
         foreach ($_REQUEST as $req_k => $req_v) {
-            if (strpos($req_k, 'olnum')>0) {
+            if (\strpos($req_k, 'olnum')>0) {
                 if (empty($req_v) || $req_v != '-1') {
                     $mapped_fields[] = $req_v;
                 }
@@ -135,10 +135,10 @@ class ImportViewDupcheck extends ImportView
         foreach ($import_fields as $ik=>$iv) {
 
              //grab the field value from the key
-            $ik_field = explode('::', $ik);
+            $ik_field = \explode('::', $ik);
 
             //field is not a custom field and was not included in the key, or was not in mapped fields, so skip
-            if (strpos($ik_field[0], 'ustomfield::')>0 || (empty($ik_field[1]) || !in_array($ik_field[1], $mapped_fields))) {
+            if (\strpos($ik_field[0], 'ustomfield::')>0 || (empty($ik_field[1]) || !\in_array($ik_field[1], $mapped_fields))) {
                 //skip indexed fields that are not defined in user mapping or
                 continue;
             }
@@ -152,15 +152,15 @@ class ImportViewDupcheck extends ImportView
             }
         }
 
-        $enabled_dupes = json_encode($dupe_enabled);
-        $disabled_dupes = json_encode($dupe_disabled);
+        $enabled_dupes = \json_encode($dupe_enabled);
+        $disabled_dupes = \json_encode($dupe_disabled);
 
         $stepTitle4 = $mod_strings['LBL_IMPORT_RECORDS'];
 
         $dateTimeFormat = $GLOBALS['timedate']->get_cal_date_time_format();
         $type = (isset($_REQUEST['type'])) ? $_REQUEST['type'] : '';
-        $lblUsed = str_replace(":", "", $mod_strings['LBL_INDEX_USED']);
-        $lblNotUsed = str_replace(":", "", $mod_strings['LBL_INDEX_NOT_USED']);
+        $lblUsed = \str_replace(":", "", $mod_strings['LBL_INDEX_USED']);
+        $lblNotUsed = \str_replace(":", "", $mod_strings['LBL_INDEX_NOT_USED']);
         return <<<EOJAVASCRIPT
 
 

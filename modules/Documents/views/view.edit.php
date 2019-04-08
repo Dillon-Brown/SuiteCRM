@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -64,7 +64,7 @@ class DocumentsViewEdit extends ViewEdit
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -94,7 +94,7 @@ class DocumentsViewEdit extends ViewEdit
         } //if
 
         if (!empty($this->bean->id) ||
-            (empty($this->bean->id) && !empty($_REQUEST['record']) && !empty($_REQUEST['action']) && strtolower($_REQUEST['action'])=='quickedit')
+            (empty($this->bean->id) && !empty($_REQUEST['record']) && !empty($_REQUEST['action']) && \strtolower($_REQUEST['action'])=='quickedit')
         ) {
             $this->ss->assign("FILE_OR_HIDDEN", "hidden");
             if (!$this->ev->isDuplicate) {
@@ -140,7 +140,7 @@ class DocumentsViewEdit extends ViewEdit
             $this->ss->assign("PARENT_NAME", $_REQUEST['parent_name']);
 
             if (!empty($_REQUEST['parent_type'])) {
-                switch (strtolower($_REQUEST['parent_type'])) {
+                switch (\strtolower($_REQUEST['parent_type'])) {
 
                     case "contracts":
                         $this->ss->assign("LBL_PARENT_NAME", $mod_strings['LBL_CONTRACT_NAME']);

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -63,7 +63,7 @@ class NoteSoap
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -92,12 +92,12 @@ class NoteSoap
         }
 
         if (!empty($note['file'])) {
-            $decodedFile = base64_decode($note['file']);
+            $decodedFile = \base64_decode($note['file']);
             $this->upload_file->set_for_soap($note['filename'], $decodedFile);
 
-            $ext_pos = strrpos($this->upload_file->stored_file_name, ".");
-            $this->upload_file->file_ext = substr($this->upload_file->stored_file_name, $ext_pos + 1);
-            if (in_array($this->upload_file->file_ext, $sugar_config['upload_badext'])) {
+            $ext_pos = \strrpos($this->upload_file->stored_file_name, ".");
+            $this->upload_file->file_ext = \substr($this->upload_file->stored_file_name, $ext_pos + 1);
+            if (\in_array($this->upload_file->file_ext, $sugar_config['upload_badext'])) {
                 $this->upload_file->stored_file_name .= ".txt";
                 $this->upload_file->file_ext = "txt";
             }
@@ -131,12 +131,12 @@ class NoteSoap
         }
 
         if (!empty($note['file'])) {
-            $decodedFile = base64_decode($note['file']);
+            $decodedFile = \base64_decode($note['file']);
             $this->upload_file->set_for_soap($note['filename'], $decodedFile);
 
-            $ext_pos = strrpos($this->upload_file->stored_file_name, ".");
-            $this->upload_file->file_ext = substr($this->upload_file->stored_file_name, $ext_pos + 1);
-            if (in_array($this->upload_file->file_ext, $sugar_config['upload_badext'])) {
+            $ext_pos = \strrpos($this->upload_file->stored_file_name, ".");
+            $this->upload_file->file_ext = \substr($this->upload_file->stored_file_name, $ext_pos + 1);
+            if (\in_array($this->upload_file->file_ext, $sugar_config['upload_badext'])) {
                 $this->upload_file->stored_file_name .= ".txt";
                 $this->upload_file->file_ext = "txt";
             }
@@ -175,9 +175,9 @@ class NoteSoap
 
         $this->upload_file->stored_file_name = $filename;
         $filepath = $this->upload_file->get_upload_path($id);
-        if (file_exists($filepath)) {
-            $file = file_get_contents($filepath);
-            return base64_encode($file);
+        if (\file_exists($filepath)) {
+            $file = \file_get_contents($filepath);
+            return \base64_encode($file);
         }
         return -1;
     }

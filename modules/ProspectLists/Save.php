@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -76,7 +76,7 @@ if (!empty($_REQUEST['duplicateId'])) {
     $copyFromProspectList = new ProspectList();
     $copyFromProspectList->retrieve($_REQUEST['duplicateId']);
     $relations = $copyFromProspectList->retrieve_relationships('prospect_lists_prospects', array('prospect_list_id'=>$_REQUEST['duplicateId']), 'related_id, related_type');
-    if (count($relations)>0) {
+    if (\count($relations)>0) {
         foreach ($relations as $rel) {
             $rel['prospect_list_id']=$return_id;
             $focus->set_relationship('prospect_lists_prospects', $rel, true);

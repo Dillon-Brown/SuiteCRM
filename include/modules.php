@@ -39,7 +39,7 @@
  */
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -549,9 +549,9 @@ $modInvisList[] = 'SurveyQuestionOptions';
 
 
 
-if (file_exists('include/modules_override.php')) {
+if (\file_exists('include/modules_override.php')) {
     include 'include/modules_override.php';
 }
-if (file_exists('custom/application/Ext/Include/modules.ext.php')) {
+if (\file_exists('custom/application/Ext/Include/modules.ext.php')) {
     include('custom/application/Ext/Include/modules.ext.php');
 }

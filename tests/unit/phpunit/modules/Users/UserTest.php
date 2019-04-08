@@ -87,7 +87,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $user->retrieve(1);
 
         $result = $user->getDefaultSignature();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -113,7 +113,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $user->retrieve(1);
 
         $result = $user->getSignaturesArray();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
 
@@ -125,8 +125,8 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $expected = "<select onChange='setSigEditButtonVisibility();' id='signature_id' name='signature_id'>\n<OPTION selected value=''>--None--</OPTION>";
         $actual = $user->getSignatures();
-        $this->assertTrue(strpos($actual, $expected) === 0);
-        $this->assertEquals(preg_match('/\<\/select\>$/', $actual), 1);
+        $this->assertTrue(\strpos($actual, $expected) === 0);
+        $this->assertEquals(\preg_match('/\<\/select\>$/', $actual), 1);
     }
 
     public function testhasPersonalEmail()
@@ -160,7 +160,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         }
 
         $this->assertTrue(isset($result));
-        $this->assertEquals(36, strlen($result));
+        $this->assertEquals(36, \strlen($result));
     }
 
     public function testsetUserPrivGuid()
@@ -181,7 +181,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $result = $user->getPreference('userPrivGuid', 'global', $user);
 
         $this->assertTrue(isset($result));
-        $this->assertEquals(36, strlen($result));
+        $this->assertEquals(36, \strlen($result));
     }
 
     public function testSetAndGetAndResetPreference()
@@ -254,7 +254,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $user->getUserDateTimePreferences();
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         $this->assertTrue(isset($result['date']));
         $this->assertTrue(isset($result['time']));
         $this->assertTrue(isset($result['userGmt']));
@@ -367,7 +367,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($user->id));
-        $this->assertEquals(36, strlen($user->id));
+        $this->assertEquals(36, \strlen($user->id));
 
 
         //test retrieve method
@@ -438,7 +438,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test with valid email and test for record ID to verify that record is same
         $user = BeanFactory::getBean('Users', $id);
-        $rand = mt_rand(1, 10000);
+        $rand = \mt_rand(1, 10000);
         $email = "one{$rand}@email.com";
         $user->email1 = $email;
         $user->save();
@@ -463,7 +463,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $pwd = 'test' . $rand;
         $user->setNewPassword($pwd);
 
-        $result = User::findUserPassword($user->user_name, md5($pwd), '', true);
+        $result = User::findUserPassword($user->user_name, \md5($pwd), '', true);
 
         // here is a really unpredictable mysql connection issue why this test is unstable
         // but should works on a correct test environments:
@@ -480,12 +480,12 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $user->retrieve($id);
 
         //test with invalid password
-        $result = $user->authenticate_user(md5("pass"));
+        $result = $user->authenticate_user(\md5("pass"));
         $this->assertEquals(false, $result);
 
         //test with invalid password
 
-        $result = $user->authenticate_user(md5("test1"));
+        $result = $user->authenticate_user(\md5("test1"));
         $this->assertEquals(true, $result);
     }
 
@@ -513,7 +513,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
 
         //find the user by new password
-        $result = User::findUserPassword("test", md5("testpass"));
+        $result = User::findUserPassword("test", \md5("testpass"));
 
         $this->assertTrue(isset($result['id']));
         $this->assertEquals($id, $result['id']);
@@ -528,8 +528,8 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $actual = $user->getPreferredEmail();
 
         self::assertEquals('firstn lastn', $actual['name']);
-        $preg = preg_match('/^one\d{0,}\@email\.com$/', $actual['email'], $matches);
-        self::assertEquals(1, count($matches));
+        $preg = \preg_match('/^one\d{0,}\@email\.com$/', $actual['email'], $matches);
+        self::assertEquals(1, \count($matches));
     }
 
     public function getUsersNameAndEmail($id)
@@ -541,7 +541,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $actual = $user->getUsersNameAndEmail();
 
         self::assertEquals('firstn lastn', $actual['name']);
-        self::assertEquals(1, preg_match('/^one\d{0,}\@email\.com$/', $actual['email']));
+        self::assertEquals(1, \preg_match('/^one\d{0,}\@email\.com$/', $actual['email']));
     }
 
 
@@ -552,7 +552,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $actual = $user->getEmailInfo($id);
 
         self::assertEquals('firstn lastn', $actual['name']);
-        self::assertEquals(1, preg_match('/^one\d{0,}\@email\.com$/', $actual['email']));
+        self::assertEquals(1, \preg_match('/^one\d{0,}\@email\.com$/', $actual['email']));
     }
 
 
@@ -562,7 +562,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $user->encrypt_password("test");
         $this->assertTrue(isset($result));
-        $this->assertGreaterThan(0, strlen($result));
+        $this->assertGreaterThan(0, \strlen($result));
     }
 
     public function testgetPasswordHash()
@@ -570,7 +570,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $result = User::getPasswordHash("test");
 
         $this->assertTrue(isset($result));
-        $this->assertGreaterThan(0, strlen($result));
+        $this->assertGreaterThan(0, \strlen($result));
     }
 
 
@@ -602,22 +602,22 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
 
         //test with empty password and empty hash
-        $result = User::checkPasswordMD5(md5(""), '');
+        $result = User::checkPasswordMD5(\md5(""), '');
         $this->assertEquals(false, $result);
 
 
         //test with valid hash and empty password
-        $result = User::checkPasswordMD5(md5(""), '$1$Gt0.XI4.$tVVSXgE36sfsVMBNo/9la1');
+        $result = User::checkPasswordMD5(\md5(""), '$1$Gt0.XI4.$tVVSXgE36sfsVMBNo/9la1');
         $this->assertEquals(false, $result);
 
 
         //test with valid password and invalid hash
-        $result = User::checkPasswordMD5(md5("test"), '$1$Gt0.XI4.$tVVSXgE36sfsVMBNo/9la2');
+        $result = User::checkPasswordMD5(\md5("test"), '$1$Gt0.XI4.$tVVSXgE36sfsVMBNo/9la2');
         $this->assertEquals(false, $result);
 
 
         //test with valid password and valid hash
-        $result = User::checkPasswordMD5(md5("test"), '$1$Gt0.XI4.$tVVSXgE36sfsVMBNo/9la1');
+        $result = User::checkPasswordMD5(\md5("test"), '$1$Gt0.XI4.$tVVSXgE36sfsVMBNo/9la1');
         $this->assertEquals(true, $result);
     }
 
@@ -713,7 +713,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $user->retrieve(1);
 
         $result = $user->get_list_view_data();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -733,12 +733,12 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     public function testGetAllUsersAndGetActiveUsers()
     {
         $all_users = User::getAllUsers();
-        $this->assertTrue(is_array($all_users));
+        $this->assertTrue(\is_array($all_users));
 
         $active_users = User::getActiveUsers();
-        $this->assertTrue(is_array($active_users));
+        $this->assertTrue(\is_array($active_users));
 
-        $this->assertGreaterThanOrEqual(count($active_users), count($all_users));
+        $this->assertGreaterThanOrEqual(\count($active_users), \count($all_users));
     }
 
 
@@ -764,7 +764,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $user = new User();
 
         $result = $user->get_meetings();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testget_calls()
@@ -786,12 +786,12 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //cpature the screen output and compare with exected values
 
-        ob_start();
+        \ob_start();
 
         $user->displayEmailCounts();
 
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
 
         $this->assertSame($expected, $renderedContent);
     }
@@ -802,7 +802,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $user = new User();
 
         $expected = array('email', 'name');
-        $actual = array_keys($user->getSystemDefaultNameAndEmail());
+        $actual = \array_keys($user->getSystemDefaultNameAndEmail());
         $this->assertSame($expected, $actual);
     }
 
@@ -814,7 +814,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $user->setDefaultsInConfig();
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         $this->assertEquals('sugar', $result['email_default_client']);
         $this->assertEquals('html', $result['email_default_editor']);
     }
@@ -918,7 +918,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $user->getLocaleFormatDesc();
         $this->assertTrue(isset($result));
-        $this->assertGreaterThan(0, strlen($result));
+        $this->assertGreaterThan(0, \strlen($result));
     }
 
     public function testisAdmin()
@@ -968,7 +968,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $user->retrieve(1);
 
         $result = $user->getDeveloperModules();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -1026,7 +1026,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $user->retrieve(1);
 
         $result = $user->getAdminModules();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -1105,7 +1105,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $user = new User();
 
         $result = $user->get_first_day_of_week();
-        $this->assertTrue(is_numeric($result));
+        $this->assertTrue(\is_numeric($result));
     }
 
 
@@ -1114,10 +1114,10 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //generate apsswords and verify they are not same
 
         $password1 = User::generatePassword();
-        $this->assertGreaterThan(0, strlen($password1));
+        $this->assertGreaterThan(0, \strlen($password1));
 
         $password2 = User::generatePassword();
-        $this->assertGreaterThan(0, strlen($password2));
+        $this->assertGreaterThan(0, \strlen($password2));
 
         $this->assertNotEquals($password1, $password2);
     }
@@ -1130,7 +1130,7 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $result = $user->sendEmailForPassword("1");
 
         //expected result is a array with template not found message.
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
 
@@ -1185,10 +1185,10 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         
         // test if there is no error
         
-        ob_start();
+        \ob_start();
         include __DIR__ . '/../../../../../modules/Users/Error.php';
-        $contents = ob_get_contents();
-        ob_end_clean();
+        $contents = \ob_get_contents();
+        \ob_end_clean();
         $expected = '<span class=\'error\'><br><br>' . "\n" . $app_strings['NTC_CLICK_BACK'] . '</span>';
         $this->assertContains($expected, $contents);
         
@@ -1197,10 +1197,10 @@ class UserTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $app_strings['TEST_ERROR_MESSAGE'] = 'Hello error';
         $request['error_string'] = 'TEST_ERROR_MESSAGE';
         $this->assertEquals($request['error_string'], 'TEST_ERROR_MESSAGE');
-        ob_start();
+        \ob_start();
         include __DIR__ . '/../../../../../modules/Users/Error.php';
-        $contents = ob_get_contents();
-        ob_end_clean();
+        $contents = \ob_get_contents();
+        \ob_end_clean();
         $expected = '<span class=\'error\'>Hello error<br><br>' . "\n"  . $app_strings['NTC_CLICK_BACK'] . '</span>';
         $this->assertContains($expected, $contents);
         

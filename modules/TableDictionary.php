@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -132,6 +132,6 @@ include('metadata/securitygroups_usersMetaData.php');
 
 include 'metadata/surveyquestionoptions_surveyquestionresponsesMetaData.php';
 
-if (file_exists('custom/application/Ext/TableDictionary/tabledictionary.ext.php')) {
+if (\file_exists('custom/application/Ext/TableDictionary/tabledictionary.ext.php')) {
     include('custom/application/Ext/TableDictionary/tabledictionary.ext.php');
 }

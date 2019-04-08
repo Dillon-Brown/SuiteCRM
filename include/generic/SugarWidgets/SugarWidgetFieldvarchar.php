@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -58,7 +58,7 @@ class SugarWidgetFieldVarchar extends SugarWidgetReportField
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($layout_manager);
     }
@@ -98,7 +98,7 @@ class SugarWidgetFieldVarchar extends SugarWidgetReportField
         foreach ($layout_def['input_name0'] as $key => $value) {
             $layout_def['input_name0'][$key] = DBManagerFactory::getInstance()->quote($value);
         }
-        return $this->_get_column_select($layout_def) . " IN ('" . implode("','", $layout_def['input_name0']) . "')\n";
+        return $this->_get_column_select($layout_def) . " IN ('" . \implode("','", $layout_def['input_name0']) . "')\n";
     }
 
     public function displayInput($layout_def)

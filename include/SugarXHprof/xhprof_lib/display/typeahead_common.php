@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 //  Copyright (c) 2009 Facebook
@@ -56,15 +56,15 @@ if (!empty($run)) {
     $functions2 = xhprof_get_matching_functions($q, $raw_data);
 
 
-    $functions = array_unique(array_merge($functions1, $functions2));
-    asort($functions);
+    $functions = \array_unique(\array_merge($functions1, $functions2));
+    \asort($functions);
 } else {
     xhprof_error("no valid runs specified to typeahead endpoint");
     $functions = array();
 }
 
 // If exact match is present move it to the front
-if (in_array($q, $functions)) {
+if (\in_array($q, $functions)) {
     $old_functions = $functions;
 
     $functions = array($q);

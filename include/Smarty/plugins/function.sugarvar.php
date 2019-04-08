@@ -81,9 +81,9 @@ function smarty_function_sugarvar($params, &$smarty)
         $member = $smarty->get_template_vars('vardef');
         $member = $member['name'];
     } else {
-        $members = explode('.', $params['memberName']);
+        $members = \explode('.', $params['memberName']);
         $member =  $smarty->get_template_vars($members[0]);
-        for ($i = 1; $i < count($members); $i++) {
+        for ($i = 1; $i < \count($members); $i++) {
             $member = $member[$members[$i]];
         }
     }

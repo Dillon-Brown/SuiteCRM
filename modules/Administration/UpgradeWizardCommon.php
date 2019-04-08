@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -50,7 +50,7 @@ require_once('include/utils/db_utils.php');
 require_once('include/utils/zip_utils.php');
 
 // increase the cuttoff time to 1 hour
-ini_set("max_execution_time", "3600");
+\ini_set("max_execution_time", "3600");
 
 if (isset($_REQUEST['view']) && ($_REQUEST['view'] != "")) {
     $view = $_REQUEST['view'];
@@ -69,17 +69,17 @@ $base_tmp_upgrade_dir   = sugar_cached('upgrades/temp');
 $GLOBALS['subdirs'] = array('full', 'langpack', 'module', 'patch', 'theme');
 // array of special scripts that are executed during (un)installation-- key is type of script, value is filename
 
-if (!defined('SUGARCRM_PRE_INSTALL_FILE')) {
-    define('SUGARCRM_PRE_INSTALL_FILE', 'scripts/pre_install.php');
-    define('SUGARCRM_POST_INSTALL_FILE', 'scripts/post_install.php');
-    define('SUGARCRM_PRE_UNINSTALL_FILE', 'scripts/pre_uninstall.php');
-    define('SUGARCRM_POST_UNINSTALL_FILE', 'scripts/post_uninstall.php');
+if (!\defined('SUGARCRM_PRE_INSTALL_FILE')) {
+    \define('SUGARCRM_PRE_INSTALL_FILE', 'scripts/pre_install.php');
+    \define('SUGARCRM_POST_INSTALL_FILE', 'scripts/post_install.php');
+    \define('SUGARCRM_PRE_UNINSTALL_FILE', 'scripts/pre_uninstall.php');
+    \define('SUGARCRM_POST_UNINSTALL_FILE', 'scripts/post_uninstall.php');
 }
 $script_files = array(
-    "pre-install" => constant('SUGARCRM_PRE_INSTALL_FILE'),
-    "post-install" => constant('SUGARCRM_POST_INSTALL_FILE'),
-    "pre-uninstall" => constant('SUGARCRM_PRE_UNINSTALL_FILE'),
-    "post-uninstall" => constant('SUGARCRM_POST_UNINSTALL_FILE'),
+    "pre-install" => \constant('SUGARCRM_PRE_INSTALL_FILE'),
+    "post-install" => \constant('SUGARCRM_POST_INSTALL_FILE'),
+    "pre-uninstall" => \constant('SUGARCRM_PRE_UNINSTALL_FILE'),
+    "post-uninstall" => \constant('SUGARCRM_POST_UNINSTALL_FILE'),
 );
 
 
@@ -91,7 +91,7 @@ function extractFile($zip_file, $file_in_zip)
         $base_tmp_upgrade_dir   = sugar_cached("upgrades/temp");
     }
     $my_zip_dir = mk_temp_dir($base_tmp_upgrade_dir);
-    register_shutdown_function('rmdir_recursive', $my_zip_dir);
+    \register_shutdown_function('rmdir_recursive', $my_zip_dir);
     unzip_file($zip_file, $file_in_zip, $my_zip_dir);
     return("$my_zip_dir/$file_in_zip");
 }
@@ -107,7 +107,7 @@ function getInstallType($type_string)
     global $subdirs;
 
     foreach ($subdirs as $subdir) {
-        if (preg_match("#/$subdir/#", $type_string)) {
+        if (\preg_match("#/$subdir/#", $type_string)) {
             return($subdir);
         }
     }
@@ -152,14 +152,14 @@ function getLanguagePackName($the_file)
 
 function getUITextForType($type)
 {
-    $type = 'LBL_UW_TYPE_'.strtoupper($type);
+    $type = 'LBL_UW_TYPE_'.\strtoupper($type);
     global $mod_strings;
     return $mod_strings[$type];
 }
 
 function getUITextForMode($mode)
 {
-    $mode = 'LBL_UW_MODE_'.strtoupper($mode);
+    $mode = 'LBL_UW_MODE_'.\strtoupper($mode);
     global $mod_strings;
     return $mod_strings[$mode];
 }
@@ -194,7 +194,7 @@ function validate_manifest($manifest)
         if (!$version_ok && isset($manifest['acceptable_sugar_versions']['regex_matches'])) {
             $matches_empty = false;
             foreach ($manifest['acceptable_sugar_versions']['regex_matches'] as $match) {
-                if (preg_match("/$match/", $sugar_version)) {
+                if (\preg_match("/$match/", $sugar_version)) {
                     $version_ok = true;
                 }
             }
@@ -223,22 +223,22 @@ function getDiffFiles($unzip_dir, $install_file, $is_install = true, $previous_v
     $modified_files = array();
     if (!empty($installdefs['copy'])) {
         foreach ($installdefs['copy'] as $cp) {
-            $cp['to'] = clean_path(str_replace('<basepath>', $unzip_dir, $cp['to']));
-            $restore_path = remove_file_extension(urldecode($install_file))."-restore/";
+            $cp['to'] = clean_path(\str_replace('<basepath>', $unzip_dir, $cp['to']));
+            $restore_path = remove_file_extension(\urldecode($install_file))."-restore/";
             $backup_path = clean_path($restore_path.$cp['to']);
             //check if this file exists in the -restore directory
-            if (file_exists($backup_path)) {
+            if (\file_exists($backup_path)) {
                 //since the file exists, then we want do an md5 of the install version and the file system version
                 $from = $backup_path;
                 $needle = $restore_path;
                 if (!$is_install) {
-                    $from = str_replace('<basepath>', $unzip_dir, $cp['from']);
+                    $from = \str_replace('<basepath>', $unzip_dir, $cp['from']);
                     $needle = $unzip_dir;
                 }
                 $files_found = md5DirCompare($from.'/', $cp['to'].'/', array('.svn'), false);
-                if (count($files_found > 0)) {
+                if (\count($files_found > 0)) {
                     foreach ($files_found as $key=>$value) {
-                        $modified_files[] = str_replace($needle, '', $key);
+                        $modified_files[] = \str_replace($needle, '', $key);
                     }
                 }
             }//fi

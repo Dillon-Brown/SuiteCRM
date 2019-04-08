@@ -38,8 +38,8 @@ function smarty_function_sugar_button_slider($params, &$smarty)
     $view = $params['view'];
     $buttons = $params['buttons'];
     $str = '';
-    if (is_array($buttons)) {
-        if (count($buttons) <= 2) {
+    if (\is_array($buttons)) {
+        if (\count($buttons) <= 2) {
             foreach ($buttons as $val => $button) {
                 $str .= smarty_function_sugar_button(array('module' => $module, 'id' => $button, 'view' => $view), $smarty);
             }
@@ -55,7 +55,7 @@ function smarty_function_sugar_button_slider($params, &$smarty)
             }
             $str .= '</div></td>';
             $str .='<td align="right"> <div class="yui-bd">';
-            for ($i = 2; $i < count($buttons); $i++) {
+            for ($i = 2; $i < \count($buttons); $i++) {
                 $button = $buttons[$i];
                 $str .= smarty_function_sugar_button(array('module' => $module, 'id' => $button, 'view' => $view), $smarty);
                 $str .= ' ';

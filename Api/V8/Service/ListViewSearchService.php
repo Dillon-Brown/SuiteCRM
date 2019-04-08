@@ -53,7 +53,7 @@ use SearchForm;
 use SuiteCRM\LangText;
 use ListViewFacade;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -100,8 +100,8 @@ class ListViewSearchService
             $text = null;
             if (isset($value[$valueKey])) {
                 $text = $value[$valueKey];
-            } elseif (isset($value['name']) && isset($displayColumns[strtoupper($value['name'])]['label'])) {
-                $text = $displayColumns[strtoupper($value['name'])]['label'];
+            } elseif (isset($value['name']) && isset($displayColumns[\strtoupper($value['name'])]['label'])) {
+                $text = $displayColumns[\strtoupper($value['name'])]['label'];
             } else {
                 \LoggerManager::getLogger()->warn("Not found translation text key for search defs for selected module field: $key");
             }
@@ -133,8 +133,8 @@ class ListViewSearchService
         $data = [
             'module' => $moduleName,
             'templateMeta' => $searchDefs['searchdefs'][$moduleName]['templateMeta'],
-            'basic' => array_values($searchDefs['searchdefs'][$moduleName]['layout']['basic_search']),
-            'advanced' => array_values($searchDefs['searchdefs'][$moduleName]['layout']['advanced_search']),
+            'basic' => \array_values($searchDefs['searchdefs'][$moduleName]['layout']['basic_search']),
+            'advanced' => \array_values($searchDefs['searchdefs'][$moduleName]['layout']['advanced_search']),
             'fields' => $searchDefs['searchFields'][$moduleName]
         ];
         

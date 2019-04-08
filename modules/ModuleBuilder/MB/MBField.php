@@ -63,11 +63,11 @@ class MBField
         if (empty($this->label)) {
             $this->label = $this->name;
         }
-        $this->name = strtolower($this->getDBName($this->name));
+        $this->name = \strtolower($this->getDBName($this->name));
         $vardef = array();
         $vardef['name']=$this->name;
         if (empty($this->vname)) {
-            $this->vname = 'LBL_' . strtoupper($this->name);
+            $this->vname = 'LBL_' . \strtoupper($this->name);
         }
         $vardef['vname'] = $this->addLabel();
         if (!empty($this->required)) {

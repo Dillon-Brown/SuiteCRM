@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -67,7 +67,7 @@ class LanguageManager
             $lang = $GLOBALS['sugar_config']['default_language'];
         }
         static $createdModules = array();
-        if (empty($createdModules[$module]) && ($refresh || !file_exists(sugar_cached('modules/').$module.'/language/'.$lang.'.lang.php'))) {
+        if (empty($createdModules[$module]) && ($refresh || !\file_exists(sugar_cached('modules/').$module.'/language/'.$lang.'.lang.php'))) {
             $loaded_mod_strings = array();
             $loaded_mod_strings = LanguageManager::loadTemplateLanguage($module, $templates, $lang, $loaded_mod_strings);
             $createdModules[$module] = true;
@@ -84,7 +84,7 @@ class LanguageManager
      */
     public static function loadTemplateLanguage($module, $templates, $lang, $loaded_mod_strings)
     {
-        $templates = array_reverse($templates);
+        $templates = \array_reverse($templates);
         foreach ($templates as $template) {
             $temp = LanguageManager::addTemplate($module, $lang, $template);
             $loaded_mod_strings = sugarLangArrayMerge($loaded_mod_strings, $temp);
@@ -101,12 +101,12 @@ class LanguageManager
         $fields = array();
         if (empty($templates[$template])) {
             $path = 'include/SugarObjects/templates/' . $template . '/language/'.$lang.'.lang.php';
-            if (file_exists($path)) {
+            if (\file_exists($path)) {
                 require($path);
                 $templates[$template] = $mod_strings;
             } else {
                 $path = 'include/SugarObjects/implements/' . $template . '/language/'.$lang.'.lang.php';
-                if (file_exists($path)) {
+                if (\file_exists($path)) {
                     require($path);
                     $templates[$template] = $mod_strings;
                 }
@@ -141,7 +141,7 @@ class LanguageManager
     public static function clearLanguageCache($module_dir = '', $lang = '')
     {
         if (empty($lang)) {
-            $languages = array_keys($GLOBALS['sugar_config']['languages']);
+            $languages = \array_keys($GLOBALS['sugar_config']['languages']);
         } else {
             $languages = array($lang);
         }
@@ -153,8 +153,8 @@ class LanguageManager
             }
         } else {
             $cache_dir = sugar_cached('modules/');
-            if (file_exists($cache_dir) && $dir = @opendir($cache_dir)) {
-                while (($entry = readdir($dir)) !== false) {
+            if (\file_exists($cache_dir) && $dir = @\opendir($cache_dir)) {
+                while (($entry = \readdir($dir)) !== false) {
                     if ($entry == "." || $entry == "..") {
                         continue;
                     }
@@ -162,7 +162,7 @@ class LanguageManager
                         LanguageManager::_clearCache($entry, $clean_lang);
                     }
                 }
-                closedir($dir);
+                \closedir($dir);
             }
         }
     }
@@ -176,8 +176,8 @@ class LanguageManager
     {
         if (!empty($module_dir) && !empty($lang)) {
             $file = sugar_cached('modules/').$module_dir.'/language/'.$lang.'.lang.php';
-            if (file_exists($file)) {
-                unlink($file);
+            if (\file_exists($file)) {
+                \unlink($file);
                 $key = self::getLanguageCacheKey($module_dir, $lang);
                 sugar_cache_clear($key);
             }
@@ -220,16 +220,16 @@ class LanguageManager
         //end of fix #27023
 
         // Add in additional search paths if they were provided.
-        if (!empty($additional_search_paths) && is_array($additional_search_paths)) {
-            $lang_paths = array_merge($lang_paths, $additional_search_paths);
+        if (!empty($additional_search_paths) && \is_array($additional_search_paths)) {
+            $lang_paths = \array_merge($lang_paths, $additional_search_paths);
         }
 
         //search a predefined set of locations for the vardef files
         foreach ($lang_paths as $path) {
-            if (file_exists($path)) {
+            if (\file_exists($path)) {
                 require($path);
                 if (!empty($mod_strings)) {
-                    if (function_exists('sugarArrayMergeRecursive')) {
+                    if (\function_exists('sugarArrayMergeRecursive')) {
                         $loaded_mod_strings = sugarArrayMergeRecursive($loaded_mod_strings, $mod_strings);
                     } else {
                         $loaded_mod_strings = sugarLangArrayMerge($loaded_mod_strings, $mod_strings);
@@ -256,20 +256,20 @@ class LanguageManager
 
         if (!$refresh) {
             $return_result = sugar_cache_retrieve($key);
-            if (!empty($return_result) && is_array($return_result)) {
+            if (!empty($return_result) && \is_array($return_result)) {
                 return $return_result;
             }
         }
 
         // Some of the vardefs do not correctly define dictionary as global.  Declare it first.
         $cachedfile = sugar_cached('modules/').$module.'/language/'.$lang.'.lang.php';
-        if ($refresh || !file_exists($cachedfile)) {
+        if ($refresh || !\file_exists($cachedfile)) {
             LanguageManager::refreshLanguage($module, $lang);
         }
 
         //at this point we should have the cache/modules/... file
         //which was created from the refreshVardefs so let's try to load it.
-        if (file_exists($cachedfile)) {
+        if (\file_exists($cachedfile)) {
             global $mod_strings;
 
             require $cachedfile;
@@ -279,7 +279,7 @@ class LanguageManager
                 sugar_cache_put($key, $mod_strings);
             }
             if (!empty($_SESSION['translation_mode'])) {
-                $mod_strings = array_map('translated_prefix', $mod_strings);
+                $mod_strings = \array_map('translated_prefix', $mod_strings);
             }
             return $mod_strings;
         }
@@ -309,7 +309,7 @@ class LanguageManager
         $jsFiles = array();
         getFiles($jsFiles, sugar_cached('jsLanguage'));
         foreach ($jsFiles as $file) {
-            unlink($file);
+            \unlink($file);
         }
 
         if (empty($GLOBALS['sugar_config']['js_lang_version'])) {

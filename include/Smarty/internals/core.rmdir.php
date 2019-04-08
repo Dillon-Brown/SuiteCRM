@@ -26,10 +26,10 @@ function smarty_core_rmdir($params, &$smarty)
         $params['exp_time'] = null;
     }
 
-    if ($_handle = @opendir($params['dirname'])) {
-        while (false !== ($_entry = readdir($_handle))) {
+    if ($_handle = @\opendir($params['dirname'])) {
+        while (false !== ($_entry = \readdir($_handle))) {
             if ($_entry != '.' && $_entry != '..') {
-                if (@is_dir($params['dirname'] . DIRECTORY_SEPARATOR . $_entry)) {
+                if (@\is_dir($params['dirname'] . DIRECTORY_SEPARATOR . $_entry)) {
                     $_params = array(
                         'dirname' => $params['dirname'] . DIRECTORY_SEPARATOR . $_entry,
                         'level' => $params['level'] + 1,
@@ -41,11 +41,11 @@ function smarty_core_rmdir($params, &$smarty)
                 }
             }
         }
-        closedir($_handle);
+        \closedir($_handle);
     }
 
     if ($params['level']) {
-        return @rmdir($params['dirname']);
+        return @\rmdir($params['dirname']);
     }
     return (bool)$_handle;
 }

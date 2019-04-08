@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -73,7 +73,7 @@ class component
     public function fillBean($args=array(), $module=null, $bean=null)
     {
         $result = null;
-        if (is_object($bean)) {
+        if (\is_object($bean)) {
             $args = $this->mapInput($args, $module);
             $item = $this->_source->getItem($args, $module);
             $result = $this->mapOutput($bean, $item);
@@ -108,13 +108,13 @@ class component
 
 
         require_once('include/connectors/filters/FilterFactory.php');
-        $filter = FilterFactory::getInstance(get_class($this->_source));
+        $filter = FilterFactory::getInstance(\get_class($this->_source));
         $list = $filter->getList($args, $module);
 
         if (!empty($list)) {
-            $resultSize = count($list);
+            $resultSize = \count($list);
             if (!empty($beans)) {
-                if (count($beans) != $resultSize) {
+                if (\count($beans) != $resultSize) {
                     throw new Exception($GLOBALS['app_strings']['ERR_CONNECTOR_FILL_BEANS_SIZE_MISMATCH']);
                 }
             } else {
@@ -123,7 +123,7 @@ class component
                 }
             }
 
-            $keys = array_keys($beans);
+            $keys = \array_keys($beans);
             $count = 0;
             foreach ($list as $entry) {
                 //Change the result keys to lower case.  This has important ramifications.
@@ -131,7 +131,7 @@ class component
                 //of the fields to display.  We change the keys to lowercase so that the values
                 //may be mapped to the beans without having to rely on the proper string casing
                 //in the listviewdefs.php files.
-                $entry = array_change_key_case($entry, CASE_LOWER);
+                $entry = \array_change_key_case($entry, CASE_LOWER);
                 $results[] = $this->mapOutput($beans[$keys[$count]], $entry);
                 $count++;
             }
@@ -223,7 +223,7 @@ class component
         if (empty($map['beans'][$module])) {
             return $input_params;
         }
-        $mapping = array_flip($map['beans'][$module]);
+        $mapping = \array_flip($map['beans'][$module]);
         $field_defs = $this->getFieldDefs();
         foreach ($inputData as $arg => $val) {
             if (!empty($mapping[$arg]) || !empty($field_defs[$arg])) {
@@ -232,7 +232,7 @@ class component
                 }
                 if (!empty($field_defs[$arg]['input'])) {
                     $in_field = $field_defs[$arg]['input'];
-                    $temp = explode('.', $in_field);
+                    $temp = \explode('.', $in_field);
                     $eval_code = "\$input_params";
                     foreach ($temp as $arr_key) {
                         $eval_code .= '[\'' . $arr_key . '\']';
@@ -251,12 +251,12 @@ class component
 
     public function mapOutput($bean, $result)
     {
-        if (is_object($bean)) {
+        if (\is_object($bean)) {
             $map = $this->getMapping();
             $mapping = $map['beans'][$bean->module_dir];
 
             //Check for situation where nothing was mapped or the only field mapped was id
-            if (empty($mapping) || (count($mapping) == 1 && isset($mapping['id']))) {
+            if (empty($mapping) || (\count($mapping) == 1 && isset($mapping['id']))) {
                 $GLOBALS['log']->error($GLOBALS['mod_strings']['ERROR_NO_DISPLAYABLE_MAPPED_FIELDS']);
                 throw new Exception($GLOBALS['mod_strings']['ERROR_NO_DISPLAYABLE_MAPPED_FIELDS']);
             }
@@ -304,10 +304,10 @@ class component
 
         $value = SugarArray::staticGet($result, $out_field);
 
-        if (is_array($def)) {
+        if (\is_array($def)) {
             if (!empty($def['function'])) {
                 $function = $def['function'];
-                if (is_array($function) && isset($function['name'])) {
+                if (\is_array($function) && isset($function['name'])) {
                     $function = $def['function']['name'];
                     if (!empty($def['function']['include'])) {
                         require_once($def['function']['include']);

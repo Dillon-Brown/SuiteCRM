@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -156,7 +156,7 @@ $xtpl->assign("SECURITY_GROUP_OPTIONS", get_select_options_with_id($options, "")
 $security_modules = $groupFocus->getSecurityModules();
 
 $security_modules["All"] = $mod_strings["LBL_ALL_MODULES"];//rost fix
-ksort($security_modules);
+\ksort($security_modules);
 $xtpl->assign("MODULE_OPTIONS", get_select_options_with_id($security_modules, "All"));
 
 

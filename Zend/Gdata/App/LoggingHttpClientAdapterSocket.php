@@ -58,9 +58,9 @@ class Zend_Gdata_App_LoggingHttpClientAdapterSocket extends Zend_Http_Client_Ada
     protected function log($message)
     {
         if ($this->log_handle == null) {
-            $this->log_handle = fopen($this->config['logfile'], 'a');
+            $this->log_handle = \fopen($this->config['logfile'], 'a');
         }
-        fwrite($this->log_handle, $message);
+        \fwrite($this->log_handle, $message);
     }
 
     /**

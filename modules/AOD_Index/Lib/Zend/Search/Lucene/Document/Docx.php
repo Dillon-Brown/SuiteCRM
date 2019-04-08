@@ -50,7 +50,7 @@ class Zend_Search_Lucene_Document_Docx extends Zend_Search_Lucene_Document_OpenX
      */
     private function __construct($fileName, $storeContent)
     {
-        if (!class_exists('ZipArchive', false)) {
+        if (!\class_exists('ZipArchive', false)) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('MS Office documents processing functionality requires Zip extension to be loaded');
         }
@@ -69,7 +69,7 @@ class Zend_Search_Lucene_Document_Docx extends Zend_Search_Lucene_Document_OpenX
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('Invalid archive or corrupted .docx file.');
         }
-        $relations = simplexml_load_string($relationsXml);
+        $relations = \simplexml_load_string($relationsXml);
         foreach ($relations->Relationship as $rel) {
             if ($rel ["Type"] == Zend_Search_Lucene_Document_OpenXml::SCHEMA_OFFICEDOCUMENT) {
                 // Found office document! Read in contents...
@@ -82,20 +82,20 @@ class Zend_Search_Lucene_Document_Docx extends Zend_Search_Lucene_Document_OpenX
                     . basename($rel['Target']))
                 ));
                 echo "\n";*/
-                libxml_use_internal_errors(true);
+                \libxml_use_internal_errors(true);
                 $dom = new DOMDocument("1.0", "UTF-8");
                 $dom->strictErrorChecking = false;
                 $dom->validateOnParse = false;
                 $dom->recover = true;
                 $dom->loadXML($package->getFromName(
-                    $this->absoluteZipPath(dirname($rel['Target'])
+                    $this->absoluteZipPath(\dirname($rel['Target'])
                     . '/'
-                    . basename($rel['Target']))
+                    . \basename($rel['Target']))
                 ));
-                $contents = simplexml_import_dom($dom);
+                $contents = \simplexml_import_dom($dom);
 
-                libxml_clear_errors();
-                libxml_use_internal_errors(false);
+                \libxml_clear_errors();
+                \libxml_use_internal_errors(false);
 
                 /*$contents = simplexml_load_string($package->getFromName(
                                                                 $this->absoluteZipPath(dirname($rel['Target'])
@@ -142,9 +142,9 @@ class Zend_Search_Lucene_Document_Docx extends Zend_Search_Lucene_Document_OpenX
 
         // Store contents
         if ($storeContent) {
-            $this->addField(Zend_Search_Lucene_Field::Text('contents', implode('', $documentBody), 'UTF-8'));
+            $this->addField(Zend_Search_Lucene_Field::Text('contents', \implode('', $documentBody), 'UTF-8'));
         } else {
-            $this->addField(Zend_Search_Lucene_Field::UnStored('contents', implode('', $documentBody), 'UTF-8'));
+            $this->addField(Zend_Search_Lucene_Field::UnStored('contents', \implode('', $documentBody), 'UTF-8'));
         }
 
         // Store meta data properties
@@ -168,7 +168,7 @@ class Zend_Search_Lucene_Document_Docx extends Zend_Search_Lucene_Document_OpenX
      */
     public static function loadDocxFile($fileName, $storeContent = false)
     {
-        if (!is_readable($fileName)) {
+        if (!\is_readable($fileName)) {
             require_once 'Zend/Search/Lucene/Document/Exception.php';
             throw new Zend_Search_Lucene_Document_Exception('Provided file \'' . $fileName . '\' is not readable.');
         }

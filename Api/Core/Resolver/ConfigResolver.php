@@ -17,21 +17,21 @@ class ConfigResolver
 
         foreach ($files as $file) {
             // base dir must exist in entryPoint.php
-            $file = sprintf('%s/%s', $GLOBALS['BASE_DIR'], $file);
+            $file = \sprintf('%s/%s', $GLOBALS['BASE_DIR'], $file);
 
             if (self::isFileExist($file)) {
                 $config = require $file;
             }
 
-            if (!is_array($config)) {
-                throw new \InvalidArgumentException(sprintf('File %s is invalid', $file));
+            if (!\is_array($config)) {
+                throw new \InvalidArgumentException(\sprintf('File %s is invalid', $file));
             }
 
             $configs[] = $config;
         }
 
         // since we support 5.5.9, we can't use splat op here
-        return !$configs ? $configs : array_reduce($configs, 'array_merge', []);
+        return !$configs ? $configs : \array_reduce($configs, 'array_merge', []);
     }
 
     /**
@@ -42,8 +42,8 @@ class ConfigResolver
      */
     public static function isFileExist($file)
     {
-        if (!file_exists($file) || !is_readable($file)) {
-            throw new \RuntimeException(sprintf('File %s is not readable', $file));
+        if (!\file_exists($file) || !\is_readable($file)) {
+            throw new \RuntimeException(\sprintf('File %s is not readable', $file));
         }
 
         return true;

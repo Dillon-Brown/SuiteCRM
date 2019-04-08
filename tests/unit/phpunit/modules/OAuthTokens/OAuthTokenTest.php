@@ -70,8 +70,8 @@ class OAuthTokenTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $result = OAuthToken::generate();
 
         $this->assertInstanceOf('OAuthToken', $result);
-        $this->assertGreaterThan(0, strlen($result->token));
-        $this->assertGreaterThan(0, strlen($result->secret));
+        $this->assertGreaterThan(0, \strlen($result->token));
+        $this->assertGreaterThan(0, \strlen($result->secret));
     }
 
     public function testSaveAndOthers()
@@ -91,7 +91,7 @@ class OAuthTokenTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($oauthToken->id));
-        $this->assertEquals(12, strlen($oauthToken->id));
+        $this->assertEquals(12, \strlen($oauthToken->id));
 
         //test load method
         $this->load($oauthToken->id);
@@ -137,7 +137,7 @@ class OAuthTokenTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $result = $token->authorize('test');
 
         $this->assertEquals('test', $token->authdata);
-        $this->assertGreaterThan(0, strlen($result));
+        $this->assertGreaterThan(0, \strlen($result));
         $this->assertEquals($result, $token->verify);
     }
 

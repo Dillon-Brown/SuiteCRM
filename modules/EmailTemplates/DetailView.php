@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -65,29 +65,29 @@ if (isset($_REQUEST['offset']) or isset($_REQUEST['record'])) {
     }
     $focus=$result;
 } else {
-    header("Location: index.php?module=Accounts&action=index");
+    \header("Location: index.php?module=Accounts&action=index");
 }
 if (isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
     $focus->id = "";
 }
 
 //needed when creating a new note with default values passed in
-if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) {
+if (isset($_REQUEST['contact_name']) && \is_null($focus->contact_name)) {
     $focus->contact_name = $_REQUEST['contact_name'];
 }
-if (isset($_REQUEST['contact_id']) && is_null($focus->contact_id)) {
+if (isset($_REQUEST['contact_id']) && \is_null($focus->contact_id)) {
     $focus->contact_id = $_REQUEST['contact_id'];
 }
-if (isset($_REQUEST['opportunity_name']) && is_null($focus->parent_name)) {
+if (isset($_REQUEST['opportunity_name']) && \is_null($focus->parent_name)) {
     $focus->parent_name = $_REQUEST['opportunity_name'];
 }
-if (isset($_REQUEST['opportunity_id']) && is_null($focus->parent_id)) {
+if (isset($_REQUEST['opportunity_id']) && \is_null($focus->parent_id)) {
     $focus->parent_id = $_REQUEST['opportunity_id'];
 }
-if (isset($_REQUEST['account_name']) && is_null($focus->parent_name)) {
+if (isset($_REQUEST['account_name']) && \is_null($focus->parent_name)) {
     $focus->parent_name = $_REQUEST['account_name'];
 }
-if (isset($_REQUEST['account_id']) && is_null($focus->parent_id)) {
+if (isset($_REQUEST['account_id']) && \is_null($focus->parent_id)) {
     $focus->parent_id = $_REQUEST['account_id'];
 }
 
@@ -146,7 +146,7 @@ $xtpl->assign("NAME", $focus->name);
 $xtpl->assign("DESCRIPTION", $focus->description);
 $xtpl->assign("SUBJECT", $focus->subject);
 $xtpl->assign("BODY", $focus->body);
-$xtpl->assign("BODY_HTML", json_encode(from_html($focus->body_html)));
+$xtpl->assign("BODY_HTML", \json_encode(from_html($focus->body_html)));
 $xtpl->assign("DATE_MODIFIED", $focus->date_modified);
 $xtpl->assign("DATE_ENTERED", $focus->date_entered);
 $xtpl->assign("ASSIGNED_USER_NAME", $focus->assigned_user_name);
@@ -182,7 +182,7 @@ if (! isset($notes_list)) {
 }
 
 $attachments = '';
-for ($i=0; $i<count($notes_list); $i++) {
+for ($i=0; $i<\count($notes_list); $i++) {
     $the_note = $notes_list[$i];
     $attachments .= "<a href=\"index.php?entryPoint=download&id={$the_note->id}&type=Notes\">".$the_note->name."</a><br />";
 }

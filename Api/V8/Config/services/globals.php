@@ -10,4 +10,4 @@ return CustomLoader::mergeCustomArray([
     DBManager::class => function () {
         return DBManagerFactory::getInstance();
     },
-], basename(__FILE__));
+], \basename(__FILE__));

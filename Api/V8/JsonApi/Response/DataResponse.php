@@ -115,6 +115,6 @@ class DataResponse implements \JsonSerializable
             'links' => $this->getLinks()
         ];
 
-        return array_filter($response);
+        return \array_filter($response);
     }
 }

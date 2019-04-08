@@ -53,7 +53,7 @@ function getAOPAssignField($assignField, $value)
     $field = '';
 
     $field .= "<select type='text' name='$assignField" . '[0]' . "' id='$assignField" . '[0]' . "' onchange='assign_field_change(\"$assignField\")' title='' tabindex='116'>" . get_select_options_with_id($app_list_strings['aow_assign_options'], isset($value[0]) ? $value[0] : null) . '</select>&nbsp;&nbsp;';
-    if (!file_exists('modules/SecurityGroups/SecurityGroup.php')) {
+    if (!\file_exists('modules/SecurityGroups/SecurityGroup.php')) {
         $field .= "<input type='hidden' name='$assignField" . '[1]' . "' id='$assignField" . '[1]' . "' value=''  />";
     } else {
         $display = 'none';
@@ -77,7 +77,7 @@ function getAOPAssignField($assignField, $value)
 function isAOPEnabled()
 {
     global $sugar_config;
-    if (array_key_exists('aop', $sugar_config) && array_key_exists('enable_aop', $sugar_config['aop'])) {
+    if (\array_key_exists('aop', $sugar_config) && \array_key_exists('enable_aop', $sugar_config['aop'])) {
         return !empty($sugar_config['aop']['enable_aop']);
     }
 
@@ -93,11 +93,11 @@ function getPortalEmailSettings()
     global $sugar_config;
     $settings = array('from_name' => '', 'from_address' => '');
 
-    if (array_key_exists('aop', $sugar_config)) {
-        if (array_key_exists('support_from_address', $sugar_config['aop'])) {
+    if (\array_key_exists('aop', $sugar_config)) {
+        if (\array_key_exists('support_from_address', $sugar_config['aop'])) {
             $settings['from_address'] = $sugar_config['aop']['support_from_address'];
         }
-        if (array_key_exists('support_from_name', $sugar_config['aop'])) {
+        if (\array_key_exists('support_from_name', $sugar_config['aop'])) {
             $settings['from_name'] = $sugar_config['aop']['support_from_name'];
         }
     }
@@ -137,7 +137,7 @@ function aop_parse_template($string, $bean_arr)
         }
 
         foreach ($focus->field_defs as $key => $field_def) {
-            if (array_key_exists($field_def['type'], $typeMap)) {
+            if (\array_key_exists($field_def['type'], $typeMap)) {
                 $focus->field_defs[$key]['type'] = $typeMap[$field_def['type']];
             }
         }

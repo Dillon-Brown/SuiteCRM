@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -45,13 +45,13 @@ require_once('include/Pear/Crypt_Blowfish/Blowfish.php');
 
 function sugarEncode($key, $data)
 {
-    return base64_encode($data);
+    return \base64_encode($data);
 }
 
 
 function sugarDecode($key, $encoded)
 {
-    $data = base64_decode($encoded);
+    $data = \base64_decode($encoded);
     return $data;
 }
 
@@ -66,17 +66,17 @@ function blowfishGetKey($type)
 {
     $key = array();
 
-    $type = str_rot13($type);
+    $type = \str_rot13($type);
 
     $keyCache = "custom/blowfish/{$type}.php";
 
     // build cache dir if needed
-    if (!file_exists('custom/blowfish')) {
+    if (!\file_exists('custom/blowfish')) {
         mkdir_recursive('custom/blowfish');
     }
 
     // get key from cache, or build if not exists
-    if (file_exists($keyCache)) {
+    if (\file_exists($keyCache)) {
         include($keyCache);
     } else {
         // create a key
@@ -96,7 +96,7 @@ function blowfishEncode($key, $data)
 {
     $bf = new Crypt_Blowfish($key);
     $encrypted = $bf->encrypt($data);
-    return base64_encode($encrypted);
+    return \base64_encode($encrypted);
 }
 
 /**
@@ -107,7 +107,7 @@ function blowfishEncode($key, $data)
  */
 function blowfishDecode($key, $encoded)
 {
-    $data = base64_decode($encoded);
+    $data = \base64_decode($encoded);
     $bf = new Crypt_Blowfish($key);
-    return trim($bf->decrypt($data));
+    return \trim($bf->decrypt($data));
 }

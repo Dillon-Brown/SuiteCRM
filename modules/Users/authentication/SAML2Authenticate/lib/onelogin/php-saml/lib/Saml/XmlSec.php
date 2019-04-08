@@ -54,10 +54,10 @@ class OneLogin_Saml_XmlSec
         for ($i = 0; $i < $timestampNodes->length; $i++) {
             $nbAttribute = $timestampNodes->item($i)->attributes->getNamedItem("NotBefore");
             $naAttribute = $timestampNodes->item($i)->attributes->getNamedItem("NotOnOrAfter");
-            if ($nbAttribute && strtotime($nbAttribute->textContent) > time()) {
+            if ($nbAttribute && \strtotime($nbAttribute->textContent) > \time()) {
                 return false;
             }
-            if ($naAttribute && strtotime($naAttribute->textContent) <= time()) {
+            if ($naAttribute && \strtotime($naAttribute->textContent) <= \time()) {
                 return false;
             }
         }

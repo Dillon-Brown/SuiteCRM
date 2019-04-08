@@ -62,25 +62,25 @@ function smarty_function_sugar_include($params, &$smarty)
         }
         
         $includeFile = $params['file'];
-        if (!file_exists($includeFile)) {
+        if (!\file_exists($includeFile)) {
             $smarty->trigger_error($app_strings['ERR_NO_SUCH_FILE'] . ': ' . $includeFile);
         }
         
-        ob_start();
+        \ob_start();
         require($includeFile);
-        $output_html = ob_get_contents();
-        ob_end_clean();
+        $output_html = \ob_get_contents();
+        \ob_end_clean();
         echo $output_html;
     } elseif (isset($params['type']) && $params['type'] == 'smarty') {
         return $smarty->fetch($params['file']);
-    } elseif (is_array($params['include'])) {
+    } elseif (\is_array($params['include'])) {
         $code = '';
         foreach ($params['include'] as $include) {
             if (isset($include['file'])) {
                 $file = $include['file'];
-                if (preg_match('/[\.]js$/si', $file)) {
+                if (\preg_match('/[\.]js$/si', $file)) {
                     $code .= "<script src=\"". getJSPath($include['file']) ."\"></script>";
-                } elseif (preg_match('/[\.]php$/si', $file)) {
+                } elseif (\preg_match('/[\.]php$/si', $file)) {
                     require_once($file);
                 }
             }

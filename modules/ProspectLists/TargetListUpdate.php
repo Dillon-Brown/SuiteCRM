@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -88,10 +88,10 @@ if ($_REQUEST['select_entire_list'] == '1') {
     $result = DBManagerFactory::getInstance()->query($query, true);
     $uids = array();
     while ($val = DBManagerFactory::getInstance()->fetchByAssoc($result, false)) {
-        array_push($uids, $val['id']);
+        \array_push($uids, $val['id']);
     }
 } else {
-    $uids = explode(',', $_POST['uids']);
+    $uids = \explode(',', $_POST['uids']);
 }
 
 // find the relationship to use

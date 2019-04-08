@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -45,7 +45,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'show_raw') {
     $email = new Email();
     $email->retrieve($_REQUEST['metadata']);
-    echo nl2br($email->raw_source);
+    echo \nl2br($email->raw_source);
 } else {
     require_once('include/Popups/Popup_picker.php');
     $popup = new Popup_Picker();

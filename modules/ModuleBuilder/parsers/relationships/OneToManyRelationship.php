@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -128,7 +128,7 @@ class OneToManyRelationship extends AbstractRelationship
             $this->lhs_module,
             $this->relationship_name,
             false,
-            'LBL_' . strtoupper($this->relationship_name . '_FROM_' . $this->getLeftModuleSystemLabel()) . '_TITLE',
+            'LBL_' . \strtoupper($this->relationship_name . '_FROM_' . $this->getLeftModuleSystemLabel()) . '_TITLE',
             $this->relationship_only ? false : $this->getIDName($this->lhs_module)
         ) ;
         if ($this->rhs_module != $this->lhs_module) {
@@ -136,7 +136,7 @@ class OneToManyRelationship extends AbstractRelationship
                 $this->rhs_module,
                 $this->relationship_name,
                 true,
-                'LBL_' . strtoupper($this->relationship_name . '_FROM_' . $this->getRightModuleSystemLabel()) . '_TITLE'
+                'LBL_' . \strtoupper($this->relationship_name . '_FROM_' . $this->getRightModuleSystemLabel()) . '_TITLE'
             );
         }
         if (! $this->relationship_only) {
@@ -145,7 +145,7 @@ class OneToManyRelationship extends AbstractRelationship
                 $this->lhs_module,
                 $this->relationship_name,
                 true,
-                'LBL_' . strtoupper($this->relationship_name . '_FROM_' . $this->getRightModuleSystemLabel()) . '_TITLE'
+                'LBL_' . \strtoupper($this->relationship_name . '_FROM_' . $this->getRightModuleSystemLabel()) . '_TITLE'
             );
         }
         

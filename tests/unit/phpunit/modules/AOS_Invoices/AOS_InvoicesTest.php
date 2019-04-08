@@ -44,7 +44,7 @@ class AOS_InvoicesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($aosInvoices->id));
-        $this->assertEquals(36, strlen($aosInvoices->id));
+        $this->assertEquals(36, \strlen($aosInvoices->id));
         $this->assertGreaterThan(0, $aosInvoices->number);
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.

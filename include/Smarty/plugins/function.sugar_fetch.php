@@ -47,7 +47,7 @@ function smarty_function_sugar_fetch($params, &$smarty)
     }
     
     $theKey = $params['key'];
-    if (is_object($params['object'])) {
+    if (\is_object($params['object'])) {
         $theData = $params['object']->$theKey;
     } else {
         $theData = $params['object'][$theKey];

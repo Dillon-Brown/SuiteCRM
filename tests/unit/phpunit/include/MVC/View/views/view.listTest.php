@@ -48,11 +48,11 @@ class ViewListTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $view->prepareSearchForm();
         $view->preDisplay();
 
-        ob_start();
+        \ob_start();
         $view->listViewProcess();
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
-        $this->assertGreaterThan(0, strlen($renderedContent));
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
+        $this->assertGreaterThan(0, \strlen($renderedContent));
         
         
         
@@ -61,22 +61,22 @@ class ViewListTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         DBManagerFactory::getInstance()->query("DELETE FROM email_addresses");
         foreach ($tableEmailAddresses as $row) {
             $query = "INSERT email_addresses INTO (";
-            $query .= (implode(',', array_keys($row)) . ') VALUES (');
+            $query .= (\implode(',', \array_keys($row)) . ') VALUES (');
             foreach ($row as $value) {
                 $quoteds[] = "'$value'";
             }
-            $query .= (implode(', ', $quoteds)) . ')';
+            $query .= (\implode(', ', $quoteds)) . ')';
             DBManagerFactory::getInstance()->query($query);
         }
         
         DBManagerFactory::getInstance()->query("DELETE FROM aod_index");
         foreach ($tableAodIndex as $row) {
             $query = "INSERT aod_index INTO (";
-            $query .= (implode(',', array_keys($row)) . ') VALUES (');
+            $query .= (\implode(',', \array_keys($row)) . ') VALUES (');
             foreach ($row as $value) {
                 $quoteds[] = "'$value'";
             }
-            $query .= (implode(', ', $quoteds)) . ')';
+            $query .= (\implode(', ', $quoteds)) . ')';
             DBManagerFactory::getInstance()->query($query);
         }
         
@@ -135,25 +135,25 @@ class ViewListTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $view = new ViewList();
         $view->module = 'Users';
 
-        ob_start();
+        \ob_start();
         $view->listViewPrepare();
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
-        $this->assertLessThanOrEqual(0, strlen($renderedContent));
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
+        $this->assertLessThanOrEqual(0, \strlen($renderedContent));
 
         //test with some REQUEST parameters preset. it should return some html and set the REQUEST key we provided in current_query_by_page REQUEST Param.
         $view = new ViewList();
         $view->module = 'Users';
         $GLOBALS['module'] = 'Users';
         $_REQUEST['Users2_USER_offset'] = 1;
-        $_REQUEST['current_query_by_page'] = htmlentities(json_encode(array('key' => 'value')));
+        $_REQUEST['current_query_by_page'] = \htmlentities(\json_encode(array('key' => 'value')));
         $view->bean = new User();
 
-        ob_start();
+        \ob_start();
         $view->listViewPrepare();
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
-        $this->assertGreaterThan(0, strlen($renderedContent));
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
+        $this->assertGreaterThan(0, \strlen($renderedContent));
         $this->assertEquals('value', $_REQUEST['key']);
          
         
@@ -220,22 +220,22 @@ class ViewListTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $view = new ViewList();
         $view->prepareSearchForm();
 
-        ob_start();
+        \ob_start();
         $view->processSearchForm();
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
-        $this->assertGreaterThan(0, strlen($renderedContent));
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
+        $this->assertGreaterThan(0, \strlen($renderedContent));
 
         //test with use_old_search = true. there is a $view variable which is never set so it doesn't returns anything.
         $view = new ViewList();
         $view->prepareSearchForm();
         $view->use_old_search = true;
 
-        ob_start();
+        \ob_start();
         $view->processSearchForm();
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
-        $this->assertEquals(0, strlen($renderedContent));
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
+        $this->assertEquals(0, \strlen($renderedContent));
         
         // clean up
         
@@ -297,11 +297,11 @@ class ViewListTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $view = new ViewList();
 
         //test without setting bean attibute. it shuold return no access html.
-        ob_start();
+        \ob_start();
         $view->display();
-        $renderedContent1 = ob_get_contents();
-        ob_end_clean();
-        $this->assertGreaterThan(0, strlen($renderedContent1));
+        $renderedContent1 = \ob_get_contents();
+        \ob_end_clean();
+        $this->assertGreaterThan(0, \strlen($renderedContent1));
 
         //test with bean, seed and other arrtibutes set. it shuold return html.
         $view->bean = new User();
@@ -310,23 +310,23 @@ class ViewListTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $view->prepareSearchForm();
         $view->preDisplay();
 
-        ob_start();
+        \ob_start();
 
         $view->display();
-        $renderedContent2 = ob_get_contents();
-        ob_end_clean();
-        $this->assertGreaterThan(0, strlen($renderedContent2));
+        $renderedContent2 = \ob_get_contents();
+        \ob_end_clean();
+        $this->assertGreaterThan(0, \strlen($renderedContent2));
         
         // clean up
         
         DBManagerFactory::getInstance()->query("DELETE FROM email_addresses");
         foreach ($tableEmailAddresses as $row) {
             $query = "INSERT email_addresses INTO (";
-            $query .= (implode(',', array_keys($row)) . ') VALUES (');
+            $query .= (\implode(',', \array_keys($row)) . ') VALUES (');
             foreach ($row as $value) {
                 $quoteds[] = "'$value'";
             }
-            $query .= (implode(', ', $quoteds)) . ')';
+            $query .= (\implode(', ', $quoteds)) . ')';
             DBManagerFactory::getInstance()->query($query);
         }
         

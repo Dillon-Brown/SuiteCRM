@@ -166,7 +166,7 @@ function __construct ($file, $alt_include = "", $mainblock="main") {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         }
         else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($file, $alt_include, $mainblock);
     }
@@ -184,7 +184,7 @@ function __construct ($file, $alt_include = "", $mainblock="main") {
 */
 
 function assign ($name,$val="") {
-	if (is_array($name)) {
+	if (\is_array($name)) {
 		foreach ($name as $k => $v) {
 			$this->VARS[$k] = $v;
 		}
@@ -197,7 +197,7 @@ function append ($varname, $name,$val="") {
 	if(!isset($this->VARS[$varname])){
 		$this->VARS[$varname] = array();
 	}
-   if(is_array($this->VARS[$varname])){
+   if(\is_array($this->VARS[$varname])){
        $this->VARS[$varname][$name] = $val;
     }
 }
@@ -220,13 +220,13 @@ function parse ($bname) {
 	$copy=$this->blocks[$bname];
 	if (!isset($this->blocks[$bname]))
 		$this->set_error ("parse: blockname [$bname] does not exist");
-	preg_match_all("/\{([A-Za-z0-9\._]+?)}/",$this->blocks[$bname],$var_array);
+	\preg_match_all("/\{([A-Za-z0-9\._]+?)}/",$this->blocks[$bname],$var_array);
 	$var_array=$var_array[1];
 	foreach ($var_array as $k => $v) {
-		$sub=explode(".",$v);
+		$sub=\explode(".",$v);
 		if ($sub[0]=="_BLOCK_") {
 			unset($sub[0]);
-			$bname2=implode(".",$sub);
+			$bname2=\implode(".",$sub);
 
 			if(isset($this->parsed_blocks[$bname2]))
 			{
@@ -238,17 +238,17 @@ function parse ($bname) {
 			}
 
 			$nul=(!isset($this->NULL_BLOCK[$bname2])) ? $this->NULL_BLOCK[""] : $this->NULL_BLOCK[$bname2];
-			$var=(empty($var))?$nul:trim($var);
+			$var=(empty($var))?$nul:\trim($var);
 			// Commented out due to regular expression issue with '$' in replacement string.
 			//$copy=preg_replace("/\{".$v."\}/","$var",$copy);
 			// This should be faster and work better for '$'
-			$copy=str_replace("{".$v."}",$var,$copy);
+			$copy=\str_replace("{".$v."}",$var,$copy);
 		} else {
 			$var=$this->VARS;
 
 			foreach ($sub as $k1 => $v1)
 			{
-				if(is_array($var) && isset($var[$v1]))
+				if(\is_array($var) && isset($var[$v1]))
 				{
 					$var=$var[$v1];
 				}
@@ -265,9 +265,9 @@ function parse ($bname) {
 			// This should be faster and work better for '$'
 
 			// this was periodically returning an array to string conversion error....
-			if(!is_array($var))
+			if(!\is_array($var))
 			{
-				$copy=str_replace("{".$v."}",$var,$copy);
+				$copy=\str_replace("{".$v."}",$var,$copy);
 			}
 		}
 	}
@@ -283,7 +283,7 @@ function parse ($bname) {
 
 	// reset sub-blocks
 	if ($this->AUTORESET && (!empty($this->sub_blocks[$bname]))) {
-		reset($this->sub_blocks[$bname]);
+		\reset($this->sub_blocks[$bname]);
 		foreach ($this->sub_blocks[$bname] as $v)
 			$this->reset($v);
 	}
@@ -304,7 +304,7 @@ function exists($bname){
 */
 function var_exists($bname,$vname){
 	if(!empty($this->blocks[$bname])){
-		return substr_count($this->blocks[$bname], '{'. $vname . '}') >0;
+		return \substr_count($this->blocks[$bname], '{'. $vname . '}') >0;
 	}
 	return false;
 }
@@ -317,7 +317,7 @@ function var_exists($bname,$vname){
 
 function rparse($bname) {
 	if (!empty($this->sub_blocks[$bname])) {
-		reset($this->sub_blocks[$bname]);
+		\reset($this->sub_blocks[$bname]);
 		foreach($this->sub_blocks[$bname] as $k => $v) {
             if (!empty($v)) {
                 $this->rparse($v, $indent . "\t");
@@ -363,7 +363,7 @@ function out ($bname) {
 	if(isset($focus)){
 		global $action;
 
-		if($focus && is_subclass_of($focus, 'SugarBean') && !$focus->ACLAccess($action)){
+		if($focus && \is_subclass_of($focus, 'SugarBean') && !$focus->ACLAccess($action)){
 
 			ACLController::displayNoAccess(true);
 
@@ -438,7 +438,7 @@ function clear_autoreset() {
 */
 
 function scan_globals() {
-	reset($GLOBALS);
+	\reset($GLOBALS);
 	foreach ($GLOBALS as $k => $v) {
         $GLOB[$k] = $v;
 	}
@@ -467,24 +467,24 @@ function scan_globals() {
 
 
 function maketree($con,$block) {
-	$con2=explode($this->block_start_delim,$con);
+	$con2=\explode($this->block_start_delim,$con);
 	$level=0;
 	$block_names=array();
 	$blocks=array();
-	reset($con2);
+	\reset($con2);
 	foreach ($con2 as $k => $v) {
 		$patt="($this->block_start_word|$this->block_end_word)\s*(\w+)\s*$this->block_end_delim(.*)";
-		if (preg_match_all("/$patt/ims",$v,$res, PREG_SET_ORDER)) {
+		if (\preg_match_all("/$patt/ims",$v,$res, PREG_SET_ORDER)) {
 			// $res[0][1] = BEGIN or END
 			// $res[0][2] = block name
 			// $res[0][3] = kinda content
 			if ($res[0][1]==$this->block_start_word) {
-				$parent_name=implode(".",$block_names);
+				$parent_name=\implode(".",$block_names);
 				$block_names[++$level]=$res[0][2];							/* add one level - array("main","table","row")*/
-				$cur_block_name=implode(".",$block_names);	/* make block name (main.table.row) */
+				$cur_block_name=\implode(".",$block_names);	/* make block name (main.table.row) */
 				$this->block_parse_order[]=$cur_block_name;	/* build block parsing order (reverse) */
 
-				if(array_key_exists($cur_block_name, $blocks))
+				if(\array_key_exists($cur_block_name, $blocks))
 				{
 					$blocks[$cur_block_name].=$res[0][3];				/* add contents */
 				}
@@ -494,7 +494,7 @@ function maketree($con,$block) {
 				}
 
 				/* add {_BLOCK_.blockname} string to parent block */
-				if(array_key_exists($parent_name, $blocks))
+				if(\array_key_exists($parent_name, $blocks))
 				{
 					$blocks[$parent_name].="{_BLOCK_.$cur_block_name}";
 				}
@@ -507,12 +507,12 @@ function maketree($con,$block) {
 				$this->sub_blocks[$cur_block_name][]="";		/* store sub block names for autoresetting */
 			} else if ($res[0][1]==$this->block_end_word) {
 				unset($block_names[$level--]);
-				$parent_name=implode(".",$block_names);
+				$parent_name=\implode(".",$block_names);
 				$blocks[$parent_name].=$res[0][3];	/* add rest of block to parent block */
   			}
 		} else { /* no block delimiters found */
-			$index = implode(".",$block_names);
-			if(array_key_exists($index, $blocks))
+			$index = \implode(".",$block_names);
+			if(\array_key_exists($index, $blocks))
 			{
 				$blocks[].=$this->block_start_delim.$v;
 			}
@@ -554,12 +554,12 @@ function getfile($file) {
 
 	// Pick which folder we should include from
 	// Prefer the local directory, then try the theme directory.
-	if (!is_file($file))
+	if (!\is_file($file))
 		$file = $this->alternate_include_directory.$file;
 
-	if(is_file($file))
+	if(\is_file($file))
 	{
-		$file_text=file_get_contents($file);
+		$file_text=\file_get_contents($file);
 
 	} else {
 		$this->set_error("[$file] does not exist");
@@ -577,9 +577,9 @@ function getfile($file) {
 
 function r_getfile($file) {
 	$text=$this->getfile($file);
-	while (preg_match($this->file_delim,$text,$res)) {
+	while (\preg_match($this->file_delim,$text,$res)) {
 		$text2=$this->getfile($res[1]);
-		$text=str_replace($res[0], $text2, $text);
+		$text=\str_replace($res[0], $text2, $text);
 	}
 	return $text;
 }

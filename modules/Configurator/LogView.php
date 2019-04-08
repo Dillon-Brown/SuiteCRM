@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -59,7 +59,7 @@ $reg_ex = false;
 if (!empty($_REQUEST['reg_ex'])) {
     $reg_ex = 'checked';
 }
-set_time_limit(180);
+\set_time_limit(180);
 echo <<<EOQ
 <form action='index.php' name='logview'>
 <input type='hidden' name='action' value='LogView'>
@@ -76,10 +76,10 @@ echo <<<EOQ
 </form>
 EOQ;
 
-define('PROCESS_ID', 1);
-define('LOG_LEVEL', 2);
-define('LOG_NAME', 3);
-define('LOG_DATA', 4);
+\define('PROCESS_ID', 1);
+\define('LOG_LEVEL', 2);
+\define('LOG_NAME', 3);
+\define('LOG_DATA', 4);
 
 // bug 53041 - now that we are respecting file name suffixes for log files, we need to get the log file name properly
 $config = SugarConfig::getInstance();
@@ -90,12 +90,12 @@ $log_dir = $log_dir . (empty($log_dir)?'':'/');
 $file_suffix = $config->get('logger.file.suffix');
 $date_suffix = "";
 if (!empty($file_suffix)) {
-    $date_suffix = "_" . date(str_replace("%", "", $file_suffix));
+    $date_suffix = "_" . \date(\str_replace("%", "", $file_suffix));
 }
 
 $logFile = $log_dir . $logfile . $date_suffix . $ext;
 
-if (!file_exists($logFile)) {
+if (!\file_exists($logFile)) {
     die('No Log File');
 }
 $lastMatch = false;
@@ -104,7 +104,7 @@ $doaction =(!empty($_REQUEST['doaction']))?$_REQUEST['doaction']:'';
 switch ($doaction) {
     case 'mark':
         echo "<h3>{$mod_strings['LBL_MARKING_WHERE_START_LOGGING']}</h3><br>";
-        $_SESSION['log_file_size'] = filesize($logFile);
+        $_SESSION['log_file_size'] = \filesize($logFile);
         break;
     case 'next':
         if (!empty($_SESSION['last_log_file_size'])) {
@@ -123,7 +123,7 @@ switch ($doaction) {
 
 if (!empty($_REQUEST['display'])) {
     echo "<h3>{$mod_strings['LBL_DISPLAYING_LOG']}</h3>";
-    $process_id =  getmypid();
+    $process_id =  \getmypid();
 
     echo $mod_strings['LBL_YOUR_PROCESS_ID'].' [' . $process_id. ']';
     echo '<br>'.$mod_strings['LBL_YOUR_IP_ADDRESS'].' ' . $_SERVER['REMOTE_ADDR'];
@@ -133,7 +133,7 @@ if (!empty($_REQUEST['display'])) {
     if (empty($_SESSION['log_file_size'])) {
         $_SESSION['log_file_size'] = 0;
     }
-    $cur_size = filesize($logFile);
+    $cur_size = \filesize($logFile);
     $_SESSION['last_log_file_size'] = $cur_size;
     $pos = 0;
     if ($cur_size >= $_SESSION['log_file_size']) {
@@ -143,21 +143,21 @@ if (!empty($_REQUEST['display'])) {
         echo $mod_strings['LBL_LOG_NOT_CHANGED'].'<br>';
     } else {
         $fp = sugar_fopen($logFile, 'r');
-        fseek($fp, $pos, SEEK_END);
+        \fseek($fp, $pos, SEEK_END);
         echo '<pre>';
-        while ($line = fgets($fp)) {
-            $line = filter_var($line, FILTER_SANITIZE_SPECIAL_CHARS);
+        while ($line = \fgets($fp)) {
+            $line = \filter_var($line, FILTER_SANITIZE_SPECIAL_CHARS);
             //preg_match('/[^\]]*\[([0-9]*)\] ([a-zA-Z]+) ([a-zA-Z0-9\.]+) - (.*)/', $line, $result);
-            preg_match('/[^\]]*\[([0-9]*)\]/', $line, $result);
-            ob_flush();
-            flush();
+            \preg_match('/[^\]]*\[([0-9]*)\]/', $line, $result);
+            \ob_flush();
+            \flush();
             if (empty($result) && $lastMatch) {
                 echo $line;
             } else {
                 $lastMatch = false;
                 if (empty($result) || ($ignore_self &&$result[LOG_NAME] == $_SERVER['REMOTE_ADDR'])) {
                 } else {
-                    if (empty($filter) || (!$reg_ex && substr_count($line, $filter) > 0) || ($reg_ex && preg_match($filter, $line))) {
+                    if (empty($filter) || (!$reg_ex && \substr_count($line, $filter) > 0) || ($reg_ex && \preg_match($filter, $line))) {
                         $lastMatch = true;
                         echo $line;
                     }
@@ -165,6 +165,6 @@ if (!empty($_REQUEST['display'])) {
             }
         }
         echo '</pre>';
-        fclose($fp);
+        \fclose($fp);
     }
 }

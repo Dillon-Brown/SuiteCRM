@@ -118,7 +118,7 @@ class Zend_Gdata_Spreadsheets_ListEntry extends Zend_Gdata_Entry
         if ($name === null) {
             return $this->_customByName;
         } else {
-            if (array_key_exists($name, $this->customByName)) {
+            if (\array_key_exists($name, $this->customByName)) {
                 return $this->_customByName[$name];
             } else {
                 return null;
@@ -164,14 +164,14 @@ class Zend_Gdata_Spreadsheets_ListEntry extends Zend_Gdata_Entry
      */
     public function removeCustom($index)
     {
-        if (array_key_exists($index, $this->_custom)) {
+        if (\array_key_exists($index, $this->_custom)) {
             $element = $this->_custom[$index];
             // Remove element
             unset($this->_custom[$index]);
             // Re-index the array
-            $this->_custom = array_values($this->_custom);
+            $this->_custom = \array_values($this->_custom);
             // Be sure to delete form both arrays!
-            $key = array_search($element, $this->_customByName);
+            $key = \array_search($element, $this->_customByName);
             unset($this->_customByName[$key]);
         } else {
             require_once 'Zend/Gdata/App/InvalidArgumentException.php';
@@ -190,12 +190,12 @@ class Zend_Gdata_Spreadsheets_ListEntry extends Zend_Gdata_Entry
      */
     public function removeCustomByName($name)
     {
-        if (array_key_exists($name, $this->_customByName)) {
+        if (\array_key_exists($name, $this->_customByName)) {
             $element = $this->_customByName[$name];
             // Remove element
             unset($this->_customByName[$name]);
             // Be sure to delete from both arrays!
-            $key = array_search($element, $this->_custom);
+            $key = \array_search($element, $this->_custom);
             unset($this->_custom[$key]);
         } else {
             require_once 'Zend/Gdata/App/InvalidArgumentException.php';

@@ -93,7 +93,7 @@ class EAPM extends Basic
         $eapmBean = new self();
 
         if (isset($_SESSION['EAPM'][$application]) && !$includeInactive) {
-            if (is_array($_SESSION['EAPM'][$application])) {
+            if (\is_array($_SESSION['EAPM'][$application])) {
                 $eapmBean->fromArray($_SESSION['EAPM'][$application]);
             } else {
                 return;
@@ -200,7 +200,7 @@ class EAPM extends Basic
             $apiList = ExternalAPIFactory::loadFullAPIList(false, true);
         }
         if (!empty($apiList) && isset($apiList[$this->application]) && $apiList[$this->application]['authMethod'] == 'oauth') {
-            $this->name = sprintf(translate('LBL_OAUTH_NAME', $this->module_dir), $this->application);
+            $this->name = \sprintf(translate('LBL_OAUTH_NAME', $this->module_dir), $this->application);
         }
     }
 

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -55,7 +55,7 @@ class ViewConvertLead extends SugarView
         ) {
         parent::__construct($bean, $view_object_map);
         $this->medataDataFile = $this->fileName;
-        if (file_exists("custom/$this->fileName")) {
+        if (\file_exists("custom/$this->fileName")) {
             $this->medataDataFile = "custom/$this->fileName";
         }
     }
@@ -83,7 +83,7 @@ class ViewConvertLead extends SugarView
         $opportunityNameInLayout = false;
         $editviewFile = 'modules/Leads/metadata/editviewdefs.php';
         $this->medataDataFile = $editviewFile;
-        if (file_exists("custom/{$editviewFile}")) {
+        if (\file_exists("custom/{$editviewFile}")) {
             $this->medataDataFile = "custom/{$editviewFile}";
         }
         include($this->medataDataFile);
@@ -98,7 +98,7 @@ class ViewConvertLead extends SugarView
         }
 
         $this->medataDataFile = $this->fileName;
-        if (file_exists("custom/$this->fileName")) {
+        if (\file_exists("custom/$this->fileName")) {
             $this->medataDataFile = "custom/$this->fileName";
         }
         $this->loadDefs();
@@ -122,14 +122,14 @@ class ViewConvertLead extends SugarView
         $filter = '';
         // Check if Lead has an account set
         if (!empty($this->focus->account_name)) {
-            $filter .= '&name_advanced=' . urlencode($this->focus->account_name);
+            $filter .= '&name_advanced=' . \urlencode($this->focus->account_name);
         }
         // Check if Lead First name is available
         if (!empty($this->focus->first_name)) {
-            $filter .= '&first_name_advanced=' . urlencode($this->focus->first_name);
+            $filter .= '&first_name_advanced=' . \urlencode($this->focus->first_name);
         }
         // Lead Last Name is always available
-        $filter .= '&last_name_advanced=' . urlencode($this->focus->last_name);
+        $filter .= '&last_name_advanced=' . \urlencode($this->focus->last_name);
         
         $smarty->assign('initialFilter', $filter);
         $smarty->assign('displayParams', array('initial_filter' => '{$initialFilter}'));
@@ -206,19 +206,19 @@ class ViewConvertLead extends SugarView
                         if ($module == "Contacts") {
                             $focus->$field = $this->focus->$field;
                         }
-                    } elseif (is_a($focus, "Company") && $field == 'phone_office') {
+                    } elseif (\is_a($focus, "Company") && $field == 'phone_office') {
                         //Special case where company and person have the same field with a different name
                         $focus->phone_office = $this->focus->phone_work;
-                    } elseif (strpos($field, "billing_address") !== false && $focus->field_defs[$field]["type"] == "varchar") /* Bug 42219 fix */
+                    } elseif (\strpos($field, "billing_address") !== false && $focus->field_defs[$field]["type"] == "varchar") /* Bug 42219 fix */
                     {
-                        $tmp_field = str_replace("billing_", "primary_", $field);
+                        $tmp_field = \str_replace("billing_", "primary_", $field);
                         $focus->field_defs[$field]["type"] = "text";
                         if (isset($this->focus->$tmp_field)) {
                             $focus->$field = $this->focus->$tmp_field;
                         }
-                     } elseif (strpos($field, "shipping_address") !== false && $focus->field_defs[$field]["type"] == "varchar") /* Bug 42219 fix */
+                     } elseif (\strpos($field, "shipping_address") !== false && $focus->field_defs[$field]["type"] == "varchar") /* Bug 42219 fix */
                     {
-                        $tmp_field = str_replace("shipping_", "primary_", $field);
+                        $tmp_field = \str_replace("shipping_", "primary_", $field);
                         if (isset($this->focus->$tmp_field)) {
                             $focus->$field = $this->focus->$tmp_field;
                         }
@@ -461,7 +461,7 @@ class ViewConvertLead extends SugarView
             }
         }
 
-        $beans = array_merge($tempBeans, $beans);
+        $beans = \array_merge($tempBeans, $beans);
         unset($tempBeans);
 
         //Handle non-contacts relationships
@@ -593,7 +593,7 @@ class ViewConvertLead extends SugarView
                         if (!isset($sugar_config['lead_conv_activity_opt']) || $sugar_config['lead_conv_activity_opt'] == 'copy') {
                             if (isset($_POST['lead_conv_ac_op_sel'])) {
                                 //if the copy to module(s) are defined, copy only to those module(s)
-                                if (is_array($_POST['lead_conv_ac_op_sel'])) {
+                                if (\is_array($_POST['lead_conv_ac_op_sel'])) {
                                     foreach ($_POST['lead_conv_ac_op_sel'] as $mod) {
                                         if ($mod == $module) {
                                             $this->copyActivityAndRelateToBean($activity, $bean, $accountParentInfo);
@@ -735,7 +735,7 @@ class ViewConvertLead extends SugarView
             //check users connected to bean
             if ($activity->load_relationship("users")) {
                 $userList = $activity->users->getBeans();
-                if (count($userList) > 0 && $newActivity->load_relationship("users")) {
+                if (\count($userList) > 0 && $newActivity->load_relationship("users")) {
                     foreach ($userList as $user) {
                         $newActivity->users->add($user->id);
                     }
@@ -772,7 +772,7 @@ class ViewConvertLead extends SugarView
             if (!isset($_REQUEST[$module . $field]) && isset($lead->$field) && $field != 'id') {
                 $bean->$field = $lead->$field;
                 if ($field == 'date_entered') {
-                    $bean->$field = gmdate($GLOBALS['timedate']->get_db_date_time_format());
+                    $bean->$field = \gmdate($GLOBALS['timedate']->get_db_date_time_format());
                 } //bug 41030
             }
         }
@@ -822,28 +822,28 @@ class ViewConvertLead extends SugarView
     {
         //Copy over address info from the contact to any beans with address not set
         foreach ($bean->field_defs as $field => $def) {
-            if (!isset($_REQUEST[$bean->module_dir . $field]) && strpos($field, "_address_") !== false) {
+            if (!isset($_REQUEST[$bean->module_dir . $field]) && \strpos($field, "_address_") !== false) {
                 $set = "primary";
-                if (strpos($field, "alt_") !== false || strpos($field, "shipping_") !== false) {
+                if (\strpos($field, "alt_") !== false || \strpos($field, "shipping_") !== false) {
                     $set = "alt";
                 }
                 $type = "";
 
-                if (strpos($field, "_address_street_2") !== false) {
+                if (\strpos($field, "_address_street_2") !== false) {
                     $type = "_address_street_2";
-                } elseif (strpos($field, "_address_street_3") !== false) {
+                } elseif (\strpos($field, "_address_street_3") !== false) {
                     $type = "_address_street_3";
-                } elseif (strpos($field, "_address_street_4") !== false) {
+                } elseif (\strpos($field, "_address_street_4") !== false) {
                     $type = "";
-                } elseif (strpos($field, "_address_street") !== false) {
+                } elseif (\strpos($field, "_address_street") !== false) {
                     $type = "_address_street";
-                } elseif (strpos($field, "_address_city") !== false) {
+                } elseif (\strpos($field, "_address_city") !== false) {
                     $type = "_address_city";
-                } elseif (strpos($field, "_address_state") !== false) {
+                } elseif (\strpos($field, "_address_state") !== false) {
                     $type = "_address_state";
-                } elseif (strpos($field, "_address_postalcode") !== false) {
+                } elseif (\strpos($field, "_address_postalcode") !== false) {
                     $type = "_address_postalcode";
-                } elseif (strpos($field, "_address_country") !== false) {
+                } elseif (\strpos($field, "_address_country") !== false) {
                     $type = "_address_country";
                 }
 

@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -66,8 +66,8 @@ return $calls = [
             [
                 'args' => ['{imap.gmail.com:993/service=imap/ssl/tls/validate-cert/secure}INBOX', 'testuser_name', 'testuser_pass', 0, 0, []],
                 'return' => [function () {
-                    $ret = fopen('fakeImapResource', 'w+'); // <-- create and return a fake resource for InboundEmail test usages
-                    if (!is_resource($ret)) {
+                    $ret = \fopen('fakeImapResource', 'w+'); // <-- create and return a fake resource for InboundEmail test usages
+                    if (!\is_resource($ret)) {
                         throw new Exception('Imap fake needs a resource to return (check the file permisson - 1)');
                     }
                     return $ret;

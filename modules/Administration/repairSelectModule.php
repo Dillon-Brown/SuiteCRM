@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -46,9 +46,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
         global $current_language;
         $smarty = new Sugar_Smarty();
             $temp_bean_list = $beanList;
-            asort($temp_bean_list);
-            $values= array_values($temp_bean_list);
-            $output= array_keys($temp_bean_list);
+            \asort($temp_bean_list);
+            $values= \array_values($temp_bean_list);
+            $output= \array_keys($temp_bean_list);
             $output_local = array();
             if ($current_language != 'en_us') {
                 foreach ($output as $temp_out) {
@@ -59,8 +59,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
             }
             //sort($output);
             //sort($values);
-            $values=array_merge(array($mod_strings['LBL_ALL_MODULES']), $values);
-            $output= array_merge(array($mod_strings['LBL_ALL_MODULES']), $output_local);
+            $values=\array_merge(array($mod_strings['LBL_ALL_MODULES']), $values);
+            $output= \array_merge(array($mod_strings['LBL_ALL_MODULES']), $output_local);
             $checkbox_values=array(
                                      'clearTpls',
                                      'clearJsFiles',

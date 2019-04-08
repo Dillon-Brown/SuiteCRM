@@ -168,13 +168,13 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
 
         // Add all headers to the request string
         foreach ($headers as $k => $v) {
-            if (is_string($k)) {
+            if (\is_string($k)) {
                 $v = "$k: $v";
             }
             $request .= "$v\r\n";
         }
 
-        if (is_resource($body)) {
+        if (\is_resource($body)) {
             $request .= "\r\n";
         } else {
             // Add the request body
@@ -182,13 +182,13 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
         }
         
         // Send the request
-        if (! @fwrite($this->socket, $request)) {
+        if (! @\fwrite($this->socket, $request)) {
             require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception("Error writing request to proxy server");
         }
         
-        if (is_resource($body)) {
-            if (stream_copy_to_stream($body, $this->socket) == 0) {
+        if (\is_resource($body)) {
+            if (\stream_copy_to_stream($body, $this->socket) == 0) {
                 require_once 'Zend/Http/Client/Adapter/Exception.php';
                 throw new Zend_Http_Client_Adapter_Exception('Error writing request to server');
             }
@@ -225,7 +225,7 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
         $request .= "\r\n";
 
         // Send the request
-        if (! @fwrite($this->socket, $request)) {
+        if (! @\fwrite($this->socket, $request)) {
             require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception("Error writing request to proxy server");
         }
@@ -233,11 +233,11 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
         // Read response headers only
         $response = '';
         $gotStatus = false;
-        while ($line = @fgets($this->socket)) {
-            $gotStatus = $gotStatus || (strpos($line, 'HTTP') !== false);
+        while ($line = @\fgets($this->socket)) {
+            $gotStatus = $gotStatus || (\strpos($line, 'HTTP') !== false);
             if ($gotStatus) {
                 $response .= $line;
-                if (!chop($line)) {
+                if (!\chop($line)) {
                     break;
                 }
             }
@@ -260,7 +260,7 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
 
         $success = false;
         foreach ($modes as $mode) {
-            $success = stream_socket_enable_crypto($this->socket, true, $mode);
+            $success = \stream_socket_enable_crypto($this->socket, true, $mode);
             if ($success) {
                 break;
             }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -75,11 +75,11 @@ class TemplateRange extends TemplateText
 
             if (isset($_REQUEST['view_module'])) {
                 $module = $_REQUEST['view_module'];
-                if (file_exists('modules/'.$module.'/metadata/SearchFields.php')) {
+                if (\file_exists('modules/'.$module.'/metadata/SearchFields.php')) {
                     require('modules/'.$module.'/metadata/SearchFields.php');
                 }
                 
-                if (file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
+                if (\file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
                     require('custom/modules/'.$module.'/metadata/SearchFields.php');
                 }
                 
@@ -108,29 +108,29 @@ class TemplateRange extends TemplateText
                         $searchFields[$module][$field_name_end]['is_date_field'] = true;
                     }
 
-                    if (!file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
+                    if (!\file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
                         mkdir_recursive('custom/modules/'.$module.'/metadata');
                     }
                     write_array_to_file("searchFields['{$module}']", $searchFields[$module], 'custom/modules/'.$module.'/metadata/SearchFields.php');
                 }
 
-                if (file_exists($cachefile = sugar_cached("modules/$module/SearchForm_basic.tpl"))) {
-                    unlink($cachefile);
+                if (\file_exists($cachefile = sugar_cached("modules/$module/SearchForm_basic.tpl"))) {
+                    \unlink($cachefile);
                 }
 
-                if (file_exists($cachefile = sugar_cached("modules/$module/SearchForm_advanced.tpl"))) {
-                    unlink($cachefile);
+                if (\file_exists($cachefile = sugar_cached("modules/$module/SearchForm_advanced.tpl"))) {
+                    \unlink($cachefile);
                 }
             }
         } else {
             //Otherwise, try to restore the searchFields to their state prior to being enabled
             if (isset($_REQUEST['view_module'])) {
                 $module = $_REQUEST['view_module'];
-                if (file_exists('modules/'.$module.'/metadata/SearchFields.php')) {
+                if (\file_exists('modules/'.$module.'/metadata/SearchFields.php')) {
                     require('modules/'.$module.'/metadata/SearchFields.php');
                 }
                 
-                if (file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
+                if (\file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
                     require('custom/modules/'.$module.'/metadata/SearchFields.php');
                 }
 
@@ -154,18 +154,18 @@ class TemplateRange extends TemplateText
                         unset($searchFields[$module][$field_name_end]);
                     }
 
-                    if (!file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
+                    if (!\file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
                         mkdir_recursive('custom/modules/'.$module.'/metadata');
                     }
                     write_array_to_file("searchFields['{$module}']", $searchFields[$module], 'custom/modules/'.$module.'/metadata/SearchFields.php');
                 }
 
-                if (file_exists($cachefile = sugar_cached("modules/$module/SearchForm_basic.tpl"))) {
-                    unlink($cachefile);
+                if (\file_exists($cachefile = sugar_cached("modules/$module/SearchForm_basic.tpl"))) {
+                    \unlink($cachefile);
                 }
 
-                if (file_exists($cachefile = sugar_cached("modules/$module/SearchForm_advanced.tpl"))) {
-                    unlink($cachefile);
+                if (\file_exists($cachefile = sugar_cached("modules/$module/SearchForm_advanced.tpl"))) {
+                    \unlink($cachefile);
                 }
             }
         }
@@ -204,11 +204,11 @@ class TemplateRange extends TemplateText
         }
 
         if (!empty($fields)) {
-            if (file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
+            if (\file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
                 require('custom/modules/'.$module.'/metadata/SearchFields.php');
-            } elseif (file_exists('modules/'.$module.'/metadata/SearchFields.php')) {
+            } elseif (\file_exists('modules/'.$module.'/metadata/SearchFields.php')) {
                 require('modules/'.$module.'/metadata/SearchFields.php');
-            } elseif (file_exists('custom/modulebuilder/' . $package . '/modules/' . $module . '/metadata/SearchFields.php')) {
+            } elseif (\file_exists('custom/modulebuilder/' . $package . '/modules/' . $module . '/metadata/SearchFields.php')) {
                 require('custom/modulebuilder/' . $package . '/modules/' . $module . '/metadata/SearchFields.php');
             }
 
@@ -237,7 +237,7 @@ class TemplateRange extends TemplateText
                 }
             }
 
-            if (!file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
+            if (!\file_exists('custom/modules/'.$module.'/metadata/SearchFields.php')) {
                 mkdir_recursive('custom/modules/'.$module.'/metadata');
             }
 

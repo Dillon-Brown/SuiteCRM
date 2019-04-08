@@ -189,7 +189,7 @@ class Zend_Search_Lucene_Search_QueryParserContext
             throw new Zend_Search_Lucene_Search_QueryParserException('\'~\' modifier must follow word or phrase.');
         }
 
-        $lastEntry = array_pop($this->_entries);
+        $lastEntry = \array_pop($this->_entries);
 
         if (!$lastEntry instanceof Zend_Search_Lucene_Search_QueryEntry) {
             // there are no entries or last entry is boolean operator
@@ -215,7 +215,7 @@ class Zend_Search_Lucene_Search_QueryParserContext
             throw new Zend_Search_Lucene_Search_QueryParserException('\'^\' modifier must follow word, phrase or subquery.');
         }
 
-        $lastEntry = array_pop($this->_entries);
+        $lastEntry = \array_pop($this->_entries);
 
         if (!$lastEntry instanceof Zend_Search_Lucene_Search_QueryEntry) {
             // there are no entries or last entry is boolean operator
@@ -350,7 +350,7 @@ class Zend_Search_Lucene_Search_QueryParserContext
         $subqueries = array();
         foreach ($conjuctions as  $conjuction) {
             // Check, if it's a one term conjuction
-            if (count($conjuction) == 1) {
+            if (\count($conjuction) == 1) {
                 $subqueries[] = $conjuction[0][0]->getQuery($this->_encoding);
             } else {
                 require_once 'Zend/Search/Lucene/Search/Query/Boolean.php';
@@ -364,12 +364,12 @@ class Zend_Search_Lucene_Search_QueryParserContext
             }
         }
 
-        if (count($subqueries) == 0) {
+        if (\count($subqueries) == 0) {
             require_once 'Zend/Search/Lucene/Search/Query/Insignificant.php';
             return new Zend_Search_Lucene_Search_Query_Insignificant();
         }
 
-        if (count($subqueries) == 1) {
+        if (\count($subqueries) == 1) {
             return $subqueries[0];
         }
 

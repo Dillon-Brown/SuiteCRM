@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -63,7 +63,7 @@ class MeetingsViewListbytype extends ViewList
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -142,7 +142,7 @@ class MeetingsViewListbytype extends ViewList
         $where =  " meetings.type = '$type' AND meetings.status != 'Held' AND meetings.status != 'Not Held' AND meetings.date_start > {$two_hours_ago} AND ( meetings.assigned_user_id = '".DBManagerFactory::getInstance()->quote($GLOBALS['current_user']->id)."' OR exists ( SELECT id FROM meetings_users WHERE meeting_id = meetings.id AND user_id = '".DBManagerFactory::getInstance()->quote($GLOBALS['current_user']->id)."' AND deleted = 0 ) ) ";
 
         if (isset($_REQUEST['name_basic'])) {
-            $name_search = trim($_REQUEST['name_basic']);
+            $name_search = \trim($_REQUEST['name_basic']);
             if (! empty($name_search)) {
                 $where .= " AND meetings.name LIKE '".DBManagerFactory::getInstance()->quote($name_search)."%' ";
             }

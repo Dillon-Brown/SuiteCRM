@@ -74,24 +74,24 @@ class _parse_propfind
         $had_input = false;
 
         // open input stream
-        $f_in = fopen($path, "r");
+        $f_in = \fopen($path, "r");
         if (!$f_in) {
             $this->success = false;
             return;
         }
 
         // create XML parser
-        $xml_parser = xml_parser_create_ns("UTF-8", " ");
+        $xml_parser = \xml_parser_create_ns("UTF-8", " ");
 
         // set tag and data handlers
-        xml_set_element_handler(
+        \xml_set_element_handler(
             $xml_parser,
                                 array(&$this, "_startElement"),
                                 array(&$this, "_endElement")
         );
 
         // we want a case sensitive parser
-        xml_parser_set_option(
+        \xml_parser_set_option(
             $xml_parser,
                               XML_OPTION_CASE_FOLDING,
             false
@@ -99,27 +99,27 @@ class _parse_propfind
 
 
         // parse input
-        while ($this->success && !feof($f_in)) {
-            $line = fgets($f_in);
-            if (is_string($line)) {
+        while ($this->success && !\feof($f_in)) {
+            $line = \fgets($f_in);
+            if (\is_string($line)) {
                 $had_input = true;
-                $this->success &= xml_parse($xml_parser, $line, false);
+                $this->success &= \xml_parse($xml_parser, $line, false);
             }
         }
 
         // finish parsing
         if ($had_input) {
-            $this->success &= xml_parse($xml_parser, "", true);
+            $this->success &= \xml_parse($xml_parser, "", true);
         }
 
         // free parser
-        xml_parser_free($xml_parser);
+        \xml_parser_free($xml_parser);
 
         // close input stream
-        fclose($f_in);
+        \fclose($f_in);
 
         // if no input was parsed it was a request
-        if (!count($this->props)) {
+        if (!\count($this->props)) {
             $this->props = "all";
         } // default
     }
@@ -136,8 +136,8 @@ class _parse_propfind
     public function _startElement($parser, $name, $attrs)
     {
         // name space handling
-        if (strstr($name, " ")) {
-            list($ns, $tag) = explode(" ", $name);
+        if (\strstr($name, " ")) {
+            list($ns, $tag) = \explode(" ", $name);
             if ($ns == "") {
                 $this->success = false;
             }

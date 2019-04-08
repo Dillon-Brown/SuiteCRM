@@ -40,7 +40,7 @@
 
 use SuiteCRM\LangText;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 

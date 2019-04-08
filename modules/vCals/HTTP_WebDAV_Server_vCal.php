@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -87,7 +87,7 @@ require_once 'include/HTTP_WebDAV_Server/Server.php';
             if (isset($GLOBALS['log'])) {
                 $GLOBALS['log']->deprecated($deprecatedMessage);
             } else {
-                trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+                \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
             }
             self::__construct();
         }
@@ -107,24 +107,24 @@ require_once 'include/HTTP_WebDAV_Server/Server.php';
             global $log;
 
             if (!empty($sugar_config['session_dir'])) {
-                session_save_path($sugar_config['session_dir']);
+                \session_save_path($sugar_config['session_dir']);
             }
 
-            session_start();
+            \session_start();
             $current_language = $sugar_config['default_language'];
 
 
             // check authentication
             if (!$this->_check_auth()) {
                 $this->http_status('401 Unauthorized');
-                header('WWW-Authenticate: Basic realm="'.($this->http_auth_realm).'"');
+                \header('WWW-Authenticate: Basic realm="'.($this->http_auth_realm).'"');
 
                 return;
             }
 
             // set root directory, defaults to webserver document root if not set
             if ($base) {
-                $this->base = realpath($base); // TODO throw if not a directory
+                $this->base = \realpath($base); // TODO throw if not a directory
             } elseif (!$this->base) {
                 $this->base = $_SERVER['DOCUMENT_ROOT'];
             }
@@ -134,21 +134,21 @@ require_once 'include/HTTP_WebDAV_Server/Server.php';
             // set path
             if (empty($_SERVER["PATH_INFO"])) {
                 $this->path = "/";
-                if (strtolower($_SERVER["REQUEST_METHOD"]) == 'get') {
+                if (\strtolower($_SERVER["REQUEST_METHOD"]) == 'get') {
                     $query_arr = $_REQUEST;
                 } else {
-                    parse_str($_REQUEST['parms'], $query_arr);
+                    \parse_str($_REQUEST['parms'], $query_arr);
                 }
             } else {
                 $this->path = $this->_urldecode($_SERVER["PATH_INFO"]);
 
-                if (ini_get("magic_quotes_gpc")) {
-                    $this->path = stripslashes($this->path);
+                if (\ini_get("magic_quotes_gpc")) {
+                    $this->path = \stripslashes($this->path);
                 }
 
-                $query_str = preg_replace('/^\//', '', $this->path);
+                $query_str = \preg_replace('/^\//', '', $this->path);
                 $query_arr =  array();
-                parse_str($query_str, $query_arr);
+                \parse_str($query_str, $query_arr);
             }
 
 
@@ -288,7 +288,7 @@ require_once 'include/HTTP_WebDAV_Server/Server.php';
             // get the Content-type
             if (isset($_SERVER["CONTENT_TYPE"])) {
                 // for now we do not support any sort of multipart requests
-                if (!strncmp($_SERVER["CONTENT_TYPE"], "multipart/", 10)) {
+                if (!\strncmp($_SERVER["CONTENT_TYPE"], "multipart/", 10)) {
                     $this->http_status("501 not implemented");
                     echo "The service does not support mulipart PUT requests";
                     return;
@@ -305,7 +305,7 @@ require_once 'include/HTTP_WebDAV_Server/Server.php';
                (Not Implemented) response in such cases."
             */
             foreach ($_SERVER as $key => $val) {
-                if (strncmp($key, "HTTP_CONTENT", 11)) {
+                if (\strncmp($key, "HTTP_CONTENT", 11)) {
                     continue;
                 }
                 switch ($key) {
@@ -374,12 +374,12 @@ require_once 'include/HTTP_WebDAV_Server/Server.php';
             }
 
             // open input stream
-            $options["stream"] = fopen("php://input", "r");
+            $options["stream"] = \fopen("php://input", "r");
             $content = '';
 
             // read in input stream
-            while (!feof($options["stream"])) {
-                $content .= fread($options["stream"], 4096);
+            while (!\feof($options["stream"])) {
+                $content .= \fread($options["stream"], 4096);
             }
 
             // set freebusy members and save
@@ -415,7 +415,7 @@ require_once 'include/HTTP_WebDAV_Server/Server.php';
          */
         public function lock(&$options)
         {
-            $options["timeout"] = time()+300; // 5min. hardcoded
+            $options["timeout"] = \time()+300; // 5min. hardcoded
             return true;
         }
 

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -55,6 +55,6 @@ if (!isset($_REQUEST['DynamicAction'])) {
 $dynamicAction = $_REQUEST['DynamicAction'];
 $res = $mySugar->$dynamicAction();
 if (isset($_REQUEST['commit_session'])) {
-    session_commit();
+    \session_commit();
 }
 echo $res;

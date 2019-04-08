@@ -28,7 +28,7 @@ class AOR_Scheduled_ReportsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbst
         //test save and test for record ID to verify that record is saved
         $aorScheduledReports->save();
         $this->assertTrue(isset($aorScheduledReports->id));
-        $this->assertEquals(36, strlen($aorScheduledReports->id));
+        $this->assertEquals(36, \strlen($aorScheduledReports->id));
 
 
 
@@ -37,7 +37,7 @@ class AOR_Scheduled_ReportsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbst
         $aorScheduledReports->retrieve($aorScheduledReports->id);
         $emails = $aorScheduledReports->get_email_recipients();
 
-        $this->assertTrue(is_array($emails));
+        $this->assertTrue(\is_array($emails));
         $this->assertEquals('test@test.com', $emails[0]);
 
 
@@ -98,7 +98,7 @@ class AOR_Scheduled_ReportsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbst
         //$this->assertFalse($aorScheduledReports->shouldRun(new DateTime()) );
 
         //test without a older last_run date
-        $aorScheduledReports->last_run = date("d-m-y H:i:s", mktime(0, 0, 0, 10, 3, 2014));
+        $aorScheduledReports->last_run = \date("d-m-y H:i:s", \mktime(0, 0, 0, 10, 3, 2014));
         $this->assertTrue($aorScheduledReports->shouldRun(new DateTime()));
 
 

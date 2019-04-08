@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -94,7 +94,7 @@ $showDone = '';
 $showExit = '';
 $disableNextForLicense='';
 
-if (!isset($_SESSION['step']) || !is_array($_SESSION['step'])) {
+if (!isset($_SESSION['step']) || !\is_array($_SESSION['step'])) {
     $_SESSION['step'] = array();
 }
 
@@ -142,15 +142,15 @@ if (isset($_REQUEST['delete_package']) && $_REQUEST['delete_package'] == 'true')
     }
 
     // delete file in upgrades/patch
-    $delete_me = 'upload://upgrades/patch/'.basename(urldecode($_REQUEST['install_file']));
-    if (is_file($delete_me) && !@unlink($delete_me)) {
+    $delete_me = 'upload://upgrades/patch/'.\basename(\urldecode($_REQUEST['install_file']));
+    if (\is_file($delete_me) && !@\unlink($delete_me)) {
         logThis('ERROR: could not delete: '.$delete_me);
         $error .= $mod_strings['ERR_UW_FILE_NOT_DELETED'].$delete_me.'<br>';
     }
 
     // delete back up instance
-    $delete_dir = 'upload://upgrades/patch/'.remove_file_extension(urldecode($_REQUEST['install_file'])) . "-restore";
-    if (is_dir($delete_dir) && !@rmdir_recursive($delete_dir)) {
+    $delete_dir = 'upload://upgrades/patch/'.remove_file_extension(\urldecode($_REQUEST['install_file'])) . "-restore";
+    if (\is_dir($delete_dir) && !@rmdir_recursive($delete_dir)) {
         logThis('ERROR: could not delete: '.$delete_dir);
         $error .= $mod_strings['ERR_UW_FILE_NOT_DELETED'].$delete_dir.'<br>';
     }
@@ -248,8 +248,8 @@ if (isset($_SESSION['Upgraded451Wizard']) && $_SESSION['Upgraded451Wizard']==tru
 $upgradeStepFile = '';
 if (isset($_REQUEST['step']) && $_REQUEST['step'] !=null) {
     if ($_REQUEST['step'] == -1) {
-        $_REQUEST['step'] = count($steps['files']) - 1;
-    } elseif ($_REQUEST['step'] >= count($steps['files'])) {
+        $_REQUEST['step'] = \count($steps['files']) - 1;
+    } elseif ($_REQUEST['step'] >= \count($steps['files'])) {
         $_REQUEST['step'] = 0;
     }
     $upgradeStepFile = $steps['files'][$_REQUEST['step']];
@@ -260,7 +260,7 @@ if (isset($_REQUEST['step']) && $_REQUEST['step'] !=null) {
         //echo 'Previous run '.$previouUpgradeRun.'</br>';
         $upgradeStepFile = $previouUpgradeRun;
         //reset REQUEST
-        for ($i=0;$i<sizeof($steps['files']);$i++) {
+        for ($i=0;$i<\sizeof($steps['files']);$i++) {
             if ($steps['files'][$i]== $previouUpgradeRun) {
                 $_REQUEST['step']=$i;
                 break;
@@ -279,17 +279,17 @@ if ($upgradeStepFile == 'license_fiveO') {
 }
 if ($upgradeStepFile == 'end') {
     //if(isset($_SESSION['current_db_version']) && substr($_SESSION['current_db_version'],0,1) == 4){
-    ob_start();
+    \ob_start();
     include('modules/ACL/install_actions.php');
     $old_mod_strings = $mod_strings;
     $mod_strings = return_module_language($current_language, 'Administration');
     include('modules/Administration/RebuildRelationship.php');
     $mod_strings = $old_mod_strings;
     //also add the cache cleaning here.
-    if (function_exists('deleteCache')) {
+    if (\function_exists('deleteCache')) {
         deleteCache();
     }
-    ob_end_clean();
+    \ob_end_clean();
     //}
 }
 
@@ -347,7 +347,7 @@ foreach ($installeds as $installed) {
     if ($type == 'patch') {
         $version = $installed->version;
         $upgrades_installed++;
-        $link = is_file($filename)? '   <input type="hidden" name="module" value="UpgradeWizard">
+        $link = \is_file($filename)? '   <input type="hidden" name="module" value="UpgradeWizard">
 					<input type="hidden" name="action" value="index">
 					<input type="hidden" name="step" value="'.$_REQUEST['step'].'">
 					<input type="hidden" name="delete_package" value="true">
@@ -359,7 +359,7 @@ foreach ($installeds as $installed) {
         $target_manifest = remove_file_extension($filename) . "-manifest.php";
 
         // cn: bug 9174 - cleared out upgrade dirs, or corrupt entries in upgrade_history give us bad file paths
-        if (is_file($target_manifest)) {
+        if (\is_file($target_manifest)) {
             require_once(getUploadRelativeName($target_manifest));
             $name = empty($manifest['name']) ? $filename : $manifest['name'];
             $description = empty($manifest['description']) ? $mod_strings['LBL_UW_NONE'] : $manifest['description'];
@@ -368,7 +368,7 @@ foreach ($installeds as $installed) {
                 $manifest_copy_files_to_dir = isset($manifest['copy_files']['to_dir']) ? clean_path($manifest['copy_files']['to_dir']) : "";
                 $manifest_copy_files_from_dir = isset($manifest['copy_files']['from_dir']) ? clean_path($manifest['copy_files']['from_dir']) : "";
                 $manifest_icon = clean_path($manifest['icon']);
-                $icon = "<!--not_in_theme!--><img src=\"" . $manifest_copy_files_to_dir . ($manifest_copy_files_from_dir != "" ? substr($manifest_icon, strlen($manifest_copy_files_from_dir)+1) : $manifest_icon) . "\">";
+                $icon = "<!--not_in_theme!--><img src=\"" . $manifest_copy_files_to_dir . ($manifest_copy_files_from_dir != "" ? \substr($manifest_icon, \strlen($manifest_copy_files_from_dir)+1) : $manifest_icon) . "\">";
             } else {
                 $icon = getImageForType($manifest['type']);
             }

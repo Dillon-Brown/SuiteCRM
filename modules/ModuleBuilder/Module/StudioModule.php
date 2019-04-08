@@ -96,14 +96,14 @@ class StudioModule
             )
         );
 
-        $moduleNames = array_change_key_case($GLOBALS ['app_list_strings'] ['moduleList']);
-        $this->name = isset($moduleNames [strtolower($module)]) ? $moduleNames [strtolower($module)] : strtolower($module);
+        $moduleNames = \array_change_key_case($GLOBALS ['app_list_strings'] ['moduleList']);
+        $this->name = isset($moduleNames [\strtolower($module)]) ? $moduleNames [\strtolower($module)] : \strtolower($module);
         $this->module = $module;
         $this->seed = BeanFactory::getBean($this->module);
         if ($this->seed) {
             $this->fields = $this->seed->field_defs;
         }
-        $GLOBALS['log']->debug(get_class($this) . "->__construct($module): " . print_r($this->fields, true));
+        $GLOBALS['log']->debug(\get_class($this) . "->__construct($module): " . \print_r($this->fields, true));
     }
 
     /**
@@ -137,10 +137,10 @@ class StudioModule
     {
         // first, get a list of a possible parent types
         $templates = array();
-        $d = dir('include/SugarObjects/templates');
+        $d = \dir('include/SugarObjects/templates');
         while ($filename = $d->read()) {
-            if (substr($filename, 0, 1) !== '.') {
-                $templates [strtolower($filename)] = strtolower($filename);
+            if (\substr($filename, 0, 1) !== '.') {
+                $templates [\strtolower($filename)] = \strtolower($filename);
             }
         }
 
@@ -150,11 +150,11 @@ class StudioModule
 
         do {
             $seed = new $type();
-            $type = get_parent_class($seed);
-        } while (!in_array(strtolower($type), $templates) && $type !== 'SugarBean');
+            $type = \get_parent_class($seed);
+        } while (!\in_array(\strtolower($type), $templates) && $type !== 'SugarBean');
 
         if ($type !== 'SugarBean') {
-            return strtolower($type);
+            return \strtolower($type);
         }
 
         // If a standard module then just look up its type - type is implicit for standard modules. Perhaps one day we will make it explicit, just as we have done for custom modules...
@@ -259,10 +259,10 @@ class StudioModule
     {
         $views = array();
         foreach ($this->sources as $file => $def) {
-            if (file_exists("modules/{$this->module}/metadata/$file")
-                || file_exists("custom/modules/{$this->module}/metadata/$file")
+            if (\file_exists("modules/{$this->module}/metadata/$file")
+                || \file_exists("custom/modules/{$this->module}/metadata/$file")
             ) {
-                $views [str_replace('.php', '', $file)] = $def;
+                $views [\str_replace('.php', '', $file)] = $def;
             }
         }
 
@@ -286,7 +286,7 @@ class StudioModule
             'campaigns'
         );
         // Some modules should not have a QuickCreate form at all, so do not add them to the list
-        if (!in_array(strtolower($this->module), $hideQuickCreateForModules)) {
+        if (!\in_array(\strtolower($this->module), $hideQuickCreateForModules)) {
             $views ['quickcreatedefs'] = array(
                 'name' => translate('LBL_QUICKCREATE'),
                 'type' => MB_QUICKCREATE,
@@ -374,10 +374,10 @@ class StudioModule
     {
         $fileName = "My{$moduleName}Dashlet";
         $customFileName = "{$moduleName}Dashlet";
-        if (file_exists("modules/{$moduleName}/Dashlets/{$fileName}/{$fileName}.php")
-            || file_exists("custom/modules/{$moduleName}/Dashlets/{$fileName}/{$fileName}.php")
-            || file_exists("modules/{$moduleName}/Dashlets/{$customFileName}/{$customFileName}.php")
-            || file_exists("custom/modules/{$moduleName}/Dashlets/{$customFileName}/{$customFileName}.php")
+        if (\file_exists("modules/{$moduleName}/Dashlets/{$fileName}/{$fileName}.php")
+            || \file_exists("custom/modules/{$moduleName}/Dashlets/{$fileName}/{$fileName}.php")
+            || \file_exists("modules/{$moduleName}/Dashlets/{$customFileName}/{$customFileName}.php")
+            || \file_exists("custom/modules/{$moduleName}/Dashlets/{$customFileName}/{$customFileName}.php")
         ) {
             return true;
         }
@@ -405,7 +405,7 @@ class StudioModule
                 } elseif ($label == 'LBL_ADVANCED_SEARCH') {
                     $name = 'AdvancedSearch';
                 } else {
-                    $name = str_replace(' ', '', $title);
+                    $name = \str_replace(' ', '', $title);
                 }
                 $nodes [$title] = array(
                     'name' => $title,
@@ -455,7 +455,7 @@ class StudioModule
                 continue;
             }
             $subname = sugar_ucfirst((!empty($label)) ? translate($label, $this->module) : $name);
-            $action = "module=ModuleBuilder&action=editLayout&view=ListView&view_module={$this->module}&subpanel={$name}&subpanelLabel=" . urlencode($subname);
+            $action = "module=ModuleBuilder&action=editLayout&view=ListView&view_module={$this->module}&subpanel={$name}&subpanelLabel=" . \urlencode($subname);
 
             //  bug47452 - adding a unique number to the $nodes[ key ] so if you have 2+ panels
             //  with the same subname they will not cancel each other out
@@ -464,7 +464,7 @@ class StudioModule
                 'label' => $subname,
                 'action' => $action,
                 'imageTitle' => $subname,
-                'imageName' => 'icon_' . ucfirst($name) . '_32',
+                'imageName' => 'icon_' . \ucfirst($name) . '_32',
                 'altImageName' => 'Subpanels',
                 'size' => '48'
             );
@@ -483,13 +483,13 @@ class StudioModule
         $this->providedSubpanels = array();
         $subpanelDir = 'modules/' . $this->module . '/metadata/subpanels/';
         foreach (array($subpanelDir, "custom/$subpanelDir") as $dir) {
-            if (is_dir($dir)) {
-                foreach (scandir($dir) as $fileName) {
+            if (\is_dir($dir)) {
+                foreach (\scandir($dir) as $fileName) {
                     // sanity check to confirm that this is a usable subpanel...
-                    if (substr($fileName, 0, 1) !== '.' && substr(strtolower($fileName), -4) == ".php"
+                    if (\substr($fileName, 0, 1) !== '.' && \substr(\strtolower($fileName), -4) == ".php"
                         && AbstractRelationships::validSubpanel("$dir/$fileName")
                     ) {
-                        $subname = str_replace('.php', '', $fileName);
+                        $subname = \str_replace('.php', '', $fileName);
                         $this->providedSubpanels [$subname] = $subname;
                     }
                 }
@@ -513,7 +513,7 @@ class StudioModule
         $modules_to_check = TabController::get_key_array($moduleList);
 
         //change case to match subpanel processing later on
-        $modules_to_check = array_change_key_case($modules_to_check);
+        $modules_to_check = \array_change_key_case($modules_to_check);
 
         $spd = '';
         $spd_arr = array();
@@ -532,7 +532,7 @@ class StudioModule
              * skip if class name is not in file list, otherwise require the bean file
              * and create new class
              */
-            if (!isset($beanFiles[$class]) || !file_exists($beanFiles[$class])) {
+            if (!isset($beanFiles[$class]) || !\file_exists($beanFiles[$class])) {
                 continue;
             }
 
@@ -542,7 +542,7 @@ class StudioModule
 
             //create new subpanel definition instance and get list of tabs
             $spd = new SubPanelDefinitions($bean_class);
-            if (isset($spd->layout_defs['subpanel_setup'][strtolower($subpanel)]['module'])) {
+            if (isset($spd->layout_defs['subpanel_setup'][\strtolower($subpanel)]['module'])) {
                 $spd_arr[] = $mod_name;
             }
         }
@@ -556,13 +556,13 @@ class StudioModule
     public function removeFieldFromLayouts($fieldName)
     {
         require_once("modules/ModuleBuilder/parsers/ParserFactory.php");
-        $GLOBALS ['log']->info(get_class($this) . "->removeFieldFromLayouts($fieldName)");
+        $GLOBALS ['log']->info(\get_class($this) . "->removeFieldFromLayouts($fieldName)");
         $sources = $this->getViewMetadataSources();
         $sources[] = array('type' => MB_BASICSEARCH);
         $sources[] = array('type' => MB_ADVANCEDSEARCH);
         $sources[] = array('type' => MB_POPUPSEARCH);
 
-        $GLOBALS ['log']->debug(print_r($sources, true));
+        $GLOBALS ['log']->debug(\print_r($sources, true));
         foreach ($sources as $name => $defs) {
             //If this module type doesn't support a given metadata type, we will get an exception from getParser()
             try {

@@ -143,12 +143,12 @@ function processSurvey(Surveys $survey, $trackerId, $contactId, $request)
         }
     }
     $response->save();
-    header('Location: index.php?entryPoint=surveyThanks&name=' . $survey->name);
+    \header('Location: index.php?entryPoint=surveyThanks&name=' . $survey->name);
 }
 
 function do404()
 {
-    header("HTTP/1.0 404 Not Found"); ?>
+    \header("HTTP/1.0 404 Not Found"); ?>
     <html>
     <head></head>
     <body><h1>Page not found</h1></body>

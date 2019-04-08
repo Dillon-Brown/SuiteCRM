@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -64,6 +64,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
         "jsgroupings" =>     array("section" => "jsgroups",	      "extdir" => "JSGroupings",    "file" => 'jsgroups.ext.php'),
         "aow" =>     		 array("section" => "aow_actions",	  "extdir" => "Actions",		"file" => 'actions.ext.php', "module" => "AOW_Actions"),
 );
-if (file_exists("custom/application/Ext/Extensions/extensions.ext.php")) {
+if (\file_exists("custom/application/Ext/Extensions/extensions.ext.php")) {
     include("custom/application/Ext/Extensions/extensions.ext.php");
 }

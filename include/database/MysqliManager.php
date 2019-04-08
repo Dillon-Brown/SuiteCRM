@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -123,7 +123,7 @@ class MysqliManager extends MysqlManager
      */
     public function query($sql, $dieOnError = false, $msg = '', $suppress = false, $keepResult = false)
     {
-        if (is_array($sql)) {
+        if (\is_array($sql)) {
             return $this->queryArray($sql, $dieOnError, $msg, $suppress);
         }
 
@@ -132,7 +132,7 @@ class MysqliManager extends MysqlManager
         parent::countQuery($sql);
         LoggerManager::getLogger()->info('Query:' . $this->removeLineBreaks($sql));
         $this->checkConnection();
-        $this->query_time = microtime(true);
+        $this->query_time = \microtime(true);
         $this->lastsql = $sql;
         if (!empty($sql)) {
             if ($this->database instanceof mysqli) {
@@ -150,13 +150,13 @@ class MysqliManager extends MysqlManager
             $GLOBALS['log']->fatal('MysqliManager: Empty query');
             $result = null;
         }
-        $md5 = md5($sql);
+        $md5 = \md5($sql);
 
         if (empty($queryMD5[$md5])) {
             $queryMD5[$md5] = true;
         }
 
-        $this->query_time = microtime(true) - $this->query_time;
+        $this->query_time = \microtime(true) - $this->query_time;
         $GLOBALS['log']->info('Query Execution Time:' . $this->query_time);
         $this->dump_slow_queries($sql);
 
@@ -213,7 +213,7 @@ class MysqliManager extends MysqlManager
      */
     public function disconnect()
     {
-        if (isset($GLOBALS['log']) && !is_null($GLOBALS['log'])) {
+        if (isset($GLOBALS['log']) && !\is_null($GLOBALS['log'])) {
             $GLOBALS['log']->debug('Calling MySQLi::disconnect()');
         }
         if (!empty($this->database)) {
@@ -254,7 +254,7 @@ class MysqliManager extends MysqlManager
             }
 
             if ($make_lower_case == true) {
-                $meta->name = strtolower($meta->name);
+                $meta->name = \strtolower($meta->name);
             }
 
             $field_array[] = $meta->name;
@@ -297,7 +297,7 @@ class MysqliManager extends MysqlManager
     {
         global $sugar_config;
 
-        if (is_null($configOptions)) {
+        if (\is_null($configOptions)) {
             $configOptions = $sugar_config['dbconfig'];
         }
 
@@ -307,10 +307,10 @@ class MysqliManager extends MysqlManager
             $dbhost = $configOptions['db_host_name'];
             $dbport = isset($configOptions['db_port']) ? ($configOptions['db_port'] == '' ? null : $configOptions['db_port']) : null;
 
-            $pos = strpos($configOptions['db_host_name'], ':');
+            $pos = \strpos($configOptions['db_host_name'], ':');
             if ($pos !== false) {
-                $dbhost = substr($configOptions['db_host_name'], 0, $pos);
-                $dbport = substr($configOptions['db_host_name'], $pos + 1);
+                $dbhost = \substr($configOptions['db_host_name'], 0, $pos);
+                $dbport = \substr($configOptions['db_host_name'], $pos + 1);
             }
 
             $this->database = @mysqli_connect(
@@ -398,7 +398,7 @@ class MysqliManager extends MysqlManager
             "MySQLi Host Info" => @mysqli_get_host_info($this->database),
             "MySQLi Server Info" => @mysqli_get_server_info($this->database),
             "MySQLi Client Encoding" => @mysqli_character_set_name($this->database),
-            "MySQL Character Set Settings" => join(", ", $charset_str),
+            "MySQL Character Set Settings" => \join(", ", $charset_str),
         );
     }
 
@@ -417,6 +417,6 @@ class MysqliManager extends MysqlManager
      */
     public function valid()
     {
-        return function_exists("mysqli_connect") && empty($GLOBALS['sugar_config']['mysqli_disabled']);
+        return \function_exists("mysqli_connect") && empty($GLOBALS['sugar_config']['mysqli_disabled']);
     }
 }

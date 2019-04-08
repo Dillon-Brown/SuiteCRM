@@ -151,7 +151,7 @@ class Reminder_Invitee extends Basic
         $invitees = BeanFactory::getBean('Reminders_Invitees')->get_full_list("", "reminders_invitees.reminder_id = '$reminderId'");
         if ($invitees) {
             foreach ($invitees as $invitee) {
-                if (!in_array($invitee->id, $inviteeIds)) {
+                if (!\in_array($invitee->id, $inviteeIds)) {
                     $invitee->mark_deleted($invitee->id);
                     $invitee->save();
                 }

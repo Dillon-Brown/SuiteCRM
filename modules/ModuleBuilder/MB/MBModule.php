@@ -38,12 +38,12 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-define('MB_TEMPLATES', 'include/SugarObjects/templates') ;
-define('MB_IMPLEMENTS', 'include/SugarObjects/implements') ;
+\define('MB_TEMPLATES', 'include/SugarObjects/templates') ;
+\define('MB_IMPLEMENTS', 'include/SugarObjects/implements') ;
 require_once('modules/ModuleBuilder/MB/MBVardefs.php') ;
 require_once('modules/ModuleBuilder/MB/MBRelationship.php') ;
 require_once('modules/ModuleBuilder/MB/MBLanguage.php') ;
@@ -87,7 +87,7 @@ class MBModule
 
     public function getDBName($name)
     {
-        return preg_replace("/[^\w]+/", "_", $name) ;
+        return \preg_replace("/[^\w]+/", "_", $name) ;
     }
 
     public function getModuleName()
@@ -114,7 +114,7 @@ class MBModule
      */
     public function load()
     {
-        if (file_exists($this->path . '/config.php')) {
+        if (\file_exists($this->path . '/config.php')) {
             include($this->path . '/config.php') ;
             $this->config = $config ;
         }
@@ -165,7 +165,7 @@ class MBModule
         $existingVardefs = $this->mbvardefs->getVardefs() ;
         //Merge with the existing vardef if it already exists
         if (!empty($existingVardefs['fields'][$vardef['name']])) {
-            $vardef = array_merge($existingVardefs['fields'][$vardef['name']], $vardef);
+            $vardef = \array_merge($existingVardefs['fields'][$vardef['name']], $vardef);
         }
         if (! empty($vardef [ 'source' ]) && $vardef [ 'source' ] == 'custom_fields') {
             unset($vardef [ 'source' ]) ;
@@ -322,26 +322,26 @@ class MBModule
             $this->copyMetaData() ;
             $this->copyDashlet() ;
             $this->copyViews() ;
-            if (0 != strcmp($old_config_md5, $this->config_md5)) {
+            if (0 != \strcmp($old_config_md5, $this->config_md5)) {
                 $this->mblanguage->reload() ;
             }
             $this->mblanguage->label = $this->config [ 'label' ] ;
             //pass in the key_name incase it has changed mblanguage will check if it is different and handle it accordingly
             $this->mblanguage->save($this->key_name) ;
 
-            if (! file_exists($this->package_path . "/icons/icon_" . ucfirst($this->key_name) . ".gif")) {
+            if (! \file_exists($this->package_path . "/icons/icon_" . \ucfirst($this->key_name) . ".gif")) {
                 $this->createIcon() ;
             }
 
-            $this->errors = array_merge($this->errors, $this->mbvardefs->errors) ;
+            $this->errors = \array_merge($this->errors, $this->mbvardefs->errors) ;
         }
     }
 
     public function copyDashlet()
     {
-        $templates = array_reverse($this->config [ 'templates' ], true) ;
+        $templates = \array_reverse($this->config [ 'templates' ], true) ;
         foreach ($templates as $template => $a) {
-            if (file_exists(MB_TEMPLATES . '/' . $template . '/Dashlets/Dashlet')) {
+            if (\file_exists(MB_TEMPLATES . '/' . $template . '/Dashlets/Dashlet')) {
                 $this->copyMetaRecursive(MB_TEMPLATES . '/' . $template . '/Dashlets/Dashlet', $this->path . '/Dashlets/' . $this->key_name . 'Dashlet/') ;
             }
         }
@@ -349,9 +349,9 @@ class MBModule
 
     public function copyViews()
     {
-        $templates = array_reverse($this->config [ 'templates' ], true) ;
+        $templates = \array_reverse($this->config [ 'templates' ], true) ;
         foreach ($templates as $template => $a) {
-            if (file_exists(MB_TEMPLATES . '/' . $template . '/views')) {
+            if (\file_exists(MB_TEMPLATES . '/' . $template . '/views')) {
                 $this->copyMetaRecursive(MB_TEMPLATES . '/' . $template . '/views', $this->path . '/views/') ;
             }
         }
@@ -359,9 +359,9 @@ class MBModule
 
     public function copyCustomFiles($from, $to)
     {
-        $d = dir($from) ;
+        $d = \dir($from) ;
         while ($filename = $d->read()) {
-            if (substr($filename, 0, 1) == '.') {
+            if (\substr($filename, 0, 1) == '.') {
                 continue ;
             }
             if ($filename != 'metadata' && $filename != 'Dashlets' && $filename != 'relationships' && $filename != 'language' && $filename != 'config.php' && $filename != 'relationships.php' && $filename != 'vardefs.php') {
@@ -372,9 +372,9 @@ class MBModule
 
     public function copyMetaData()
     {
-        $templates = array_reverse($this->config [ 'templates' ], true) ;
+        $templates = \array_reverse($this->config [ 'templates' ], true) ;
         foreach ($templates as $template => $a) {
-            if (file_exists(MB_TEMPLATES . '/' . $template . '/metadata')) {
+            if (\file_exists(MB_TEMPLATES . '/' . $template . '/metadata')) {
                 $this->copyMetaRecursive(MB_TEMPLATES . '/' . $template . '/metadata', $this->path . '/metadata/') ;
             }
         }
@@ -382,30 +382,30 @@ class MBModule
 
     public function copyMetaRecursive($from, $to, $overwrite = false)
     {
-        if (! file_exists($from)) {
+        if (! \file_exists($from)) {
             return ;
         }
-        if (is_dir($from)) {
+        if (\is_dir($from)) {
             $findArray = array( '<module_name>' , '<_module_name>' , '<MODULE_NAME>' , '<object_name>' , '<_object_name>' , '<OBJECT_NAME>' );
-            $replaceArray = array( $this->key_name , strtolower($this->key_name) , strtoupper($this->key_name) ,
-                                    $this->key_name , strtolower($this->key_name) , strtoupper($this->key_name) );
+            $replaceArray = array( $this->key_name , \strtolower($this->key_name) , \strtoupper($this->key_name) ,
+                                    $this->key_name , \strtolower($this->key_name) , \strtoupper($this->key_name) );
             mkdir_recursive($to) ;
-            $d = dir($from) ;
+            $d = \dir($from) ;
             while ($e = $d->read()) {
-                if (substr($e, 0, 1) == '.') {
+                if (\substr($e, 0, 1) == '.') {
                     continue ;
                 }
                 $nfrom = $from . '/' . $e ;
-                $nto = $to . '/' . str_replace('m-n-', $this->key_name, $e) ;
-                if (is_dir($nfrom)) {
+                $nto = $to . '/' . \str_replace('m-n-', $this->key_name, $e) ;
+                if (\is_dir($nfrom)) {
                     $this->copyMetaRecursive($nfrom, $nto, $overwrite) ;
                 } else {
-                    if ($overwrite || ! file_exists($nto)) {
-                        $contents = file_get_contents($nfrom) ;
-                        $contents = str_replace($findArray, $replaceArray, $contents) ;
+                    if ($overwrite || ! \file_exists($nto)) {
+                        $contents = \file_get_contents($nfrom) ;
+                        $contents = \str_replace($findArray, $replaceArray, $contents) ;
                         $fw = sugar_fopen($nto, 'w') ;
-                        fwrite($fw, $contents) ;
-                        fclose($fw) ;
+                        \fwrite($fw, $contents) ;
+                        \fclose($fw) ;
                     }
                 }
             }
@@ -414,7 +414,7 @@ class MBModule
 
     public function saveConfig()
     {
-        $header = file_get_contents('modules/ModuleBuilder/MB/header.php') ;
+        $header = \file_get_contents('modules/ModuleBuilder/MB/header.php') ;
         if (! write_array_to_file('config', $this->config, $this->path . '/config.php', 'w', $header)) {
             $this->errors [] = 'Could not save config to ' . $this->path . '/config.php' ;
         }
@@ -423,8 +423,8 @@ class MBModule
 
     public function setConfigMD5()
     {
-        if (file_exists($this->path . '/config.php')) {
-            $this->config_md5 = md5(base64_encode(serialize($this->config))) ;
+        if (\file_exists($this->path . '/config.php')) {
+            $this->config_md5 = \md5(\base64_encode(\serialize($this->config))) ;
         }
     }
 
@@ -452,7 +452,7 @@ class MBModule
     {
         $class = array( ) ;
         $class [ 'name' ] = $this->key_name ;
-        $class [ 'table_name' ] = strtolower($class [ 'name' ]) ;
+        $class [ 'table_name' ] = \strtolower($class [ 'name' ]) ;
         $class [ 'extends' ] = 'Basic' ;
         $class [ 'requires' ] [] = MB_TEMPLATES . '/basic/Basic.php' ;
         $class [ 'requires' ] = array( ) ;
@@ -469,8 +469,8 @@ class MBModule
                 continue ;
             }
             $class [ 'templates' ] .= ",'$template'" ;
-            $class [ 'extends' ] = ucFirst($template) ;
-            $class [ 'requires' ] [] = MB_TEMPLATES . '/' . $template . '/' . ucfirst($template) . '.php' ;
+            $class [ 'extends' ] = \ucFirst($template) ;
+            $class [ 'requires' ] [] = MB_TEMPLATES . '/' . $template . '/' . \ucfirst($template) . '.php' ;
         }
         $class [ 'importable' ] = $this->config [ 'importable' ] ;
         $class [ 'inline_edit' ] = isset($this->config [ 'inline_edit' ]) ? $this->config [ 'inline_edit' ] : null;
@@ -484,26 +484,26 @@ class MBModule
         $smarty->right_delimiter = '}}' ;
         $smarty->assign('class', $class) ;
 
-        if (! file_exists($path . '/' . $class [ 'name' ] . '.php')) {
+        if (! \file_exists($path . '/' . $class [ 'name' ] . '.php')) {
             $fp = sugar_fopen($path . '/' . $class ['name'] . '.php', 'w');
-            fwrite($fp, $smarty->fetch('modules/ModuleBuilder/tpls/MBModule/Class.tpl'));
-            fclose($fp);
+            \fwrite($fp, $smarty->fetch('modules/ModuleBuilder/tpls/MBModule/Class.tpl'));
+            \fclose($fp);
         }
         //write vardefs
         $fp = sugar_fopen($path . '/vardefs.php', 'w') ;
-        fwrite($fp, $smarty->fetch('modules/ModuleBuilder/tpls/MBModule/vardef.tpl')) ;
-        fclose($fp) ;
+        \fwrite($fp, $smarty->fetch('modules/ModuleBuilder/tpls/MBModule/vardef.tpl')) ;
+        \fclose($fp) ;
         
-        if (! file_exists($path . '/metadata')) {
+        if (! \file_exists($path . '/metadata')) {
             mkdir_recursive($path . '/metadata') ;
         }
         if (! empty($this->config [ 'studio' ])) {
             $fp = sugar_fopen($path . '/metadata/studio.php', 'w') ;
-            fwrite($fp, $smarty->fetch('modules/ModuleBuilder/tpls/MBModule/Studio.tpl')) ;
-            fclose($fp) ;
+            \fwrite($fp, $smarty->fetch('modules/ModuleBuilder/tpls/MBModule/Studio.tpl')) ;
+            \fclose($fp) ;
         } else {
-            if (file_exists($path . '/metadata/studio.php')) {
-                unlink($path . '/metadata/studio.php') ;
+            if (\file_exists($path . '/metadata/studio.php')) {
+                \unlink($path . '/metadata/studio.php') ;
             }
         }
     }
@@ -512,12 +512,12 @@ class MBModule
     {
         $smarty = new Sugar_Smarty() ;
         $smarty->assign('moduleName', $this->key_name) ;
-        $smarty->assign('showvCard', in_array('person', array_keys($this->config[ 'templates' ]))) ;
+        $smarty->assign('showvCard', \in_array('person', \array_keys($this->config[ 'templates' ]))) ;
         $smarty->assign('showimport', $this->config['importable']);
         //write sugar generated class
         $fp = sugar_fopen($path . '/' . 'Menu.php', 'w') ;
-        fwrite($fp, $smarty->fetch('modules/ModuleBuilder/tpls/MBModule/Menu.tpl')) ;
-        fclose($fp) ;
+        \fwrite($fp, $smarty->fetch('modules/ModuleBuilder/tpls/MBModule/Menu.tpl')) ;
+        \fclose($fp) ;
     }
 
     public function addInstallDefs(&$installDefs)
@@ -568,7 +568,7 @@ class MBModule
             array( 'name' => translate('LBL_LAYOUTS') , 'type' => 'Folder' , 'action' => "module=ModuleBuilder&action=wizard&view_module={$this->name}&view_package={$this->package}&MB=1" , 'children' => $layouts ) ,
             ) ;
 
-        if (count($lSubs) > 0) {
+        if (\count($lSubs) > 0) {
             $children [] = array( 'name' => translate('LBL_AVAILABLE_SUBPANELS') , 'type' => 'folder' , 'children' => $lSubs ) ;
         }
 
@@ -583,14 +583,14 @@ class MBModule
         $this->providedSubpanels = array() ;
 
         $subpanelDir = $this->getModuleDir() . '/metadata/subpanels/' ;
-        if (file_exists($subpanelDir)) {
-            $f = dir($subpanelDir) ;
+        if (\file_exists($subpanelDir)) {
+            $f = \dir($subpanelDir) ;
             require_once 'modules/ModuleBuilder/parsers/relationships/AbstractRelationships.php' ;
 
             while ($g = $f->read()) {
                 // sanity check to confirm that this is a usable subpanel...
-                if (substr($g, 0, 1) != '.' && AbstractRelationships::validSubpanel($subpanelDir . $g)) {
-                    $subname = str_replace('.php', '', $g) ;
+                if (\substr($g, 0, 1) != '.' && AbstractRelationships::validSubpanel($subpanelDir . $g)) {
+                    $subname = \str_replace('.php', '', $g) ;
                     $this->providedSubpanels [ $subname ] = $subname ;
                 }
             }
@@ -602,9 +602,9 @@ class MBModule
     public static function getTypes()
     {
         $types = array( ) ;
-        $d = dir(MB_TEMPLATES) ;
+        $d = \dir(MB_TEMPLATES) ;
         while ($e = $d->read()) {
-            if (substr($e, 0, 1) != '.') {
+            if (\substr($e, 0, 1) != '.') {
                 $types [ $e ] = $e ;
             }
         }
@@ -619,10 +619,10 @@ class MBModule
         $this->name = $new_name ;
         $this->key_name = $this->package_key . '_' . $this->name ;
         $new = $this->getModuleDir() ;
-        if (file_exists($new)) {
+        if (\file_exists($new)) {
             return false ;
         }
-        $renamed = rename($old, $new) ;
+        $renamed = \rename($old, $new) ;
         if ($renamed) {
             $this->renameMetaData($new, $old_name) ;
             $this->renameLanguageFiles($new) ;
@@ -646,17 +646,17 @@ class MBModule
     public function renameMetaData($new_dir, $old_name)
     {
         $GLOBALS [ 'log' ]->debug('MBModule.php->renameMetaData: new_dir=' . $new_dir) ;
-        if (! file_exists($new_dir)) {
+        if (! \file_exists($new_dir)) {
             return ;
         }
-        $dir = dir($new_dir) ;
+        $dir = \dir($new_dir) ;
         while ($e = $dir->read()) {
-            if (substr($e, 0, 1) != '.') {
-                if (is_dir($new_dir . '/' . $e)) {
+            if (\substr($e, 0, 1) != '.') {
+                if (\is_dir($new_dir . '/' . $e)) {
                     $this->renameMetaData($new_dir . '/' . $e, $old_name) ;
                 }
-                if (is_file($new_dir . '/' . $e)) {
-                    $contents = file_get_contents($new_dir . '/' . $e) ;
+                if (\is_file($new_dir . '/' . $e)) {
+                    $contents = \file_get_contents($new_dir . '/' . $e) ;
                     $search_array = array(
                         '/(\$module_name[ ]*=[ ]*\').*(\'[ ]*;)/',
                         '/(\$_module_name[ ]*=[ ]*\').*(\'[ ]*;)/',
@@ -667,13 +667,13 @@ class MBModule
                     );
                     $replace_array = array(
                         '$1' . $this->key_name . '$2',
-                        '$1' . strtolower($this->key_name) . '$2',
-                        '$1' . strtoupper($this->key_name) . '$2',
+                        '$1' . \strtolower($this->key_name) . '$2',
+                        '$1' . \strtoupper($this->key_name) . '$2',
                         '$1' . $this->key_name . '$2',
-                        '$1' . strtolower($this->key_name) . '$2',
-                        '$1' . strtoupper($this->key_name) . '$2',
+                        '$1' . \strtolower($this->key_name) . '$2',
+                        '$1' . \strtoupper($this->key_name) . '$2',
                     );
-                    $contents = preg_replace($search_array, $replace_array, $contents);
+                    $contents = \preg_replace($search_array, $replace_array, $contents);
                     $search_array = array(
                         "{$old_name}_",
                         "{$old_name}Dashlet"
@@ -682,17 +682,17 @@ class MBModule
                         $this->key_name . '_',
                         $this->key_name . 'Dashlet'
                     );
-                    $contents = str_replace($search_array, $replace_array, $contents);
+                    $contents = \str_replace($search_array, $replace_array, $contents);
                     
                     
                     if ("relationships.php" == $e) {
                         //bug 39598 Relationship Name Is Not Updated If Module Name Is Changed In Module Builder
-                        $contents = str_replace("'{$old_name}'", "'{$this->key_name}'", $contents) ;
+                        $contents = \str_replace("'{$old_name}'", "'{$this->key_name}'", $contents) ;
                     }
                     
                     $fp = sugar_fopen($new_dir . '/' . $e, 'w') ;
-                    fwrite($fp, $contents) ;
-                    fclose($fp) ;
+                    \fwrite($fp, $contents) ;
+                    \fclose($fp) ;
                 }
             }
         }
@@ -707,7 +707,7 @@ class MBModule
         $this->name = $new_name ;
         $this->key_name = $this->package_key . '_' . $this->name ;
         $new = $this->getModuleDir() ;
-        while (file_exists($new)) {
+        while (\file_exists($new)) {
             $count ++ ;
             $this->name = $new_name . $count ;
             $this->key_name = $this->package_key . '_' . $this->name ;
@@ -751,7 +751,7 @@ class MBModule
     public function getAvailibleSubpanelDef($panelName)
     {
         $filepath = $this->getModuleDir() . "/metadata/subpanels/{$panelName}.php" ;
-        if (file_exists($filepath)) {
+        if (\file_exists($filepath)) {
             include($filepath) ;
             return $subpanel_layout ;
         }
@@ -764,7 +764,7 @@ class MBModule
         $filepath = "$dir/{$panelName}.php" ;
         if (mkdir_recursive($dir)) {
             // preserve any $module_name entry if one exists
-            if (file_exists($filepath)) {
+            if (\file_exists($filepath)) {
                 include($filepath) ;
             }
             $module_name = (isset($module_name)) ? $module_name : $this->key_name ;
@@ -772,8 +772,8 @@ class MBModule
             $GLOBALS [ 'log' ]->debug("About to save this file to $filepath") ;
             $GLOBALS [ 'log' ]->debug($layout) ;
             $fw = sugar_fopen($filepath, 'w') ;
-            fwrite($fw, $layout) ;
-            fclose($fw) ;
+            \fwrite($fw, $layout) ;
+            \fclose($fw) ;
         }
     }
 
@@ -794,38 +794,38 @@ class MBModule
         }
 
         // GIF Version
-        copy("include/SugarObjects/templates/$template/icons/$template.gif", "$icondir/icon_" . ucfirst($this->key_name) . ".gif");
-        copy("include/SugarObjects/templates/$template/icons/$template.gif", "$icondir/" . $this->key_name . ".gif");
+        \copy("include/SugarObjects/templates/$template/icons/$template.gif", "$icondir/icon_" . \ucfirst($this->key_name) . ".gif");
+        \copy("include/SugarObjects/templates/$template/icons/$template.gif", "$icondir/" . $this->key_name . ".gif");
         // SVG Version
-        if (file_exists("include/SugarObjects/templates/$template/icons/$template.svg")) {
-            copy("include/SugarObjects/templates/$template/icons/$template.svg", "$icondir/" . $this->key_name . ".svg");
+        if (\file_exists("include/SugarObjects/templates/$template/icons/$template.svg")) {
+            \copy("include/SugarObjects/templates/$template/icons/$template.svg", "$icondir/" . $this->key_name . ".svg");
         }
         // GIF Version
-        if (file_exists("include/SugarObjects/templates/$template/icons/Create$template.gif")) {
-            copy("include/SugarObjects/templates/$template/icons/Create$template.gif", "$icondir/Create" . $this->key_name . ".gif");
+        if (\file_exists("include/SugarObjects/templates/$template/icons/Create$template.gif")) {
+            \copy("include/SugarObjects/templates/$template/icons/Create$template.gif", "$icondir/Create" . $this->key_name . ".gif");
         }
         // SVG Version
-        if (file_exists("include/SugarObjects/templates/$template/icons/Create$template.svg")) {
-            copy("include/SugarObjects/templates/$template/icons/Create$template.svg", "$icondir/Create" . $this->key_name . ".svg");
+        if (\file_exists("include/SugarObjects/templates/$template/icons/Create$template.svg")) {
+            \copy("include/SugarObjects/templates/$template/icons/Create$template.svg", "$icondir/Create" . $this->key_name . ".svg");
         }
         // GIF Version
-        if (file_exists("include/SugarObjects/templates/$template/icons/{$template}_32.gif")) {
-            copy("include/SugarObjects/templates/$template/icons/{$template}_32.gif", "$icondir/icon_" . $this->key_name . "_32.gif");
+        if (\file_exists("include/SugarObjects/templates/$template/icons/{$template}_32.gif")) {
+            \copy("include/SugarObjects/templates/$template/icons/{$template}_32.gif", "$icondir/icon_" . $this->key_name . "_32.gif");
         }
         // SVG Version
-        if (file_exists("include/SugarObjects/templates/$template/icons/{$template}_32.svg")) {
-            copy("include/SugarObjects/templates/$template/icons/{$template}_32.svg", "$icondir/icon_" . $this->key_name . "_32.svg");
+        if (\file_exists("include/SugarObjects/templates/$template/icons/{$template}_32.svg")) {
+            \copy("include/SugarObjects/templates/$template/icons/{$template}_32.svg", "$icondir/icon_" . $this->key_name . "_32.svg");
         }
 
         // SuiteP Support
-        if (file_exists("include/SugarObjects/templates/$template/icons/sidebar/modules/{$template}.svg")) {
-            copy("include/SugarObjects/templates/$template/icons/sidebar/modules/{$template}.svg", "$icondir/sidebar/modules/" . $this->key_name . ".svg");
+        if (\file_exists("include/SugarObjects/templates/$template/icons/sidebar/modules/{$template}.svg")) {
+            \copy("include/SugarObjects/templates/$template/icons/sidebar/modules/{$template}.svg", "$icondir/sidebar/modules/" . $this->key_name . ".svg");
         }
-        if (file_exists("include/SugarObjects/templates/$template/icons/sub_panel/{$template}.svg")) {
-            copy("include/SugarObjects/templates/$template/icons/sub_panel/{$template}.svg", "$icondir/sub_panel/" . $this->key_name . ".svg");
+        if (\file_exists("include/SugarObjects/templates/$template/icons/sub_panel/{$template}.svg")) {
+            \copy("include/SugarObjects/templates/$template/icons/sub_panel/{$template}.svg", "$icondir/sub_panel/" . $this->key_name . ".svg");
         }
-        if (file_exists("include/SugarObjects/templates/$template/icons/sub_panel/modules/{$template}.svg")) {
-            copy("include/SugarObjects/templates/$template/icons/sub_panel/modules/{$template}.svg", "$icondir/sub_panel/modules/" . $this->key_name . ".svg");
+        if (\file_exists("include/SugarObjects/templates/$template/icons/sub_panel/modules/{$template}.svg")) {
+            \copy("include/SugarObjects/templates/$template/icons/sub_panel/modules/{$template}.svg", "$icondir/sub_panel/modules/" . $this->key_name . ".svg");
         }
     }
 

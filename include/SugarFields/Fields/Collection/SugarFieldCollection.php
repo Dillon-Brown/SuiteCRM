@@ -46,7 +46,7 @@ class SugarFieldCollection extends SugarFieldBase
     public function getDetailViewSmarty($parentFieldArray, $vardef, $displayParams, $tabindex)
     {
         $nolink = array('Users');
-        if (in_array($vardef['module'], $nolink)) {
+        if (\in_array($vardef['module'], $nolink)) {
             $displayParams['nolink']=true;
         } else {
             $displayParams['nolink']=false;
@@ -111,12 +111,12 @@ class SugarFieldCollection extends SugarFieldBase
             $link_field = array();
             // populate $link_field from POST
             foreach ($_POST as $name=>$value) {
-                if (strpos($name, $field . "_collection_") !== false) {
-                    $num = substr($name, -1);
-                    if (is_numeric($num)) {
-                        settype($num, 'int');
-                        if (strpos($name, $field . "_collection_extra_") !== false) {
-                            $extra_field = substr($name, $field . "_collection_extra_" . $num);
+                if (\strpos($name, $field . "_collection_") !== false) {
+                    $num = \substr($name, -1);
+                    if (\is_numeric($num)) {
+                        \settype($num, 'int');
+                        if (\strpos($name, $field . "_collection_extra_") !== false) {
+                            $extra_field = \substr($name, $field . "_collection_extra_" . $num);
                             $link_field[$num]['extra_field'][$extra_field]=$value;
                         } elseif ($name == $field . "_collection_" . $num) {
                             $link_field[$num]['name']=$value;
@@ -129,7 +129,7 @@ class SugarFieldCollection extends SugarFieldBase
             // Set Primary
             if (isset($_POST["primary_" . $field . "_collection"])) {
                 $primary = $_POST["primary_" . $field . "_collection"];
-                settype($primary, 'int');
+                \settype($primary, 'int');
                 $link_field[$primary]['primary']=true;
             }
             // Create or update record and take care of the extra_field
@@ -172,18 +172,18 @@ class SugarFieldCollection extends SugarFieldBase
                     $obj->retrieve($link_field[$k]['id']);
                 }
                 // Update the extra field for the new or the existing record
-                if (isset($v['extra_field']) && is_array($v['extra_field'])) {
+                if (isset($v['extra_field']) && \is_array($v['extra_field'])) {
                     // Retrieve the changed fields
                     if (isset($_POST["update_fields_{$field}_collection"]) && !empty($_POST["update_fields_{$field}_collection"])) {
                         $JSON = getJSONobj();
-                        $update_fields = $JSON->decode(html_entity_decode($_POST["update_fields_{$field}_collection"]));
+                        $update_fields = $JSON->decode(\html_entity_decode($_POST["update_fields_{$field}_collection"]));
                     }
                     // Update the changed fields
                     foreach ($update_fields as $kk=>$vv) {
                         if (!isset($_POST[$field . "_allow_update"]) || ($_POST[$field . "_allow_update"] !== 'false' && $_POST[$field . "_allow_update"] !== false)) {
                             //allow to update the extra_field in the record
                             if (isset($v['extra_field'][$kk]) && $vv == true) {
-                                $extra_field_name = str_replace("_".$field."_collection_extra_".$k, "", $kk);
+                                $extra_field_name = \str_replace("_".$field."_collection_extra_".$k, "", $kk);
                                 if ($obj->$extra_field_name != $v['extra_field'][$kk]) {
                                     $save = true;
                                     $obj->$extra_field_name=$v['extra_field'][$kk];

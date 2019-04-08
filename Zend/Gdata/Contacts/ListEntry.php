@@ -163,7 +163,7 @@ class Zend_Gdata_Contacts_ListEntry extends Zend_Gdata_Entry
                         );
 
         if ($this->_names != null) {
-            $entry = array_merge($entry, $this->_names->toArray());
+            $entry = \array_merge($entry, $this->_names->toArray());
         }
 
         //Get the self link so we can query for the contact details at a later date
@@ -176,7 +176,7 @@ class Zend_Gdata_Contacts_ListEntry extends Zend_Gdata_Entry
 
         //Get addresses
         foreach ($this->_addresses as $address) {
-            $entry = array_merge($entry, $address->toArray());
+            $entry = \array_merge($entry, $address->toArray());
         }
         //Process phones
         foreach ($this->_phones as $phoneEntry) {
@@ -185,7 +185,7 @@ class Zend_Gdata_Contacts_ListEntry extends Zend_Gdata_Entry
         }
 
         //Process emails
-        $entry = array_merge($entry, $this->getEmailAddresses());
+        $entry = \array_merge($entry, $this->getEmailAddresses());
 
         //Get Notes
         if ($this->_content != null) {

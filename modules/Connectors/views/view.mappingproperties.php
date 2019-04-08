@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -83,7 +83,7 @@ class ViewMappingProperties extends ViewList
             foreach ($mapping['beans'] as $module=>$field_mapping) {
                 $mod_strings = return_module_language($GLOBALS['current_language'], $module);
                 $bean = loadBean($module);
-                if (!is_object($bean)) {
+                if (!\is_object($bean)) {
                     continue;
                 }
                 $field_defs = $bean->getFieldDefinitions();
@@ -106,8 +106,8 @@ class ViewMappingProperties extends ViewList
                     }
                     
                     //Remove the ':' character in some labels
-                    if (preg_match('/\:$/', $available_fields[$id])) {
-                        $available_fields[$id] = substr($available_fields[$id], 0, strlen($available_fields[$id])-1);
+                    if (\preg_match('/\:$/', $available_fields[$id])) {
+                        $available_fields[$id] = \substr($available_fields[$id], 0, \strlen($available_fields[$id])-1);
                     }
                     
                     if (isset($labels[$available_fields[$id]])) {
@@ -122,7 +122,7 @@ class ViewMappingProperties extends ViewList
                     $available_fields[$id] = $available_fields[$id] . " ({$id})";
                 }
                 
-                asort($available_fields);
+                \asort($available_fields);
                 
                 $field_keys = array();
                 $field_values = array();
@@ -133,12 +133,12 @@ class ViewMappingProperties extends ViewList
                         $source_fields[$id] = $source_defs[$id];
                     }
                 }
-                $source_fields = array_merge($source_fields, $source_defs);
+                $source_fields = \array_merge($source_fields, $source_defs);
                 
                 foreach ($source_fields as $id=>$def) {
                     if (empty($def['hidden'])) {
-                        $field_keys[strtolower($id)] = !empty($connector_strings[$source_fields[$id]['vname']]) ? $connector_strings[$source_fields[$id]['vname']] : $id;
-                        $field_values[] = !empty($field_mapping[strtolower($id)]) ? $field_mapping[strtolower($id)] : '';
+                        $field_keys[\strtolower($id)] = !empty($connector_strings[$source_fields[$id]['vname']]) ? $connector_strings[$source_fields[$id]['vname']] : $id;
+                        $field_values[] = !empty($field_mapping[\strtolower($id)]) ? $field_mapping[\strtolower($id)] : '';
                     }
                 }
 

@@ -42,8 +42,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 /* bootstrap sugarcrm */
 //echo "CWD:" . getcwd() . "\n";
-chdir('../');
-define('sugarEntry', true);
+\chdir('../');
+\define('sugarEntry', true);
 global $sugar_config, $db;
 require_once 'include/utils.php';
 require_once 'include/modules.php';
@@ -55,4 +55,4 @@ $GLOBALS['app_list_strings'] = return_app_list_strings_language($GLOBALS['curren
 $GLOBALS['sugar_config']['resource_management']['default_limit'] = 999999;
 
 
-define('SUITE_PHPUNIT_RUNNER', true);
+\define('SUITE_PHPUNIT_RUNNER', true);

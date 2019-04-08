@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -78,7 +78,7 @@ class SugarSprites
 
     private function loadMetaHelper($dir, $file)
     {
-        if (file_exists("cache/sprites/{$dir}/{$file}.meta.php")) {
+        if (\file_exists("cache/sprites/{$dir}/{$file}.meta.php")) {
             $sprites = array();
             $GLOBALS['log']->debug("Sprites: Loading sprites metadata for $dir");
             include("cache/sprites/{$dir}/{$file}.meta.php");

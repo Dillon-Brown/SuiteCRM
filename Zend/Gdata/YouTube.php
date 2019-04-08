@@ -656,10 +656,10 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
     public static function parseFormUploadTokenResponse($response)
     {
         // Load the feed as an XML DOMDocument object
-        @ini_set('track_errors', 1);
+        @\ini_set('track_errors', 1);
         $doc = new DOMDocument();
         $success = @$doc->loadXML($response);
-        @ini_restore('track_errors');
+        @\ini_restore('track_errors');
 
         if (!$success) {
             require_once 'Zend/Gdata/App/Exception.php';
@@ -707,7 +707,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
         $videoEntry,
         $url='http://gdata.youtube.com/action/GetUploadToken'
     ) {
-        if ($url != null && is_string($url)) {
+        if ($url != null && \is_string($url)) {
             // $response is a Zend_Http_response object
             $response = $this->post($videoEntry, $url);
             return self::parseFormUploadTokenResponse($response->getBody());
@@ -740,7 +740,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
         if ($username instanceof Zend_Gdata_Query) {
             $uri = $username->getQueryUrl();
         } else {
-            if (count(explode(',', $username)) >
+            if (\count(\explode(',', $username)) >
                 self::ACTIVITY_FEED_MAX_USERS) {
                 require_once 'Zend/Gdata/App/InvalidArgumentException.php';
                 throw new Zend_Gdata_App_InvalidArgumentException(
@@ -831,7 +831,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
             $this->getMajorProtocolVersion() == 1) {
             if (!$videoId) {
                 $videoId = $videoEntry->getVideoId();
-            } elseif (strlen($videoId) < 12) {
+            } elseif (\strlen($videoId) < 12) {
                 //Append the full URI
                 $videoId = self::VIDEO_URI . '/' . $videoId;
             }
@@ -845,7 +845,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
         } else {
             if (!$videoId) {
                 $videoId = $videoEntry->getVideoId();
-                $videoId = substr($videoId, strrpos($videoId, ':'));
+                $videoId = \substr($videoId, \strrpos($videoId, ':'));
             }
             $messageEntry->setId($this->newId($videoId));
             $messageEntry->setSummary($this->newSummary($body));
@@ -875,7 +875,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
         $newComment = $this->newCommentEntry();
         $newComment->content = $this->newContent()->setText($commentText);
         $commentId = $commentEntry->getId();
-        $commentIdArray = explode(':', $commentId);
+        $commentIdArray = \explode(':', $commentId);
 
         // create a new link element
         $inReplyToLinkHref = self::VIDEO_URI . '/' . $commentIdArray[3] .

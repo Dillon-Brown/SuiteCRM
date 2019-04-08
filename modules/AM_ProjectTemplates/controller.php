@@ -19,7 +19,7 @@
  * @author Andrew Mclaughlan <andrew@mclaughlan.info>
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -59,7 +59,7 @@ class AM_ProjectTemplatesController extends SugarController
         $template = new AM_ProjectTemplates();
         $template->retrieve($template_id);
 
-        $override_business_hours = intval($template->override_business_hours);
+        $override_business_hours = \intval($template->override_business_hours);
 
 
         //------ build business hours array
@@ -113,7 +113,7 @@ class AM_ProjectTemplatesController extends SugarController
         $project->name = $project_name;
         $project->estimated_start_date = $start;
         $project->status = $template->status;
-        $project->priority = strtolower($template->priority);
+        $project->priority = \strtolower($template->priority);
         $project->description = $template->description;
         $project->assigned_user_id = $template->assigned_user_id;
         $project->save();
@@ -158,7 +158,7 @@ class AM_ProjectTemplatesController extends SugarController
             $project_task = new ProjectTask();
             $project_task->name = $row['name'];
             $project_task->status = $row['status'];
-            $project_task->priority = strtolower($row['priority']);
+            $project_task->priority = \strtolower($row['priority']);
             $project_task->percent_complete = $row['percent_complete'];
             $project_task->predecessors = $row['predecessors'];
             $project_task->milestone_flag = $row['milestone_flag'];
@@ -168,7 +168,7 @@ class AM_ProjectTemplatesController extends SugarController
             $project_task->estimated_effort = $row['estimated_effort'];
             $project_task->utilization = $row['utilization'];
             
-            if ($copy_all == 0 && !in_array($row['id'], $copy_tasks)) {
+            if ($copy_all == 0 && !\in_array($row['id'], $copy_tasks)) {
                 $project_task->assigned_user_id = null;
             } else {
                 $project_task->assigned_user_id = $row['assigned_user_id'];
@@ -248,7 +248,7 @@ class AM_ProjectTemplatesController extends SugarController
             'action'=>'DetailView',
             'record' => $project->id,
         );
-        SugarApplication::redirect('index.php?' . http_build_query($params));
+        SugarApplication::redirect('index.php?' . \http_build_query($params));
     }
 
 
@@ -269,16 +269,16 @@ class AM_ProjectTemplatesController extends SugarController
 
         //--- get the gantt chart start and end
 
-        $start_date =  Date('Y-m-d');
+        $start_date =  \Date('Y-m-d');
 
         $query = "select max(duration) +1 from am_tasktemplates inner join am_tasktemplates_am_projecttemplates_c on am_tasktemplates_am_projecttemplatesam_tasktemplates_idb = am_tasktemplates.id and am_tasktemplates_am_projecttemplatesam_projecttemplates_ida = '{$pid}'";
         
         $duration = $db->getOne($query);
 
         if ($duration < 31) {
-            $end_date = Date('Y-m-d', strtotime("+30 days"));
+            $end_date = \Date('Y-m-d', \strtotime("+30 days"));
         } else {
-            $end_date = Date('Y-m-d', strtotime("+ " . $duration . " days"));
+            $end_date = \Date('Y-m-d', \strtotime("+ " . $duration . " days"));
         }
 
         //-------------------------------------------?>
@@ -318,7 +318,7 @@ class AM_ProjectTemplatesController extends SugarController
 
         $task_name = $_POST['task_name'];
         $project_id = $_POST['project_id'];
-        $override_business_hours = intval($_POST['override_business_hours']);
+        $override_business_hours = \intval($_POST['override_business_hours']);
         $task_id = $_POST['task_id'];
         $predecessor = $_POST['predecessor'];
         $rel_type = $_POST['rel_type'];
@@ -372,7 +372,7 @@ class AM_ProjectTemplatesController extends SugarController
         $project_template->load_relationship('am_tasktemplates_am_projecttemplates');
         $tasks = $project_template->get_linked_beans('am_tasktemplates_am_projecttemplates', 'AM_TaskTemplates');
 
-        $tid = count($tasks) + 1 ;
+        $tid = \count($tasks) + 1 ;
 
         if ($this->IsNullOrEmptyString($task_id)) {
             $this->create_task($task_name, $start, $enddate, $project_id, $milestone_flag, $status, $tid, $predecessor, $rel_type, $duration, $duration_unit, $resource, $percent, $note, $actual_duration, $tid);
@@ -406,9 +406,9 @@ class AM_ProjectTemplatesController extends SugarController
         $query = "SELECT date_finish FROM project_task WHERE id = '{$id}'";
         $end_date = $db->getOne($query);
         //Add 1 day onto end date for first day of new task
-        $start_date = date('Y-m-d', strtotime($end_date. ' + 1 days'));
+        $start_date = \date('Y-m-d', \strtotime($end_date. ' + 1 days'));
         //Add lag onto start date
-        $start_date = date('Y-m-d', strtotime($start_date. ' + '.$lag.' days'));
+        $start_date = \date('Y-m-d', \strtotime($start_date. ' + '.$lag.' days'));
 
         echo $timeDate->to_display_date($start_date, true);
         die();
@@ -420,10 +420,10 @@ class AM_ProjectTemplatesController extends SugarController
     {
 
        //convert quotes in json string back to normal
-        $jArray = htmlspecialchars_decode($_POST['orderArray']);
+        $jArray = \htmlspecialchars_decode($_POST['orderArray']);
 
         //create object/array from json data
-        $orderArray = json_decode($jArray, true);
+        $orderArray = \json_decode($jArray, true);
 
         foreach ($orderArray as $id => $order_number) {
             $task = new AM_TaskTemplates();
@@ -506,6 +506,6 @@ class AM_ProjectTemplatesController extends SugarController
     // Function for basic field validation (present and neither empty nor only white space
     public function IsNullOrEmptyString($question)
     {
-        return (!isset($question) || trim($question)==='');
+        return (!isset($question) || \trim($question)==='');
     }
 }

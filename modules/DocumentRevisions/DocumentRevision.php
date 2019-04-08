@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -134,7 +134,7 @@ class DocumentRevision extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -246,15 +246,15 @@ class DocumentRevision extends SugarBean
 
         // get extension
         $realFilename = $tempDoc->filename;
-        $fileExtension_beg = strrpos($realFilename, ".");
+        $fileExtension_beg = \strrpos($realFilename, ".");
         $fileExtension = "";
 
         if ($fileExtension_beg > 0) {
-            $fileExtension = substr($realFilename, $fileExtension_beg + 1);
+            $fileExtension = \substr($realFilename, $fileExtension_beg + 1);
         }
         //check to see if this is a file with extension located in "badext"
         foreach ($sugar_config['upload_badext'] as $badExt) {
-            if (strtolower($fileExtension) == strtolower($badExt)) {
+            if (\strtolower($fileExtension) == \strtolower($badExt)) {
                 //if found, then append with .txt to filename and break out of lookup
                 //this will make sure that the file goes out with right extension, but is stored
                 //as a text in db.
@@ -267,7 +267,7 @@ class DocumentRevision extends SugarBean
         $return = $logicalName.$revString.$fileExtension;
 
         // apply RFC limitations here
-        if (mb_strlen($return) > 1024) {
+        if (\mb_strlen($return) > 1024) {
             // do something if we find a real RFC issue
         }
 

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -55,7 +55,7 @@ abstract class ext_rest extends source
     protected function fetchUrl($url)
     {
         $data = '';
-        $data = @file_get_contents($url);
+        $data = @\file_get_contents($url);
         if (empty($data)) {
             $GLOBALS['log']->error("Unable to retrieve contents from url:[{$url}]");
         }

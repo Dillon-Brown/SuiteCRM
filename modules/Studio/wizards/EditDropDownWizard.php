@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -54,12 +54,12 @@ class EditDropDownWizard extends StudioWizard
     }
     public function back()
     {
-        ob_clean();
+        \ob_clean();
         if (!empty($_SESSION['studio']['module'])) {
-            header('Location: index.php?action=wizard&module=Studio&wizard=SelectModuleAction');
+            \header('Location: index.php?action=wizard&module=Studio&wizard=SelectModuleAction');
             sugar_cleanup(true);
         }
-        header('Location: index.php?action=wizard&module=Studio&wizard=StudioWizard');
+        \header('Location: index.php?action=wizard&module=Studio&wizard=StudioWizard');
         sugar_cleanup(true);
     }
     public function options()

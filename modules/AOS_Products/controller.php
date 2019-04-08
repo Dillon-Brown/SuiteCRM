@@ -53,7 +53,7 @@
          $this->view = 'edit';
          $GLOBALS['view'] = $this->view;
          if (!empty($_REQUEST['deleteAttachment'])) {
-             ob_clean();
+             \ob_clean();
              echo $this->bean->deleteAttachment($_REQUEST['isDuplicate']) ? 'true' : 'false';
              sugar_cleanup(true);
          }

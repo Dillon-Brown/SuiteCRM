@@ -7,7 +7,7 @@ class db_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         //array containing all possible types supported by db_convert
         return array(
-                array(gmdate('Y-m-d H:i:s'), 'today', array(), 'CURDATE()'),
+                array(\gmdate('Y-m-d H:i:s'), 'today', array(), 'CURDATE()'),
                 array('text', 'left', array(2), 'LEFT(text,2)'),
                 array('2015-11-16 19:10:52', 'date_format', array(), 'DATE_FORMAT(2015-11-16 19:10:52,\'%Y-%m-%d\')'),
                 array('2015-11-16 19:10:52', 'time_format', array(), '2015-11-16 19:10:52'),

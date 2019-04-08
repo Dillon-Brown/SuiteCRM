@@ -12,12 +12,12 @@ class MonthField extends AbstractField
     public function isSatisfiedBy(DateTime $date, $value)
     {
         // Convert text month values to integers
-        $value = str_ireplace(
+        $value = \str_ireplace(
             array(
                 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
                 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
             ),
-            range(1, 12),
+            \range(1, 12),
             $value
         );
 
@@ -39,6 +39,6 @@ class MonthField extends AbstractField
 
     public function validate($value)
     {
-        return (bool) preg_match('/^[\*,\/\-0-9A-Z]+$/', $value);
+        return (bool) \preg_match('/^[\*,\/\-0-9A-Z]+$/', $value);
     }
 }

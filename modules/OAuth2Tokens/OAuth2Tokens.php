@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -117,7 +117,7 @@ class OAuth2Tokens extends SugarBean
      */
     public function get_summary_text()
     {
-        return substr($this->id, 0, 10) . '...';
+        return \substr($this->id, 0, 10) . '...';
     }
 
     /**

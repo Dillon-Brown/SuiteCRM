@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -59,19 +59,19 @@ foreach ($focus->column_fields as $field) {
     }
     if (isset($_REQUEST[$field])) {
         if ($field != "group_id") {
-            $focus->$field = trim($_REQUEST[$field]);
+            $focus->$field = \trim($_REQUEST[$field]);
         }
     }
 }
 foreach ($focus->additional_column_fields as $field) {
     if (isset($_REQUEST[$field])) {
-        $value = trim($_REQUEST[$field]);
+        $value = \trim($_REQUEST[$field]);
         $focus->$field = $value;
     }
 }
 foreach ($focus->required_fields as $field) {
     if (isset($_REQUEST[$field])) {
-        $value = trim($_REQUEST[$field]);
+        $value = \trim($_REQUEST[$field]);
         $focus->$field = $value;
     }
 }
@@ -100,7 +100,7 @@ if (empty($optimum)) {
 $delimiter = $focus->getSessionInboundDelimiterString($focus->server_url, $focus->email_user, $focus->port, $focus->protocol);
 
 //added check to ensure the $optimum['serial']) is not empty.
-if (is_array($optimum) && (count($optimum) > 0) && !empty($optimum['serial'])) {
+if (\is_array($optimum) && (\count($optimum) > 0) && !empty($optimum['serial'])) {
     $focus->service = $optimum['serial'];
 } else {
     // no save
@@ -124,20 +124,20 @@ if (isset($_REQUEST['only_since']) && $_REQUEST['only_since'] == 1) {
     $onlySince = false;
 }
 $stored_options = array();
-$stored_options['from_name'] = trim($_REQUEST['from_name']);
-$stored_options['from_addr'] = trim($_REQUEST['from_addr']);
+$stored_options['from_name'] = \trim($_REQUEST['from_name']);
+$stored_options['from_addr'] = \trim($_REQUEST['from_addr']);
 isValidEmailAddress($stored_options['from_addr']);
-$stored_options['reply_to_name'] = trim($_REQUEST['reply_to_name']);
-$stored_options['reply_to_addr'] = trim($_REQUEST['reply_to_addr']);
+$stored_options['reply_to_name'] = \trim($_REQUEST['reply_to_name']);
+$stored_options['reply_to_addr'] = \trim($_REQUEST['reply_to_addr']);
 $stored_options['only_since'] = $onlySince;
 $stored_options['filter_domain'] = $_REQUEST['filter_domain'];
 $stored_options['email_num_autoreplies_24_hours'] = $_REQUEST['email_num_autoreplies_24_hours'];
 $stored_options['allow_outbound_group_usage'] = isset($_REQUEST['allow_outbound_group_usage']) ? true : false;
 
 if (!$focus->isPop3Protocol()) {
-    $stored_options['mailbox'] = (isset($_REQUEST['mailbox']) ? trim($_REQUEST['mailbox']) : "");
-    $stored_options['trashFolder'] = (isset($_REQUEST['trashFolder']) ? trim($_REQUEST['trashFolder']) : "");
-    $stored_options['sentFolder'] = (isset($_REQUEST['sentFolder']) ? trim($_REQUEST['sentFolder']) : "");
+    $stored_options['mailbox'] = (isset($_REQUEST['mailbox']) ? \trim($_REQUEST['mailbox']) : "");
+    $stored_options['trashFolder'] = (isset($_REQUEST['trashFolder']) ? \trim($_REQUEST['trashFolder']) : "");
+    $stored_options['sentFolder'] = (isset($_REQUEST['sentFolder']) ? \trim($_REQUEST['sentFolder']) : "");
 } // if
 if ($focus->isMailBoxTypeCreateCase() || ($focus->mailbox_type == 'createcase' && empty($_REQUEST['id']))) {
     $stored_options['distrib_method'] = (isset($_REQUEST['distrib_method'])) ? $_REQUEST['distrib_method'] : "";
@@ -200,7 +200,7 @@ if (!empty($focus->groupfolder_id)) {
     }
 }
 
-$focus->stored_options = base64_encode(serialize($stored_options));
+$focus->stored_options = \base64_encode(\serialize($stored_options));
 $GLOBALS['log']->info('----->InboundEmail now saving self');
 
 
@@ -389,7 +389,7 @@ if ($_REQUEST['module'] == 'Campaigns') {
         $redirectUrl .= $error;
     }
 
-    header($redirectUrl);
+    \header($redirectUrl);
 }
 
 /**

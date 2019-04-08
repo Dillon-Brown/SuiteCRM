@@ -1,6 +1,6 @@
 <?php
- if (!defined('sugarEntry')) {
-     define('sugarEntry', true);
+ if (!\defined('sugarEntry')) {
+     \define('sugarEntry', true);
  }
 /**
  *
@@ -43,12 +43,12 @@
 
 //change directories to where this file is located.
 //this is to make sure it can find dce_config.php
-chdir(dirname(__FILE__));
+\chdir(\dirname(__FILE__));
 
 require_once('include/entryPoint.php');
 
-$sapi_type = php_sapi_name();
-if (substr($sapi_type, 0, 3) != 'cli') {
+$sapi_type = \php_sapi_name();
+if (\substr($sapi_type, 0, 3) != 'cli') {
     sugar_die("cron.php is CLI only.");
 }
 
@@ -56,8 +56,8 @@ if (!is_windows()) {
     require_once 'include/utils.php';
     $cronUser = getRunningUser();
 
-    if (array_key_exists('cron', $sugar_config) && array_key_exists('allowed_cron_users', $sugar_config['cron'])) {
-        if (!in_array($cronUser, $sugar_config['cron']['allowed_cron_users'])) {
+    if (\array_key_exists('cron', $sugar_config) && \array_key_exists('allowed_cron_users', $sugar_config['cron'])) {
+        if (!\in_array($cronUser, $sugar_config['cron']['allowed_cron_users'])) {
             $GLOBALS['log']->fatal("cron.php: running as $cronUser is not allowed in allowed_cron_users ".
                                    "in config.php. Exiting.");
             if ($cronUser == 'root') {
@@ -88,7 +88,7 @@ $GLOBALS['log']->debug('--------------------------------------------> at cron.ph
 $cron_driver = !empty($sugar_config['cron_class'])?$sugar_config['cron_class']:'SugarCronJobs';
 $GLOBALS['log']->debug("Using $cron_driver as CRON driver");
 
-if (file_exists("custom/include/SugarQueue/$cron_driver.php")) {
+if (\file_exists("custom/include/SugarQueue/$cron_driver.php")) {
     require_once "custom/include/SugarQueue/$cron_driver.php";
 } else {
     require_once "include/SugarQueue/$cron_driver.php";
@@ -103,14 +103,14 @@ sugar_cleanup(false);
 // some jobs have annoying habit of calling sugar_cleanup(), and it can be called only once
 // but job results can be written to DB after job is finished, so we have to disconnect here again
 // just in case we couldn't call cleanup
-if (class_exists('DBManagerFactory')) {
+if (\class_exists('DBManagerFactory')) {
     $db = DBManagerFactory::getInstance();
     $db->disconnect();
 }
 
 // If we have a session left over, destroy it
-if (session_id()) {
-    session_destroy();
+if (\session_id()) {
+    \session_destroy();
 }
 
 if ($exit_on_cleanup) {

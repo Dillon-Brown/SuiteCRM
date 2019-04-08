@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 require_once 'include/utils.php';
@@ -58,7 +58,7 @@ if (!isset($_SERVER['SERVER_SOFTWARE'])) {
     LoggerManager::getLogger()->warn('SERVER_SOFTVARE is undefined got Display Warnings');
 }
 
-if (isset($_SERVER['SERVER_SOFTWARE']) && (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (php_sapi_name() == 'cgi-fcgi') && (ini_get('fastcgi.logging') != '0')) {
+if (isset($_SERVER['SERVER_SOFTWARE']) && (\strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (\php_sapi_name() == 'cgi-fcgi') && (\ini_get('fastcgi.logging') != '0')) {
     displayAdminError(translate('LBL_FASTCGI_LOGGING', 'Administration'));
 }
 if (is_admin($current_user)) {

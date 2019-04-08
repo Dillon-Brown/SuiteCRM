@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -43,8 +43,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 // Bug 57062 ///////////////////////////////
-if ((!empty($_REQUEST['spriteNamespace']) && substr_count($_REQUEST['spriteNamespace'], '..') > 0) ||
-    (!empty($_REQUEST['imageName']) && substr_count($_REQUEST['imageName'], '..') > 0)) {
+if ((!empty($_REQUEST['spriteNamespace']) && \substr_count($_REQUEST['spriteNamespace'], '..') > 0) ||
+    (!empty($_REQUEST['imageName']) && \substr_count($_REQUEST['imageName'], '..') > 0)) {
     die();
 }
 // End Bug 57062 ///////////////////////////////
@@ -57,65 +57,65 @@ if (isset($_REQUEST['themeName']) && SugarThemeRegistry::current()->name != $_RE
     SugarThemeRegistry::set($_SESSION['authenticated_user_theme']);
 }
 
-while (substr_count($_REQUEST['imageName'], '..') > 0) {
-    $_REQUEST['imageName'] = str_replace('..', '.', $_REQUEST['imageName']);
+while (\substr_count($_REQUEST['imageName'], '..') > 0) {
+    $_REQUEST['imageName'] = \str_replace('..', '.', $_REQUEST['imageName']);
 }
 
 if (isset($_REQUEST['spriteNamespace'])) {
     $filename = "cache/sprites/{$_REQUEST['spriteNamespace']}/{$_REQUEST['imageName']}";
-    if (! file_exists($filename)) {
-        header($_SERVER["SERVER_PROTOCOL"].' 404 Not Found');
+    if (! \file_exists($filename)) {
+        \header($_SERVER["SERVER_PROTOCOL"].' 404 Not Found');
         die;
     }
 } else {
     $filename = SugarThemeRegistry::current()->getImageURL($_REQUEST['imageName']);
     if (empty($filename)) {
-        header($_SERVER["SERVER_PROTOCOL"].' 404 Not Found');
+        \header($_SERVER["SERVER_PROTOCOL"].' 404 Not Found');
         die;
     }
 }
 
-$filename_arr = explode('?', $filename);
+$filename_arr = \explode('?', $filename);
 $filename = $filename_arr[0];
-$file_ext = substr($filename, -3);
+$file_ext = \substr($filename, -3);
 
 $mime_type = SugarThemeRegistry::current()->getMimeType($file_ext);
-if (is_null($mime_type)) {
-    header($_SERVER["SERVER_PROTOCOL"].' 404 Not Found');
+if (\is_null($mime_type)) {
+    \header($_SERVER["SERVER_PROTOCOL"].' 404 Not Found');
     die;
 }
 
 
 // try to use the content cached locally if it's the same as we have here.
-if (defined('TEMPLATE_URL')) {
-    $last_modified_time = time();
+if (\defined('TEMPLATE_URL')) {
+    $last_modified_time = \time();
 } else {
-    $last_modified_time = filemtime($filename);
+    $last_modified_time = \filemtime($filename);
 }
 
-$etag = '"'.md5_file($filename).'"';
+$etag = '"'.\md5_file($filename).'"';
 
-header("Cache-Control: private");
-header("Pragma: dummy=bogus");
-header("Etag: $etag");
-header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 2592000));
+\header("Cache-Control: private");
+\header("Pragma: dummy=bogus");
+\header("Etag: $etag");
+\header('Expires: ' . \gmdate('D, d M Y H:i:s \G\M\T', \time() + 2592000));
 
 $ifmod = isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
-    ? strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $last_modified_time : null;
+    ? \strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $last_modified_time : null;
 $iftag = isset($_SERVER['HTTP_IF_NONE_MATCH'])
     ? $_SERVER['HTTP_IF_NONE_MATCH'] == $etag : null;
 if (($ifmod || $iftag) && ($ifmod !== false && $iftag !== false)) {
-    header($_SERVER["SERVER_PROTOCOL"].' 304 Not Modified');
+    \header($_SERVER["SERVER_PROTOCOL"].' 304 Not Modified');
     die;
 }
 
-header("Last-Modified: ".gmdate('D, d M Y H:i:s \G\M\T', $last_modified_time));
-header('Content-Type: ' . $mime_type);
+\header("Last-Modified: ".\gmdate('D, d M Y H:i:s \G\M\T', $last_modified_time));
+\header('Content-Type: ' . $mime_type);
 
-if (!defined('TEMPLATE_URL')) {
-    if (!file_exists($filename)) {
+if (!\defined('TEMPLATE_URL')) {
+    if (!\file_exists($filename)) {
         sugar_touch($filename);
     }
 }
 
-readfile($filename);
+\readfile($filename);

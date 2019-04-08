@@ -310,15 +310,15 @@ class Zend_Search_Lucene_Search_QueryLexer extends Zend_Search_Lucene_FSM
      */
     private function _translateInput($char)
     {
-        if (strpos(self::QUERY_WHITE_SPACE_CHARS, $char) !== false) {
+        if (\strpos(self::QUERY_WHITE_SPACE_CHARS, $char) !== false) {
             return self::IN_WHITE_SPACE;
-        } elseif (strpos(self::QUERY_SYNT_CHARS, $char) !== false) {
+        } elseif (\strpos(self::QUERY_SYNT_CHARS, $char) !== false) {
             return self::IN_SYNT_CHAR;
-        } elseif (strpos(self::QUERY_MUTABLE_CHARS, $char) !== false) {
+        } elseif (\strpos(self::QUERY_MUTABLE_CHARS, $char) !== false) {
             return self::IN_MUTABLE_CHAR;
-        } elseif (strpos(self::QUERY_LEXEMEMODIFIER_CHARS, $char) !== false) {
+        } elseif (\strpos(self::QUERY_LEXEMEMODIFIER_CHARS, $char) !== false) {
             return self::IN_LEXEME_MODIFIER;
-        } elseif (strpos(self::QUERY_ASCIIDIGITS_CHARS, $char) !== false) {
+        } elseif (\strpos(self::QUERY_ASCIIDIGITS_CHARS, $char) !== false) {
             return self::IN_ASCII_DIGIT;
         } elseif ($char === '"') {
             return self::IN_QUOTE;
@@ -349,17 +349,17 @@ class Zend_Search_Lucene_Search_QueryLexer extends Zend_Search_Lucene_FSM
         if (PHP_OS == 'AIX' && $encoding == '') {
             $encoding = 'ISO8859-1';
         }
-        $strLength = iconv_strlen($inputString, $encoding);
+        $strLength = \iconv_strlen($inputString, $encoding);
 
         // Workaround for iconv_substr bug
         $inputString .= ' ';
 
         for ($count = 0; $count < $strLength; $count++) {
-            $this->_queryString[$count] = iconv_substr($inputString, $count, 1, $encoding);
+            $this->_queryString[$count] = \iconv_substr($inputString, $count, 1, $encoding);
         }
 
         for ($this->_queryStringPosition = 0;
-             $this->_queryStringPosition < count($this->_queryString);
+             $this->_queryStringPosition < \count($this->_queryString);
              $this->_queryStringPosition++) {
             $this->process($this->_translateInput($this->_queryString[$this->_queryStringPosition]));
         }
@@ -394,12 +394,12 @@ class Zend_Search_Lucene_Search_QueryLexer extends Zend_Search_Lucene_FSM
         $lexeme = $this->_queryString[$this->_queryStringPosition];
 
         // Process two char lexemes
-        if (strpos(self::QUERY_DOUBLECHARLEXEME_CHARS, $lexeme) !== false) {
+        if (\strpos(self::QUERY_DOUBLECHARLEXEME_CHARS, $lexeme) !== false) {
             // increase current position in a query string
             $this->_queryStringPosition++;
 
             // check,
-            if ($this->_queryStringPosition == count($this->_queryString)  ||
+            if ($this->_queryStringPosition == \count($this->_queryString)  ||
                 $this->_queryString[$this->_queryStringPosition] != $lexeme) {
                 require_once 'Zend/Search/Lucene/Search/QueryParserException.php';
                 throw new Zend_Search_Lucene_Search_QueryParserException('Two chars lexeme expected. ' . $this->_positionMsg());
@@ -417,7 +417,7 @@ class Zend_Search_Lucene_Search_QueryLexer extends Zend_Search_Lucene_FSM
 
         // Skip this lexeme if it's a field indicator ':' and treat previous as 'field' instead of 'word'
         if ($token->type == Zend_Search_Lucene_Search_QueryToken::TT_FIELD_INDICATOR) {
-            $token = array_pop($this->_lexemes);
+            $token = \array_pop($this->_lexemes);
             if ($token === null  ||  $token->type != Zend_Search_Lucene_Search_QueryToken::TT_WORD) {
                 require_once 'Zend/Search/Lucene/Search/QueryParserException.php';
                 throw new Zend_Search_Lucene_Search_QueryParserException('Field mark \':\' must follow field name. ' . $this->_positionMsg());

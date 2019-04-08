@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -74,7 +74,7 @@ class Popup_Picker
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -129,7 +129,7 @@ class Popup_Picker
         $button  = "<form action='index.php' method='post' name='form' id='form'>\n";
         //START:FOR MULTI-SELECT
         $multi_select=false;
-        if (!empty($_REQUEST['mode']) && strtoupper($_REQUEST['mode']) == 'MULTISELECT') {
+        if (!empty($_REQUEST['mode']) && \strtoupper($_REQUEST['mode']) == 'MULTISELECT') {
             $multi_select=true;
             $button .= "<input type='button' name='button' class='button' onclick=\"send_back_selected('Prospects',document.MassUpdate,'mass[]','" .$app_strings['ERR_NOTHING_SELECTED']."');\" title='"
                 .$app_strings['LBL_SELECT_BUTTON_TITLE']."' value='  "
@@ -155,10 +155,10 @@ class Popup_Picker
         $form->assign('request_data', $request_data);
 
 
-        ob_start();
+        \ob_start();
         insert_popup_header($theme);
-        $output_html .= ob_get_contents();
-        ob_end_clean();
+        $output_html .= \ob_get_contents();
+        \ob_end_clean();
 
         //$output_html .= get_form_header($mod_strings['LBL_SEARCH_FORM_TITLE'], '', false);
 
@@ -185,11 +185,11 @@ class Popup_Picker
         $ListView->setQuery($where, '', 'campaign_name1', 'CAMPAIGNLOG');
         $ListView->setModStrings($mod_strings);
 
-        ob_start();
+        \ob_start();
         $output_html .= get_form_header($mod_strings['LBL_LIST_FORM_TITLE'], $button, false); //FOR MULTI-SELECT
         $ListView->processListView($seed_bean, 'main', 'CAMPAIGNLOG');
-        $output_html .= ob_get_contents();
-        ob_end_clean();
+        $output_html .= \ob_get_contents();
+        \ob_end_clean();
 
         $output_html .= insert_popup_footer();
         return $output_html;

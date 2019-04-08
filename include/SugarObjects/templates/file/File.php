@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -77,7 +77,7 @@ class File extends Basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -113,12 +113,12 @@ class File extends Basic
         parent::fill_in_additional_detail_fields();
 
         if (!empty($this->file_ext)) {
-            $img_name = SugarThemeRegistry::current()->getImageURL(strtolower($this->file_ext) . '_image_inline.gif');
-            $img_name_bare = strtolower($this->file_ext) . '_image_inline';
+            $img_name = SugarThemeRegistry::current()->getImageURL(\strtolower($this->file_ext) . '_image_inline.gif');
+            $img_name_bare = \strtolower($this->file_ext) . '_image_inline';
         }
 
         //set default file name.
-        if (!empty($img_name) && file_exists($img_name)) {
+        if (!empty($img_name) && \file_exists($img_name)) {
             $img_name = $img_name_bare;
         } else {
             $img_name = 'def_image_inline'; //todo change the default image.
@@ -166,8 +166,8 @@ class File extends Basic
             }
             $removeFile = "upload://{$this->id}";
         }
-        if (file_exists($removeFile)) {
-            if (!unlink($removeFile)) {
+        if (\file_exists($removeFile)) {
+            if (!\unlink($removeFile)) {
                 $GLOBALS['log']->error("*** Could not unlink() file: [ {$removeFile} ]");
             } else {
                 $this->uploadfile = '';

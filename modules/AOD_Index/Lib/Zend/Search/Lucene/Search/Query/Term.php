@@ -133,7 +133,7 @@ class Zend_Search_Lucene_Search_Query_Term extends Zend_Search_Lucene_Search_Que
      */
     public function execute(Zend_Search_Lucene_Interface $reader, $docsFilter = null)
     {
-        $this->_docVector = array_flip($reader->termDocs($this->_term, $docsFilter));
+        $this->_docVector = \array_flip($reader->termDocs($this->_term, $docsFilter));
         $this->_termFreqs = $reader->termFreqs($this->_term, $docsFilter);
 
         // Initialize weight if it's not done yet
@@ -217,7 +217,7 @@ class Zend_Search_Lucene_Search_Query_Term extends Zend_Search_Lucene_Search_Que
         $query .= $this->_term->text;
 
         if ($this->getBoost() != 1) {
-            $query = $query . '^' . round($this->getBoost(), 4);
+            $query = $query . '^' . \round($this->getBoost(), 4);
         }
 
         return $query;

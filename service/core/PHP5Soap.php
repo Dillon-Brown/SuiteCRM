@@ -47,10 +47,10 @@ abstract class PHP5Soap extends SugarSoapService
     public function __construct($url)
     {
         $this->soapURL = $url;
-        ini_set("soap.wsdl_cache_enabled", "0"); // disabling WSDL cache
+        \ini_set("soap.wsdl_cache_enabled", "0"); // disabling WSDL cache
         global $HTTP_RAW_POST_DATA;
         if (!isset($HTTP_RAW_POST_DATA)) {
-            $HTTP_RAW_POST_DATA = file_get_contents('php://input');
+            $HTTP_RAW_POST_DATA = \file_get_contents('php://input');
         }
         parent::__construct();
     }
@@ -65,7 +65,7 @@ abstract class PHP5Soap extends SugarSoapService
      */
     public function serve()
     {
-        ob_clean();
+        \ob_clean();
         global $HTTP_RAW_POST_DATA;
         $GLOBALS['log']->debug("I am here1 ". $HTTP_RAW_POST_DATA);
         $qs = '';
@@ -77,12 +77,12 @@ abstract class PHP5Soap extends SugarSoapService
             $qs = '';
         }
 
-        if (stristr($qs, 'wsdl') || $HTTP_RAW_POST_DATA == '') {
+        if (\stristr($qs, 'wsdl') || $HTTP_RAW_POST_DATA == '') {
             $wsdlCacheFile = $this->getWSDLPath(false);
-            if (stristr($qs, 'wsdl')) {
+            if (\stristr($qs, 'wsdl')) {
                 $contents = @sugar_file_get_contents($wsdlCacheFile);
                 if ($contents !== false) {
-                    header("Content-Type: text/xml; charset=ISO-8859-1\r\n");
+                    \header("Content-Type: text/xml; charset=ISO-8859-1\r\n");
                     print $contents;
                 } // if
             } else {
@@ -91,8 +91,8 @@ abstract class PHP5Soap extends SugarSoapService
         } else {
             $this->server->handle();
         }
-        ob_end_flush();
-        flush();
+        \ob_end_flush();
+        \flush();
     }
 
     private function generateSoapServer()
@@ -115,14 +115,14 @@ abstract class PHP5Soap extends SugarSoapService
     public function getWSDLPath($generateWSDL)
     {
         $wsdlURL = $this->getSoapURL().'?wsdl';
-        $wsdlCacheFile = 'upload://wsdlcache-' . md5($wsdlURL);
+        $wsdlCacheFile = 'upload://wsdlcache-' . \md5($wsdlURL);
 
         if ($generateWSDL) {
             $oldqs = $_SERVER['QUERY_STRING'];
             $_SERVER['QUERY_STRING'] = "wsdl";
             $this->nusoap_server->service($wsdlURL);
             $_SERVER['QUERY_STRING'] = $oldqs;
-            file_put_contents($wsdlCacheFile, ob_get_contents());
+            \file_put_contents($wsdlCacheFile, \ob_get_contents());
             return $wsdlCacheFile;
             //ob_clean();
         }
@@ -173,7 +173,7 @@ abstract class PHP5Soap extends SugarSoapService
 
     public function registerFunction($function, $input, $output)
     {
-        if (in_array($function, $this->excludeFunctions)) {
+        if (\in_array($function, $this->excludeFunctions)) {
             return;
         }
         if ($this->nusoap_server == null) {

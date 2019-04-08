@@ -96,7 +96,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
             21 => 'override_business_hours',
         ), $bean->column_fields);
 
-        $keys = array_keys($bean->field_name_map);
+        $keys = \array_keys($bean->field_name_map);
         self::assertEquals(array(
             0 => 'id',
             1 => 'name',
@@ -122,7 +122,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
             21 => 'override_business_hours',
         ), $keys);
 
-        self::assertEquals($keys, array_keys($bean->field_defs));
+        self::assertEquals($keys, \array_keys($bean->field_defs));
         self::assertEquals(true, $bean->optimistic_lock);
         self::assertEquals(array(), $bean->list_fields);
         self::assertNotTrue(isset($bean->added_custom_field_defs));
@@ -292,10 +292,10 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
             74 => 'factor_auth_interface',
         ), $bean->column_fields);
 
-        $keys = array_keys($bean->field_name_map);
+        $keys = \array_keys($bean->field_name_map);
         self::assertEquals($bean->column_fields, $keys);
 
-        $keys = array_keys($bean->field_defs);
+        $keys = \array_keys($bean->field_defs);
         self::assertEquals($bean->column_fields, $keys);
 
         self::assertEquals('', $bean->optimistic_lock);
@@ -408,10 +408,10 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
             74 => 'factor_auth_interface',
         ), $bean->column_fields);
 
-        $keys = array_keys($bean->field_name_map);
+        $keys = \array_keys($bean->field_name_map);
         self::assertEquals($bean->column_fields, $keys);
 
-        $keys = array_keys($bean->field_defs);
+        $keys = \array_keys($bean->field_defs);
         self::assertEquals($bean->column_fields, $keys);
 
         self::assertNotEquals(true, $bean->optimistic_lock);
@@ -524,10 +524,10 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
             74 => 'factor_auth_interface',
         ), $bean->column_fields);
 
-        $keys = array_keys($bean->field_name_map);
+        $keys = \array_keys($bean->field_name_map);
         self::assertEquals($bean->column_fields, $keys);
 
-        $keys = array_keys($bean->field_defs);
+        $keys = \array_keys($bean->field_defs);
         self::assertEquals($bean->column_fields, $keys);
 
         self::assertNotEquals(true, $bean->optimistic_lock);
@@ -657,7 +657,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         // test
         $results = $bean->publicParseDateDefault('2015-05-05', true);
         self::assertNotEquals('05/05/2015', $results);
-        self::assertEquals(1, preg_match('/05\/05\/2015 \d{2}:\d{2}/', $results));
+        self::assertEquals(1, \preg_match('/05\/05\/2015 \d{2}:\d{2}/', $results));
 
         // test
         $results = $bean->publicParseDateDefault('2015-05-05 11:11', true);
@@ -1242,11 +1242,11 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         $this->db->query("DELETE FROM aod_index");
         foreach ($tableAodIndex as $row) {
             $query = "INSERT aod_index INTO (";
-            $query .= (implode(',', array_keys($row)) . ') VALUES (');
+            $query .= (\implode(',', \array_keys($row)) . ') VALUES (');
             foreach ($row as $value) {
                 $quoteds[] = "'$value'";
             }
-            $query .= (implode(', ', $quoteds)) . ')';
+            $query .= (\implode(', ', $quoteds)) . ')';
             DBManagerFactory::getInstance()->query($query);
         }
         
@@ -2205,10 +2205,10 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $bean = new Contact();
-        ob_start();
+        \ob_start();
         $bean->create_tables();
-        $results = ob_get_contents();
-        ob_get_clean();
+        $results = \ob_get_contents();
+        \ob_get_clean();
         self::assertEquals(/** @lang text */
             "Table already exists : $bean->table_name<br>",
             $results
@@ -2531,7 +2531,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         $bean = BeanFactory::getBean('Contacts');
         $bean->id = 'testBean_1';
         $bean->modified_by_name = 'testing';
-        $bean->field_defs = array_merge($bean->field_defs, $bean->field_defs = array(
+        $bean->field_defs = \array_merge($bean->field_defs, $bean->field_defs = array(
             'email_addresses' => array(
                 'type' => 'link',
             ),

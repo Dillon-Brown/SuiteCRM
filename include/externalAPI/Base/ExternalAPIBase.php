@@ -136,9 +136,9 @@ abstract class ExternalAPIBase implements ExternalAPIPlugin
 
     protected function postData($url, $postfields, $headers)
     {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $ch = \curl_init($url);
+        \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         
         $proxy_config = SugarModule::get('Administration')->loadBean();
         $proxy_config->retrieveSettings('proxy');
@@ -146,28 +146,28 @@ abstract class ExternalAPIBase implements ExternalAPIPlugin
         if (!empty($proxy_config) &&
             !empty($proxy_config->settings['proxy_on']) &&
             $proxy_config->settings['proxy_on'] == 1) {
-            curl_setopt($ch, CURLOPT_PROXY, $proxy_config->settings['proxy_host']);
-            curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_config->settings['proxy_port']);
+            \curl_setopt($ch, CURLOPT_PROXY, $proxy_config->settings['proxy_host']);
+            \curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_config->settings['proxy_port']);
             if (!empty($proxy_settings['proxy_auth'])) {
-                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_settings['proxy_username'] . ':' . $proxy_settings['proxy_password']);
+                \curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_settings['proxy_username'] . ':' . $proxy_settings['proxy_password']);
             }
         }
         
-        if ((is_array($postfields) && count($postfields) == 0) ||
+        if ((\is_array($postfields) && \count($postfields) == 0) ||
              empty($postfields)) {
-            curl_setopt($ch, CURLOPT_POST, false);
+            \curl_setopt($ch, CURLOPT_POST, false);
         } else {
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+            \curl_setopt($ch, CURLOPT_POST, true);
+            \curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
         }
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        \curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        \curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
 
         $GLOBALS['log']->debug("ExternalAPIBase->postData Where: ".$url);
-        $GLOBALS['log']->debug("Headers:\n".print_r($headers, true));
+        $GLOBALS['log']->debug("Headers:\n".\print_r($headers, true));
         // $GLOBALS['log']->debug("Postfields:\n".print_r($postfields,true));
-        $rawResponse = curl_exec($ch);
-        $GLOBALS['log']->debug("Got:\n".print_r($rawResponse, true));
+        $rawResponse = \curl_exec($ch);
+        $GLOBALS['log']->debug("Got:\n".\print_r($rawResponse, true));
 
         return $rawResponse;
     }
@@ -260,6 +260,6 @@ abstract class ExternalAPIBase implements ExternalAPIPlugin
      */
     public function isMimeDetectionAvailable()
     {
-        return (function_exists('mime_content_type') || function_exists('ext2mime'));
+        return (\function_exists('mime_content_type') || \function_exists('ext2mime'));
     }
 }

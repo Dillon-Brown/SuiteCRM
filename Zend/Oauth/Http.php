@@ -104,7 +104,7 @@ class Zend_Oauth_Http
      */
     public function setMethod($method)
     {
-        if (!in_array($method, array(Zend_Oauth::POST, Zend_Oauth::GET))) {
+        if (!\in_array($method, array(Zend_Oauth::POST, Zend_Oauth::GET))) {
             require_once 'Zend/Oauth/Exception.php';
             throw new Zend_Oauth_Exception('invalid HTTP method: ' . $method);
         }
@@ -253,7 +253,7 @@ class Zend_Oauth_Http
         $headerValue = array();
         $headerValue[] = 'OAuth realm="' . $realm . '"';
         foreach ($params as $key => $value) {
-            if (!preg_match("/^oauth_/", $key)) {
+            if (!\preg_match("/^oauth_/", $key)) {
                 continue;
             }
             $headerValue[] = Zend_Oauth_Http_Utility::urlEncode($key)
@@ -261,6 +261,6 @@ class Zend_Oauth_Http
                            . Zend_Oauth_Http_Utility::urlEncode($value)
                            . '"';
         }
-        return implode(",", $headerValue);
+        return \implode(",", $headerValue);
     }
 }

@@ -60,7 +60,7 @@ class OAuthTokensController extends SugarController
     protected function post_delete()
     {
         if (!empty($_REQUEST['return_url'])) {
-            $_REQUEST['return_url'] =urldecode($_REQUEST['return_url']);
+            $_REQUEST['return_url'] =\urldecode($_REQUEST['return_url']);
             $this->redirect_url = $_REQUEST['return_url'];
         } else {
             parent::post_delete();

@@ -90,11 +90,11 @@ class Config_File
     public function set_path($config_path)
     {
         if (!empty($config_path)) {
-            if (!is_string($config_path) || !file_exists($config_path) || !is_dir($config_path)) {
+            if (!\is_string($config_path) || !\file_exists($config_path) || !\is_dir($config_path)) {
                 $this->_trigger_error_msg("Bad config file path '$config_path'");
                 return;
             }
-            if (substr($config_path, -1) != DIRECTORY_SEPARATOR) {
+            if (\substr($config_path, -1) != DIRECTORY_SEPARATOR) {
                 $config_path .= DIRECTORY_SEPARATOR;
             }
 
@@ -151,7 +151,7 @@ class Config_File
      */
     public function &get_key($config_key)
     {
-        list($file_name, $section_name, $var_name) = explode('/', $config_key, 3);
+        list($file_name, $section_name, $var_name) = \explode('/', $config_key, 3);
         $result = &$this->get($file_name, $section_name, $var_name);
         return $result;
     }
@@ -163,7 +163,7 @@ class Config_File
      */
     public function get_file_names()
     {
-        return array_keys($this->_config_data);
+        return \array_keys($this->_config_data);
     }
 
 
@@ -181,7 +181,7 @@ class Config_File
             return;
         }
 
-        return array_keys($this->_config_data[$file_name]["sections"]);
+        return \array_keys($this->_config_data[$file_name]["sections"]);
     }
 
 
@@ -203,9 +203,9 @@ class Config_File
         }
 
         if (empty($section)) {
-            return array_keys($this->_config_data[$file_name]["vars"]);
+            return \array_keys($this->_config_data[$file_name]["vars"]);
         }
-        return array_keys($this->_config_data[$file_name]["sections"][$section]["vars"]);
+        return \array_keys($this->_config_data[$file_name]["sections"][$section]["vars"]);
     }
 
 
@@ -239,7 +239,7 @@ class Config_File
             $config_file = $file_name;
         }
 
-        ini_set('track_errors', true);
+        \ini_set('track_errors', true);
 
         $contents = @sugar_file_get_contents($config_file);
         if ($contents === false) {
@@ -273,7 +273,7 @@ class Config_File
     {
         if ($this->fix_newlines) {
             // fix mac/dos formatted newlines
-            $contents = preg_replace('!\r\n?!', "\n", $contents);
+            $contents = \preg_replace('!\r\n?!', "\n", $contents);
         }
 
         $config_data = array();
@@ -284,20 +284,20 @@ class Config_File
         $vars =& $config_data['vars'];
 
         /* parse file line by line */
-        preg_match_all('!^.*\r?\n?!m', $contents, $match);
+        \preg_match_all('!^.*\r?\n?!m', $contents, $match);
         $lines = $match[0];
-        for ($i=0, $count=count($lines); $i<$count; $i++) {
+        for ($i=0, $count=\count($lines); $i<$count; $i++) {
             $line = $lines[$i];
             if (empty($line)) {
                 continue;
             }
 
-            if (substr($line, 0, 1) == '[' && preg_match('!^\[(.*?)\]!', $line, $match)) {
+            if (\substr($line, 0, 1) == '[' && \preg_match('!^\[(.*?)\]!', $line, $match)) {
                 /* section found */
-                if (substr($match[1], 0, 1) == '.') {
+                if (\substr($match[1], 0, 1) == '.') {
                     /* hidden section */
                     if ($this->read_hidden) {
-                        $section_name = substr($match[1], 1);
+                        $section_name = \substr($match[1], 1);
                     } else {
                         /* break reference to $vars to ignore hidden section */
                         unset($vars);
@@ -314,26 +314,26 @@ class Config_File
                 continue;
             }
 
-            if (preg_match('/^\s*(\.?\w+)\s*=\s*(.*)/s', $line, $match)) {
+            if (\preg_match('/^\s*(\.?\w+)\s*=\s*(.*)/s', $line, $match)) {
                 /* variable found */
-                $var_name = rtrim($match[1]);
-                if (strpos($match[2], '"""') === 0) {
+                $var_name = \rtrim($match[1]);
+                if (\strpos($match[2], '"""') === 0) {
                     /* handle multiline-value */
-                    $lines[$i] = substr($match[2], 3);
+                    $lines[$i] = \substr($match[2], 3);
                     $var_value = '';
                     while ($i<$count) {
-                        if (($pos = strpos($lines[$i], '"""')) === false) {
+                        if (($pos = \strpos($lines[$i], '"""')) === false) {
                             $var_value .= $lines[$i++];
                         } else {
                             /* end of multiline-value */
-                            $var_value .= substr($lines[$i], 0, $pos);
+                            $var_value .= \substr($lines[$i], 0, $pos);
                             break;
                         }
                     }
                     $booleanize = false;
                 } else {
                     /* handle simple value */
-                    $var_value = preg_replace('/^([\'"])(.*)\1$/', '\2', rtrim($match[2]));
+                    $var_value = \preg_replace('/^([\'"])(.*)\1$/', '\2', \rtrim($match[2]));
                     $booleanize = $this->booleanize;
                 }
                 $this->_set_config_var($vars, $var_name, $var_value, $booleanize);
@@ -353,22 +353,22 @@ class Config_File
      */
     public function _set_config_var(&$container, $var_name, $var_value, $booleanize)
     {
-        if (substr($var_name, 0, 1) == '.') {
+        if (\substr($var_name, 0, 1) == '.') {
             if (!$this->read_hidden) {
                 return;
             }
-            $var_name = substr($var_name, 1);
+            $var_name = \substr($var_name, 1);
         }
 
-        if (!preg_match("/^[a-zA-Z_]\w*$/", $var_name)) {
+        if (!\preg_match("/^[a-zA-Z_]\w*$/", $var_name)) {
             $this->_trigger_error_msg("Bad variable name '$var_name'");
             return;
         }
 
         if ($booleanize) {
-            if (preg_match("/^(on|true|yes)$/i", $var_value)) {
+            if (\preg_match("/^(on|true|yes)$/i", $var_value)) {
                 $var_value = true;
-            } elseif (preg_match("/^(off|false|no)$/i", $var_value)) {
+            } elseif (\preg_match("/^(off|false|no)$/i", $var_value)) {
                 $var_value = false;
             }
         }
@@ -376,7 +376,7 @@ class Config_File
         if (!isset($container[$var_name]) || $this->overwrite) {
             $container[$var_name] = $var_value;
         } else {
-            settype($container[$var_name], 'array');
+            \settype($container[$var_name], 'array');
             $container[$var_name][] = $var_value;
         }
     }
@@ -388,7 +388,7 @@ class Config_File
      */
     public function _trigger_error_msg($error_msg, $error_type = E_USER_WARNING)
     {
-        trigger_error("Config_File error: $error_msg", $error_type);
+        \trigger_error("Config_File error: $error_msg", $error_type);
     }
     /**#@-*/
 }

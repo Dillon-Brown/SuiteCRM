@@ -217,7 +217,7 @@ abstract class Zend_Search_Lucene_Search_Query
         }
 
         $inputHTML = '<html><head><META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8"/></head><body>'
-                   . iconv($encoding, 'UTF-8//IGNORE', $inputHtmlFragment) . '</body></html>';
+                   . \iconv($encoding, 'UTF-8//IGNORE', $inputHtmlFragment) . '</body></html>';
 
         /** Zend_Search_Lucene_Document_Html */
         require_once 'Zend/Search/Lucene/Document/Html.php';

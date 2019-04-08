@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -51,11 +51,11 @@ class SugarWidgetFieldSingleEnum extends SugarWidgetFieldEnum
         global $app_list_strings;
 
         if (!empty($layout_def['remove_blank']) && $layout_def['remove_blank']) {
-            if (is_array($layout_def['options'])) {
+            if (\is_array($layout_def['options'])) {
                 $ops = $layout_def['options'];
             } elseif (isset($layout_def['options']) && isset($app_list_strings[$layout_def['options']])) {
                 $ops = $app_list_strings[$layout_def['options']];
-                if (array_key_exists('', $app_list_strings[$layout_def['options']])) {
+                if (\array_key_exists('', $app_list_strings[$layout_def['options']])) {
                     unset($ops['']);
                 }
             } else {

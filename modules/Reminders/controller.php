@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -54,12 +54,12 @@ class RemindersController extends SugarController
                 $person = BeanFactory::getBean($invitee['personModule'], $invitee['personModuleId']);
                 $invitee['personName'] = $person->name;
             }
-            if (isset($invitee['personModule']) && $invitee['personModule'] && in_array($invitee['personModule'], $personModules) && isset($invitee['personModuleId']) && $invitee['personModuleId'] && isset($invitee['personName']) && $invitee['personName']) {
+            if (isset($invitee['personModule']) && $invitee['personModule'] && \in_array($invitee['personModule'], $personModules) && isset($invitee['personModuleId']) && $invitee['personModuleId'] && isset($invitee['personName']) && $invitee['personName']) {
                 $ret[] = $invitee;
             }
         }
 
-        $inviteeJson = json_encode($ret);
+        $inviteeJson = \json_encode($ret);
         echo $inviteeJson;
         die();
     }

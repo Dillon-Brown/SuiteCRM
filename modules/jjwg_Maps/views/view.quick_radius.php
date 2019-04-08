@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -20,7 +20,7 @@ class Jjwg_MapsViewQuick_Radius extends SugarView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -46,7 +46,7 @@ class Jjwg_MapsViewQuick_Radius extends SugarView
         </td>
         <td>
             <input type="text" name="quick_address" id="quick_address"
-            value="<?php echo htmlspecialchars($_REQUEST['quick_address']); ?>" title='' tabindex='101' size="40" maxlength="255">
+            value="<?php echo \htmlspecialchars($_REQUEST['quick_address']); ?>" title='' tabindex='101' size="40" maxlength="255">
         </td>
     </tr>
     <tr>
@@ -57,10 +57,10 @@ class Jjwg_MapsViewQuick_Radius extends SugarView
             <select id="display_module" tabindex="111" title="<?php echo $GLOBALS['mod_strings']['LBL_MODULE_TYPE']; ?>" name="display_module">
                 <?php foreach ($GLOBALS['jjwg_config']['valid_geocode_modules'] as $module) {
             ?>
-                    <option value="<?php echo htmlspecialchars($module); ?>" <?php
+                    <option value="<?php echo \htmlspecialchars($module); ?>" <?php
                     if (!empty($_REQUEST['display_module']) && $module == $_REQUEST['display_module']) {
                         echo 'selected="selected"';
-                    } ?>><?php echo htmlspecialchars($GLOBALS['app_list_strings']['moduleList'][$module]); ?>
+                    } ?>><?php echo \htmlspecialchars($GLOBALS['app_list_strings']['moduleList'][$module]); ?>
                 <?php
         } ?>
             </select>
@@ -72,14 +72,14 @@ class Jjwg_MapsViewQuick_Radius extends SugarView
         </td>
         <td>
             <input type="text" name="distance" id="distance"
-            value="<?php echo htmlspecialchars($_REQUEST['distance']); ?>" title='' tabindex='121' size="10" maxlength="10">
+            value="<?php echo \htmlspecialchars($_REQUEST['distance']); ?>" title='' tabindex='121' size="10" maxlength="10">
             <select id="unit_type" tabindex="131" title="<?php echo $GLOBALS['mod_strings']['LBL_DISTANCE']; ?>" name="unit_type">
                 <?php foreach ($GLOBALS['app_list_strings']['map_unit_type_list'] as $key=>$value) {
             ?>
-                    <option value="<?php echo htmlspecialchars($key); ?>" <?php
+                    <option value="<?php echo \htmlspecialchars($key); ?>" <?php
                     if ($key == $_REQUEST['unit_type']) {
                         echo 'selected="selected"';
-                    } ?>><?php echo htmlspecialchars($value); ?>
+                    } ?>><?php echo \htmlspecialchars($value); ?>
                 <?php
         } ?>
             </select>

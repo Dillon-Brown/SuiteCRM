@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -269,7 +269,7 @@ class EditViewMerge
      */
     public function setLogFile($file)
     {
-        $this->fp = fopen($file, 'a');
+        $this->fp = \fopen($file, 'a');
     }
     
     /**
@@ -284,16 +284,16 @@ class EditViewMerge
      */
     protected function areMatchingValues($val1, $val2)
     {
-        if (!is_array($val1)) {
+        if (!\is_array($val1)) {
             //if val2 is an array and val1 isn't then it isn't a match
-            if (is_array($val2)) {
+            if (\is_array($val2)) {
                 return false;
             }
             //otherwise both are not arrays so we can return a comparison between them
             return $val1 == $val2;
         }
         //if val1 is an array and val2 isn't then it isn't a match
-        if (!is_array($val2)) {
+        if (!\is_array($val2)) {
             return false;
         }
         
@@ -323,10 +323,10 @@ class EditViewMerge
      */
     public function arrayMerge($gimp, $dom)
     {
-        if (is_array($gimp) && is_array($dom)) {
+        if (\is_array($gimp) && \is_array($dom)) {
             foreach ($dom as $domKey => $domVal) {
                 if (isset($gimp[$domKey])) {
-                    if (is_array($domVal)) {
+                    if (\is_array($domVal)) {
                         $gimp[$domKey] = $this->arrayMerge($gimp[$domKey], $dom[$domKey]);
                     } else {
                         $gimp[$domKey] = $domVal;
@@ -376,9 +376,9 @@ class EditViewMerge
             return $custom;
         }
         
-        if (is_array($custom)) {
+        if (\is_array($custom)) {
             //if both new and custom are arrays then at this point new != custom and orig != custom and orig != new  so let's merge the custom and the new and return that
-            if (is_array($new)) {
+            if (\is_array($new)) {
                 $new = $this->arrayMerge($custom, $new);
                 $this->log($new);
                 return $new;
@@ -408,7 +408,7 @@ class EditViewMerge
                 $do_merge = true;
                 
                 //Address fields present a special problem...
-                if (preg_match('/(alt_|primary_|billing_|shipping_)address_street/i', $field, $matches)) {
+                if (\preg_match('/(alt_|primary_|billing_|shipping_)address_street/i', $field, $matches)) {
                     $prefix = $matches[1];
                     $city = $prefix . 'address_city';
                     $postal_code = $prefix . 'address_postalcode';
@@ -488,8 +488,8 @@ class EditViewMerge
     {
         $panels  = array();
         
-        $panel_keys = array_keys($this->customPanelIds);
-        $this->defaultPanel = end($panel_keys);
+        $panel_keys = \array_keys($this->customPanelIds);
+        $this->defaultPanel = \end($panel_keys);
         
         foreach ($this->mergedFields as $field_id=>$field) {
             //If this field is in a panel not defined in the custom layout, set it to default panel
@@ -500,7 +500,7 @@ class EditViewMerge
             if ($field['loc']['source'] == 'new') {
                 if ($this->bestMatch) {
                     //for best match as long as the column is filled let's keep walking down till we can fill it
-                    $row = end(array_keys($this->customData[$this->module][$this->viewDefs][$this->panelName][$field['loc']['panel']]));
+                    $row = \end(\array_keys($this->customData[$this->module][$this->viewDefs][$this->panelName][$field['loc']['panel']]));
                     $col = 0;
                     while (!empty($panels[$field['loc']['panel']][$row][$col])) {
                         $col++;
@@ -526,9 +526,9 @@ class EditViewMerge
         
         foreach ($panels as $k=>$panel) {
             foreach ($panel as $r=>$row) {
-                ksort($panels[$k][$r]);
+                \ksort($panels[$k][$r]);
             }
-            ksort($panels[$k]);
+            \ksort($panels[$k]);
         }
         
         return $panels;
@@ -544,7 +544,7 @@ class EditViewMerge
     {
         //this is to handle the situation in Calls/Meetings where we updated the templateMeta and will fail if we don't update this.
         //long term we should not do this and should provide a way for calls/meetings to update themselves.
-        if (isset($this->customData[$this->module][$this->viewDefs][$this->templateMetaName]) && strcmp(strtolower($this->module), 'calls') != 0 && strcmp(strtolower($this->module), 'meetings') != 0) {
+        if (isset($this->customData[$this->module][$this->viewDefs][$this->templateMetaName]) && \strcmp(\strtolower($this->module), 'calls') != 0 && \strcmp(\strtolower($this->module), 'meetings') != 0) {
             $this->newData[$this->module][$this->viewDefs][$this->templateMetaName] = $this->customData[$this->module][$this->viewDefs][$this->templateMetaName];
         }
     }
@@ -592,8 +592,8 @@ class EditViewMerge
         $blanks = 0;
         $setDefaultPanel = false;
   
-        if (count($panels) == 1) {
-            $arrayKeys = array_keys($panels);
+        if (\count($panels) == 1) {
+            $arrayKeys = \array_keys($panels);
             if (!empty($arrayKeys[0])) {
                 $this->defaultPanel = $arrayKeys[0];
                 $panels = $panels[$arrayKeys[0]];
@@ -621,8 +621,8 @@ class EditViewMerge
                         $field_name = 'BLANK_' . $blanks;
                         $blanks++;
                     } else {
-                        $field_name = is_array($col) && isset($col['name']) ? $col['name'] : $col;
-                        if (is_array($col)) {
+                        $field_name = \is_array($col) && isset($col['name']) ? $col['name'] : $col;
+                        if (\is_array($col)) {
                             if (!empty($col['name'])) {
                                 $field_name = $col['name'];
                             }
@@ -631,7 +631,7 @@ class EditViewMerge
                         }
                     }
                     
-                    if (is_string($field_name)) {
+                    if (\is_string($field_name)) {
                         // We need to replace all instances of the fake uploadfile and filename field that has custom code with the real filename field
                         if (!empty($col['customCode'])) {
                             if ($field_name == 'uploadfile') {
@@ -676,8 +676,8 @@ class EditViewMerge
         $panel_ids = array();
         $setDefaultPanel = false;
         
-        if (count($panels) == 1) {
-            $arrayKeys = array_keys($panels);
+        if (\count($panels) == 1) {
+            $arrayKeys = \array_keys($panels);
             if (!empty($arrayKeys[0])) {
                 $this->defaulPanel = $arrayKeys[0];
                 $panels = $panels[$arrayKeys[0]];
@@ -718,7 +718,7 @@ class EditViewMerge
         $this->originalData = $$varnmame;
         require($new_file);
         $this->newData = $$varnmame;
-        if (file_exists($custom_file)) {
+        if (\file_exists($custom_file)) {
             require($custom_file);
             $this->customData = $$varnmame;
         } else {
@@ -760,7 +760,7 @@ class EditViewMerge
     public function merge($module, $original_file, $new_file, $custom_file=false, $save=true)
     {
         $this->clear();
-        $this->log("\n\n". 'Starting a merge in ' . get_class($this));
+        $this->log("\n\n". 'Starting a merge in ' . \get_class($this));
         $this->log('merging the following files');
         $this->log('original file:'  . $original_file);
         $this->log('new file:'  . $new_file);
@@ -772,7 +772,7 @@ class EditViewMerge
         $this->mergeMetaData();
         if ($save && !empty($this->newData) && !empty($custom_file)) {
             //backup the file
-            copy($custom_file, $custom_file . '.suback.php');
+            \copy($custom_file, $custom_file . '.suback.php');
             return $this->save($custom_file);
         }
         
@@ -788,11 +788,11 @@ class EditViewMerge
      */
     protected function log($message)
     {
-        if (!is_string($message)) {
-            $message = var_export($message, true);
+        if (!\is_string($message)) {
+            $message = \var_export($message, true);
         }
         if (!empty($this->fp)) {
-            fwrite($this->fp, $message. "\n");
+            \fwrite($this->fp, $message. "\n");
         } else {
             if (!empty($GLOBALS['log'])) {
                 $GLOBALS['log']->debug($message . "\n");

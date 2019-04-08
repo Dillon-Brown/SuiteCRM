@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -69,7 +69,7 @@ class ProjectTaskViewList extends ViewList
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -84,17 +84,17 @@ class ProjectTaskViewList extends ViewList
         $module = $GLOBALS['module'];
         $metadataFile = null;
         $foundViewDefs = false;
-        if (file_exists('custom/modules/' . $module. '/metadata/listviewdefs.php')) {
+        if (\file_exists('custom/modules/' . $module. '/metadata/listviewdefs.php')) {
             $metadataFile = 'custom/modules/' . $module . '/metadata/listviewdefs.php';
             $foundViewDefs = true;
         } else {
-            if (file_exists('custom/modules/'.$module.'/metadata/metafiles.php')) {
+            if (\file_exists('custom/modules/'.$module.'/metadata/metafiles.php')) {
                 require_once('custom/modules/'.$module.'/metadata/metafiles.php');
                 if (!empty($metafiles[$module]['listviewdefs'])) {
                     $metadataFile = $metafiles[$module]['listviewdefs'];
                     $foundViewDefs = true;
                 }
-            } elseif (file_exists('modules/'.$module.'/metadata/metafiles.php')) {
+            } elseif (\file_exists('modules/'.$module.'/metadata/metafiles.php')) {
                 require_once('modules/'.$module.'/metadata/metafiles.php');
                 if (!empty($metafiles[$module]['listviewdefs'])) {
                     $metadataFile = $metafiles[$module]['listviewdefs'];
@@ -102,23 +102,23 @@ class ProjectTaskViewList extends ViewList
                 }
             }
         }
-        if (!$foundViewDefs && file_exists('modules/'.$module.'/metadata/listviewdefs.php')) {
+        if (!$foundViewDefs && \file_exists('modules/'.$module.'/metadata/listviewdefs.php')) {
             $metadataFile = 'modules/'.$module.'/metadata/listviewdefs.php';
         }
         require_once($metadataFile);
 
         $seed = $this->bean;
-        if (!empty($this->bean->object_name) && isset($_REQUEST[$module.'2_'.strtoupper($this->bean->object_name).'_offset'])) {//if you click the pagination button, it will populate the search criteria here
+        if (!empty($this->bean->object_name) && isset($_REQUEST[$module.'2_'.\strtoupper($this->bean->object_name).'_offset'])) {//if you click the pagination button, it will populate the search criteria here
             if (!empty($_REQUEST['current_query_by_page'])) {//The code support multi browser tabs pagination
-                $blockVariables = array('mass', 'uid', 'massupdate', 'delete', 'merge', 'selectCount', 'request_data', 'current_query_by_page', $module.'2_'.strtoupper($this->bean->object_name).'_ORDER_BY');
+                $blockVariables = array('mass', 'uid', 'massupdate', 'delete', 'merge', 'selectCount', 'request_data', 'current_query_by_page', $module.'2_'.\strtoupper($this->bean->object_name).'_ORDER_BY');
                 if (isset($_REQUEST['lvso'])) {
                     $blockVariables[] = 'lvso';
                 }
 
-                $current_query_by_page = json_decode(html_entity_decode($_REQUEST['current_query_by_page']), true);
+                $current_query_by_page = \json_decode(\html_entity_decode($_REQUEST['current_query_by_page']), true);
                 foreach ($current_query_by_page as $search_key=>$search_value) {
-                    if ($search_key != $module.'2_'.strtoupper($this->bean->object_name).'_offset' && !in_array($search_key, $blockVariables)) {
-                        if (!is_array($search_value)) {
+                    if ($search_key != $module.'2_'.\strtoupper($this->bean->object_name).'_offset' && !\in_array($search_key, $blockVariables)) {
+                        if (!\is_array($search_value)) {
                             $_REQUEST[$search_key] = DBManagerFactory::getInstance()->quote($search_value);
                         } else {
                             foreach ($search_value as $key=>&$val) {
@@ -146,7 +146,7 @@ class ProjectTaskViewList extends ViewList
         $lv = new ListViewSmarty();
         $displayColumns = array();
         if (!empty($_REQUEST['displayColumns'])) {
-            foreach (explode('|', $_REQUEST['displayColumns']) as $num => $col) {
+            foreach (\explode('|', $_REQUEST['displayColumns']) as $num => $col) {
                 if (!empty($listViewDefs[$module][$col])) {
                     $displayColumns[$col] = $listViewDefs[$module][$col];
                 }
@@ -199,7 +199,7 @@ class ProjectTaskViewList extends ViewList
         }
 
         $use_old_search = true;
-        if (file_exists('modules/'.$this->module.'/SearchForm.html')) {
+        if (\file_exists('modules/'.$this->module.'/SearchForm.html')) {
             require_once('include/SearchForm/SearchForm.php');
             $searchForm = new SearchForm($this->module, $this->seed);
         } else {
@@ -207,18 +207,18 @@ class ProjectTaskViewList extends ViewList
             require_once('include/SearchForm/SearchForm2.php');
 
 
-            if (file_exists('custom/modules/'.$this->module.'/metadata/searchdefs.php')) {
+            if (\file_exists('custom/modules/'.$this->module.'/metadata/searchdefs.php')) {
                 require_once('custom/modules/'.$this->module.'/metadata/searchdefs.php');
             } elseif (!empty($metafiles[$this->module]['searchdefs'])) {
                 require_once($metafiles[$this->module]['searchdefs']);
-            } elseif (file_exists('modules/'.$this->module.'/metadata/searchdefs.php')) {
+            } elseif (\file_exists('modules/'.$this->module.'/metadata/searchdefs.php')) {
                 require_once('modules/'.$this->module.'/metadata/searchdefs.php');
             }
 
 
             if (!empty($metafiles[$this->module]['searchfields'])) {
                 require($metafiles[$this->module]['searchfields']);
-            } elseif (file_exists('modules/'.$this->module.'/metadata/SearchFields.php')) {
+            } elseif (\file_exists('modules/'.$this->module.'/metadata/SearchFields.php')) {
                 require('modules/'.$this->module.'/metadata/SearchFields.php');
             }
 
@@ -236,14 +236,14 @@ class ProjectTaskViewList extends ViewList
         $where = '';
         if (isset($_REQUEST['query'])) {
             // we have a query
-            if (!empty($_SERVER['HTTP_REFERER']) && preg_match('/action=EditView/', $_SERVER['HTTP_REFERER'])) { // from EditView cancel
+            if (!empty($_SERVER['HTTP_REFERER']) && \preg_match('/action=EditView/', $_SERVER['HTTP_REFERER'])) { // from EditView cancel
                    $searchForm->populateFromArray($storeQuery->query);
             } else {
                 $searchForm->populateFromRequest();
             }
             $where_clauses = $searchForm->generateSearchWhere(true, $this->seed->module_dir);
-            if (count($where_clauses) > 0) {
-                $where = '('. implode(' ) AND ( ', $where_clauses) . ')';
+            if (\count($where_clauses) > 0) {
+                $where = '('. \implode(' ) AND ( ', $where_clauses) . ')';
             }
             $GLOBALS['log']->info("List View Where Clause: $where");
         }

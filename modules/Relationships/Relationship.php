@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -89,7 +89,7 @@ class Relationship extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -217,7 +217,7 @@ class Relationship extends SugarBean
 
         //		_ppd($GLOBALS['relationships']);
 
-        if (array_key_exists($relationship_name, $GLOBALS['relationships'])) {
+        if (\array_key_exists($relationship_name, $GLOBALS['relationships'])) {
             foreach ($GLOBALS['relationships'][$relationship_name] as $field=>$value) {
                 $this->$field = $value;
             }
@@ -229,7 +229,7 @@ class Relationship extends SugarBean
 
     public function load_relationship_meta()
     {
-        if (!file_exists(Relationship::cache_file_dir().'/'.Relationship::cache_file_name_only())) {
+        if (!\file_exists(Relationship::cache_file_dir().'/'.Relationship::cache_file_name_only())) {
             $this->build_relationship_cache();
         }
         include(Relationship::cache_file_dir().'/'.Relationship::cache_file_name_only());
@@ -246,7 +246,7 @@ class Relationship extends SugarBean
         }
 
         sugar_mkdir($this->cache_file_dir(), null, true);
-        $out = "<?php \n \$relationships = " . var_export($relationships, true) . ";";
+        $out = "<?php \n \$relationships = " . \var_export($relationships, true) . ";";
         sugar_file_put_contents_atomic(Relationship::cache_file_dir() . '/' . Relationship::cache_file_name_only(), $out);
 
         require_once("data/Relationships/RelationshipFactory.php");
@@ -266,8 +266,8 @@ class Relationship extends SugarBean
     public static function delete_cache()
     {
         $filename=Relationship::cache_file_dir().'/'.Relationship::cache_file_name_only();
-        if (file_exists($filename)) {
-            unlink($filename);
+        if (\file_exists($filename)) {
+            \unlink($filename);
         }
         require_once("data/Relationships/RelationshipFactory.php");
         SugarRelationshipFactory::deleteCache();
@@ -281,15 +281,15 @@ class Relationship extends SugarBean
 
         $temp_module = get_module_info($base_module);
 
-        $rel_attribute1_name = $temp_module->field_defs[strtolower($rel_module1_name)]['relationship'];
+        $rel_attribute1_name = $temp_module->field_defs[\strtolower($rel_module1_name)]['relationship'];
         $rel_module1 = $this->get_other_module($rel_attribute1_name, $base_module, $temp_module->db);
         $rel_module1_bean = get_module_info($rel_module1);
 
         if ($rel_module2_name!="") {
             if ($rel_module2_name == 'ProjectTask') {
-                $rel_module2_name = strtolower($rel_module2_name);
+                $rel_module2_name = \strtolower($rel_module2_name);
             }
-            $rel_attribute2_name = $rel_module1_bean->field_defs[strtolower($rel_module2_name)]['relationship'];
+            $rel_attribute2_name = $rel_module1_bean->field_defs[\strtolower($rel_module2_name)]['relationship'];
             $rel_module2 = $this->get_other_module($rel_attribute2_name, $rel_module1_bean->module_dir, $rel_module1_bean->db);
             $rel_module2_bean = get_module_info($rel_module2);
             return $rel_module2_bean;

@@ -9,7 +9,7 @@ function install_ss()
     global $sugar_config;
 
     /** If this is the first install set some default settings */
-    if (!array_key_exists('securitysuite_additive', $sugar_config)) {
+    if (!\array_key_exists('securitysuite_additive', $sugar_config)) {
         // save securitysuite_additive setting
         $sugar_config['securitysuite_additive'] = true;
         // save securitysuite_user_role_precedence setting
@@ -31,7 +31,7 @@ function install_ss()
         //write_array_to_file('sugar_config', $sugar_config, 'config.php');
     }
 
-    if (!array_key_exists('securitysuite_strict_rights', $sugar_config)) {
+    if (!\array_key_exists('securitysuite_strict_rights', $sugar_config)) {
         // save securitysuite_strict_rights setting
         $sugar_config['securitysuite_strict_rights'] = true;
 
@@ -39,7 +39,7 @@ function install_ss()
         //write_array_to_file('sugar_config', $sugar_config, 'config.php');
     }
 
-    if (!array_key_exists('securitysuite_filter_user_list', $sugar_config)) {
+    if (!\array_key_exists('securitysuite_filter_user_list', $sugar_config)) {
         // save securitysuite_filter_user_list setting
         $sugar_config['securitysuite_filter_user_list'] = false;
 
@@ -53,7 +53,7 @@ function install_ss()
     $GLOBALS['sugar_config']['addAjaxBannedModules'][] = 'SecurityGroups';
 
     $sugar_config['securitysuite_version'] = '6.5.17';
-    ksort($sugar_config);
+    \ksort($sugar_config);
     write_array_to_file('sugar_config', $sugar_config, 'config.php');
 
     installSSHooks();

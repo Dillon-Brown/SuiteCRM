@@ -65,7 +65,7 @@ class ViewDetailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $view->ss = new Sugar_Smarty();
         $view->preDisplay();
         $this->assertInstanceOf('DetailView2', $view->dv);
-        $this->asserttrue(is_array($view->dv->defs));
+        $this->asserttrue(\is_array($view->dv->defs));
 
         //execute the method again for a different module with required attributes preset, it will initialize the dv(detail view) attribute.
         $view = new ViewDetail();
@@ -74,7 +74,7 @@ class ViewDetailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $view->ss = new Sugar_Smarty();
         $view->preDisplay();
         $this->assertInstanceOf('DetailView2', $view->dv);
-        $this->asserttrue(is_array($view->dv->defs));
+        $this->asserttrue(\is_array($view->dv->defs));
         
         // clean up
         
@@ -104,11 +104,11 @@ class ViewDetailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $view->ss = new Sugar_Smarty();
         $view->preDisplay();
 
-        ob_start();
+        \ob_start();
         $view->display();
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
-        $this->assertGreaterThan(0, strlen($renderedContent));
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
+        $this->assertGreaterThan(0, \strlen($renderedContent));
         
         // clean up
         

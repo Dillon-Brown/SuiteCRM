@@ -63,7 +63,7 @@ require_once('include/EditView/EditView2.php');
          if (isset($GLOBALS['log'])) {
              $GLOBALS['log']->deprecated($deprecatedMessage);
          } else {
-             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+             \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
          }
          self::__construct();
      }
@@ -78,7 +78,7 @@ require_once('include/EditView/EditView2.php');
              if (!empty($_REQUEST['modules'])) {
                  $js_array = 'Array(';
 
-                 $count = count($_REQUEST['modules']);
+                 $count = \count($_REQUEST['modules']);
                  $index = 1;
                  foreach ($_REQUEST['modules'] as $module) {
                      $js_array .= "'form_".$module."'";

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -72,7 +72,7 @@ class ImapHandlerFakeData
      */
     protected function encodeArgs($args = null)
     {
-        return $encoded = md5(serialize($args));
+        return $encoded = \md5(\serialize($args));
     }
     
     /**
@@ -83,11 +83,11 @@ class ImapHandlerFakeData
      */
     protected function getNextCallReturn($name, $argsEncoded)
     {
-        if (!is_array($this->calls[$name][$argsEncoded])) {
+        if (!\is_array($this->calls[$name][$argsEncoded])) {
             throw new Exception('Fake handler given an incorrect data. Returns should be an array at name: ' . $name, self::ERR_WRONG_TESTSET);
         }
-        $ret = array_shift($this->calls[$name][$argsEncoded]);
-        $this->calls[$name][$argsEncoded] = array_values($this->calls[$name][$argsEncoded]);
+        $ret = \array_shift($this->calls[$name][$argsEncoded]);
+        $this->calls[$name][$argsEncoded] = \array_values($this->calls[$name][$argsEncoded]);
         if (empty($this->calls[$name][$argsEncoded])) {
             // using the last element forever..
             $this->calls[$name][$argsEncoded] = [$ret];
@@ -104,16 +104,16 @@ class ImapHandlerFakeData
      */
     protected function getCall($name, $args = null)
     {
-        if (key_exists($name, $this->calls)) {
+        if (\key_exists($name, $this->calls)) {
             $argsEncoded = $this->encodeArgs($args);
-            if (key_exists($argsEncoded, $this->calls[$name])) {
+            if (\key_exists($argsEncoded, $this->calls[$name])) {
                 $ret = $this->getNextCallReturn($name, $argsEncoded);
                 return $ret;
             } else {
-                throw new Exception('Fake caller has not matched arguments for this call: ' . $name . "\nArguments was: " . print_r($args, true), self::ERR_NO_MATCH_ARGS);
+                throw new Exception('Fake caller has not matched arguments for this call: ' . $name . "\nArguments was: " . \print_r($args, true), self::ERR_NO_MATCH_ARGS);
             }
         } else {
-            throw new Exception('Fake call does not exists for this function call: ' . $name . "\nwith specific arguments:\n" . print_r($args, true), self::ERR_CALL_NOT_FOUND);
+            throw new Exception('Fake call does not exists for this function call: ' . $name . "\nwith specific arguments:\n" . \print_r($args, true), self::ERR_CALL_NOT_FOUND);
         }
     }
     
@@ -127,7 +127,7 @@ class ImapHandlerFakeData
     public function call($name, $args = null)
     {
         $ret = $this->getCall($name, $args);
-        if (is_object($ret) && ($ret instanceof Closure)) {
+        if (\is_object($ret) && ($ret instanceof Closure)) {
             $out = $ret();
         } else {
             $out = $ret;

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -54,7 +54,7 @@ if (isset($_POST['timezone']) || isset($_GET['timezone'])) {
     $current_user->setPreference('timezone', $timezone);
     $current_user->setPreference('ut', 1);
     $current_user->savePreferencesToDB();
-    session_write_close();
-    header('Location: index.php?action=index&module=Home');
+    \session_write_close();
+    \header('Location: index.php?action=index&module=Home');
     exit();
 }

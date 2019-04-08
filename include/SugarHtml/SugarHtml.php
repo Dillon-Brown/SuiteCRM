@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -153,7 +153,7 @@ class SugarHtml
         $out = "";
         if (isset($dom_tree[0])) { //dom contains sibling items
             foreach ($dom_tree as $dom) {
-                $out .= is_array($dom) ? self::createHtml($dom) : $dom;
+                $out .= \is_array($dom) ? self::createHtml($dom) : $dom;
             }
         } elseif (isset($dom_tree['tag'])) {
             $tagName = $dom_tree['tag'];
@@ -176,7 +176,7 @@ class SugarHtml
                 $out .= '/>';
             } else {
                 $out .= self::HTML_TAG_END;
-                $out .= (is_array($container)) ? self::createHtml($container) : $container;
+                $out .= (\is_array($container)) ? self::createHtml($container) : $container;
                 $out .= self::createCloseTag($tagName);
             }
         } elseif (isset($dom_tree['smarty'])) { //dom contains smarty function
@@ -186,12 +186,12 @@ class SugarHtml
                 unset($blocks['template']);
                 $replacement = array();
                 foreach ($blocks as $key => $value) {
-                    $replacement[$key] = is_array($value) ? self::createHtml($value) : $value;
+                    $replacement[$key] = \is_array($value) ? self::createHtml($value) : $value;
                 }
                 if ($count++ > 0) {
                     $out .= ' ';
                 }
-                $out .= strtr($template, $replacement);
+                $out .= \strtr($template, $replacement);
             }
         } else {
             $count = 0;
@@ -213,11 +213,11 @@ class SugarHtml
             'submit', 'button', 'hidden', 'checkbox', 'input'
         );
 
-        if (in_array($sugar_html['type'], $input_types)) {
+        if (\in_array($sugar_html['type'], $input_types)) {
             $sugar_html['htmlOptions']['type'] = (empty($sugar_html['htmlOptions']['type'])) ? $sugar_html['type'] : $sugar_html['htmlOptions']['type'];
             $sugar_html['htmlOptions']['value'] = $sugar_html['value'];
 
-            $output = array_merge(array(
+            $output = \array_merge(array(
                 'tag' => 'input',
                 'self_closing' => true,
             ), $sugar_html['htmlOptions']);
@@ -247,38 +247,38 @@ class SugarHtml
      */
     public static function parseHtmlTag($code, $appendTo = array())
     {
-        $code = ltrim($code);
-        $start_pos = strpos($code, ' ') ? strpos($code, ' ') : strpos($code, self::HTML_TAG_END);
+        $code = \ltrim($code);
+        $start_pos = \strpos($code, ' ') ? \strpos($code, ' ') : \strpos($code, self::HTML_TAG_END);
         $output = array();
-        if (substr($code, 0, 1) != self::HTML_TAG_BEGIN || $start_pos === false) {
+        if (\substr($code, 0, 1) != self::HTML_TAG_BEGIN || $start_pos === false) {
             $offset = 0;
             self::parseSmartyTag($code, $output, $offset);
-            $remainder = ltrim(substr($code, $offset));
+            $remainder = \ltrim(\substr($code, $offset));
             if (!empty($remainder)) {
-                array_push($appendTo, $output);
+                \array_push($appendTo, $output);
                 return self::parseHtmlTag($remainder, $appendTo);
             }
         } else {
-            $tag = substr($code, 1, $start_pos - 1);
+            $tag = \substr($code, 1, $start_pos - 1);
             $closing_tag = '</'.$tag;
-            $end_pos = strpos($code, $closing_tag, $start_pos + 1);
+            $end_pos = \strpos($code, $closing_tag, $start_pos + 1);
             $output['tag'] = $tag;
 
             if ($end_pos === false) {
                 $output['self_closing'] = true;
-                $code = substr($code, $start_pos + 1);
+                $code = \substr($code, $start_pos + 1);
             } else {
                 $output['self_closing'] = false;
-                $code = substr($code, $start_pos + 1, $end_pos - $start_pos - 1);
+                $code = \substr($code, $start_pos + 1, $end_pos - $start_pos - 1);
             }
             $remainder = self::extractAttributes($code, $output);
 
             if (!empty($remainder)) {
-                array_push($appendTo, $output);
+                \array_push($appendTo, $output);
                 return self::parseHtmlTag($remainder, $appendTo);
             }
         }
-        return (empty($appendTo)) ? $output : array_merge($appendTo, array($output));
+        return (empty($appendTo)) ? $output : \array_merge($appendTo, array($output));
     }
 
     /**
@@ -296,30 +296,30 @@ class SugarHtml
             $output['smarty'] = array();
         }
 
-        $_str = ltrim(substr($code, $offset + 1));
+        $_str = \ltrim(\substr($code, $offset + 1));
 
-        preg_match("/^[$\w]+/", $_str, $statement);
+        \preg_match("/^[$\w]+/", $_str, $statement);
         $_smarty_closing = self::SMARTY_TAG_BEGIN.'/'.$statement[0];
-        $_left = strlen($statement[0]);
+        $_left = \strlen($statement[0]);
 
-        $_right = strpos($code, $_smarty_closing, $offset);
+        $_right = \strpos($code, $_smarty_closing, $offset);
         if ($_right === false) { //smarty closed itself
-            $_right = strpos($code, self::SMARTY_TAG_END, $offset);
+            $_right = \strpos($code, self::SMARTY_TAG_END, $offset);
         } else {
-            preg_match_all('/\{( |)+'.substr($_str, 0, $_left).'/', substr($_str, 0, $_right), $matches);
+            \preg_match_all('/\{( |)+'.\substr($_str, 0, $_left).'/', \substr($_str, 0, $_right), $matches);
 
-            $match_count = count($matches[0]);
+            $match_count = \count($matches[0]);
             while ($match_count-- > 0) {
-                $_right = strpos($code, $_smarty_closing, $_right + strlen($_smarty_closing));
+                $_right = \strpos($code, $_smarty_closing, $_right + \strlen($_smarty_closing));
             }
 
-            $_right = strpos($code, self::SMARTY_TAG_END, $_right);
+            $_right = \strpos($code, self::SMARTY_TAG_END, $_right);
         }
-        $smarty_string = substr($code, $offset, $_right + 1 - $offset);
+        $smarty_string = \substr($code, $offset, $_right + 1 - $offset);
 
-        $clauses = array_slice(
+        $clauses = \array_slice(
             //split into each clause
-            preg_split("/[\{\}]/i", $smarty_string),
+            \preg_split("/[\{\}]/i", $smarty_string),
             1,
             -1 //slice out the first and last items, which is empty.
         );
@@ -337,14 +337,14 @@ class SugarHtml
         $queue = 0;
         $is_literal = false;
         $current_literal_string = '';
-        for ($seq = 0; $seq < count($clauses); $seq++) {
+        for ($seq = 0; $seq < \count($clauses); $seq++) {
             $is_reserved = false;
 
-            $current_literal_string = !empty($current_literal_string) ? $current_literal_string : (isset($reserved_functions[trim($clauses[$seq])]) ? trim($clauses[$seq]) : '');
+            $current_literal_string = !empty($current_literal_string) ? $current_literal_string : (isset($reserved_functions[\trim($clauses[$seq])]) ? \trim($clauses[$seq]) : '');
             $is_literal = $is_literal || !empty($current_literal_string);
 
             foreach ($reserved_strings as $str) {
-                if (substr(ltrim($clauses[$seq]), 0, strlen($str)) == $str) {
+                if (\substr(\ltrim($clauses[$seq]), 0, \strlen($str)) == $str) {
                     $is_reserved = true;
                     break;
                 }
@@ -355,9 +355,9 @@ class SugarHtml
                 } else {
                     $clauses[--$queue] .= self::SMARTY_TAG_BEGIN.$clauses[$seq].self::SMARTY_TAG_END;
                 }
-                $is_literal = $is_literal && (substr(ltrim($clauses[$seq]), 0, strlen("/".$current_literal_string)) != "/".$current_literal_string);
+                $is_literal = $is_literal && (\substr(\ltrim($clauses[$seq]), 0, \strlen("/".$current_literal_string)) != "/".$current_literal_string);
                 $current_literal_string = ($is_literal) ? $current_literal_string : '';
-                if ($seq < count($clauses) - 1) {
+                if ($seq < \count($clauses) - 1) {
                     $clauses[$queue++] .= $clauses[++$seq];
                 } else {
                     $queue++;
@@ -366,34 +366,34 @@ class SugarHtml
                 $clauses[$queue++] = $clauses[$seq];
             }
         }
-        array_splice($clauses, $queue);
+        \array_splice($clauses, $queue);
         //Split phrases for the conditional statement
         $count = 0;
         $queue = 0;
-        for ($seq = 0; $seq < count($clauses); $seq++) {
-            if ($seq > 0 && substr(ltrim($clauses[$seq]), 0, 2) == 'if') {
+        for ($seq = 0; $seq < \count($clauses); $seq++) {
+            if ($seq > 0 && \substr(\ltrim($clauses[$seq]), 0, 2) == 'if') {
                 $count++;
             }
             if ($count > 0) {
                 $clauses[--$queue] .= ($seq % 2 == 0) ? self::SMARTY_TAG_BEGIN.$clauses[$seq].self::SMARTY_TAG_END : $clauses[$seq];
-                if ($seq < count($clauses)) {
+                if ($seq < \count($clauses)) {
                     $clauses[$queue++] .= $clauses[++$seq];
                 }
             } else {
                 $clauses[$queue++] = $clauses[$seq];
             }
 
-            if ($seq > 0 && substr(ltrim($clauses[$seq - 1]), 0, 3) == '/if') {
+            if ($seq > 0 && \substr(\ltrim($clauses[$seq - 1]), 0, 3) == '/if') {
                 $count--;
             }
         }
-        array_splice($clauses, $queue);
+        \array_splice($clauses, $queue);
 
         //resemble the smarty phases
         $seq = 0;
         foreach ($clauses as $index => $clause) {
             if ($index % 2 == 0) {
-                if (self::SMARTY_TAG_BEGIN == substr($clause, 0, 1) && self::SMARTY_TAG_END == substr($clause, -1, 1)) {
+                if (self::SMARTY_TAG_BEGIN == \substr($clause, 0, 1) && self::SMARTY_TAG_END == \substr($clause, -1, 1)) {
                     $smarty_template['template'] .= $clause;
                 } else {
                     $smarty_template['template'] .= '{'.$clause.'}';
@@ -428,8 +428,8 @@ class SugarHtml
         $quote_encoded = false;
         $smarty_encoded = false;
         $cache = array();
-        $code = rtrim($code);
-        for ($i = 0; $i < strlen($code) ; $i ++) {
+        $code = \rtrim($code);
+        for ($i = 0; $i < \strlen($code) ; $i ++) {
             $char = $code[$i];
             if (!$smarty_encoded && ($char == self::SINGLE_QUOTE || $char == self::DOUBLE_QUOTE)) {
                 if (empty($quote_type)) {
@@ -437,11 +437,11 @@ class SugarHtml
                     $quote_type = $char;
                 } elseif ($quote_type == $char) {
                     if (!empty($cache)) {
-                        $string = implode('', $cache);
+                        $string = \implode('', $cache);
                         if (empty($var_name)) {
                             $var_name = $string;
                         } elseif ($var_assign) {
-                            $output[trim($var_name)] = $string;
+                            $output[\trim($var_name)] = $string;
                             unset($var_name);
                         }
                     }
@@ -450,21 +450,21 @@ class SugarHtml
                     $cache = array();
                     $quote_encoded = false;
                 } else {
-                    array_push($cache, $char);
+                    \array_push($cache, $char);
                 }
             } elseif ($quote_encoded && $char == self::SMARTY_TAG_BEGIN) {
                 $smarty_encoded = true;
-                array_push($cache, $char);
+                \array_push($cache, $char);
             } elseif ($quote_encoded && $char == self::SMARTY_TAG_END) {
                 $smarty_encoded = false;
-                array_push($cache, $char);
+                \array_push($cache, $char);
             } elseif (!$quote_encoded && $char == ' ') {
                 if (!empty($cache)) {
-                    $string = implode('', $cache);
+                    $string = \implode('', $cache);
                     if (empty($var_name)) {
                         $var_name = $string;
                     } elseif ($var_assign) {
-                        $output[trim($var_name)] = $string;
+                        $output[\trim($var_name)] = $string;
                         unset($var_name);
                     }
                     $quote_encoded = false;
@@ -475,8 +475,8 @@ class SugarHtml
                 if (!empty($var_name)) {
                     $output[$var_name] = '';
                 }
-                $string = implode('', $cache);
-                if (trim($string) != "") {
+                $string = \implode('', $cache);
+                if (\trim($string) != "") {
                     $var_name = $string;
                 }
                 $var_assign = true;
@@ -486,20 +486,20 @@ class SugarHtml
             } elseif (!$quote_encoded && $char == self::HTML_TAG_END) {
                 break;
             } else {
-                array_push($cache, $char);
+                \array_push($cache, $char);
             }
         }
         if (!empty($cache)) {
-            $var_name = implode('', $cache);
+            $var_name = \implode('', $cache);
             $output[$var_name] = '';
         }
 
         if (isset($output['self_closing']) && $output['self_closing'] === false) {
-            $output['container'] = self::parseHtmlTag(substr($code, $i + 1));
+            $output['container'] = self::parseHtmlTag(\substr($code, $i + 1));
             return '';
         }
 
-        return substr($code, $i + 1);
+        return \substr($code, $i + 1);
     }
 
     /**
@@ -513,8 +513,8 @@ class SugarHtml
     {
         $options = "";
         foreach ($params as $attr => $value) {
-            if (is_numeric($attr) === false) {
-                $attr = trim($attr);
+            if (\is_numeric($attr) === false) {
+                $attr = \trim($attr);
                 if ($value) {
                     $options .= $attr.'="'.$value.'" ';
                 } elseif (!empty($attr)) {

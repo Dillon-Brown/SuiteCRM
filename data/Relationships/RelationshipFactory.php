@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -71,7 +71,7 @@ class SugarRelationshipFactory
      */
     public static function getInstance()
     {
-        if (is_null(self::$rfInstance)) {
+        if (\is_null(self::$rfInstance)) {
             self::$rfInstance = new self();
         }
 
@@ -86,8 +86,8 @@ class SugarRelationshipFactory
     public static function deleteCache()
     {
         $file = self::getInstance()->getCacheFile();
-        if (is_file($file)) {
-            unlink($file);
+        if (\is_file($file)) {
+            \unlink($file);
         }
     }
 
@@ -163,7 +163,7 @@ class SugarRelationshipFactory
 
     protected function loadRelationships()
     {
-        if (is_file($this->getCacheFile())) {
+        if (\is_file($this->getCacheFile())) {
             include $this->getCacheFile();
             $this->relationships = $relationships;
         } else {
@@ -198,9 +198,9 @@ class SugarRelationshipFactory
             if (!empty($def['relationships'])) {
                 foreach ($def['relationships'] as $relKey => $relDef) {
                     if ($key === $relKey) { //Relationship only entry, we need to capture everything
-                        $relationships[$key] = array_merge(array('name' => $key), (array) $def, (array) $relDef);
+                        $relationships[$key] = \array_merge(array('name' => $key), (array) $def, (array) $relDef);
                     } else {
-                        $relationships[$relKey] = array_merge(array('name' => $relKey), (array) $relDef);
+                        $relationships[$relKey] = \array_merge(array('name' => $relKey), (array) $relDef);
                         if (!empty($relationships[$relKey]['join_table']) && empty($relationships[$relKey]['fields'])
                             && isset($dictionary[$relationships[$relKey]['join_table']]['fields'])
                         ) {
@@ -211,8 +211,8 @@ class SugarRelationshipFactory
             }
         }
         //Save it out
-        sugar_mkdir(dirname($this->getCacheFile()), null, true);
-        $out = "<?php \n \$relationships = ".var_export($relationships, true).';';
+        sugar_mkdir(\dirname($this->getCacheFile()), null, true);
+        $out = "<?php \n \$relationships = ".\var_export($relationships, true).';';
         sugar_file_put_contents_atomic($this->getCacheFile(), $out);
 
         $this->relationships = $relationships;

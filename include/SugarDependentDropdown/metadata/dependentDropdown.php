@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -59,7 +59,7 @@ $actions = $rules->getActionsDOM();
 
 $strings = array();
 foreach ($app_strings as $k => $v) {
-    if (strpos($k, "LBL_ROUTING_") !== false) {
+    if (\strpos($k, "LBL_ROUTING_") !== false) {
         $strings[$k] = $v;
     }
 }

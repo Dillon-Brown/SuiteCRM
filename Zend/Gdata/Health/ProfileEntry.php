@@ -99,7 +99,7 @@ class Zend_Gdata_Health_ProfileEntry extends Zend_Gdata_Entry
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
 
-        if (strstr($absoluteNodeName, $this->lookupNamespace('ccr') . ':')) {
+        if (\strstr($absoluteNodeName, $this->lookupNamespace('ccr') . ':')) {
             $ccrElement = new Zend_Gdata_Health_Extension_Ccr();
             $ccrElement->transferFromDOM($child);
             $this->_ccrData = $ccrElement;

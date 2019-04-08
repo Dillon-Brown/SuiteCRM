@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -104,7 +104,7 @@ if ($campaign_id && isset($campaign) && $campaign->status == 'Inactive') {
         $where_clauses = array();
 
         if (!empty($campaign_id)) {
-            array_push($where_clauses, "campaign_id = '".DBManagerFactory::getInstance()->quote($campaign_id)."'");
+            \array_push($where_clauses, "campaign_id = '".DBManagerFactory::getInstance()->quote($campaign_id)."'");
         }
 
         $where = "";

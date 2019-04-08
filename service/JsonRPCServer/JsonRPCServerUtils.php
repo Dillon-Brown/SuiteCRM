@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -57,7 +57,7 @@ class JsonRPCServerUtils
         }
         $cond_arr = array();
 
-        if (!is_array($query_obj['conditions'])) {
+        if (!\is_array($query_obj['conditions'])) {
             $query_obj['conditions'] = array();
         }
 
@@ -66,7 +66,7 @@ class JsonRPCServerUtils
                 continue;
             }
             if ($condition['name'] === 'email1' || $condition['name'] === 'email2') {
-                $email1_value = strtoupper($condition['value']);
+                $email1_value = \strtoupper($condition['value']);
                 $email1_condition = " {$table}id in ( SELECT  er.bean_id AS id FROM email_addr_bean_rel er, " .
                     'email_addresses ea WHERE ea.id = er.email_address_id ' .
                     "AND ea.deleted = 0 AND er.deleted = 0 AND er.bean_module = '{$module}' AND email_address_caps LIKE '%{$email1_value}%' )";
@@ -95,12 +95,12 @@ class JsonRPCServerUtils
         if ($table === 'users.') {
             $cond_arr[] = $table . "status='Active'";
         }
-        $group = strtolower(trim($query_obj['group']));
+        $group = \strtolower(\trim($query_obj['group']));
         if ($group !== 'and' && $group !== 'or') {
             $group = 'and';
         }
 
-        return implode(" $group ", $cond_arr);
+        return \implode(" $group ", $cond_arr);
     }
 
     /**
@@ -117,14 +117,14 @@ class JsonRPCServerUtils
 
         if ($user_unique_key !== $server_unique_key) {
             $log->debug('JSON_SERVER: user_unique_key:' . $user_unique_key . '!=' . $server_unique_key);
-            session_destroy();
+            \session_destroy();
 
             return null;
         }
 
         if (!isset($_SESSION['authenticated_user_id'])) {
             $log->debug('JSON_SERVER: authenticated_user_id NOT SET. DESTROY');
-            session_destroy();
+            \session_destroy();
 
             return null;
         }
@@ -140,7 +140,7 @@ class JsonRPCServerUtils
 
         if ($result === null) {
             $GLOBALS['log']->debug('JSON_SERVER: could get a user from SESSION. DESTROY');
-            session_destroy();
+            \session_destroy();
 
             return null;
         }

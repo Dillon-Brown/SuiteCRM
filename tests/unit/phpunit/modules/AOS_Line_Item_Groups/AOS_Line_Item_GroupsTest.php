@@ -85,7 +85,7 @@ class AOS_Line_Item_GroupsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstr
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($aosLineItemGroup->id));
-        $this->assertEquals(36, strlen($aosLineItemGroup->id));
+        $this->assertEquals(36, \strlen($aosLineItemGroup->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $aosLineItemGroup->mark_deleted($aosLineItemGroup->id);

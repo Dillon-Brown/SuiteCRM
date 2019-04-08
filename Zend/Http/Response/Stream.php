@@ -142,7 +142,7 @@ class Zend_Http_Response_Stream extends Zend_Http_Response
      */
     public function __construct($code, $headers, $body = null, $version = '1.1', $message = null)
     {
-        if (is_resource($body)) {
+        if (\is_resource($body)) {
             $this->setStream($body);
             $body = '';
         }
@@ -211,27 +211,27 @@ class Zend_Http_Response_Stream extends Zend_Http_Response
      */
     protected function readStream()
     {
-        if (!is_resource($this->stream)) {
+        if (!\is_resource($this->stream)) {
             return '';
         }
 
         if (isset($headers['content-length'])) {
-            $this->body = stream_get_contents($this->stream, $headers['content-length']);
+            $this->body = \stream_get_contents($this->stream, $headers['content-length']);
         } else {
-            $this->body = stream_get_contents($this->stream);
+            $this->body = \stream_get_contents($this->stream);
         }
-        fclose($this->stream);
+        \fclose($this->stream);
         $this->stream = null;
     }
 
     public function __destruct()
     {
-        if (is_resource($this->stream)) {
-            fclose($this->stream);
+        if (\is_resource($this->stream)) {
+            \fclose($this->stream);
             $this->stream = null;
         }
         if ($this->_cleanup) {
-            @unlink($this->stream_name);
+            @\unlink($this->stream_name);
         }
     }
 
@@ -241,7 +241,7 @@ class Zend_Http_Response_Stream extends Zend_Http_Response
     public function __wakeup()
     {
         // clean all properties
-        foreach (get_object_vars($this) as $k => $v) {
+        foreach (\get_object_vars($this) as $k => $v) {
             $this->$k = null;
         }
         throw new Exception("Not a serializable object");

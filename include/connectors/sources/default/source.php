@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -116,10 +116,10 @@ abstract class source
     public function loadMapping()
     {
         $mapping = array();
-        $dir = str_replace('_', '/', get_class($this));
-        if (file_exists("custom/modules/Connectors/connectors/sources/{$dir}/mapping.php")) {
+        $dir = \str_replace('_', '/', \get_class($this));
+        if (\file_exists("custom/modules/Connectors/connectors/sources/{$dir}/mapping.php")) {
             require("custom/modules/Connectors/connectors/sources/{$dir}/mapping.php");
-        } elseif (file_exists("modules/Connectors/connectors/sources/{$dir}/mapping.php")) {
+        } elseif (\file_exists("modules/Connectors/connectors/sources/{$dir}/mapping.php")) {
             require("modules/Connectors/connectors/sources/{$dir}/mapping.php");
         }
         $this->_mapping = $mapping;
@@ -136,11 +136,11 @@ abstract class source
      */
     public function loadVardefs()
     {
-        $class = get_class($this);
-        $dir = str_replace('_', '/', $class);
-        if (file_exists("custom/modules/Connectors/connectors/sources/{$dir}/vardefs.php")) {
+        $class = \get_class($this);
+        $dir = \str_replace('_', '/', $class);
+        if (\file_exists("custom/modules/Connectors/connectors/sources/{$dir}/vardefs.php")) {
             require("custom/modules/Connectors/connectors/sources/{$dir}/vardefs.php");
-        } elseif (file_exists("modules/Connectors/connectors/sources/{$dir}/vardefs.php")) {
+        } elseif (\file_exists("modules/Connectors/connectors/sources/{$dir}/vardefs.php")) {
             require("modules/Connectors/connectors/sources/{$dir}/vardefs.php");
         }
 
@@ -176,7 +176,7 @@ abstract class source
         $config_str = "<?php\n/***CONNECTOR SOURCE***/\n";
 
         // Handle encryption
-        if (!empty($this->_config['encrypt_properties']) && is_array($this->_config['encrypt_properties']) && !empty($this->_config['properties'])) {
+        if (!empty($this->_config['encrypt_properties']) && \is_array($this->_config['encrypt_properties']) && !empty($this->_config['properties'])) {
             require_once('include/utils/encryption_utils.php');
             foreach ($this->_config['encrypt_properties'] as $name) {
                 if (!empty($this->_config['properties'][$name])) {
@@ -191,12 +191,12 @@ abstract class source
                 $config_str .= override_value_to_string_recursive2('config', $key, $val, false);
             }
         }
-        $dir = str_replace('_', '/', get_class($this));
+        $dir = \str_replace('_', '/', \get_class($this));
 
-        if (!file_exists("custom/modules/Connectors/connectors/sources/{$dir}")) {
+        if (!\file_exists("custom/modules/Connectors/connectors/sources/{$dir}")) {
             mkdir_recursive("custom/modules/Connectors/connectors/sources/{$dir}");
         }
-        file_put_contents("custom/modules/Connectors/connectors/sources/{$dir}/config.php", $config_str);
+        \file_put_contents("custom/modules/Connectors/connectors/sources/{$dir}/config.php", $config_str);
     }
 
     /**
@@ -209,7 +209,7 @@ abstract class source
         }
         // Handle decryption
         require_once('include/utils/encryption_utils.php');
-        if (!empty($this->_config['encrypt_properties']) && is_array($this->_config['encrypt_properties']) && !empty($this->_config['properties'])) {
+        if (!empty($this->_config['encrypt_properties']) && \is_array($this->_config['encrypt_properties']) && !empty($this->_config['properties'])) {
             foreach ($this->_config['encrypt_properties'] as $name) {
                 if (!empty($this->_config['properties'][$name])) {
                     $this->_config['properties'][$name] = blowfishDecode(blowfishGetKey('encrypt_field'), $this->_config['properties'][$name]);
@@ -225,11 +225,11 @@ abstract class source
     public function loadConfig()
     {
         $config = array();
-        $dir = str_replace('_', '/', get_class($this));
-        if (file_exists("modules/Connectors/connectors/sources/{$dir}/config.php")) {
+        $dir = \str_replace('_', '/', \get_class($this));
+        if (\file_exists("modules/Connectors/connectors/sources/{$dir}/config.php")) {
             require("modules/Connectors/connectors/sources/{$dir}/config.php");
         }
-        if (file_exists("custom/modules/Connectors/connectors/sources/{$dir}/config.php")) {
+        if (\file_exists("custom/modules/Connectors/connectors/sources/{$dir}/config.php")) {
             require("custom/modules/Connectors/connectors/sources/{$dir}/config.php");
         }
         $this->_config = $config;
@@ -263,10 +263,10 @@ abstract class source
     public function getOriginalMapping()
     {
         $mapping = array();
-        $dir = str_replace('_', '/', get_class($this));
-        if (file_exists("modules/Connectors/connectors/sources/{$dir}/mapping.php")) {
+        $dir = \str_replace('_', '/', \get_class($this));
+        if (\file_exists("modules/Connectors/connectors/sources/{$dir}/mapping.php")) {
             require("modules/Connectors/connectors/sources/{$dir}/mapping.php");
-        } elseif (file_exists("custom/modules/Connectors/connectors/sources/{$dir}/mapping.php")) {
+        } elseif (\file_exists("custom/modules/Connectors/connectors/sources/{$dir}/mapping.php")) {
             require("custom/modules/Connectors/connectors/sources/{$dir}/mapping.php");
         }
         return $mapping;
@@ -339,7 +339,7 @@ abstract class source
     {
         if (!empty($this->_config) && isset($this->_config['properties'][$name])) {
             // check if we're asking for encrypted property and we didn't decrypt yet
-            if (!$this->config_decrypted && !empty($this->_config['encrypt_properties']) && in_array($name, $this->_config['encrypt_properties']) && !empty($this->_config['properties'][$name])) {
+            if (!$this->config_decrypted && !empty($this->_config['encrypt_properties']) && \in_array($name, $this->_config['encrypt_properties']) && !empty($this->_config['properties'][$name])) {
                 $this->initConfig();
             }
             return $this->_config['properties'][$name];
@@ -530,7 +530,7 @@ abstract class source
      */
     protected function log($log_data)
     {
-        $name = get_class($this);
+        $name = \get_class($this);
         $property_name = $this->getProperty('name');
         if (!empty($property_name)) {
             $name = $property_name;

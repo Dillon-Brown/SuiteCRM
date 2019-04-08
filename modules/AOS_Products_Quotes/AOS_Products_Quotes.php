@@ -56,7 +56,7 @@ class AOS_Products_Quotes extends AOS_Products_Quotes_sugar
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -64,7 +64,7 @@ class AOS_Products_Quotes extends AOS_Products_Quotes_sugar
 
     public function save_lines($post_data, $parent, $groups = array(), $key = '')
     {
-        $line_count = isset($post_data[$key . 'name']) ? count($post_data[$key . 'name']) : 0;
+        $line_count = isset($post_data[$key . 'name']) ? \count($post_data[$key . 'name']) : 0;
         $j = 0;
         for ($i = 0; $i < $line_count; ++$i) {
             if (isset($post_data[$key . 'deleted'][$i]) && $post_data[$key . 'deleted'][$i] == 1) {
@@ -101,7 +101,7 @@ class AOS_Products_Quotes extends AOS_Products_Quotes_sugar
                         $product_quote->group_id = $groups[$post_data[$key . 'group_number'][$i]];
                     }
                 }
-                if (trim($product_quote->product_id) != '' && trim($product_quote->name) != '' && trim($product_quote->product_unit_price) != '') {
+                if (\trim($product_quote->product_id) != '' && \trim($product_quote->name) != '' && \trim($product_quote->product_unit_price) != '') {
                     $product_quote->number = ++$j;
                     $product_quote->assigned_user_id = $parent->assigned_user_id;
                     $product_quote->parent_id = $parent->id;

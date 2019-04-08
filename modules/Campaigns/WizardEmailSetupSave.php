@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -122,15 +122,15 @@ if (isset($_REQUEST['wiz_new_mbox']) && ($_REQUEST['wiz_new_mbox']=='1')) {
 function clean_up_post($prefix)
 {
     foreach ($_REQUEST as $key => $val) {
-        if ((strstr($key, $prefix)) && (strpos($key, $prefix)== 0)) {
-            $newkey  =substr($key, strlen($prefix)) ;
+        if ((\strstr($key, $prefix)) && (\strpos($key, $prefix)== 0)) {
+            $newkey  =\substr($key, \strlen($prefix)) ;
             $_REQUEST[$newkey] = $val;
         }
     }
 
     foreach ($_POST as $key => $val) {
-        if ((strstr($key, $prefix)) && (strpos($key, $prefix)== 0)) {
-            $newkey  =substr($key, strlen($prefix)) ;
+        if ((\strstr($key, $prefix)) && (\strpos($key, $prefix)== 0)) {
+            $newkey  =\substr($key, \strlen($prefix)) ;
             $_POST[$newkey] = $val;
         }
     }

@@ -79,11 +79,11 @@ class AM_ProjectTemplatesTable
             $resource_array[] = $resource;
         }
 
-        if (!is_null($tasks)) {
+        if (!\is_null($tasks)) {
             foreach ($tasks as $task) {
                 $task->duration_unit = "Days";
-                $task->date_start =  Date('Y-m-d');
-                $task->date_finish = Date('Y-m-d', strtotime("+" . $task->duration -1 . " days"));
+                $task->date_start =  \Date('Y-m-d');
+                $task->date_finish = \Date('Y-m-d', \strtotime("+" . $task->duration -1 . " days"));
 
                 echo '<tr class="row_sortable">
                         <td class="project_table_cells"><input class="order_number" name="order_number[]" rel="'.$task->id.'" type="hidden" value="'.$task->order_number.'" />'.$task->task_number.'</td>';
@@ -160,6 +160,6 @@ class AM_ProjectTemplatesTable
     // Function for basic field validation (present and neither empty nor only white space
     public function IsNullOrEmptyString($question)
     {
-        return (!isset($question) || trim($question)==='');
+        return (!isset($question) || \trim($question)==='');
     }
 }

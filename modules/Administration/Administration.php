@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -86,11 +86,11 @@ class Administration extends SugarBean
         $sendMailEnabled = isset($sugar_config['allow_sendmail_outbound']) && $sugar_config['allow_sendmail_outbound'];
 
         // remove php notice from installer
-        if (!array_key_exists('mail_smtpserver', $this->settings)) {
+        if (!\array_key_exists('mail_smtpserver', $this->settings)) {
             $this->settings['mail_smtpserver'] = '';
         }
 
-        if (trim($this->settings['mail_smtpserver']) == '' && !$sendMailEnabled) {
+        if (\trim($this->settings['mail_smtpserver']) == '' && !$sendMailEnabled) {
             if (isset($this->settings['notify_on']) && $this->settings['notify_on']) {
                 $smtp_error = true;
             }
@@ -113,7 +113,7 @@ class Administration extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -171,14 +171,14 @@ class Administration extends SugarBean
 
             foreach ($oe->field_defs as $def) {
                 // fixes installer php notice
-                if (!array_key_exists($def, $this->settings)) {
+                if (!\array_key_exists($def, $this->settings)) {
                     $this->settings[$def] = '';
                 }
 
-                if (strpos($def, "mail_") !== false) {
+                if (\strpos($def, "mail_") !== false) {
                     $this->settings[$def] = $oe->$def;
                 }
-                if (strpos($def, "smtp") !== false) {
+                if (\strpos($def, "smtp") !== false) {
                     $this->settings[$def] = $oe->$def;
                 }
             }
@@ -198,14 +198,14 @@ class Administration extends SugarBean
 
         foreach ($_POST as $key => $val) {
             $prefix = $this->get_config_prefix($key);
-            if (in_array($prefix[0], $this->config_categories)) {
-                if (is_array($val)) {
-                    $val = implode(",", $val);
+            if (\in_array($prefix[0], $this->config_categories)) {
+                if (\is_array($val)) {
+                    $val = \implode(",", $val);
                 }
                 $this->saveSetting($prefix[0], $prefix[1], $val);
             }
-            if (strpos($key, "mail_") !== false) {
-                if (in_array($key, $oe->field_defs)) {
+            if (\strpos($key, "mail_") !== false) {
+                if (\in_array($key, $oe->field_defs)) {
                     $oe->$key = $val;
                 }
             }
@@ -252,6 +252,6 @@ class Administration extends SugarBean
 
     public function get_config_prefix($str)
     {
-        return $str ? array(substr($str, 0, strpos($str, "_")), substr($str, strpos($str, "_") + 1)) : array(false, false);
+        return $str ? array(\substr($str, 0, \strpos($str, "_")), \substr($str, \strpos($str, "_") + 1)) : array(false, false);
     }
 }

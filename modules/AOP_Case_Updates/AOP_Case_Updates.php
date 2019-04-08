@@ -91,7 +91,7 @@ class AOP_Case_Updates extends Basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -120,12 +120,12 @@ class AOP_Case_Updates extends Basic
         $this->name = SugarCleaner::cleanHtml($this->name);
         $this->parseDescription();
         parent::save($check_notify);
-        if (file_exists('custom/modules/AOP_Case_Updates/CaseUpdatesHook.php')) {
+        if (\file_exists('custom/modules/AOP_Case_Updates/CaseUpdatesHook.php')) {
             require_once 'custom/modules/AOP_Case_Updates/CaseUpdatesHook.php';
         } else {
             require_once 'modules/AOP_Case_Updates/CaseUpdatesHook.php';
         }
-        if (class_exists('CustomCaseUpdatesHook')) {
+        if (\class_exists('CustomCaseUpdatesHook')) {
             $hook = new CustomCaseUpdatesHook();
         } else {
             $hook = new CaseUpdatesHook();
@@ -142,11 +142,11 @@ class AOP_Case_Updates extends Basic
     {
         $description = SugarCleaner::cleanHtml($this->description);
 
-        if (preg_match('/<[^<]+>/', $description, $matches) !== 0) {
+        if (\preg_match('/<[^<]+>/', $description, $matches) !== 0) {
             // remove external warning, if HTML is not valid
-            libxml_use_internal_errors(true);
+            \libxml_use_internal_errors(true);
             $dom = new DOMDocument();
-            $dom->loadHTML(mb_convert_encoding($description, 'HTML-ENTITIES', 'UTF-8'));
+            $dom->loadHTML(\mb_convert_encoding($description, 'HTML-ENTITIES', 'UTF-8'));
             foreach ($dom->getElementsByTagName('head') as $headElement) {
                 $headElement->parentNode->removeChild($headElement);
             }
@@ -154,14 +154,14 @@ class AOP_Case_Updates extends Basic
             $dom->appendChild($dom->firstChild);
             $description = $dom->saveHTML();
 
-            foreach (libxml_get_errors() as $xmlError) {
-                $GLOBALS['log']->warn(sprintf('%s in %s', trim($xmlError->message), get_class($this)));
+            foreach (\libxml_get_errors() as $xmlError) {
+                $GLOBALS['log']->warn(\sprintf('%s in %s', \trim($xmlError->message), \get_class($this)));
             }
 
-            libxml_clear_errors();
+            \libxml_clear_errors();
         }
 
-        $this->description = trim(preg_replace('/\s\s+/', ' ', $description));
+        $this->description = \trim(\preg_replace('/\s\s+/', ' ', $description));
     }
 
     /**
@@ -244,14 +244,14 @@ class AOP_Case_Updates extends Basic
         $beans = array('Contacts' => $contactId, 'Cases' => $this->getCase()->id, 'Users' => $user->id, 'AOP_Case_Updates' => $this->id);
         $ret = array();
         $ret['subject'] = from_html(aop_parse_template($template->subject, $beans));
-        $body = aop_parse_template(str_replace('$sugarurl', $sugar_config['site_url'], $template->body_html), $beans);
-        $bodyAlt = aop_parse_template(str_replace('$sugarurl', $sugar_config['site_url'], $template->body), $beans);
+        $body = aop_parse_template(\str_replace('$sugarurl', $sugar_config['site_url'], $template->body_html), $beans);
+        $bodyAlt = aop_parse_template(\str_replace('$sugarurl', $sugar_config['site_url'], $template->body), $beans);
         if ($addDelimiter) {
             $body = $app_strings['LBL_AOP_EMAIL_REPLY_DELIMITER'].$body;
             $bodyAlt = $app_strings['LBL_AOP_EMAIL_REPLY_DELIMITER'].$bodyAlt;
         }
         $ret['body'] = from_html($body);
-        $ret['body_alt'] = strip_tags(from_html($bodyAlt));
+        $ret['body_alt'] = \strip_tags(from_html($bodyAlt));
 
         return $ret;
     }
@@ -284,11 +284,11 @@ class AOP_Case_Updates extends Basic
         $mailer->setMailerForSystem();
 
         $signatureHTML = '';
-        if ($signature && array_key_exists('signature_html', $signature)) {
+        if ($signature && \array_key_exists('signature_html', $signature)) {
             $signatureHTML = from_html($signature['signature_html']);
         }
         $signaturePlain = '';
-        if ($signature && array_key_exists('signature', $signature)) {
+        if ($signature && \array_key_exists('signature', $signature)) {
             $signaturePlain = $signature['signature'];
         }
         $emailSettings = getPortalEmailSettings();
@@ -307,7 +307,7 @@ class AOP_Case_Updates extends Basic
             if ($mailer->send()) {
                 require_once 'modules/Emails/Email.php';
                 $emailObj = new Email();
-                $emailObj->to_addrs_names = implode(',', $emails);
+                $emailObj->to_addrs_names = \implode(',', $emails);
                 $emailObj->type = 'out';
                 $emailObj->deleted = '0';
                 $emailObj->name = $mailer->Subject;

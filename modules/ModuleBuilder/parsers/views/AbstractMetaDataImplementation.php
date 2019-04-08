@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -122,7 +122,7 @@ abstract class AbstractMetaDataImplementation
      */
     public function getViewdefs()
     {
-        $GLOBALS['log']->debug(get_class($this) . '->getViewdefs:' . print_r($this->_viewdefs, true));
+        $GLOBALS['log']->debug(\get_class($this) . '->getViewdefs:' . \print_r($this->_viewdefs, true));
 
         return $this->_viewdefs;
     }
@@ -171,11 +171,11 @@ abstract class AbstractMetaDataImplementation
     protected function _loadFromFile($filename)
     {
         // BEGIN ASSERTIONS
-        if (!file_exists($filename)) {
+        if (!\file_exists($filename)) {
             return null;
         }
         // END ASSERTIONS
-        $GLOBALS['log']->debug(get_class($this) . "->_loadFromFile(): reading from " . $filename);
+        $GLOBALS['log']->debug(\get_class($this) . "->_loadFromFile(): reading from " . $filename);
         require $filename; // loads the viewdef - must be a require not require_once to ensure can reload if called twice in succession
 
         // Check to see if we have the module name set as a variable rather than embedded in the $viewdef array
@@ -196,7 +196,7 @@ abstract class AbstractMetaDataImplementation
             // get view name by performing a case insensitive search on each key
             $key = '';
             foreach ($viewdefs[$this->_moduleName] as $viewdefKey => $viewdefVal) {
-                if (stristr($viewdefKey, $this->_view) !== false) {
+                if (\stristr($viewdefKey, $this->_view) !== false) {
                     $key = $viewdefKey;
                     break;
                 }
@@ -225,11 +225,11 @@ abstract class AbstractMetaDataImplementation
         }
         $this->_variables = $variables;
         // now remove the modulename preamble from the loaded defs
-        reset($defs);
+        \reset($defs);
 
-        $GLOBALS['log']->debug(get_class($this) . "->_loadFromFile: returning " . print_r($defs, true));
+        $GLOBALS['log']->debug(\get_class($this) . "->_loadFromFile: returning " . \print_r($defs, true));
 
-        return array_shift($defs); // 'value' contains the value part of 'key'=>'value' part
+        return \array_shift($defs); // 'value' contains the value part of 'key'=>'value' part
     }
 
     /**
@@ -242,11 +242,11 @@ abstract class AbstractMetaDataImplementation
     protected function _loadFromPopupFile($filename, $mod, $view, $forSave = false)
     {
         // BEGIN ASSERTIONS
-        if (!file_exists($filename)) {
+        if (!\file_exists($filename)) {
             return null;
         }
         // END ASSERTIONS
-        $GLOBALS['log']->debug(get_class($this) . "->_loadFromFile(): reading from " . $filename);
+        $GLOBALS['log']->debug(\get_class($this) . "->_loadFromFile(): reading from " . $filename);
 
         if (!empty($mod)) {
             $oldModStrings = $GLOBALS['mod_strings'];
@@ -334,13 +334,13 @@ abstract class AbstractMetaDataImplementation
      */
     protected function _saveToFile($filename, $defs, $useVariables = true, $forPopup = false)
     {
-        if (file_exists($filename)) {
-            unlink($filename);
+        if (\file_exists($filename)) {
+            \unlink($filename);
         }
 
-        mkdir_recursive(dirname($filename));
+        mkdir_recursive(\dirname($filename));
 
-        $useVariables = (count($this->_variables) > 0) && $useVariables; // only makes sense to do the variable replace if we have variables to replace...
+        $useVariables = (\count($this->_variables) > 0) && $useVariables; // only makes sense to do the variable replace if we have variables to replace...
 
         // create the new metadata file contents, and write it out
         $out = "<?php\n";
@@ -361,7 +361,7 @@ abstract class AbstractMetaDataImplementation
         $out .= ";\n";
 
         if ($this->hasToAppendOriginalViewTemplateDefs($defs)) {
-            $templateMeta = var_export($this->_originalViewTemplateDefs, true);
+            $templateMeta = \var_export($this->_originalViewTemplateDefs, true);
             if (!empty($templateMeta)) {
                 $out .= '$viewdefs[\'' . $this->_moduleName . '\'][\'' . $this->_viewName . '\'][\'templateMeta\'] = ' . $templateMeta;
             }
@@ -370,7 +370,7 @@ abstract class AbstractMetaDataImplementation
         $out .= ";\n?>\n";
 
         if (sugar_file_put_contents($filename, $out) === false) {
-            $GLOBALS ['log']->fatal(get_class($this) . ": could not write new viewdef file " . $filename);
+            $GLOBALS ['log']->fatal(\get_class($this) . ": could not write new viewdef file " . $filename);
         }
     }
 
@@ -383,7 +383,7 @@ abstract class AbstractMetaDataImplementation
         if (empty($this->_originalViewTemplateDefs)) {
             return false;
         }
-        if (is_array($defs) && isset($defs[$this->_viewName])) {
+        if (\is_array($defs) && isset($defs[$this->_viewName])) {
             // The defs are already being saved we don't want to duplicate them
             return false;
         }
@@ -414,17 +414,17 @@ abstract class AbstractMetaDataImplementation
                 continue;
             }
 
-            if (is_array($def)) {
-                if (isset($def ['name']) && !is_array($def ['name'])) { // found a 'name' definition, that is not the definition of a field called name :)
+            if (\is_array($def)) {
+                if (isset($def ['name']) && !\is_array($def ['name'])) { // found a 'name' definition, that is not the definition of a field called name :)
                     // if this is a module field, then merge in the definition,
                     // otherwise this is a new field defined in the layout, so just take the definition
                     $fielddefs [$def ['name']] =
-                        (isset($fielddefs [$def ['name']])) ? array_merge($fielddefs [$def ['name']], $def) : $def;
+                        (isset($fielddefs [$def ['name']])) ? \array_merge($fielddefs [$def ['name']], $def) : $def;
                 } else {
                     // dealing with a listlayout which lacks 'name' keys, but which does have 'label' keys
                     if (isset($def ['label']) || isset($def ['vname']) || isset($def ['widget_class'])) {
-                        $key = strtolower($key);
-                        $fielddefs [$key] = (isset($fielddefs [$key])) ? array_merge($fielddefs [$key], $def) : $def;
+                        $key = \strtolower($key);
+                        $fielddefs [$key] = (isset($fielddefs [$key])) ? \array_merge($fielddefs [$key], $def) : $def;
                     } else {
                         $this->_mergeFielddefs($fielddefs, $def);
                     }
@@ -456,7 +456,7 @@ abstract class AbstractMetaDataImplementation
      */
     public function getFileNameInPackage($view, $moduleName, $packageName, $type = MB_BASEMETADATALOCATION)
     {
-        $type = strtolower($type);
+        $type = \strtolower($type);
 
         // BEGIN ASSERTIONS
         if ($type != MB_BASEMETADATALOCATION && $type != MB_HISTORYMETADATALOCATION) {

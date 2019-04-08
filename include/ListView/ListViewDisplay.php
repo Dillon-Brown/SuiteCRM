@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -93,7 +93,7 @@ class ListViewDisplay
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -194,15 +194,15 @@ class ListViewDisplay
     {
         // create filter fields based off of display columns
         if (empty($filter_fields) || $this->mergeDisplayColumns) {
-            if (!is_array($this->displayColumns)) {
+            if (!\is_array($this->displayColumns)) {
                 LoggerManager::getLogger()->warn('displayColumns is not an array');
             }
 
             foreach ((array)$this->displayColumns as $columnName => $def) {
-                $filter_fields[strtolower($columnName)] = true;
+                $filter_fields[\strtolower($columnName)] = true;
 
-                if (isset($this->seed->field_defs[strtolower($columnName)]['type']) &&
-               strtolower($this->seed->field_defs[strtolower($columnName)]['type']) == 'currency' &&
+                if (isset($this->seed->field_defs[\strtolower($columnName)]['type']) &&
+               \strtolower($this->seed->field_defs[\strtolower($columnName)]['type']) == 'currency' &&
                isset($this->seed->field_defs['currency_id'])) {
                     $filter_fields['currency_id'] = true;
                 }
@@ -216,16 +216,16 @@ class ListViewDisplay
                         }
                     }
                 }
-                if (!empty($this->seed->field_defs[strtolower($columnName)]['db_concat_fields'])) {
-                    foreach ($this->seed->field_defs[strtolower($columnName)]['db_concat_fields'] as $index=>$field) {
-                        if (!isset($filter_fields[strtolower($field)]) || !$filter_fields[strtolower($field)]) {
-                            $filter_fields[strtolower($field)] = true;
+                if (!empty($this->seed->field_defs[\strtolower($columnName)]['db_concat_fields'])) {
+                    foreach ($this->seed->field_defs[\strtolower($columnName)]['db_concat_fields'] as $index=>$field) {
+                        if (!isset($filter_fields[\strtolower($field)]) || !$filter_fields[\strtolower($field)]) {
+                            $filter_fields[\strtolower($field)] = true;
                         }
                     }
                 }
             }
             foreach ($this->searchColumns as $columnName => $def) {
-                $filter_fields[strtolower($columnName)] = true;
+                $filter_fields[\strtolower($columnName)] = true;
             }
         }
 
@@ -243,15 +243,15 @@ class ListViewDisplay
      */
     public function process($file, $data, $htmlVar)
     {
-        if (!is_array($data['data'])) {
-            LoggerManager::getLogger()->warn('Row data must be an array, ' . gettype($data['data']) . ' given and converting to an array.');
+        if (!\is_array($data['data'])) {
+            LoggerManager::getLogger()->warn('Row data must be an array, ' . \gettype($data['data']) . ' given and converting to an array.');
         }
-        $this->rowCount = count((array)$data['data']);
+        $this->rowCount = \count((array)$data['data']);
         if (!isset($data['pageData']['bean'])) {
             $GLOBALS['log']->warn("List view process error: Invalid data, bean is not set");
             return false;
         }
-        $this->moduleString = $data['pageData']['bean']['moduleDir'] . '2_' . strtoupper($htmlVar) . '_offset';
+        $this->moduleString = $data['pageData']['bean']['moduleDir'] . '2_' . \strtoupper($htmlVar) . '_offset';
         return true;
     }
 
@@ -464,7 +464,7 @@ class ListViewDisplay
         global $app_strings;
         global $dictionary;
 
-        if (!is_array($this->seed->field_defs)) {
+        if (!\is_array($this->seed->field_defs)) {
             return '';
         }
 
@@ -615,9 +615,9 @@ class ListViewDisplay
     protected function buildTargetList($loc = 'top')
     {
         global $app_strings;
-        unset($_REQUEST[session_name()]);
+        unset($_REQUEST[\session_name()]);
         unset($_REQUEST['PHPSESSID']);
-        $current_query_by_page = htmlentities(json_encode($_REQUEST));
+        $current_query_by_page = \htmlentities(\json_encode($_REQUEST));
 
         $js = <<<EOF
             if(sugarListView.get_checks_count() < 1) {
@@ -685,7 +685,7 @@ class ListViewDisplay
 			}
 			open_popup('ProspectLists','600','400','',true,false,{ 'call_back_function':'set_return_and_save_targetlist','form_name':'targetlist_form','field_to_name_array':{'id':'prospect_list'} } );
 EOF;
-        $js = str_replace(array("\r","\n"), '', $js);
+        $js = \str_replace(array("\r","\n"), '', $js);
         return "<a href='javascript:void(0)' class=\"parent-dropdown-action-handler\" id=\"targetlist_listview_". $loc ." \" onclick=\"$js\">{$app_strings['LBL_ADD_TO_PROSPECT_LIST_BUTTON_LABEL']}</a>";
     }
     /**
@@ -737,12 +737,12 @@ EOF;
      */
     protected function fillDisplayColumnsWithVardefs()
     {
-        if (!is_array($this->displayColumns)) {
+        if (!\is_array($this->displayColumns)) {
             LoggerManager::getLogger()->warn('displayColumns is not an array');
         }
 
         foreach ((array)$this->displayColumns as $columnName => $def) {
-            $seedName =  strtolower($columnName);
+            $seedName =  \strtolower($columnName);
             if (!empty($this->lvd->seed->field_defs[$seedName])) {
                 $seedDef = $this->lvd->seed->field_defs[$seedName];
             }
@@ -763,10 +763,10 @@ EOF;
             if ($this->displayColumns[$columnName]['type'] == 'html') {
                 $cField = $this->seed->custom_fields;
                 if (isset($cField) && isset($cField->bean->$seedName)) {
-                    $seedName2 = strtoupper($columnName);
-                    $htmlDisplay = html_entity_decode($cField->bean->$seedName);
+                    $seedName2 = \strtoupper($columnName);
+                    $htmlDisplay = \html_entity_decode($cField->bean->$seedName);
                     $count = 0;
-                    while ($count < count($data['data'])) {
+                    while ($count < \count($data['data'])) {
                         $data['data'][$count][$seedName2] = &$htmlDisplay;
                         $count++;
                     }
@@ -792,7 +792,7 @@ EOF;
 
             //C.L. Bug 38388 - ensure that ['id'] is set for related fields
             if (!isset($this->displayColumns[$columnName]['id']) && isset($this->displayColumns[$columnName]['id_name'])) {
-                $this->displayColumns[$columnName]['id'] = strtoupper($this->displayColumns[$columnName]['id_name']);
+                $this->displayColumns[$columnName]['id'] = \strtoupper($this->displayColumns[$columnName]['id_name']);
             }
         }
     }

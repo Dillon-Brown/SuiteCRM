@@ -113,7 +113,7 @@ class HTMLPurifier_Printer
      */
     protected function row($name, $value)
     {
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             $value = $value ? 'On' : 'Off';
         }
         return
@@ -131,7 +131,7 @@ class HTMLPurifier_Printer
     protected function escape($string)
     {
         $string = HTMLPurifier_Encoder::cleanUTF8($string);
-        $string = htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
+        $string = \htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
         return $string;
     }
 
@@ -147,7 +147,7 @@ class HTMLPurifier_Printer
             return 'None';
         }
         $ret = '';
-        $i = count($array);
+        $i = \count($array);
         foreach ($array as $value) {
             $i--;
             $ret .= $value;
@@ -171,14 +171,14 @@ class HTMLPurifier_Printer
     {
         static $five = null;
         if ($five === null) {
-            $five = version_compare(PHP_VERSION, '5', '>=');
+            $five = \version_compare(PHP_VERSION, '5', '>=');
         }
         $prefix = 'HTMLPurifier_' . $sec_prefix;
         if (!$five) {
-            $prefix = strtolower($prefix);
+            $prefix = \strtolower($prefix);
         }
-        $class = str_replace($prefix, '', get_class($obj));
-        $lclass = strtolower($class);
+        $class = \str_replace($prefix, '', \get_class($obj));
+        $lclass = \strtolower($class);
         $class .= '(';
         switch ($lclass) {
             case 'enum':
@@ -186,14 +186,14 @@ class HTMLPurifier_Printer
                 foreach ($obj->valid_values as $value => $bool) {
                     $values[] = $value;
                 }
-                $class .= implode(', ', $values);
+                $class .= \implode(', ', $values);
                 break;
             case 'css_composite':
                 $values = array();
                 foreach ($obj->defs as $def) {
                     $values[] = $this->getClass($def, $sec_prefix);
                 }
-                $class .= implode(', ', $values);
+                $class .= \implode(', ', $values);
                 break;
             case 'css_multiple':
                 $class .= $this->getClass($obj->single, $sec_prefix) . ', ';

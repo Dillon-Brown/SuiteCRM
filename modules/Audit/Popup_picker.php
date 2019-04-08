@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -80,7 +80,7 @@ class Popup_Picker
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -143,13 +143,13 @@ EOHTML;
         $params[] = translate('LBL_MODULE_NAME', $focus->module_dir);
         $params[] = $focus->get_summary_text();
         $params[] = translate('LBL_CHANGE_LOG', 'Audit');
-        echo str_replace('</div>', "<span class='utils'>$titleExtra</span></div>", getClassicModuleTitle($focus->module_dir, $params, false));
+        echo \str_replace('</div>', "<span class='utils'>$titleExtra</span></div>", getClassicModuleTitle($focus->module_dir, $params, false));
 
         $oddRow = true;
         $audited_fields = $focus->getAuditEnabledFieldDefinitions();
-        asort($audited_fields);
+        \asort($audited_fields);
         $fields = '';
-        $field_count = count($audited_fields);
+        $field_count = \count($audited_fields);
         $start_tag = "<table><tr><td >";
         $end_tag = "</td></tr></table>";
 
@@ -163,7 +163,7 @@ EOHTML;
                 } elseif (isset($value['label'])) {
                     $vname = $value['label'];
                 }
-                $fields .= str_replace(':', '', translate($vname, $focus->module_dir));
+                $fields .= \str_replace(':', '', translate($vname, $focus->module_dir));
 
                 if ($index < $field_count) {
                     $fields .= ", ";

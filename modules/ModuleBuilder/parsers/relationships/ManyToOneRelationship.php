@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -63,7 +63,7 @@ class ManyToOneRelationship extends AbstractRelationship
     public function __construct($definition)
     {
         parent::__construct($definition) ;
-        $onetomanyDef = array_merge($definition, array(
+        $onetomanyDef = \array_merge($definition, array(
             'rhs_label'    => isset($definition['lhs_label'])    ? $definition['lhs_label']    : null,
             'lhs_label'    => isset($definition['rhs_label'])    ? $definition['rhs_label']    : null,
             'lhs_subpanel' => isset($definition['rhs_subpanel']) ? $definition['rhs_subpanel'] : null,

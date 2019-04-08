@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -53,7 +53,7 @@ $ACLbeanList=$beanList;
 
 if (is_admin($current_user)) {
     foreach ($ACLbeanList as $module=>$class) {
-        if (empty($installed_classes[$class]) && isset($beanFiles[$class]) && file_exists($beanFiles[$class])) {
+        if (empty($installed_classes[$class]) && isset($beanFiles[$class]) && \file_exists($beanFiles[$class])) {
             if ($class == 'Tracker') {
             } else {
                 require_once($beanFiles[$class]);

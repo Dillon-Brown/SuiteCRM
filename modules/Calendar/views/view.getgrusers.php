@@ -57,8 +57,8 @@ class CalendarViewGetGRUsers extends SugarView
         $users_arr = array();
         require_once("modules/Users/User.php");
     
-        $user_ids = explode(",", trim($_REQUEST['users'], ','));
-        $user_ids = array_unique($user_ids);
+        $user_ids = \explode(",", \trim($_REQUEST['users'], ','));
+        $user_ids = \array_unique($user_ids);
 
         require_once('include/json_config.php');
         global $json;
@@ -71,11 +71,11 @@ class CalendarViewGetGRUsers extends SugarView
             }
             $bean = new User();
             $bean->retrieve($u_id);
-            array_push($users_arr, $json_config->populateBean($bean));
+            \array_push($users_arr, $json_config->populateBean($bean));
         }
         
         $GRjavascript = "\n" . $json_config->global_registry_var_name."['focus'].users_arr = " . $json->encode($users_arr) . ";\n";
-        ob_clean();
+        \ob_clean();
         echo $GRjavascript;
     }
 }

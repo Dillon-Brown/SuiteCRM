@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -50,9 +50,9 @@ class DropDownHelper
     public $modules = array();
     public function getDropDownModules()
     {
-        $dir = dir('modules');
+        $dir = \dir('modules');
         while ($entry = $dir->read()) {
-            if (file_exists('modules/'. $entry . '/EditView.php')) {
+            if (\file_exists('modules/'. $entry . '/EditView.php')) {
                 $this->scanForDropDowns('modules/'. $entry . '/EditView.php', $entry);
             }
         }
@@ -60,9 +60,9 @@ class DropDownHelper
 
     public function scanForDropDowns($filepath, $module)
     {
-        $contents = file_get_contents($filepath);
+        $contents = \file_get_contents($filepath);
         $matches = array();
-        preg_match_all('/app_list_strings\s*\[\s*[\'\"]([^\]]*)[\'\"]\s*]/', $contents, $matches);
+        \preg_match_all('/app_list_strings\s*\[\s*[\'\"]([^\]]*)[\'\"]\s*]/', $contents, $matches);
         if (!empty($matches[1])) {
             foreach ($matches[1] as $match) {
                 $this->modules[$module][$match] = $match;
@@ -83,8 +83,8 @@ class DropDownHelper
         switch ($name) {
             //When renaming tabs ensure that the modList dropdown is filtered properly.
             case 'moduleList':
-                $hiddenModList = array_flip($GLOBALS['modInvisList']);
-                $moduleList = array_flip($GLOBALS['moduleList']);
+                $hiddenModList = \array_flip($GLOBALS['modInvisList']);
+                $moduleList = \array_flip($GLOBALS['moduleList']);
 
                 foreach ($dropdown as $k => $v) {
                     if (isset($moduleList[$k])) { // && !$hiddenModList[$k])
@@ -121,8 +121,8 @@ class DropDownHelper
             if ($key == 'BLANK') {
                 $key = '';
             }
-            $key = trim($key);
-            $value = trim($value);
+            $key = \trim($key);
+            $value = \trim($value);
             if (empty($params['delete_' . $index])) {
                 $dropdown[$key] = $value;
             }
@@ -137,7 +137,7 @@ class DropDownHelper
 
 
         //get rid of closing tags they are not needed and are just trouble
-        $contents = str_replace("?>", '', $contents);
+        $contents = \str_replace("?>", '', $contents);
         if (empty($contents)) {
             $contents = "<?php";
         }
@@ -146,10 +146,10 @@ class DropDownHelper
             //this is for handling moduleList and such where nothing should be deleted or anything but they can be renamed
             foreach ($dropdown as $key=>$value) {
                 //only if the value has changed or does not exist do we want to add it this way
-                if (!isset($my_list_strings[$dropdown_name][$key]) || strcmp($my_list_strings[$dropdown_name][$key], $value) != 0) {
+                if (!isset($my_list_strings[$dropdown_name][$key]) || \strcmp($my_list_strings[$dropdown_name][$key], $value) != 0) {
                     //clear out the old value
                     $pattern_match = '/\s*\$app_list_strings\s*\[\s*\''.$dropdown_name.'\'\s*\]\[\s*\''.$key.'\'\s*\]\s*=\s*[\'\"]{1}.*?[\'\"]{1};\s*/ism';
-                    $contents = preg_replace($pattern_match, "\n", $contents);
+                    $contents = \preg_replace($pattern_match, "\n", $contents);
                     //add the new ones
                     $contents .= "\n\$app_list_strings['$dropdown_name']['$key']=" . var_export_helper($value) . ";";
                 }
@@ -157,7 +157,7 @@ class DropDownHelper
         } else {
             //clear out the old value
             $pattern_match = '/\s*\$app_list_strings\s*\[\s*\''.$dropdown_name.'\'\s*\]\s*=\s*array\s*\([^\)]*\)\s*;\s*/ism';
-            $contents = preg_replace($pattern_match, "\n", $contents);
+            $contents = \preg_replace($pattern_match, "\n", $contents);
             //add the new ones
             $contents .= "\n\$app_list_strings['$dropdown_name']=" . var_export_helper($dropdown) . ";";
         }

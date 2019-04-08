@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -80,7 +80,7 @@ class CampaignLog extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -97,7 +97,7 @@ class CampaignLog extends SugarBean
             return $emptyArr;
         }
 
-        $table = strtolower($temp_array['TARGET_TYPE']);
+        $table = \strtolower($temp_array['TARGET_TYPE']);
 
         if ($temp_array['TARGET_TYPE']=='Accounts') {
             $query = "select name from $table where id = ".$this->db->quoted($temp_array['TARGET_ID']);

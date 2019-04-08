@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -63,7 +63,7 @@ class TemplateInt extends TemplateRange
     public function get_html_edit()
     {
         $this->prepare();
-        return "<input type='text' name='". $this->name. "' id='".$this->name."' title='{" . strtoupper($this->name) ."_HELP}' size='".$this->size."' maxlength='".$this->len."' value='{". strtoupper($this->name). "}'>";
+        return "<input type='text' name='". $this->name. "' id='".$this->name."' title='{" . \strtoupper($this->name) ."_HELP}' size='".$this->size."' maxlength='".$this->len."' value='{". \strtoupper($this->name). "}'>";
     }
 
     public function populateFromPost()
@@ -81,8 +81,8 @@ class TemplateInt extends TemplateRange
 
         $vardef['min'] = isset($this->min) ? $this->min : $this->ext1;
         $vardef['max'] = isset($this->max) ? $this->max : $this->ext2;
-        $vardef['min'] = filter_var($vardef['min'], FILTER_VALIDATE_INT);
-        $vardef['max'] = filter_var($vardef['max'], FILTER_VALIDATE_INT);
+        $vardef['min'] = \filter_var($vardef['min'], FILTER_VALIDATE_INT);
+        $vardef['max'] = \filter_var($vardef['max'], FILTER_VALIDATE_INT);
         if ($vardef['min'] !== false || $vardef['max'] !== false) {
             $vardef['validation'] = array(
                 'type' => 'range',

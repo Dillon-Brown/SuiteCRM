@@ -1,5 +1,5 @@
 <?php
-if (! defined('sugarEntry') || ! sugarEntry) {
+if (! \defined('sugarEntry') || ! sugarEntry) {
     die('Not A Valid Entry Point') ;
 }
 
@@ -93,11 +93,11 @@ class AbstractRelationships
         require_once 'modules/ModuleBuilder/Module/StudioBrowser.php' ;
         $browser = new StudioBrowser() ;
         $browser->loadRelatableModules();
-        reset($browser->modules) ;
+        \reset($browser->modules) ;
 
         foreach ($browser->modules as $moduleName => $module) {
             // do not include the submodules of Activities as already have the parent...
-            if (! $includeActivitiesSubmodules && in_array($module->module, self::$activities)) {
+            if (! $includeActivitiesSubmodules && \in_array($module->module, self::$activities)) {
                 continue ;
             }
             $providedSubpanels = $module->getProvidedSubpanels();
@@ -111,7 +111,7 @@ class AbstractRelationships
 
     public static function validSubpanel($filename)
     {
-        if (! file_exists($filename)) {
+        if (! \file_exists($filename)) {
             return false ;
         }
         
@@ -199,9 +199,9 @@ class AbstractRelationships
      */
     protected function _load($basepath)
     {
-        $GLOBALS [ 'log' ]->info(get_class($this) . ": loading relationships from " . $basepath . '/relationships.php') ;
+        $GLOBALS [ 'log' ]->info(\get_class($this) . ": loading relationships from " . $basepath . '/relationships.php') ;
         $objects = array( ) ;
-        if (file_exists($basepath . '/relationships.php')) {
+        if (\file_exists($basepath . '/relationships.php')) {
             include($basepath . '/relationships.php') ;
             foreach ($relationships as $name => $definition) {
                 // update any pre-5.1 relationships to the new definitions
@@ -226,8 +226,8 @@ class AbstractRelationships
      */
     protected function _save($relationships, $basepath)
     {
-        $GLOBALS [ 'log' ]->info(get_class($this) . ": saving relationships to " . $basepath . '/relationships.php') ;
-        $header = file_get_contents('modules/ModuleBuilder/MB/header.php') ;
+        $GLOBALS [ 'log' ]->info(\get_class($this) . ": saving relationships to " . $basepath . '/relationships.php') ;
+        $header = \file_get_contents('modules/ModuleBuilder/MB/header.php') ;
         
         $definitions = array( ) ;
         
@@ -279,7 +279,7 @@ class AbstractRelationships
         if (empty($basename)) {
             // start off with the proposed name being simply lhs_module_rhs_module
             $definition = $relationship->getDefinition() ;
-            $basename = strtolower($definition [ 'lhs_module' ] . '_' . $definition [ 'rhs_module' ]) ;
+            $basename = \strtolower($definition [ 'lhs_module' ] . '_' . $definition [ 'rhs_module' ]) ;
         }
         
         // Bug #49024 : Relationships Created in Earlier Versions Cause Conflicts and AJAX Errors After Upgrade
@@ -297,12 +297,12 @@ class AbstractRelationships
         }
 
         // bug33522 - if our relationship basename is in the special cases
-        if (in_array($name, $this->specialCaseBaseNames)) {
+        if (\in_array($name, $this->specialCaseBaseNames)) {
             //add a _1 (or _suffix#) and check to see if it already exists
             $name = $name . "_" . ( string ) ($suffix ++);
             while (isset($allRelationships [ $name ])) {
                 // if it does exist, strip off the _1 previously added and try again
-                $name = substr($name, 0, -2) . "_" . ( string ) ($suffix ++);
+                $name = \substr($name, 0, -2) . "_" . ( string ) ($suffix ++);
             }
         }
 
@@ -329,17 +329,17 @@ class AbstractRelationships
             
             foreach ($relationships as $name => $relationship) {
                 if (! ($relationship->readonly() || $relationship->deleted())) {
-                    if (method_exists($relationship, $buildMethod) && method_exists($this, $saveMethod)) {
+                    if (\method_exists($relationship, $buildMethod) && \method_exists($this, $saveMethod)) {
                         $metadata = $relationship->$buildMethod() ;
                         
-                        if (count($metadata) > 0) { // don't clutter up the filesystem with empty files...
-                            $GLOBALS [ 'log' ]->debug(get_class($this) . ": BUILD is running METHOD $saveMethod") ;
+                        if (\count($metadata) > 0) { // don't clutter up the filesystem with empty files...
+                            $GLOBALS [ 'log' ]->debug(\get_class($this) . ": BUILD is running METHOD $saveMethod") ;
                             $installDef = $this->$saveMethod($basepath, $installDefPrefix, $name, $metadata) ;
                             
                             // some save methods (e.g., saveRelateFieldDefinition) handle the installDefs internally and so return null
 
                         
-                            if (! is_null($installDef)) {
+                            if (! \is_null($installDef)) {
                                 foreach ($installDef as $moduleName => $def) {
                                     $installDefs [ $key ] [ ] = $def ;
                                 }
@@ -382,14 +382,14 @@ class AbstractRelationships
             
             $filename = "{$basepath}/language/{$definition['module']}.php" ;
         
-            if (file_exists($filename)) {
+            if (\file_exists($filename)) {
                 include($filename);
             }
                 
             
             //Check for app strings
-            $GLOBALS [ 'log' ]->debug(get_class($this) . "->saveLabels(): saving the following to {$filename}"
-                                      . print_r($definition, true)) ;
+            $GLOBALS [ 'log' ]->debug(\get_class($this) . "->saveLabels(): saving the following to {$filename}"
+                                      . \print_r($definition, true)) ;
             if ($definition['module'] == 'application') {
                 $app_list_strings[$definition [ 'system_label' ]] = $definition [ 'display_label' ];
                 foreach ($app_list_strings as $key => $val) {
@@ -402,9 +402,9 @@ class AbstractRelationships
                 }
             }
             
-            $fh = fopen($filename, 'w') ;
-            fputs($fh, $out, strlen($out)) ;
-            fclose($fh) ;
+            $fh = \fopen($filename, 'w') ;
+            \fputs($fh, $out, \strlen($out)) ;
+            \fclose($fh) ;
             
             
             foreach ($sugar_config['languages'] as $lk => $lv) {
@@ -437,9 +437,9 @@ class AbstractRelationships
         mkdir_recursive("$basepath/relationships") ;
         
         $installDefs = array( ) ;
-        list($rhs_module, $properties) = each($relationshipMetaData) ;
+        list($rhs_module, $properties) = \each($relationshipMetaData) ;
         $filename = "$basepath/relationships/{$relationshipName}MetaData.php" ;
-        $GLOBALS [ 'log' ]->debug(get_class($this) . "->saveRelationshipMetaData(): saving the following to {$filename}" . print_r($properties, true)) ;
+        $GLOBALS [ 'log' ]->debug(\get_class($this) . "->saveRelationshipMetaData(): saving the following to {$filename}" . \print_r($properties, true)) ;
         write_array_to_file('dictionary["' . $relationshipName . '"]', $properties, "{$filename}", 'w') ;
         $installDefs [ $relationshipName ] = array( /*'module' => $rhs_module , 'module_vardefs' => "<basepath>/Vardefs/{$relationshipName}.php" ,*/ 'meta_data' => "{$installDefPrefix}/relationships/relationships/{$relationshipName}MetaData.php" ) ;
         
@@ -462,14 +462,14 @@ class AbstractRelationships
             $subpanelVarname = 'layout_defs["' . $moduleName . '"]["subpanel_setup"]';
             $out = "";
             foreach ($definitions as $definition) {
-                $GLOBALS [ 'log' ]->debug(get_class($this) . "->saveSubpanelDefinitions(): saving the following to {$filename}" . print_r($definition, true)) ;
+                $GLOBALS [ 'log' ]->debug(\get_class($this) . "->saveSubpanelDefinitions(): saving the following to {$filename}" . \print_r($definition, true)) ;
                 if (empty($definition ['get_subpanel_data']) || $definition ['subpanel_name'] == 'history' || $definition ['subpanel_name'] == 'activities') {
                     $definition ['get_subpanel_data'] = $definition ['subpanel_name'];
                 }
-                $out .= override_value_to_string($subpanelVarname, strtolower($definition [ 'get_subpanel_data' ]), $definition) . "\n";
+                $out .= override_value_to_string($subpanelVarname, \strtolower($definition [ 'get_subpanel_data' ]), $definition) . "\n";
             }
             if (!empty($out)) {
-                $out = "<?php\n // created: " . date('Y-m-d H:i:s') . "\n" . $out;
+                $out = "<?php\n // created: " . \date('Y-m-d H:i:s') . "\n" . $out;
                 sugar_file_put_contents($filename, $out);
             }
 
@@ -493,7 +493,7 @@ class AbstractRelationships
     protected function saveVardefs($basepath, $installDefPrefix, $relationshipName, $vardefs)
     {
         mkdir_recursive("$basepath/vardefs/") ;
-        $GLOBALS [ 'log' ]->debug(get_class($this) . "->saveVardefs(): vardefs =" . print_r($vardefs, true)) ;
+        $GLOBALS [ 'log' ]->debug(\get_class($this) . "->saveVardefs(): vardefs =" . \print_r($vardefs, true)) ;
         
         foreach ($vardefs as $moduleName => $definitions) {
             // find this module's Object name - the object name, not the module name, is used as the key in the vardefs...
@@ -514,13 +514,13 @@ class AbstractRelationships
             
             $filename = "$basepath/vardefs/{$relName}_{$moduleName}.php" ;
             
-            $out =  "<?php\n// created: " . date('Y-m-d H:i:s') . "\n";
+            $out =  "<?php\n// created: " . \date('Y-m-d H:i:s') . "\n";
             foreach ($definitions as $definition) {
-                $GLOBALS [ 'log' ]->debug(get_class($this) . "->saveVardefs(): saving the following to {$filename}" . print_r($definition, true)) ;
+                $GLOBALS [ 'log' ]->debug(\get_class($this) . "->saveVardefs(): saving the following to {$filename}" . \print_r($definition, true)) ;
                 $out .= '$dictionary["' . $object . '"]["fields"]["' . $definition [ 'name' ] . '"] = '
                          . var_export_helper($definition) . ";\n";
             }
-            file_put_contents($filename, $out);
+            \file_put_contents($filename, $out);
             
             $installDefs [ $moduleName ] = array(
                 'from' => "{$installDefPrefix}/relationships/vardefs/{$relName}_{$moduleName}.php" ,
@@ -528,7 +528,7 @@ class AbstractRelationships
             ) ;
         }
         
-        $GLOBALS [ 'log' ]->debug(get_class($this) . "->saveVardefs(): installDefs =" . print_r($installDefs, true)) ;
+        $GLOBALS [ 'log' ]->debug(\get_class($this) . "->saveVardefs(): installDefs =" . \print_r($installDefs, true)) ;
         
         return $installDefs ;
     }
@@ -552,9 +552,9 @@ class AbstractRelationships
             // convert the keyName into a packageName, needed for checking to see if this is really an undeployed module, or just a module with a _ in the name...
             $package = $mb->getPackage($name) ; // seem to need to call getPackage twice to get the key correctly... TODO: figure out why...
             $key = $mb->getPackage($name)->key ;
-            if (strlen($key) < strlen($deployedName)) {
-                $position = stripos($deployedName, $key) ;
-                $moduleName = trim(substr($deployedName, strlen($key)), '_'); //use trim rather than just assuming that _ is between packageName and moduleName in the deployedName
+            if (\strlen($key) < \strlen($deployedName)) {
+                $position = \stripos($deployedName, $key) ;
+                $moduleName = \trim(\substr($deployedName, \strlen($key)), '_'); //use trim rather than just assuming that _ is between packageName and moduleName in the deployedName
                 if ($position !== false && $position == 0 && (isset($mb->packages [ $name ]->modules [ $moduleName ]))) {
                     $packageName = $name ;
                     break ;

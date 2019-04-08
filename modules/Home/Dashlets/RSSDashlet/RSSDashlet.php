@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -157,9 +157,9 @@ class RSSDashlet extends Dashlet
         $url
         ) {
         // suppress XML errors
-        libxml_use_internal_errors(true);
-        $data = file_get_contents($url);
-        $urlparse = parse_url($url);
+        \libxml_use_internal_errors(true);
+        $data = \file_get_contents($url);
+        $urlparse = \parse_url($url);
         if (empty($urlparse['scheme']) || empty($urlparse['host'])) {
             return $this->dashletStrings['ERR_LOADING_FEED'];
         }
@@ -169,8 +169,8 @@ class RSSDashlet extends Dashlet
         if (!$data) {
             return $this->dashletStrings['ERR_LOADING_FEED'];
         }
-        libxml_disable_entity_loader(true);
-        $rssdoc = simplexml_load_string($data);
+        \libxml_disable_entity_loader(true);
+        $rssdoc = \simplexml_load_string($data);
         // return back the error message if the loading wasn't successful
         if (!$rssdoc) {
             return $this->dashletStrings['ERR_LOADING_FEED'];
@@ -181,9 +181,9 @@ class RSSDashlet extends Dashlet
             foreach ($rssdoc->channel as $channel) {
                 if (isset($channel->item)) {
                     foreach ($channel->item as $item) {
-                        $link = htmlspecialchars($item->link, ENT_QUOTES, 'UTF-8');
-                        $title = htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8');
-                        $description = htmlspecialchars($item->description, ENT_QUOTES, 'UTF-8');
+                        $link = \htmlspecialchars($item->link, ENT_QUOTES, 'UTF-8');
+                        $title = \htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8');
+                        $description = \htmlspecialchars($item->description, ENT_QUOTES, 'UTF-8');
                         $output .= <<<EOHTML
 <tr>
 <td>
@@ -197,13 +197,13 @@ EOHTML;
             }
         } else {
             foreach ($rssdoc->entry as $entry) {
-                $link = trim($entry->link);
+                $link = \trim($entry->link);
                 if (empty($link)) {
                     $link = $entry->link[0]['href'];
                 }
-                $link = htmlspecialchars($link, ENT_QUOTES, 'UTF-8');
-                $title = htmlspecialchars($entry->title, ENT_QUOTES, 'UTF-8');
-                $summary = htmlspecialchars($entry->summary, ENT_QUOTES, 'UTF-8');
+                $link = \htmlspecialchars($link, ENT_QUOTES, 'UTF-8');
+                $title = \htmlspecialchars($entry->title, ENT_QUOTES, 'UTF-8');
+                $summary = \htmlspecialchars($entry->summary, ENT_QUOTES, 'UTF-8');
                 $output .= <<<EOHTML
 <tr>
 <td>

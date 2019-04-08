@@ -41,15 +41,15 @@ class AOPInboundEmail extends InboundEmail
             return $string;
         }
         $matches = array();
-        preg_match('/cid:([[:alnum:]-]*)/', $string, $matches);
+        \preg_match('/cid:([[:alnum:]-]*)/', $string, $matches);
         if (!$matches) {
             return $string;
         }
-        array_shift($matches);
-        $matches = array_unique($matches);
+        \array_shift($matches);
+        $matches = \array_unique($matches);
         foreach ($matches as $match) {
-            if (in_array($match, $noteIds)) {
-                $string = str_replace('cid:'.$match, $sugar_config['site_url']."/index.php?entryPoint=download&id={$match}&type=Notes&", $string);
+            if (\in_array($match, $noteIds)) {
+                $string = \str_replace('cid:'.$match, $sugar_config['site_url']."/index.php?entryPoint=download&id={$match}&type=Notes&", $string);
             }
         }
         return $string;
@@ -94,7 +94,7 @@ class AOPInboundEmail extends InboundEmail
 
             $GLOBALS['log']->debug('finding related accounts with address ' . $contactAddr);
             if ($accountIds = $this->getRelatedId($contactAddr, 'accounts')) {
-                if (sizeof($accountIds) == 1) {
+                if (\sizeof($accountIds) == 1) {
                     $c->account_id = $accountIds[0];
 
                     $acct = new Account();
@@ -113,7 +113,7 @@ class AOPInboundEmail extends InboundEmail
                 $c->emails->add($email->id);
             } // if
             if (!empty($contactIds) && $c->load_relationship('contacts')) {
-                if (!$accountIds && count($contactIds) == 1) {
+                if (!$accountIds && \count($contactIds) == 1) {
                     $contact = BeanFactory::getBean('Contacts', $contactIds[0]);
                     if ($contact->load_relationship('accounts')) {
                         $acct = $contact->accounts->get();
@@ -135,7 +135,7 @@ class AOPInboundEmail extends InboundEmail
                 $newNote->save();
                 $srcFile = "upload://{$note->id}";
                 $destFile = "upload://{$newNote->id}";
-                copy($srcFile, $destFile);
+                \copy($srcFile, $destFile);
             }
 
             $c->email_id = $email->id;
@@ -143,12 +143,12 @@ class AOPInboundEmail extends InboundEmail
             $email->parent_id = $c->id;
             // assign the email to the case owner
             $email->assigned_user_id = $c->assigned_user_id;
-            $email->name = str_replace('%1', $c->case_number, $c->getEmailSubjectMacro()) . " ". $email->name;
+            $email->name = \str_replace('%1', $c->case_number, $c->getEmailSubjectMacro()) . " ". $email->name;
             $email->save();
             $GLOBALS['log']->debug('InboundEmail created one case with number: '.$c->case_number);
             $createCaseTemplateId = $this->get_stored_options('create_case_email_template', "");
             if (!empty($this->stored_options)) {
-                $storedOptions = unserialize(base64_decode($this->stored_options));
+                $storedOptions = \unserialize(\base64_decode($this->stored_options));
             }
             if (!empty($createCaseTemplateId)) {
                 $fromName = "";
@@ -185,10 +185,10 @@ class AOPInboundEmail extends InboundEmail
                     $et->body_html = '';
                 }
 
-                $et->subject = "Re:" . " " . str_replace('%1', $c->case_number, $c->getEmailSubjectMacro() . " ". $c->name);
+                $et->subject = "Re:" . " " . \str_replace('%1', $c->case_number, $c->getEmailSubjectMacro() . " ". $c->name);
 
-                $html = trim($email->description_html);
-                $plain = trim($email->description);
+                $html = \trim($email->description_html);
+                $plain = \trim($email->description);
 
                 $email->email2init();
                 $email->from_addr = $email->from_addr_name;
@@ -200,7 +200,7 @@ class AOPInboundEmail extends InboundEmail
 
                 $email = $email->et->handleReplyType($email, "reply");
                 $ret = $email->et->displayComposeEmail($email);
-                $ret['description'] = empty($email->description_html) ?  str_replace("\n", "\n<BR/>", $email->description) : $email->description_html;
+                $ret['description'] = empty($email->description_html) ?  \str_replace("\n", "\n<BR/>", $email->description) : $email->description_html;
 
                 $reply = new Email();
                 $reply->type				= 'out';

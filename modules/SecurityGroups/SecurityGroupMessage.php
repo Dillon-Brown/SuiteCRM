@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -53,7 +53,7 @@ class SecurityGroupMessage extends Basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -95,7 +95,7 @@ class SecurityGroupMessage extends Basic
         }
 
         $data['NAME'] = $data['DESCRIPTION'];
-        $data['NAME'] =  '<div class="list view" style="padding:5px;border:none;">' . html_entity_decode($data['NAME']);
+        $data['NAME'] =  '<div class="list view" style="padding:5px;border:none;">' . \html_entity_decode($data['NAME']);
         $data['NAME'] .= '<div class="byLineBox" style="padding-top: 2px"><span class="byLineLeft">'.$username.' ['.$securitygroup_name.']';
         $data['NAME'] .= '&nbsp;</span><span style="cursor: pointer;" class="byLineRight"> '.  $this->getTimeLapse($data['DATE_ENTERED']) . ' &nbsp;' .$delete. '</span></div>';
         return  $data ;
@@ -116,7 +116,7 @@ class SecurityGroupMessage extends Basic
             return;
         } // || !$feed->ACLAccess('save', true) )return;
 
-        $text = strip_tags($text);
+        $text = \strip_tags($text);
         $message->name = '';
         $message->description = $text;
         $message->securitygroup_id = $securitygroup_id;
@@ -127,17 +127,17 @@ class SecurityGroupMessage extends Basic
     {
         $startDate = $GLOBALS['timedate']->to_db($startDate);
         $start = array();
-        preg_match('/(\d+)\-(\d+)\-(\d+) (\d+)\:(\d+)\:(\d+)/', $startDate, $start);
-        $end = gmdate('Y-m-d H:i:s');
-        $start_time = gmmktime($start[4], $start[5], $start[6], $start[2], $start[3], $start[1]);
-        $seconds = time()- $start_time;
+        \preg_match('/(\d+)\-(\d+)\-(\d+) (\d+)\:(\d+)\:(\d+)/', $startDate, $start);
+        $end = \gmdate('Y-m-d H:i:s');
+        $start_time = \gmmktime($start[4], $start[5], $start[6], $start[2], $start[3], $start[1]);
+        $seconds = \time()- $start_time;
         $minutes =   $seconds/60;
         $seconds = $seconds % 60;
-        $hours = floor($minutes / 60);
+        $hours = \floor($minutes / 60);
         $minutes = $minutes % 60;
-        $days = floor($hours / 24);
+        $days = \floor($hours / 24);
         $hours = $hours % 24;
-        $weeks = floor($days / 7);
+        $weeks = \floor($days / 7);
         $days = $days % 7;
         $result = '';
         if ($weeks == 1) {

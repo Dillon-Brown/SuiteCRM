@@ -75,7 +75,7 @@ $vardefs = array(
   array(
         'name' => 'assigned_user_link',
     'type' => 'link',
-    'relationship' => strtolower($module).'_assigned_user',
+    'relationship' => \strtolower($module).'_assigned_user',
     'vname' => 'LBL_ASSIGNED_TO_USER',
     'link_type' => 'one',
     'module'=>'Users',
@@ -88,7 +88,7 @@ $vardefs = array(
   ),
 ),
 'relationships'=>array(
-      strtolower($module).'_assigned_user' =>
+      \strtolower($module).'_assigned_user' =>
    array('lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',
    'rhs_module'=> $module , 'rhs_table'=> $table_name, 'rhs_key' => 'assigned_user_id',
    'relationship_type'=>'one-to-many')

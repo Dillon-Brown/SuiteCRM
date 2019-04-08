@@ -55,7 +55,7 @@ class MailMergeController extends SugarController
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -68,7 +68,7 @@ class MailMergeController extends SugarController
         //get the module
         $module = !empty($_REQUEST['qModule']) ? $_REQUEST['qModule'] : '';
         //lowercase module name
-        $lmodule = strtolower($module);
+        $lmodule = \strtolower($module);
         //get the search term
         $term = !empty($_REQUEST['term']) ? DBManagerFactory::getInstance()->quote($_REQUEST['term']) : '';
         //in the case of Campaigns we need to use the related module
@@ -96,7 +96,7 @@ class MailMergeController extends SugarController
             if ($module == 'CampaignProspects') {
                 $using_cp = true;
                 $module = 'Prospects';
-                $lmodule = strtolower($relModule);
+                $lmodule = \strtolower($relModule);
                 $campign_where = $_SESSION['MAILMERGE_WHERE'];
                 $where = $lmodule.".first_name like '%".$term."%' OR ".$lmodule.".last_name like '%".$term."%'";
                 if ($campign_where) {

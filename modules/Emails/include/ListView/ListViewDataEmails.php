@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -295,29 +295,29 @@ class ListViewDataEmails extends ListViewData
                 }
 
                 // strip out the suffix to the the field names
-                if ((stristr($filteredField, 'advanced') !== false) || (stristr($filteredField, 'basic') !== false)) {
-                    $f = str_ireplace('_advanced', '', $filteredField);
-                    $f = str_ireplace('_basic', '', $f);
+                if ((\stristr($filteredField, 'advanced') !== false) || (\stristr($filteredField, 'basic') !== false)) {
+                    $f = \str_ireplace('_advanced', '', $filteredField);
+                    $f = \str_ireplace('_basic', '', $f);
                     if (isset(self::$mapServerFields[$f])) {
                         $filter[self::$mapServerFields[$f]] = $filteredFieldValue;
                     }
 
-                    if (array_key_exists($filteredField, $f)) {
+                    if (\array_key_exists($filteredField, $f)) {
                         continue;
                     }
 
                     // if field name is not an IMap field
-                    if (!array_key_exists($f, self::$mapServerFields)) {
+                    if (!\array_key_exists($f, self::$mapServerFields)) {
                         $this->searchType = 'crm';
                     }
                 } else {
                     // use the field names
-                    if (in_array($filteredField, self::$mapIgnoreFields)) {
+                    if (\in_array($filteredField, self::$mapIgnoreFields)) {
                         continue;
                     }
 
                     // if field name is not an IMap field
-                    if (!array_key_exists($filteredField, self::$mapServerFields)) {
+                    if (!\array_key_exists($filteredField, self::$mapServerFields)) {
                         $this->searchType = 'crm';
                     } else {
                         if (!empty($request[$filteredField.'_advanced'])) {
@@ -325,8 +325,8 @@ class ListViewDataEmails extends ListViewData
                         } elseif (!empty($request[$filteredField.'_basic'])) {
                             $filter[self::$mapServerFields[$filteredField]] = $request[$filteredField.'_basic'];
                         } else {
-                            $f = str_ireplace('_advanced', '', $filteredField);
-                            $f = str_ireplace('_basic', '', $f);
+                            $f = \str_ireplace('_advanced', '', $filteredField);
+                            $f = \str_ireplace('_basic', '', $f);
                             $filter[self::$mapServerFields[$filteredField]] = $f;
                         }
                     }
@@ -350,29 +350,29 @@ class ListViewDataEmails extends ListViewData
     {
         // Fix fields in filter fields
         foreach (self::$mapEmailFieldsToEmailTextFields as $EmailSearchField => $EmailTextSearchField) {
-            if (array_search($EmailSearchField, self::$alwaysIncludeSearchFields) !== false) {
+            if (\array_search($EmailSearchField, self::$alwaysIncludeSearchFields) !== false) {
                 $filterFields[$EmailSearchField] = true;
                 continue;
             } elseif (
-                array_key_exists($EmailSearchField . '_advanced', $request) &&
+                \array_key_exists($EmailSearchField . '_advanced', $request) &&
                 empty($request[$EmailSearchField . '_advanced'])
             ) {
-                $pos = array_search($EmailSearchField, $filterFields);
+                $pos = \array_search($EmailSearchField, $filterFields);
                 unset($filterFields[$pos]);
                 continue;
             } elseif (
-                array_key_exists($EmailSearchField . '_basic', $request) &&
+                \array_key_exists($EmailSearchField . '_basic', $request) &&
                 empty($request[$EmailSearchField . '_basic'])
             ) {
-                $pos = array_search($EmailSearchField, $filterFields);
+                $pos = \array_search($EmailSearchField, $filterFields);
                 unset($filterFields[$pos]);
                 continue;
             }
 
-            if (!array_key_exists($EmailSearchField, $filterFields)) {
+            if (!\array_key_exists($EmailSearchField, $filterFields)) {
                 $filterFields[$EmailTextSearchField] = true;
             } else {
-                $pos = array_search($EmailSearchField, $filterFields);
+                $pos = \array_search($EmailSearchField, $filterFields);
                 if ($pos !== false) {
                     unset($filterFields[$pos]);
                     $filterFields[$EmailTextSearchField] = true;
@@ -381,7 +381,7 @@ class ListViewDataEmails extends ListViewData
 
             // since the where is hard coded at this point we need to map the fields in the where
             // clause of the SQL
-            $where = str_replace($EmailSearchField, $EmailTextSearchField, $where);
+            $where = \str_replace($EmailSearchField, $EmailTextSearchField, $where);
         }
 
         return $filterFields;
@@ -414,7 +414,7 @@ class ListViewDataEmails extends ListViewData
 
         $crmQueryArray['inner_join'] = '';
         if (!empty($this->seed->listview_inner_join)) {
-            $crmQueryArray['inner_join'] = ' ' . implode(' ', $this->seed->listview_inner_join) . ' ';
+            $crmQueryArray['inner_join'] = ' ' . \implode(' ', $this->seed->listview_inner_join) . ' ';
         }
 
         // force join with email_text
@@ -433,7 +433,7 @@ class ListViewDataEmails extends ListViewData
      */
     public function getCrmEmailsQuery($crmQueryArray, &$params)
     {
-        if (!is_array($params)) {
+        if (!\is_array($params)) {
             $params = array();
         }
 
@@ -509,10 +509,10 @@ class ListViewDataEmails extends ListViewData
     {
         switch ($field) {
             case 'from_addr_name':
-                $ret = html_entity_decode($inboundEmail->handleMimeHeaderDecode($emailHeader['from']));
+                $ret = \html_entity_decode($inboundEmail->handleMimeHeaderDecode($emailHeader['from']));
                 break;
             case 'to_addrs_names':
-                $ret = mb_decode_mimeheader($emailHeader['to']);
+                $ret = \mb_decode_mimeheader($emailHeader['to']);
                 break;
             case 'has_attachments':
                 $ret = false;
@@ -521,7 +521,7 @@ class ListViewDataEmails extends ListViewData
                 $ret = $emailHeader['flagged'];
                 break;
             case 'name':
-                $ret = html_entity_decode($inboundEmail->handleMimeHeaderDecode($emailHeader['subject']));
+                $ret = \html_entity_decode($inboundEmail->handleMimeHeaderDecode($emailHeader['subject']));
                 break;
             case 'date_entered':
                 $db = DBManagerFactory::getInstance();
@@ -537,7 +537,7 @@ class ListViewDataEmails extends ListViewData
                 );
 
                 if (!empty($emails) && !empty($emails[0]->date_entered)) {
-                    $date = preg_replace('/(\ \([A-Z]+\))/', '', $emails[0]->date_entered);
+                    $date = \preg_replace('/(\ \([A-Z]+\))/', '', $emails[0]->date_entered);
 
                     $dateTime = DateTime::createFromFormat(
                         'Y-m-d H:i:s',
@@ -558,7 +558,7 @@ class ListViewDataEmails extends ListViewData
                     $ret = '';
                     $dateTime = false;
 
-                    $date = preg_replace('/(\ \([A-Z]+\))/', '', $emailHeader['date']);
+                    $date = \preg_replace('/(\ \([A-Z]+\))/', '', $emailHeader['date']);
 
                     $formats = array(
                         'D, d M Y H:i:s O',
@@ -594,11 +594,11 @@ class ListViewDataEmails extends ListViewData
                     $is_imported = [];
                 }
 
-                if (is_array($is_imported) || $is_imported instanceof Countable) {
-                    $count = count($is_imported);
+                if (\is_array($is_imported) || $is_imported instanceof Countable) {
+                    $count = \count($is_imported);
                 } else {
                     LoggerManager::getLogger()->warn('ListViewDataEmails::getEmailRecordFieldValue: email list should be a Countable');
-                    $count = count((array)$is_imported);
+                    $count = \count((array)$is_imported);
                 }
 
                 if ($count > 0) {
@@ -655,7 +655,7 @@ class ListViewDataEmails extends ListViewData
         }
 
         foreach ($seed->column_fields as $c => $field) {
-            $emailRecord[strtoupper($field)] = $this->getEmailRecordFieldValue($field, $emailHeader, $inboundEmail, $currentUser, $folder, $folderObj);
+            $emailRecord[\strtoupper($field)] = $this->getEmailRecordFieldValue($field, $emailHeader, $inboundEmail, $currentUser, $folder, $folderObj);
         }
 
         return $emailRecord;
@@ -670,7 +670,7 @@ class ListViewDataEmails extends ListViewData
         return
             (isset($request["searchFormTab"]) && $request["searchFormTab"] == "advanced_search") ||
             (
-                isset($request["type_basic"]) && (count($request["type_basic"]) > 1 ||
+                isset($request["type_basic"]) && (\count($request["type_basic"]) > 1 ||
                 $request["type_basic"][0] != "")
             ) ||
             (isset($request["module"]) && $request["module"] == "MergeRecords");
@@ -753,7 +753,7 @@ class ListViewDataEmails extends ListViewData
 
             // search in draft in CRM db?
 
-            if ($folderObj->getType() === 'draft' && !array_key_exists('status', $filter_fields)) {
+            if ($folderObj->getType() === 'draft' && !\array_key_exists('status', $filter_fields)) {
                 if (!empty($where)) {
                     $where .= ' AND ';
                 }
@@ -829,7 +829,7 @@ class ListViewDataEmails extends ListViewData
             }
         } catch (SuiteException $e) {
             $GLOBALS['log']->warn(
-                'Exception (class ' . get_class($e) .
+                'Exception (class ' . \get_class($e) .
                 ') message was: ' . $e->getMessage() .
                 " (code: " . $e->getCode() .
                 ")\ntrace info:\n" . $e->getTraceAsString()

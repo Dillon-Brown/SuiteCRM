@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -333,7 +333,7 @@ function onLangSelect(e) {
 EOQ;
 if (check_php_version() === -1) {
     if (empty($mod_strings['LBL_MINIMUM_PHP_VERSION'])) {
-        $mod_strings['LBL_MINIMUM_PHP_VERSION'] = 'The minimum PHP version required is '.constant('SUITECRM_PHP_MIN_VERSION');
+        $mod_strings['LBL_MINIMUM_PHP_VERSION'] = 'The minimum PHP version required is '.\constant('SUITECRM_PHP_MIN_VERSION');
     }
 
     $php_verison_warning =<<<eoq

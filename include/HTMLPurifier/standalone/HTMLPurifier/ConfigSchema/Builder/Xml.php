@@ -41,7 +41,7 @@ class HTMLPurifier_ConfigSchema_Builder_Xml extends XMLWriter
         if ($var === array()) {
             return 'array()';
         }
-        return var_export($var, true);
+        return \var_export($var, true);
     }
 
     /**

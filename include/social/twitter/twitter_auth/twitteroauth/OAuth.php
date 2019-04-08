@@ -3,7 +3,7 @@
 
 /* Generic exception class
  */
-if (!class_exists('OAuthException')) {
+if (!\class_exists('OAuthException')) {
     class OAuthException extends Exception
     {
         // pass
@@ -28,7 +28,7 @@ class OAuthConsumer
     }
 }
 
-if (!class_exists('OAuthToken')) {
+if (!\class_exists('OAuthToken')) {
     class OAuthToken
     {
         // access tokens and request tokens
@@ -128,9 +128,9 @@ class OAuthSignatureMethod_HMAC_SHA1 extends OAuthSignatureMethod
         );
 
         $key_parts = OAuthUtil::urlencode_rfc3986($key_parts);
-        $key = implode('&', $key_parts);
+        $key = \implode('&', $key_parts);
 
-        return base64_encode(hash_hmac('sha1', $base_string, $key, true));
+        return \base64_encode(\hash_hmac('sha1', $base_string, $key, true));
     }
 }
 
@@ -163,7 +163,7 @@ class OAuthSignatureMethod_PLAINTEXT extends OAuthSignatureMethod
         );
 
         $key_parts = OAuthUtil::urlencode_rfc3986($key_parts);
-        $key = implode('&', $key_parts);
+        $key = \implode('&', $key_parts);
         $request->base_string = $key;
 
         return $key;
@@ -208,20 +208,20 @@ abstract class OAuthSignatureMethod_RSA_SHA1 extends OAuthSignatureMethod
         $cert = $this->fetch_private_cert($request);
 
         // Pull the private key ID from the certificate
-        $privatekeyid = openssl_get_privatekey($cert);
+        $privatekeyid = \openssl_get_privatekey($cert);
 
         // Sign using the key
-        $ok = openssl_sign($base_string, $signature, $privatekeyid);
+        $ok = \openssl_sign($base_string, $signature, $privatekeyid);
 
         // Release the key resource
-        openssl_free_key($privatekeyid);
+        \openssl_free_key($privatekeyid);
 
-        return base64_encode($signature);
+        return \base64_encode($signature);
     }
 
     public function check_signature($request, $consumer, $token, $signature)
     {
-        $decoded_sig = base64_decode($signature);
+        $decoded_sig = \base64_decode($signature);
 
         $base_string = $request->get_signature_base_string();
 
@@ -229,13 +229,13 @@ abstract class OAuthSignatureMethod_RSA_SHA1 extends OAuthSignatureMethod
         $cert = $this->fetch_public_cert($request);
 
         // Pull the public key ID from the certificate
-        $publickeyid = openssl_get_publickey($cert);
+        $publickeyid = \openssl_get_publickey($cert);
 
         // Check the computed signature against the one passed in the query
-        $ok = openssl_verify($base_string, $decoded_sig, $publickeyid);
+        $ok = \openssl_verify($base_string, $decoded_sig, $publickeyid);
 
         // Release the key resource
-        openssl_free_key($publickeyid);
+        \openssl_free_key($publickeyid);
 
         return $ok == 1;
     }
@@ -254,7 +254,7 @@ class OAuthRequest
     public function __construct($http_method, $http_url, $parameters = null)
     {
         @$parameters or $parameters = array();
-        $parameters = array_merge(OAuthUtil::parse_parameters(parse_url($http_url, PHP_URL_QUERY)), $parameters);
+        $parameters = \array_merge(OAuthUtil::parse_parameters(\parse_url($http_url, PHP_URL_QUERY)), $parameters);
         $this->parameters = $parameters;
         $this->http_method = $http_method;
         $this->http_url = $http_url;
@@ -290,24 +290,24 @@ class OAuthRequest
             // It's a POST request of the proper content-type, so parse POST
             // parameters and add those overriding any duplicates from GET
             if ($http_method == "POST"
-                && @strstr(
+                && @\strstr(
                     $request_headers["Content-Type"],
                     "application/x-www-form-urlencoded"
                 )
             ) {
                 $post_data = OAuthUtil::parse_parameters(
-                    file_get_contents(self::$POST_INPUT)
+                    \file_get_contents(self::$POST_INPUT)
                 );
-                $parameters = array_merge($parameters, $post_data);
+                $parameters = \array_merge($parameters, $post_data);
             }
 
             // We have a Authorization-header with OAuth data. Parse the header
             // and add those overriding any duplicates from GET or POST
-            if (@substr($request_headers['Authorization'], 0, 6) == "OAuth ") {
+            if (@\substr($request_headers['Authorization'], 0, 6) == "OAuth ") {
                 $header_parameters = OAuthUtil::split_header(
                     $request_headers['Authorization']
                 );
-                $parameters = array_merge($parameters, $header_parameters);
+                $parameters = \array_merge($parameters, $header_parameters);
             }
         }
 
@@ -328,7 +328,7 @@ class OAuthRequest
             $defaults['oauth_token'] = $token->key;
         }
 
-        $parameters = array_merge($defaults, $parameters);
+        $parameters = \array_merge($defaults, $parameters);
 
         return new OAuthRequest($http_method, $http_url, $parameters);
     }
@@ -337,7 +337,7 @@ class OAuthRequest
     {
         if ($allow_duplicates && isset($this->parameters[$name])) {
             // We have already added parameter(s) with this name, so add to the list
-            if (is_scalar($this->parameters[$name])) {
+            if (\is_scalar($this->parameters[$name])) {
                 // This is the first duplicate, so transform scalar (string)
                 // into an array so we can add the duplicates
                 $this->parameters[$name] = array($this->parameters[$name]);
@@ -399,7 +399,7 @@ class OAuthRequest
 
         $parts = OAuthUtil::urlencode_rfc3986($parts);
 
-        return implode('&', $parts);
+        return \implode('&', $parts);
     }
 
     /**
@@ -407,7 +407,7 @@ class OAuthRequest
      */
     public function get_normalized_http_method()
     {
-        return strtoupper($this->http_method);
+        return \strtoupper($this->http_method);
     }
 
     /**
@@ -416,7 +416,7 @@ class OAuthRequest
      */
     public function get_normalized_http_url()
     {
-        $parts = parse_url($this->http_url);
+        $parts = \parse_url($this->http_url);
 
         $port = @$parts['port'];
         $scheme = $parts['scheme'];
@@ -469,10 +469,10 @@ class OAuthRequest
 
         $total = array();
         foreach ($this->parameters as $k => $v) {
-            if (substr($k, 0, 5) != "oauth") {
+            if (\substr($k, 0, 5) != "oauth") {
                 continue;
             }
-            if (is_array($v)) {
+            if (\is_array($v)) {
                 throw new OAuthException('Arrays not supported in headers');
             }
             $out .= ($first) ? ' ' : ',';
@@ -513,7 +513,7 @@ class OAuthRequest
      */
     private static function generate_timestamp()
     {
-        return time();
+        return \time();
     }
 
     /**
@@ -521,10 +521,10 @@ class OAuthRequest
      */
     private static function generate_nonce()
     {
-        $mt = microtime();
-        $rand = mt_rand();
+        $mt = \microtime();
+        $rand = \mt_rand();
 
-        return md5($mt . $rand); // md5s look nicer than numbers
+        return \md5($mt . $rand); // md5s look nicer than numbers
     }
 }
 
@@ -637,15 +637,15 @@ class OAuthServer
             throw new OAuthException('No signature method parameter. This parameter is required');
         }
 
-        if (!in_array(
+        if (!\in_array(
             $signature_method,
-            array_keys($this->signature_methods)
+            \array_keys($this->signature_methods)
         )
         ) {
             throw new OAuthException(
                 "Signature method '$signature_method' not supported " .
                 "try one of the following: " .
-                implode(", ", array_keys($this->signature_methods))
+                \implode(", ", \array_keys($this->signature_methods))
             );
         }
         return $this->signature_methods[$signature_method];
@@ -726,8 +726,8 @@ class OAuthServer
         }
 
         // verify that timestamp is recentish
-        $now = time();
-        if (abs($now - $timestamp) > $this->timestamp_threshold) {
+        $now = \time();
+        if (\abs($now - $timestamp) > $this->timestamp_threshold) {
             throw new OAuthException(
                 "Expired timestamp, yours $timestamp, ours $now"
             );
@@ -793,13 +793,13 @@ class OAuthUtil
 {
     public static function urlencode_rfc3986($input)
     {
-        if (is_array($input)) {
-            return array_map(array('OAuthUtil', 'urlencode_rfc3986'), $input);
-        } elseif (is_scalar($input)) {
-            return str_replace(
+        if (\is_array($input)) {
+            return \array_map(array('OAuthUtil', 'urlencode_rfc3986'), $input);
+        } elseif (\is_scalar($input)) {
+            return \str_replace(
                 '+',
                 ' ',
-                str_replace('%7E', '~', rawurlencode($input))
+                \str_replace('%7E', '~', \rawurlencode($input))
             );
         }
         return '';
@@ -811,7 +811,7 @@ class OAuthUtil
     // seem to be used anywhere so leaving it as is.
     public static function urldecode_rfc3986($string)
     {
-        return urldecode($string);
+        return \urldecode($string);
     }
 
     // Utility function for turning the Authorization: header into
@@ -822,14 +822,14 @@ class OAuthUtil
         $pattern = '/(([-_a-z]*)=("([^"]*)"|([^,]*)),?)/';
         $offset = 0;
         $params = array();
-        while (preg_match($pattern, $header, $matches, PREG_OFFSET_CAPTURE, $offset) > 0) {
+        while (\preg_match($pattern, $header, $matches, PREG_OFFSET_CAPTURE, $offset) > 0) {
             $match = $matches[0];
             $header_name = $matches[2][0];
             $header_content = (isset($matches[5])) ? $matches[5][0] : $matches[4][0];
-            if (preg_match('/^oauth_/', $header_name) || !$only_allow_oauth_parameters) {
+            if (\preg_match('/^oauth_/', $header_name) || !$only_allow_oauth_parameters) {
                 $params[$header_name] = OAuthUtil::urldecode_rfc3986($header_content);
             }
-            $offset = $match[1] + strlen($match[0]);
+            $offset = $match[1] + \strlen($match[0]);
         }
 
         if (isset($params['realm'])) {
@@ -842,7 +842,7 @@ class OAuthUtil
     // helper to try to sort out headers for people who aren't running apache
     public static function get_headers()
     {
-        if (function_exists('apache_request_headers')) {
+        if (\function_exists('apache_request_headers')) {
             // we need this to get the actual Authorization: header
             // because apache tends to tell us it doesn't exist
             $headers = apache_request_headers();
@@ -853,10 +853,10 @@ class OAuthUtil
             // request
             $out = array();
             foreach ($headers as $key => $value) {
-                $key = str_replace(
+                $key = \str_replace(
                     " ",
                     "-",
-                    ucwords(strtolower(str_replace("-", " ", $key)))
+                    \ucwords(\strtolower(\str_replace("-", " ", $key)))
                 );
                 $out[$key] = $value;
             }
@@ -872,14 +872,14 @@ class OAuthUtil
             }
 
             foreach ($_SERVER as $key => $value) {
-                if (substr($key, 0, 5) == "HTTP_") {
+                if (\substr($key, 0, 5) == "HTTP_") {
                     // this is chaos, basically it is just there to capitalize the first
                     // letter of every word that is not an initial HTTP and strip HTTP
                     // code from przemek
-                    $key = str_replace(
+                    $key = \str_replace(
                         " ",
                         "-",
-                        ucwords(strtolower(str_replace("_", " ", substr($key, 5))))
+                        \ucwords(\strtolower(\str_replace("_", " ", \substr($key, 5))))
                     );
                     $out[$key] = $value;
                 }
@@ -897,11 +897,11 @@ class OAuthUtil
             return array();
         }
 
-        $pairs = explode('&', $input);
+        $pairs = \explode('&', $input);
 
         $parsed_parameters = array();
         foreach ($pairs as $pair) {
-            $split = explode('=', $pair, 2);
+            $split = \explode('=', $pair, 2);
             $parameter = OAuthUtil::urldecode_rfc3986($split[0]);
             $value = isset($split[1]) ? OAuthUtil::urldecode_rfc3986($split[1]) : '';
 
@@ -909,7 +909,7 @@ class OAuthUtil
                 // We have already recieved parameter(s) with this name, so add to the list
                 // of parameters with this name
 
-                if (is_scalar($parsed_parameters[$parameter])) {
+                if (\is_scalar($parsed_parameters[$parameter])) {
                     // This is the first duplicate, so transform scalar (string) into an array
                     // so we can add the duplicates
                     $parsed_parameters[$parameter] = array($parsed_parameters[$parameter]);
@@ -930,20 +930,20 @@ class OAuthUtil
         }
 
         // Urlencode both keys and values
-        $keys = OAuthUtil::urlencode_rfc3986(array_keys($params));
-        $values = OAuthUtil::urlencode_rfc3986(array_values($params));
-        $params = array_combine($keys, $values);
+        $keys = OAuthUtil::urlencode_rfc3986(\array_keys($params));
+        $values = OAuthUtil::urlencode_rfc3986(\array_values($params));
+        $params = \array_combine($keys, $values);
 
         // Parameters are sorted by name, using lexicographical byte value ordering.
         // Ref: Spec: 9.1.1 (1)
-        uksort($params, 'strcmp');
+        \uksort($params, 'strcmp');
 
         $pairs = array();
         foreach ($params as $parameter => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 // If two or more parameters share the same name, they are sorted by their value
                 // Ref: Spec: 9.1.1 (1)
-                natsort($value);
+                \natsort($value);
                 foreach ($value as $duplicate_value) {
                     $pairs[] = $parameter . '=' . $duplicate_value;
                 }
@@ -953,6 +953,6 @@ class OAuthUtil
         }
         // For each parameter, the name is separated from the corresponding value by an '=' character (ASCII code 61)
         // Each name-value pair is separated by an '&' character (ASCII code 38)
-        return implode('&', $pairs);
+        return \implode('&', $pairs);
     }
 }

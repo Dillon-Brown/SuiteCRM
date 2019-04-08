@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -64,10 +64,10 @@ function smarty_function_sugar_actions_link($params, &$smarty)
     $type = $params['id'];
     $location = (empty($params['location'])) ? "" : "_".$params['location'];
 
-    if (!is_array($type)) {
+    if (!\is_array($type)) {
         $module = $params['module'];
         $view = $params['view'];
-        switch (strtoupper($type)) {
+        switch (\strtoupper($type)) {
             case "SEARCH":
             return '<input tabindex="2" title="{$APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{$APP.LBL_SEARCH_BUTTON_KEY}" onclick="SUGAR.savedViews.setChooser(); SUGAR.ajaxUI.submitForm(this.form);" class="button" type="button" name="button" value="{$APP.LBL_SEARCH_BUTTON_LABEL}" id="search_form_submit"/>&nbsp;';
             break;
@@ -112,7 +112,7 @@ function smarty_function_sugar_actions_link($params, &$smarty)
             break;
 
             case "SUBPANELSAVE":
-                if ($view == 'QuickCreate' || (isset($_REQUEST['target_action']) && strtolower($_REQUEST['target_action'])) == 'quickcreate') {
+                if ($view == 'QuickCreate' || (isset($_REQUEST['target_action']) && \strtolower($_REQUEST['target_action'])) == 'quickcreate') {
                     $view =  "form_SubpanelQuickCreate_{$module}";
                 }
                 return '{if $bean->aclAccess("save")}<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="disableOnUnloadEditView();this.form.action.value=\'Save\';if(check_form(\''.$view.'\'))return SUGAR.subpanelUtils.inlineSave(this.form.id, \'' . $params['module'] . '_subpanel_save_button\');return false;" type="submit" name="' . $params['module'] . '_subpanel_save_button" id="' . $params['module'] . '_subpanel_save_button" value="{$APP.LBL_SAVE_BUTTON_LABEL}">{/if} ';
@@ -165,7 +165,7 @@ function smarty_function_sugar_actions_link($params, &$smarty)
 
 
       } //switch
-    } elseif (is_array($type) && isset($type['customCode'])) {
+    } elseif (\is_array($type) && isset($type['customCode'])) {
         return $type['customCode'];
     }
 }

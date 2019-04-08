@@ -92,7 +92,7 @@ class AOR_ReportTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($aor_Report->id));
-        $this->assertEquals(36, strlen($aor_Report->id));
+        $this->assertEquals(36, \strlen($aor_Report->id));
 
         //mark the record as deleted for cleanup
         $aor_Report->mark_deleted($aor_Report->id);
@@ -155,7 +155,7 @@ class AOR_ReportTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //execute the method and verify that it returns an array
         $aor_Report = new AOR_Report();
         $result = $aor_Report->getReportFields();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testbuild_report_chart()
@@ -211,15 +211,15 @@ class AOR_ReportTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method without any parameters and verify it returns html string
         $html1 = $aor_Report->build_group_report();
-        $this->assertGreaterThan(0, strlen($html1));
+        $this->assertGreaterThan(0, \strlen($html1));
 
         //execute the method wit offset parameter and verify it returns html string
         $html2 = $aor_Report->build_group_report(1);
-        $this->assertGreaterThan(0, strlen($html2));
+        $this->assertGreaterThan(0, \strlen($html2));
 
         //execute the method with both parameters and verify it returns html string
         $html3 = $aor_Report->build_group_report(0, false);
-        $this->assertGreaterThan(0, strlen($html3));
+        $this->assertGreaterThan(0, \strlen($html3));
 
         //verify that all three html strings are different.
         $this->assertNotEquals($html1, $html2);
@@ -241,15 +241,15 @@ class AOR_ReportTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method without any parameters and verify it returns html string
         $html1 = $aor_Report->build_report_html();
-        $this->assertGreaterThan(0, strlen($html1));
+        $this->assertGreaterThan(0, \strlen($html1));
 
         //execute the method with both parameters and verify it returns html string
         $html2 = $aor_Report->build_report_html(0, false);
-        $this->assertGreaterThan(0, strlen($html2));
+        $this->assertGreaterThan(0, \strlen($html2));
 
         //execute the method with group and identifier parameters and verify it returns html string
         $html3 = $aor_Report->build_report_html(1, false, 'grouptest', 'testidentifier');
-        $this->assertGreaterThan(0, strlen($html3));
+        $this->assertGreaterThan(0, \strlen($html3));
 
         //verify that group and identifier exist in the strings
         $this->assertContains('grouptest', $html3);
@@ -312,11 +312,11 @@ class AOR_ReportTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method without any parameters and verify that it returns a non empty string
         $actual = $aor_Report->build_report_query();
-        $this->assertGreaterThanOrEqual(0, strlen($actual));
+        $this->assertGreaterThanOrEqual(0, \strlen($actual));
 
         //execute the method with parameter and verify that it returns a non empty string
         $actual = $aor_Report->build_report_query('name');
-        $this->assertGreaterThanOrEqual(0, strlen($actual));
+        $this->assertGreaterThanOrEqual(0, \strlen($actual));
         
         // clean up
         
@@ -331,7 +331,7 @@ class AOR_ReportTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method with parameters and verify that it returns an array.
         $actual = $aor_Report->build_report_query_select($query_array, 'name');
-        $this->assertTrue(is_array($actual));
+        $this->assertTrue(\is_array($actual));
     }
 
     public function testbuild_report_query_join()

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -43,7 +43,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 $filePath = 'modules/Home/QuickSearch.php';
-if (file_exists('custom/' . $filePath)) {
+if (\file_exists('custom/' . $filePath)) {
     require_once('custom/' . $filePath);
     $quicksearchQuery = new quicksearchQueryCustom();
     $conditionEqual = quicksearchQueryCustom::CONDITION_EQUAL;
@@ -54,16 +54,16 @@ if (file_exists('custom/' . $filePath)) {
 }
 
 $json = getJSONobj();
-$data = $json->decode(html_entity_decode($_REQUEST['data']));
+$data = $json->decode(\html_entity_decode($_REQUEST['data']));
 if (isset($_REQUEST['query']) && !empty($_REQUEST['query'])) {
     foreach ($data['conditions'] as $k=>$v) {
         if (empty($data['conditions'][$k]['value']) && ($data['conditions'][$k]['op'] != $conditionEqual)) {
-            $data['conditions'][$k]['value']=urldecode($_REQUEST['query']);
+            $data['conditions'][$k]['value']=\urldecode($_REQUEST['query']);
         }
     }
 }
 
 $method = !empty($data['method']) ? $data['method'] : 'query';
-if (method_exists($quicksearchQuery, $method)) {
+if (\method_exists($quicksearchQuery, $method)) {
     echo $quicksearchQuery->$method($data);
 }

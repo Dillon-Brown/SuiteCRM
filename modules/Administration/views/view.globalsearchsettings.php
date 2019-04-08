@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -82,10 +82,10 @@ class AdministrationViewGlobalsearchsettings extends SugarView
 
         $modules = $usa->retrieveEnabledAndDisabledModules();
 
-        $sugar_smarty->assign('enabled_modules', json_encode($modules['enabled']));
-        $sugar_smarty->assign('disabled_modules', json_encode($modules['disabled']));
+        $sugar_smarty->assign('enabled_modules', \json_encode($modules['enabled']));
+        $sugar_smarty->assign('disabled_modules', \json_encode($modules['disabled']));
         $tpl = 'modules/Administration/templates/GlobalSearchSettings.tpl';
-        if (file_exists('custom/' . $tpl)) {
+        if (\file_exists('custom/' . $tpl)) {
             $tpl = 'custom/' . $tpl;
         }
         echo $sugar_smarty->fetch($tpl);

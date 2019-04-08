@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -67,9 +67,9 @@ class DatabaseStore implements Store
             if (!empty($monitor->$name)) {
                 $columns[] = $name;
                 if ($metrics[$name]->_type == 'int') {
-                    $values[] = intval($monitor->$name);
+                    $values[] = \intval($monitor->$name);
                 } elseif ($metrics[$name]->_type == 'double') {
-                    $values[] = floatval($monitor->$name);
+                    $values[] = \floatval($monitor->$name);
                 } elseif ($metrics[$name]->_type == 'datetime') {
                     $values[] = DBManagerFactory::getInstance()->convert(DBManagerFactory::getInstance()->quoted($monitor->$name), "datetime");
                 } else {
@@ -88,7 +88,7 @@ class DatabaseStore implements Store
             $values[] = $id;
         }
 
-        $query = "INSERT INTO $monitor->table_name (" .implode(",", $columns). " ) VALUES ( ". implode(",", $values). ')';
+        $query = "INSERT INTO $monitor->table_name (" .\implode(",", $columns). " ) VALUES ( ". \implode(",", $values). ')';
         DBManagerFactory::getInstance()->query($query);
     }
 }

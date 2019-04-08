@@ -56,8 +56,8 @@ class Facebook extends BaseFacebook
      */
     public function __construct($config)
     {
-        if (!session_id()) {
-            session_start();
+        if (!\session_id()) {
+            \session_start();
         }
         parent::__construct($config);
         if (!empty($config['sharedSession'])) {
@@ -100,7 +100,7 @@ class Facebook extends BaseFacebook
         }
         // evil/corrupt/missing case
         $base_domain = $this->getBaseDomain();
-        $this->sharedSessionID = md5(uniqid(mt_rand(), true));
+        $this->sharedSessionID = \md5(\uniqid(\mt_rand(), true));
         $cookie_value = $this->makeSignedRequest(
       array(
         'domain' => $base_domain,
@@ -108,8 +108,8 @@ class Facebook extends BaseFacebook
       )
     );
         $_COOKIE[$cookie_name] = $cookie_value;
-        if (!headers_sent()) {
-            $expire = time() + self::FBSS_COOKIE_EXPIRE;
+        if (!\headers_sent()) {
+            $expire = \time() + self::FBSS_COOKIE_EXPIRE;
             SugarApplication::setCookie($cookie_name, $cookie_value, $expire, '/', '.'.$base_domain, false, true);
         } else {
             // @codeCoverageIgnoreStart
@@ -136,7 +136,7 @@ class Facebook extends BaseFacebook
      */
     protected function setPersistentData($key, $value)
     {
-        if (!in_array($key, self::$kSupportedKeys)) {
+        if (!\in_array($key, self::$kSupportedKeys)) {
             self::errorLog('Unsupported key passed to setPersistentData.');
             return;
         }
@@ -152,7 +152,7 @@ class Facebook extends BaseFacebook
      */
     protected function getPersistentData($key, $default = false)
     {
-        if (!in_array($key, self::$kSupportedKeys)) {
+        if (!\in_array($key, self::$kSupportedKeys)) {
             self::errorLog('Unsupported key passed to getPersistentData.');
             return $default;
         }
@@ -169,7 +169,7 @@ class Facebook extends BaseFacebook
      */
     protected function clearPersistentData($key)
     {
-        if (!in_array($key, self::$kSupportedKeys)) {
+        if (!\in_array($key, self::$kSupportedKeys)) {
             self::errorLog('Unsupported key passed to clearPersistentData.');
             return;
         }
@@ -203,7 +203,7 @@ class Facebook extends BaseFacebook
         $cookie_name = $this->getSharedSessionCookieName();
         unset($_COOKIE[$cookie_name]);
         $base_domain = $this->getBaseDomain();
-        setcookie($cookie_name, '', 1, '/', '.'.$base_domain, false, true);
+        \setcookie($cookie_name, '', 1, '/', '.'.$base_domain, false, true);
     }
 
     /**
@@ -228,8 +228,8 @@ class Facebook extends BaseFacebook
     {
         $parts = array('fb', $this->getAppId(), $key);
         if ($this->sharedSessionID) {
-            array_unshift($parts, $this->sharedSessionID);
+            \array_unshift($parts, $this->sharedSessionID);
         }
-        return implode('_', $parts);
+        return \implode('_', $parts);
     }
 }

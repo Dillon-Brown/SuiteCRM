@@ -326,19 +326,19 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
     {
         if ($options instanceof Zend_Config) {
             $options = $options->toArray();
-        } elseif (!is_array($options)) {
-            $options = func_get_args();
-            $temp['allow'] = array_shift($options);
+        } elseif (!\is_array($options)) {
+            $options = \func_get_args();
+            $temp['allow'] = \array_shift($options);
             if (!empty($options)) {
-                $temp['idn'] = array_shift($options);
+                $temp['idn'] = \array_shift($options);
             }
 
             if (!empty($options)) {
-                $temp['tld'] = array_shift($options);
+                $temp['tld'] = \array_shift($options);
             }
 
             if (!empty($options)) {
-                $temp['ip'] = array_shift($options);
+                $temp['ip'] = \array_shift($options);
             }
 
             $options = $temp;
@@ -366,19 +366,19 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
      */
     public function setOptions($options)
     {
-        if (array_key_exists('allow', $options)) {
+        if (\array_key_exists('allow', $options)) {
             $this->setAllow($options['allow']);
         }
 
-        if (array_key_exists('idn', $options)) {
+        if (\array_key_exists('idn', $options)) {
             $this->setValidateIdn($options['idn']);
         }
 
-        if (array_key_exists('tld', $options)) {
+        if (\array_key_exists('tld', $options)) {
             $this->setValidateTld($options['tld']);
         }
 
-        if (array_key_exists('ip', $options)) {
+        if (\array_key_exists('ip', $options)) {
             $this->setIpValidator($options['ip']);
         }
 
@@ -488,14 +488,14 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             $this->_error(self::INVALID);
             return false;
         }
 
         $this->_setValue($value);
         // Check input against IP address schema
-        if (preg_match('/^[0-9.a-e:.]*$/i', $value) &&
+        if (\preg_match('/^[0-9.a-e:.]*$/i', $value) &&
             $this->_options['ip']->setTranslator($this->getTranslator())->isValid($value)) {
             if (!($this->_options['allow'] & self::ALLOW_IP)) {
                 $this->_error(self::IP_ADDRESS_NOT_ALLOWED);
@@ -506,19 +506,19 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         }
 
         // Check input against DNS hostname schema
-        $domainParts = explode('.', $value);
-        if ((count($domainParts) > 1) && (strlen($value) >= 4) && (strlen($value) <= 254)) {
+        $domainParts = \explode('.', $value);
+        if ((\count($domainParts) > 1) && (\strlen($value) >= 4) && (\strlen($value) <= 254)) {
             $status = false;
 
-            $origenc = iconv_get_encoding('internal_encoding');
-            iconv_set_encoding('internal_encoding', 'UTF-8');
+            $origenc = \iconv_get_encoding('internal_encoding');
+            \iconv_set_encoding('internal_encoding', 'UTF-8');
             do {
                 // First check TLD
                 $matches = array();
-                if (preg_match('/([^.]{2,10})$/i', end($domainParts), $matches) ||
-                    (end($domainParts) == 'ایران') || (end($domainParts) == '中国') ||
-                    (end($domainParts) == '公司') || (end($domainParts) == '网络')) {
-                    reset($domainParts);
+                if (\preg_match('/([^.]{2,10})$/i', \end($domainParts), $matches) ||
+                    (\end($domainParts) == 'ایران') || (\end($domainParts) == '中国') ||
+                    (\end($domainParts) == '公司') || (\end($domainParts) == '网络')) {
+                    \reset($domainParts);
 
                     // Hostname characters are: *(label dot)(label dot label); max 254 chars
                     // label: id-prefix [*ldh{61} id-prefix]; max 63 chars
@@ -526,9 +526,9 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                     // ldh: alpha / digit / dash
 
                     // Match TLD against known list
-                    $this->_tld = strtolower($matches[1]);
+                    $this->_tld = \strtolower($matches[1]);
                     if ($this->_options['tld']) {
-                        if (!in_array($this->_tld, $this->_validTlds)) {
+                        if (!\in_array($this->_tld, $this->_validTlds)) {
                             $this->_error(self::UNKNOWN_TLD);
                             $status = false;
                             break;
@@ -541,11 +541,11 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                      * @see Zend_Validate_Hostname_Interface
                      */
                     $regexChars = array(0 => '/^[a-z0-9\x2d]{1,63}$/i');
-                    if ($this->_options['idn'] &&  isset($this->_validIdns[strtoupper($this->_tld)])) {
-                        if (is_string($this->_validIdns[strtoupper($this->_tld)])) {
-                            $regexChars += include($this->_validIdns[strtoupper($this->_tld)]);
+                    if ($this->_options['idn'] &&  isset($this->_validIdns[\strtoupper($this->_tld)])) {
+                        if (\is_string($this->_validIdns[\strtoupper($this->_tld)])) {
+                            $regexChars += include($this->_validIdns[\strtoupper($this->_tld)]);
                         } else {
-                            $regexChars += $this->_validIdns[strtoupper($this->_tld)];
+                            $regexChars += $this->_validIdns[\strtoupper($this->_tld)];
                         }
                     }
 
@@ -553,17 +553,17 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                     $check = 0;
                     foreach ($domainParts as $domainPart) {
                         // Decode Punycode domainnames to IDN
-                        if (strpos($domainPart, 'xn--') === 0) {
-                            $domainPart = $this->decodePunycode(substr($domainPart, 4));
+                        if (\strpos($domainPart, 'xn--') === 0) {
+                            $domainPart = $this->decodePunycode(\substr($domainPart, 4));
                             if ($domainPart === false) {
                                 return false;
                             }
                         }
 
                         // Check dash (-) does not start, end or appear in 3rd and 4th positions
-                        if ((strpos($domainPart, '-') === 0)
-                            || ((strlen($domainPart) > 2) && (strpos($domainPart, '-', 2) == 2) && (strpos($domainPart, '-', 3) == 3))
-                            || (strpos($domainPart, '-') === (strlen($domainPart) - 1))) {
+                        if ((\strpos($domainPart, '-') === 0)
+                            || ((\strlen($domainPart) > 2) && (\strpos($domainPart, '-', 2) == 2) && (\strpos($domainPart, '-', 3) == 3))
+                            || (\strpos($domainPart, '-') === (\strlen($domainPart) - 1))) {
                             $this->_error(self::INVALID_DASH);
                             $status = false;
                             break 2;
@@ -572,15 +572,15 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                         // Check each domain part
                         $checked = false;
                         foreach ($regexChars as $regexKey => $regexChar) {
-                            $status = @preg_match($regexChar, $domainPart);
+                            $status = @\preg_match($regexChar, $domainPart);
                             if ($status > 0) {
                                 $length = 63;
-                                if (array_key_exists(strtoupper($this->_tld), $this->_idnLength)
-                                    && (array_key_exists($regexKey, $this->_idnLength[strtoupper($this->_tld)]))) {
-                                    $length = $this->_idnLength[strtoupper($this->_tld)];
+                                if (\array_key_exists(\strtoupper($this->_tld), $this->_idnLength)
+                                    && (\array_key_exists($regexKey, $this->_idnLength[\strtoupper($this->_tld)]))) {
+                                    $length = $this->_idnLength[\strtoupper($this->_tld)];
                                 }
 
-                                if (iconv_strlen($domainPart, 'UTF-8') > $length) {
+                                if (\iconv_strlen($domainPart, 'UTF-8') > $length) {
                                     $this->_error(self::INVALID_HOSTNAME);
                                 } else {
                                     $checked = true;
@@ -595,7 +595,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                     }
 
                     // If one of the labels doesn't match, the hostname is invalid
-                    if ($check !== count($domainParts)) {
+                    if ($check !== \count($domainParts)) {
                         $this->_error(self::INVALID_HOSTNAME_SCHEMA);
                         $status = false;
                     }
@@ -606,7 +606,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                 }
             } while (false);
 
-            iconv_set_encoding('internal_encoding', $origenc);
+            \iconv_set_encoding('internal_encoding', $origenc);
             // If the input passes as an Internet domain name, and domain names are allowed, then the hostname
             // passes validation
             if ($status && ($this->_options['allow'] & self::ALLOW_DNS)) {
@@ -618,7 +618,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
 
         // Check input against local network name schema; last chance to pass validation
         $regexLocal = '/^(([a-zA-Z0-9\x2d]{1,63}\x2e)*[a-zA-Z0-9\x2d]{1,63}){1,254}$/';
-        $status = @preg_match($regexLocal, $value);
+        $status = @\preg_match($regexLocal, $value);
 
         // If the input passes as a local network name, and local network names are allowed, then the
         // hostname passes validation
@@ -649,26 +649,26 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
      */
     protected function decodePunycode($encoded)
     {
-        $found = preg_match('/([^a-z0-9\x2d]{1,10})$/i', $encoded);
+        $found = \preg_match('/([^a-z0-9\x2d]{1,10})$/i', $encoded);
         if (empty($encoded) || ($found > 0)) {
             // no punycode encoded string, return as is
             $this->_error(self::CANNOT_DECODE_PUNYCODE);
             return false;
         }
 
-        $separator = strrpos($encoded, '-');
+        $separator = \strrpos($encoded, '-');
         if ($separator > 0) {
             for ($x = 0; $x < $separator; ++$x) {
                 // prepare decoding matrix
-                $decoded[] = ord($encoded[$x]);
+                $decoded[] = \ord($encoded[$x]);
             }
         } else {
             $this->_error(self::CANNOT_DECODE_PUNYCODE);
             return false;
         }
 
-        $lengthd = count($decoded);
-        $lengthe = strlen($encoded);
+        $lengthd = \count($decoded);
+        $lengthe = \strlen($encoded);
 
         // decoding
         $init  = true;
@@ -678,7 +678,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
 
         for ($indexe = ($separator) ? ($separator + 1) : 0; $indexe < $lengthe; ++$lengthd) {
             for ($old_index = $index, $pos = 1, $key = 36; 1 ; $key += 36) {
-                $hex   = ord($encoded[$indexe++]);
+                $hex   = \ord($encoded[$indexe++]);
                 $digit = ($hex - 48 < 10) ? $hex - 22
                        : (($hex - 65 < 26) ? $hex - 65
                        : (($hex - 97 < 26) ? $hex - 97
@@ -693,13 +693,13 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                 $pos = (int) ($pos * (36 - $tag));
             }
 
-            $delta   = intval($init ? (($index - $old_index) / 700) : (($index - $old_index) / 2));
-            $delta  += intval($delta / ($lengthd + 1));
+            $delta   = \intval($init ? (($index - $old_index) / 700) : (($index - $old_index) / 2));
+            $delta  += \intval($delta / ($lengthd + 1));
             for ($key = 0; $delta > 910 / 2; $key += 36) {
-                $delta = intval($delta / 35);
+                $delta = \intval($delta / 35);
             }
 
-            $base   = intval($key + 36 * $delta / ($delta + 38));
+            $base   = \intval($key + 36 * $delta / ($delta + 38));
             $init   = false;
             $char  += (int) ($index / ($lengthd + 1));
             $index %= ($lengthd + 1);
@@ -715,25 +715,25 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         // convert decoded ucs4 to utf8 string
         foreach ($decoded as $key => $value) {
             if ($value < 128) {
-                $decoded[$key] = chr($value);
+                $decoded[$key] = \chr($value);
             } elseif ($value < (1 << 11)) {
-                $decoded[$key]  = chr(192 + ($value >> 6));
-                $decoded[$key] .= chr(128 + ($value & 63));
+                $decoded[$key]  = \chr(192 + ($value >> 6));
+                $decoded[$key] .= \chr(128 + ($value & 63));
             } elseif ($value < (1 << 16)) {
-                $decoded[$key]  = chr(224 + ($value >> 12));
-                $decoded[$key] .= chr(128 + (($value >> 6) & 63));
-                $decoded[$key] .= chr(128 + ($value & 63));
+                $decoded[$key]  = \chr(224 + ($value >> 12));
+                $decoded[$key] .= \chr(128 + (($value >> 6) & 63));
+                $decoded[$key] .= \chr(128 + ($value & 63));
             } elseif ($value < (1 << 21)) {
-                $decoded[$key]  = chr(240 + ($value >> 18));
-                $decoded[$key] .= chr(128 + (($value >> 12) & 63));
-                $decoded[$key] .= chr(128 + (($value >> 6) & 63));
-                $decoded[$key] .= chr(128 + ($value & 63));
+                $decoded[$key]  = \chr(240 + ($value >> 18));
+                $decoded[$key] .= \chr(128 + (($value >> 12) & 63));
+                $decoded[$key] .= \chr(128 + (($value >> 6) & 63));
+                $decoded[$key] .= \chr(128 + ($value & 63));
             } else {
                 $this->_error(self::CANNOT_DECODE_PUNYCODE);
                 return false;
             }
         }
 
-        return implode($decoded);
+        return \implode($decoded);
     }
 }

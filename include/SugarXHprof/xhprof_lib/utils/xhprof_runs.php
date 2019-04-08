@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 //
@@ -76,7 +76,7 @@ class XHProfRuns_Default implements iXHProfRuns
 
     private function gen_run_id($type)
     {
-        return uniqid();
+        return \uniqid();
     }
 
     private function file_name($run_id, $type)
@@ -98,7 +98,7 @@ class XHProfRuns_Default implements iXHProfRuns
         // in which the error_log file resides.
 
         if (empty($dir)) {
-            $dir = ini_get("xhprof.output_dir");
+            $dir = \ini_get("xhprof.output_dir");
             if (empty($dir)) {
 
         // some default that at least works on unix...
@@ -118,15 +118,15 @@ class XHProfRuns_Default implements iXHProfRuns
     {
         $file_name = $this->file_name($run_id, $type);
 
-        if (!file_exists($file_name)) {
+        if (!\file_exists($file_name)) {
             xhprof_error("Could not find file $file_name");
             $run_desc = "Invalid Run Id = $run_id";
             return null;
         }
 
-        $contents = file_get_contents($file_name);
+        $contents = \file_get_contents($file_name);
         $run_desc = "XHProf Run (Namespace=$type)";
-        return unserialize($contents);
+        return \unserialize($contents);
     }
 
     public function save_run($xhprof_data, $type, $run_id = null)
@@ -134,18 +134,18 @@ class XHProfRuns_Default implements iXHProfRuns
 
     // Use PHP serialize function to store the XHProf's
         // raw profiler data.
-        $xhprof_data = serialize($xhprof_data);
+        $xhprof_data = \serialize($xhprof_data);
 
         if ($run_id === null) {
             $run_id = $this->gen_run_id($type);
         }
 
         $file_name = $this->file_name($run_id, $type);
-        $file = fopen($file_name, 'w');
+        $file = \fopen($file_name, 'w');
 
         if ($file) {
-            fwrite($file, $xhprof_data);
-            fclose($file);
+            \fwrite($file, $xhprof_data);
+            \fclose($file);
         } else {
             xhprof_error("Could not open $file_name\n");
         }
@@ -156,21 +156,21 @@ class XHProfRuns_Default implements iXHProfRuns
 
     public function list_runs()
     {
-        if (is_dir($this->dir)) {
+        if (\is_dir($this->dir)) {
             echo "<hr/>Existing runs:\n<ul>\n";
-            $files = glob("{$this->dir}/*.{$this->suffix}");
+            $files = \glob("{$this->dir}/*.{$this->suffix}");
             $function = function ($a, $b) {
-                return filemtime($b) - filemtime($a);
+                return \filemtime($b) - \filemtime($a);
             };
 
-            usort($files, $function);
+            \usort($files, $function);
             foreach ($files as $file) {
-                list($run, $source) = explode('.', basename($file));
-                echo '<li><a href="' . htmlentities($_SERVER['SCRIPT_NAME'])
-                . '?run=' . htmlentities($run) . '&source='
-                . htmlentities($source) . '">'
-                . htmlentities(basename($file)) . "</a><small> "
-                . date("Y-m-d H:i:s", filemtime($file)) . "</small></li>\n";
+                list($run, $source) = \explode('.', \basename($file));
+                echo '<li><a href="' . \htmlentities($_SERVER['SCRIPT_NAME'])
+                . '?run=' . \htmlentities($run) . '&source='
+                . \htmlentities($source) . '">'
+                . \htmlentities(\basename($file)) . "</a><small> "
+                . \date("Y-m-d H:i:s", \filemtime($file)) . "</small></li>\n";
             }
             echo "</ul>\n";
         }

@@ -41,7 +41,7 @@ class actionModifyRecord extends actionCreateRecord
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id);
     }
@@ -94,25 +94,25 @@ EOS;
 
         $module = getRelatedModule($bean->module_name, $params['rel_type']);
         $html .= "cr_module[" . $line . "] = \"" . $module . "\";";
-        $html .= "cr_fields[" . $line . "] = \"" . trim(preg_replace(
+        $html .= "cr_fields[" . $line . "] = \"" . \trim(\preg_replace(
             '/\s+/',
             ' ',
                 getModuleFields($module, 'EditView', '', array(), array('email1', 'email2'))
         )) . "\";";
-        $html .= "cr_relationships[".$line."] = \"".trim(preg_replace('/\s+/', ' ', getModuleRelationships($module)))."\";";
-        if ($params && array_key_exists('field', $params)) {
+        $html .= "cr_relationships[".$line."] = \"".\trim(\preg_replace('/\s+/', ' ', getModuleRelationships($module)))."\";";
+        if ($params && \array_key_exists('field', $params)) {
             foreach ($params['field'] as $key => $field) {
-                if (is_array($params['value'][$key])) {
-                    $params['value'][$key] = json_encode($params['value'][$key]);
+                if (\is_array($params['value'][$key])) {
+                    $params['value'][$key] = \json_encode($params['value'][$key]);
                 }
 
-                $html .= "load_crline('".$line."','".$field."','".str_replace(array("\r\n","\r","\n"), " ", $params['value'][$key])."','".$params['value_type'][$key]."');";
+                $html .= "load_crline('".$line."','".$field."','".\str_replace(array("\r\n","\r","\n"), " ", $params['value'][$key])."','".$params['value_type'][$key]."');";
             }
         }
         if (isset($params['rel'])) {
             foreach ($params['rel'] as $key => $field) {
-                if (is_array($params['rel_value'][$key])) {
-                    $params['rel_value'][$key] = json_encode($params['rel_value'][$key]);
+                if (\is_array($params['rel_value'][$key])) {
+                    $params['rel_value'][$key] = \json_encode($params['rel_value'][$key]);
                 }
 
                 $html .= "load_crrelline('".$line."','".$field."','".$params['rel_value'][$key]."','".$params['rel_value_type'][$key]."');";

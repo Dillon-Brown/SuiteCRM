@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -65,10 +65,10 @@ class updatePortal
 
             $object_arr['Contacts'] = $bean->id;
             $body_html = aop_parse_template($template->body_html, $object_arr);
-            $body_html = str_replace($search, $replace, $body_html);
+            $body_html = \str_replace($search, $replace, $body_html);
 
             $body_plain = aop_parse_template($template->body, $object_arr);
-            $body_plain = str_replace($search, $replace, $body_plain);
+            $body_plain = \str_replace($search, $replace, $body_plain);
 
             $this->sendEmail($bean->email1, $template->subject, $body_html, $body_plain, $bean);
         }

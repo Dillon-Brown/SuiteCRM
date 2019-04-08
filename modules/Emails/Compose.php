@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -46,7 +46,7 @@ $data = $_REQUEST;
 
 if (!empty($data['listViewExternalClient'])) {
     $email = new Email();
-    echo $email->getNamePlusEmailAddressesForCompose($_REQUEST['action_module'], (explode(",", $_REQUEST['uid'])));
+    echo $email->getNamePlusEmailAddressesForCompose($_REQUEST['action_module'], (\explode(",", $_REQUEST['uid'])));
 }
 //For the full compose/email screen, the compose package is generated and script execution
 //continues to the Emails/index.php page.
@@ -111,7 +111,7 @@ function generateComposeDataPackage($data, $forFullCompose = true)
         $namePlusEmail = '';
         if (isset($data['to_email_addrs'])) {
             $namePlusEmail = $data['to_email_addrs'];
-            $namePlusEmail = from_html(str_replace("&nbsp;", " ", $namePlusEmail));
+            $namePlusEmail = from_html(\str_replace("&nbsp;", " ", $namePlusEmail));
         } else {
             if (isset($bean->full_name)) {
                 $namePlusEmail = from_html($bean->full_name) . " <" . from_html($bean->emailAddress->getPrimaryAddress($bean)) . ">";
@@ -125,7 +125,7 @@ function generateComposeDataPackage($data, $forFullCompose = true)
         $email_id = "";
         $attachments = array();
         if ($bean->module_dir == 'Cases') {
-            $subject = str_replace('%1', $bean->case_number, $bean->getEmailSubjectMacro() . " " . from_html($bean->name));//bug 41928
+            $subject = \str_replace('%1', $bean->case_number, $bean->getEmailSubjectMacro() . " " . from_html($bean->name));//bug 41928
             $bean->load_relationship("contacts");
             $contact_ids = $bean->contacts->get();
             $contact = new Contact();
@@ -138,7 +138,7 @@ function generateComposeDataPackage($data, $forFullCompose = true)
         if ($bean->module_dir == 'KBDocuments') {
             require_once("modules/Emails/EmailUI.php");
             $subject = $bean->kbdocument_name;
-            $article_body = str_replace('/' . $GLOBALS['sugar_config']['cache_dir'] . 'images/', $GLOBALS['sugar_config']['site_url'] . '/' . $GLOBALS['sugar_config']['cache_dir'] . 'images/', KBDocument::get_kbdoc_body_without_incrementing_count($bean->id));
+            $article_body = \str_replace('/' . $GLOBALS['sugar_config']['cache_dir'] . 'images/', $GLOBALS['sugar_config']['site_url'] . '/' . $GLOBALS['sugar_config']['cache_dir'] . 'images/', KBDocument::get_kbdoc_body_without_incrementing_count($bean->id));
             $body = from_html($article_body);
             $attachments = KBDocument::get_kbdoc_attachments_for_newemail($bean->id);
             $attachments = $attachments['attachments'];
@@ -183,7 +183,7 @@ function generateComposeDataPackage($data, $forFullCompose = true)
         );
     } elseif (isset($_REQUEST['ListView'])) {
         $email = new Email();
-        $namePlusEmail = $email->getNamePlusEmailAddressesForCompose($_REQUEST['action_module'], (explode(",", $_REQUEST['uid'])));
+        $namePlusEmail = $email->getNamePlusEmailAddressesForCompose($_REQUEST['action_module'], (\explode(",", $_REQUEST['uid'])));
         $ret = array(
             'to_email_addrs' => $namePlusEmail,
         );
@@ -258,25 +258,25 @@ function generateComposeDataPackage($data, $forFullCompose = true)
 
             $myEmailAddresses = array();
             foreach ($current_user->emailAddress->addresses as $p) {
-                array_push($myEmailAddresses, $p['email_address']);
+                \array_push($myEmailAddresses, $p['email_address']);
             }
 
             //remove current user's email address (if contained in To/CC)
-            $ccEmailsArr = explode(", ", $ccEmails);
+            $ccEmailsArr = \explode(", ", $ccEmails);
 
             foreach ($ccEmailsArr as $p => $q) {
-                preg_match('/<(.*?)>/', $q, $email);
+                \preg_match('/<(.*?)>/', $q, $email);
                 if (isset($email[1])) {
                     $checkemail = $email[1];
                 } else {
                     $checkemail = $q;
                 }
-                if (in_array($checkemail, $myEmailAddresses)) {
+                if (\in_array($checkemail, $myEmailAddresses)) {
                     unset($ccEmailsArr[$p]);
                 }
             }
 
-            $ccEmails = implode(", ", $ccEmailsArr);
+            $ccEmails = \implode(", ", $ccEmailsArr);
 
             $ret['cc_addrs'] = from_html($ccEmails);
         }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -127,7 +127,7 @@ $dictionary['jjwg_Areas'] = array(
     'relationships' => array(),
     'optimistic_locking' => true,
 );
-if (!class_exists('VardefManager')) {
+if (!\class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('jjwg_Areas', 'jjwg_Areas', array('basic', 'assignable', 'security_groups'));

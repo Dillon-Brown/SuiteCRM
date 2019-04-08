@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -61,7 +61,7 @@ class Chart_pipeline_by_sales_stage
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -127,11 +127,11 @@ class Chart_pipeline_by_sales_stage
         }
 
         // cn: format date_start|end to user's preferred
-        $dateDisplayStart	= strftime($timedate->get_user_date_format(), strtotime($date_start));
-        $dateDisplayEnd   	= strftime($timedate->get_user_date_format(), strtotime($date_end));
+        $dateDisplayStart	= \strftime($timedate->get_user_date_format(), \strtotime($date_start));
+        $dateDisplayEnd   	= \strftime($timedate->get_user_date_format(), \strtotime($date_end));
         $seps				= array("-", "/");
         $dates				= array($date_start, $date_end);
-        $dateFileNameSafe	= str_replace($seps, "_", $dates);
+        $dateFileNameSafe	= \str_replace($seps, "_", $dates);
         $dateXml[0]			= $timedate->swap_formats($date_start, $user_dateFormat, $timedate->dbDayFormat);
         $dateXml[1]			= $timedate->swap_formats($date_end, $user_dateFormat, $timedate->dbDayFormat);
 
@@ -140,11 +140,11 @@ class Chart_pipeline_by_sales_stage
         $datax_selected= array();
         $user_tempx = $current_user->getPreference('pbss_sales_stages');
         //get list of sales stage keys to display
-        if (!empty($user_tempx) && count($user_tempx) > 0 && !isset($_REQUEST['pbss_sales_stages'])) {
+        if (!empty($user_tempx) && \count($user_tempx) > 0 && !isset($_REQUEST['pbss_sales_stages'])) {
             $tempx = $user_tempx ;
             $GLOBALS['log']->debug("USER PREFERENCES['pbss_sales_stages'] is:");
             $GLOBALS['log']->debug($user_tempx);
-        } elseif (isset($_REQUEST['pbss_sales_stages']) && count($_REQUEST['pbss_sales_stages']) > 0) {
+        } elseif (isset($_REQUEST['pbss_sales_stages']) && \count($_REQUEST['pbss_sales_stages']) > 0) {
             $tempx = $_REQUEST['pbss_sales_stages'];
             $current_user->setPreference('pbss_sales_stages', $_REQUEST['pbss_sales_stages']);
             $GLOBALS['log']->debug("_REQUEST['pbss_sales_stages'] is:");
@@ -154,14 +154,14 @@ class Chart_pipeline_by_sales_stage
         }
 
         //set $datax using selected sales stage keys
-        if (count($tempx) > 0) {
+        if (\count($tempx) > 0) {
             foreach ($tempx as $key) {
                 $datax[$key] = $app_list_strings['sales_stage_dom'][$key];
-                array_push($datax_selected, $key);
+                \array_push($datax_selected, $key);
             }
         } else {
             $datax = $app_list_strings['sales_stage_dom'];
-            $datax_selected = array_keys($app_list_strings['sales_stage_dom']);
+            $datax_selected = \array_keys($app_list_strings['sales_stage_dom']);
         }
         $GLOBALS['log']->debug("datax is:");
         $GLOBALS['log']->debug($datax);
@@ -170,12 +170,12 @@ class Chart_pipeline_by_sales_stage
         $new_ids = array();
         $user_ids = $current_user->getPreference('pbss_ids');
         //get list of user ids for which to display data
-        if (!empty($user_ids) && count($user_ids) != 0 && !isset($_REQUEST['pbss_ids'])) {
+        if (!empty($user_ids) && \count($user_ids) != 0 && !isset($_REQUEST['pbss_ids'])) {
             $ids = $user_ids;
 
             $GLOBALS['log']->debug("USER PREFERENCES['pbss_ids'] is:");
             $GLOBALS['log']->debug($user_ids);
-        } elseif (isset($_REQUEST['pbss_ids']) && count($_REQUEST['pbss_ids']) > 0) {
+        } elseif (isset($_REQUEST['pbss_ids']) && \count($_REQUEST['pbss_ids']) > 0) {
             $ids = $_REQUEST['pbss_ids'];
             $current_user->setPreference('pbss_ids', $_REQUEST['pbss_ids']);
             $GLOBALS['log']->debug("_REQUEST['pbss_ids'] is:");
@@ -184,14 +184,14 @@ class Chart_pipeline_by_sales_stage
             $GLOBALS['log']->debug($current_user->getPreference('pbss_ids'));
         } else {
             $ids = get_user_array(false);
-            $ids = array_keys($ids);
+            $ids = \array_keys($ids);
         }
 
         //create unique prefix based on selected users for image files
         $id_hash = '1';
         if (isset($ids)) {
-            sort($ids);
-            $id_hash = crc32(implode('', $ids));
+            \sort($ids);
+            $id_hash = \crc32(\implode('', $ids));
             if ($id_hash < 0) {
                 $id_hash = $id_hash * -1;
             }
@@ -270,8 +270,8 @@ Calendar.setup ({
 echo "<P align='center'>".$this->gen_xml($datax, $dateXml[0], $dateXml[1], $ids, $cache_file_name, $refresh, 'hBarF', $current_module_strings)."</P>";
         echo "<P align='center'><span class='chartFootnote'>".$current_module_strings['LBL_SALES_STAGE_FORM_DESC']."</span></P>";
 
-        if (file_exists($cache_file_name)) {
-            $file_date = $timedate->asUser($timedate->fromTimestamp(filemtime($cache_file_name)));
+        if (\file_exists($cache_file_name)) {
+            $file_date = $timedate->asUser($timedate->fromTimestamp(\filemtime($cache_file_name)));
         } else {
             $file_date = '';
         } ?>
@@ -313,7 +313,7 @@ echo get_validate_chart_js();
 
         global $timedate;
 
-        if (!file_exists($cache_file_name) || $refresh == true) {
+        if (!\file_exists($cache_file_name) || $refresh == true) {
             $GLOBALS['log']->debug("starting pipeline chart");
             $GLOBALS['log']->debug("datax is:");
             $GLOBALS['log']->debug($datax);
@@ -323,7 +323,7 @@ echo get_validate_chart_js();
             $opp = new Opportunity;
             $where="";
             //build the where clause for the query that matches $user
-            $count = count($user_id);
+            $count = \count($user_id);
             $id = array();
             $user_list = get_user_array(false);
             foreach ($user_id as $key) {
@@ -333,17 +333,17 @@ echo get_validate_chart_js();
                 foreach ($new_ids as $the_id=>$the_name) {
                     $id[] = "'".$the_id."'";
                 }
-                $ids = join(",", $id);
+                $ids = \join(",", $id);
                 $where .= "opportunities.assigned_user_id IN ($ids) ";
             }
             //build the where clause for the query that matches $datax
-            $count = count($datax);
+            $count = \count($datax);
             $dataxArr = array();
             if ($count>0) {
                 foreach ($datax as $key=>$value) {
                     $dataxArr[] = "'".$key."'";
                 }
-                $dataxArr = join(",", $dataxArr);
+                $dataxArr = \join(",", $dataxArr);
                 $where .= "AND opportunities.sales_stage IN	($dataxArr) ";
             }
 
@@ -389,9 +389,9 @@ echo get_validate_chart_js();
             $rowTotalArr[] = 0;
             while ($row = $opp->db->fetchByAssoc($result, false)) {
                 if ($row['total']*$div<=100) {
-                    $sum = round($row['total']*$div, 2);
+                    $sum = \round($row['total']*$div, 2);
                 } else {
-                    $sum = round($row['total']*$div);
+                    $sum = \round($row['total']*$div);
                 }
                 if (!isset($stageArr[$row['sales_stage']]['row_total'])) {
                     $stageArr[$row['sales_stage']]['row_total']=0;
@@ -409,7 +409,7 @@ echo get_validate_chart_js();
                     $rowTotalArr[]=$stageArr[$key]['row_total'];
                 }
                 if (isset($stageArr[$key]['row_total']) && $stageArr[$key]['row_total']>100) {
-                    $stageArr[$key]['row_total'] = round($stageArr[$key]['row_total']);
+                    $stageArr[$key]['row_total'] = \round($stageArr[$key]['row_total']);
                 }
                 $fileContents .= '     <dataRow title="'.$translation.'" endLabel="';
                 if (isset($stageArr[$key]['row_total'])) {
@@ -417,10 +417,10 @@ echo get_validate_chart_js();
                 }
                 $fileContents .= '">'."\n";
                 if (isset($stageArr[$key]['people'])) {
-                    asort($stageArr[$key]['people']);
-                    reset($stageArr[$key]['people']);
+                    \asort($stageArr[$key]['people']);
+                    \reset($stageArr[$key]['people']);
                     foreach ($stageArr[$key]['people'] as $nameKey=>$nameValue) {
-                        $fileContents .= '          <bar id="'.$nameKey.'" totalSize="'.$stageArr[$key][$nameKey]['total'].'" altText="'.$nameValue.': '.format_number($stageArr[$key][$nameKey]['opp_count'], 0, 0).' '.$current_module_strings['LBL_OPPS_WORTH'].' '.format_number($stageArr[$key][$nameKey]['total'], 2, 2).$current_module_strings['LBL_OPP_THOUSANDS'].' '.$current_module_strings['LBL_OPPS_IN_STAGE'].' '.$translation.'" url="index.php?module=Opportunities&action=index&assigned_user_id[]='.$nameKey.'&sales_stage='.urlencode($key).'&date_start='.$date_start.'&date_closed='.$date_end.'&query=true&searchFormTab=advanced_search"/>'."\n";
+                        $fileContents .= '          <bar id="'.$nameKey.'" totalSize="'.$stageArr[$key][$nameKey]['total'].'" altText="'.$nameValue.': '.format_number($stageArr[$key][$nameKey]['opp_count'], 0, 0).' '.$current_module_strings['LBL_OPPS_WORTH'].' '.format_number($stageArr[$key][$nameKey]['total'], 2, 2).$current_module_strings['LBL_OPP_THOUSANDS'].' '.$current_module_strings['LBL_OPPS_IN_STAGE'].' '.$translation.'" url="index.php?module=Opportunities&action=index&assigned_user_id[]='.$nameKey.'&sales_stage='.\urlencode($key).'&date_start='.$date_start.'&date_closed='.$date_end.'&query=true&searchFormTab=advanced_search"/>'."\n";
                     }
                 }
                 $fileContents .= '     </dataRow>'."\n";
@@ -435,7 +435,7 @@ echo get_validate_chart_js();
             $fileContents .= '     <xData min="0" max="'.$max.'" length="'.$length.'" prefix="'.$symbol.'" suffix="" kDelim="'.$kDelim.'" />'."\n";
             $fileContents .= '     <colorLegend status="on">'."\n";
             $i=0;
-            asort($new_ids);
+            \asort($new_ids);
             foreach ($new_ids as $key=>$value) {
                 $color = generate_graphcolor($key, $i);
                 $fileContents .= '          <mapping id="'.$key.'" name="'.$value.'" color="'.$color.'"/>'."\n";
@@ -517,11 +517,11 @@ echo get_validate_chart_js();
         $datax_selected= array();
         $user_tempx = $current_user->getPreference('pbss_sales_stages');
         //get list of sales stage keys to display
-        if (!empty($user_tempx) && count($user_tempx) > 0 && !isset($_REQUEST['pbss_sales_stages'])) {
+        if (!empty($user_tempx) && \count($user_tempx) > 0 && !isset($_REQUEST['pbss_sales_stages'])) {
             $tempx = $user_tempx ;
             $GLOBALS['log']->debug("USER PREFERENCES['pbss_sales_stages'] is:");
             $GLOBALS['log']->debug($user_tempx);
-        } elseif (isset($_REQUEST['pbss_sales_stages']) && count($_REQUEST['pbss_sales_stages']) > 0) {
+        } elseif (isset($_REQUEST['pbss_sales_stages']) && \count($_REQUEST['pbss_sales_stages']) > 0) {
             $tempx = $_REQUEST['pbss_sales_stages'];
             $current_user->setPreference('pbss_sales_stages', $_REQUEST['pbss_sales_stages']);
             $GLOBALS['log']->debug("_REQUEST['pbss_sales_stages'] is:");
@@ -531,14 +531,14 @@ echo get_validate_chart_js();
         }
 
         //set $datax using selected sales stage keys
-        if (count($tempx) > 0) {
+        if (\count($tempx) > 0) {
             foreach ($tempx as $key) {
                 $datax[$key] = $app_list_strings['sales_stage_dom'][$key];
-                array_push($datax_selected, $key);
+                \array_push($datax_selected, $key);
             }
         } else {
             $datax = $app_list_strings['sales_stage_dom'];
-            $datax_selected = array_keys($app_list_strings['sales_stage_dom']);
+            $datax_selected = \array_keys($app_list_strings['sales_stage_dom']);
         }
         $GLOBALS['log']->debug("datax is:");
         $GLOBALS['log']->debug($datax);
@@ -549,12 +549,12 @@ echo get_validate_chart_js();
         $new_ids = array();
         $user_ids = $current_user->getPreference('pbss_ids');
         //get list of user ids for which to display data
-        if (!empty($user_ids) && count($user_ids) != 0 && !isset($_REQUEST['pbss_ids'])) {
+        if (!empty($user_ids) && \count($user_ids) != 0 && !isset($_REQUEST['pbss_ids'])) {
             $ids = $user_ids;
 
             $GLOBALS['log']->debug("USER PREFERENCES['pbss_ids'] is:");
             $GLOBALS['log']->debug($user_ids);
-        } elseif (isset($_REQUEST['pbss_ids']) && count($_REQUEST['pbss_ids']) > 0) {
+        } elseif (isset($_REQUEST['pbss_ids']) && \count($_REQUEST['pbss_ids']) > 0) {
             $ids = $_REQUEST['pbss_ids'];
             $current_user->setPreference('pbss_ids', $_REQUEST['pbss_ids']);
             $GLOBALS['log']->debug("_REQUEST['pbss_ids'] is:");
@@ -563,14 +563,14 @@ echo get_validate_chart_js();
             $GLOBALS['log']->debug($current_user->getPreference('pbss_ids'));
         } else {
             $ids = get_user_array(false);
-            $ids = array_keys($ids);
+            $ids = \array_keys($ids);
         }
 
         $user_id = $ids;
         $opp = new Opportunity;
         $where="";
         //build the where clause for the query that matches $user
-        $count = count($user_id);
+        $count = \count($user_id);
         $id = array();
         $user_list = get_user_array(false);
         foreach ($user_id as $key) {
@@ -580,17 +580,17 @@ echo get_validate_chart_js();
             foreach ($new_ids as $the_id=>$the_name) {
                 $id[] = "'".$the_id."'";
             }
-            $ids = join(",", $id);
+            $ids = \join(",", $id);
             $where .= "opportunities.assigned_user_id IN ($ids) ";
         }
         //build the where clause for the query that matches $datax
-        $count = count($datax);
+        $count = \count($datax);
         $dataxArr = array();
         if ($count>0) {
             foreach ($datax as $key=>$value) {
                 $dataxArr[] = "'".$key."'";
             }
-            $dataxArr = join(",", $dataxArr);
+            $dataxArr = \join(",", $dataxArr);
             $where .= "AND opportunities.sales_stage IN	($dataxArr) ";
         }
 

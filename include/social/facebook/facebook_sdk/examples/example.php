@@ -37,7 +37,7 @@ if ($user) {
         // Proceed knowing you have a logged in user who's authenticated.
         $user_profile = $facebook->api('/me');
     } catch (FacebookApiException $e) {
-        error_log($e);
+        \error_log($e);
         $user = null;
     }
 }
@@ -88,14 +88,14 @@ $naitik = $facebook->api('/naitik');
     <?php endif ?>
 
     <h3>PHP Session</h3>
-    <pre><?php print_r($_SESSION); ?></pre>
+    <pre><?php \print_r($_SESSION); ?></pre>
 
     <?php if ($user): ?>
       <h3>You</h3>
       <img src="https://graph.facebook.com/<?php echo $user; ?>/picture">
 
       <h3>Your User Object (/me)</h3>
-      <pre><?php print_r($user_profile); ?></pre>
+      <pre><?php \print_r($user_profile); ?></pre>
     <?php else: ?>
       <strong><em>You are not Connected.</em></strong>
     <?php endif ?>

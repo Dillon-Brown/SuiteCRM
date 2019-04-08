@@ -112,7 +112,7 @@ class ModulesLib
             // Create data item
             if (isset($selectFields[$moduleBean->module_name])) {
                 // Only return the fields requested
-                $fields['fields'][$moduleBean->module_name] = explode(',', $selectFields[$moduleBean->module_name]);
+                $fields['fields'][$moduleBean->module_name] = \explode(',', $selectFields[$moduleBean->module_name]);
             } else {
                 $fields['fields'][$moduleBean->module_name] = $moduleBean->column_fields;
             }
@@ -157,7 +157,7 @@ class ModulesLib
         $currentOffset = (integer)$paginatedModuleRecords['current_offset'] < 0 ? 0 : (integer)$paginatedModuleRecords['current_offset'];
         $firstOffset = 0;
         $limitOffset = ($limit <= 0) ? $config['list_max_entries_per_page'] : $limit;
-        $lastOffset = (integer)floor((integer)$paginatedModuleRecords['row_count'] / $limitOffset);
+        $lastOffset = (integer)\floor((integer)$paginatedModuleRecords['row_count'] / $limitOffset);
         $prevOffset = $currentOffset - 1 < $firstOffset ? $firstOffset : $currentOffset - 1;
         $nextOffset = $currentOffset + 1 > $lastOffset ? $lastOffset : $currentOffset + 1;
 
@@ -231,19 +231,19 @@ class ModulesLib
         $db = $this->containers->get('DatabaseManager');
         $orderBy = '';
         if (!empty($req->getParam('sort'))) {
-            $sortField = explode(',', $req->getParam('sort'));
+            $sortField = \explode(',', $req->getParam('sort'));
             foreach ($sortField as $sortKey => $sortValue) {
                 if ($sortValue[0] === '-') {
-                    $sortField[$sortKey] = $db->quote(substr($sortValue, 1)) . ' DESC';
+                    $sortField[$sortKey] = $db->quote(\substr($sortValue, 1)) . ' DESC';
                 } else {
                     if ($sortValue[0] === '+') {
-                        $sortField[$sortKey] = $db->quote(substr($sortValue, 1)) . ' ASC';
+                        $sortField[$sortKey] = $db->quote(\substr($sortValue, 1)) . ' ASC';
                     } else {
                         $sortField[$sortKey] = $db->quote($sortValue) . ' ASC';
                     }
                 }
             }
-            $orderBy = implode(',', $sortField);
+            $orderBy = \implode(',', $sortField);
         }
 
         return $orderBy;
@@ -342,7 +342,7 @@ class ModulesLib
         }
 
         if ($sort !== null) {
-            $query->modify(array('sort' => implode(',', $sort)));
+            $query->modify(array('sort' => \implode(',', $sort)));
         }
 
 

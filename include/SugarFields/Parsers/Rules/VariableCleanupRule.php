@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -66,8 +66,8 @@ class VariableCleanupRule extends BaseRule
                 foreach ($panel as $rowCount=>$row) {
                     foreach ($row as $key=>$column) {
                         //This converts variable ended with "_c_checked" to just "_c" (for checkboxes in DetailView)
-                        if (!is_array($column) && isset($column) && preg_match('/(.*?)_c_checked$/s', $column, $matches)) {
-                            if (count($matches) == 2) {
+                        if (!\is_array($column) && isset($column) && \preg_match('/(.*?)_c_checked$/s', $column, $matches)) {
+                            if (\count($matches) == 2) {
                                 $panels[$name][$rowCount][$key] = $matches[1] . "_c";
                             }
                         } elseif ($this->matches($column, '/^parent_id$/si')) {

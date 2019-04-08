@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -121,7 +121,7 @@ class SugarPHPMailer extends PHPMailer
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -214,14 +214,14 @@ class SugarPHPMailer extends PHPMailer
             }
 
             // body text
-            $this->Body = from_html($locale->translateCharset(trim($this->Body), 'UTF-8', $OBCharset));
-            $this->AltBody = from_html($locale->translateCharset(trim($this->AltBody), 'UTF-8', $OBCharset));
-            $subjectUTF8 = from_html(trim($this->Subject));
+            $this->Body = from_html($locale->translateCharset(\trim($this->Body), 'UTF-8', $OBCharset));
+            $this->AltBody = from_html($locale->translateCharset(\trim($this->AltBody), 'UTF-8', $OBCharset));
+            $subjectUTF8 = from_html(\trim($this->Subject));
             $subject = $locale->translateCharset($subjectUTF8, 'UTF-8', $OBCharset);
             $this->Subject = $locale->translateCharset($subjectUTF8, 'UTF-8', $OBCharset);
 
             // HTML email RFC compliance
-            if ($this->ContentType === 'text/html' && strpos($this->Body, '<html') === false) {
+            if ($this->ContentType === 'text/html' && \strpos($this->Body, '<html') === false) {
                 $langHeader = get_language_header();
 
                 $head = <<<eoq
@@ -244,7 +244,7 @@ eoq;
                 $fromName = $this->Username;
             }
 
-            $this->FromName = $locale->translateCharset(trim($fromName), 'UTF-8', $OBCharset);
+            $this->FromName = $locale->translateCharset(\trim($fromName), 'UTF-8', $OBCharset);
         }
     }
 
@@ -258,18 +258,18 @@ eoq;
      */
     public function replaceImageByRegex($regex, $local_prefix, $object = false)
     {
-        preg_match_all("#<img[^>]*[\s]+src[^=]*=[\s]*[\"']($regex)(.+?)[\"']#si", $this->Body, $matches);
+        \preg_match_all("#<img[^>]*[\s]+src[^=]*=[\s]*[\"']($regex)(.+?)[\"']#si", $this->Body, $matches);
         $i = 0;
         foreach ($matches[2] as $match) {
-            $filename = urldecode($match);
+            $filename = \urldecode($match);
             $cid = $filename;
             $file_location = $local_prefix . $filename;
-            if (!file_exists($file_location)) {
+            if (!\file_exists($file_location)) {
                 continue;
             }
             if ($object) {
-                if (preg_match('#&(?:amp;)?type=([\w]+)#i', $matches[0][$i], $typematch)) {
-                    switch (strtolower($typematch[1])) {
+                if (\preg_match('#&(?:amp;)?type=([\w]+)#i', $matches[0][$i], $typematch)) {
+                    switch (\strtolower($typematch[1])) {
                         case 'documents':
                             $beanname = 'DocumentRevisions';
                             break;
@@ -287,7 +287,7 @@ eoq;
                     }
                 }
             } else {
-                $mime_type = 'image/' . strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                $mime_type = 'image/' . \strtolower(\pathinfo($filename, PATHINFO_EXTENSION));
             }
             if (!$this->embeddedAttachmentExists($cid)) {
                 $this->addEmbeddedImage($file_location, $cid, $filename, 'base64', $mime_type);
@@ -295,9 +295,9 @@ eoq;
             $i++;
         }
         //replace references to cache with cid tag
-        $this->Body = preg_replace("|\"$regex|i", '"cid:', $this->Body);
+        $this->Body = \preg_replace("|\"$regex|i", '"cid:', $this->Body);
         // remove bad img line from outbound email
-        $this->Body = preg_replace('#<img[^>]+src[^=]*=\"\/([^>]*?[^>]*)>#sim', '', $this->Body);
+        $this->Body = \preg_replace('#<img[^>]+src[^=]*=\"\/([^>]*?[^>]*)>#sim', '', $this->Body);
     }
 
     /**
@@ -313,7 +313,7 @@ eoq;
         $this->clearAttachments();
 
         //replace references to cache/images with cid tag
-        $this->Body = preg_replace(';=\s*"' . preg_quote(sugar_cached('images/'), ';') . ';', '="cid:', $this->Body);
+        $this->Body = \preg_replace(';=\s*"' . \preg_quote(sugar_cached('images/'), ';') . ';', '="cid:', $this->Body);
 
         $this->replaceImageByRegex("(?:{$sugar_config['site_url']})?/?cache/images/", sugar_cached('images/'));
 
@@ -334,7 +334,7 @@ eoq;
             $filename = '';
 
             if ($note->object_name === 'Note') {
-                if (!empty($note->file->temp_file_location) && is_file($note->file->temp_file_location)) {
+                if (!empty($note->file->temp_file_location) && \is_file($note->file->temp_file_location)) {
                     $file_location = $note->file->temp_file_location;
                     $filename = $note->file->original_file_name;
                     $mime_type = $note->file->mime_type;
@@ -350,7 +350,7 @@ eoq;
             }
 
             $filename =
-                substr($filename, 36, strlen($filename)); // strip GUID	for PHPMailer class to name outbound file
+                \substr($filename, 36, \strlen($filename)); // strip GUID	for PHPMailer class to name outbound file
             if (!$note->embed_flag) {
                 $this->addAttachment($file_location, $filename, 'base64', $mime_type);
             } // else
@@ -435,10 +435,10 @@ eoq;
      */
     public function replace($key, $value)
     {
-        $this->Subject = preg_replace('/\$' . $key . '\b/', $value, $this->Subject);
-        $this->Body = preg_replace('/\$' . $key . '\b/', $value, $this->Body);
-        $this->Body_html = preg_replace('/\$' . $key . '\b/', $value, $this->Body_html);
-        $this->AltBody = preg_replace('/\$' . $key . '\b/', $value, $this->AltBody);
+        $this->Subject = \preg_replace('/\$' . $key . '\b/', $value, $this->Subject);
+        $this->Body = \preg_replace('/\$' . $key . '\b/', $value, $this->Body);
+        $this->Body_html = \preg_replace('/\$' . $key . '\b/', $value, $this->Body_html);
+        $this->AltBody = \preg_replace('/\$' . $key . '\b/', $value, $this->AltBody);
     }
 
     /**
@@ -475,7 +475,7 @@ eoq;
                 } else {
                     $this->fullSmtpLog .= "$level: $str\n";
                 }
-                $previousIs334 = (strpos($str, 'SERVER -> CLIENT: 334') !== false);
+                $previousIs334 = (\strpos($str, 'SERVER -> CLIENT: 334') !== false);
             };
 
             $this->SMTPDebug = 3;

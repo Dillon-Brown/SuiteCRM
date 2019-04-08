@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -52,7 +52,7 @@ if (!is_admin($GLOBALS['current_user'])) {
     $requestedMethod = $_REQUEST['method'];
     $pmc = new PackageController();
   
-    if (method_exists($pmc, $requestedMethod)) {
+    if (\method_exists($pmc, $requestedMethod)) {
         echo $pmc->$requestedMethod();
     } else {
         echo 'no method';

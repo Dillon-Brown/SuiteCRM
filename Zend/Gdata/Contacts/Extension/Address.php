@@ -81,7 +81,7 @@ class Zend_Gdata_Contacts_Extension_Address extends Zend_Gdata_Extension
     {
         switch ($attribute->localName) {
         case 'primary':
-            if (strtolower($attribute->nodeValue) == 'true') {
+            if (\strtolower($attribute->nodeValue) == 'true') {
                 $this->_isPrimary = true;
             } else {
                 $this->_isPrimary = false;
@@ -102,7 +102,7 @@ class Zend_Gdata_Contacts_Extension_Address extends Zend_Gdata_Extension
         if ($this->_addressType == null) {
             return '';
         } else {
-            return str_replace($this->lookupNamespace('gd') . '#', '', $this->_addressType);
+            return \str_replace($this->lookupNamespace('gd') . '#', '', $this->_addressType);
         }
     }
 
@@ -110,7 +110,7 @@ class Zend_Gdata_Contacts_Extension_Address extends Zend_Gdata_Extension
     {
         $results = array();
 
-        $keyPrefix= $this->_transformMapping[strtolower($this->getAddressType())];
+        $keyPrefix= $this->_transformMapping[\strtolower($this->getAddressType())];
 
         foreach ($this->_extensionElements as $elem) {
             if ($elem->_rootElement  == 'formattedAddress') {

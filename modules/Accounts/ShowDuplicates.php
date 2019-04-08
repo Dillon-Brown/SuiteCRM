@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -48,8 +48,8 @@ if (!isset($_SESSION['SHOW_DUPLICATES'])) {
 
 // retrieve $_POST values out of the $_SESSION variable - placed in there by AccountFormBase to avoid the length limitations on URLs implicit with GETS
 //$GLOBALS['log']->debug('ShowDuplicates.php: _POST = '.print_r($_SESSION['SHOW_DUPLICATES'],true));
-parse_str($_SESSION['SHOW_DUPLICATES'], $_POST);
-$post = array_map("securexss", $_POST);
+\parse_str($_SESSION['SHOW_DUPLICATES'], $_POST);
+$post = \array_map("securexss", $_POST);
 foreach ($post as $k => $v) {
     $_POST[$k] = $v;
 }
@@ -87,7 +87,7 @@ $GLOBALS['check_notify'] = false;
 
 $query = 'select id, name, website, billing_address_city  from accounts where deleted=0 ';
 $duplicates = $_POST['duplicate'];
-$count = count($duplicates);
+$count = \count($duplicates);
 $db = DBManagerFactory::getInstance();
 if ($count > 0) {
     $query .= "and (";
@@ -117,13 +117,13 @@ $xtpl->assign('FORMBODY', $accountForm->buildTableForm($duplicateAccounts, 'Acco
 $input = '';
 foreach ($account->column_fields as $field) {
     if (!empty($_POST['Accounts'.$field])) {
-        $value = urldecode($_POST['Accounts'.$field]);
+        $value = \urldecode($_POST['Accounts'.$field]);
         $input .= "<input type='hidden' name='$field' value='{$value}'>\n";
     }
 }
 foreach ($account->additional_column_fields as $field) {
     if (!empty($_POST['Accounts'.$field])) {
-        $value = urldecode($_POST['Accounts'.$field]);
+        $value = \urldecode($_POST['Accounts'.$field]);
         $input .= "<input type='hidden' name='$field' value='{$value}'>\n";
     }
 }

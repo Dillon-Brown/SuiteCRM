@@ -10,14 +10,14 @@ include_once('../../../../../config.php');
 global $sugar_config;
 
 /* Start session and load lib */
-session_start();
+\session_start();
 require_once('include/social/twitter/twitter_auth/twitteroauth/twitteroauth.php');
 include_once('modules/Connectors/connectors/sources/ext/rest/twitter/config.php');
 
 /* If the oauth_token is old redirect to the connect page. */
 if (isset($_REQUEST['oauth_token']) && $_SESSION['oauth_token'] !== $_REQUEST['oauth_token']) {
     $_SESSION['oauth_status'] = 'oldtoken';
-    header('Location: include/social/get_feed_data.php');
+    \header('Location: include/social/get_feed_data.php');
 }
 
 $settings = array(
@@ -45,8 +45,8 @@ unset($_SESSION['oauth_token_secret']);
 if (200 == $connection->http_code) {
     /* The user has been verified and the access tokens can be saved for future use */
     $_SESSION['status'] = 'verified';
-    header('Location: ' .$sugar_config['site_url'] . '/index.php');
+    \header('Location: ' .$sugar_config['site_url'] . '/index.php');
 } else {
     /* Save HTTP status for error dialog on connnect page.*/
-    header('Location: ' .$sugar_config['site_url'] . '/index.php');
+    \header('Location: ' .$sugar_config['site_url'] . '/index.php');
 }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -61,7 +61,7 @@ if (isset($GLOBALS['sugar_config']['hide_admin_diagnostics']) && $GLOBALS['sugar
 global $skip_md5_diff;
 $skip_md5_diff = false;
 
-set_time_limit(3600);
+\set_time_limit(3600);
 // get all needed globals
 global $app_strings;
 global $app_list_strings;
@@ -95,7 +95,7 @@ $sod_guid = create_guid();
 
 //GET CURRENT DATETIME STAMP TO USE IN FILENAME
 global $curdatetime;
-$curdatetime = date("Ymd-His");
+$curdatetime = \date("Ymd-His");
 
 
 global $progress_bar_percent;
@@ -106,20 +106,20 @@ global $totalitems;
 $totalitems = 0;
 global $currentitems;
 $currentitems = 0;
-define("CONFIG_WEIGHT", 1);
-define("CUSTOM_DIR_WEIGHT", 1);
-define("PHPINFO_WEIGHT", 1);
-define("SQL_DUMPS_WEIGHT", 2);
-define("SQL_SCHEMA_WEIGHT", 3);
-define("SQL_INFO_WEIGHT", 1);
-define("MD5_WEIGHT", 5);
-define("BEANLISTBEANFILES_WEIGHT", 1);
-define("SUGARLOG_WEIGHT", 2);
-define("VARDEFS_WEIGHT", 2);
+\define("CONFIG_WEIGHT", 1);
+\define("CUSTOM_DIR_WEIGHT", 1);
+\define("PHPINFO_WEIGHT", 1);
+\define("SQL_DUMPS_WEIGHT", 2);
+\define("SQL_SCHEMA_WEIGHT", 3);
+\define("SQL_INFO_WEIGHT", 1);
+\define("MD5_WEIGHT", 5);
+\define("BEANLISTBEANFILES_WEIGHT", 1);
+\define("SUGARLOG_WEIGHT", 2);
+\define("VARDEFS_WEIGHT", 2);
 
 //THIS MUST CHANGE IF THE NUMBER OF DIRECTORIES TRAVERSED TO GET TO
 //   THE DIAGNOSTIC CACHE DIR CHANGES
-define("RETURN_FROM_DIAG_DIR", "../../../..");
+\define("RETURN_FROM_DIAG_DIR", "../../../..");
 
 global $getDumpsFrom;
 $getDumpsFrom = array();
@@ -155,9 +155,9 @@ function array_as_table($header, $values)
     $contents = "<table border=\"0\" cellpadding=\"0\" class=\"tabDetailView\">";
     $keys = array();
     foreach ($values as $field) {
-        $keys = array_unique($keys + array_keys($field));
+        $keys = \array_unique($keys + \array_keys($field));
     }
-    $cols = count($keys);
+    $cols = \count($keys);
 
     $contents .= "<tr colspan=\"$cols\">$header</tr><tr>";
     foreach ($keys as $key) {
@@ -167,8 +167,8 @@ function array_as_table($header, $values)
     foreach ($values as $field) {
         $contents .= "<tr>";
         foreach ($field as $item) {
-            if (is_array($item)) {
-                $item = join(",", $item);
+            if (\is_array($item)) {
+                $item = \join(",", $item);
             }
             $contents .= "<td class=\"tabDetailViewDF\">$item</td>";
         }
@@ -193,7 +193,7 @@ function getFullTableDump($tableName)
     $returnString .= array_as_table("{$db->dbName} $tableName Keys:", $indexes);
     $returnString .= "<BR><BR>";
 
-    $def_count = count($cols);
+    $def_count = \count($cols);
 
     $td_result = $db->query("select * from ".$tableName);
     if (!$td_result) {
@@ -207,7 +207,7 @@ function getFullTableDump($tableName)
     $returnString .= "</tr>";
     $row_counter = 1;
     while ($row = $db->fetchByAssoc($td_result)) {
-        $row = array_values($row);
+        $row = \array_values($row);
         $returnString .= "<tr>";
         $returnString .= "<td class=\"tabDetailViewDL\">".$row_counter."</td>";
         for ($counter = 0; $counter < $def_count; $counter++) {
@@ -215,19 +215,19 @@ function getFullTableDump($tableName)
             //perform this check when counter is set to two, which means it is on the 'value' column
             if ($counter == 2) {
                 //if the previous "name" column value was set to smtppass, set replace_val to true
-                if (strcmp($row[$counter - 1], "smtppass") == 0) {
+                if (\strcmp($row[$counter - 1], "smtppass") == 0) {
                     $replace_val = true;
                 }
 
                 //if the previous "name" column value was set to smtppass,
                 //and the "category" value set to ldap, set replace_val to true
-                if (strcmp($row[$counter - 2], "ldap") == 0 && strcmp($row[$counter - 1], "admin_password") == 0) {
+                if (\strcmp($row[$counter - 2], "ldap") == 0 && \strcmp($row[$counter - 1], "admin_password") == 0) {
                     $replace_val = true;
                 }
 
                 //if the previous "name" column value was set to password,
                 //and the "category" value set to proxy, set replace_val to true
-                if (strcmp($row[$counter - 2], "proxy") == 0 && strcmp($row[$counter - 1], "password") == 0) {
+                if (\strcmp($row[$counter - 2], "proxy") == 0 && \strcmp($row[$counter - 1], "password") == 0) {
                     $replace_val = true;
                 }
             }
@@ -249,28 +249,28 @@ function getFullTableDump($tableName)
 // Deletes the directory recursively
 function deleteDir($dir)
 {
-    if (substr($dir, strlen($dir)-1, 1) != '/') {
+    if (\substr($dir, \strlen($dir)-1, 1) != '/') {
         $dir .= '/';
     }
 
-    if ($handle = opendir($dir)) {
-        while ($obj = readdir($handle)) {
+    if ($handle = \opendir($dir)) {
+        while ($obj = \readdir($handle)) {
             if ($obj != '.' && $obj != '..') {
-                if (is_dir($dir.$obj)) {
+                if (\is_dir($dir.$obj)) {
                     if (!deleteDir($dir.$obj)) {
                         return false;
                     }
-                } elseif (is_file($dir.$obj)) {
-                    if (!unlink($dir.$obj)) {
+                } elseif (\is_file($dir.$obj)) {
+                    if (!\unlink($dir.$obj)) {
                         return false;
                     }
                 }
             }
         }
 
-        closedir($handle);
+        \closedir($handle);
 
-        if (!@rmdir($dir)) {
+        if (!@\rmdir($dir)) {
             return false;
         }
         return true;
@@ -303,7 +303,7 @@ function prepareDiag()
 
 
     //determine if files.md5 exists or not
-    if (file_exists('files.md5')) {
+    if (\file_exists('files.md5')) {
         $skip_md5_diff = false;
     } else {
         $skip_md5_diff = true;
@@ -324,7 +324,7 @@ function prepareDiag()
 
     display_progress_bar("diagnostic", $progress_bar_percent, 100);
 
-    ob_flush();
+    \ob_flush();
 }
 
 function executesugarlog()
@@ -334,7 +334,7 @@ function executesugarlog()
     global $cacheDir;
     require_once('include/SugarLogger/SugarLogger.php');
     $logger = new SugarLogger();
-    if (!copy($logger->getLogFileNameWithPath(), $cacheDir.'/'.$logger->getLogFileName())) {
+    if (!\copy($logger->getLogFileNameWithPath(), $cacheDir.'/'.$logger->getLogFileName())) {
         echo "Couldn't copy suitecrm.log to cacheDir.<br>";
     }
     //END COPY SUGARCRM.LOG
@@ -349,16 +349,16 @@ function executephpinfo()
     //This gets phpinfo, writes to a buffer, then I write to phpinfo.html
     global $cacheDir;
 
-    ob_start();
-    phpinfo();
-    $phpinfo = ob_get_contents();
-    ob_clean();
+    \ob_start();
+    \phpinfo();
+    $phpinfo = \ob_get_contents();
+    \ob_clean();
 
     $handle = sugar_fopen($cacheDir."phpinfo.html", "w");
-    if (fwrite($handle, $phpinfo) === false) {
+    if (\fwrite($handle, $phpinfo) === false) {
         echo "Cannot write to file ".$cacheDir."phpinfo.html<br>";
     }
-    fclose($handle);
+    \fclose($handle);
     //END GETPHPINFO
 
     //UPDATING PROGRESS BAR
@@ -410,7 +410,7 @@ function execute_sql($getinfo, $getdumps, $getschema)
             }
         }
         if (!empty($content)) {
-            file_put_contents($sqlInfoDir."{$db->dbName}-General-info.html", $content);
+            \file_put_contents($sqlInfoDir."{$db->dbName}-General-info.html", $content);
             sodUpdateProgressBar(SQL_INFO_WEIGHT);
         }
     }
@@ -492,7 +492,7 @@ function execute_sql($getinfo, $getdumps, $getschema)
             $contents .= "<BR><BR>";
         }
 
-        file_put_contents($tablesSchemaDir."{$db->dbName}TablesSchema.html", $contents);
+        \file_put_contents($tablesSchemaDir."{$db->dbName}TablesSchema.html", $contents);
         //END GET ALL TABLES SCHEMAS
         //BEGIN UPDATING PROGRESS BAR
         sodUpdateProgressBar(SQL_SCHEMA_WEIGHT);
@@ -507,7 +507,7 @@ function execute_sql($getinfo, $getdumps, $getschema)
         foreach ($getDumpsFrom as $table) {
             //calling function defined above to get the string for dump
             $contents = $style .getFullTableDump($table);
-            file_put_contents($tableDumpsDir.$table.".html", $contents);
+            \file_put_contents($tableDumpsDir.$table.".html", $contents);
         }
         //END GET TABLEDUMPS
         //BEGIN UPDATING PROGRESS BAR
@@ -526,7 +526,7 @@ function executebeanlistbeanfiles()
     global $beanFiles;
     global $mod_strings;
 
-    ob_start();
+    \ob_start();
 
     echo $mod_strings['LBL_DIAGNOSTIC_BEANLIST_DESC'];
     echo "<BR>";
@@ -547,7 +547,7 @@ function executebeanlistbeanfiles()
         if (!isset($beanFiles[$beanz])) {
             echo "<font color=orange>NO! --- ".$beanz." is not an index in \$beanFiles</font><br>";
         } else {
-            if (file_exists($beanFiles[$beanz])) {
+            if (\file_exists($beanFiles[$beanz])) {
                 echo "<font color=green>YES --- ".$beanz." file \"".$beanFiles[$beanz]."\" exists</font><br>";
             } else {
                 echo "<font color=red>NO! --- ".$beanz." file \"".$beanFiles[$beanz]."\" does NOT exist</font><br>";
@@ -555,14 +555,14 @@ function executebeanlistbeanfiles()
         }
     }
 
-    $content = ob_get_contents();
-    ob_clean();
+    $content = \ob_get_contents();
+    \ob_clean();
 
     $handle = sugar_fopen($cacheDir."beanFiles.html", "w");
-    if (fwrite($handle, $content) === false) {
+    if (\fwrite($handle, $content) === false) {
         echo "Cannot write to file ".$cacheDir."beanFiles.html<br>";
     }
-    fclose($handle);
+    \fclose($handle);
     //END CHECK BEANLIST FILES ARE AVAILABLE
     //BEGIN UPDATING PROGRESS BAR
     sodUpdateProgressBar(BEANLISTBEANFILES_WEIGHT);
@@ -587,7 +587,7 @@ function executemd5($filesmd5, $md5calculated)
     global $curdatetime;
     global $skip_md5_diff;
     global $sod_guid;
-    if (file_exists('files.md5')) {
+    if (\file_exists('files.md5')) {
         include('files.md5');
     }
     //create dir for md5s
@@ -597,7 +597,7 @@ function executemd5($filesmd5, $md5calculated)
     if (!$skip_md5_diff) {
         //make sure the files.md5
         if ($filesmd5) {
-            if (!copy('files.md5', $md5_directory."files.md5")) {
+            if (!\copy('files.md5', $md5_directory."files.md5")) {
                 echo "Couldn't copy files.md5 to ".$md5_directory."<br>Skipping md5 checks.<br>";
             }
         }
@@ -612,7 +612,7 @@ function executemd5($filesmd5, $md5calculated)
 
     //if the files.md5 didn't exist, we can't do this
     if (!$skip_md5_diff) {
-        $md5_string_diff = array_diff($md5_string_calculated, $md5_string);
+        $md5_string_diff = \array_diff($md5_string_calculated, $md5_string);
 
         write_array_to_file('md5_string_diff', $md5_string_diff, $md5_directory."md5_array_diff.php");
     }
@@ -637,13 +637,13 @@ function executevardefs()
     global $sugar_db_version;
     global $sugar_flavor;
 
-    ob_start();
+    \ob_start();
     foreach ($beanList as $beanz) {
         // echo "Module: ".$beanz."<br>";
 
-        $path_parts = pathinfo($beanFiles[ $beanz ]);
+        $path_parts = \pathinfo($beanFiles[ $beanz ]);
         $vardefFileName = $path_parts[ 'dirname' ]."/vardefs.php";
-        if (file_exists($vardefFileName)) {
+        if (\file_exists($vardefFileName)) {
             // echo "<br>".$vardefFileName."<br>";
         }
         include_once($vardefFileName);
@@ -664,7 +664,7 @@ function executevardefs()
         $comments[$vardef['table']] = $vardef['comment'];
     }
 
-    asort($tables);
+    \asort($tables);
 
     foreach ($tables as $t) {
         $name = $t;
@@ -683,7 +683,7 @@ function executevardefs()
 		<TD NOWRAP class=\"tabDetailViewDL\">Comment</TD>
 	</TR>';
 
-        ksort($fields[ $t ]);
+        \ksort($fields[ $t ]);
 
         foreach ($fields[$t] as $k => $v) {
             // we only care about physical tables ('source' can be 'non-db' or 'nondb' or 'function' )
@@ -725,14 +725,14 @@ function executevardefs()
 
     echo "</body></html>";
 
-    $vardefFormattedOutput = ob_get_contents();
-    ob_clean();
+    $vardefFormattedOutput = \ob_get_contents();
+    \ob_clean();
 
     $handle = sugar_fopen($cacheDir."vardefschema.html", "w");
-    if (fwrite($handle, $vardefFormattedOutput) === false) {
+    if (\fwrite($handle, $vardefFormattedOutput) === false) {
         echo "Cannot write to file ".$cacheDir."vardefschema.html<br>";
     }
-    fclose($handle);
+    \fclose($handle);
     sodUpdateProgressBar(VARDEFS_WEIGHT);
     //END UPDATING PROGRESS BAR
 }
@@ -745,10 +745,10 @@ function finishDiag()
     global $sod_guid;
     global $mod_strings;
 
-    chdir($cacheDir);
+    \chdir($cacheDir);
     zip_dir(".", "../diagnostic".$curdatetime.".zip");
     //END ZIP ALL FILES AND EXTRACT IN CACHE ROOT
-    chdir(RETURN_FROM_DIAG_DIR);
+    \chdir(RETURN_FROM_DIAG_DIR);
 
     deleteDir($cacheDir);
 

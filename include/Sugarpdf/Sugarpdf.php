@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -43,7 +43,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 
-if (file_exists('custom/include/Sugarpdf/sugarpdf_config.php')) {
+if (\file_exists('custom/include/Sugarpdf/sugarpdf_config.php')) {
     require_once('custom/include/Sugarpdf/sugarpdf_config.php');
 } else {
     require_once('include/Sugarpdf/sugarpdf_config.php');
@@ -158,12 +158,12 @@ class Sugarpdf extends TCPDF
         $this->SetCompression($compression);
         $protection=array();
         if (PDF_PROTECTION != "") {
-            $protection=explode(",", PDF_PROTECTION);
+            $protection=\explode(",", PDF_PROTECTION);
         }
 
         $this->SetProtection($protection, blowfishDecode(blowfishGetKey('sugarpdf_pdf_user_password'), PDF_USER_PASSWORD), blowfishDecode(blowfishGetKey('sugarpdf_pdf_owner_password'), PDF_OWNER_PASSWORD));
         $this->setCellHeightRatio(K_CELL_HEIGHT_RATIO);
-        $this->setJPEGQuality(intval(PDF_JPEG_QUALITY));
+        $this->setJPEGQuality(\intval(PDF_JPEG_QUALITY));
         $this->setPDFVersion(PDF_PDF_VERSION);
 
         // set default header data
@@ -219,11 +219,11 @@ class Sugarpdf extends TCPDF
 
             // START SUGARPDF
             $logo = K_PATH_CUSTOM_IMAGES.$headerdata['logo'];
-            $imsize = @getimagesize($logo);
+            $imsize = @\getimagesize($logo);
             if ($imsize === false) {
                 // encode spaces on filename
-                $logo = str_replace(' ', '%20', $logo);
-                $imsize = @getimagesize($logo);
+                $logo = \str_replace(' ', '%20', $logo);
+                $imsize = @\getimagesize($logo);
                 if ($imsize === false) {
                     $logo = K_PATH_IMAGES.$headerdata['logo'];
                 }
@@ -235,7 +235,7 @@ class Sugarpdf extends TCPDF
         } else {
             $imgy = $this->GetY();
         }
-        $cell_height = round(($this->getCellHeightRatio() * $headerfont[2]) / $this->getScaleFactor(), 2);
+        $cell_height = \round(($this->getCellHeightRatio() * $headerfont[2]) / $this->getScaleFactor(), 2);
         // set starting margin for text data cell
         if ($this->getRTL()) {
             $header_x = $ormargins['right'] + ($headerdata['logo_width'] * 1.1);
@@ -253,7 +253,7 @@ class Sugarpdf extends TCPDF
         $this->MultiCell(0, $cell_height, $headerdata['string'], 0, '', 0, 1, '', '', true, 0, false);
         // print an ending header line
         $this->SetLineStyle(array('width' => 0.85 / $this->getScaleFactor(), 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        $this->SetY((2.835 / $this->getScaleFactor()) + max($imgy, $this->GetY()));
+        $this->SetY((2.835 / $this->getScaleFactor()) + \max($imgy, $this->GetY()));
         if ($this->getRTL()) {
             $this->SetX($ormargins['right']);
         } else {
@@ -275,7 +275,7 @@ class Sugarpdf extends TCPDF
     */
     public function SetFont($family, $style='', $size=0, $fontfile='')
     {
-        if (empty($fontfile) && defined('K_PATH_CUSTOM_FONTS')) {
+        if (empty($fontfile) && \defined('K_PATH_CUSTOM_FONTS')) {
             // This will force addFont to search the custom directory for font before the OOB directory
             $fontfile = K_PATH_CUSTOM_FONTS."phantomFile.phantom";
         }
@@ -286,8 +286,8 @@ class Sugarpdf extends TCPDF
     {
         $this->SetFont(PDF_FONT_NAME_MAIN, '', 12);
         $this->MultiCell(0, 0, '---', 0, 'L');
-        $this->MultiCell(0, 0, 'Class: '.get_class($this), 0, 'L');
-        $this->MultiCell(0, 0, 'Extends: '.get_parent_class($this), 0, 'L');
+        $this->MultiCell(0, 0, 'Class: '.\get_class($this), 0, 'L');
+        $this->MultiCell(0, 0, 'Extends: '.\get_parent_class($this), 0, 'L');
         $this->MultiCell(0, 0, '---', 0, 'L');
         $this->MultiCell(0, 0, 'Module: '.$this->module, 0, 'L');
         $this->MultiCell(0, 0, 'Tcpdf Action: '.$this->action, 0, 'L');
@@ -343,7 +343,7 @@ class Sugarpdf extends TCPDF
         // HEADER
         if (!isset($options['isheader']) || $options['isheader'] == true) {
             $headerOptions = $options;
-            if (!empty($options['header']) && is_array($options['header'])) {
+            if (!empty($options['header']) && \is_array($options['header'])) {
                 $headerOptions = $this->initOptionsForWriteCellTable($options['header'], $item);
             }
             foreach ($item[0] as $k => $v) {
@@ -383,17 +383,17 @@ class Sugarpdf extends TCPDF
                 $cellOptions = $options;
                 $value = $cell;
 
-                if (is_array($cell)) {
+                if (\is_array($cell)) {
                     $value = $cell['value'];
-                    if (!empty($cell['options']) && is_array($cell['options'])) {
+                    if (!empty($cell['options']) && \is_array($cell['options'])) {
                         $cellOptions = $this->initOptionsForWriteCellTable($cell['options'], $item);
                     }
                 }
 
                 //Bug45077-replacing single quote entities
-                $value=str_replace("&#039;", "'", $value);
+                $value=\str_replace("&#039;", "'", $value);
                 //Bug45077-replacing double quote entities
-                $value=str_replace("&quot;", '"', $value);
+                $value=\str_replace("&quot;", '"', $value);
 
                 if ($even && !empty($options['evencolor'])) {
                     $this->SetFillColorArray($this->convertHTMLColorToDec($options['evencolor']));
@@ -442,7 +442,7 @@ class Sugarpdf extends TCPDF
         $line="";
         if (!empty($options)) {
             foreach ($options as $k=>$v) {
-                $tmp[strtolower($k)]=$v;
+                $tmp[\strtolower($k)]=$v;
             }
             $options=$tmp;
         } else {
@@ -451,7 +451,7 @@ class Sugarpdf extends TCPDF
         if (!isset($options["isheader"]) || $options["isheader"] == true) {
             if (!empty($options["header"])) {
                 foreach ($options["header"] as $k=>$v) {
-                    $tmp[strtolower($k)]=$v;
+                    $tmp[\strtolower($k)]=$v;
                 }
                 $options["header"]=$tmp;
             } else {
@@ -507,7 +507,7 @@ class Sugarpdf extends TCPDF
         if (empty($options[$tag])) {
             $options[$tag] = array();
         }
-        if (is_array($value)) {
+        if (\is_array($value)) {
             if (isset($value["options"])) {
                 // The options of a specific entity overwrite the general options
                 $options[$tag] = $value["options"];
@@ -532,7 +532,7 @@ class Sugarpdf extends TCPDF
         $h=0;
         foreach ($line as $kk=>$cell) {
             $cellValue = $cell;
-            if (is_array($cellValue)) {
+            if (\is_array($cellValue)) {
                 $tmp = $cellValue['value'];
                 $cellValue = $tmp;
             }
@@ -553,15 +553,15 @@ class Sugarpdf extends TCPDF
     {
         if (!empty($options)) {
             foreach ($options as $k=>$v) {
-                $tmp[strtolower($k)]=$v;
+                $tmp[\strtolower($k)]=$v;
             }
             $options=$tmp;
         } else {
             $options=array();
         }
         // set to default if empty
-        if (empty($options["width"]) || !is_array($options["width"])) {
-            $colNum = count($item[0]);
+        if (empty($options["width"]) || !\is_array($options["width"])) {
+            $colNum = \count($item[0]);
             $defaultWidth = $this->getRemainingWidth()/$colNum;
             foreach ($item[0] as $k => $v) {
                 $options["width"][$k]=$defaultWidth;
@@ -650,45 +650,45 @@ class Sugarpdf extends TCPDF
         // max column width
         $wmax = $w - (2 * $this->cMargin);
         // remove carriage returns
-        $txt = str_replace("\r", '', $txt);
+        $txt = \str_replace("\r", '', $txt);
         // divide text in blocks
-        $txtblocks = explode("\n", $txt);
+        $txtblocks = \explode("\n", $txt);
         // for each block;
         foreach ($txtblocks as $block) {
             // estimate the number of lines
             if (empty($block)) {
                 $lines++;
             // If the block is in more than one line
-            } elseif (ceil($this->GetStringWidth($block) / $wmax)>1) {
+            } elseif (\ceil($this->GetStringWidth($block) / $wmax)>1) {
                 //divide into words
-                $words = explode(" ", $block);
+                $words = \explode(" ", $block);
                 //TODO explode with space is not the best things to do...
                 $wordBlock = "";
                 $first=true;
                 $lastNum = 0;
                 $run = false;
 
-                for ($i=0; $i<count($words); $i++) {
+                for ($i=0; $i<\count($words); $i++) {
                     if ($first) {
                         $wordBlock = $words[$i];
                     } else {
                         $wordBlock .= " ".$words[$i];
                     }
-                    if (ceil($this->GetStringWidth($wordBlock) / $wmax)>1) {
+                    if (\ceil($this->GetStringWidth($wordBlock) / $wmax)>1) {
                         if ($first) {
-                            $lastNum = ceil($this->GetStringWidth($wordBlock) / $wmax);
+                            $lastNum = \ceil($this->GetStringWidth($wordBlock) / $wmax);
                             $run = true;
                             $first = false;
                         } else {
-                            if ($run && $lastNum == ceil($this->GetStringWidth($wordBlock) / $wmax)) {
+                            if ($run && $lastNum == \ceil($this->GetStringWidth($wordBlock) / $wmax)) {
                                 // save the number of line if it is the last loop
-                                if ($i+1 == count($words)) {
-                                    $lines += ceil($this->GetStringWidth($wordBlock) / $wmax);
+                                if ($i+1 == \count($words)) {
+                                    $lines += \ceil($this->GetStringWidth($wordBlock) / $wmax);
                                 }
                                 continue;
                             }
                             $first = true;
-                            $lines += ceil($this->GetStringWidth(substr($wordBlock, 0, (strlen($wordBlock) - strlen(" ".$words[$i])))) / $wmax);
+                            $lines += \ceil($this->GetStringWidth(\substr($wordBlock, 0, (\strlen($wordBlock) - \strlen(" ".$words[$i])))) / $wmax);
                             $i--;
                             $lastNum = 0;
                             $run = false;
@@ -697,8 +697,8 @@ class Sugarpdf extends TCPDF
                         $first = false;
                     }
                     // save the number of line if it is the last loop
-                    if ($i+1 == count($words)) {
-                        $lines += ceil($this->GetStringWidth($wordBlock) / $wmax);
+                    if ($i+1 == \count($words)) {
+                        $lines += \ceil($this->GetStringWidth($wordBlock) / $wmax);
                     }
                 }
             } else {
@@ -716,7 +716,7 @@ class Sugarpdf extends TCPDF
     public function Output($name='doc.pdf', $dest='I')
     {
         if ($dest == 'I' || $dest == 'D') {
-            ini_set('zlib.output_compression', 'Off');
+            \ini_set('zlib.output_compression', 'Off');
         }
 
         return parent::Output($name, $dest);

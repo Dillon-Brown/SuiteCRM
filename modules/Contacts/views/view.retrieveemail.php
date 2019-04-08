@@ -69,7 +69,7 @@ class ContactsViewRetrieveEmail extends SugarView
         $data['target'] = $_REQUEST['target'];
         if (!empty($_REQUEST['email'])) {
             $db = DBManagerFactory::getInstance();
-            $email = DBManagerFactory::getInstance()->quote(strtoupper(trim($_REQUEST['email'])));
+            $email = DBManagerFactory::getInstance()->quote(\strtoupper(\trim($_REQUEST['email'])));
             $result = $db->query("SELECT * FROM email_addresses WHERE email_address_caps = '$email' AND deleted = 0");
             if ($row = $db->fetchByAssoc($result)) {
                 $data['email'] = $row;

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -82,7 +82,7 @@ class ListViewData
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -98,7 +98,7 @@ class ListViewData
         if (!empty($orderBy) || !empty($_REQUEST[$this->var_order_by])) {
             if (!empty($_REQUEST[$this->var_order_by])) {
                 $orderBy = $_REQUEST[$this->var_order_by];
-                if (!empty($_REQUEST['lvso']) && (empty($_SESSION['lvd']['last_ob']) || strcmp($orderBy, $_SESSION['lvd']['last_ob']) == 0)) {
+                if (!empty($_REQUEST['lvso']) && (empty($_SESSION['lvd']['last_ob']) || \strcmp($orderBy, $_SESSION['lvd']['last_ob']) == 0)) {
                     $direction = $_REQUEST['lvso'];
                 }
             }
@@ -118,7 +118,7 @@ class ListViewData
             }
         }
         if (!empty($direction)) {
-            if (strtolower($direction) == "desc") {
+            if (\strtolower($direction) == "desc") {
                 $direction = 'DESC';
             } else {
                 $direction = 'ASC';
@@ -135,7 +135,7 @@ class ListViewData
      */
     public function getReverseSortOrder($current_order)
     {
-        return (strcmp(strtolower($current_order), 'asc') == 0)?'DESC':'ASC';
+        return (\strcmp(\strtolower($current_order), 'asc') == 0)?'DESC':'ASC';
     }
     /**
      * gets the limit of how many rows to show per page
@@ -169,13 +169,13 @@ class ListViewData
 
         $blockVariables = array('mass', 'uid', 'massupdate', 'delete', 'merge', 'selectCount',$this->var_order_by, $this->var_offset, 'lvso', 'sortOrder', 'orderBy', 'request_data', 'current_query_by_page');
         foreach ($beanList as $bean) {
-            $blockVariables[] = 'Home2_'.strtoupper($bean).'_ORDER_BY';
+            $blockVariables[] = 'Home2_'.\strtoupper($bean).'_ORDER_BY';
         }
         $blockVariables[] = 'Home2_CASE_ORDER_BY';
 
         // Added mostly for the unit test runners, which may not have these superglobals defined
-        $params = array_merge($_POST, $_GET);
-        $params = array_diff_key($params, array_flip($blockVariables));
+        $params = \array_merge($_POST, $_GET);
+        $params = \array_diff_key($params, \array_flip($blockVariables));
 
         return $params;
     }
@@ -194,7 +194,7 @@ class ListViewData
         }
 
         $module = (!empty($listviewName)) ? $listviewName: (isset($_REQUEST['module']) ? $_REQUEST['module'] : null);
-        $this->var_name = $module .'2_'. strtoupper($baseName) . ($id?'_'.$id:'');
+        $this->var_name = $module .'2_'. \strtoupper($baseName) . ($id?'_'.$id:'');
 
         $this->var_order_by = $this->var_name .'_ORDER_BY';
         $this->var_offset = $this->var_name . '_offset';
@@ -203,8 +203,8 @@ class ListViewData
 
         $_SESSION[$module .'2_QUERY_QUERY'] = $where;
 
-        $_SESSION[strtoupper($baseName) . "_FROM_LIST_VIEW"] = $timestamp;
-        $_SESSION[strtoupper($baseName) . "_DETAIL_NAV_HISTORY"] = false;
+        $_SESSION[\strtoupper($baseName) . "_FROM_LIST_VIEW"] = $timestamp;
+        $_SESSION[\strtoupper($baseName) . "_DETAIL_NAV_HISTORY"] = false;
     }
 
     public function getTotalCount($main_query)
@@ -275,7 +275,7 @@ class ListViewData
 
         // if $params tell us to override all ordering
         if (!empty($params['overrideOrder']) && !empty($params['orderBy'])) {
-            $order = $this->getOrderBy(strtolower($params['orderBy']), (empty($params['sortOrder']) ? '' : $params['sortOrder'])); // retreive from $_REQUEST
+            $order = $this->getOrderBy(\strtolower($params['orderBy']), (empty($params['sortOrder']) ? '' : $params['sortOrder'])); // retreive from $_REQUEST
         } else {
             $order = $this->getOrderBy(); // retreive from $_REQUEST
         }
@@ -290,10 +290,10 @@ class ListViewData
         // Bug 22740 - Tweak this check to strip off the table name off the order by parameter.
         // Samir Gandhi : Do not remove the report_cache.date_modified condition as the report list view is broken
         $orderby = $order['orderBy'];
-        if (strpos($order['orderBy'], '.') && ($order['orderBy'] != "report_cache.date_modified")) {
-            $orderby = substr($order['orderBy'], strpos($order['orderBy'], '.')+1);
+        if (\strpos($order['orderBy'], '.') && ($order['orderBy'] != "report_cache.date_modified")) {
+            $orderby = \substr($order['orderBy'], \strpos($order['orderBy'], '.')+1);
         }
-        if ($orderby != 'date_entered' && !in_array($orderby, array_keys($filter_fields))) {
+        if ($orderby != 'date_entered' && !\in_array($orderby, \array_keys($filter_fields))) {
             $order['orderBy'] = '';
             $order['sortOrder'] = '';
         }
@@ -320,10 +320,10 @@ class ListViewData
         $ret_array = $seed->create_new_list_query($orderBy, $where, $filter_fields, $params, 0, '', true, $seed, $singleSelect);
         $ret_array['inner_join'] = '';
         if (!empty($this->seed->listview_inner_join)) {
-            $ret_array['inner_join'] = ' ' . implode(' ', $this->seed->listview_inner_join) . ' ';
+            $ret_array['inner_join'] = ' ' . \implode(' ', $this->seed->listview_inner_join) . ' ';
         }
 
-        if (!is_array($params)) {
+        if (!\is_array($params)) {
             $params = array();
         }
         if (!isset($params['custom_select'])) {
@@ -350,13 +350,13 @@ class ListViewData
                 $limit = $this->getLimit();
             }
             $dyn_offset = $this->getOffset();
-            if ($dyn_offset > 0 || !is_int($dyn_offset)) {
+            if ($dyn_offset > 0 || !\is_int($dyn_offset)) {
                 $offset = $dyn_offset;
             }
 
-            if (strcmp($offset, 'end') == 0) {
+            if (\strcmp($offset, 'end') == 0) {
                 $totalCount = $this->getTotalCount($main_query);
-                $offset = (floor(($totalCount -1) / $limit)) * $limit;
+                $offset = (\floor(($totalCount -1) / $limit)) * $limit;
             }
             if ($this->seed->ACLAccess('ListView')) {
                 $result = $this->db->limitQuery($main_query, $offset, $limit + 1);
@@ -377,14 +377,14 @@ class ListViewData
         while (($row = $this->db->fetchByAssoc($result)) != null) {
             if ($count < $limit) {
                 $id_list .= ',\''.$row[$id_field].'\'';
-                $idIndex[$row[$id_field]][] = count($rows);
+                $idIndex[$row[$id_field]][] = \count($rows);
                 $rows[] = $seed->convertRow($row);
             }
             $count++;
         }
 
         if (!empty($id_list)) {
-            $id_list = '('.substr($id_list, 1).')';
+            $id_list = '('.\substr($id_list, 1).')';
         }
 
         SugarVCR::store($this->seed->module_dir, $main_query);
@@ -409,9 +409,9 @@ class ListViewData
                     }
                 }
 
-                $rows_keys = array_keys($rows);
+                $rows_keys = \array_keys($rows);
                 foreach ($rows_keys as $key) {
-                    $rows[$key]['secondary_select_count'] = count($ref_id_count[$rows[$key]['ref_id']]);
+                    $rows[$key]['secondary_select_count'] = \count($ref_id_count[$rows[$key]['ref_id']]);
                 }
             }
 
@@ -438,10 +438,10 @@ class ListViewData
 
             $pageData = array();
 
-            reset($rows);
-            while ($row = current($rows)) {
+            \reset($rows);
+            while ($row = \current($rows)) {
                 $temp = clone $seed;
-                $dataIndex = count($data);
+                $dataIndex = \count($data);
 
                 $temp->setupCustomFields($temp->module_dir);
                 $temp->loadFromRow($row);
@@ -457,9 +457,9 @@ class ListViewData
                 $detailViewAccess = $temp->ACLAccess('DetailView');
                 $editViewAccess = $temp->ACLAccess('EditView');
                 $pageData['rowAccess'][$dataIndex] = array('view' => $detailViewAccess, 'edit' => $editViewAccess);
-                $additionalDetailsAllow = $this->additionalDetails && $detailViewAccess && (file_exists(
+                $additionalDetailsAllow = $this->additionalDetails && $detailViewAccess && (\file_exists(
                          'modules/' . $temp->module_dir . '/metadata/additionalDetails.php'
-                     ) || file_exists('custom/modules/' . $temp->module_dir . '/metadata/additionalDetails.php'));
+                     ) || \file_exists('custom/modules/' . $temp->module_dir . '/metadata/additionalDetails.php'));
                 $additionalDetailsEdit = $editViewAccess;
                 if ($additionalDetailsAllow) {
                     if ($this->additionalDetailsAjax) {
@@ -467,7 +467,7 @@ class ListViewData
                         $ar = $this->getAdditionalDetailsAjax(isset($data[$dataIndex]['ID']) ? $data[$dataIndex]['ID'] : null);
                     } else {
                         $additionalDetailsFile = 'modules/' . $this->seed->module_dir . '/metadata/additionalDetails.php';
-                        if (file_exists('custom/modules/' . $this->seed->module_dir . '/metadata/additionalDetails.php')) {
+                        if (\file_exists('custom/modules/' . $this->seed->module_dir . '/metadata/additionalDetails.php')) {
                             $additionalDetailsFile = 'custom/modules/' . $this->seed->module_dir . '/metadata/additionalDetails.php';
                         }
                         require_once($additionalDetailsFile);
@@ -480,7 +480,7 @@ class ListViewData
                     $pageData['additionalDetails'][$dataIndex] = $ar['string'];
                     $pageData['additionalDetails']['fieldToAddTo'] = $ar['fieldToAddTo'];
                 }
-                next($rows);
+                \next($rows);
             }
         }
         $nextOffset = -1;
@@ -501,11 +501,11 @@ class ListViewData
         if ($count >= $limit && $totalCounted) {
             $totalCount  = $this->getTotalCount($main_query);
         }
-        SugarVCR::recordIDs($this->seed->module_dir, array_keys($idIndex), $offset, $totalCount);
+        SugarVCR::recordIDs($this->seed->module_dir, \array_keys($idIndex), $offset, $totalCount);
         $module_names = array(
             'Prospects' => 'Targets'
         );
-        $endOffset = (floor(($totalCount - 1) / $limit)) * $limit;
+        $endOffset = (\floor(($totalCount - 1) / $limit)) * $limit;
         $pageData['ordering'] = $order;
         $pageData['ordering']['sortOrder'] = $this->getReverseSortOrder($pageData['ordering']['sortOrder']);
         //get url parameters as an array
@@ -513,7 +513,7 @@ class ListViewData
         //join url parameters from array to a string
         $pageData['urls'] = $this->generateURLS($pageData['queries']);
         $pageData['offsets'] = array( 'current'=>$offset, 'next'=>$nextOffset, 'prev'=>$prevOffset, 'end'=>$endOffset, 'total'=>$totalCount, 'totalCounted'=>$totalCounted);
-        $pageData['bean'] = array('objectName' => $seed->object_name, 'moduleDir' => $seed->module_dir, 'moduleName' => strtr($seed->module_dir, $module_names));
+        $pageData['bean'] = array('objectName' => $seed->object_name, 'moduleDir' => $seed->module_dir, 'moduleName' => \strtr($seed->module_dir, $module_names));
         $pageData['stamp'] = $this->stamp;
         $pageData['access'] = array('view' => $this->seed->ACLAccess('DetailView'), 'edit' => $this->seed->ACLAccess('EditView'));
         $pageData['idIndex'] = $idIndex;
@@ -524,7 +524,7 @@ class ListViewData
         $queryString = '';
 
         if (isset($_REQUEST["searchFormTab"]) && $_REQUEST["searchFormTab"] == "advanced_search" ||
-            isset($_REQUEST["type_basic"]) && (count($_REQUEST["type_basic"] > 1) || $_REQUEST["type_basic"][0] != "") ||
+            isset($_REQUEST["type_basic"]) && (\count($_REQUEST["type_basic"] > 1) || $_REQUEST["type_basic"][0] != "") ||
             isset($_REQUEST["module"]) && $_REQUEST["module"] == "MergeRecords") {
             $queryString = "-advanced_search";
         } elseif (isset($_REQUEST["searchFormTab"]) && $_REQUEST["searchFormTab"] == "basic_search") {
@@ -541,11 +541,11 @@ class ListViewData
             }
 
             foreach ($basicSearchFields as $basicSearchField) {
-                $field_name = (is_array($basicSearchField) && isset($basicSearchField['name'])) ? $basicSearchField['name'] : $basicSearchField;
+                $field_name = (\is_array($basicSearchField) && isset($basicSearchField['name'])) ? $basicSearchField['name'] : $basicSearchField;
                 $field_name .= "_basic";
-                if (isset($_REQUEST[$field_name])  && (!is_array($basicSearchField) || !isset($basicSearchField['type']) || $basicSearchField['type'] == 'text' || $basicSearchField['type'] == 'name')) {
+                if (isset($_REQUEST[$field_name])  && (!\is_array($basicSearchField) || !isset($basicSearchField['type']) || $basicSearchField['type'] == 'text' || $basicSearchField['type'] == 'name')) {
                     // Ensure the encoding is UTF-8
-                    $queryString = htmlentities($_REQUEST[$field_name], null, 'UTF-8');
+                    $queryString = \htmlentities($_REQUEST[$field_name], null, 'UTF-8');
                     break;
                 }
             }
@@ -564,7 +564,7 @@ class ListViewData
     protected function generateURLS($queries)
     {
         foreach ($queries as $name => $value) {
-            $queries[$name] = 'index.php?' . http_build_query($value);
+            $queries[$name] = 'index.php?' . \http_build_query($value);
         }
         $this->base_url = $queries['baseURL'];
         return $queries;
@@ -646,15 +646,15 @@ class ListViewData
 
         $results = $adFunction($fields);
 
-        $results['string'] = str_replace(array("&#039", "'"), '\&#039', $results['string']); // no xss!
+        $results['string'] = \str_replace(array("&#039", "'"), '\&#039', $results['string']); // no xss!
 
-        if (trim($results['string']) == '') {
+        if (\trim($results['string']) == '') {
             $results['string'] = $app_strings['LBL_NONE'];
         }
         $close = false;
         $extra = "<img alt='{$app_strings['LBL_INFOINLINE']}' style='padding: 0px 5px 0px 2px' border='0' onclick=\"SUGAR.util.getStaticAdditionalDetails(this,'";
 
-        $extra .= str_replace(array("\rn", "\r", "\n"), array('','','<br />'), $results['string']) ;
+        $extra .= \str_replace(array("\rn", "\r", "\n"), array('','','<br />'), $results['string']) ;
         $extra .= "','<div style=\'float:left\'>{$app_strings['LBL_ADDITIONAL_DETAILS']}</div><div style=\'float: right\'>";
 
         if ($editAccess && !empty($results['editLink'])) {

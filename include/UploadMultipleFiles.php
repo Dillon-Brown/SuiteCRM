@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -143,8 +143,8 @@ class UploadMultipleFiles
     protected static function tryRename($filename, $bean_id)
     {
         $fullname = "upload://$bean_id.$filename";
-        if (file_exists($fullname)) {
-            if (!rename($fullname, "upload://$bean_id")) {
+        if (\file_exists($fullname)) {
+            if (!\rename($fullname, "upload://$bean_id")) {
                 $GLOBALS['log']->fatal("unable to rename file: $fullname => $bean_id");
             }
 
@@ -170,8 +170,8 @@ class UploadMultipleFiles
         }
 
         if (!$skip_rename) {
-            self::tryRename(rawurlencode($stored_file_name), $bean_id) ||
-            self::tryRename(urlencode($stored_file_name), $bean_id) ||
+            self::tryRename(\rawurlencode($stored_file_name), $bean_id) ||
+            self::tryRename(\urlencode($stored_file_name), $bean_id) ||
             self::tryRename($stored_file_name, $bean_id) ||
             self::tryRename(
                 $locale->translateCharset($stored_file_name, 'UTF-8', $locale->getExportCharset()),
@@ -195,14 +195,14 @@ class UploadMultipleFiles
         // current file system (GUID)
         $source = "upload://$old_id";
 
-        if (!file_exists($source)) {
+        if (!\file_exists($source)) {
             // old-style file system (GUID.filename.extension)
             $oldStyleSource = $source . $file_name;
-            if (file_exists($oldStyleSource)) {
+            if (\file_exists($oldStyleSource)) {
                 // change to new style
-                if (copy($oldStyleSource, $source)) {
+                if (\copy($oldStyleSource, $source)) {
                     // delete the old
-                    if (!unlink($oldStyleSource)) {
+                    if (!\unlink($oldStyleSource)) {
                         $GLOBALS['log']->error("upload_file could not unlink [ {$oldStyleSource} ]");
                     }
                 } else {
@@ -212,7 +212,7 @@ class UploadMultipleFiles
         }
 
         $destination = "upload://$new_id";
-        if (!copy($source, $destination)) {
+        if (!\copy($source, $destination)) {
             $GLOBALS['log']->error("upload_file could not copy [ {$source} ] to [ {$destination} ]");
         }
     }
@@ -276,7 +276,7 @@ class UploadMultipleFiles
             return false;
         }
 
-        if (!is_uploaded_file($_FILES[$this->field_name]['tmp_name'][$this->index])) {
+        if (!\is_uploaded_file($_FILES[$this->field_name]['tmp_name'][$this->index])) {
             return false;
         } elseif ($_FILES[$this->field_name]['size'][$this->index] > $sugar_config['upload_maxsize']) {
             $GLOBALS['log']->fatal("ERROR: uploaded file was too big: max filesize: {$sugar_config['upload_maxsize']}");
@@ -305,7 +305,7 @@ class UploadMultipleFiles
      */
     public function getMimeSoap($filename)
     {
-        if (function_exists('ext2mime')) {
+        if (\function_exists('ext2mime')) {
             $mime = ext2mime($filename);
         } else {
             $mime = ' application/octet-stream';
@@ -323,9 +323,9 @@ class UploadMultipleFiles
     {
         $filename = $_FILES_element['name'][$this->index];
         $filetype = isset($_FILES_element['type'][$this->index]) ? $_FILES_element['type'][$this->index] : null;
-        $file_ext = pathinfo($filename, PATHINFO_EXTENSION);
+        $file_ext = \pathinfo($filename, PATHINFO_EXTENSION);
 
-        $is_image = strpos($filetype, 'image/') === 0;
+        $is_image = \strpos($filetype, 'image/') === 0;
         // if it's an image, or no file extension is available and the mime is octet-stream
         // try to determine the mime type
         $recheckMime = $is_image || (empty($file_ext) && $filetype == 'application/octet-stream');
@@ -333,14 +333,14 @@ class UploadMultipleFiles
         $mime = 'application/octet-stream';
         if ($filetype && !$recheckMime) {
             $mime = $filetype;
-        } elseif (function_exists('mime_content_type')) {
-            $mime = mime_content_type($_FILES_element['tmp_name'][$this->index]);
+        } elseif (\function_exists('mime_content_type')) {
+            $mime = \mime_content_type($_FILES_element['tmp_name'][$this->index]);
         } elseif ($is_image) {
-            $info = getimagesize($_FILES_element['tmp_name'][$this->index]);
+            $info = \getimagesize($_FILES_element['tmp_name'][$this->index]);
             if ($info) {
                 $mime = $info['mime'];
             }
-        } elseif (function_exists('ext2mime')) {
+        } elseif (\function_exists('ext2mime')) {
             $mime = ext2mime($filename);
         }
 
@@ -382,7 +382,7 @@ class UploadMultipleFiles
             $this->confirm_upload();
         }
 
-        if (($data = @file_get_contents($this->temp_file_location)) === false) {
+        if (($data = @\file_get_contents($this->temp_file_location)) === false) {
             return false;
         }
 
@@ -409,20 +409,20 @@ class UploadMultipleFiles
             if (is_windows()) {
                 // create a non UTF-8 name encoding
                 // 176 + 36 char guid = windows' maximum filename length
-                $end = (strlen($stored_file_name) > 176) ? 176 : strlen($stored_file_name);
-                $stored_file_name = substr($stored_file_name, 0, $end);
+                $end = (\strlen($stored_file_name) > 176) ? 176 : \strlen($stored_file_name);
+                $stored_file_name = \substr($stored_file_name, 0, $end);
                 $this->original_file_name = $_FILES[$this->field_name]['name'];
             }
-            $stored_file_name = str_replace("\\", "", $stored_file_name);
+            $stored_file_name = \str_replace("\\", "", $stored_file_name);
         } else {
             $stored_file_name = $this->stored_file_name;
             $this->original_file_name = $stored_file_name;
         }
 
-        $this->file_ext = pathinfo($stored_file_name, PATHINFO_EXTENSION);
+        $this->file_ext = \pathinfo($stored_file_name, PATHINFO_EXTENSION);
         // cn: bug 6347 - fix file extension detection
         foreach ($sugar_config['upload_badext'] as $badExt) {
-            if (strtolower($this->file_ext) == strtolower($badExt)) {
+            if (\strtolower($this->file_ext) == \strtolower($badExt)) {
                 $stored_file_name .= ".txt";
                 $this->file_ext = "txt";
                 break; // no need to look for more
@@ -440,11 +440,11 @@ class UploadMultipleFiles
     public function final_move($bean_id)
     {
         $destination = $bean_id;
-        if (substr($destination, 0, 9) != "file://") {
+        if (\substr($destination, 0, 9) != "file://") {
             $destination = "uploads://$bean_id";
         }
         if ($this->use_soap) {
-            if (!file_put_contents($destination, $this->file)) {
+            if (!\file_put_contents($destination, $this->file)) {
                 $GLOBALS['log']->fatal("ERROR: can't save file to $destination");
 
                 return false;
@@ -476,7 +476,7 @@ class UploadMultipleFiles
         if (!empty($doc_type) && $doc_type != 'Sugar') {
             global $sugar_config;
             $destination = $this->get_upload_path($bean_id);
-            sugar_rename($destination, str_replace($bean_id, $bean_id . '_' . $file_name, $destination));
+            sugar_rename($destination, \str_replace($bean_id, $bean_id . '_' . $file_name, $destination));
             $new_destination = $this->get_upload_path($bean_id . '_' . $file_name);
 
             try {
@@ -501,10 +501,10 @@ class UploadMultipleFiles
                 $GLOBALS['log']->error("Caught exception: (" . $e->getMessage() . ") ");
             }
             if (!$result['success']) {
-                sugar_rename($new_destination, str_replace($bean_id . '_' . $file_name, $bean_id, $new_destination));
+                sugar_rename($new_destination, \str_replace($bean_id . '_' . $file_name, $bean_id, $new_destination));
                 $bean->doc_type = 'Sugar';
                 // FIXME: Translate
-                if (!is_array($_SESSION['user_error_message'])) {
+                if (!\is_array($_SESSION['user_error_message'])) {
                     $_SESSION['user_error_message'] = array();
                 }
 
@@ -512,7 +512,7 @@ class UploadMultipleFiles
                     $GLOBALS['app_strings']['ERR_EXTERNAL_API_SAVE_FAIL'];
                 $_SESSION['user_error_message'][] = $error_message;
             } else {
-                unlink($new_destination);
+                \unlink($new_destination);
             }
         }
     }
@@ -527,8 +527,8 @@ class UploadMultipleFiles
         $file_name = $bean_id;
 
         // cn: bug 8056 - mbcs filename in urlencoding > 212 chars in Windows fails
-        $end = (strlen($file_name) > 212) ? 212 : strlen($file_name);
-        $ret_file_name = substr($file_name, 0, $end);
+        $end = (\strlen($file_name) > 212) ? 212 : \strlen($file_name);
+        $ret_file_name = \substr($file_name, 0, $end);
 
         return "upload://$ret_file_name";
     }
@@ -540,8 +540,8 @@ class UploadMultipleFiles
      */
     public static function unlink_file($bean_id, $file_name = '')
     {
-        if (file_exists("upload://$bean_id$file_name")) {
-            return unlink("upload://$bean_id$file_name");
+        if (\file_exists("upload://$bean_id$file_name")) {
+            return \unlink("upload://$bean_id$file_name");
         }
     }
 
@@ -560,10 +560,10 @@ class UploadMultipleFiles
      */
     public static function realpath($path)
     {
-        if (substr($path, 0, 9) == "upload://") {
+        if (\substr($path, 0, 9) == "upload://") {
             $path = UploadStream::path($path);
         }
-        $ret = realpath($path);
+        $ret = \realpath($path);
 
         return $ret ? $ret : $path;
     }
@@ -574,8 +574,8 @@ class UploadMultipleFiles
      */
     public static function relativeName($path)
     {
-        if (substr($path, 0, 9) == "upload://") {
-            $path = substr($path, 9);
+        if (\substr($path, 0, 9) == "upload://") {
+            $path = \substr($path, 9);
         }
 
         return $path;

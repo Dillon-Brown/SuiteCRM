@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -86,7 +86,7 @@ class M2MRelationship extends SugarRelationship
             return $results;
         }
         //Multiple links with same relationship name
-        elseif (is_array($results)) {
+        elseif (\is_array($results)) {
             $GLOBALS['log']->error("Warning: Multiple links found for relationship {$this->name} within module {$module}");
             return $this->getMostAppropriateLinkedDefinition($results);
         }
@@ -133,7 +133,7 @@ class M2MRelationship extends SugarRelationship
         //Need to hijack this as security groups will not contain a link on the module side
         //due to the way the module works. Plus it would remove the relative ease of adding custom module support
 
-        if (get_class($rhs) != 'User' && get_class($rhs) != 'ACLRole' && get_class($lhs) == 'SecurityGroup') {
+        if (\get_class($rhs) != 'User' && \get_class($rhs) != 'ACLRole' && \get_class($lhs) == 'SecurityGroup') {
             $rhs->$rhsLinkName->addBean($lhs);
             $this->callBeforeAdd($rhs, $lhs, $rhsLinkName);
 
@@ -141,7 +141,7 @@ class M2MRelationship extends SugarRelationship
             $this->addRow($dataToInsert);
             $rhs->$rhsLinkName->addBean($lhs);
             $this->callAfterAdd($lhs, $rhs, $lhsLinkName);
-        } elseif (get_class($lhs) != 'User' && get_class($lhs) != 'ACLRole' && get_class($rhs) == 'SecurityGroup') {
+        } elseif (\get_class($lhs) != 'User' && \get_class($lhs) != 'ACLRole' && \get_class($rhs) == 'SecurityGroup') {
             $lhs->$lhsLinkName->addBean($rhs);
             $this->callBeforeAdd($lhs, $rhs, $lhsLinkName);
 
@@ -153,12 +153,12 @@ class M2MRelationship extends SugarRelationship
             /* END - SECURITY GROUPS */
 
             if (empty($lhs->$lhsLinkName) && !$lhs->load_relationship($lhsLinkName)) {
-                $lhsClass = get_class($lhs);
+                $lhsClass = \get_class($lhs);
                 $GLOBALS['log']->fatal("could not load LHS $lhsLinkName in $lhsClass");
                 return false;
             }
             if (empty($rhs->$rhsLinkName) && !$rhs->load_relationship($rhsLinkName)) {
-                $rhsClass = get_class($rhs);
+                $rhsClass = \get_class($rhs);
                 $GLOBALS['log']->fatal("could not load RHS $rhsLinkName in $rhsClass");
                 return false;
             }
@@ -214,7 +214,7 @@ class M2MRelationship extends SugarRelationship
             }
         }
         if (!empty($additionalFields)) {
-            $row = array_merge($row, $additionalFields);
+            $row = \array_merge($row, $additionalFields);
         }
 
         return $row;
@@ -257,7 +257,7 @@ class M2MRelationship extends SugarRelationship
         //Need to hijack this as security groups will not contain a link on the module side
         //due to the way the module works. Plus it would remove the relative ease of adding custom module support
 
-        if (get_class($lhs) == 'SecurityGroup' || get_class($rhs) == 'SecurityGroup') {
+        if (\get_class($lhs) == 'SecurityGroup' || \get_class($rhs) == 'SecurityGroup') {
             $dataToRemove = array(
                 $this->def['join_key_lhs'] => $lhs->id,
                 $this->def['join_key_rhs'] => $rhs->id
@@ -265,12 +265,12 @@ class M2MRelationship extends SugarRelationship
 
 
             if (empty($_SESSION['disable_workflow']) || $_SESSION['disable_workflow'] != "Yes") {
-                if (get_class($lhs) != 'SecurityGroup' && $lhs->$lhsLinkName instanceof Link2) {
+                if (\get_class($lhs) != 'SecurityGroup' && $lhs->$lhsLinkName instanceof Link2) {
                     $lhs->$lhsLinkName->load();
                     $this->callBeforeDelete($lhs, $rhs, $lhsLinkName);
                 }
 
-                if (get_class($rhs) != 'SecurityGroup' && $rhs->$rhsLinkName instanceof Link2) {
+                if (\get_class($rhs) != 'SecurityGroup' && $rhs->$rhsLinkName instanceof Link2) {
                     $rhs->$rhsLinkName->load();
                     $this->callBeforeDelete($rhs, $lhs, $rhsLinkName);
                 }
@@ -279,12 +279,12 @@ class M2MRelationship extends SugarRelationship
             $this->removeRow($dataToRemove);
 
             if (empty($_SESSION['disable_workflow']) || $_SESSION['disable_workflow'] != "Yes") {
-                if (get_class($lhs) != 'SecurityGroup' && $lhs->$lhsLinkName instanceof Link2) {
+                if (\get_class($lhs) != 'SecurityGroup' && $lhs->$lhsLinkName instanceof Link2) {
                     $lhs->$lhsLinkName->load();
                     $this->callAfterDelete($lhs, $rhs, $lhsLinkName);
                 }
 
-                if (get_class($rhs) != 'SecurityGroup' && $rhs->$rhsLinkName instanceof Link2) {
+                if (\get_class($rhs) != 'SecurityGroup' && $rhs->$rhsLinkName instanceof Link2) {
                     $rhs->$rhsLinkName->load();
                     $this->callAfterDelete($rhs, $lhs, $rhsLinkName);
                 }
@@ -408,12 +408,12 @@ class M2MRelationship extends SugarRelationship
 
         $tmpFocus = $link->getFocus();
         if (!isset($tmpFocus->id)) {
-            if (is_object($tmpFocus)) {
-                $focusInfo = get_class($tmpFocus);
-            } elseif (is_bool($tmpFocus)) {
+            if (\is_object($tmpFocus)) {
+                $focusInfo = \get_class($tmpFocus);
+            } elseif (\is_bool($tmpFocus)) {
                 $focusInfo = ' (bool)' . ($tmpFocus ? 'TRUE' : 'FALSE');
             } else {
-                $focusInfo = ' (' . gettype($tmpFocus) . ')' . $tmpFocus;
+                $focusInfo = ' (' . \gettype($tmpFocus) . ')' . $tmpFocus;
             }
             LoggerManager::getLogger()->warn('No focus from link when M2MRelationship get query. Focus was: ' . $focusInfo);
             $tmpId = null;
@@ -426,7 +426,7 @@ class M2MRelationship extends SugarRelationship
 
         //Add any optional where clause
         if (!empty($params['where'])) {
-            $add_where = is_string($params['where']) ? $params['where'] : "$whereTable." . $this->getOptionalWhereClause($params['where']);
+            $add_where = \is_string($params['where']) ? $params['where'] : "$whereTable." . $this->getOptionalWhereClause($params['where']);
             if (!empty($add_where)) {
                 $where .= " AND $add_where";
             }
@@ -458,7 +458,7 @@ class M2MRelationship extends SugarRelationship
                 }
                 $middle_table[] = $field_def['name'];
             }
-            $SelectIncludedMiddleTableFields = ', ' . implode(',', $middle_table);
+            $SelectIncludedMiddleTableFields = ', ' . \implode(',', $middle_table);
         }
 
         if (empty($params['return_as_array'])) {

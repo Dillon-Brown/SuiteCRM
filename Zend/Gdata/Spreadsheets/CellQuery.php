@@ -195,7 +195,7 @@ class Zend_Gdata_Spreadsheets_CellQuery extends Zend_Gdata_Query
      */
     public function getMinRow()
     {
-        if (array_key_exists('min-row', $this->_params)) {
+        if (\array_key_exists('min-row', $this->_params)) {
             return $this->_params['min-row'];
         } else {
             return null;
@@ -225,7 +225,7 @@ class Zend_Gdata_Spreadsheets_CellQuery extends Zend_Gdata_Query
      */
     public function getMaxRow()
     {
-        if (array_key_exists('max-row', $this->_params)) {
+        if (\array_key_exists('max-row', $this->_params)) {
             return $this->_params['max-row'];
         } else {
             return null;
@@ -255,7 +255,7 @@ class Zend_Gdata_Spreadsheets_CellQuery extends Zend_Gdata_Query
      */
     public function getMinCol()
     {
-        if (array_key_exists('min-col', $this->_params)) {
+        if (\array_key_exists('min-col', $this->_params)) {
             return $this->_params['min-col'];
         } else {
             return null;
@@ -285,7 +285,7 @@ class Zend_Gdata_Spreadsheets_CellQuery extends Zend_Gdata_Query
      */
     public function getMaxCol()
     {
-        if (array_key_exists('max-col', $this->_params)) {
+        if (\array_key_exists('max-col', $this->_params)) {
             return $this->_params['max-col'];
         } else {
             return null;
@@ -315,7 +315,7 @@ class Zend_Gdata_Spreadsheets_CellQuery extends Zend_Gdata_Query
      */
     public function getRange()
     {
-        if (array_key_exists('range', $this->_params)) {
+        if (\array_key_exists('range', $this->_params)) {
             return $this->_params['range'];
         } else {
             return null;
@@ -330,7 +330,7 @@ class Zend_Gdata_Spreadsheets_CellQuery extends Zend_Gdata_Query
      */
     public function setReturnEmpty($value)
     {
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             $this->_params['return-empty'] = ($value?'true':'false');
         } elseif ($value != null) {
             $this->_params['return-empty'] = $value;
@@ -347,7 +347,7 @@ class Zend_Gdata_Spreadsheets_CellQuery extends Zend_Gdata_Query
      */
     public function getReturnEmpty()
     {
-        if (array_key_exists('return-empty', $this->_params)) {
+        if (\array_key_exists('return-empty', $this->_params)) {
             return $this->_params['return-empty'];
         } else {
             return null;

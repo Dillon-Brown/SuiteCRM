@@ -93,7 +93,7 @@ class SugarFieldDatetimecombo extends SugarFieldBase
             $this->ss->assign('id_range_start', "start_range_{$id}");
             $this->ss->assign('id_range_end', "end_range_{$id}");
             $this->ss->assign('id_range_choice', "{$id}_range_choice");
-            if (file_exists('custom/include/SugarFields/Fields/Datetimecombo/RangeSearchForm.tpl')) {
+            if (\file_exists('custom/include/SugarFields/Fields/Datetimecombo/RangeSearchForm.tpl')) {
                 return $this->fetch('custom/include/SugarFields/Fields/Datetimecombo/RangeSearchForm.tpl');
             }
             return $this->fetch('include/SugarFields/Fields/Datetimecombo/RangeSearchForm.tpl');
@@ -144,7 +144,7 @@ class SugarFieldDatetimecombo extends SugarFieldBase
             return;
         }
 
-        if (strpos($params[$prefix.$field], ' ') > 0) {
+        if (\strpos($params[$prefix.$field], ' ') > 0) {
             if ($timedate->check_matching_format($params[$prefix.$field], TimeDate::DB_DATETIME_FORMAT)) {
                 $bean->$field = $params[$prefix.$field];
             } else {
@@ -186,13 +186,13 @@ class SugarFieldDatetimecombo extends SugarFieldBase
             } else {
                 $timepart = $parts[1];
                 // see if we can get by stripping the seconds
-                if (strpos($settings->timeformat, 's') === false) {
+                if (\strpos($settings->timeformat, 's') === false) {
                     $sep = $timedate->timeSeparatorFormat($settings->timeformat);
                     // We are assuming here seconds are the last component, which
                     // is kind of reasonable - no sane time format puts seconds first
-                    $timeparts = explode($sep, $timepart);
+                    $timeparts = \explode($sep, $timepart);
                     if (!empty($timeparts[2])) {
-                        $timepart = join($sep, array($timeparts[0], $timeparts[1]));
+                        $timepart = \join($sep, array($timeparts[0], $timeparts[1]));
                     }
                 }
             }

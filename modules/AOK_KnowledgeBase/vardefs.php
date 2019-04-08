@@ -268,7 +268,7 @@ $dictionary['AOK_KnowledgeBase'] = array(
     'unified_search' => true,
 );
 
-if (!class_exists('VardefManager')) {
+if (!\class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOK_KnowledgeBase', 'AOK_KnowledgeBase', array('basic', 'assignable', 'security_groups'));

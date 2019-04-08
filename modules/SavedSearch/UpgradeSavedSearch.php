@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -49,7 +49,7 @@ class UpgradeSavedSearch
         while ($row = DBManagerFactory::getInstance()->fetchByAssoc($result)) {
             $focus = new SavedSearch();
             $focus->retrieve($row['id']);
-            $contents = unserialize(base64_decode($focus->contents));
+            $contents = \unserialize(\base64_decode($focus->contents));
             $has_team_name_saved = isset($contents['team_name_advanced']) || isset($contents['team_name_basic']) ? true : false;
             //If $contents['searchFormTab'] is set then this is coming from a 4.x saved search
             if (isset($contents['searchFormTab']) && $contents['searchFormTab'] == 'saved_views') {
@@ -58,10 +58,10 @@ class UpgradeSavedSearch
                 $advanced = !empty($contents['advanced']);
                 $field_map = array();
 
-                if (file_exists("custom/modules/{$module}/metadata/searchdefs.php")) {
+                if (\file_exists("custom/modules/{$module}/metadata/searchdefs.php")) {
                     require("custom/modules/{$module}/metadata/searchdefs.php");
                     $field_map = $advanced ? $searchdefs[$module]['layout']['advanced_search'] : $searchdefs[$module]['layout']['basic_search'];
-                } elseif (file_exists("modules/{$module}/metadata/SearchFields.php")) {
+                } elseif (\file_exists("modules/{$module}/metadata/SearchFields.php")) {
                     require("modules/{$module}/metadata/SearchFields.php");
                     $field_map = $searchFields[$module];
                 } else {
@@ -78,14 +78,14 @@ class UpgradeSavedSearch
                 foreach ($contents as $key=>$value) {
                     if (isset($field_map[$key])) {
                         $new_key = $key . ($advanced ? '_advanced' : '_basic');
-                        if (preg_match('/^team_name_(advanced|basic)$/', $new_key)) {
-                            if (!is_array($value)) {
+                        if (\preg_match('/^team_name_(advanced|basic)$/', $new_key)) {
+                            if (!\is_array($value)) {
                                 $temp_value = array();
                                 $teap_value[] = $value;
                                 $value = $temp_value;
                             }
 
-                            $team_results = DBManagerFactory::getInstance()->query("SELECT id, name FROM teams where id in ('" . implode("','", $value) . "')");
+                            $team_results = DBManagerFactory::getInstance()->query("SELECT id, name FROM teams where id in ('" . \implode("','", $value) . "')");
                             if (!empty($team_results)) {
                                 $count = 0;
                                 while ($team_row = DBManagerFactory::getInstance()->fetchByAssoc($team_results)) {
@@ -110,7 +110,7 @@ class UpgradeSavedSearch
                     }
                 }
                 $new_contents['searchFormTab'] = $advanced ? 'advanced_search' : 'basic_search';
-                $content = base64_encode(serialize($new_contents));
+                $content = \base64_encode(\serialize($new_contents));
                 DBManagerFactory::getInstance()->query("UPDATE saved_search SET contents = '{$content}' WHERE id = '{$row['id']}'");
             } elseif ($has_team_name_saved) {
                 //Otherwise, if the boolean has_team_name_saved is set to true, we also need to parse (coming from 5.x)
@@ -122,7 +122,7 @@ class UpgradeSavedSearch
                         $contents['id_team_name_advanced_collection_0'] = $contents['team_name_advanced'];
                         $contents['team_name_advanced_type'] = 'any';
                         unset($contents['team_name_advanced']);
-                        $content = base64_encode(serialize($contents));
+                        $content = \base64_encode(\serialize($contents));
                         DBManagerFactory::getInstance()->query("UPDATE saved_search SET contents = '{$content}' WHERE id = '{$row['id']}'");
                     }
                 }
@@ -139,7 +139,7 @@ class UpgradeSavedSearch
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }

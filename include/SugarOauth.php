@@ -63,7 +63,7 @@
                 'consumerSecret' => $consumer_secret,
             );
             if (!empty($params)) {
-                $this->_oauth_config = array_merge($this->_oauth_config, $params);
+                $this->_oauth_config = \array_merge($this->_oauth_config, $params);
             }
             parent::__construct($this->_oauth_config);
         }
@@ -124,11 +124,11 @@
             if (!empty($callback)) {
                 $this->setCallbackUrl($callback);
             }
-            list($clean_url, $query) = explode('?', $url);
+            list($clean_url, $query) = \explode('?', $url);
             if ($query) {
                 $url = $clean_url;
-                parse_str($query, $query_params);
-                $params = array_merge($params, $query_params);
+                \parse_str($query, $query_params);
+                $params = \array_merge($params, $query_params);
             }
             $this->setRequestTokenUrl($url);
             try {
@@ -168,12 +168,12 @@
         public function fetch($url, $params = null, $method = 'GET', $headers = null)
         {
             $acc = $this->makeAccessToken();
-            if (strpos($url, '?')) {
-                list($clean_url, $query) = explode('?', $url);
+            if (\strpos($url, '?')) {
+                list($clean_url, $query) = \explode('?', $url);
                 if ($query) {
                     $url = $clean_url;
-                    parse_str($query, $query_params);
-                    $params = array_merge($params?$params:array(), $query_params);
+                    \parse_str($query, $query_params);
+                    $params = \array_merge($params?$params:array(), $query_params);
                 }
             }
             $client = $acc->getHttpClient($this->_oauth_config, $url);

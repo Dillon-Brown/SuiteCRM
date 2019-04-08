@@ -40,7 +40,7 @@
 
 use SuiteCRM\StateCheckerPHPUnitTestCaseAbstract;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -101,6 +101,6 @@ class ImapTestSettingsEntryHandlerTest extends StateCheckerPHPUnitTestCaseAbstra
         $handler = new ImapTestSettingsEntryHandler();
         $results = $handler->handleEntryPointRequest(['imap_test' => 'foo'], ['imap_test_settings' => 'testCaseExample']);
         $this->assertEquals('OK: test settings changed to "testCaseExample"', $results);
-        $this->assertTrue(unlink($settingsFile));
+        $this->assertTrue(\unlink($settingsFile));
     }
 }

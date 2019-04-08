@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -47,9 +47,9 @@ function generateFieldDefsJS2()
             require_once($beanFiles[$beanList[$key]]);
             $focus = new $beanList[$key];
             $loopControl[$key][$key] = $focus;
-            $prefixes[$key] = strtolower($focus->object_name) . '_';
+            $prefixes[$key] = \strtolower($focus->object_name) . '_';
             if ($focus->object_name == 'Case') {
-                $prefixes[$key] = 'a' . strtolower($focus->object_name) . '_';
+                $prefixes[$key] = 'a' . \strtolower($focus->object_name) . '_';
             }
         }
     }
@@ -75,7 +75,7 @@ function generateFieldDefsJS2()
                 if (    /*($field_def['type'] == 'relate' && empty($field_def['custom_type'])) ||*/
                     ($field_def['type'] == 'assigned_user_name' || $field_def['type'] == 'link') ||
                     ($field_def['type'] == 'bool') ||
-                    (in_array($field_def['name'], $badFields))
+                    (\in_array($field_def['name'], $badFields))
                 ) {
                     continue;
                 }
@@ -83,11 +83,11 @@ function generateFieldDefsJS2()
                     //echo $key;
                 }
                 // valid def found, process
-                $optionKey = strtolower("{$prefixes[$collectionKey]}{$key}");
+                $optionKey = \strtolower("{$prefixes[$collectionKey]}{$key}");
                 if (isset($field_def['vname'])) {
-                    $optionLabel = preg_replace('/:$/', "", translate($field_def['vname'], $beankey));
+                    $optionLabel = \preg_replace('/:$/', "", translate($field_def['vname'], $beankey));
                 } else {
-                    $optionLabel = preg_replace('/:$/', "", $field_def['name']);
+                    $optionLabel = \preg_replace('/:$/', "", $field_def['name']);
                 }
                 $dup = 1;
                 foreach ($collection[$collectionKey] as $value) {
@@ -114,7 +114,7 @@ function genDropDownJS2()
 {
     global $app_list_strings, $beanList, $beanFiles;
 
-    $lblContactAndOthers = implode('/', array(
+    $lblContactAndOthers = \implode('/', array(
         isset($app_list_strings['moduleListSingular']['Contacts']) ? $app_list_strings['moduleListSingular']['Contacts'] : 'Contact',
         isset($app_list_strings['moduleListSingular']['Leads']) ? $app_list_strings['moduleListSingular']['Leads'] : 'Lead',
         isset($app_list_strings['moduleListSingular']['Prospects']) ? $app_list_strings['moduleListSingular']['Prospects'] : 'Target',
@@ -122,7 +122,7 @@ function genDropDownJS2()
 
     $dropdown = '';
 
-    array_multisort($app_list_strings['moduleList'], SORT_ASC, $app_list_strings['moduleList']);
+    \array_multisort($app_list_strings['moduleList'], SORT_ASC, $app_list_strings['moduleList']);
 
     foreach ($app_list_strings['moduleList'] as $key => $name) {
         if (isset($beanList[$key]) && isset($beanFiles[$beanList[$key]]) && !str_begin($key, 'AOW_') && !str_begin($key, 'zr2_')) {

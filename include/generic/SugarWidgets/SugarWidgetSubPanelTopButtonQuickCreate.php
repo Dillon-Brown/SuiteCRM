@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -70,19 +70,19 @@ class SugarWidgetSubPanelTopButtonQuickCreate extends SugarWidgetSubPanelTopButt
             $defines['child_module_name'] = $defines['module'];
         }
 
-        $defines['parent_bean_name'] = get_class($defines['focus']);
+        $defines['parent_bean_name'] = \get_class($defines['focus']);
 
         $relationship_name = $this->get_subpanel_relationship_name($defines);
 
         $form = 'form' . $relationship_name;
-        $button = '<form onsubmit="return SUGAR.subpanelUtils.sendAndRetrieve(this.id, \'subpanel_' . $defines['subpanel_definition']->name . '\', \'' . addslashes($app_strings['LBL_LOADING']) . '\');" action="index.php" method="post" name="form" id="form' . $form . "\">\n";
+        $button = '<form onsubmit="return SUGAR.subpanelUtils.sendAndRetrieve(this.id, \'subpanel_' . $defines['subpanel_definition']->name . '\', \'' . \addslashes($app_strings['LBL_LOADING']) . '\');" action="index.php" method="post" name="form" id="form' . $form . "\">\n";
 
         //module_button is used to override the value of module name
         $button .= "<input type='hidden' name='target_module' value='".$defines['child_module_name']."'>\n";
-        $button .= "<input type='hidden' name='".strtolower($defines['parent_bean_name'])."_id' value='".$defines['focus']->id."'>\n";
+        $button .= "<input type='hidden' name='".\strtolower($defines['parent_bean_name'])."_id' value='".$defines['focus']->id."'>\n";
 
         if (isset($defines['focus']->name)) {
-            $button .= "<input type='hidden' name='".strtolower($defines['parent_bean_name'])."_name' value='".$defines['focus']->name."'>";
+            $button .= "<input type='hidden' name='".\strtolower($defines['parent_bean_name'])."_name' value='".$defines['focus']->name."'>";
             #26451,add these fields for custom one-to-many relate field.
             if (!empty($defines['child_module_name'])) {
                 $button .= "<input type='hidden' name='". $relationship_name ."_name' value='".$defines['focus']->name."'>";
@@ -132,9 +132,9 @@ class SugarWidgetSubPanelTopButtonQuickCreate extends SugarWidgetSubPanelTopButt
             }
         }
 
-        if (strtolower($defines['child_module_name']) =='contracts') {
+        if (\strtolower($defines['child_module_name']) =='contracts') {
             //set variables to account name, or parent account name
-            if (strtolower($defines['parent_bean_name']) == 'account') {
+            if (\strtolower($defines['parent_bean_name']) == 'account') {
                 //if account is parent bean, then get focus id/focus name
                 if (isset($defines['focus']->id)) {
                     $additionalFormFields['account_id'] = $defines['focus']->id;
@@ -142,7 +142,7 @@ class SugarWidgetSubPanelTopButtonQuickCreate extends SugarWidgetSubPanelTopButt
                 if (isset($defines['focus']->name)) {
                     $additionalFormFields['account_name'] = $defines['focus']->name;
                 }
-            } elseif (strtolower($defines['parent_bean_name']) == 'quote') {
+            } elseif (\strtolower($defines['parent_bean_name']) == 'quote') {
                 //if quote is parent bean, then get billing_account_id/billing_account_name
                 if (isset($defines['focus']->billing_account_id)) {
                     $additionalFormFields['account_id'] = $defines['focus']->billing_account_id;

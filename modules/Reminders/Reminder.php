@@ -87,11 +87,11 @@ class Reminder extends Basic
      */
     public static function saveRemindersDataJson($eventModule, $eventModuleId, $remindersDataJson)
     {
-        $reminderData = json_decode($remindersDataJson);
-        if (!json_last_error()) {
+        $reminderData = \json_decode($remindersDataJson);
+        if (!\json_last_error()) {
             Reminder::saveRemindersData($eventModule, $eventModuleId, $reminderData);
         } else {
-            throw new Exception(json_last_error_msg());
+            throw new Exception(\json_last_error_msg());
         }
     }
 
@@ -134,7 +134,7 @@ class Reminder extends Basic
         $reminders = BeanFactory::getBean('Reminders')->get_full_list("", "reminders.related_event_module = '$eventModule' AND reminders.related_event_module_id = '$eventModuleId'");
         if ($reminders) {
             foreach ($reminders as $reminder) {
-                if (!in_array($reminder->id, $savedReminderIds)) {
+                if (!\in_array($reminder->id, $savedReminderIds)) {
                     Reminder_Invitee::deleteRemindersInviteesMultiple($reminder->id);
                     $reminder->mark_deleted($reminder->id);
                     $reminder->save();
@@ -156,9 +156,9 @@ class Reminder extends Basic
     public static function loadRemindersDataJson($eventModule, $eventModuleId, $isDuplicate = false)
     {
         $remindersData = self::loadRemindersData($eventModule, $eventModuleId, $isDuplicate);
-        $remindersDataJson = json_encode($remindersData);
-        if (!$remindersDataJson && json_last_error()) {
-            throw new Exception(json_last_error_msg());
+        $remindersDataJson = \json_encode($remindersData);
+        if (!$remindersDataJson && \json_last_error()) {
+            throw new Exception(\json_last_error_msg());
         }
         return $remindersDataJson;
     }
@@ -312,7 +312,7 @@ class Reminder extends Basic
         ////	MEETING INTEGRATION
         $meetingIntegration = null;
         if (isset($sugar_config['meeting_integration']) && !empty($sugar_config['meeting_integration'])) {
-            if (!class_exists($sugar_config['meeting_integration'])) {
+            if (!\class_exists($sugar_config['meeting_integration'])) {
                 require_once("modules/{$sugar_config['meeting_integration']}/{$sugar_config['meeting_integration']}.php");
             }
             $meetingIntegration = new $sugar_config['meeting_integration']();
@@ -320,8 +320,8 @@ class Reminder extends Basic
         ////	END MEETING INTEGRATION
         ///////////////////////////////////////////////////////////////////////
 
-        $dateTimeNowStamp = strtotime(self::unQuoteTime($dateTimeNow));
-        $dateTimeMaxStamp = strtotime(self::unQuoteTime($dateTimeMax));
+        $dateTimeNowStamp = \strtotime(self::unQuoteTime($dateTimeNow));
+        $dateTimeMaxStamp = \strtotime(self::unQuoteTime($dateTimeMax));
 
         $popupReminders = BeanFactory::getBean('Reminders')->get_full_list(
             '',
@@ -433,7 +433,7 @@ class Reminder extends Basic
                     $app_strings['MSG_JS_ALERT_MTG_REMINDER_LOC'] . $location .
                     $description .
                     $instructions,
-                    $relatedEventStart - strtotime($alertDateTimeNow),
+                    $relatedEventStart - \strtotime($alertDateTimeNow),
                     $url,
                     $popupReminder->id
                 );
@@ -454,7 +454,7 @@ class Reminder extends Basic
     private static function unQuoteTime($timestr)
     {
         $ret = '';
-        for ($i = 0; $i < strlen($timestr); $i++) {
+        for ($i = 0; $i < \strlen($timestr); $i++) {
             if ($timestr[$i] != "'") {
                 $ret .= $timestr[$i];
             }
@@ -472,9 +472,9 @@ class Reminder extends Basic
     private static function testEventPersonAcceptStatus(SugarBean $event, SugarBean $person, $acceptStatus = 'decline')
     {
         if ($acceptStats = self::getEventPersonAcceptStatus($event, $person)) {
-            $acceptStatusLower = strtolower($acceptStatus);
+            $acceptStatusLower = \strtolower($acceptStatus);
             foreach ((array)$acceptStats as $acceptStat) {
-                if (strtolower($acceptStat) == $acceptStatusLower) {
+                if (\strtolower($acceptStat) == $acceptStatusLower) {
                     return true;
                 }
             }
@@ -504,7 +504,7 @@ class Reminder extends Basic
 
     private function upgradeEventPersonQuery(SugarBean $event, $person_table)
     {
-        $eventIdField = strtolower($event->object_name) . '_id';
+        $eventIdField = \strtolower($event->object_name) . '_id';
         $query = "
 			SELECT * FROM {$event->table_name}_{$person_table}
 			WHERE
@@ -516,11 +516,11 @@ class Reminder extends Basic
 
     private static function getEventPersonQuery(SugarBean $event, SugarBean $person)
     {
-        $eventIdField = array_search($event->table_name, $event->relationship_fields);
+        $eventIdField = \array_search($event->table_name, $event->relationship_fields);
         if (!$eventIdField) {
-            $eventIdField = strtolower($event->object_name . '_id');
+            $eventIdField = \strtolower($event->object_name . '_id');
         }
-        $personIdField = strtolower($person->object_name) . '_id';
+        $personIdField = \strtolower($person->object_name) . '_id';
         $query = "
 			SELECT * FROM {$event->table_name}_{$person->table_name}
 			WHERE
@@ -540,9 +540,9 @@ class Reminder extends Basic
      */
     public static function loadRemindersDefaultValuesDataJson()
     {
-        $ret = json_encode(self::loadRemindersDefaultValuesData());
-        if (!$ret && json_last_error()) {
-            throw new Exception(json_last_error_msg());
+        $ret = \json_encode(self::loadRemindersDefaultValuesData());
+        if (!$ret && \json_last_error()) {
+            throw new Exception(\json_last_error_msg());
         }
         return $ret;
     }
@@ -720,13 +720,13 @@ class Reminder extends Basic
 
     private static function getRelatedInviteeModuleFromInviteeArray($invitee)
     {
-        if (array_key_exists('user_id', $invitee)) {
+        if (\array_key_exists('user_id', $invitee)) {
             return 'Users';
         }
-        if (array_key_exists('lead_id', $invitee)) {
+        if (\array_key_exists('lead_id', $invitee)) {
             return 'Leads';
         }
-        if (array_key_exists('contact_id', $invitee)) {
+        if (\array_key_exists('contact_id', $invitee)) {
             return 'Contacts';
         }
         // TODO:!!!!
@@ -736,13 +736,13 @@ class Reminder extends Basic
 
     private static function getRelatedInviteeModuleIdFromInviteeArray($invitee)
     {
-        if (array_key_exists('user_id', $invitee)) {
+        if (\array_key_exists('user_id', $invitee)) {
             return $invitee['user_id'];
         }
-        if (array_key_exists('lead_id', $invitee)) {
+        if (\array_key_exists('lead_id', $invitee)) {
             return $invitee['lead_id'];
         }
-        if (array_key_exists('contact_id', $invitee)) {
+        if (\array_key_exists('contact_id', $invitee)) {
             return $invitee['contact_id'];
         }
         // TODO:!!!!
@@ -780,7 +780,7 @@ class Reminder extends Basic
         $tpl->assign('remindersData', Reminder::loadRemindersData($event->module_name, $event->id));
         $tpl->assign('remindersDataJson', Reminder::loadRemindersDataJson($event->module_name, $event->id));
         $tpl->assign('remindersDefaultValuesDataJson', Reminder::loadRemindersDefaultValuesDataJson());
-        $tpl->assign('remindersDisabled', json_encode(true));
+        $tpl->assign('remindersDisabled', \json_encode(true));
         return $tpl->fetch('modules/Reminders/tpls/reminders.tpl');
     }
 

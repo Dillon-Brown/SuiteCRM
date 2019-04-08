@@ -108,7 +108,7 @@ class Zend_Search_Lucene_Search_QueryEntry_Term extends Zend_Search_Lucene_Searc
                 $this->_term,
                                                                              $encoding,
                                                                              ($this->_field !== null)?
-                                                                                  iconv($encoding, 'UTF-8', $this->_field) :
+                                                                                  \iconv($encoding, 'UTF-8', $this->_field) :
                                                                                   null,
                                                                              $this->_similarity
                                                                              );
@@ -123,7 +123,7 @@ class Zend_Search_Lucene_Search_QueryEntry_Term extends Zend_Search_Lucene_Searc
             $this->_term,
                                                                         $encoding,
                                                                         ($this->_field !== null)?
-                                                                              iconv($encoding, 'UTF-8', $this->_field) :
+                                                                              \iconv($encoding, 'UTF-8', $this->_field) :
                                                                               null
                                                                         );
         $query->setBoost($this->_boost);

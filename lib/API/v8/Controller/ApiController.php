@@ -114,7 +114,7 @@ class ApiController implements LoggerAwareInterface
     {
         try {
             $negotiated = $this->negotiatedJsonApiContent($request, $response);
-            if (in_array($negotiated->getStatusCode(), array(415, 406), true)) {
+            if (\in_array($negotiated->getStatusCode(), array(415, 406), true)) {
                 // return error instead of response
                 return $negotiated;
             }
@@ -130,27 +130,27 @@ class ApiController implements LoggerAwareInterface
             $payload['jsonapi'] = $jsonAPI->toJsonApiResponse();
 
             // Validate Response
-            $data = json_decode(json_encode($payload));
+            $data = \json_decode(\json_encode($payload));
 
             $validator = new Validator();
-            $validator->validate($data, (object)['$ref' => 'file://' . realpath($jsonAPI->getSchemaPath())]);
+            $validator->validate($data, (object)['$ref' => 'file://' . \realpath($jsonAPI->getSchemaPath())]);
 
             if (!$validator->isValid()) {
                 $errors = $validator->getErrors();
-                $this->logger->error('[Invalid Payload Response]'. json_encode($payload));
+                $this->logger->error('[Invalid Payload Response]'. \json_encode($payload));
                 $apiErrorObjects = [];
                 foreach ($errors as $error) {
                     $apiErrorObject = new JsonApiErrorObject();
                     $apiErrorObject->retrieveFromRequest($request);
-                    $apiErrorObjectArray = array_merge($error, $apiErrorObject->export());
+                    $apiErrorObjectArray = \array_merge($error, $apiErrorObject->export());
                     $apiErrorObjectArrays[] = $apiErrorObjectArray;
                 }
-                $payload['errors'] = array_merge($payload['errors'], $apiErrorObjectArrays);
+                $payload['errors'] = \array_merge($payload['errors'], $apiErrorObjectArrays);
             }
 
-            json_encode($payload);
-            if (json_last_error() != JSON_ERROR_NONE) {
-                throw new Exception('Generating JSON payload failed: ' . json_last_error_msg());
+            \json_encode($payload);
+            if (\json_last_error() != JSON_ERROR_NONE) {
+                throw new Exception('Generating JSON payload failed: ' . \json_last_error_msg());
             }
 
             if (isset($payload['errors'][0]['status'])) {
@@ -161,9 +161,9 @@ class ApiController implements LoggerAwareInterface
             return $response
                 ->withHeader(self::CONTENT_TYPE_HEADER, self::CONTENT_TYPE)
                 ->withStatus($status)
-                ->write(json_encode($payload));
+                ->write(\json_encode($payload));
         } catch (\Exception $e) {
-            $errorMessage = 'Generate JSON API Response exception detected: ' . get_class($e) . ': ' . $e->getMessage() . ' (' . $e->getCode() . ')';
+            $errorMessage = 'Generate JSON API Response exception detected: ' . \get_class($e) . ': ' . $e->getMessage() . ' (' . $e->getCode() . ')';
             if (inDeveloperMode()) {
                 ErrorMessage::log($errorMessage);
             }
@@ -188,7 +188,7 @@ class ApiController implements LoggerAwareInterface
             $payload['errors'][] = $error->export();
             return $payload;
         } catch (Exception $e) {
-            $errorMessage = 'Generate JSON API Error Response exception detected: ' . get_class($e) . ': ' . $e->getMessage() . ' (' . $e->getCode() . ')';
+            $errorMessage = 'Generate JSON API Error Response exception detected: ' . \get_class($e) . ': ' . $e->getMessage() . ' (' . $e->getCode() . ')';
             if (inDeveloperMode()) {
                 ErrorMessage::log($errorMessage);
             }
@@ -215,7 +215,7 @@ class ApiController implements LoggerAwareInterface
                 $this->setLogger(new Logger());
             }
 
-            if (is_subclass_of($exception, ApiException::class)) {
+            if (\is_subclass_of($exception, ApiException::class)) {
                 $jsonError['detail'] = $exception->getDetail();
                 $jsonError['source'] = $exception->getSource();
                 $response = $response->withStatus($exception->getHttpStatus());
@@ -258,9 +258,9 @@ class ApiController implements LoggerAwareInterface
 
             return $response
                 ->withHeader(self::CONTENT_TYPE_HEADER, self::CONTENT_TYPE)
-                ->write(json_encode($payload));
+                ->write(\json_encode($payload));
         } catch (\Exception $e) {
-            $errorMessage = 'Generate JSON API Error Response exception detected: ' . get_class($e) . ': ' . $e->getMessage() . ' (' . $e->getCode() . ')';
+            $errorMessage = 'Generate JSON API Error Response exception detected: ' . \get_class($e) . ': ' . $e->getMessage() . ' (' . $e->getCode() . ')';
             if (inDeveloperMode()) {
                 ErrorMessage::log($errorMessage);
             }
@@ -286,7 +286,7 @@ class ApiController implements LoggerAwareInterface
         if (empty($header)) {
             throw new NotAcceptableException('Header should contains an "Accept" header.');
         }
-        if (count($header) !== 1) {
+        if (\count($header) !== 1) {
             throw new NotAcceptableException('Header should contains exactly one "Accept" header.');
         }
         if ($header[0] !== self::CONTENT_TYPE) {
@@ -310,10 +310,10 @@ class ApiController implements LoggerAwareInterface
     {
         // Validate Response
         $jsonAPI = $this->containers->get('JsonApi');
-        $data = json_decode($request->getBody());
+        $data = \json_decode($request->getBody());
 
         $validator = new Validator();
-        $validator->validate($data, (object)['$ref' => 'file://' . realpath($jsonAPI->getSchemaPath())]);
+        $validator->validate($data, (object)['$ref' => 'file://' . \realpath($jsonAPI->getSchemaPath())]);
 
         if (!$validator->isValid()) {
             $errors = $validator->getErrors();

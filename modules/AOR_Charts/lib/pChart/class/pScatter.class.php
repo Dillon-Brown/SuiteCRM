@@ -13,8 +13,8 @@
      You can find the whole class documentation on the pChart web site.
  */
 
- define("SCATTER_MISSING_X_SERIE", 190001);
- define("SCATTER_MISSING_Y_SERIE", 190002);
+ \define("SCATTER_MISSING_X_SERIE", 190001);
+ \define("SCATTER_MISSING_Y_SERIE", 190002);
 
  /* pScatter class definition */
  class pScatter
@@ -115,8 +115,8 @@
              if ($Mode == SCALE_MODE_FLOATING) {
                  foreach ($Data["Series"] as $SerieID => $SerieParameter) {
                      if ($SerieParameter["Axis"] == $AxisID && $Data["Series"][$SerieID]["isDrawable"]) {
-                         $AxisMax = max($AxisMax, $Data["Series"][$SerieID]["Max"]);
-                         $AxisMin = min($AxisMin, $Data["Series"][$SerieID]["Min"]);
+                         $AxisMax = \max($AxisMax, $Data["Series"][$SerieID]["Max"]);
+                         $AxisMin = \min($AxisMin, $Data["Series"][$SerieID]["Min"]);
                      }
                  }
                  $AutoMargin = (($AxisMax-$AxisMin)/100)*$XReleasePercent;
@@ -137,7 +137,7 @@
              if (isset($ManualScale[$AxisID]["Rows"]) && isset($ManualScale[$AxisID]["RowHeight"])) {
                  $Scale = array("Rows"=>$ManualScale[$AxisID]["Rows"],"RowHeight"=>$ManualScale[$AxisID]["RowHeight"],"XMin"=>$ManualScale[$AxisID]["Min"],"XMax"=>$ManualScale[$AxisID]["Max"]);
              } else {
-                 $MaxDivs = floor($Width/$MinDivHeight);
+                 $MaxDivs = \floor($Width/$MinDivHeight);
                  $Scale   = $this->pChartObject->computeScale($Data["Axis"][$AxisID]["Min"], $Data["Axis"][$AxisID]["Max"], $MaxDivs, $Factors, $AxisID);
              }
 
@@ -240,11 +240,11 @@
                          } else {
                              $BGColor = array("R"=>$BackgroundR2,"G"=>$BackgroundG2,"B"=>$BackgroundB2,"Alpha"=>$BackgroundAlpha2);
                          }
-                         if ($LastX != null && $CycleBackground  && ($DrawXLines == ALL || in_array($AxisID, $DrawXLines))) {
+                         if ($LastX != null && $CycleBackground  && ($DrawXLines == ALL || \in_array($AxisID, $DrawXLines))) {
                              $this->pChartObject->drawFilledRectangle($LastX, $this->pChartObject->GraphAreaY1+$FloatingOffset, $XPos, $this->pChartObject->GraphAreaY2-$FloatingOffset, $BGColor);
                          }
 
-                         if ($DrawXLines == ALL || in_array($AxisID, $DrawXLines)) {
+                         if ($DrawXLines == ALL || \in_array($AxisID, $DrawXLines)) {
                              $this->pChartObject->drawLine($XPos, $this->pChartObject->GraphAreaY1+$FloatingOffset, $XPos, $this->pChartObject->GraphAreaY2-$FloatingOffset, array("R"=>$GridR,"G"=>$GridG,"B"=>$GridB,"Alpha"=>$GridAlpha,"Ticks"=>$GridTicks));
                          }
                          if ($DrawSubTicks && $i != $AxisSettings["Rows"]) {
@@ -254,7 +254,7 @@
                          $this->pChartObject->drawLine($XPos, $YPos-$InnerTickWidth, $XPos, $YPos+$OuterTickWidth, array("R"=>$TickR,"G"=>$TickG,"B"=>$TickB,"Alpha"=>$TickAlpha));
                          $Bounds    = $this->pChartObject->drawText($XPos, $YPos+$OuterTickWidth+$LabelOffset, $Value, array("Angle"=>$XLabelsRotation,"Align"=>$LabelAlign));
                          $TxtBottom = $YPos+2+$OuterTickWidth+2+($Bounds[0]["Y"]-$Bounds[2]["Y"]);
-                         $MaxBottom = max($MaxBottom, $TxtBottom);
+                         $MaxBottom = \max($MaxBottom, $TxtBottom);
 
                          $LastX = $XPos;
                      }
@@ -314,11 +314,11 @@
                          } else {
                              $BGColor = array("R"=>$BackgroundR2,"G"=>$BackgroundG2,"B"=>$BackgroundB2,"Alpha"=>$BackgroundAlpha2);
                          }
-                         if ($LastX != null && $CycleBackground  && ($DrawXLines == ALL || in_array($AxisID, $DrawXLines))) {
+                         if ($LastX != null && $CycleBackground  && ($DrawXLines == ALL || \in_array($AxisID, $DrawXLines))) {
                              $this->pChartObject->drawFilledRectangle($LastX, $this->pChartObject->GraphAreaY1+$FloatingOffset, $XPos, $this->pChartObject->GraphAreaY2-$FloatingOffset, $BGColor);
                          }
 
-                         if ($DrawXLines == ALL || in_array($AxisID, $DrawXLines)) {
+                         if ($DrawXLines == ALL || \in_array($AxisID, $DrawXLines)) {
                              $this->pChartObject->drawLine($XPos, $this->pChartObject->GraphAreaY1+$FloatingOffset, $XPos, $this->pChartObject->GraphAreaY2-$FloatingOffset, array("R"=>$GridR,"G"=>$GridG,"B"=>$GridB,"Alpha"=>$GridAlpha,"Ticks"=>$GridTicks));
                          }
 
@@ -329,7 +329,7 @@
                          $this->pChartObject->drawLine($XPos, $YPos-$OuterTickWidth, $XPos, $YPos+$InnerTickWidth, array("R"=>$TickR,"G"=>$TickG,"B"=>$TickB,"Alpha"=>$TickAlpha));
                          $Bounds = $this->pChartObject->drawText($XPos, $YPos-$OuterTickWidth-$LabelOffset, $Value, array("Angle"=>$XLabelsRotation,"Align"=>$LabelAlign));
                          $TxtBox = $YPos-$OuterTickWidth-4-($Bounds[0]["Y"]-$Bounds[2]["Y"]);
-                         $MinTop = min($MinTop, $TxtBox);
+                         $MinTop = \min($MinTop, $TxtBox);
 
                          $LastX = $XPos;
                      }
@@ -374,11 +374,11 @@
                          } else {
                              $BGColor = array("R"=>$BackgroundR2,"G"=>$BackgroundG2,"B"=>$BackgroundB2,"Alpha"=>$BackgroundAlpha2);
                          }
-                         if ($LastY != null && $CycleBackground && ($DrawYLines == ALL || in_array($AxisID, $DrawYLines))) {
+                         if ($LastY != null && $CycleBackground && ($DrawYLines == ALL || \in_array($AxisID, $DrawYLines))) {
                              $this->pChartObject->drawFilledRectangle($this->pChartObject->GraphAreaX1+$FloatingOffset, $LastY, $this->pChartObject->GraphAreaX2-$FloatingOffset, $YPos, $BGColor);
                          }
 
-                         if (($YPos != $this->pChartObject->GraphAreaY1 && $YPos != $this->pChartObject->GraphAreaY2) && ($DrawYLines == ALL || in_array($AxisID, $DrawYLines))) {
+                         if (($YPos != $this->pChartObject->GraphAreaY1 && $YPos != $this->pChartObject->GraphAreaY2) && ($DrawYLines == ALL || \in_array($AxisID, $DrawYLines))) {
                              $this->pChartObject->drawLine($this->pChartObject->GraphAreaX1+$FloatingOffset, $YPos, $this->pChartObject->GraphAreaX2-$FloatingOffset, $YPos, array("R"=>$GridR,"G"=>$GridG,"B"=>$GridB,"Alpha"=>$GridAlpha,"Ticks"=>$GridTicks));
                          }
 
@@ -389,7 +389,7 @@
                          $this->pChartObject->drawLine($XPos-$OuterTickWidth, $YPos, $XPos+$InnerTickWidth, $YPos, array("R"=>$TickR,"G"=>$TickG,"B"=>$TickB,"Alpha"=>$TickAlpha));
                          $Bounds  = $this->pChartObject->drawText($XPos-$OuterTickWidth-2, $YPos, $Value, array("Align"=>TEXT_ALIGN_MIDDLERIGHT));
                          $TxtLeft = $XPos-$OuterTickWidth-2-($Bounds[1]["X"]-$Bounds[0]["X"]);
-                         $MinLeft = min($MinLeft, $TxtLeft);
+                         $MinLeft = \min($MinLeft, $TxtLeft);
 
                          $LastY = $YPos;
                      }
@@ -432,11 +432,11 @@
                          } else {
                              $BGColor = array("R"=>$BackgroundR2,"G"=>$BackgroundG2,"B"=>$BackgroundB2,"Alpha"=>$BackgroundAlpha2);
                          }
-                         if ($LastY != null && $CycleBackground  && ($DrawYLines == ALL || in_array($AxisID, $DrawYLines))) {
+                         if ($LastY != null && $CycleBackground  && ($DrawYLines == ALL || \in_array($AxisID, $DrawYLines))) {
                              $this->pChartObject->drawFilledRectangle($this->pChartObject->GraphAreaX1+$FloatingOffset, $LastY, $this->pChartObject->GraphAreaX2-$FloatingOffset, $YPos, $BGColor);
                          }
 
-                         if (($YPos != $this->pChartObject->GraphAreaY1 && $YPos != $this->pChartObject->GraphAreaY2) && ($DrawYLines == ALL || in_array($AxisID, $DrawYLines))) {
+                         if (($YPos != $this->pChartObject->GraphAreaY1 && $YPos != $this->pChartObject->GraphAreaY2) && ($DrawYLines == ALL || \in_array($AxisID, $DrawYLines))) {
                              $this->pChartObject->drawLine($this->pChartObject->GraphAreaX1+$FloatingOffset, $YPos, $this->pChartObject->GraphAreaX2-$FloatingOffset, $YPos, array("R"=>$GridR,"G"=>$GridG,"B"=>$GridB,"Alpha"=>$GridAlpha,"Ticks"=>$GridTicks));
                          }
 
@@ -447,7 +447,7 @@
                          $this->pChartObject->drawLine($XPos-$InnerTickWidth, $YPos, $XPos+$OuterTickWidth, $YPos, array("R"=>$TickR,"G"=>$TickG,"B"=>$TickB,"Alpha"=>$TickAlpha));
                          $Bounds  = $this->pChartObject->drawText($XPos+$OuterTickWidth+2, $YPos, $Value, array("Align"=>TEXT_ALIGN_MIDDLELEFT));
                          $TxtLeft = $XPos+$OuterTickWidth+2+($Bounds[1]["X"]-$Bounds[0]["X"]);
-                         $MaxLeft = max($MaxLeft, $TxtLeft);
+                         $MaxLeft = \max($MaxLeft, $TxtLeft);
 
                          $LastY = $YPos;
                      }
@@ -512,13 +512,13 @@
                  }
 
                  $PosArrayX = $this->getPosArray($SerieValuesX, $SerieXAxis);
-                 if (!is_array($PosArrayX)) {
+                 if (!\is_array($PosArrayX)) {
                      $Value = $PosArrayX;
                      $PosArrayX = "";
                      $PosArrayX[0] = $Value;
                  }
                  $PosArrayY = $this->getPosArray($SerieValuesY, $SerieYAxis);
-                 if (!is_array($PosArrayY)) {
+                 if (!\is_array($PosArrayY)) {
                      $Value = $PosArrayY;
                      $PosArrayY = "";
                      $PosArrayY[0] = $Value;
@@ -531,9 +531,9 @@
                      $Y = $PosArrayY[$Key];
 
                      if ($X != VOID && $Y != VOID) {
-                         $RealValue = round($Data["Series"][$Series["X"]]["Data"][$Key], 2)." / ".round($Data["Series"][$Series["Y"]]["Data"][$Key], 2);
+                         $RealValue = \round($Data["Series"][$Series["X"]]["Data"][$Key], 2)." / ".\round($Data["Series"][$Series["Y"]]["Data"][$Key], 2);
                          if ($RecordImageMap) {
-                             $this->pChartObject->addToImageMap("CIRCLE", floor($X).",".floor($Y).",".floor($PlotSize+$BorderSize), $this->pChartObject->toHTMLColor($Series["Color"]["R"], $Series["Color"]["G"], $Series["Color"]["B"]), $Description, $RealValue);
+                             $this->pChartObject->addToImageMap("CIRCLE", \floor($X).",".\floor($Y).",".\floor($PlotSize+$BorderSize), $this->pChartObject->toHTMLColor($Series["Color"]["R"], $Series["Color"]["G"], $Series["Color"]["B"]), $Description, $RealValue);
                          }
 
                          if (isset($Series["Shape"])) {
@@ -581,13 +581,13 @@
                  }
 
                  $PosArrayX = $this->getPosArray($SerieValuesX, $SerieXAxis);
-                 if (!is_array($PosArrayX)) {
+                 if (!\is_array($PosArrayX)) {
                      $Value = $PosArrayX;
                      $PosArrayX = "";
                      $PosArrayX[0] = $Value;
                  }
                  $PosArrayY = $this->getPosArray($SerieValuesY, $SerieYAxis);
-                 if (!is_array($PosArrayY)) {
+                 if (!\is_array($PosArrayY)) {
                      $Value = $PosArrayY;
                      $PosArrayY = "";
                      $PosArrayY[0] = $Value;
@@ -608,9 +608,9 @@
                      $Y = $PosArrayY[$Key];
 
                      if ($X != VOID && $Y != VOID) {
-                         $RealValue = round($Data["Series"][$Series["X"]]["Data"][$Key], 2)." / ".round($Data["Series"][$Series["Y"]]["Data"][$Key], 2);
+                         $RealValue = \round($Data["Series"][$Series["X"]]["Data"][$Key], 2)." / ".\round($Data["Series"][$Series["Y"]]["Data"][$Key], 2);
                          if ($RecordImageMap) {
-                             $this->pChartObject->addToImageMap("CIRCLE", floor($X).",".floor($Y).",".$ImageMapPlotSize, $this->pChartObject->toHTMLColor($Series["Color"]["R"], $Series["Color"]["G"], $Series["Color"]["B"]), $Description, $RealValue);
+                             $this->pChartObject->addToImageMap("CIRCLE", \floor($X).",".\floor($Y).",".$ImageMapPlotSize, $this->pChartObject->toHTMLColor($Series["Color"]["R"], $Series["Color"]["G"], $Series["Color"]["B"]), $Description, $RealValue);
                          }
                      }
 
@@ -653,13 +653,13 @@
                  }
 
                  $PosArrayX = $this->getPosArray($SerieValuesX, $SerieXAxis);
-                 if (!is_array($PosArrayX)) {
+                 if (!\is_array($PosArrayX)) {
                      $Value = $PosArrayX;
                      $PosArrayX = "";
                      $PosArrayX[0] = $Value;
                  }
                  $PosArrayY = $this->getPosArray($SerieValuesY, $SerieYAxis);
-                 if (!is_array($PosArrayY)) {
+                 if (!\is_array($PosArrayY)) {
                      $Value = $PosArrayY;
                      $PosArrayY = "";
                      $PosArrayY[0] = $Value;
@@ -683,9 +683,9 @@
                      $Force = $this->pChartObject->getLength($LastX, $LastY, $X, $Y)/5;
 
                      if ($X != VOID && $Y != VOID) {
-                         $RealValue = round($Data["Series"][$Series["X"]]["Data"][$Key], 2)." / ".round($Data["Series"][$Series["Y"]]["Data"][$Key], 2);
+                         $RealValue = \round($Data["Series"][$Series["X"]]["Data"][$Key], 2)." / ".\round($Data["Series"][$Series["Y"]]["Data"][$Key], 2);
                          if ($RecordImageMap) {
-                             $this->pChartObject->addToImageMap("CIRCLE", floor($X).",".floor($Y).",".$ImageMapPlotSize, $this->pChartObject->toHTMLColor($Series["Color"]["R"], $Series["Color"]["G"], $Series["Color"]["B"]), $Description, $RealValue);
+                             $this->pChartObject->addToImageMap("CIRCLE", \floor($X).",".\floor($Y).",".$ImageMapPlotSize, $this->pChartObject->toHTMLColor($Series["Color"]["R"], $Series["Color"]["G"], $Series["Color"]["B"]), $Description, $RealValue);
                          }
                      }
 
@@ -715,7 +715,7 @@
      {
          $Data = $this->pDataObject->getData();
 
-         if (!is_array($Values)) {
+         if (!\is_array($Values)) {
              $Values = array($Values);
          }
 
@@ -733,7 +733,7 @@
                  }
              }
 
-             if (count($Result) == 1) {
+             if (\count($Result) == 1) {
                  return($Result[0]);
              }
              return($Result);
@@ -751,7 +751,7 @@
              }
          }
 
-         if (count($Result) == 1) {
+         if (\count($Result) == 1) {
              return($Result[0]);
          }
          return($Result);
@@ -803,7 +803,7 @@
              }
          }
 
-         $YStep = max($this->pChartObject->FontSize, $IconAreaHeight) + 5;
+         $YStep = \max($this->pChartObject->FontSize, $IconAreaHeight) + 5;
          $XStep = $IconAreaWidth + 5;
          $XStep = $XSpacing;
 
@@ -829,10 +829,10 @@
                          $Boundaries["B"] = $BoxArray[1]["Y"]+2+$IconAreaHeight/2;
                      }
 
-                     $Lines = preg_split("/\n/", $Series["Description"]);
-                     $vY = $vY + max($this->pChartObject->FontSize*count($Lines), $IconAreaHeight) + 5;
+                     $Lines = \preg_split("/\n/", $Series["Description"]);
+                     $vY = $vY + \max($this->pChartObject->FontSize*\count($Lines), $IconAreaHeight) + 5;
                  } elseif ($Mode == LEGEND_HORIZONTAL) {
-                     $Lines = preg_split("/\n/", $Series["Description"]);
+                     $Lines = \preg_split("/\n/", $Series["Description"]);
                      $Width = "";
                      foreach ($Lines as $Key => $Value) {
                          $BoxArray = $this->pChartObject->getTextBox($vX+$IconAreaWidth+6, $Y+$IconAreaHeight/2+(($this->pChartObject->FontSize+3)*$Key), $FontName, $FontSize, 0, $Value);
@@ -850,7 +850,7 @@
                          $Width[] = $BoxArray[1]["X"];
                      }
 
-                     $vX=max($Width)+$XStep;
+                     $vX=\max($Width)+$XStep;
                  }
              }
          }
@@ -888,12 +888,12 @@
                  } else {
                      if ($Family == LEGEND_FAMILY_BOX) {
                          if ($BoxWidth != $IconAreaWidth) {
-                             $XOffset = floor(($IconAreaWidth-$BoxWidth)/2);
+                             $XOffset = \floor(($IconAreaWidth-$BoxWidth)/2);
                          } else {
                              $XOffset = 0;
                          }
                          if ($BoxHeight != $IconAreaHeight) {
-                             $YOffset = floor(($IconAreaHeight-$BoxHeight)/2);
+                             $YOffset = \floor(($IconAreaHeight-$BoxHeight)/2);
                          } else {
                              $YOffset = 0;
                          }
@@ -901,8 +901,8 @@
                          $this->pChartObject->drawFilledRectangle($X+1+$XOffset, $Y+1+$YOffset, $X+$BoxWidth+$XOffset+1, $Y+$BoxHeight+1+$YOffset, array("R"=>0,"G"=>0,"B"=>0,"Alpha"=>20));
                          $this->pChartObject->drawFilledRectangle($X+$XOffset, $Y+$YOffset, $X+$BoxWidth+$XOffset, $Y+$BoxHeight+$YOffset, array("R"=>$R,"G"=>$G,"B"=>$B,"Surrounding"=>20));
                      } elseif ($Family == LEGEND_FAMILY_CIRCLE) {
-                         $this->pChartObject->drawFilledCircle($X+1+$IconAreaWidth/2, $Y+1+$IconAreaHeight/2, min($IconAreaHeight/2, $IconAreaWidth/2), array("R"=>0,"G"=>0,"B"=>0,"Alpha"=>20));
-                         $this->pChartObject->drawFilledCircle($X+$IconAreaWidth/2, $Y+$IconAreaHeight/2, min($IconAreaHeight/2, $IconAreaWidth/2), array("R"=>$R,"G"=>$G,"B"=>$B,"Surrounding"=>20));
+                         $this->pChartObject->drawFilledCircle($X+1+$IconAreaWidth/2, $Y+1+$IconAreaHeight/2, \min($IconAreaHeight/2, $IconAreaWidth/2), array("R"=>0,"G"=>0,"B"=>0,"Alpha"=>20));
+                         $this->pChartObject->drawFilledCircle($X+$IconAreaWidth/2, $Y+$IconAreaHeight/2, \min($IconAreaHeight/2, $IconAreaWidth/2), array("R"=>$R,"G"=>$G,"B"=>$B,"Surrounding"=>20));
                      } elseif ($Family == LEGEND_FAMILY_LINE) {
                          $this->pChartObject->drawLine($X+1, $Y+1+$IconAreaHeight/2, $X+1+$IconAreaWidth, $Y+1+$IconAreaHeight/2, array("R"=>0,"G"=>0,"B"=>0,"Alpha"=>20,"Ticks"=>$Ticks,"Weight"=>$Weight));
                          $this->pChartObject->drawLine($X, $Y+$IconAreaHeight/2, $X+$IconAreaWidth, $Y+$IconAreaHeight/2, array("R"=>$R,"G"=>$G,"B"=>$B,"Ticks"=>$Ticks,"Weight"=>$Weight));
@@ -910,20 +910,20 @@
                  }
 
                  if ($Mode == LEGEND_VERTICAL) {
-                     $Lines = preg_split("/\n/", $Series["Description"]);
+                     $Lines = \preg_split("/\n/", $Series["Description"]);
                      foreach ($Lines as $Key => $Value) {
                          $this->pChartObject->drawText($X+$IconAreaWidth+4, $Y+$IconAreaHeight/2+(($this->pChartObject->FontSize+3)*$Key), $Value, array("R"=>$FontR,"G"=>$FontG,"B"=>$FontB,"Align"=>TEXT_ALIGN_MIDDLELEFT));
                      }
 
-                     $Y=$Y+max($this->pChartObject->FontSize*count($Lines), $IconAreaHeight) + 5;
+                     $Y=$Y+\max($this->pChartObject->FontSize*\count($Lines), $IconAreaHeight) + 5;
                  } elseif ($Mode == LEGEND_HORIZONTAL) {
-                     $Lines = preg_split("/\n/", $Series["Description"]);
+                     $Lines = \preg_split("/\n/", $Series["Description"]);
                      $Width = "";
                      foreach ($Lines as $Key => $Value) {
                          $BoxArray = $this->pChartObject->drawText($X+$IconAreaWidth+4, $Y+$IconAreaHeight/2+(($this->pChartObject->FontSize+3)*$Key), $Value, array("R"=>$FontR,"G"=>$FontG,"B"=>$FontB,"Align"=>TEXT_ALIGN_MIDDLELEFT));
                          $Width[] = $BoxArray[1]["X"];
                      }
-                     $X=max($Width)+2+$XStep;
+                     $X=\max($Width)+2+$XStep;
                  }
              }
          }
@@ -941,7 +941,7 @@
          $Style	= isset($Format["Style"]) ? $Format["Style"] : LEGEND_ROUND;
          $Mode	= isset($Format["Mode"]) ? $Format["Mode"] : LEGEND_VERTICAL;
 
-         $YStep = max($this->pChartObject->FontSize, $BoxSize) + 5;
+         $YStep = \max($this->pChartObject->FontSize, $BoxSize) + 5;
          $XStep = $BoxSize + 5;
 
          $X=100;
@@ -961,7 +961,7 @@
              }
          }
 
-         $YStep = max($this->pChartObject->FontSize, $IconAreaHeight) + 5;
+         $YStep = \max($this->pChartObject->FontSize, $IconAreaHeight) + 5;
          $XStep = $IconAreaWidth + 5;
          $XStep = $XSpacing;
 
@@ -987,10 +987,10 @@
                          $Boundaries["B"] = $BoxArray[1]["Y"]+2+$IconAreaHeight/2;
                      }
 
-                     $Lines = preg_split("/\n/", $Series["Description"]);
-                     $vY = $vY + max($this->pChartObject->FontSize*count($Lines), $IconAreaHeight) + 5;
+                     $Lines = \preg_split("/\n/", $Series["Description"]);
+                     $vY = $vY + \max($this->pChartObject->FontSize*\count($Lines), $IconAreaHeight) + 5;
                  } elseif ($Mode == LEGEND_HORIZONTAL) {
-                     $Lines = preg_split("/\n/", $Series["Description"]);
+                     $Lines = \preg_split("/\n/", $Series["Description"]);
                      $Width = "";
                      foreach ($Lines as $Key => $Value) {
                          $BoxArray = $this->pChartObject->getTextBox($vX+$IconAreaWidth+6, $Y+$IconAreaHeight/2+(($this->pChartObject->FontSize+3)*$Key), $FontName, $FontSize, 0, $Value);
@@ -1008,7 +1008,7 @@
                          $Width[] = $BoxArray[1]["X"];
                      }
 
-                     $vX=max($Width)+$XStep;
+                     $vX=\max($Width)+$XStep;
                  }
              }
          }
@@ -1062,7 +1062,7 @@
                      $Sxx = $Sxx + $X*$X;
                  }
 
-                 $n = count($PosArrayX);
+                 $n = \count($PosArrayX);
 
                  if ((($n*$Sxx) == ($Sx*$Sx))) {
                      $X1 = $this->getPosArray($Data["Axis"][$SerieXAxis]["ScaleMin"], $SerieXAxis);
@@ -1112,7 +1112,7 @@
          $Data    = $this->pDataObject->getData();
          $Palette = $this->pDataObject->getPalette();
 
-         if (!is_array($Points)) {
+         if (!\is_array($Points)) {
              $Point = $Points;
              $Points = "";
              $Points[0] = $Point;
@@ -1131,13 +1131,13 @@
          $SerieYAxis = $Data["Series"][$SerieY]["Axis"];
 
          $PosArrayX = $this->getPosArray($SerieValuesX, $SerieXAxis);
-         if (!is_array($PosArrayX)) {
+         if (!\is_array($PosArrayX)) {
              $Value = $PosArrayX;
              $PosArrayX = "";
              $PosArrayX[0] = $Value;
          }
          $PosArrayY = $this->getPosArray($SerieValuesY, $SerieYAxis);
-         if (!is_array($PosArrayY)) {
+         if (!\is_array($PosArrayY)) {
              $Value = $PosArrayY;
              $PosArrayY = "";
              $PosArrayY[0] = $Value;
@@ -1145,8 +1145,8 @@
 
          foreach ($Points as $Key => $Point) {
              if (isset($PosArrayX[$Point]) && isset($PosArrayY[$Point])) {
-                 $X = floor($PosArrayX[$Point]);
-                 $Y = floor($PosArrayY[$Point]);
+                 $X = \floor($PosArrayX[$Point]);
+                 $Y = \floor($PosArrayY[$Point]);
 
                  if ($DrawPoint == LABEL_POINT_CIRCLE) {
                      $this->pChartObject->drawFilledCircle($X, $Y, 3, array("R"=>255,"G"=>255,"B"=>255,"BorderR"=>0,"BorderG"=>0,"BorderB"=>0));
@@ -1166,7 +1166,7 @@
                  if ($Decimals == null) {
                      $XValue = $SerieValuesX[$Point];
                  } else {
-                     $XValue = round($SerieValuesX[$Point], $Decimals);
+                     $XValue = \round($SerieValuesX[$Point], $Decimals);
                  }
                  $XValue      = $this->pChartObject->scaleFormat($XValue, $XAxisMode, $XAxisFormat, $XAxisUnit);
 
@@ -1176,7 +1176,7 @@
                  if ($Decimals == null) {
                      $YValue = $SerieValuesY[$Point];
                  } else {
-                     $YValue = round($SerieValuesY[$Point], $Decimals);
+                     $YValue = \round($SerieValuesY[$Point], $Decimals);
                  }
                  $YValue      = $this->pChartObject->scaleFormat($YValue, $YAxisMode, $YAxisFormat, $YAxisUnit);
 
@@ -1368,7 +1368,7 @@
                  if ($NameAngle == ZONE_NAME_ANGLE_AUTO) {
                      $TxtPos   = $this->pChartObject->getTextBox($XPos, $YPos, $this->pChartObject->FontName, $this->pChartObject->FontSize, 0, $AreaName);
                      $TxtWidth = $TxtPos[1]["X"] - $TxtPos[0]["X"];
-                     if (abs($X2 - $X1) > $TxtWidth) {
+                     if (\abs($X2 - $X1) > $TxtWidth) {
                          $NameAngle = 0;
                      } else {
                          $NameAngle = 90;

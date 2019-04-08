@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -97,7 +97,7 @@ class TabGroupHelper
                 continue;
             }
 
-            $labelID = (!empty($params['tablabelid_' . $index]))?$params['tablabelid_' . $index]: 'LBL_GROUPTAB' . $count . '_'. time();
+            $labelID = (!empty($params['tablabelid_' . $index]))?$params['tablabelid_' . $index]: 'LBL_GROUPTAB' . $count . '_'. \time();
             $labelValue = SugarCleaner::stripTags(from_html($params['tablabel_' . $index]), false);
             $app_strings = return_application_language($grouptab_lang);
             if (empty($app_strings[$labelID]) || $app_strings[$labelID] != $labelValue) {

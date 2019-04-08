@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -87,7 +87,7 @@ $fromListView = false;
 if (!empty($_REQUEST['record'])) {
     $_SESSION['MAILMERGE_RECORD'] = $_REQUEST['record'];
 } elseif (isset($_REQUEST['uid'])) {
-    $_SESSION['MAILMERGE_RECORD'] = explode(',', $_REQUEST['uid']);
+    $_SESSION['MAILMERGE_RECORD'] = \explode(',', $_REQUEST['uid']);
 } elseif (isset($_REQUEST['entire']) && $_REQUEST['entire'] == 'true') {
     // do entire list
     $focus = 0;
@@ -101,9 +101,9 @@ if (!empty($_REQUEST['record'])) {
     } else {
         $where = '';
     }
-    $beginWhere = substr(trim($where), 0, 5);
+    $beginWhere = \substr(\trim($where), 0, 5);
     if ($beginWhere == "where") {
-        $where = substr(trim($where), 5, strlen($where));
+        $where = \substr(\trim($where), 5, \strlen($where));
     }
     $orderBy = '';
     $query = $focus->create_export_query($orderBy, $where);
@@ -112,7 +112,7 @@ if (!empty($_REQUEST['record'])) {
 
     $new_arr = array();
     while ($val = $db->fetchByAssoc($result, false)) {
-        array_push($new_arr, $val['id']);
+        \array_push($new_arr, $val['id']);
     }
     $_SESSION['MAILMERGE_RECORD'] = $new_arr;
 } elseif (isset($_SESSION['MAILMERGE_RECORDS'])) {
@@ -150,12 +150,12 @@ if (isset($_SESSION['MAILMERGE_RECORD'])) {
                     $pList = $prospect->retrieveTargetList("campaigns.id = '$record_id' AND related_type = #$mname#", array('id', 'first_name', 'last_name'));
 
                     foreach ($pList['list'] as $bean) {
-                        $selected_objects .= $bean->id.'='.str_replace("&", "##", $bean->name).'&';
+                        $selected_objects .= $bean->id.'='.\str_replace("&", "##", $bean->name).'&';
                     }
                 }
             } else {
                 $seed->retrieve($record_id);
-                $selected_objects .= $record_id.'='.str_replace("&", "##", $seed->name).'&';
+                $selected_objects .= $record_id.'='.\str_replace("&", "##", $seed->name).'&';
             }
         }
 
@@ -189,7 +189,7 @@ $xtpl->assign("MAILMERGE_TEMPLATES", get_select_options_with_id(getDocumentRevis
 
 if (isset($_SESSION['MAILMERGE_MODULE'])) {
     $module_select_text = $mod_strings['LBL_MAILMERGE_SELECTED_MODULE'];
-    $xtpl->assign("MAILMERGE_NUM_SELECTED_OBJECTS", count($_SESSION['MAILMERGE_RECORD'])." ".$_SESSION['MAILMERGE_MODULE']." Selected");
+    $xtpl->assign("MAILMERGE_NUM_SELECTED_OBJECTS", \count($_SESSION['MAILMERGE_RECORD'])." ".$_SESSION['MAILMERGE_MODULE']." Selected");
 } else {
     $module_select_text = $mod_strings['LBL_MAILMERGE_MODULE'];
 }

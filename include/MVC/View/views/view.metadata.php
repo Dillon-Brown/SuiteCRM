@@ -53,7 +53,7 @@ class ViewMetadata extends SugarView
     {
         echo "<div $attr style='overflow:auto;float:left;width:200px;height:200px' >";
         foreach ($values as $value) {
-            $checked = in_array($value, $selected)? " checked=checked ": " ";
+            $checked = \in_array($value, $selected)? " checked=checked ": " ";
             echo "<div style='padding:2px'><input type='checkbox' name='$name' value='$value' $checked> $value</div>";
         }
         echo "</div>";
@@ -86,7 +86,7 @@ class ViewMetadata extends SugarView
     public function printValue($value, $depth=0)
     {
         echo "<pre>";
-        print_r($value);
+        \print_r($value);
         echo "</pre>";
     }
     
@@ -104,8 +104,8 @@ class ViewMetadata extends SugarView
         }
         $this->displayCheckBoxes('modules[]', VardefBrowser::getModules(), $modules, ' id="_modules" ');
         $attributes = !empty($_REQUEST['attributes'])?$_REQUEST['attributes']:array();
-        $allAttributes = array_keys(VardefBrowser::findFieldAttributes());
-        sort($allAttributes);
+        $allAttributes = \array_keys(VardefBrowser::findFieldAttributes());
+        \sort($allAttributes);
         $this->displayCheckBoxes('attributes[]', $allAttributes, $attributes, ' id="_attributes" ');
         $this->displayTextBoxes($allAttributes, ' id="_fields" ');
         echo "</form>";
@@ -264,7 +264,7 @@ class VardefBrowser
             }
             $modules[] = $module;
         }
-        sort($modules);
+        \sort($modules);
         return $modules;
     }
     
@@ -347,14 +347,14 @@ class VardefBrowser
                     continue;
                 }
                 foreach ($GLOBALS['dictionary'][$object]['fields'] as $name=>$def) {
-                    $fieldAttributes = (!empty($attributes))? $attributes:array_keys($def);
+                    $fieldAttributes = (!empty($attributes))? $attributes:\array_keys($def);
                     foreach ($fieldAttributes as $k) {
                         if (isset($def[$k])) {
-                            $v  = var_export($def[$k], true);
-                            $key = is_array($def[$k])?null:$def[$k];
+                            $v  = \var_export($def[$k], true);
+                            $key = \is_array($def[$k])?null:$def[$k];
                             if ($k == 'type') {
                                 if (isset($def['dbType'])) {
-                                    $v = var_export($def['dbType'], true);
+                                    $v = \var_export($def['dbType'], true);
                                 }
                             }
                             if ($byModule) {
@@ -363,7 +363,7 @@ class VardefBrowser
                                 if ($byType) {
                                     $fields[$def['type']][$k][$key] = $v;
                                 } else {
-                                    if (!is_array($def[$k])) {
+                                    if (!\is_array($def[$k])) {
                                         if (isset($fields[$k][$key])) {
                                             $fields[$k][$key]['refs']++;
                                         } else {

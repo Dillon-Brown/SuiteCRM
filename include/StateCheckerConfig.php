@@ -40,7 +40,7 @@
 
 namespace SuiteCRM;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -270,7 +270,7 @@ class StateCheckerConfig
             self::retrieve();
         }
         if (inDeveloperMode()) {
-            if (in_array($key, ['testStateCheckMode'])) {
+            if (\in_array($key, ['testStateCheckMode'])) {
                 return self::RUN_PER_TESTS;
             }
         }

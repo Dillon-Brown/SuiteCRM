@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -61,7 +61,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
         {
 
             // validate path is a .tpl file
-            $path_parts = pathinfo($templatePath);
+            $path_parts = \pathinfo($templatePath);
             if ($path_parts['extension'] != 'tpl') {
                 $GLOBALS['log']->fatal('ListViewSubPanel::initNewSmartyTemplate path must have an tpl extension');
 
@@ -162,7 +162,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             $this->smartyTemplate->display($this->smartyTemplatePath);
 
             if (isset($_SESSION['validation'])) {
-                print base64_decode('PGEgaHJlZj0naHR0cDovL3d3dy5zdWdhcmNybS5jb20nPlBPV0VSRUQmbmJzcDtCWSZuYnNwO1NVR0FSQ1JNPC9hPg==');
+                print \base64_decode('PGEgaHJlZj0naHR0cDovL3d3dy5zdWdhcmNybS5jb20nPlBPV0VSRUQmbmJzcDtCWSZuYnNwO1NVR0FSQ1JNPC9hPg==');
             }
             if (isset($list_data['query'])) {
                 return ($list_data['query']);
@@ -192,14 +192,14 @@ if (!defined('sugarEntry') || !sugarEntry) {
                 if ($usage != 'query_only' || !empty($widget_args['force_query_only_display'])) {
                     $imgArrow = '';
 
-                    if ($orderBy == $column_name || (isset($widget_args['sort_by']) && str_replace('.', '_', $widget_args['sort_by']) == $orderBy)) {
+                    if ($orderBy == $column_name || (isset($widget_args['sort_by']) && \str_replace('.', '_', $widget_args['sort_by']) == $orderBy)) {
                         $imgArrow = "_down";
                         if ($this->sort_order == 'asc') {
                             $imgArrow = "_up";
                         };
                     }
 
-                    if (!preg_match("/_button/i", $column_name)) {
+                    if (!\preg_match("/_button/i", $column_name)) {
                         $widget_args['name'] = $column_name;
                         $widget_args['sort'] = $imgArrow;
                         $widget_args['start_link_wrapper'] = $this->start_link_wrapper;
@@ -256,7 +256,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             $subpanel_item_count = 0;
             $oddRow = true;
             $count = 0;
-            reset($data);
+            \reset($data);
 
             //GETTING OFFSET
             $offset = ($this->getOffset($html_varName)) === false ? 0 : $this->getOffset($html_varName);
@@ -419,9 +419,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
                                 $alias_field_def['name'] = $list_field['alias'];
                                 // Add alias field def into bean to can render field in subpanel
                                 $aItem->field_defs[$list_field['alias']] = $alias_field_def;
-                                if (!isset($fields[strtoupper($list_field['alias'])]) || empty($fields[strtoupper($list_field['alias'])])) {
+                                if (!isset($fields[\strtoupper($list_field['alias'])]) || empty($fields[\strtoupper($list_field['alias'])])) {
                                     global $timedate;
-                                    $fields[strtoupper($list_field['alias'])] = (!empty($aItem->$field_name)) ? $aItem->$field_name : $timedate->to_display_date_time($aItem->{$list_field['alias']});
+                                    $fields[\strtoupper($list_field['alias'])] = (!empty($aItem->$field_name)) ? $aItem->$field_name : $timedate->to_display_date_time($aItem->{$list_field['alias']});
                                 }
                             } else {
                                 $list_field['name'] = $field_name;
@@ -432,12 +432,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
                             $list_field['end_link_wrapper'] = $this->end_link_wrapper;
                             $list_field['subpanel_id'] = $this->subpanel_id;
                             $list_field += $field_acl;
-                            if (isset($aItem->field_defs[strtolower($list_field['name'])])) {
+                            if (isset($aItem->field_defs[\strtolower($list_field['name'])])) {
                                 require_once('include/SugarFields/SugarFieldHandler.php');
                                 // We need to see if a sugar field exists for this field type first,
                                 // if it doesn't, toss it at the old sugarWidgets. This is for
                                 // backwards compatibility and will be removed in a future release
-                                $vardef = $aItem->field_defs[strtolower($list_field['name'])];
+                                $vardef = $aItem->field_defs[\strtolower($list_field['name'])];
                                 if (isset($vardef['type'])) {
                                     $fieldType = isset($vardef['custom_type']) ? $vardef['custom_type'] : $vardef['type'];
                                     $tmpField = SugarFieldHandler::getSugarField($fieldType, true);
@@ -458,7 +458,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                                     // So we'll populate the field data with the pre-rendered display for the field
                                     $list_field['fields'][$field_name] = $widget_contents[$aVal][$field_name];
                                     if ('full_name' == $field_name) {//bug #32465
-                                        $list_field['fields'][strtoupper($field_name)] = $widget_contents[$aVal][$field_name];
+                                        $list_field['fields'][\strtoupper($field_name)] = $widget_contents[$aVal][$field_name];
                                     }
 
                                     //vardef source is non db, assign the field name to varname for processing of column.
@@ -489,13 +489,13 @@ if (!defined('sugarEntry') || !sugarEntry) {
                                     if (empty($widget_contents[$aVal][$field_name])) {
                                         $widget_contents[$aVal][$field_name] = '&nbsp;';
                                     }
-                                } elseif (preg_match("/button/i", $list_field['name'])) {
+                                } elseif (\preg_match("/button/i", $list_field['name'])) {
                                     if ((($list_field['name'] === 'edit_button' && $field_acl['EditView']) || ($list_field['name'] === 'close_button' && $field_acl['EditView']) || ($list_field['name'] === 'remove_button' && $field_acl['Delete'])) && '' != ($_content = $layout_manager->widgetDisplay($list_field))) {
                                         $button_contents[$aVal][] = $_content;
                                         unset($_content);
                                     } else {
                                         $doNotProcessTheseActions = array("edit_button", "close_button","remove_button");
-                                        if (!in_array($list_field['name'], $doNotProcessTheseActions) && '' != ($_content = $layout_manager->widgetDisplay($list_field))) {
+                                        if (!\in_array($list_field['name'], $doNotProcessTheseActions) && '' != ($_content = $layout_manager->widgetDisplay($list_field))) {
                                             $button_contents[$aVal][] = $_content;
                                             unset($_content);
                                         } else {
@@ -538,7 +538,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             }
             $start_record = $current_offset + 1;
 
-            if (!is_numeric($col_count)) {
+            if (!\is_numeric($col_count)) {
                 $col_count = 20;
             }
 
@@ -555,7 +555,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             if ($row_count == 0) {
                 $number_pages = 0;
             } else {
-                $number_pages = floor(($row_count - 1) / $this->records_per_page);
+                $number_pages = \floor(($row_count - 1) / $this->records_per_page);
             }
 
             $last_offset = $number_pages * $this->records_per_page;
@@ -568,11 +568,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
                     $dynamic_url .= '&' . $this->getSessionVariableName($html_varName, 'ORDER_BY') . '=' . $this->getSessionVariable($html_varName, 'ORDER_BY') . '&sort_order=' . $this->sort_order . '&to_pdf=true&action=SubPanelViewer&subpanel=' . $this->subpanel_module;
                 }
 
-                $current_URL = htmlentities($this->base_URL . $current_offset . $dynamic_url);
-                $start_URL = htmlentities($this->base_URL . "0" . $dynamic_url);
-                $previous_URL = htmlentities($this->base_URL . $previous_offset . $dynamic_url);
-                $next_URL = htmlentities($this->base_URL . $next_offset . $dynamic_url);
-                $end_URL = htmlentities($this->base_URL . 'end' . $dynamic_url);
+                $current_URL = \htmlentities($this->base_URL . $current_offset . $dynamic_url);
+                $start_URL = \htmlentities($this->base_URL . "0" . $dynamic_url);
+                $previous_URL = \htmlentities($this->base_URL . $previous_offset . $dynamic_url);
+                $next_URL = \htmlentities($this->base_URL . $next_offset . $dynamic_url);
+                $end_URL = \htmlentities($this->base_URL . 'end' . $dynamic_url);
 
                 if (!empty($this->start_link_wrapper)) {
                     $current_URL = $this->start_link_wrapper . $current_URL . $this->end_link_wrapper;
@@ -582,15 +582,15 @@ if (!defined('sugarEntry') || !sugarEntry) {
                     $end_URL = $this->start_link_wrapper . $end_URL . $this->end_link_wrapper;
                 }
 
-                $moduleString = htmlspecialchars("{$currentModule}_{$html_varName}_offset");
-                $moduleStringOrder = htmlspecialchars("{$currentModule}_{$html_varName}_ORDER_BY");
+                $moduleString = \htmlspecialchars("{$currentModule}_{$html_varName}_offset");
+                $moduleStringOrder = \htmlspecialchars("{$currentModule}_{$html_varName}_ORDER_BY");
                 if ($this->shouldProcess && !$this->multi_select_popup) {
                     // check the checkboxes onload
                     echo "<script>YAHOO.util.Event.addListener(window, \"load\", sListView.check_boxes);</script>\n";
 
                     $massUpdateRun = isset($_REQUEST['massupdate']) && $_REQUEST['massupdate'] == 'true';
                     $uids = empty($_REQUEST['uid']) || $massUpdateRun ? '' : $_REQUEST['uid'];
-                    $select_entire_list = ($massUpdateRun) ? 0 : (isset($_POST['select_entire_list']) ? $_POST['select_entire_list'] : (isset($_REQUEST['select_entire_list']) ? htmlspecialchars($_REQUEST['select_entire_list']) : 0));
+                    $select_entire_list = ($massUpdateRun) ? 0 : (isset($_POST['select_entire_list']) ? $_POST['select_entire_list'] : (isset($_REQUEST['select_entire_list']) ? \htmlspecialchars($_REQUEST['select_entire_list']) : 0));
 
                     echo "<textarea style='display: none' name='uid'>{$uids}</textarea>\n" . "<input type='hidden' name='select_entire_list' value='{$select_entire_list}'>\n" . "<input type='hidden' name='{$moduleString}' value='0'>\n" . "<input type='hidden' name='{$moduleStringOrder}' value='0'>\n";
                 }
@@ -610,7 +610,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                         $previous_link = "<button type='button' class='button' name='listViewPrevButton' title='{$this->local_app_strings['LNK_LIST_PREVIOUS']}' onClick='location.href=\"$previous_URL\"; sListView.save_checks($previous_offset, \"{$moduleString}\");'><span class='suitepicon suitepicon-action-left'></span></button>";
                     } else {
                         $onClick = '';
-                        if (0 != preg_match('/javascript.*/', $start_URL)) {
+                        if (0 != \preg_match('/javascript.*/', $start_URL)) {
                             $onClick = "\"$start_URL;\"";
                         } else {
                             $onClick = "'location.href=\"$start_URL\";'";
@@ -618,7 +618,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                         $start_link = "<button type='button' class='button' name='listViewStartButton' title='{$this->local_app_strings['LNK_LIST_START']}' onClick=" . $onClick . "><span class='suitepicon suitepicon-action-first'></span></button>";
 
                         $onClick = '';
-                        if (0 != preg_match('/javascript.*/', $previous_URL)) {
+                        if (0 != \preg_match('/javascript.*/', $previous_URL)) {
                             $onClick = "\"$previous_URL;\"";
                         } else {
                             $onClick = "'location.href=\"$previous_URL\";'";
@@ -642,7 +642,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                         $next_link = "<button type='button' name='listViewNextButton' class='button' title='{$this->local_app_strings['LNK_LIST_NEXT']}' onClick='location.href=\"$next_URL\"; sListView.save_checks($next_offset, \"{$moduleString}\");'><span class='suitepicon suitepicon-action-right'></span></button>";
                     } else {
                         $onClick = '';
-                        if (0 != preg_match('/javascript.*/', $next_URL)) {
+                        if (0 != \preg_match('/javascript.*/', $next_URL)) {
                             $onClick = "\"$next_URL;\"";
                         } else {
                             $onClick = "'location.href=\"$next_URL\";'";
@@ -650,7 +650,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                         $next_link = "<button type='button' name='listViewNextButton' class='button' title='{$this->local_app_strings['LNK_LIST_NEXT']}' onClick=" . $onClick . "><span class='suitepicon suitepicon-action-right'></span></button>";
 
                         $onClick = '';
-                        if (0 != preg_match('/javascript.*/', $end_URL)) {
+                        if (0 != \preg_match('/javascript.*/', $end_URL)) {
                             $onClick = "\"$end_URL;\"";
                         } else {
                             $onClick = "'location.href=\"$end_URL\";'";
@@ -745,7 +745,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                     $merge_link = "&nbsp;";
                 }
 
-                $selected_objects_span = "&nbsp;|&nbsp;{$this->local_app_strings['LBL_LISTVIEW_SELECTED_OBJECTS']}<input  style='border: 0px; background: transparent; font-size: inherit; color: inherit' type='text' readonly name='selectCount[]' value='" . ((isset($_POST['mass'])) ? count($_POST['mass']) : 0) . "' />";
+                $selected_objects_span = "&nbsp;|&nbsp;{$this->local_app_strings['LBL_LISTVIEW_SELECTED_OBJECTS']}<input  style='border: 0px; background: transparent; font-size: inherit; color: inherit' type='text' readonly name='selectCount[]' value='" . ((isset($_POST['mass'])) ? \count($_POST['mass']) : 0) . "' />";
 
                 if ($_REQUEST['module'] == 'Home' || $this->local_current_module == 'Import' || $this->show_export_button == false || (!empty($sugar_config['disable_export'])) || (!empty($sugar_config['admin_export_only']) && !(is_admin($current_user) || (ACLController::moduleSupportsACL($_REQUEST['module']) && ACLAction::getUserAccessLevel($current_user->id, $_REQUEST['module'], 'access') == ACL_ALLOW_ENABLED && (ACLAction::getUserAccessLevel($current_user->id, $_REQUEST['module'], 'admin') == ACL_ALLOW_ADMIN || ACLAction::getUserAccessLevel($current_user->id, $_REQUEST['module'], 'admin') == ACL_ALLOW_ADMIN_DEV))))) {
                     if ($_REQUEST['module'] != 'InboundEmail' && $_REQUEST['module'] != 'EmailMan' && $_REQUEST['module'] != 'iFrames') {
@@ -809,8 +809,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
                 $this->base_URL = $_SERVER['PHP_SELF'];
 
                 if (isset($_SERVER['QUERY_STRING'])) {
-                    $this->base_URL = preg_replace("/\&" . $this->getSessionVariableName($html_varName, "ORDER_BY") . "=[0-9a-zA-Z\_\.]*/", "", $this->base_URL . '?' . $_SERVER['QUERY_STRING']);
-                    $this->base_URL = preg_replace("/\&" . $this->getSessionVariableName($html_varName, "offset") . "=[0-9]*/", "", $this->base_URL);
+                    $this->base_URL = \preg_replace("/\&" . $this->getSessionVariableName($html_varName, "ORDER_BY") . "=[0-9a-zA-Z\_\.]*/", "", $this->base_URL . '?' . $_SERVER['QUERY_STRING']);
+                    $this->base_URL = \preg_replace("/\&" . $this->getSessionVariableName($html_varName, "offset") . "=[0-9]*/", "", $this->base_URL);
                 }
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $this->base_URL .= '?';
@@ -832,17 +832,17 @@ if (!defined('sugarEntry') || !sugarEntry) {
             }
 
             //bug43465 start
-            if (isset($this->appendToBaseUrl) && is_array($this->appendToBaseUrl)) {
+            if (isset($this->appendToBaseUrl) && \is_array($this->appendToBaseUrl)) {
                 foreach ($this->appendToBaseUrl as $key => $value) {
                     $fullRequestString = $key . '=' . $value;
 
                     if ($this->base_URL == "/index.php") {
                         $this->base_URL .= "?";
                     } else {
-                        if ($fullRequestString == substr($this->baseURL, '-' . strlen($fullRequestString))) {
-                            $this->base_URL = preg_replace("/&" . $key . "\=.*/", "", $this->base_URL);
+                        if ($fullRequestString == \substr($this->baseURL, '-' . \strlen($fullRequestString))) {
+                            $this->base_URL = \preg_replace("/&" . $key . "\=.*/", "", $this->base_URL);
                         } else {
-                            $this->base_URL = preg_replace("/&" . $key . "\=.*?&/", "&", $this->base_URL);
+                            $this->base_URL = \preg_replace("/&" . $key . "\=.*?&/", "&", $this->base_URL);
                         }
                         $this->base_URL .= "&";
                     }

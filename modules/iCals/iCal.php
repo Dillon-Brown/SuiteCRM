@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -86,7 +86,7 @@ class iCal extends vCal
     protected function getUtcTime($ts)
     {
         global $timedate, $sugar_version;
-        $timestamp = ($ts+(date('Z')-$timedate->adjustmentForUserTimeZone()*60));
+        $timestamp = ($ts+(\date('Z')-$timedate->adjustmentForUserTimeZone()*60));
         return $this->getUtcDateTime(new SugarDateTime("@" . $ts));
     }
 
@@ -98,10 +98,10 @@ class iCal extends vCal
     */
     protected function convertMinsToHoursAndMins($minutes)
     {
-        $hrs = floor(abs($minutes) / 60);
-        $remainderMinutes = abs($minutes) - ($hrs * 60);
+        $hrs = \floor(\abs($minutes) / 60);
+        $remainderMinutes = \abs($minutes) - ($hrs * 60);
         $sign = (($minutes < 0) ? "-" : "+");
-        return $sign . str_pad($hrs, 2, "0", STR_PAD_LEFT) . str_pad($remainderMinutes, 2, "0", STR_PAD_LEFT);
+        return $sign . \str_pad($hrs, 2, "0", STR_PAD_LEFT) . \str_pad($remainderMinutes, 2, "0", STR_PAD_LEFT);
     }
 
     /**
@@ -126,13 +126,13 @@ class iCal extends vCal
         $dueHour = 0;
         $dueMin = 0;
         if ($validDueDate) {
-            $dateDueArr = explode("-", $task->date_due);
+            $dateDueArr = \explode("-", $task->date_due);
             $dueYear = (int)$dateDueArr[0];
             $dueMonth = (int)$dateDueArr[1];
             $dueDay = (int)$dateDueArr[2];
 
             if ($validDueTime) {
-                $timeDueArr = explode(":", $task->time_due);
+                $timeDueArr = \explode(":", $task->time_due);
                 $dueHour = (int)$timeDueArr[0];
                 $dueMin = (int)$timeDueArr[1];
             }
@@ -148,15 +148,15 @@ class iCal extends vCal
         $due_date_time->setTime($dueHour, $dueMin);
         $ical_array[] = array(
             "DTSTART;TZID=" . $user_bean->getPreference('timezone'),
-            str_replace("Z", "", $this->getUtcDateTime($due_date_time))
+            \str_replace("Z", "", $this->getUtcDateTime($due_date_time))
         );
         $ical_array[] = array("DTSTAMP", $dtstamp);
         $ical_array[] = array("SUMMARY", $task->name);
         $ical_array[] = array("UID", $task->id);
         if ($validDueDate) {
-            $iCalDueDate = str_replace("-", "", $task->date_due);
-            if (strlen($iCalDueDate) > 8) {
-                $iCalDueDate = substr($iCalDueDate, 0, 8);
+            $iCalDueDate = \str_replace("-", "", $task->date_due);
+            if (\strlen($iCalDueDate) > 8) {
+                $iCalDueDate = \substr($iCalDueDate, 0, 8);
             }
             $ical_array[] = array("DUE;VALUE=DATE", $iCalDueDate);
         }
@@ -252,7 +252,7 @@ class iCal extends vCal
                 $ical_array[] = array("SUMMARY", $event->name);
                 $ical_array[] = array(
                     "DTSTART;TZID=" . $user_bean->getPreference('timezone'),
-                    str_replace(
+                    \str_replace(
                         "Z",
                         "",
                         $timedate->tzUser($act->start_time, $current_user)->format(self::UTC_FORMAT)
@@ -260,7 +260,7 @@ class iCal extends vCal
                 );
                 $ical_array[] = array(
                     "DTEND;TZID=" . $user_bean->getPreference('timezone'),
-                    str_replace(
+                    \str_replace(
                         "Z",
                         "",
                         $timedate->tzUser($act->end_time, $current_user)->format(self::UTC_FORMAT)
@@ -279,8 +279,8 @@ class iCal extends vCal
                     $eventUsers = $event->get_meeting_users();
                     $query = "SELECT contact_id as id from meetings_contacts where meeting_id='$event->id' AND deleted=0";
                     $eventContacts = $event->build_related_list($query, new Contact());
-                    $eventAttendees = array_merge($eventUsers, $eventContacts);
-                    if (is_array($eventAttendees)) {
+                    $eventAttendees = \array_merge($eventUsers, $eventContacts);
+                    if (\is_array($eventAttendees)) {
                         foreach ($eventAttendees as $attendee) {
                             if ($attendee->id != $user_bean->id) {
                                 // Define the participant status
@@ -309,8 +309,8 @@ class iCal extends vCal
                 if ($event->object_name == "Call") {
                     $eventUsers = $event->get_call_users();
                     $eventContacts = $event->get_contacts();
-                    $eventAttendees = array_merge($eventUsers, $eventContacts);
-                    if (is_array($eventAttendees)) {
+                    $eventAttendees = \array_merge($eventUsers, $eventContacts);
+                    if (\is_array($eventAttendees)) {
                         foreach ($eventAttendees as $attendee) {
                             if ($attendee->id != $user_bean->id) {
                                 // Define the participant status
@@ -351,7 +351,7 @@ class iCal extends vCal
 
         require_once('include/TimeDate.php');
         $timedate = new TimeDate();
-        $today = gmdate("Y-m-d");
+        $today = \gmdate("Y-m-d");
         $today = $timedate->handle_offset($today, $timedate->dbDayFormat, false);
 
         require_once('modules/ProjectTask/ProjectTask.php');
@@ -360,7 +360,7 @@ class iCal extends vCal
             "AND (project_task.date_start IS NULL OR " . CalendarActivity::get_occurs_within_where_clause('project_task', '', $start_date_time, $end_date_time, 'date_start', 'month') . ")";
         $seedProjectTask = new ProjectTask();
         $projectTaskList = $seedProjectTask->get_full_list("", $where);
-        if (is_array($projectTaskList)) {
+        if (\is_array($projectTaskList)) {
             foreach ($projectTaskList as $projectTask) {
                 $str .= $this->createSugarIcalTodo($user_bean, $projectTask, "ProjectTask", $dtstamp);
             }
@@ -373,7 +373,7 @@ class iCal extends vCal
                 "AND (tasks.date_start IS NULL OR " . CalendarActivity::get_occurs_within_where_clause('tasks', '', $start_date_time, $end_date_time, 'date_start', 'month') . ")";
             $seedTask = new Task();
             $taskList = $seedTask->get_full_list("", $where);
-            if (is_array($taskList)) {
+            if (\is_array($taskList)) {
                 foreach ($taskList as $task) {
                     $str .= $this->createSugarIcalTodo($user_bean, $task, "Tasks", $dtstamp);
                 }
@@ -414,7 +414,7 @@ class iCal extends vCal
         $idx = 0;
         $result = array();
 
-        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+        if (\version_compare(PHP_VERSION, '5.3.0') >= 0) {
             $year_date = SugarDateTime::createFromFormat("Y", $year, new DateTimeZone("UTC"));
             $year_end = clone $year_date;
             $year_end->setDate((int) $year, 12, 31);
@@ -434,7 +434,7 @@ class iCal extends vCal
 
             $idx = 0;
             foreach ($transitions as $transition) {
-                if ($transition['isdst'] && intval(substr($transition["time"], 0, 4)) == intval(date("Y"))) {
+                if ($transition['isdst'] && \intval(\substr($transition["time"], 0, 4)) == \intval(\date("Y"))) {
                     break;
                 }
                 $idx++;
@@ -468,7 +468,7 @@ class iCal extends vCal
 
         $gmtTZ = new DateTimeZone("UTC");
         $tz = $this->getUserTimezone($current_user);
-        $dstRange = $this->getDSTRange($current_user, date('Y'));
+        $dstRange = $this->getDSTRange($current_user, \date('Y'));
 
         $dstOffset = 0;
         $gmtOffset = 0;
@@ -478,25 +478,25 @@ class iCal extends vCal
         $ical_array[] = array("TZID", $timezoneName);
         $ical_array[] = array("X-LIC-LOCATION", $timezoneName);
 
-        if (array_key_exists('start', $dstRange)) {
+        if (\array_key_exists('start', $dstRange)) {
             $dstOffset = ($dstRange['start']['offset'] / 60);
             $startDate = new DateTime("@" . $dstRange["start"]["ts"], $gmtTZ);
-            $startstamp = strtotime($timedate->asDb($startDate));
+            $startstamp = \strtotime($timedate->asDb($startDate));
             $ical_array[] = array("BEGIN", "DAYLIGHT");
             $ical_array[] = array("TZOFFSETFROM", $this->convertMinsToHoursAndMins($gmtOffset));
             $ical_array[] = array("TZOFFSETTO", $this->convertMinsToHoursAndMins($dstOffset));
-            $ical_array[] = array("DTSTART", str_replace("Z", "", $this->getUtcTime($startstamp)));
+            $ical_array[] = array("DTSTART", \str_replace("Z", "", $this->getUtcTime($startstamp)));
             $ical_array[] = array("END", "DAYLIGHT");
         }
 
-        if (array_key_exists('end', $dstRange)) {
+        if (\array_key_exists('end', $dstRange)) {
             $gmtOffset = ($dstRange['end']['offset'] / 60);
             $endDate = new DateTime("@" . $dstRange["end"]["ts"], $gmtTZ);
-            $endstamp = strtotime($timedate->asDb($endDate));
+            $endstamp = \strtotime($timedate->asDb($endDate));
             $ical_array[] = array("BEGIN", "STANDARD");
             $ical_array[] = array("TZOFFSETFROM", $this->convertMinsToHoursAndMins($dstOffset));
             $ical_array[] = array("TZOFFSETTO", $this->convertMinsToHoursAndMins($gmtOffset));
-            $ical_array[] = array("DTSTART", str_replace("Z", "", $this->getUtcTime($endstamp)));
+            $ical_array[] = array("DTSTART", \str_replace("Z", "", $this->getUtcTime($endstamp)));
             $ical_array[] = array("END", "STANDARD");
         }
 
@@ -525,7 +525,7 @@ class iCal extends vCal
         $ical_array[] = array("METHOD", "PUBLISH");
         $ical_array[] = array("X-WR-CALNAME", "$cal_name (SugarCRM)");
         $ical_array[] = array("PRODID", "-//SugarCRM//SugarCRM Calendar//EN");
-        $ical_array = array_merge($ical_array, vCal::create_ical_array_from_string($this->getTimezoneString()));
+        $ical_array = \array_merge($ical_array, vCal::create_ical_array_from_string($this->getTimezoneString()));
         $ical_array[] = array("CALSCALE", "GREGORIAN");
 
         $now_date_time = $timedate->getNow(true);
@@ -554,6 +554,6 @@ class iCal extends vCal
 
         $str .= vCal::create_ical_string_from_array($ical_array, true);
 
-        return htmlspecialchars_decode(preg_replace("/&#([0-9]+)\\\\;/", '&#$1;', utf8_decode($str)));
+        return \htmlspecialchars_decode(\preg_replace("/&#([0-9]+)\\\\;/", '&#$1;', \utf8_decode($str)));
     }
 }

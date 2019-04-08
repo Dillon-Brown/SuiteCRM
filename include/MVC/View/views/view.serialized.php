@@ -56,7 +56,7 @@ class ViewSerialized extends SugarView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -64,8 +64,8 @@ class ViewSerialized extends SugarView
 
     public function display()
     {
-        ob_clean();
-        echo serialize($this->bean->toArray());
+        \ob_clean();
+        echo \serialize($this->bean->toArray());
         sugar_cleanup(true);
     }
 }

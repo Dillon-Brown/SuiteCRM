@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -170,7 +170,7 @@ function add_hidden_elements($key, $value)
     $elements = '';
 
     // if it's an array, we need to loop into the array and use square brackets []
-    if (is_array($value)) {
+    if (\is_array($value)) {
         foreach ($value as $k=>$v) {
             $elements .= "<input type='hidden' name='$key"."[$k]' value='$v'>\n";
         }
@@ -187,7 +187,7 @@ function getPostToForm($ignore='', $isRegularExpression=false)
     $fields = '';
     if (!empty($ignore) && $isRegularExpression) {
         foreach ($_POST as $key=>$value) {
-            if (!preg_match($ignore, $key)) {
+            if (!\preg_match($ignore, $key)) {
                 $fields .= add_hidden_elements($key, $value);
             }
         }
@@ -206,14 +206,14 @@ function getGetToForm($ignore='', $usePostAsAuthority = false)
     global $log;
     $fields = '';
     foreach ($_GET as $key => $value) {
-        if (is_array($key)) {
+        if (\is_array($key)) {
             if (!empty($key)) {
                 $log->warn('$key must be a string');
             }
             continue;
         }
 
-        if (is_array($value)) {
+        if (\is_array($value)) {
             if (!empty($value)) {
                 $log->warn('$value must be a string');
             }
@@ -237,12 +237,12 @@ function getAnyToForm($ignore='', $usePostAsAuthority = false)
 function handleRedirect($return_id='', $return_module='', $additionalFlags = false)
 {
     if (isset($_REQUEST['return_url']) && $_REQUEST['return_url'] != "") {
-        header("Location: ". $_REQUEST['return_url']);
+        \header("Location: ". $_REQUEST['return_url']);
         exit;
     }
 
     $url = buildRedirectURL($return_id, $return_module);
-    header($url);
+    \header($url);
     exit;
 }
 
@@ -339,11 +339,11 @@ function buildRedirectURL($return_id='', $return_module='')
 
 function getLikeForEachWord($fieldname, $value, $minsize=4)
 {
-    $value = trim($value);
-    $values = explode(' ', $value);
+    $value = \trim($value);
+    $values = \explode(' ', $value);
     $ret = '';
     foreach ($values as $val) {
-        if (strlen($val) >= $minsize) {
+        if (\strlen($val) >= $minsize) {
             if (!empty($ret)) {
                 $ret .= ' or';
             }
@@ -369,7 +369,7 @@ function isCloseAndCreateNewPressed()
 function add_prospects_to_prospect_list($parent_id, $child_id)
 {
     $focus=BeanFactory::getBean('Prospects');
-    if (is_array($child_id)) {
+    if (\is_array($child_id)) {
         $uids = $child_id;
     } else {
         $uids = array($child_id);
@@ -406,7 +406,7 @@ function add_to_prospect_list($query_panel, $parent_module, $parent_type, $paren
     require_once('include/SubPanel/SubPanelTiles.php');
 
 
-    if (!class_exists($parent_type)) {
+    if (!\class_exists($parent_type)) {
         require_once('modules/'.cleanDirName($parent_module).'/'.cleanDirName($parent_type).'.php');
     }
     $focus = new $parent_type();
@@ -439,7 +439,7 @@ function add_to_prospect_list($query_panel, $parent_module, $parent_type, $paren
     if (!empty($result['list'])) {
         foreach ($result['list'] as $object) {
             if ($link_type != 'default') {
-                $relationship_attribute=strtolower($object->$link_attribute);
+                $relationship_attribute=\strtolower($object->$link_attribute);
             }
             $GLOBALS['log']->debug('add_prospects_to_prospect_list:relationship_attribute:'.$relationship_attribute);
             // load relationship for the first time or on change of relationship atribute.

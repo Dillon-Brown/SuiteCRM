@@ -65,7 +65,7 @@ class MBVardefs
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($name, $path, $key_name);
     }
@@ -76,26 +76,26 @@ class MBVardefs
         $module = $this->name;
         $table_name = $this->name;
         $object_name = $this->key_name;
-        $_object_name = strtolower($this->key_name);
+        $_object_name = \strtolower($this->key_name);
 
         // required by the vardef template for team security in SugarObjects
-        $table_name = strtolower($module);
+        $table_name = \strtolower($module);
 
-        if (file_exists($file)) {
+        if (\file_exists($file)) {
             include($file);
             if (isset($vardefs)) {
                 if ($by_group) {
                     $this->vardefs['fields'] [$template]= $vardefs['fields'];
                 } else {
-                    $this->vardefs['fields']= array_merge($this->vardefs['fields'], $vardefs['fields']);
+                    $this->vardefs['fields']= \array_merge($this->vardefs['fields'], $vardefs['fields']);
                     if (!empty($vardefs['relationships'])) {
-                        $this->vardefs['relationships']= array_merge($this->vardefs['relationships'], $vardefs['relationships']);
+                        $this->vardefs['relationships']= \array_merge($this->vardefs['relationships'], $vardefs['relationships']);
                     }
                 }
             }
         }
         //Bug40450 - Extra 'Name' field in a File type module in module builder
-        if (array_key_exists('file', $this->templates)) {
+        if (\array_key_exists('file', $this->templates)) {
             unset($this->vardefs['fields']['name']);
             unset($this->vardefs['fields']['file']['name']);
         }
@@ -126,7 +126,7 @@ class MBVardefs
         if ($by_group) {
             $this->vardefs['fields'][$this->name] = $this->vardef['fields'];
         } else {
-            $this->vardefs['fields'] = array_merge($this->vardefs['fields'], $this->vardef['fields']);
+            $this->vardefs['fields'] = \array_merge($this->vardefs['fields'], $this->vardef['fields']);
         }
     }
 
@@ -149,7 +149,7 @@ class MBVardefs
 
     public function addFieldVardef($vardef)
     {
-        if (!isset($vardef['default']) || strlen($vardef['default']) == 0) {
+        if (!isset($vardef['default']) || \strlen($vardef['default']) == 0) {
             unset($vardef['default']);
         }
         $this->vardef['fields'][$vardef['name']] = $vardef;
@@ -162,19 +162,19 @@ class MBVardefs
 
     public function save()
     {
-        $header = file_get_contents('modules/ModuleBuilder/MB/header.php');
+        $header = \file_get_contents('modules/ModuleBuilder/MB/header.php');
         write_array_to_file('vardefs', $this->vardef, $this->path . '/vardefs.php', 'w', $header);
     }
 
     public function build($path)
     {
-        $header = file_get_contents('modules/ModuleBuilder/MB/header.php');
+        $header = \file_get_contents('modules/ModuleBuilder/MB/header.php');
         write_array_to_file('dictionary["' . $this->name . '"]', $this->getVardefs(), $path . '/vardefs.php', 'w', $header);
     }
     public function load()
     {
         $this->vardef = array('fields'=>array(), 'relationships'=>array());
-        if (file_exists($this->path . '/vardefs.php')) {
+        if (\file_exists($this->path . '/vardefs.php')) {
             include($this->path. '/vardefs.php');
             $this->vardef = $vardefs;
         }

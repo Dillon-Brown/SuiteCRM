@@ -69,12 +69,12 @@ function smarty_function_html_checkboxes($params, &$smarty)
 
             case 'values':
             case 'output':
-                $$_key = array_values((array)$_val);
+                $$_key = \array_values((array)$_val);
                 break;
 
             case 'checked':
             case 'selected':
-                $selected = array_map('strval', array_values((array)$_val));
+                $selected = \array_map('strval', \array_values((array)$_val));
                 break;
 
             case 'checkboxes':
@@ -86,7 +86,7 @@ function smarty_function_html_checkboxes($params, &$smarty)
                 break;
 
             default:
-                if (!is_array($_val)) {
+                if (!\is_array($_val)) {
                     $extra .= ' '.$_key.'="'.smarty_function_escape_special_chars($_val).'"';
                 } else {
                     $smarty->trigger_error("html_checkboxes: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
@@ -99,7 +99,7 @@ function smarty_function_html_checkboxes($params, &$smarty)
         return '';
     } /* raise error here? */
 
-    settype($selected, 'array');
+    \settype($selected, 'array');
     $_html_result = array();
 
     if (isset($options)) {
@@ -116,7 +116,7 @@ function smarty_function_html_checkboxes($params, &$smarty)
     if (!empty($params['assign'])) {
         $smarty->assign($params['assign'], $_html_result);
     } else {
-        return implode("\n", $_html_result);
+        return \implode("\n", $_html_result);
     }
 }
 
@@ -130,7 +130,7 @@ function smarty_function_html_checkboxes_output($name, $value, $output, $selecte
         . smarty_function_escape_special_chars($name) . '[]" value="'
         . smarty_function_escape_special_chars($value) . '"';
 
-    if (in_array((string)$value, $selected)) {
+    if (\in_array((string)$value, $selected)) {
         $_output .= ' checked="checked"';
     }
     $_output .= $extra . ' />' . $output;

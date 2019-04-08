@@ -52,10 +52,10 @@ class FavoritesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test with empty string parameter
         $result = $favorites->getCurrentUserSidebarFavorites();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         //test with string
         $result = $favorites->getCurrentUserSidebarFavorites('1');
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 }

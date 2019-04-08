@@ -19,9 +19,9 @@ $pdf = false;
 //////////////////////////////////
 //////////////////////////////////
 
-ini_set("memory_limit","256M");
+\ini_set("memory_limit","256M");
 
-define('_MPDF_PATH','../');
+\define('_MPDF_PATH','../');
 
 include("../mpdf.php");
 $mpdf=new mPDF('s');
@@ -31,9 +31,9 @@ if ($checkdir) {
 }
 else { $ttfdir = _MPDF_TTFONTPATH; }
 
-$mqr=ini_get("magic_quotes_runtime");
+$mqr=\ini_get("magic_quotes_runtime");
 if ($mqr) { set_magic_quotes_runtime(0); }
-if (!class_exists('TTFontFile', false)) { include(_MPDF_PATH .'classes/ttfontsuni.php'); }
+if (!\class_exists('TTFontFile', false)) { include(_MPDF_PATH .'classes/ttfontsuni.php'); }
 $ttf = new TTFontFile();
 
 $tempfontdata = array();
@@ -42,12 +42,12 @@ $tempseriffonts = array();
 $tempmonofonts = array();
 $tempfonttrans = array();
 
-$ff = scandir($ttfdir);
+$ff = \scandir($ttfdir);
 
 foreach($ff AS $f) {
 	$ret = array();
 	$isTTC = false;
-	if (strtolower(substr($f,-4,4))=='.ttc' || strtolower(substr($f,-5,5))=='.ttcf') {	// Mac ttcf
+	if (\strtolower(\substr($f,-4,4))=='.ttc' || \strtolower(\substr($f,-5,5))=='.ttcf') {	// Mac ttcf
 		$isTTC = true;
 		$ttf->getTTCFonts($ttfdir.$f);
 		$nf = $ttf->numTTCFonts;
@@ -55,19 +55,19 @@ foreach($ff AS $f) {
 			$ret[] = $ttf->extractCoreInfo($ttfdir.$f, $i);
 		}
 	}
-	elseif (strtolower(substr($f,-4,4))=='.ttf' || strtolower(substr($f,-4,4))=='.otf' ) {
+	elseif (\strtolower(\substr($f,-4,4))=='.ttf' || \strtolower(\substr($f,-4,4))=='.otf' ) {
 		$ret[] = $ttf->extractCoreInfo($ttfdir.$f);
 	}
-	for ($i=0; $i<count($ret); $i++) {
-	   if (!is_array($ret[$i])) { 
+	for ($i=0; $i<\count($ret); $i++) {
+	   if (!\is_array($ret[$i])) { 
 		if (!$pdf) echo $ret[$i].'<br />'; 
 	   }
 	   else {
 		$tfname = $ret[$i][0];
 		$bold = $ret[$i][1];
 		$italic = $ret[$i][2];
-		$fname = strtolower($tfname );
-		$fname = preg_replace('/[ ()]/','',$fname );
+		$fname = \strtolower($tfname );
+		$fname = \preg_replace('/[ ()]/','',$fname );
 		$tempfonttrans[$tfname] = $fname;
 		$style = '';
 		if ($bold) { $style .= 'B'; }
@@ -90,10 +90,10 @@ foreach($ff AS $f) {
 	}
 
 }
-$tempsansfonts = array_unique($tempsansfonts);
-$tempseriffonts = array_unique($tempseriffonts );
-$tempmonofonts = array_unique($tempmonofonts );
-$tempfonttrans = array_unique($tempfonttrans);
+$tempsansfonts = \array_unique($tempsansfonts);
+$tempseriffonts = \array_unique($tempseriffonts );
+$tempmonofonts = \array_unique($tempmonofonts );
+$tempfonttrans = \array_unique($tempfonttrans);
 
 if (!$pdf) {
 	echo '<h3>Information</h3>';
@@ -118,7 +118,7 @@ foreach ($tempfontdata AS $fname => $v) {
 	}
 	if (isset($tempfontdata[$fname]['sip']) && $tempfontdata[$fname]['sip']) {
 		if (!$pdf) echo 'INFO - Font file '.$fname.' contains characters in Unicode Plane 2 SIP<br />';
-		if (preg_match('/^(.*)-extb/',$fname, $fm)) {
+		if (\preg_match('/^(.*)-extb/',$fname, $fm)) {
 			if (isset($tempfontdata[($fm[1])]) && $tempfontdata[($fm[1])]) {
 				$tempfontdata[($fm[1])]['sip-ext'] = $fname;
 				if (!$pdf) echo 'INFO - Font file '.$fname.' has been defined as a CJK ext-B for '.($fm[1]).'<br />';
@@ -134,7 +134,7 @@ foreach ($tempfontdata AS $fname => $v) {
 	unset($tempfontdata[$fname]['smp']); 
 }
 
-$mpdf->fontdata = array_merge($tempfontdata ,$mpdf->fontdata);
+$mpdf->fontdata = \array_merge($tempfontdata ,$mpdf->fontdata);
 
 	$mpdf->available_unifonts = array();
 	foreach ($mpdf->fontdata AS $f => $fs) {
@@ -151,10 +151,10 @@ if (!$pdf) {
 	echo '<h3>Font names as parsed by mPDF</h3>';
 }
 
-ksort($tempfonttrans);
+\ksort($tempfonttrans);
 $html = '';
 foreach($tempfonttrans AS $on=>$mn) {
-	if (!file_exists($ttfdir.$mpdf->fontdata[$mn]['R'])) { continue; }
+	if (!\file_exists($ttfdir.$mpdf->fontdata[$mn]['R'])) { continue; }
 	$ond = '"'.$on.'"'; 
 	$html .= '<p style="font-family:'.$on.';">'.$ond.' font is available as '.$mn;
 	if (isset($mpdf->fontdata[$mn]['sip-ext']) && $mpdf->fontdata[$mn]['sip-ext']) {
@@ -184,15 +184,15 @@ echo '<div>Remember to edit the following arrays to place your preferred default
 
 echo '<pre>';
 
-ksort($tempfontdata);
-echo '$this->fontdata = '.var_export($tempfontdata,true).";\n";
+\ksort($tempfontdata);
+echo '$this->fontdata = '.\var_export($tempfontdata,true).";\n";
 
-sort($tempsansfonts);
-echo '$this->sans_fonts = array(\''.implode("', '", $tempsansfonts)."');\n";
-sort($tempseriffonts);
-echo '$this->serif_fonts = array(\''.implode("', '", $tempseriffonts)."');\n";
-sort($tempmonofonts);
-echo '$this->mono_fonts = array(\''.implode("', '", $tempmonofonts)."');\n";
+\sort($tempsansfonts);
+echo '$this->sans_fonts = array(\''.\implode("', '", $tempsansfonts)."');\n";
+\sort($tempseriffonts);
+echo '$this->serif_fonts = array(\''.\implode("', '", $tempseriffonts)."');\n";
+\sort($tempmonofonts);
+echo '$this->mono_fonts = array(\''.\implode("', '", $tempmonofonts)."');\n";
 echo '</pre>';
 
 exit;

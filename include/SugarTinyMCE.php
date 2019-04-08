@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -128,8 +128,8 @@ class SugarTinyMCE
 
         $config = $this->defaultConfig;
         //include tinymce lang file
-        $lang = substr($GLOBALS['current_language'], 0, 2);
-        if (file_exists('include/javascript/tiny_mce/langs/'.$lang.'.js')) {
+        $lang = \substr($GLOBALS['current_language'], 0, 2);
+        if (\file_exists('include/javascript/tiny_mce/langs/'.$lang.'.js')) {
             $config['language'] = $lang;
         }
         $config['directionality'] = SugarThemeRegistry::current()->directionality;
@@ -142,7 +142,7 @@ class SugarTinyMCE
 
         $instantiateCall = '';
         if (!empty($targets)) {
-            $exTargets = explode(",", $targets);
+            $exTargets = \explode(",", $targets);
             foreach ($exTargets as $instance) {
                 $instantiateCall .= "tinyMCE.execCommand('mceAddControl', false, document.getElementById('{$instance}'));\n";
             }
@@ -167,7 +167,7 @@ function load_mce() {
         }
     } else {
 eoq;
-        $exTargets = explode(",", $targets);
+        $exTargets = \explode(",", $targets);
         foreach ($exTargets as $instance) {
             $ret .=<<<eoq
     document.getElementById('$instance').style.width = '100%';
@@ -194,8 +194,8 @@ eoq;
 
         $config = $this->defaultConfig;
         //include tinymce lang file
-        $lang = substr($GLOBALS['current_language'], 0, 2);
-        if (file_exists('include/javascript/tiny_mce/langs/'.$lang.'.js')) {
+        $lang = \substr($GLOBALS['current_language'], 0, 2);
+        if (\file_exists('include/javascript/tiny_mce/langs/'.$lang.'.js')) {
             $config['language'] = $lang;
         }
         $config['theme_advanced_buttons1'] = $this->buttonConfigs[$type]['buttonConfig'];
@@ -219,9 +219,9 @@ eoq;
      */
     public function cleanEncodedMCEHtml($html)
     {
-        $html = str_replace("mce:script", "script", $html);
-        $html = str_replace("mce_src=", "src=", $html);
-        $html = str_replace("mce_href=", "href=", $html);
+        $html = \str_replace("mce:script", "script", $html);
+        $html = \str_replace("mce_src=", "src=", $html);
+        $html = \str_replace("mce_href=", "href=", $html);
         return $html;
     }
 
@@ -232,7 +232,7 @@ eoq;
      */
     private function overloadButtonConfigs()
     {
-        if (file_exists($this->customConfigFile)) {
+        if (\file_exists($this->customConfigFile)) {
             require_once($this->customConfigFile);
 
             if (!isset($buttonConfigs)) {
@@ -254,7 +254,7 @@ eoq;
      */
     private function overloadDefaultConfigs()
     {
-        if (file_exists($this->customDefaultConfigFile)) {
+        if (\file_exists($this->customDefaultConfigFile)) {
             require_once($this->customDefaultConfigFile);
 
             if (!isset($defaultConfig)) {

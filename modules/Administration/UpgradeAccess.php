@@ -38,17 +38,17 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
 global $mod_strings;
 global $sugar_config;
 
-$ignoreCase = (substr_count(strtolower($_SERVER['SERVER_SOFTWARE']), 'apache/2') > 0) ? '(?i)' : '';
-$htaccess_file = getcwd() . "/.htaccess";
+$ignoreCase = (\substr_count(\strtolower($_SERVER['SERVER_SOFTWARE']), 'apache/2') > 0) ? '(?i)' : '';
+$htaccess_file = \getcwd() . "/.htaccess";
 $contents = '';
-$basePath = parse_url($sugar_config['site_url'], PHP_URL_PATH);
+$basePath = \parse_url($sugar_config['site_url'], PHP_URL_PATH);
 if (empty($basePath)) {
     $basePath = '/';
 }
@@ -89,25 +89,25 @@ RedirectMatch 403 {$ignoreCase}/+files\.md5\$
 # END SUGARCRM RESTRICTIONS
 EOQ;
 
-if (file_exists($htaccess_file)) {
-    $fp = fopen($htaccess_file, 'r');
+if (\file_exists($htaccess_file)) {
+    $fp = \fopen($htaccess_file, 'r');
     $skip = false;
-    while ($line = fgets($fp)) {
-        if (preg_match('/\s*#\s*BEGIN\s*SUGARCRM\s*RESTRICTIONS/i', $line)) {
+    while ($line = \fgets($fp)) {
+        if (\preg_match('/\s*#\s*BEGIN\s*SUGARCRM\s*RESTRICTIONS/i', $line)) {
             $skip = true;
         }
         if (!$skip) {
             $oldcontents .= $line;
         }
-        if (preg_match('/\s*#\s*END\s*SUGARCRM\s*RESTRICTIONS/i', $line)) {
+        if (\preg_match('/\s*#\s*END\s*SUGARCRM\s*RESTRICTIONS/i', $line)) {
             $skip = false;
         }
     }
 }
-if (substr($contents, -1) != "\n") {
+if (\substr($contents, -1) != "\n") {
     $restrict_str = "\n" . $restrict_str;
 }
-$status = file_put_contents($htaccess_file, $contents . $restrict_str);
+$status = \file_put_contents($htaccess_file, $contents . $restrict_str);
 
 if (!$status) {
     echo '<p>' . $mod_strings['LBL_HT_NO_WRITE'] . "<span class=stop>{$htaccess_file}</span></p>\n";
@@ -116,7 +116,7 @@ if (!$status) {
 }
 
 // new content should be prepended to the file
-file_put_contents($htaccess_file, $oldcontents, FILE_APPEND);
+\file_put_contents($htaccess_file, $oldcontents, FILE_APPEND);
 
 // cn: bug 9365 - security for filesystem
 $uploadDir = '';
@@ -133,16 +133,16 @@ $denyAll = <<<eoq
 	Deny from all
 eoq;
 
-if (file_exists($uploadHta) && filesize($uploadHta)) {
+if (\file_exists($uploadHta) && \filesize($uploadHta)) {
     // file exists, parse to make sure it is current
-    if (is_writable($uploadHta)) {
-        $oldHtaccess = file_get_contents($uploadHta);
+    if (\is_writable($uploadHta)) {
+        $oldHtaccess = \file_get_contents($uploadHta);
         // use a different regex boundary b/c .htaccess uses the typicals
-        if (strstr($oldHtaccess, $denyAll) === false) {
+        if (\strstr($oldHtaccess, $denyAll) === false) {
             $oldHtaccess .= "\n";
             $oldHtaccess .= $denyAll;
         }
-        if (!file_put_contents($uploadHta, $oldHtaccess)) {
+        if (!\file_put_contents($uploadHta, $oldHtaccess)) {
             $htaccess_failed = true;
         }
     } else {
@@ -150,7 +150,7 @@ if (file_exists($uploadHta) && filesize($uploadHta)) {
     }
 } else {
     // no .htaccess yet, create a fill
-    if (!file_put_contents($uploadHta, $denyAll)) {
+    if (!\file_put_contents($uploadHta, $denyAll)) {
         $htaccess_failed = true;
     }
 }

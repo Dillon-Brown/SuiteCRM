@@ -43,8 +43,8 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
         $ret .= $this->element('caption', 'Doctype');
         $ret .= $this->row('Name', $doctype->name);
         $ret .= $this->row('XML', $doctype->xml ? 'Yes' : 'No');
-        $ret .= $this->row('Default Modules', implode($doctype->modules, ', '));
-        $ret .= $this->row('Default Tidy Modules', implode($doctype->tidyModules, ', '));
+        $ret .= $this->row('Default Modules', \implode($doctype->modules, ', '));
+        $ret .= $this->row('Default Tidy Modules', \implode($doctype->tidyModules, ', '));
         $ret .= $this->end('table');
         return $ret;
     }
@@ -124,7 +124,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
         $ret = '';
         $ret .= $this->start('table');
         $ret .= $this->element('caption', 'Elements ($info)');
-        ksort($this->def->info);
+        \ksort($this->def->info);
         $ret .= $this->heavyHeader('Allowed tags', 2);
         $ret .= $this->start('tr');
         $ret .= $this->element('td', $this->listifyTagLookup($this->def->info), array('colspan' => 2));
@@ -199,7 +199,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
         } elseif ($def->type == 'empty') {
             $elements = array();
         } elseif ($def->type == 'table') {
-            $elements = array_flip(
+            $elements = \array_flip(
                 array(
                     'col',
                     'caption',
@@ -233,13 +233,13 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
         } elseif ($def->type == 'custom') {
             $ret .= $this->element(
                 'td',
-                '<em>' . ucfirst($def->type) . '</em>: ' .
+                '<em>' . \ucfirst($def->type) . '</em>: ' .
                 $def->dtd_regex
             );
         } else {
             $ret .= $this->element(
                 'td',
-                '<em>' . ucfirst($def->type) . '</em>: ' .
+                '<em>' . \ucfirst($def->type) . '</em>: ' .
                 $this->escape($this->listifyTagLookup($elements)),
                 null,
                 0
@@ -256,7 +256,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
      */
     protected function listifyTagLookup($array)
     {
-        ksort($array);
+        \ksort($array);
         $list = array();
         foreach ($array as $name => $discard) {
             if ($name !== '#PCDATA' && !isset($this->def->info[$name])) {
@@ -275,7 +275,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
      */
     protected function listifyObjectList($array)
     {
-        ksort($array);
+        \ksort($array);
         $list = array();
         foreach ($array as $obj) {
             $list[] = $this->getClass($obj, 'AttrTransform_');
@@ -290,7 +290,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
      */
     protected function listifyAttr($array)
     {
-        ksort($array);
+        \ksort($array);
         $list = array();
         foreach ($array as $name => $obj) {
             if ($obj === false) {

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -106,8 +106,8 @@ class Link
 
         //Following behavior is tied to a property(ignore_role) value in the vardef. It alters the values of 2 properties, ignore_role_filter and add_distinct.
         //the property values can be altered again before any requests are made.
-        if (!empty($fieldDef) && is_array($fieldDef)) {
-            if (array_key_exists('ignore_role', $fieldDef)) {
+        if (!empty($fieldDef) && \is_array($fieldDef)) {
+            if (\array_key_exists('ignore_role', $fieldDef)) {
                 if ($fieldDef['ignore_role'] == true) {
                     $this->ignore_role_filter=true;
                     $this->add_distinct=true;
@@ -458,7 +458,7 @@ class Link
                 }
 
                 //add deleted clause - but not if we're dealing with a Custom table which will lack the 'deleted' field
-                if (substr_count($this->_relationship->rhs_table, '_cstm') == 0) {
+                if (\substr_count($this->_relationship->rhs_table, '_cstm') == 0) {
                     $where.=$this->_add_deleted_clause($deleted, 'AND', $this->_relationship->rhs_table);
                 }
 
@@ -500,7 +500,7 @@ class Link
             }
 
             //add deleted clause - but not if we're dealing with a Custom table which will lack the 'deleted' field
-            if (substr_count($this->_relationship->rhs_table, '_cstm') == 0) {
+            if (\substr_count($this->_relationship->rhs_table, '_cstm') == 0) {
                 $where.=$this->_add_deleted_clause($deleted, 'AND', $this->_relationship->rhs_table);
             }
 
@@ -671,7 +671,7 @@ class Link
             return;
         }
 
-        if (!is_array($rel_keys)) {
+        if (!\is_array($rel_keys)) {
             $keys[]=$rel_keys;
         } else {
             $keys=$rel_keys;
@@ -683,7 +683,7 @@ class Link
             return null;
         }
         //if multiple keys are passed then check for unsupported relationship types.
-        if (count($keys) > 1) {
+        if (\count($keys) > 1) {
             if (($this->_relationship->relationship_type == 'one-to-one')
                 or ($this->_relationship->relationship_type == 'one-to-many' and !$bean_is_lhs)
                 or ($this->_relationship->relationship_type == 'many-to-one')) {
@@ -867,7 +867,7 @@ class Link
      */
     public function delete($id, $related_id='')
     {
-        $GLOBALS['log']->debug(sprintf("delete called with these parameter values. id=%s, related_id=%s", $id, $related_id));
+        $GLOBALS['log']->debug(\sprintf("delete called with these parameter values. id=%s, related_id=%s", $id, $related_id));
 
         $_relationship=&$this->_relationship;
         $_bean=&$this->_bean;
@@ -1067,14 +1067,14 @@ class Link
             return ($dictionary[$this->_relationship_name][$def_name]);
         }
         // custom metadata is found in custom/metadata (naturally) and the naming follows the convention $relationship_name_c, and $relationship_name = $table_name$locations = array( 'metadata/' , 'custom/metadata/' ) ;
-        $relationshipName = preg_replace('/_c$/', '', $table_name) ;
+        $relationshipName = \preg_replace('/_c$/', '', $table_name) ;
 
         $locations = array( 'metadata/' , 'custom/metadata/' ) ;
 
         foreach ($locations as $basepath) {
             $path = $basepath . $relationshipName . 'MetaData.php' ;
 
-            if (file_exists($path)) {
+            if (\file_exists($path)) {
                 include($path);
                 if (isset($dictionary[$relationshipName][$def_name])) {
                     return $dictionary[$relationshipName][$def_name];
@@ -1097,7 +1097,7 @@ class Link
         if (!empty($varDefs)) {
             $role_field = '';
             foreach ($varDefs as $v) {
-                if (strpos($v['name'], '_role') !== false) {
+                if (\strpos($v['name'], '_role') !== false) {
                     $role_field = $v['name'];
                 }
             }

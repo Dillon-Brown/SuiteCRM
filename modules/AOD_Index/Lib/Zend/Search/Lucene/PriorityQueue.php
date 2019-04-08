@@ -62,7 +62,7 @@ abstract class Zend_Search_Lucene_PriorityQueue
      */
     public function put($element)
     {
-        $nodeId   = count($this->_heap);
+        $nodeId   = \count($this->_heap);
         $parentId = ($nodeId-1) >> 1;   // floor( ($nodeId-1)/2 )
 
         while ($nodeId != 0  &&  $this->_less($element, $this->_heap[$parentId])) {
@@ -88,7 +88,7 @@ abstract class Zend_Search_Lucene_PriorityQueue
      */
     public function top()
     {
-        if (count($this->_heap) == 0) {
+        if (\count($this->_heap) == 0) {
             return null;
         }
 
@@ -105,12 +105,12 @@ abstract class Zend_Search_Lucene_PriorityQueue
      */
     public function pop()
     {
-        if (count($this->_heap) == 0) {
+        if (\count($this->_heap) == 0) {
             return null;
         }
 
         $top = $this->_heap[0];
-        $lastId = count($this->_heap) - 1;
+        $lastId = \count($this->_heap) - 1;
 
         /**
          * Find appropriate position for last node

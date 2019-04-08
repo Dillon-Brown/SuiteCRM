@@ -50,7 +50,7 @@ class ApplicationLanguage
      */
     public function getApplicationLanguageStrings(CurrentLanguage $currentLanguage)
     {
-        $applicationLanguageStrings =  array_merge(
+        $applicationLanguageStrings =  \array_merge(
             return_application_language($currentLanguage->getCurrentLanguage()),
             return_app_list_strings_language($currentLanguage->getCurrentLanguage())
         );

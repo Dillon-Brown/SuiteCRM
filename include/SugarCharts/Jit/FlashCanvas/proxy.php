@@ -33,14 +33,14 @@
  */
 
 // Whether we check referrer or not
-define('CHECK_REFERRER', true);
+\define('CHECK_REFERRER', true);
 
 // Check that the request is from FlashCanvas
 if (CHECK_REFERRER) {
     if (empty($_SERVER['HTTP_REFERER'])) {
         exit;
     }
-    if (!preg_match('#/flash\d*canvas\.swf$#', $_SERVER['HTTP_REFERER'])) {
+    if (!\preg_match('#/flash\d*canvas\.swf$#', $_SERVER['HTTP_REFERER'])) {
         exit;
     }
 }
@@ -49,25 +49,25 @@ if (CHECK_REFERRER) {
 if (empty($_GET['url'])) {
     exit;
 }
-if (!preg_match('#^https?://#', $_GET['url'])) {
+if (!\preg_match('#^https?://#', $_GET['url'])) {
     exit;
 }
 
 // Percent-encode special characters in the URL
 $search  = array(  '%',   '#',   ' ');
 $replace = array('%25', '%23', '%20');
-$url     = str_replace($search, $replace, $_GET['url']);
+$url     = \str_replace($search, $replace, $_GET['url']);
 
 // Disable compression
-header('Content-Encoding: none');
+\header('Content-Encoding: none');
 
 // Load and output the file
-if (extension_loaded('curl')) {
+if (\extension_loaded('curl')) {
     // Use cURL extension
-    $ch = curl_init($url);
-    curl_exec($ch);
-    curl_close($ch);
+    $ch = \curl_init($url);
+    \curl_exec($ch);
+    \curl_close($ch);
 } else {
     // Use the http:// wrapper
-    readfile($url);
+    \readfile($url);
 }

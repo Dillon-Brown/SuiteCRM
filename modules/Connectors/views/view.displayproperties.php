@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -88,12 +88,12 @@ class ViewDisplayProperties extends ViewList
         $count = 0;
         global $current_user;
         $access = $current_user->getDeveloperModules();
-        $d = dir('modules');
+        $d = \dir('modules');
         while ($e = $d->read()) {
-            if (substr($e, 0, 1) == '.' || !is_dir('modules/' . $e)) {
+            if (\substr($e, 0, 1) == '.' || !\is_dir('modules/' . $e)) {
                 continue;
             }
-            if (empty($enabled_modules[$e]) && file_exists('modules/' . $e . '/metadata/studio.php') && file_exists('modules/' . $e . '/metadata/detailviewdefs.php') && isset($GLOBALS [ 'beanList' ][$e]) && (in_array($e, $access) || is_admin($current_user))) { // installed modules must also exist in the beanList
+            if (empty($enabled_modules[$e]) && \file_exists('modules/' . $e . '/metadata/studio.php') && \file_exists('modules/' . $e . '/metadata/detailviewdefs.php') && isset($GLOBALS [ 'beanList' ][$e]) && (\in_array($e, $access) || is_admin($current_user))) { // installed modules must also exist in the beanList
                 $disabled_modules[$e] = isset($GLOBALS['app_list_strings']['moduleList'][$e]) ? $GLOBALS['app_list_strings']['moduleList'][$e] : $e;
             }
         }
@@ -104,8 +104,8 @@ class ViewDisplayProperties extends ViewList
         $enabled_modules = $s->filterAllowedModules($enabled_modules);
         $disabled_modules = $s->filterAllowedModules($disabled_modules);
 
-        asort($enabled_modules);
-        asort($disabled_modules);
+        \asort($enabled_modules);
+        \asort($disabled_modules);
 
         //$enabled = $json->encode($enabled_modules);
         //$disabled = $json->encode($disabled_modules);

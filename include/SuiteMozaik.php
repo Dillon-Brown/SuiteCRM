@@ -65,16 +65,16 @@ class SuiteMozaik
     {
         $this->vendorPath = $this->mozaikPath . '/vendor';
         if ($this->autoInsertThumbnails) {
-            if (count($this->getThumbs())==0 || self::$devMode) {
+            if (\count($this->getThumbs())==0 || self::$devMode) {
                 $ord = 0;
                 foreach (self::$defaultThumbnails as $thumbName => $thumbData) {
                     $templateSectionLine = new TemplateSectionLine();
                     $templateSectionLine->name = $thumbData['label'];
-                    $templateSectionLine->description = preg_replace('/^string:/', '', $thumbData['tpl']);
-                    $templateSectionLine->description = str_replace('{lipsum}', $this->getContentLipsum(), $templateSectionLine->description);
-                    $templateSectionLine->description = str_replace('{imageSmall}', $this->getContentImageSample(130), $templateSectionLine->description);
-                    $templateSectionLine->description = str_replace('{image}', $this->getContentImageSample(), $templateSectionLine->description);
-                    $templateSectionLine->thumbnail = file_exists($this->mozaikPath . '/' . $thumbData['thumbnail']) ? $this->mozaikPath . '/' . $thumbData['thumbnail'] : null;
+                    $templateSectionLine->description = \preg_replace('/^string:/', '', $thumbData['tpl']);
+                    $templateSectionLine->description = \str_replace('{lipsum}', $this->getContentLipsum(), $templateSectionLine->description);
+                    $templateSectionLine->description = \str_replace('{imageSmall}', $this->getContentImageSample(130), $templateSectionLine->description);
+                    $templateSectionLine->description = \str_replace('{image}', $this->getContentImageSample(), $templateSectionLine->description);
+                    $templateSectionLine->thumbnail = \file_exists($this->mozaikPath . '/' . $thumbData['thumbnail']) ? $this->mozaikPath . '/' . $thumbData['thumbnail'] : null;
                     $templateSectionLine->ord = ++$ord;
                     $templateSectionLine->save();
                 }
@@ -90,12 +90,12 @@ class SuiteMozaik
 
     private function getContentImageSample($width = null)
     {
-        if (is_numeric($width)) {
+        if (\is_numeric($width)) {
             $width = ' width="' . $width . '"';
         } else {
             $width = '';
         }
-        $splits = explode('index.php', $_SERVER['REQUEST_URI']);
+        $splits = \explode('index.php', $_SERVER['REQUEST_URI']);
         $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $splits[0];
         $image = '<img src="' . $url . $this->mozaikPath . '/tpls/default/images/sample.jpg" ' . $width . ' />';
         return $image;
@@ -129,11 +129,11 @@ HTML;
             $tinyMCESetup = '{}';
         }
 
-        if (is_array($tinyMCESetup) || is_object($tinyMCESetup)) {
-            $tinyMCESetup = json_encode($tinyMCESetup);
+        if (\is_array($tinyMCESetup) || \is_object($tinyMCESetup)) {
+            $tinyMCESetup = \json_encode($tinyMCESetup);
         }
 
-        if (!preg_match('/^tinyMCE\s*:\s*/', $tinyMCESetup)) {
+        if (!\preg_match('/^tinyMCE\s*:\s*/', $tinyMCESetup)) {
             $tinyMCESetup = "tinyMCE: $tinyMCESetup";
         }
         return $tinyMCESetup;
@@ -141,13 +141,13 @@ HTML;
 
     public function getElementHTML($contents = '', $textareaId = null, $elementId = 'mozaik', $width = '600', $thumbs = array(), $tinyMCESetup = '{}')
     {
-        if (is_numeric($width)) {
+        if (\is_numeric($width)) {
             $width .= 'px';
         }
         if (!$thumbs) {
             $thumbs = self::$defaultThumbnails;
         }
-        $thumbsJSON = json_encode($thumbs);
+        $thumbsJSON = \json_encode($thumbs);
 
         $tinyMCESetup = $this->tinyMCESetupArgumentFixer($tinyMCESetup);
 
@@ -207,7 +207,7 @@ HTML;
 
     public function getAllHTML($contents = '', $textareaId = null, $elementId = 'mozaik', $width = '600', $group = '', $tinyMCESetup = '{}')
     {
-        if (is_numeric($width)) {
+        if (\is_numeric($width)) {
             $width .= 'px';
         }
         $tinyMCESetup = $this->tinyMCESetupArgumentFixer($tinyMCESetup);
@@ -220,7 +220,7 @@ HTML;
 
     private function getRefreshTextareaScript($textareaId, $elementId, $width = 'initial')
     {
-        if (is_numeric($width)) {
+        if (\is_numeric($width)) {
             $width .= 'px';
         }
         $js = <<<SCRIPT
@@ -256,7 +256,7 @@ SCRIPT;
                 foreach ($thumbBeans as $thumbBean) {
                     $thumbs[$thumbBean->name] = array(
                         'label' => $thumbBean->thumbnail ? $this->getThumbImageHTML($thumbBean->thumbnail, $thumbBean->name) : $thumbBean->name,
-                        'tpl' => 'string:' . html_entity_decode($thumbBean->description),
+                        'tpl' => 'string:' . \html_entity_decode($thumbBean->description),
                     );
                 }
             }
@@ -270,7 +270,7 @@ SCRIPT;
 
     private function getThumbImageHTML($src, $label)
     {
-        if (file_exists($src)) {
+        if (\file_exists($src)) {
             $html = '<img src="' . $src. '" alt="' . $label . '">';
         } else {
             $html = $label;

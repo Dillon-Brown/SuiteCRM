@@ -497,7 +497,7 @@ abstract class Zend_Search_Lucene_Search_Similarity
      */
     public function idf($input, Zend_Search_Lucene_Interface $reader)
     {
-        if (!is_array($input)) {
+        if (!\is_array($input)) {
             return $this->idfFreq($reader->docFreq($input), $reader->count());
         }
         $idf = 0.0;

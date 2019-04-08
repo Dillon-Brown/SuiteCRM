@@ -58,7 +58,7 @@ class ViewProperty extends SugarView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -86,24 +86,24 @@ class ViewProperty extends SugarView
         $this->subpanel = (! empty($_REQUEST['subpanel'])) ? $_REQUEST['subpanel'] : "";
         $this->properties = array();
         foreach ($_REQUEST as $key=>$value) {
-            if (substr($key, 0, 4) == 'name') {
-                $this->properties[substr($key, 5)]['name'] = $value;
+            if (\substr($key, 0, 4) == 'name') {
+                $this->properties[\substr($key, 5)]['name'] = $value;
             }
-            if (substr($key, 0, 2) == 'id') {
-                $this->properties[substr($key, 3)]['id'] = $value;
+            if (\substr($key, 0, 2) == 'id') {
+                $this->properties[\substr($key, 3)]['id'] = $value;
             }
-            if (substr($key, 0, 5) == 'value') {
-                $this->properties[substr($key, 6)]['value'] = $value;
+            if (\substr($key, 0, 5) == 'value') {
+                $this->properties[\substr($key, 6)]['value'] = $value;
                 // tyoung - now a nasty hack to disable editing of labels which contain Smarty functions - this is envisaged to be a temporary fix to prevent admins modifying these functions then being unable to restore the original complicated value if they regret it
-                if (substr($key, 6) == 'label') {
+                if (\substr($key, 6) == 'label') {
                     //#29796  , we disable the edit function for sub panel label
-                    if (preg_match('/\{.*\}/', $value) || !empty($this->subpanel)) {
-                        $this->properties[substr($key, 6)]['hidden'] = 1;
+                    if (\preg_match('/\{.*\}/', $value) || !empty($this->subpanel)) {
+                        $this->properties[\substr($key, 6)]['hidden'] = 1;
                     }
                 }
             }
-            if (substr($key, 0, 5) == 'title') {
-                $this->properties[substr($key, 6)]['title'] = $value;
+            if (\substr($key, 0, 5) == 'title') {
+                $this->properties[\substr($key, 6)]['title'] = $value;
             }
         }
     }
@@ -125,7 +125,7 @@ class ViewProperty extends SugarView
         $smarty->assign('available_languages', get_languages());
         $smarty->assign('selected_lang', $selected_lang);
 
-        ksort($this->properties);
+        \ksort($this->properties);
 
         $smarty->assign("properties", $this->properties);
 //        $smarty->assign("id",$this->id);

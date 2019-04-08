@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -111,10 +111,10 @@ class ImportMap extends SugarBean
     {
         $mapping_arr = array();
         if (!empty($this->content)) {
-            $pairs = explode("&", $this->content);
+            $pairs = \explode("&", $this->content);
             foreach ($pairs as $pair) {
-                list($name, $value) = explode("=", $pair);
-                $mapping_arr[trim($name)] = $value;
+                list($name, $value) = \explode("=", $pair);
+                $mapping_arr[\trim($name)] = $value;
             }
         }
 
@@ -133,7 +133,7 @@ class ImportMap extends SugarBean
         foreach ($mapping_arr as $key => $item) {
             $output[] = "$key=$item";
         }
-        $this->content = implode("&", $output);
+        $this->content = \implode("&", $output);
     }
 
     /**
@@ -145,10 +145,10 @@ class ImportMap extends SugarBean
     {
         $defa_arr = array();
         if (!empty($this->default_values)) {
-            $pairs = explode("&", $this->default_values);
+            $pairs = \explode("&", $this->default_values);
             foreach ($pairs as $pair) {
-                list($name, $value) = explode("=", $pair);
-                $defa_arr[trim($name)] = $value;
+                list($name, $value) = \explode("=", $pair);
+                $defa_arr[\trim($name)] = $value;
             }
         }
 
@@ -167,7 +167,7 @@ class ImportMap extends SugarBean
         foreach ($defa_arr as $key => $item) {
             $output[] = "$key=$item";
         }
-        $this->default_values = implode("&", $output);
+        $this->default_values = \implode("&", $output);
     }
 
     /**
@@ -202,8 +202,8 @@ class ImportMap extends SugarBean
      */
     public function save($check_notify = false)
     {
-        $args = func_get_args();
-        return call_user_func_array(array($this, '_save'), $args);
+        $args = \func_get_args();
+        return \call_user_func_array(array($this, '_save'), $args);
     }
     public function _save(
         $owner_id,
@@ -226,7 +226,7 @@ class ImportMap extends SugarBean
 
         // Bug 23354 - Make sure enclosure gets saved as an empty string if
         // it is an empty string, instead of as a null
-        if (strlen($enclosure) <= 0) {
+        if (\strlen($enclosure) <= 0) {
             $enclosure = ' ';
         }
 
@@ -383,7 +383,7 @@ class ImportMap extends SugarBean
 
         //retrieve user preferences and populate preference array
         $preference_values_str = $current_user->getPreference('field_values', 'import');
-        $preference_values = json_decode($preference_values_str, true);
+        $preference_values = \json_decode($preference_values_str, true);
 
         foreach ($import_step_fields as $val) {
             //overwrite preference array with new values from request if the value is different or new
@@ -394,7 +394,7 @@ class ImportMap extends SugarBean
         }
 
         //force the values to passed in array if array is set
-        if (!empty($ForceValsArr) && is_array($ForceValsArr)) {
+        if (!empty($ForceValsArr) && \is_array($ForceValsArr)) {
             foreach ($ForceValsArr as $forceKey=>$forceVal) {
                 $preference_values[$forceKey] = $forceVal;
                 $set = true;
@@ -403,7 +403,7 @@ class ImportMap extends SugarBean
 
         //set preferences if any changes were made and return the new array
         if ($set) {
-            $preference_values_str =  json_encode($preference_values);
+            $preference_values_str =  \json_encode($preference_values);
             $current_user->setPreference('field_values', $preference_values_str, 0, 'import');
         }
         if (empty($preference_values)) {

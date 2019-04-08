@@ -184,7 +184,7 @@ class Zend_Search_Lucene_LockManager
             }
 
             // wait 1 microsecond
-            usleep(1);
+            \usleep(1);
         }
 
         // Restore lock state

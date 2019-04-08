@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -106,7 +106,7 @@ class ImportFieldSanitize
             $this->addRelatedBean = false;
         }
         
-        $field = $sfh::getSugarField(ucfirst($name));
+        $field = $sfh::getSugarField(\ucfirst($name));
         if ($field instanceof SugarFieldBase) {
             $value = $field->importSanitize($value, $vardef, $focus, $this);
         }
@@ -167,7 +167,7 @@ class ImportFieldSanitize
             $sea = new SugarEmailAddress;
         }
         
-        if (!empty($value) && !preg_match($sea->regex, $value)) {
+        if (!empty($value) && !\preg_match($sea->regex, $value)) {
             return false;
         }
 
@@ -195,8 +195,8 @@ class ImportFieldSanitize
         }
 
 
-        if (!empty($value) && strtolower($value) != "all") {
-            $theList   = explode(",", $value);
+        if (!empty($value) && \strtolower($value) != "all") {
+            $theList   = \explode(",", $value);
             $isValid   = true;
             $bad_names = array();
             foreach ($theList as $eachItem) {
@@ -279,63 +279,63 @@ class ImportFieldSanitize
 
         $dateparts = array();
         $reg = $timedate->get_regular_expression($format);
-        preg_match('@'.$reg['format'].'@', $value, $dateparts);
+        \preg_match('@'.$reg['format'].'@', $value, $dateparts);
 
         if (empty($dateparts)) {
             return false;
         }
         if (isset($reg['positions']['a'])
-                && !in_array($dateparts[$reg['positions']['a']], array('am','pm'))) {
+                && !\in_array($dateparts[$reg['positions']['a']], array('am','pm'))) {
             return false;
         }
         if (isset($reg['positions']['A'])
-                && !in_array($dateparts[$reg['positions']['A']], array('AM','PM'))) {
+                && !\in_array($dateparts[$reg['positions']['A']], array('AM','PM'))) {
             return false;
         }
         if (isset($reg['positions']['h']) && (
-                !is_numeric($dateparts[$reg['positions']['h']])
+                !\is_numeric($dateparts[$reg['positions']['h']])
                 || $dateparts[$reg['positions']['h']] < 1
                 || $dateparts[$reg['positions']['h']] > 12
         )) {
             return false;
         }
         if (isset($reg['positions']['H']) && (
-                !is_numeric($dateparts[$reg['positions']['H']])
+                !\is_numeric($dateparts[$reg['positions']['H']])
                 || $dateparts[$reg['positions']['H']] < 0
                 || $dateparts[$reg['positions']['H']] > 23
         )) {
             return false;
         }
         if (isset($reg['positions']['i']) && (
-                !is_numeric($dateparts[$reg['positions']['i']])
+                !\is_numeric($dateparts[$reg['positions']['i']])
                 || $dateparts[$reg['positions']['i']] < 0
                 || $dateparts[$reg['positions']['i']] > 59
         )) {
             return false;
         }
         if (isset($reg['positions']['s']) && (
-                !is_numeric($dateparts[$reg['positions']['s']])
+                !\is_numeric($dateparts[$reg['positions']['s']])
                 || $dateparts[$reg['positions']['s']] < 0
                 || $dateparts[$reg['positions']['s']] > 59
         )) {
             return false;
         }
         if (isset($reg['positions']['d']) && (
-                !is_numeric($dateparts[$reg['positions']['d']])
+                !\is_numeric($dateparts[$reg['positions']['d']])
                 || $dateparts[$reg['positions']['d']] < 1
                 || $dateparts[$reg['positions']['d']] > 31
         )) {
             return false;
         }
         if (isset($reg['positions']['m']) && (
-                !is_numeric($dateparts[$reg['positions']['m']])
+                !\is_numeric($dateparts[$reg['positions']['m']])
                 || $dateparts[$reg['positions']['m']] < 1
                 || $dateparts[$reg['positions']['m']] > 12
         )) {
             return false;
         }
         if (isset($reg['positions']['Y']) &&
-                !is_numeric($dateparts[$reg['positions']['Y']])) {
+                !\is_numeric($dateparts[$reg['positions']['Y']])) {
             return false;
         }
 

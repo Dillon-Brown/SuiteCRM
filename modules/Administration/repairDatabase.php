@@ -38,14 +38,14 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
 
 
 global $current_user, $beanFiles;
-set_time_limit(3600);
+\set_time_limit(3600);
 
 
 $db = DBManagerFactory::getInstance();
@@ -54,28 +54,28 @@ if (is_admin($current_user) || isset($from_sync_client) || is_admin_for_any_modu
     isset($_REQUEST['execute'])? $execute=$_REQUEST['execute'] : $execute= false;
     $export = false;
 
-    if (sizeof($_POST) && isset($_POST['raction'])) {
-        if (isset($_POST['raction']) && strtolower($_POST['raction']) == "export") {
+    if (\sizeof($_POST) && isset($_POST['raction'])) {
+        if (isset($_POST['raction']) && \strtolower($_POST['raction']) == "export") {
             //jc - output buffering is being used. if we do not clean the output buffer
             //the contents of the buffer up to the length of the repair statement(s)
             //will be saved in the file...
-            ob_clean();
+            \ob_clean();
 
-            header("Content-Disposition: attachment; filename=repairSugarDB.sql");
-            header("Content-Type: text/sql; charset={$app_strings['LBL_CHARSET']}");
-            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-            header("Last-Modified: " . TimeDate::httpTime());
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("Content-Length: " . strlen($_POST['sql']));
+            \header("Content-Disposition: attachment; filename=repairSugarDB.sql");
+            \header("Content-Type: text/sql; charset={$app_strings['LBL_CHARSET']}");
+            \header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            \header("Last-Modified: " . TimeDate::httpTime());
+            \header("Cache-Control: post-check=0, pre-check=0", false);
+            \header("Content-Length: " . \strlen($_POST['sql']));
 
             //jc:7347 - for whatever reason, html_entity_decode is choking on converting
             //the html entity &#039; to a single quote, so we will use str_replace
             //instead
-            $sql = str_replace('&#039;', "'", $_POST['sql']);
+            $sql = \str_replace('&#039;', "'", $_POST['sql']);
             //echo html_entity_decode($_POST['sql']);
             echo $sql;
-        } elseif (isset($_POST['raction']) && strtolower($_POST['raction']) == "execute") {
-            $sql = str_replace(
+        } elseif (isset($_POST['raction']) && \strtolower($_POST['raction']) == "execute") {
+            $sql = \str_replace(
                 array(
                     "\n",
                     '&#039;',
@@ -84,10 +84,10 @@ if (is_admin($current_user) || isset($from_sync_client) || is_admin_for_any_modu
                     '',
                     "'",
                 ),
-                preg_replace('#(/\*.+?\*/\n*)#', '', $_POST['sql'])
+                \preg_replace('#(/\*.+?\*/\n*)#', '', $_POST['sql'])
             );
-            foreach (explode(";", $sql) as $stmt) {
-                $stmt = trim($stmt);
+            foreach (\explode(";", $sql) as $stmt) {
+                $stmt = \trim($stmt);
 
                 if (!empty($stmt)) {
                     $db->query($stmt, true, 'Executing repair query: ');
@@ -102,7 +102,7 @@ if (is_admin($current_user) || isset($from_sync_client) || is_admin_for_any_modu
                 echo getClassicModuleTitle($mod_strings['LBL_REPAIR_DATABASE'], array($mod_strings['LBL_REPAIR_DATABASE']), true);
             }
             echo "<h1 id=\"rdloading\">{$mod_strings['LBL_REPAIR_DATABASE_PROCESSING']}</h1>";
-            ob_flush();
+            \ob_flush();
         }
 
         $sql = '';
@@ -111,7 +111,7 @@ if (is_admin($current_user) || isset($from_sync_client) || is_admin_for_any_modu
         $repairedTables = array();
 
         foreach ($beanFiles as $bean => $file) {
-            if (file_exists($file)) {
+            if (\file_exists($file)) {
                 require_once($file);
                 unset($GLOBALS['dictionary'][$bean]);
                 $focus = new $bean();
@@ -123,7 +123,7 @@ if (is_admin($current_user) || isset($from_sync_client) || is_admin_for_any_modu
                 if (($focus instanceof SugarBean) && $focus->hasCustomFields() && !isset($repairedTables[$focus->table_name . '_cstm'])) {
                     $df = new DynamicField($focus->module_dir);
                     //Need to check if the method exists as during upgrade an old version of Dynamic Fields may be loaded.
-                    if (method_exists($df, "repairCustomFields")) {
+                    if (\method_exists($df, "repairCustomFields")) {
                         $df->bean = $focus;
                         $sql .= $df->repairCustomFields($execute);
                         $repairedTables[$focus->table_name . '_cstm'] = true;
@@ -159,8 +159,8 @@ if (is_admin($current_user) || isset($from_sync_client) || is_admin_for_any_modu
 
             if (isset($sql) && !empty($sql)) {
                 $qry_str = "";
-                foreach (explode("\n", $sql) as $line) {
-                    if (!empty($line) && substr($line, -2) != "*/") {
+                foreach (\explode("\n", $sql) as $line) {
+                    if (!empty($line) && \substr($line, -2) != "*/") {
                         $line .= ";";
                     }
 

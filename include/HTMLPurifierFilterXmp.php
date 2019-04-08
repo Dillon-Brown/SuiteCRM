@@ -57,6 +57,6 @@ class HTMLPurifierFilterXmp extends \HTMLPurifier_Filter
      */
     public function preFilter($html, $config, $context)
     {
-        return preg_replace("#<(/)?xmp>#i", "<\\1pre>", $html);
+        return \preg_replace("#<(/)?xmp>#i", "<\\1pre>", $html);
     }
 }

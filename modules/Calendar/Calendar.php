@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -102,16 +102,16 @@ class Calendar
         
         $this->view = $view;
 
-        if (!array_key_exists($this->view, $this->views)) {
+        if (!\array_key_exists($this->view, $this->views)) {
             $this->view = 'agendaWeek';
         }
         
         $date_arr = array();
         if (!empty($_REQUEST['day'])) {
-            $_REQUEST['day'] = intval($_REQUEST['day']);
+            $_REQUEST['day'] = \intval($_REQUEST['day']);
         }
         if (!empty($_REQUEST['month'])) {
-            $_REQUEST['month'] = intval($_REQUEST['month']);
+            $_REQUEST['month'] = \intval($_REQUEST['month']);
         }
 
         if (!empty($_REQUEST['day'])) {
@@ -163,32 +163,32 @@ class Calendar
             );
         }
         
-        $current_date_db = $date_arr['year']."-".str_pad($date_arr['month'], 2, "0", STR_PAD_LEFT)."-".str_pad($date_arr['day'], 2, "0", STR_PAD_LEFT);
+        $current_date_db = $date_arr['year']."-".\str_pad($date_arr['month'], 2, "0", STR_PAD_LEFT)."-".\str_pad($date_arr['day'], 2, "0", STR_PAD_LEFT);
         $this->date_time = $GLOBALS['timedate']->fromString($current_date_db);
         
         $this->show_tasks = $current_user->getPreference('show_tasks');
-        if (is_null($this->show_tasks)) {
+        if (\is_null($this->show_tasks)) {
             $this->show_tasks = SugarConfig::getInstance()->get('calendar.show_tasks_by_default', true);
         }
         
         $this->show_calls = $current_user->getPreference('show_calls');
-        if (is_null($this->show_calls)) {
+        if (\is_null($this->show_calls)) {
             $this->show_calls = SugarConfig::getInstance()->get('calendar.show_calls_by_default', true);
         }
         
         // Show completed Meetings, Calls, Tasks
         $this->show_completed = $current_user->getPreference('show_completed');
-        if (is_null($this->show_completed)) {
+        if (\is_null($this->show_completed)) {
             $this->show_completed = SugarConfig::getInstance()->get('calendar.show_completed_by_default', true);
         }
         
         $this->enable_repeat = SugarConfig::getInstance()->get('calendar.enable_repeat', true);
 
-        if (in_array($this->view, array('month','year'))) {
+        if (\in_array($this->view, array('month','year'))) {
             $this->style = "basic";
         } else {
             $displayTimeslots = $GLOBALS['current_user']->getPreference('calendar_display_timeslots');
-            if (is_null($displayTimeslots)) {
+            if (\is_null($displayTimeslots)) {
                 $displayTimeslots = SugarConfig::getInstance()->get('calendar.display_timeslots', true);
             }
             if (!$displayTimeslots) {
@@ -213,11 +213,11 @@ class Calendar
         }
         
         $this->day_start_time = $current_user->getPreference('day_start_time');
-        if (is_null($this->day_start_time)) {
+        if (\is_null($this->day_start_time)) {
             $this->day_start_time = SugarConfig::getInstance()->get('calendar.default_day_start', "08:00");
         }
         $this->day_end_time = $current_user->getPreference('day_end_time');
-        if (is_null($this->day_end_time)) {
+        if (\is_null($this->day_end_time)) {
             $this->day_end_time = SugarConfig::getInstance()->get('calendar.default_day_end', "19:00");
         }
             
@@ -246,7 +246,7 @@ class Calendar
         foreach ($this->acts_arr as $user_id => $acts) {
             if (isset($acts) && empty($acts)) {
                 $shared_calendar_separate = $GLOBALS['current_user']->getPreference('calendar_display_shared_separate');
-                if (is_null($shared_calendar_separate)) {
+                if (\is_null($shared_calendar_separate)) {
                     $shared_calendar_separate = SugarConfig::getInstance()->get('calendar.calendar_display_shared_separate', true);
                 }
                 //if no calendar items we add the user to the list.
@@ -262,7 +262,7 @@ class Calendar
                 $item = array();
                 $item['user_id'] = $user_id;
                 $item['module_name'] = $act->sugar_bean->module_dir;
-                $item['type'] = strtolower($act->sugar_bean->object_name);
+                $item['type'] = \strtolower($act->sugar_bean->object_name);
                 $item['assigned_user_id'] = $act->sugar_bean->assigned_user_id;
                 $item['record'] = $act->sugar_bean->id;
                 $item['name'] = $act->sugar_bean->name . ' ' . $act->sugar_bean->assigned_user_name;
@@ -321,14 +321,14 @@ class Calendar
                 }
 
                 if (isset($this->activityList[ $act->sugar_bean->module_name ]['start']) && !empty($this->activityList[ $act->sugar_bean->module_name ]['start'])) {
-                    $item = array_merge($item, CalendarUtils::get_time_data($act->sugar_bean, $this->activityList[ $act->sugar_bean->module_name ]['start'], $this->activityList[ $act->sugar_bean->module_name ]['end']));
+                    $item = \array_merge($item, CalendarUtils::get_time_data($act->sugar_bean, $this->activityList[ $act->sugar_bean->module_name ]['start'], $this->activityList[ $act->sugar_bean->module_name ]['end']));
                 } else {
-                    $item = array_merge($item, CalendarUtils::get_time_data($act->sugar_bean));
+                    $item = \array_merge($item, CalendarUtils::get_time_data($act->sugar_bean));
                 }
 
 
                 $shared_calendar_separate = $GLOBALS['current_user']->getPreference('calendar_display_shared_separate');
-                if (is_null($shared_calendar_separate)) {
+                if (\is_null($shared_calendar_separate)) {
                     $shared_calendar_separate = SugarConfig::getInstance()->get('calendar.calendar_display_shared_separate', true);
                 }
                 //if no calendar items we add the user to the list.
@@ -351,9 +351,9 @@ class Calendar
         
         
         $user_ids = $current_user->getPreference('shared_ids');
-        if (!empty($user_ids) && count($user_ids) != 0 && !isset($_REQUEST['shared_ids'])) {
+        if (!empty($user_ids) && \count($user_ids) != 0 && !isset($_REQUEST['shared_ids'])) {
             $this->shared_ids = $user_ids;
-        } elseif (isset($_REQUEST['shared_ids']) && count($_REQUEST['shared_ids']) > 0) {
+        } elseif (isset($_REQUEST['shared_ids']) && \count($_REQUEST['shared_ids']) > 0) {
             $this->shared_ids = $_REQUEST['shared_ids'];
             $current_user->setPreference('shared_ids', $_REQUEST['shared_ids']);
         } else {
@@ -383,9 +383,9 @@ class Calendar
      */
     public function calculate_day_range()
     {
-        list($hour_start, $minute_start) =  explode(":", $this->day_start_time);
-        list($hour_end, $minute_end) =  explode(":", $this->day_end_time);
-        $this->scroll_slot = intval($hour_start * (60 / $this->time_step) + ($minute_start / $this->time_step));
+        list($hour_start, $minute_start) =  \explode(":", $this->day_start_time);
+        list($hour_end, $minute_end) =  \explode(":", $this->day_end_time);
+        $this->scroll_slot = \intval($hour_start * (60 / $this->time_step) + ($minute_start / $this->time_step));
         $this->celcount = (($hour_end * 60 + $minute_end) - ($hour_start * 60 + $minute_start)) / $this->time_step;
     }
     

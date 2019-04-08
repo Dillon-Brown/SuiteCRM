@@ -52,8 +52,8 @@ class AccountTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $this->assertInstanceOf('Account', $Account);
         $this->assertInstanceOf('Company', $Account);
         $this->assertInstanceOf('SugarBean', $Account);
-        $this->assertTrue(is_array($Account->field_name_map));
-        $this->assertTrue(is_array($Account->field_defs));
+        $this->assertTrue(\is_array($Account->field_name_map));
+        $this->assertTrue(\is_array($Account->field_defs));
     }
 
     public function testget_summary_text()
@@ -82,7 +82,7 @@ class AccountTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method and verify that it returns an array
         $contacts = $Account->get_contacts();
-        $this->assertTrue(is_array($contacts));
+        $this->assertTrue(\is_array($contacts));
     }
 
     public function testclear_account_case_relationship()

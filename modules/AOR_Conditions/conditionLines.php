@@ -29,7 +29,7 @@ function display_condition_lines($focus, $field, $value, $view)
 
     $html = '';
 
-    if (!is_file('cache/jsLanguage/AOR_Conditions/' . $GLOBALS['current_language'] . '.js')) {
+    if (!\is_file('cache/jsLanguage/AOR_Conditions/' . $GLOBALS['current_language'] . '.js')) {
         require_once('include/language/jsLanguage.php');
         jsLanguage::createModuleStringsCache('AOR_Conditions', $GLOBALS['current_language']);
     }
@@ -56,16 +56,16 @@ function display_condition_lines($focus, $field, $value, $view)
                 while ($row = $focus->db->fetchByAssoc($result)) {
                     $condition_name = new AOR_Condition();
                     $condition_name->retrieve($row['id']);
-                    $condition_name->module_path = unserialize(base64_decode($condition_name->module_path));
-                    $html .= "report_fields = \"".trim(preg_replace('/\s+/', ' ', getModuleFields(getRelatedModule($focus->report_module, $condition_name->module_path[0]))))."\";";
+                    $condition_name->module_path = \unserialize(\base64_decode($condition_name->module_path));
+                    $html .= "report_fields = \"".\trim(\preg_replace('/\s+/', ' ', getModuleFields(getRelatedModule($focus->report_module, $condition_name->module_path[0]))))."\";";
                     if ($condition_name->value_type == 'Date') {
-                        $condition_name->value = unserialize(base64_decode($condition_name->value));
+                        $condition_name->value = \unserialize(\base64_decode($condition_name->value));
                     }
-                    $condition_item = json_encode($condition_name->toArray());
+                    $condition_item = \json_encode($condition_name->toArray());
                     $html .= "loadConditionLine(".$condition_item.");";
                 }
             }
-            $html .= "report_fields = \"".trim(preg_replace('/\s+/', ' ', getModuleFields($focus->report_module)))."\";";
+            $html .= "report_fields = \"".\trim(\preg_replace('/\s+/', ' ', getModuleFields($focus->report_module)))."\";";
             $html .= "</script>";
         }
     } elseif ($view == 'DetailView') {
@@ -76,7 +76,7 @@ function display_condition_lines($focus, $field, $value, $view)
         if (isset($focus->report_module) && $focus->report_module != '') {
             require_once("modules/AOW_WorkFlow/aow_utils.php");
             $html .= "<script>";
-            $html .= "report_fields = \"".trim(preg_replace('/\s+/', ' ', getModuleFields($focus->report_module)))."\";";
+            $html .= "report_fields = \"".\trim(\preg_replace('/\s+/', ' ', getModuleFields($focus->report_module)))."\";";
             $html .= "report_module = \"".$focus->report_module."\";";
             $sql = "SELECT id FROM aor_conditions WHERE aor_report_id = '".$focus->id."' AND deleted = 0 ORDER BY condition_order ASC";
             $result = $focus->db->query($sql);
@@ -84,11 +84,11 @@ function display_condition_lines($focus, $field, $value, $view)
             while ($row = $focus->db->fetchByAssoc($result)) {
                 $condition_name = new AOR_Condition();
                 $condition_name->retrieve($row['id']);
-                $condition_name->module_path = unserialize(base64_decode($condition_name->module_path));
+                $condition_name->module_path = \unserialize(\base64_decode($condition_name->module_path));
                 if ($condition_name->value_type == 'Date') {
-                    $condition_name->value = unserialize(base64_decode($condition_name->value));
+                    $condition_name->value = \unserialize(\base64_decode($condition_name->value));
                 }
-                $condition_item = json_encode($condition_name->toArray());
+                $condition_item = \json_encode($condition_name->toArray());
                 $html .= "loadConditionLine(".$condition_item.");";
             }
             $html .= "</script>";

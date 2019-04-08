@@ -29,13 +29,13 @@ class RelationshipObjectHelper
     public function getRelationships(\SugarBean $bean, $uriPath)
     {
         $relationships = $this->varDefHelper->getAllRelationships($bean);
-        asort($relationships);
+        \asort($relationships);
 
         $relationshipsLinks = [];
-        foreach (array_unique($relationships) as $module) {
+        foreach (\array_unique($relationships) as $module) {
             $linkResponse = new LinksResponse();
             $linkResponse->setRelated(
-                sprintf('/%s/%s/%s', $uriPath, 'relationships', strtolower($module))
+                \sprintf('/%s/%s/%s', $uriPath, 'relationships', \strtolower($module))
             );
 
             $relationshipsLinks[$module] = ['links' => $linkResponse];

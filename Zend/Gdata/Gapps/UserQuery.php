@@ -123,7 +123,7 @@ class Zend_Gdata_Gapps_UserQuery extends Zend_Gdata_Gapps_Query
      */
     public function getStartUsername()
     {
-        if (array_key_exists('startUsername', $this->_params)) {
+        if (\array_key_exists('startUsername', $this->_params)) {
             return $this->_params['startUsername'];
         } else {
             return null;

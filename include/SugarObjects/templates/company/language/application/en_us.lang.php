@@ -38,13 +38,13 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
 $app_list_strings = array(
 
-    strtolower($object_name) . '_type_dom' => array(
+    \strtolower($object_name) . '_type_dom' => array(
         '' => '',
         'Analyst' => 'Analyst',
         'Competitor' => 'Competitor',

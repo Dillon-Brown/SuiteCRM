@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -203,19 +203,19 @@ class LoggerManager
     {
         $locations = array('include/SugarLogger','custom/include/SugarLogger');
         foreach ($locations as $location) {
-            if (is_dir($location) && $dir = opendir($location)) {
-                while (($file = readdir($dir)) !== false) {
+            if (\is_dir($location) && $dir = \opendir($location)) {
+                while (($file = \readdir($dir)) !== false) {
                     if ($file == ".."
                             || $file == "."
                             || $file == "LoggerTemplate.php"
                             || $file == "LoggerManager.php"
-                            || !is_file("$location/$file")
+                            || !\is_file("$location/$file")
                             ) {
                         continue;
                     }
                     require_once("$location/$file");
-                    $loggerClass = basename($file, ".php");
-                    if (class_exists($loggerClass) && class_implements($loggerClass, 'LoggerTemplate')) {
+                    $loggerClass = \basename($file, ".php");
+                    if (\class_exists($loggerClass) && \class_implements($loggerClass, 'LoggerTemplate')) {
                         self::$_loggers[$loggerClass] = new $loggerClass();
                     }
                 }
@@ -225,14 +225,14 @@ class LoggerManager
 
     public static function getAvailableLoggers()
     {
-        return array_keys(self::$_loggers);
+        return \array_keys(self::$_loggers);
     }
 
     public static function getLoggerLevels()
     {
         $loggerLevels = self::$_levelMapping;
         foreach ($loggerLevels as $key => $value) {
-            $loggerLevels[$key] = ucfirst($key);
+            $loggerLevels[$key] = \ucfirst($key);
         }
 
         return $loggerLevels;

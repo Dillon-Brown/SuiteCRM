@@ -38,7 +38,7 @@ class WebDriver extends \Codeception\Module\WebDriver
     protected function isBrowserStackLocalEnabled()
     {
         return
-            array_key_exists('browserstack.local', $this->config['capabilities']) &&
+            \array_key_exists('browserstack.local', $this->config['capabilities']) &&
             $this->config['capabilities']['browserstack.local'];
     }
 

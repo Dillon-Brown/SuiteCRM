@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -84,14 +84,14 @@ class EmailAuthenticateUser extends SugarAuthenticateUser
             $_SESSION['lastUserName'] = $name;
             $_SESSION['emailAuthToken'] = '';
             for ($i = 0; $i < $this->passwordLength; $i++) {
-                $_SESSION['emailAuthToken'] .= chr(mt_rand(48, 90));
+                $_SESSION['emailAuthToken'] .= \chr(\mt_rand(48, 90));
             }
-            $_SESSION['emailAuthToken']  =  str_replace(array('<', '>'), array('#', '@'), $_SESSION['emailAuthToken']);
+            $_SESSION['emailAuthToken']  =  \str_replace(array('<', '>'), array('#', '@'), $_SESSION['emailAuthToken']);
             $_SESSION['login_error'] = 'Please Enter Your User Name and Emailed Session Token';
             $this->sendEmailPassword($user_id, $_SESSION['emailAuthToken']);
             return false;
         }
-        if (strcmp($name, $_SESSION['lastUserName']) == 0 && strcmp($password, $_SESSION['emailAuthToken']) == 0) {
+        if (\strcmp($name, $_SESSION['lastUserName']) == 0 && \strcmp($password, $_SESSION['emailAuthToken']) == 0) {
             $this->loadUserOnSession($_SESSION['lastUserId']);
             unset($_SESSION['lastUserId']);
             unset($_SESSION['lastUserName']);
@@ -127,7 +127,7 @@ class EmailAuthenticateUser extends SugarAuthenticateUser
         $OBCharset = $locale->getPrecedentPreference('default_email_charset');
         $notify_mail = new SugarPHPMailer();
         $notify_mail->CharSet = $sugar_config['default_charset'];
-        $notify_mail->AddAddress(((!empty($row['email1']))?$row['email1']: $row['email2']), $locale->translateCharsetMIME(trim($row['first_name'] . ' ' . $row['last_name']), 'UTF-8', $OBCharset));
+        $notify_mail->AddAddress(((!empty($row['email1']))?$row['email1']: $row['email2']), $locale->translateCharsetMIME(\trim($row['first_name'] . ' ' . $row['last_name']), 'UTF-8', $OBCharset));
 
         if (empty($_SESSION['authenticated_user_language'])) {
             $current_language = $sugar_config['default_language'];

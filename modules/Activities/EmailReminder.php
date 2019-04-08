@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -170,13 +170,13 @@ class EmailReminder
         $xtpl->parse($template_name);
         $xtpl->parse($template_name . "_Subject");
 
-        $tempBody = from_html(trim($xtpl->text($template_name)));
+        $tempBody = from_html(\trim($xtpl->text($template_name)));
         $mail->msgHTML($tempBody);
 
-        $tempBody = preg_replace('/<a href=([\"\']?)(.*?)\1>(.*?)<\/a>/', "\\3 [\\2]", $tempBody);
+        $tempBody = \preg_replace('/<a href=([\"\']?)(.*?)\1>(.*?)<\/a>/', "\\3 [\\2]", $tempBody);
 
-        $mail->AltBody = strip_tags($tempBody);
-        $mail->Subject = strip_tags(from_html($xtpl->text($template_name . "_Subject")));
+        $mail->AltBody = \strip_tags($tempBody);
+        $mail->Subject = \strip_tags(from_html($xtpl->text($template_name . "_Subject")));
 
         $oe = new OutboundEmail();
         $oe = $oe->getSystemMailerSettings();
@@ -188,7 +188,7 @@ class EmailReminder
 
         foreach ($recipients as $r) {
             $mail->clearAddresses();
-            $mail->addAddress($r['email'], $GLOBALS['locale']->translateCharsetMIME(trim($r['name']), 'UTF-8', $OBCharset));
+            $mail->addAddress($r['email'], $GLOBALS['locale']->translateCharsetMIME(\trim($r['name']), 'UTF-8', $OBCharset));
             $mail->prepForOutbound();
             if (!$mail->send()) {
                 $GLOBALS['log']->fatal("Email Reminder: error sending e-mail (method: {$mail->Mailer}), (error: {$mail->ErrorInfo})");
@@ -207,7 +207,7 @@ class EmailReminder
     */
     protected function setReminderBody(XTemplate $xtpl, SugarBean $bean, User $user)
     {
-        $object = strtoupper($bean->object_name);
+        $object = \strtoupper($bean->object_name);
 
         $xtpl->assign("{$object}_SUBJECT", $bean->name);
         $date = $GLOBALS['timedate']->fromUser($bean->date_start, $GLOBALS['current_user']);

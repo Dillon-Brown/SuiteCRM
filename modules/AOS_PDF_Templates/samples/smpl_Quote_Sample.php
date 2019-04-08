@@ -27,7 +27,7 @@ class smpl_Quote_Sample
 </tr>
 <tr style="text-align: left;">
 <td style="text-align: left;">
-<h1>'.strtoupper(translate('LBL_PDF_NAME', 'AOS_Quotes')).'</h1>
+<h1>'.\strtoupper(translate('LBL_PDF_NAME', 'AOS_Quotes')).'</h1>
 </td>
 </tr>
 </tbody>

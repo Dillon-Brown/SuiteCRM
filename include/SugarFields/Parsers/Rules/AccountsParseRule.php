@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -59,7 +59,7 @@ class AccountsParseRule extends BaseRule
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -73,9 +73,9 @@ class AccountsParseRule extends BaseRule
                     foreach ($row as $key=>$column) {
                         if ($this->matches($column, '/^parent_id$/')) {
                             $panels[$name][$rowCount][$key] = 'parent_name';
-                        } elseif ($this->matches($column, '/_address_(street|country)$/') && is_array($column) && isset($column['customCode'])) {
-                            if (preg_match('/\{\$fields\.push_contacts_(billing|shipping)\.value\}/', $column['customCode'], $m)) {
-                                $column['customCode'] = str_replace('{$fields.push_contacts_'. $m[1].'.value}', '{$custom_code_'.$m[1].'}', $column['customCode']);
+                        } elseif ($this->matches($column, '/_address_(street|country)$/') && \is_array($column) && isset($column['customCode'])) {
+                            if (\preg_match('/\{\$fields\.push_contacts_(billing|shipping)\.value\}/', $column['customCode'], $m)) {
+                                $column['customCode'] = \str_replace('{$fields.push_contacts_'. $m[1].'.value}', '{$custom_code_'.$m[1].'}', $column['customCode']);
                                 $panels[$name][$rowCount][$key] = $column;
                             }
                         }

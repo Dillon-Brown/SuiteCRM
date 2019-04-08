@@ -65,7 +65,7 @@ class UpgradeMetaHelper
         $this->debug_mode = $debugMode;
         $this->upgrade_modules = $this->getModifiedModules();
 
-        if (count($this->upgrade_modules) > 0) {
+        if (\count($this->upgrade_modules) > 0) {
             $_SESSION['Upgraded_Modules'] = $this->upgrade_modules;
             $this->create_upgrade_directory();
             $this->path_to_master_copy = $masterCopyDirecotry;
@@ -73,7 +73,7 @@ class UpgradeMetaHelper
         }
 
         $this->customized_modules = $this->getAllCustomizedModulesBeyondStudio();
-        if (count($this->customized_modules) > 0) {
+        if (\count($this->customized_modules) > 0) {
             $_SESSION['Customized_Modules'] = $this->customized_modules;
         }
     }
@@ -87,7 +87,7 @@ class UpgradeMetaHelper
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($dir, $masterCopyDirecotry, $debugMode);
     }
@@ -102,8 +102,8 @@ class UpgradeMetaHelper
     public function getModifiedModules()
     {
         $md5_string = array();
-        if (file_exists(clean_path(getcwd().'/files.md5'))) {
-            require(clean_path(getcwd().'/files.md5'));
+        if (\file_exists(clean_path(\getcwd().'/files.md5'))) {
+            require(clean_path(\getcwd().'/files.md5'));
         }
 
         $return_array = array();
@@ -112,23 +112,23 @@ class UpgradeMetaHelper
             $editView = "modules/$mod/EditView.html";
             $detailView = "modules/$mod/DetailView.html";
             $searchForm = "modules/$mod/SearchForm.html";
-            if (file_exists($editView) && isset($md5_string['./' . $editView])) {
-                $fileContents = file_get_contents($editView);
-                if (md5($fileContents) != $md5_string['./' . $editView]) {
+            if (\file_exists($editView) && isset($md5_string['./' . $editView])) {
+                $fileContents = \file_get_contents($editView);
+                if (\md5($fileContents) != $md5_string['./' . $editView]) {
                     $return_array[$mod][] = $editView;
                 }
             }
 
-            if (file_exists($detailView) && isset($md5_string['./' . $detailView])) {
-                $fileContents = file_get_contents($detailView);
-                if (md5($fileContents) != $md5_string['./' . $detailView]) {
+            if (\file_exists($detailView) && isset($md5_string['./' . $detailView])) {
+                $fileContents = \file_get_contents($detailView);
+                if (\md5($fileContents) != $md5_string['./' . $detailView]) {
                     $return_array[$mod][] = $detailView;
                 }
             }
 
-            if (file_exists($searchForm) && isset($md5_string['./' . $searchForm])) {
-                $fileContents = file_get_contents($searchForm);
-                if (md5($fileContents) != $md5_string['./' . $searchForm]) {
+            if (\file_exists($searchForm) && isset($md5_string['./' . $searchForm])) {
+                $fileContents = \file_get_contents($searchForm);
+                if (\md5($fileContents) != $md5_string['./' . $searchForm]) {
                     $return_array[$mod][] = $searchForm;
                 }
             }
@@ -140,24 +140,24 @@ class UpgradeMetaHelper
     public function saveMatchingFilesQueries($currStep, $value)
     {
         $upgrade_progress_dir = sugar_cached('upgrades/temp');
-        if (!is_dir($upgrade_progress_dir)) {
-            mkdir($upgrade_progress_dir);
+        if (!\is_dir($upgrade_progress_dir)) {
+            \mkdir($upgrade_progress_dir);
         }
         $file_queries_file = $upgrade_progress_dir.'/files_queries.php';
-        if (file_exists($file_queries_file)) {
+        if (\file_exists($file_queries_file)) {
             include($file_queries_file);
         } else {
-            if (function_exists('sugar_fopen')) {
+            if (\function_exists('sugar_fopen')) {
                 sugar_fopen($file_queries_file, 'w+');
             } else {
-                fopen($file_queries_file, 'w+');
+                \fopen($file_queries_file, 'w+');
             }
         }
         if (!isset($files_queries) || $files_queries == null) {
             $files_queries = array();
         }
         $files_queries[$currStep]=$value;
-        if (is_writable($file_queries_file) && write_array_to_file(
+        if (\is_writable($file_queries_file) && write_array_to_file(
             "file_queries",
             $file_queries,
         $file_queries_file
@@ -170,15 +170,15 @@ class UpgradeMetaHelper
     {
         require_once('modules/UpgradeWizard/uw_utils.php');
         $md5_string = array();
-        if (file_exists(clean_path(getcwd().'/files.md5'))) {
-            require(clean_path(getcwd().'/files.md5'));
+        if (\file_exists(clean_path(\getcwd().'/files.md5'))) {
+            require(clean_path(\getcwd().'/files.md5'));
         }
         $return_array = array();
         $modules = $this->loadStudioModules();
         $modulesAll = getAllModules(); //keep all modules as well
-        $allOtherModules = array_diff($modulesAll, $modules);
+        $allOtherModules = \array_diff($modulesAll, $modules);
         foreach ($modules as $mod) {
-            if (!is_dir('modules/'.$mod)) {
+            if (!\is_dir('modules/'.$mod)) {
                 continue;
             }
             $editView = "modules/$mod/EditView.html";
@@ -189,10 +189,10 @@ class UpgradeMetaHelper
             $allModFiles = findAllFiles('modules/'.$mod, $allModFiles);
             foreach ($allModFiles as $file) {
                 //$file_md5_ref = str_replace(clean_path(getcwd()),'',$file);
-                if (file_exists($file) && !in_array($file, $exclude_files)) {
+                if (\file_exists($file) && !\in_array($file, $exclude_files)) {
                     if (isset($md5_string['./'.$file])) {
-                        $fileContents = file_get_contents($file);
-                        if (md5($fileContents) != $md5_string['./'.$file]) {
+                        $fileContents = \file_get_contents($file);
+                        if (\md5($fileContents) != $md5_string['./'.$file]) {
                             $return_array[$mod][] = $file;
                         } else {
                             //keep in the array to be deleted later
@@ -205,17 +205,17 @@ class UpgradeMetaHelper
         //also check out other non-studio modules by taking the difference between
         //allMOdules and
         foreach ($allOtherModules as $mod) {
-            if (!is_dir('modules/'.$mod)) {
+            if (!\is_dir('modules/'.$mod)) {
                 continue;
             }
             $allModFiles = array();
             $allModFiles = findAllFiles('modules/'.$mod, $allModFiles);
             foreach ($allModFiles as $file) {
                 //$file_md5_ref = str_replace(clean_path(getcwd()),'',$file);
-                if (file_exists($file)) {
+                if (\file_exists($file)) {
                     if (isset($md5_string['./'.$file])) {
-                        $fileContents = file_get_contents($file);
-                        if (md5($fileContents) == $md5_string['./'.$file]) {
+                        $fileContents = \file_get_contents($file);
+                        if (\md5($fileContents) == $md5_string['./'.$file]) {
                             $_SESSION['removeMd5MatchingFiles'][] = $file;
                         }
                     }
@@ -244,12 +244,12 @@ class UpgradeMetaHelper
             //find all files in each module if the files have been modified
             //as compared to the base version then add the module to the
             //customized modules array
-            $modFiles = findAllFiles(clean_path(getcwd())."/modules/$mod", array());
+            $modFiles = findAllFiles(clean_path(\getcwd())."/modules/$mod", array());
             foreach ($modFiles as $file) {
-                $fileContents = file_get_contents($file);
-                $file = str_replace(clean_path(getcwd()), '', $file);
+                $fileContents = \file_get_contents($file);
+                $file = \str_replace(clean_path(\getcwd()), '', $file);
                 if ($md5_string['./' . $file]) {
-                    if (md5($fileContents) != $md5_string['./' . $file]) {
+                    if (\md5($fileContents) != $md5_string['./' . $file]) {
                         //A file has been customized in the module. Put the module into the
                         // customized modules array.
                         echo 'Changed File'.$file;
@@ -278,12 +278,12 @@ class UpgradeMetaHelper
     public function loadStudioModules()
     {
         $modules = array();
-        $d = dir('modules');
+        $d = \dir('modules');
         while ($e = $d->read()) {
-            if (substr($e, 0, 1) == '.' || !is_dir('modules/' . $e)) {
+            if (\substr($e, 0, 1) == '.' || !\is_dir('modules/' . $e)) {
                 continue;
             }
-            if (file_exists('modules/' . $e . '/metadata/studio.php')) {
+            if (\file_exists('modules/' . $e . '/metadata/studio.php')) {
                 $modules[] = $e;
             }
         }
@@ -325,7 +325,7 @@ class UpgradeMetaHelper
     {
         global $beanList, $dictionary;
         foreach ($files as $file) {
-            if (preg_match('/(EditView|DetailView|SearchForm|QuickCreate)(\.html|\.tpl)$/s', $file, $matches)) {
+            if (\preg_match('/(EditView|DetailView|SearchForm|QuickCreate)(\.html|\.tpl)$/s', $file, $matches)) {
                 $view = $matches[1];
 
                 switch ($view) {
@@ -334,22 +334,22 @@ class UpgradeMetaHelper
                        case 'SearchForm': $parser = $this->svparser; break;
                     }
 
-                $lowerCaseView = $view == 'SearchForm' ? 'search' : strtolower($view);
+                $lowerCaseView = $view == 'SearchForm' ? 'search' : \strtolower($view);
 
                 include('modules/'.$module_name.'/vardefs.php');
                 $bean_name = $beanList[$module_name];
                 $newFile = $this->upgrade_dir.'/modules/'.$module_name.'/metadata/'.$lowerCaseView.'defs.php';
-                $evfp = fopen($newFile, 'w');
+                $evfp = \fopen($newFile, 'w');
 
                 $bean_name = $bean_name == 'aCase' ? 'Case' : $bean_name;
-                fwrite($evfp, $parser->parse(
+                \fwrite($evfp, $parser->parse(
                     $file,
                                             $dictionary[$bean_name]['fields'],
                                             $module_name,
                                             true,
                                             $this->path_to_master_copy.'/modules/'.$module_name.'/metadata/'.$lowerCaseView.'defs.php'
                 ));
-                fclose($evfp);
+                \fclose($evfp);
             } //if
         } //foreach
     }
@@ -364,24 +364,24 @@ class UpgradeMetaHelper
     public function create_upgrade_directory()
     {
         $dir = $this->upgrade_dir.'/modules';
-        if (!file_exists($this->upgrade_dir)) {
-            mkdir($this->upgrade_dir, 0755);
+        if (!\file_exists($this->upgrade_dir)) {
+            \mkdir($this->upgrade_dir, 0755);
         }
-        if (!file_exists($dir)) {
-            mkdir($dir, 0755);
+        if (!\file_exists($dir)) {
+            \mkdir($dir, 0755);
         }
 
         foreach ($this->upgrade_modules as $module=>$files) {
-            if (!file_exists($dir.'/'.$module)) {
-                mkdir($dir.'/'.$module, 0755);
+            if (!\file_exists($dir.'/'.$module)) {
+                \mkdir($dir.'/'.$module, 0755);
             }
-            if (!file_exists($dir.'/'.$module.'/metadata')) {
-                mkdir($dir.'/'.$module.'/metadata', 0755);
+            if (!\file_exists($dir.'/'.$module.'/metadata')) {
+                \mkdir($dir.'/'.$module.'/metadata', 0755);
             }
 
             foreach ($files as $file) {
-                if (file_exists($file) && is_file($file)) {
-                    copy($file, $this->upgrade_dir.'/'.$file);
+                if (\file_exists($file) && \is_file($file)) {
+                    \copy($file, $this->upgrade_dir.'/'.$file);
                 } //if
             } //foreach
         }
@@ -400,17 +400,17 @@ class UpgradeMetaHelper
      */
     public function verifyMetaData($metadataFile, $module, $view)
     {
-        if (!file_exists($metadataFile) || !is_file($metadataFile)) {
+        if (!\file_exists($metadataFile) || !\is_file($metadataFile)) {
             return false;
         }
 
         include($metadataFile);
 
-        if (isset($viewdefs) && isset($viewdefs[$module][$view]['panels']) && is_array($viewdefs[$module][$view]['panels'])) {
+        if (isset($viewdefs) && isset($viewdefs[$module][$view]['panels']) && \is_array($viewdefs[$module][$view]['panels'])) {
             return true;
         }
 
-        if (isset($searchdefs) && isset($searchdefs[$module]) &&  is_array($searchdefs[$module])) {
+        if (isset($searchdefs) && isset($searchdefs[$module]) &&  \is_array($searchdefs[$module])) {
             return true;
         }
 

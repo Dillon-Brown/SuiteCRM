@@ -113,7 +113,7 @@ class MeetingTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($meeting->id));
-        $this->assertEquals(36, strlen($meeting->id));
+        $this->assertEquals(36, \strlen($meeting->id));
 
         /* Test set_accept_status method */
 
@@ -346,7 +346,7 @@ class MeetingTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $meeting = new Meeting();
 
         $result = $meeting->get_meeting_users();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testget_invite_meetings()
@@ -355,7 +355,7 @@ class MeetingTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $user = new User();
         $result = $meeting->get_invite_meetings($user);
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testget_notification_recipients()
@@ -364,12 +364,12 @@ class MeetingTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test without special_notification
         $result = $meeting->get_notification_recipients();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         //test with special_notification
         $meeting->special_notification = 1;
         $result = $meeting->get_notification_recipients();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testbean_implements()
@@ -476,6 +476,6 @@ class MeetingTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         global $dictionary, $app_list_strings;
 
         $result = getMeetingTypeOptions($dictionary, $app_list_strings);
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 }

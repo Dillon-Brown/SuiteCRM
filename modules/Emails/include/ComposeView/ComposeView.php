@@ -46,7 +46,7 @@ class ComposeView extends EditView
      */
     public function __construct()
     {
-        $this->view = get_class($this);
+        $this->view = \get_class($this);
     }
 
     /**

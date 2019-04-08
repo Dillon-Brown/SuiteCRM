@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -42,5 +42,5 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 
-define('EXTERNAL_CACHE_NULL_VALUE', "SUGAR_CACHE_NULL_ZZ");
+\define('EXTERNAL_CACHE_NULL_VALUE', "SUGAR_CACHE_NULL_ZZ");
 require_once 'include/SugarCache/SugarCache.php';

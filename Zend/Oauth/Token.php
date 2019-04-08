@@ -71,7 +71,7 @@ abstract class Zend_Oauth_Token
         if ($response !== null) {
             $this->_response = $response;
             $params = $this->_parseParameters($response);
-            if (count($params) > 0) {
+            if (\count($params) > 0) {
                 $this->setParams($params);
             }
         }
@@ -143,7 +143,7 @@ abstract class Zend_Oauth_Token
      */
     public function setParam($key, $value)
     {
-        $this->_params[$key] = trim($value, "\n");
+        $this->_params[$key] = \trim($value, "\n");
         return $this;
     }
 
@@ -257,10 +257,10 @@ abstract class Zend_Oauth_Token
         }
 
         // validate body based on acceptable characters...todo
-        $parts = explode('&', $body);
+        $parts = \explode('&', $body);
         foreach ($parts as $kvpair) {
-            $pair = explode('=', $kvpair);
-            $params[rawurldecode($pair[0])] = rawurldecode($pair[1]);
+            $pair = \explode('=', $kvpair);
+            $params[\rawurldecode($pair[0])] = \rawurldecode($pair[1]);
         }
         return $params;
     }

@@ -65,7 +65,7 @@ class ViewRelationship extends SugarView
         ) {
         require_once 'modules/ModuleBuilder/parsers/relationships/AbstractRelationship.php' ;
         foreach (AbstractRelationship::$definitionKeys as $key) {
-            if (!empty($_REQUEST ['ajaxLoad']) && in_array($key, array('label', 'rhs_label', 'lhs_label'))) {
+            if (!empty($_REQUEST ['ajaxLoad']) && \in_array($key, array('label', 'rhs_label', 'lhs_label'))) {
                 continue;
             }
             if (! empty($_REQUEST [ $key ])) {
@@ -107,12 +107,12 @@ class ViewRelationship extends SugarView
             $appStrings = $module->getModStrings($selected_lang) ;
         }
         
-        ksort($relatableModules) ;
+        \ksort($relatableModules) ;
         $lhs_subpanels = $module->getProvidedSubpanels() ;
         // Fix to re-add sorting of the subpanel names so that the 'default' subpanel always appears first in the list.
         // This assumes that subpanels are usually named ForXYZ which is the case currently, and hence 'default' will be sorted first.
         //I f this assumption is incorrect, then a better solution would be to remove 'default' from the subpanel list, then sort, and finally array_unshift it back on.
-        natcasesort($lhs_subpanels);
+        \natcasesort($lhs_subpanels);
                 
         $cardinality = array( MB_ONETOONE => translate('LBL_ONETOONE') , MB_ONETOMANY => translate('LBL_ONETOMANY') , MB_MANYTOONE=> translate('LBL_MANYTOONE'), MB_MANYTOMANY => translate('LBL_MANYTOMANY'), ) ;
         
@@ -140,7 +140,7 @@ class ViewRelationship extends SugarView
             }
         } else {
             $definition = array( ) ;
-            $firstModuleDefinition = each($relatableModules) ;
+            $firstModuleDefinition = \each($relatableModules) ;
             $definition [ 'rhs_module' ] = $firstModuleDefinition [ 'key' ] ;
             $definition [ 'lhs_module' ] = $moduleName ;
             $definition [ 'lhs_label' ] = translate($moduleName);
@@ -159,7 +159,7 @@ class ViewRelationship extends SugarView
         
         $rhs_subpanels = $relatableModules [ $relationship->rhs_module ] ;
         // Fix to re-add sorting of the subpanel names so that the 'default' subpanel always appears first in the list. This assumes that subpanels are usually named ForXYZ which is the case currently, and hence 'default' will be sorted first. If this assumption is incorrect, then a better solution would be to remove 'default' from the subpanel list, then sort, and finally array_unshift it back on.
-        natcasesort($rhs_subpanels);
+        \natcasesort($rhs_subpanels);
         
         if (empty($_REQUEST [ 'relationship_name' ])) {
             // tidy up the options for the view based on the modules participating in the relationship and the cardinality
@@ -167,10 +167,10 @@ class ViewRelationship extends SugarView
 
             // fix up the available cardinality options
             $relationship_type = $relationship->getType() ;
-            if (count($lhs_subpanels) == 0 || count($rhs_subpanels) == 0) {
+            if (\count($lhs_subpanels) == 0 || \count($rhs_subpanels) == 0) {
                 unset($cardinality [ MB_MANYTOMANY ]) ;
             }
-            if (count($rhs_subpanels) == 0) {
+            if (\count($rhs_subpanels) == 0) {
                 unset($cardinality [ MB_ONETOMANY ]) ;
             }
 
@@ -188,8 +188,8 @@ class ViewRelationship extends SugarView
                 unset($cardinality [ MB_MANYTOONE ]);
             }
             if (! isset($cardinality[$relationship->getType()])) {
-                end($cardinality) ;
-                $definition [ 'relationship_type' ] = key($cardinality) ;
+                \end($cardinality) ;
+                $definition [ 'relationship_type' ] = \key($cardinality) ;
                 $relationship = RelationshipFactory::newRelationship($definition) ;
             }
             
@@ -210,7 +210,7 @@ class ViewRelationship extends SugarView
         $this->smarty->assign('rel', $relationship->getDefinition()) ;
         $this->smarty->assign('mod_strings', $GLOBALS [ 'mod_strings' ]) ;
         $this->smarty->assign('module_key', $relationship->lhs_module) ;
-        $this->smarty->assign('cardinality', array_keys($cardinality)) ;
+        $this->smarty->assign('cardinality', \array_keys($cardinality)) ;
         $this->smarty->assign('translated_cardinality', $cardinality) ;
         $this->smarty->assign('selected_cardinality', translate($relationship->getType())) ;
         
@@ -219,8 +219,8 @@ class ViewRelationship extends SugarView
             $relatable [ $name ] = translate($name) ;
         }
         unset($relatable [ 'KBDocuments' ]) ;
-        natcasesort($relatable) ;
-        $this->smarty->assign('relatable', array_keys($relatable)) ;
+        \natcasesort($relatable) ;
+        $this->smarty->assign('relatable', \array_keys($relatable)) ;
         $this->smarty->assign('translated_relatable', $relatable) ;
         $this->smarty->assign('rhspanels', $rhs_subpanels) ;
         $this->smarty->assign('lhspanels', $lhs_subpanels) ;

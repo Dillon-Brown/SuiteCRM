@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -144,7 +144,7 @@ EOQ;
     
         
         $focus = new ProspectList();
-        if ($useRequired &&  !checkRequired($prefix, array_keys($focus->required_fields))) {
+        if ($useRequired &&  !checkRequired($prefix, \array_keys($focus->required_fields))) {
             return null;
         }
         $focus = populateFromPost($prefix, $focus);

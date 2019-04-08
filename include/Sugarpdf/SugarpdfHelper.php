@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,7 +71,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
         // Wrap the tags defined in the options array (like b, i, font... tags)
         if (!empty($options)) {
             foreach ($options as $k=>$v) {
-                if (is_array($v)) {
+                if (\is_array($v)) {
                     $html = wrapTag($k, "$html", $v);
                 }
             }
@@ -80,7 +80,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
         $return = "<$tag ";
         if (!empty($options)) {
             foreach ($options as $k=>$v) {
-                if (!is_array($v)) {
+                if (!\is_array($v)) {
                     $return .= " $k=".'"'.$v.'"';
                 }
             }
@@ -96,7 +96,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
     function prepare_string($string)
     {
         global $locale;
-        $string = html_entity_decode($string, ENT_QUOTES);
+        $string = \html_entity_decode($string, ENT_QUOTES);
         // return $locale->translateCharset($string, 'UTF-8', $locale->getExportCharset());
         return $string;
     }
@@ -118,10 +118,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
         $dec_sep = $seps[1];
 
         // cn: bug 8522 - sig digits not honored in pdfs
-        if (is_null($decimals)) {
+        if (\is_null($decimals)) {
             $decimals = $locale->getPrecision();
         }
-        if (is_null($round)) {
+        if (\is_null($round)) {
             $round = $locale->getPrecision();
         }
 
@@ -186,16 +186,16 @@ if (!defined('sugarEntry') || !sugarEntry) {
         }
 
         if (empty($params['human'])) {
-            $amount = number_format(round($amount, $round), $decimals, $dec_sep, $num_grp_sep);
+            $amount = \number_format(\round($amount, $round), $decimals, $dec_sep, $num_grp_sep);
             $amount = format_place_symbol($amount, $symbol, (empty($params['symbol_space']) ? false : true));
         } else {
             // If amount is more greater than a thousand(positive or negative)
-            if (strpos($amount, '.') > 0) {
-                $checkAmount = strlen(substr($amount, 0, strpos($amount, '.')));
+            if (\strpos($amount, '.') > 0) {
+                $checkAmount = \strlen(\substr($amount, 0, \strpos($amount, '.')));
             }
 
             if ($checkAmount >= 1000 || $checkAmount <= -1000) {
-                $amount = round(($amount / 1000), 0);
+                $amount = \round(($amount / 1000), 0);
                 $amount = $amount . 'k';
                 $amount = format_place_symbol($amount, $symbol, (empty($params['symbol_space']) ? false : true));
             } else {

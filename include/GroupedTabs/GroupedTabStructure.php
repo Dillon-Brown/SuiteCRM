@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -72,7 +72,7 @@ class GroupedTabStructure
             $tabStructure = $GLOBALS['tabStructure'];
             
             foreach ($patch as $mainTab => $subModules) {
-                $tabStructure[$mainTab]['modules'] = array_merge($tabStructure[$mainTab]['modules'], $subModules);
+                $tabStructure[$mainTab]['modules'] = \array_merge($tabStructure[$mainTab]['modules'], $subModules);
             }
         } else {
             $tabStructure =& $GLOBALS['tabStructure'];
@@ -81,8 +81,8 @@ class GroupedTabStructure
         $retStruct = array();
         $mlhUsed = array();
         //the invisible list should be merged if activities is set to be hidden
-        if (in_array('Activities', $modList)) {
-            $modList = array_merge($modList, $modInvisListActivities);
+        if (\in_array('Activities', $modList)) {
+            $modList = \array_merge($modList, $modInvisListActivities);
         }
         
         //Add any iFrame tabs to the 'other' group.
@@ -97,7 +97,7 @@ class GroupedTabStructure
             unset($modList['iFrames']);
         }
                 
-        $modList = array_merge($modList, $moduleExtraMenu);
+        $modList = \array_merge($modList, $moduleExtraMenu);
                 
         /* Only return modules which exists in the modList */
         foreach ($tabStructure as $mainTab => $subModules) {
@@ -113,7 +113,7 @@ class GroupedTabStructure
                  * and mark whichever module matched as used.
                  */
                 foreach ($modList as $module) {
-                    if (is_string($module) && strcasecmp($subModule, $module) === 0) {
+                    if (\is_string($module) && \strcasecmp($subModule, $module) === 0) {
                         if ($labelAsKey) {
                             $retStruct[$subModules['label']]['modules'][$module] = $app_list_strings['moduleList'][$module];
                         } else {

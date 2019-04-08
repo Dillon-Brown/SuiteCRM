@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -153,7 +153,7 @@ class FactorAuthEmailCode implements FactorAuthInterface
             $GLOBALS['log']->warn($msg);
             SugarApplication::appendErrorMessage($mod_strings['ERR_NO_2FACTOR_EMAIL_TMPL']);
             return false;
-        } elseif ($emailTpl && !preg_match('/\$code\b/', $emailTpl->body_html)) {
+        } elseif ($emailTpl && !\preg_match('/\$code\b/', $emailTpl->body_html)) {
             $msg .= 'Two factor email template should contains a $code at least.';
             $GLOBALS['log']->warn($msg);
             SugarApplication::appendErrorMessage($mod_strings['ERR_NO_2FACTOR_EMAIL_TMPL_CODE']);

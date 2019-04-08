@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -55,7 +55,7 @@ function getSystemInfo($send_usage_info=true)
     $info = getBaseSystemInfo($send_usage_info);
     if ($send_usage_info) {
         $info['application_key']=$sugar_config['unique_key'];
-        $info['php_version']=phpversion();
+        $info['php_version']=\phpversion();
         if (isset($_SERVER['SERVER_SOFTWARE'])) {
             $info['server_software'] = $_SERVER['SERVER_SOFTWARE'];
         } // if
@@ -72,7 +72,7 @@ function getSystemInfo($send_usage_info=true)
             $administration = new Administration();
         }
         $administration->retrieveSettings('system');
-        $info['system_name'] = (!empty($administration->settings['system_name']))?substr($administration->settings['system_name'], 0, 255):'';
+        $info['system_name'] = (!empty($administration->settings['system_name']))?\substr($administration->settings['system_name'], 0, 255):'';
 
 
         $result=$db->getOne("select count(*) count from users where status='Active' and deleted=0 and is_admin='1'", false, 'fetching admin count');
@@ -108,18 +108,18 @@ function getSystemInfo($send_usage_info=true)
         $info['db_type']=$sugar_config['dbconfig']['db_type'];
         $info['db_version']=$db->version();
     }
-    if (file_exists('distro.php')) {
+    if (\file_exists('distro.php')) {
         include('distro.php');
         if (!empty($distro_name)) {
             $info['distro_name'] = $distro_name;
         }
     }
-    $info['os'] = php_uname('s');
-    $info['os_version'] = php_uname('r');
+    $info['os'] = \php_uname('s');
+    $info['os_version'] = \php_uname('r');
     $info['timezone_u'] = $GLOBALS['current_user']->getPreference('timezone');
-    $info['timezone'] = date('e');
+    $info['timezone'] = \date('e');
     if ($info['timezone'] == 'e') {
-        $info['timezone'] = date('T');
+        $info['timezone'] = \date('T');
     }
     return $info;
 }
@@ -183,11 +183,11 @@ function check_now($send_usage_info=true, $get_request_data=false, $response_dat
 
 
 
-        $encoded = sugarEncode($key, serialize($info));
+        $encoded = sugarEncode($key, \serialize($info));
 
         if ($get_request_data) {
             $request_data = array('key'=>$key, 'data'=>$encoded);
-            return serialize($request_data);
+            return \serialize($request_data);
         }
         $encodedResult = $sclient->call('sugarHome', array('key'=>$key, 'data'=>$encoded));
     } else {
@@ -197,7 +197,7 @@ function check_now($send_usage_info=true, $get_request_data=false, $response_dat
 
     if ($response_data || !$sclient->getError()) {
         $serializedResultData = sugarDecode($key, $encodedResult);
-        $resultData = unserialize($serializedResultData);
+        $resultData = \unserialize($serializedResultData);
         if ($response_data && empty($resultData)) {
             $resultData = array();
             $resultData['validation'] = 'invalid validation key';
@@ -210,12 +210,12 @@ function check_now($send_usage_info=true, $get_request_data=false, $response_dat
     if ($response_data || !$sclient->getError()) {
         if (!empty($resultData['msg'])) {
             if (!empty($resultData['msg']['admin'])) {
-                $license->saveSetting('license', 'msg_admin', base64_encode($resultData['msg']['admin']));
+                $license->saveSetting('license', 'msg_admin', \base64_encode($resultData['msg']['admin']));
             } else {
                 $license->saveSetting('license', 'msg_admin', '');
             }
             if (!empty($resultData['msg']['all'])) {
-                $license->saveSetting('license', 'msg_all', base64_encode($resultData['msg']['all']));
+                $license->saveSetting('license', 'msg_all', \base64_encode($resultData['msg']['all']));
             } else {
                 $license->saveSetting('license', 'msg_all', '');
             }
@@ -235,18 +235,18 @@ function check_now($send_usage_info=true, $get_request_data=false, $response_dat
         if (empty($license->settings['license_last_validation_success']) && empty($license->settings['license_last_validation_fail']) && empty($license->settings['license_vk_end_date'])) {
             $license->saveSetting('license', 'vk_end_date', TimeDate::getInstance()->nowDb());
 
-            $license->saveSetting('license', 'validation_key', base64_encode(serialize(array('verified'=>false))));
+            $license->saveSetting('license', 'validation_key', \base64_encode(\serialize(array('verified'=>false))));
         }
         $_SESSION['COULD_NOT_CONNECT'] =TimeDate::getInstance()->nowDb();
     }
     if (!empty($resultData['versions'])) {
-        $license->saveSetting('license', 'latest_versions', base64_encode(serialize($resultData['versions'])));
+        $license->saveSetting('license', 'latest_versions', \base64_encode(\serialize($resultData['versions'])));
     } else {
         $resultData['versions'] = array();
         $license->saveSetting('license', 'latest_versions', '')	;
     }
 
-    if (sizeof($resultData) == 1 && !empty($resultData['versions'][0]['version'])
+    if (\sizeof($resultData) == 1 && !empty($resultData['versions'][0]['version'])
         && compareVersions($sugar_version, $resultData['versions'][0]['version'])) {
         $resultData['versions'][0]['version'] = $sugar_version;
         $resultData['versions'][0]['description'] = "You have the latest version.";
@@ -260,7 +260,7 @@ function check_now($send_usage_info=true, $get_request_data=false, $response_dat
  */
 function compareVersions($ver1, $ver2)
 {
-    return (version_compare($ver1, $ver2) === 1);
+    return (\version_compare($ver1, $ver2) === 1);
 }
 function set_CheckUpdates_config_setting($value)
 {
@@ -364,7 +364,7 @@ function loginLicense()
 
     if (shouldCheckSugar()) {
         $last_check_date=get_last_check_date_config_setting();
-        $current_date_time=time();
+        $current_date_time=\time();
         $time_period=3*23*3600 ;
         if (($current_date_time - $last_check_date) > $time_period
         ) {
@@ -376,11 +376,11 @@ function loginLicense()
             include('sugar_version.php');
 
             $newVersion = '';
-            if (!empty($version) && count($version) == 1) {
+            if (!empty($version) && \count($version) == 1) {
                 $newVersion = $version[0]['version'];
             }
 
-            if (version_compare($newVersion, $sugar_version, '>') && is_admin($current_user)) {
+            if (\version_compare($newVersion, $sugar_version, '>') && is_admin($current_user)) {
                 //set session variables.
                 $_SESSION['available_version']=$version[0]['version'];
                 $_SESSION['available_version_description']=$version[0]['description'];

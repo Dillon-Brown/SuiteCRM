@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -50,7 +50,7 @@ if (!$db->supports('fix:expandDatabase')) {
 }
 global $current_user,$beanFiles;
 
-set_time_limit(3600);
+\set_time_limit(3600);
 if (is_admin($current_user) || isset($from_sync_client)) {
     $execute = false;
     $export = false;
@@ -64,7 +64,7 @@ if (is_admin($current_user) || isset($from_sync_client)) {
                 $execute = true;
                 break;
             case 'export':
-                header('Location: index.php?module=Administration&action=expandDatabase&do_action=do_export&to_pdf=true');
+                \header('Location: index.php?module=Administration&action=expandDatabase&do_action=do_export&to_pdf=true');
                 die();
             case 'do_export':
                 $export = true;
@@ -103,14 +103,14 @@ if (is_admin($current_user) || isset($from_sync_client)) {
         } //while
 
         //If there are no ALTER queries to run, echo message
-        if (count($alter_queries) == 0) {
+        if (\count($alter_queries) == 0) {
             echo $mod_strings['ERR_NO_COLUMNS_TO_EXPAND'];
         } else {
 
             // Create a backup file to restore columns to original length
             if ($execute) {
                 $fh = sugar_fopen('restoreExpand.sql', 'w');
-                if (-1 == fwrite($fh, $theRestoreQueries)) {
+                if (-1 == \fwrite($fh, $theRestoreQueries)) {
                     $GLOBALS['log']->error($mod_strings['ERR_CANNOT_CREATE_RESTORE_FILE']);
                     echo($mod_strings['ERR_CANNOT_CREATE_RESTORE_FILE']);
                 } else {
@@ -124,23 +124,23 @@ if (is_admin($current_user) || isset($from_sync_client)) {
             }
 
             if ($export) {
-                header("Content-Disposition: attachment; filename=expandSugarDB.sql");
-                header("Content-Type: text/sql; charset={$app_strings['LBL_CHARSET']}");
-                header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-                header("Last-Modified: " . TimeDate::httpTime());
-                header("Cache-Control: post-check=0, pre-check=0", false);
-                header("Content-Length: ".strlen($theAlterQueries));
+                \header("Content-Disposition: attachment; filename=expandSugarDB.sql");
+                \header("Content-Type: text/sql; charset={$app_strings['LBL_CHARSET']}");
+                \header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+                \header("Last-Modified: " . TimeDate::httpTime());
+                \header("Cache-Control: post-check=0, pre-check=0", false);
+                \header("Content-Length: ".\strlen($theAlterQueries));
                 echo $theAlterQueries;
                 die();
             }
             if (empty($_REQUEST['repair_silent'])) {
-                echo nl2br($theAlterQueries);
+                echo \nl2br($theAlterQueries);
             }
         } //if-else
     } // end do_action
 
     if (empty($_REQUEST['repair_silent']) && empty($_REQUEST['do_action'])) {
-        if (!file_exists('restoreExpand.sql')) {
+        if (!\file_exists('restoreExpand.sql')) {
             echo "	<b>{$mod_strings['LBL_REPAIR_ACTION']}</b><br>
 				<form name='repairdb'>
 					<input type='hidden' name='action' value='expandDatabase'>

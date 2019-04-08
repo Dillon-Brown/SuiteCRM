@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -73,10 +73,10 @@ global $focus_list;
 $button  = "<form action='index.php' method='post' name='form' id='form'>\n";
 $button .= "<input type='hidden' name='module' value='Opportunities'>\n";
 if ($currentModule == 'Accounts') {
-    $button .= "<input type='hidden' name='account_id' value='$focus->id'>\n<input type='hidden' name='account_name' value=\"".urlencode($focus->name)."\">\n";
+    $button .= "<input type='hidden' name='account_id' value='$focus->id'>\n<input type='hidden' name='account_name' value=\"".\urlencode($focus->name)."\">\n";
 }
 if ($currentModule == 'Contacts') {
-    $button .= "<input type='hidden' name='account_id' value='$focus->account_id'>\n<input type='hidden' name='account_name' value=\"".urlencode($focus->account_name)."\">\n";
+    $button .= "<input type='hidden' name='account_id' value='$focus->account_id'>\n<input type='hidden' name='account_name' value=\"".\urlencode($focus->account_name)."\">\n";
     $button .= "<input type='hidden' name='contact_id' value='$focus->id'>\n";
 }
 $button .= "<input type='hidden' name='return_module' value='".$currentModule."'>\n";

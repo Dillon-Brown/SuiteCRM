@@ -130,28 +130,28 @@ class ExternalSourceEAPMAdapter extends ImportDataSource
     //Begin Implementation for SPL's Iterator interface
     public function current()
     {
-        $this->_currentRow =  current($this->_recordSet);
+        $this->_currentRow =  \current($this->_recordSet);
         return $this->_currentRow;
     }
 
     public function key()
     {
-        return key($this->_recordSet);
+        return \key($this->_recordSet);
     }
     
     public function rewind()
     {
-        reset($this->_recordSet);
+        \reset($this->_recordSet);
     }
 
     public function next()
     {
         $this->_rowsCount++;
-        next($this->_recordSet);
+        \next($this->_recordSet);
     }
 
     public function valid()
     {
-        return (current($this->_recordSet) !== false);
+        return (\current($this->_recordSet) !== false);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -87,7 +87,7 @@ class OpportunityFormBase
             global $mod_strings;
         }
         global $app_strings;
-        $cols = sizeof($rows[0]) * 2 + 1;
+        $cols = \sizeof($rows[0]) * 2 + 1;
         $form = '<table width="100%"><tr><td>'.$mod_strings['MSG_DUPLICATE']. '</td></tr><tr><td height="20"></td></tr></table>';
 
         $form .= "<form action='index.php' method='post' name='dupOpps'><input type='hidden' name='selectedOpportunity' value=''>";
@@ -295,7 +295,7 @@ EOQ;
 EOQ;
         //carry forward custom lead fields to opportunities during Lead Conversion
         $tempOpp = new Opportunity();
-        if (method_exists($lead, 'convertCustomFieldsForm')) {
+        if (\method_exists($lead, 'convertCustomFieldsForm')) {
             $lead->convertCustomFieldsForm($the_form, $tempOpp, $prefix);
         }
         unset($tempOpp);
@@ -444,7 +444,7 @@ EOQ;
         require_once('include/formbase.php');
 
         $focus = new Opportunity();
-        if ($useRequired &&  !checkRequired($prefix, array_keys($focus->required_fields))) {
+        if ($useRequired &&  !checkRequired($prefix, \array_keys($focus->required_fields))) {
             return null;
         }
 

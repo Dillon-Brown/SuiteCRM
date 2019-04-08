@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -67,7 +67,7 @@ $offset=0;
 
 
 /* end standard DetailView layout process */
-$exServ = explode('::', $focus->service);
+$exServ = \explode('::', $focus->service);
 if ($focus->delete_seen == 1) {
     $delete_seen = $mod_strings['LBL_MARK_READ_NO'];
 } else {
@@ -99,7 +99,7 @@ $tls = $app_list_strings['dom_email_bool']['bool_false'];
 $ca = $app_list_strings['dom_email_bool']['bool_false'];
 if (!empty($focus->service)) {
     // will always have 2 values: /tls || /notls and /validate-cert || /novalidate-cert
-    $exServ = explode('::', $focus->service);
+    $exServ = \explode('::', $focus->service);
     if ($exServ[0] == 'tls') {
         $tls = $app_list_strings['dom_email_bool']['bool_true'];
     }
@@ -135,7 +135,7 @@ $onlySince = $mod_strings['LBL_ONLY_SINCE_NO'];
 
 if (!empty($focus->stored_options)) {
     // FROM NAME and Address
-    $storedOptions = unserialize(base64_decode($focus->stored_options));
+    $storedOptions = \unserialize(\base64_decode($focus->stored_options));
 
     $from_name = (isset($storedOptions['from_name']) ? $storedOptions['from_name'] : "");
     $from_addr = (isset($storedOptions['from_addr']) ? $storedOptions['from_addr'] : "");

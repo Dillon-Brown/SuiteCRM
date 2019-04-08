@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -103,44 +103,44 @@ class ViewBackups extends SugarView
                     $errors[] = $mod_strings['LBL_BACKUP_FILENAME_ERROR'];
                 }
         
-                if (sizeof($errors) > 0) {
+                if (\sizeof($errors) > 0) {
                     return($errors);
                 }
         
-                if (!is_dir($backup_dir)) {
+                if (!\is_dir($backup_dir)) {
                     if (!mkdir_recursive($backup_dir)) {
                         $errors[] = $mod_strings['LBL_BACKUP_DIRECTORY_EXISTS'];
                     }
                 }
         
-                if (!is_writable($backup_dir)) {
+                if (!\is_writable($backup_dir)) {
                     $errors[] = $mod_strings['LBL_BACKUP_DIRECTORY_NOT_WRITABLE'];
                 }
         
-                if (is_file("$backup_dir/$backup_zip")) {
+                if (\is_file("$backup_dir/$backup_zip")) {
                     $errors[] = $mod_strings['LBL_BACKUP_FILE_EXISTS'];
                 }
-                if (is_dir("$backup_dir/$backup_zip")) {
+                if (\is_dir("$backup_dir/$backup_zip")) {
                     $errors[] = $mod_strings['LBL_BACKUP_FILE_AS_SUB'];
                 }
-                if (sizeof($errors) == 0) {
+                if (\sizeof($errors) == 0) {
                     $run = "confirmed";
                     $input_disabled = "readonly";
                 }
             } elseif ($run == "confirmed") {
-                ini_set("memory_limit", "-1");
-                ini_set("max_execution_time", "0");
+                \ini_set("memory_limit", "-1");
+                \ini_set("max_execution_time", "0");
                 zip_dir(".", "$backup_dir/$backup_zip");
                 $run = "done";
             }
         }
-        if (sizeof($errors) > 0) {
+        if (\sizeof($errors) > 0) {
             foreach ($errors as $error) {
                 print("<font color=\"red\">$error</font><br>");
             }
         }
         if ($run == "done") {
-            $size = filesize("$backup_dir/$backup_zip");
+            $size = \filesize("$backup_dir/$backup_zip");
             print($mod_strings['LBL_BACKUP_FILE_STORED'] . " $backup_dir/$backup_zip ($size bytes).<br>\n");
             print("<a href=\"index.php?module=Administration&action=index\">" . $mod_strings['LBL_BACKUP_BACK_HOME']. "</a>\n");
         } else {

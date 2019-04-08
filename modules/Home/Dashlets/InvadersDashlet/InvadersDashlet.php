@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -87,7 +87,7 @@ class InvadersDashlet extends Dashlet
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id, $def);
     }
@@ -156,7 +156,7 @@ class InvadersDashlet extends Dashlet
         global $sugar_config, $timedate, $current_user, $theme;
         $options = array();
         $options['title'] = $_REQUEST['title'];
-        if (is_numeric($_REQUEST['height'])) {
+        if (\is_numeric($_REQUEST['height'])) {
             if ($_REQUEST['height'] > 0 && $_REQUEST['height'] <= 300) {
                 $options['height'] = $_REQUEST['height'];
             } elseif ($_REQUEST['height'] > 300) {
@@ -181,7 +181,7 @@ class InvadersDashlet extends Dashlet
         if (isset($_REQUEST['savedText'])) {
             $optionsArray = $this->loadOptions();
 //            _pp($_REQUEST['savedText']);
-            $optionsArray['savedText'] = nl2br($_REQUEST['savedText']);
+            $optionsArray['savedText'] = \nl2br($_REQUEST['savedText']);
             $this->storeOptions($optionsArray);
         } else {
             $optionsArray['savedText'] = '';

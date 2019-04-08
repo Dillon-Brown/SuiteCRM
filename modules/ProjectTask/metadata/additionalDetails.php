@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -73,8 +73,8 @@ function additionalDetailsProjectTask($fields)
     }
         
     if (!empty($fields['DESCRIPTION'])) {
-        $overlib_string .= '<b>'. $mod_strings['LBL_DESCRIPTION'] . '</b> ' . substr($fields['DESCRIPTION'], 0, 300);
-        if (strlen($fields['DESCRIPTION']) > 300) {
+        $overlib_string .= '<b>'. $mod_strings['LBL_DESCRIPTION'] . '</b> ' . \substr($fields['DESCRIPTION'], 0, 300);
+        if (\strlen($fields['DESCRIPTION']) > 300) {
             $overlib_string .= '...';
         }
     }

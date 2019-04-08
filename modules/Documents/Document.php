@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -117,7 +117,7 @@ class Document extends File
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -174,7 +174,7 @@ class Document extends File
             $createRevision = false;
             //Move file saved during populatefrompost to match the revision id rather than document id
             if (!empty($_FILES['filename_file'])) {
-                rename("upload://{$this->id}", "upload://{$Revision->id}");
+                \rename("upload://{$this->id}", "upload://{$Revision->id}");
                 $createRevision = true;
             } else {
                 if ($isDuplicate && (empty($this->doc_type) || $this->doc_type == 'Sugar')) {
@@ -184,7 +184,7 @@ class Document extends File
                     $old_name = "upload://{$oldDocument->document_revision_id}";
                     $new_name = "upload://{$Revision->id}";
                     $GLOBALS['log']->debug("Attempting to copy from $old_name to $new_name");
-                    copy($old_name, $new_name);
+                    \copy($old_name, $new_name);
                     $createRevision = true;
                 }
             }
@@ -277,13 +277,13 @@ class Document extends File
             global $img_name;
             global $img_name_bare;
             if (!empty($row['file_ext'])) {
-                $img_name = SugarThemeRegistry::current()->getImageURL(strtolower($row['file_ext']) . "_image_inline.gif");
-                $img_name_bare = strtolower($row['file_ext']) . "_image_inline";
+                $img_name = SugarThemeRegistry::current()->getImageURL(\strtolower($row['file_ext']) . "_image_inline.gif");
+                $img_name_bare = \strtolower($row['file_ext']) . "_image_inline";
             }
         }
 
         //set default file name.
-        if (!empty($img_name) && file_exists($img_name)) {
+        if (!empty($img_name) && \file_exists($img_name)) {
             $img_name = $img_name_bare;
         } else {
             $img_name = "def_image_inline"; //todo change the default image.
@@ -428,7 +428,7 @@ class Document extends File
         $this->load_relationships('revisions');
         $revisions = $this->get_linked_beans('revisions', 'DocumentRevision');
 
-        if (!empty($revisions) && is_array($revisions)) {
+        if (!empty($revisions) && \is_array($revisions)) {
             foreach ($revisions as $key => $version) {
                 UploadFile::unlink_file($version->id, $version->filename);
                 //mark the version deleted.

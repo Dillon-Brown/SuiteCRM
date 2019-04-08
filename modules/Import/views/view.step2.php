@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,7 +71,7 @@ class ImportViewStep2 extends ImportView
         $this->ss->assign("CURRENT_STEP", $this->currentStep);
         $this->ss->assign("TYPE", (!empty($_REQUEST['type']) ? $_REQUEST['type'] : "import"));
         $this->ss->assign("CUSTOM_DELIMITER", (!empty($_REQUEST['custom_delimiter']) ? $_REQUEST['custom_delimiter'] : ","));
-        $this->ss->assign("CUSTOM_ENCLOSURE", htmlentities(
+        $this->ss->assign("CUSTOM_ENCLOSURE", \htmlentities(
             (!empty($_REQUEST['custom_enclosure']) && $_REQUEST['custom_enclosure'] != 'other'
                 ? $_REQUEST['custom_enclosure'] :
                 (!empty($_REQUEST['custom_enclosure_other'])
@@ -81,7 +81,7 @@ class ImportViewStep2 extends ImportView
         $this->ss->assign("IMPORT_MODULE", $_REQUEST['import_module']);
         $this->ss->assign("HEADER", $app_strings['LBL_IMPORT']." ". $mod_strings['LBL_MODULE_NAME']);
         $this->ss->assign("JAVASCRIPT", $this->_getJS());
-        $this->ss->assign("SAMPLE_URL", "<a href=\"javascript: void(0);\" onclick=\"window.location.href='index.php?entryPoint=export&module=".urlencode($_REQUEST['import_module'])."&action=index&all=true&sample=true'\" >".$mod_strings['LBL_EXAMPLE_FILE']."</a>");
+        $this->ss->assign("SAMPLE_URL", "<a href=\"javascript: void(0);\" onclick=\"window.location.href='index.php?entryPoint=export&module=".\urlencode($_REQUEST['import_module'])."&action=index&all=true&sample=true'\" >".$mod_strings['LBL_EXAMPLE_FILE']."</a>");
 
         $displayBackBttn = isset($_REQUEST['action']) && $_REQUEST['action'] == 'Step2' && isset($_REQUEST['current_step']) && $_REQUEST['current_step']!=='2'? true : false; //bug 51239
         $this->ss->assign("displayBackBttn", $displayBackBttn);
@@ -100,7 +100,7 @@ class ImportViewStep2 extends ImportView
         $import_map_seed = new ImportMap();
         $custom_imports_arr = $import_map_seed->retrieve_all_by_string_fields(array('assigned_user_id' => $current_user->id, 'is_published' => 'no','module' => $_REQUEST['import_module']));
 
-        if (count($custom_imports_arr)) {
+        if (\count($custom_imports_arr)) {
             $custom = array();
             foreach ($custom_imports_arr as $import) {
                 $custom[] = array( "IMPORT_NAME" => $import->name,"IMPORT_ID"   => $import->id);
@@ -110,7 +110,7 @@ class ImportViewStep2 extends ImportView
 
         // get globally defined import maps
         $published_imports_arr = $import_map_seed->retrieve_all_by_string_fields(array('is_published' => 'yes', 'module' => $_REQUEST['import_module'],));
-        if (count($published_imports_arr)) {
+        if (\count($published_imports_arr)) {
             $published = array();
             foreach ($published_imports_arr as $import) {
                 $published[] = array("IMPORT_NAME" => $import->name, "IMPORT_ID"   => $import->id);

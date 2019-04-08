@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -44,12 +44,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
 function installStatus($msg, $cmd = null, $overwrite = false, $before = '[ok]<br>')
 {
     $fname = 'install/status.json';
-    if (!$overwrite && file_exists($fname)) {
-        $stat = json_decode(file_get_contents($fname));
+    if (!$overwrite && \file_exists($fname)) {
+        $stat = \json_decode(\file_get_contents($fname));
         //$msg = json_encode($stat);
         $msg = $stat->message . $before . $msg;
     }
-    file_put_contents($fname, json_encode(array(
+    \file_put_contents($fname, \json_encode(array(
         'message' => $msg,
         'command' => $cmd,
     )));
@@ -62,10 +62,10 @@ $GLOBALS['installing'] = true;
 if (!isset($install_script) || !$install_script) {
     die($mod_strings['ERR_NO_DIRECT_SCRIPT']);
 }
-ini_set("output_buffering", "0");
-set_time_limit(3600);
+\ini_set("output_buffering", "0");
+\set_time_limit(3600);
 // flush after each output so the user can see the progress in real-time
-ob_implicit_flush();
+\ob_implicit_flush();
 
 
 require_once('install/install_utils.php');
@@ -99,7 +99,7 @@ $setup_site_admin_user_name         = $_SESSION['setup_site_admin_user_name'];
 $setup_site_admin_password          = $_SESSION['setup_site_admin_password'];
 $setup_site_guid                    = (isset($_SESSION['setup_site_specify_guid']) && $_SESSION['setup_site_specify_guid'] != '') ? $_SESSION['setup_site_guid'] : '';
 $setup_site_url                     = $_SESSION['setup_site_url'];
-$parsed_url                         = parse_url($setup_site_url);
+$parsed_url                         = \parse_url($setup_site_url);
 $setup_site_host_name               = $parsed_url['host'];
 $setup_site_log_dir                 = isset($_SESSION['setup_site_custom_log_dir']) ? $_SESSION['setup_site_log_dir'] : '.';
 $setup_site_log_file                = 'suitecrm.log';  // may be an option later
@@ -157,7 +157,7 @@ $bottle = handleSugarConfig();
 //handleLog4Php();
 
 $server_software = $_SERVER["SERVER_SOFTWARE"];
-if (strpos($server_software, 'Microsoft-IIS') !== false) {
+if (\strpos($server_software, 'Microsoft-IIS') !== false) {
     installLog("calling handleWebConfig()");
     handleWebConfig();
 } else {
@@ -208,12 +208,12 @@ foreach ($beanFiles as $bean => $file) {
 echo "<br>";
 // load up the config_override.php file.
 // This is used to provide default user settings
-if (is_file("config_override.php")) {
+if (\is_file("config_override.php")) {
     require_once("config_override.php");
 }
 
 $db                 = DBManagerFactory::getInstance();
-$startTime          = microtime(true);
+$startTime          = \microtime(true);
 $focus              = 0;
 $processed_tables   = array(); // for keeping track of the tables we have worked on
 $empty              = array();
@@ -240,7 +240,7 @@ installerHook('pre_createAllModuleTables');
 foreach ($beanFiles as $bean => $file) {
     $doNotInit = array('Scheduler', 'SchedulersJob', 'ProjectTask','jjwg_Maps','jjwg_Address_Cache','jjwg_Areas','jjwg_Markers');
 
-    if (in_array($bean, $doNotInit)) {
+    if (\in_array($bean, $doNotInit)) {
         $focus = new $bean(false);
     } else {
         $focus = new $bean();
@@ -254,11 +254,11 @@ foreach ($beanFiles as $bean => $file) {
     //installStatus(sprintf($mod_strings['STAT_CREATE_DB_TABLE'], $focus->table_name ));
     installLog("processing table ".$focus->table_name);
     // check to see if we have already setup this table
-    if (!in_array($table_name, $processed_tables)) {
-        if (!file_exists("modules/".$focus->module_dir."/vardefs.php")) {
+    if (!\in_array($table_name, $processed_tables)) {
+        if (!\file_exists("modules/".$focus->module_dir."/vardefs.php")) {
             continue;
         }
-        if (!in_array($bean, $nonStandardModules)) {
+        if (!\in_array($bean, $nonStandardModules)) {
             require_once("modules/".$focus->module_dir."/vardefs.php"); // load up $dictionary
             if ($dictionary[$focus->object_name]['table'] == 'does_not_exist') {
                 continue; // support new vardef definitions
@@ -304,7 +304,7 @@ echo "<br>";
 ///////////////////////////////////////////////////////////////////////////////
 ////    START RELATIONSHIP CREATION
 
-    ksort($rel_dictionary);
+    \ksort($rel_dictionary);
     foreach ($rel_dictionary as $rel_name => $rel_data) {
         $table = $rel_data['table'];
 
@@ -378,7 +378,7 @@ enableSugarFeeds();
 
 ///////////////////////////////////////////////////////////////////////////
 ////    FINALIZE LANG PACK INSTALL
-    if (isset($_SESSION['INSTALLED_LANG_PACKS']) && is_array($_SESSION['INSTALLED_LANG_PACKS']) && !empty($_SESSION['INSTALLED_LANG_PACKS'])) {
+    if (isset($_SESSION['INSTALLED_LANG_PACKS']) && \is_array($_SESSION['INSTALLED_LANG_PACKS']) && !empty($_SESSION['INSTALLED_LANG_PACKS'])) {
         updateUpgradeHistory();
     }
 
@@ -394,18 +394,18 @@ enableSugarFeeds();
 installLog("Installation has completed *********");
 
     $memoryUsed = '';
-    if (function_exists('memory_get_usage')) {
-        $memoryUsed = $mod_strings['LBL_PERFORM_OUTRO_5'] . memory_get_usage() . $mod_strings['LBL_PERFORM_OUTRO_6'];
+    if (\function_exists('memory_get_usage')) {
+        $memoryUsed = $mod_strings['LBL_PERFORM_OUTRO_5'] . \memory_get_usage() . $mod_strings['LBL_PERFORM_OUTRO_6'];
     }
 
 
     $errTcpip = '';
-    $fp = @fsockopen("www.suitecrm.com", 80, $errno, $errstr, 3);
+    $fp = @\fsockopen("www.suitecrm.com", 80, $errno, $errstr, 3);
     if (!$fp) {
         $errTcpip = "<p>{$mod_strings['ERR_PERFORM_NO_TCPIP']}</p>";
     }
     if ($fp && (!isset($_SESSION['oc_install']) || $_SESSION['oc_install'] == false)) {
-        @fclose($fp);
+        @\fclose($fp);
         if ($next_step == 9999) {
             $next_step = 8;
         }
@@ -478,21 +478,21 @@ FP;
 //Beginning of the scenario implementations
 //We need to load the tabs so that we can remove those which are scenario based and un-selected
 //Remove the custom tabConfig as this overwrites the complete list containined in the include/tabConfig.php
-if (file_exists('custom/include/tabConfig.php')) {
-    unlink('custom/include/tabConfig.php');
+if (\file_exists('custom/include/tabConfig.php')) {
+    \unlink('custom/include/tabConfig.php');
 }
 require_once('include/tabConfig.php');
 
 //Remove the custom dashlet so that we can use the complete list of defaults to filter by category
-if (file_exists('custom/modules/Home/dashlets.php')) {
-    unlink('custom/modules/Home/dashlets.php');
+if (\file_exists('custom/modules/Home/dashlets.php')) {
+    \unlink('custom/modules/Home/dashlets.php');
 }
 //Check if the folder is in place
-if (!file_exists('custom/modules/Home')) {
+if (!\file_exists('custom/modules/Home')) {
     sugar_mkdir('custom/modules/Home', 0775);
 }
 //Check if the folder is in place
-if (!file_exists('custom/include')) {
+if (!\file_exists('custom/include')) {
     sugar_mkdir('custom/include', 0775);
 }
 
@@ -502,9 +502,9 @@ require_once('modules/Home/dashlets.php');
 if (isset($_SESSION['installation_scenarios'])) {
     foreach ($_SESSION['installation_scenarios'] as $scenario) {
         //If the item is not in $_SESSION['scenarios'], then unset them as they are not required
-        if (!in_array($scenario['key'], $_SESSION['scenarios'])) {
+        if (!\in_array($scenario['key'], $_SESSION['scenarios'])) {
             foreach ($scenario['modules'] as $module) {
-                if (($removeKey = array_search($module, $enabled_tabs)) !== false) {
+                if (($removeKey = \array_search($module, $enabled_tabs)) !== false) {
                     unset($enabled_tabs[$removeKey]);
                 }
             }
@@ -528,22 +528,22 @@ if (isset($_SESSION['installation_scenarios'])) {
 }
 
 //Have a 'core' options, with accounts / contacts if no other scenario is selected
-if (!is_null($_SESSION['scenarios'])) {
+if (!\is_null($_SESSION['scenarios'])) {
     unset($GLOBALS['tabStructure']['LBL_TABGROUP_DEFAULT']);
 }
 
 
 //Write the tabstructure to custom so that the grouping are not shown for the un-selected scenarios
 $fp = sugar_fopen('custom/include/tabConfig.php', 'w');
-$fileContents = "<?php \n" .'$GLOBALS["tabStructure"] ='.var_export($GLOBALS['tabStructure'], true).';';
-fwrite($fp, $fileContents);
-fclose($fp);
+$fileContents = "<?php \n" .'$GLOBALS["tabStructure"] ='.\var_export($GLOBALS['tabStructure'], true).';';
+\fwrite($fp, $fileContents);
+\fclose($fp);
 
 //Write the dashlets to custom so that the dashlets are not shown for the un-selected scenarios
 $fp = sugar_fopen('custom/modules/Home/dashlets.php', 'w');
-$fileContents = "<?php \n" .'$defaultDashlets ='.var_export($defaultDashlets, true).';';
-fwrite($fp, $fileContents);
-fclose($fp);
+$fileContents = "<?php \n" .'$defaultDashlets ='.\var_export($defaultDashlets, true).';';
+\fwrite($fp, $fileContents);
+\fclose($fp);
 
 
 // End of the scenario implementations
@@ -572,7 +572,7 @@ post_install_modules();
 installLog("populating the db with seed data");
 if ($_SESSION['demoData'] != 'no') {
     installerHook('pre_installDemoData');
-    set_time_limit(301);
+    \set_time_limit(301);
 
     echo "<br>";
     echo "<b>{$mod_strings['LBL_PERFORM_DEMO_DATA']}</b>";
@@ -593,11 +593,11 @@ if ($_SESSION['demoData'] != 'no') {
 
 // save current superglobals and vars
 $varStack['GLOBALS'] = $GLOBALS;
-$varStack['defined_vars'] = get_defined_vars();
+$varStack['defined_vars'] = \get_defined_vars();
 
 // restore previously posted form
-$_REQUEST = array_merge($_REQUEST, $_SESSION);
-$_POST = array_merge($_POST, $_SESSION);
+$_REQUEST = \array_merge($_REQUEST, $_SESSION);
+$_POST = \array_merge($_POST, $_SESSION);
 
 
 installStatus($mod_strings['STAT_INSTALL_FINISH']);
@@ -736,16 +736,16 @@ foreach ($varStack['defined_vars'] as $__key => $__value) {
 
 
 
-$endTime = microtime(true);
+$endTime = \microtime(true);
 $deltaTime = $endTime - $startTime;
 
-if (!is_array($bottle) || !is_object($bottle)) {
+if (!\is_array($bottle) || !\is_object($bottle)) {
     $bottle = (array)$bottle;
     LoggerManager::getLogger()->warn('Bottle needs to be an array to perform setup');
 }
 
 
-if (count($bottle) > 0) {
+if (\count($bottle) > 0) {
     foreach ($bottle as $bottle_message) {
         $bottleMsg .= "{$bottle_message}\n";
     }
@@ -775,5 +775,5 @@ EOQ;
 
 echo $out;
 
-$loginURL = str_replace('install.php', 'index.php', "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-installStatus(sprintf($mod_strings['STAT_INSTALL_FINISH_LOGIN'], $loginURL), array('function' => 'redirect', 'arguments' => $loginURL));
+$loginURL = \str_replace('install.php', 'index.php', "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+installStatus(\sprintf($mod_strings['STAT_INSTALL_FINISH_LOGIN'], $loginURL), array('function' => 'redirect', 'arguments' => $loginURL));

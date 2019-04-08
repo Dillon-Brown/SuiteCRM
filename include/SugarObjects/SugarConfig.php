@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -52,7 +52,7 @@ class SugarConfig
     public static function getInstance()
     {
         static $instance = null;
-        if (is_null($instance)) {
+        if (\is_null($instance)) {
             $instance = new SugarConfig();
         }
         return $instance;
@@ -61,7 +61,7 @@ class SugarConfig
     public function get($key, $default = null)
     {
         if (!isset($this->_cached_values[$key])) {
-            if (!class_exists('SugarArray', true)) {
+            if (!\class_exists('SugarArray', true)) {
                 require 'include/utils/array_utils.php';
             }
             $this->_cached_values[$key] = isset($GLOBALS['sugar_config']) ?
@@ -73,7 +73,7 @@ class SugarConfig
 
     public function clearCache($key = null)
     {
-        if (is_null($key)) {
+        if (\is_null($key)) {
             $this->_cached_values = array();
         } else {
             unset($this->_cached_values[$key]);

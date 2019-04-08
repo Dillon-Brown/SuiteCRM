@@ -1,6 +1,6 @@
 <?php
-$sapi_type = php_sapi_name();
-if (substr($sapi_type, 0, 3) != 'cli') {
+$sapi_type = \php_sapi_name();
+if (\substr($sapi_type, 0, 3) != 'cli') {
     die('testinstall.php is CLI only.');
 }
 
@@ -19,14 +19,14 @@ $_POST['email_reminder_checked'] = false;
 
 
 try {
-    ob_start();
+    \ob_start();
     require_once 'install.php';
-    ob_end_clean();
+    \ob_end_clean();
 } catch (\Exception $e) {
     echo "\nINSTALLATION FAILED! file: " . $e->getFile() . ' - line: ' . $e->getLine()
         . "\n" . $e->getMessage()
-        . "\n" . str_repeat('-', 120)
-        . "\n" . print_r($e->getTrace(), true)
-        . "\n" . str_repeat('-', 120)
+        . "\n" . \str_repeat('-', 120)
+        . "\n" . \print_r($e->getTrace(), true)
+        . "\n" . \str_repeat('-', 120)
         . "\n";
 }

@@ -14,19 +14,19 @@
  */
 
  /* Class return codes */
- define("PIE_NO_ABSCISSA", 140001);
- define("PIE_NO_DATASERIE", 140002);
- define("PIE_SUMISNULL", 140003);
- define("PIE_RENDERED", 140000);
+ \define("PIE_NO_ABSCISSA", 140001);
+ \define("PIE_NO_DATASERIE", 140002);
+ \define("PIE_SUMISNULL", 140003);
+ \define("PIE_RENDERED", 140000);
 
- define("PIE_LABEL_COLOR_AUTO", 140010);
- define("PIE_LABEL_COLOR_MANUAL", 140011);
+ \define("PIE_LABEL_COLOR_AUTO", 140010);
+ \define("PIE_LABEL_COLOR_MANUAL", 140011);
 
- define("PIE_VALUE_NATURAL", 140020);
- define("PIE_VALUE_PERCENTAGE", 140021);
+ \define("PIE_VALUE_NATURAL", 140020);
+ \define("PIE_VALUE_PERCENTAGE", 140021);
 
- define("PIE_VALUE_INSIDE", 140030);
- define("PIE_VALUE_OUTSIDE", 140031);
+ \define("PIE_VALUE_INSIDE", 140030);
+ \define("PIE_VALUE_OUTSIDE", 140031);
 
  /* pPie class definition */
  class pPie
@@ -117,10 +117,10 @@
          }
 
          /* Compute the wasted angular space between series */
-         if (count($Values)==1) {
+         if (\count($Values)==1) {
              $WastedAngular = 0;
          } else {
-             $WastedAngular = count($Values) * $DataGapAngle;
+             $WastedAngular = \count($Values) * $DataGapAngle;
          }
 
          /* Compute the scale */
@@ -172,8 +172,8 @@
                  $X0 = $X;
                  $Y0 = $Y;
              } else {
-                 $X0 = cos(($Angle-90)*PI/180) * $DataGapRadius + $X;
-                 $Y0 = sin(($Angle-90)*PI/180) * $DataGapRadius + $Y;
+                 $X0 = \cos(($Angle-90)*PI/180) * $DataGapRadius + $X;
+                 $Y0 = \sin(($Angle-90)*PI/180) * $DataGapRadius + $Y;
              }
 
              $Plots[] = $X0;
@@ -181,8 +181,8 @@
 
 
              for ($i=$Offset;$i<=$EndAngle;$i=$i+$Step) {
-                 $Xc = cos(($i-90)*PI/180) * $Radius + $X;
-                 $Yc = sin(($i-90)*PI/180) * $Radius + $Y;
+                 $Xc = \cos(($i-90)*PI/180) * $Radius + $X;
+                 $Yc = \sin(($i-90)*PI/180) * $Radius + $Y;
 
                  if ($SecondPass && ($i<90)) {
                      $Yc++;
@@ -212,8 +212,8 @@
                  }
 
                  $Angle = ($EndAngle - $Offset)/2 + $Offset;
-                 $Xc = cos(($Angle-90)*PI/180) * $Radius + $X;
-                 $Yc = sin(($Angle-90)*PI/180) * $Radius + $Y;
+                 $Xc = \cos(($Angle-90)*PI/180) * $Radius + $X;
+                 $Yc = \sin(($Angle-90)*PI/180) * $Radius + $Y;
 
                  $Label = $Data["Series"][$Data["Abscissa"]]["Data"][$Key];
 
@@ -255,15 +255,15 @@
                      $Y0 = $Y;
                  } else {
                      $Angle = ($EndAngle - $Offset)/2 + $Offset;
-                     $X0 = cos(($Angle-90)*PI/180) * $DataGapRadius + $X;
-                     $Y0 = sin(($Angle-90)*PI/180) * $DataGapRadius + $Y;
+                     $X0 = \cos(($Angle-90)*PI/180) * $DataGapRadius + $X;
+                     $Y0 = \sin(($Angle-90)*PI/180) * $DataGapRadius + $Y;
                  }
                  $Plots[] = $X0;
                  $Plots[] = $Y0;
 
                  for ($i=$Offset;$i<=$EndAngle;$i=$i+$Step) {
-                     $Xc = cos(($i-90)*PI/180) * $Radius + $X;
-                     $Yc = sin(($i-90)*PI/180) * $Radius + $Y;
+                     $Xc = \cos(($i-90)*PI/180) * $Radius + $X;
+                     $Yc = \sin(($i-90)*PI/180) * $Radius + $Y;
 
                      if ($FirstPoint) {
                          $this->pChartObject->drawLine($Xc, $Yc, $X0, $Y0, $Settings);
@@ -282,8 +282,8 @@
                      }
 
                      $Angle = ($EndAngle - $Offset)/2 + $Offset;
-                     $Xc = cos(($Angle-90)*PI/180) * $Radius + $X;
-                     $Yc = sin(($Angle-90)*PI/180) * $Radius + $Y;
+                     $Xc = \cos(($Angle-90)*PI/180) * $Radius + $X;
+                     $Yc = \sin(($Angle-90)*PI/180) * $Radius + $Y;
 
                      $Label = $Data["Series"][$Data["Abscissa"]]["Data"][$Key];
 
@@ -302,7 +302,7 @@
          if ($WriteValues != null && !$Shadow) {
              $Step = 360 / (2 * PI * $Radius);
              $Offset = 0;
-             $ID = count($Values)-1;
+             $ID = \count($Values)-1;
              $Settings = array("Align"=>TEXT_ALIGN_MIDDLEMIDDLE,"R"=>$ValueR,"G"=>$ValueG,"B"=>$ValueB,"Alpha"=>$ValueAlpha);
              foreach ($Values as $Key => $Value) {
                  $EndAngle = ($Value*$ScaleFactor) + $Offset;
@@ -312,15 +312,15 @@
                  $Angle    = ($EndAngle - $Offset)/2 + $Offset;
 
                  if ($ValuePosition == PIE_VALUE_OUTSIDE) {
-                     $Xc = cos(($Angle-90)*PI/180) * ($Radius+$ValuePadding) + $X;
-                     $Yc = sin(($Angle-90)*PI/180) * ($Radius+$ValuePadding) + $Y;
+                     $Xc = \cos(($Angle-90)*PI/180) * ($Radius+$ValuePadding) + $X;
+                     $Yc = \sin(($Angle-90)*PI/180) * ($Radius+$ValuePadding) + $Y;
                  } else {
-                     $Xc = cos(($Angle-90)*PI/180) * ($Radius)/2 + $X;
-                     $Yc = sin(($Angle-90)*PI/180) * ($Radius)/2 + $Y;
+                     $Xc = \cos(($Angle-90)*PI/180) * ($Radius)/2 + $X;
+                     $Yc = \sin(($Angle-90)*PI/180) * ($Radius)/2 + $Y;
                  }
 
                  if ($WriteValues == PIE_VALUE_PERCENTAGE) {
-                     $Display = round((100 / $SerieSum) * $Value, $Precision)."%";
+                     $Display = \round((100 / $SerieSum) * $Value, $Precision)."%";
                  } elseif ($WriteValues == PIE_VALUE_NATURAL) {
                      $Display = $Value.$ValueSuffix;
                  }
@@ -418,10 +418,10 @@
          }
 
          /* Compute the wasted angular space between series */
-         if (count($Values)==1) {
+         if (\count($Values)==1) {
              $WastedAngular = 0;
          } else {
-             $WastedAngular = count($Values) * $DataGapAngle;
+             $WastedAngular = \count($Values) * $DataGapAngle;
          }
 
          /* Compute the scale */
@@ -435,8 +435,8 @@
          /* Draw the polygon pie elements */
          $Step   = 360 / (2 * PI * $Radius);
          $Offset = 360;
-         $ID = count($Values)-1;
-         $Values = array_reverse($Values);
+         $ID = \count($Values)-1;
+         $Values = \array_reverse($Values);
          $Slice  = 0;
          $Slices = "";
          $SliceColors = "";
@@ -474,16 +474,16 @@
                  $Y0 = $Y;
              } else {
                  $Angle = ($EndAngle - $Offset)/2 + $Offset;
-                 $X0 = cos(($Angle-90)*PI/180) * $DataGapRadius + $X;
-                 $Y0 = sin(($Angle-90)*PI/180) * $DataGapRadius*$SkewFactor + $Y;
+                 $X0 = \cos(($Angle-90)*PI/180) * $DataGapRadius + $X;
+                 $Y0 = \sin(($Angle-90)*PI/180) * $DataGapRadius*$SkewFactor + $Y;
              }
              $Slices[$Slice][] = $X0;
              $Slices[$Slice][] = $Y0;
              $SliceAngle[$Slice][] = 0;
 
              for ($i=$Offset;$i>=$EndAngle;$i=$i-$Step) {
-                 $Xc = cos(($i-90)*PI/180) * $Radius + $X;
-                 $Yc = sin(($i-90)*PI/180) * $Radius*$SkewFactor + $Y;
+                 $Xc = \cos(($i-90)*PI/180) * $Radius + $X;
+                 $Yc = \sin(($i-90)*PI/180) * $Radius*$SkewFactor + $Y;
 
                  if (($SecondPass || $RestoreShadow) && ($i<90)) {
                      $Yc++;
@@ -513,7 +513,7 @@
          if ($RestoreShadow && ($this->pChartObject->ShadowX != 0 || $this->pChartObject->ShadowY !=0)) {
              foreach ($Slices as $SliceID => $Plots) {
                  $ShadowPie = "";
-                 for ($i=0;$i<count($Plots);$i=$i+2) {
+                 for ($i=0;$i<\count($Plots);$i=$i+2) {
                      $ShadowPie[] = $Plots[$i]+$this->pChartObject->ShadowX;
                      $ShadowPie[] = $Plots[$i+1]+$this->pChartObject->ShadowY;
                  }
@@ -531,8 +531,8 @@
                  }
 
                  for ($i=$Offset;$i>=$EndAngle;$i=$i-$Step) {
-                     $Xc = cos(($i-90)*PI/180) * $Radius + $X + $this->pChartObject->ShadowX;
-                     $Yc = sin(($i-90)*PI/180) * $Radius*$SkewFactor + $Y + $this->pChartObject->ShadowY;
+                     $Xc = \cos(($i-90)*PI/180) * $Radius + $X + $this->pChartObject->ShadowX;
+                     $Yc = \sin(($i-90)*PI/180) * $Radius*$SkewFactor + $Y + $this->pChartObject->ShadowY;
 
                      $this->pChartObject->drawAntialiasPixel($Xc, $Yc, $Settings);
                  }
@@ -560,21 +560,21 @@
                  if (isset($SliceAngle[$SliceID][1])) /* Empty error handling */
           {
            $Angle = $SliceAngle[$SliceID][1];
-           $Xc = cos(($Angle-90)*PI/180) * $Radius + $X;
-           $Yc = sin(($Angle-90)*PI/180) * $Radius*$SkewFactor + $Y;
+           $Xc = \cos(($Angle-90)*PI/180) * $Radius + $X;
+           $Yc = \sin(($Angle-90)*PI/180) * $Radius*$SkewFactor + $Y;
            $this->pChartObject->drawLine($Plots[0], $Plots[1], $Xc, $Yc, $Settings);
 
-           $Angle = $SliceAngle[$SliceID][count($SliceAngle[$SliceID])-1];
-           $Xc = cos(($Angle-90)*PI/180) * $Radius + $X;
-           $Yc = sin(($Angle-90)*PI/180) * $Radius*$SkewFactor + $Y;
+           $Angle = $SliceAngle[$SliceID][\count($SliceAngle[$SliceID])-1];
+           $Xc = \cos(($Angle-90)*PI/180) * $Radius + $X;
+           $Yc = \sin(($Angle-90)*PI/180) * $Radius*$SkewFactor + $Y;
            $this->pChartObject->drawLine($Plots[0], $Plots[1], $Xc, $Yc, $Settings);
           }
              }
          }
 
          /* Draw the two vertical edges */
-         $Slices      = array_reverse($Slices);
-         $SliceColors = array_reverse($SliceColors);
+         $Slices      = \array_reverse($Slices);
+         $SliceColors = \array_reverse($SliceColors);
          foreach ($Slices as $SliceID => $Plots) {
              $Settings = $SliceColors[$SliceID];
              $Settings["R"]+= 10;
@@ -592,8 +592,8 @@
         }
          }
 
-         $Slices      = array_reverse($Slices);
-         $SliceColors = array_reverse($SliceColors);
+         $Slices      = \array_reverse($Slices);
+         $SliceColors = \array_reverse($SliceColors);
          foreach ($Slices as $SliceID => $Plots) {
              $Settings = $SliceColors[$SliceID];
              $Settings["R"]+= 10;
@@ -601,17 +601,17 @@
              $Settings["B"]+= 10;
              $Settings["NoBorder"] = true;
              if ($Visible[$SliceID]["End"]) {
-                 $this->pChartObject->drawLine($Plots[count($Plots)-2], $Plots[count($Plots)-1], $Plots[count($Plots)-2], $Plots[count($Plots)-1]- $SliceHeight, array("R"=>$Settings["R"],"G"=>$Settings["G"],"B"=>$Settings["B"]));
+                 $this->pChartObject->drawLine($Plots[\count($Plots)-2], $Plots[\count($Plots)-1], $Plots[\count($Plots)-2], $Plots[\count($Plots)-1]- $SliceHeight, array("R"=>$Settings["R"],"G"=>$Settings["G"],"B"=>$Settings["B"]));
 
                  $Border = "";
                  $Border[] = $Plots[0];
                  $Border[] = $Plots[1];
                  $Border[] = $Plots[0];
                  $Border[] = $Plots[1] - $SliceHeight;
-                 $Border[] = $Plots[count($Plots)-2];
-                 $Border[] = $Plots[count($Plots)-1] - $SliceHeight;
-                 $Border[] = $Plots[count($Plots)-2];
-                 $Border[] = $Plots[count($Plots)-1];
+                 $Border[] = $Plots[\count($Plots)-2];
+                 $Border[] = $Plots[\count($Plots)-1] - $SliceHeight;
+                 $Border[] = $Plots[\count($Plots)-2];
+                 $Border[] = $Plots[\count($Plots)-1];
                  $this->pChartObject->drawPolygon($Border, $Settings);
              }
          }
@@ -624,7 +624,7 @@
              $Settings["B"]+= 10;
              $Settings["NoBorder"] = true;
 
-             for ($j=2;$j<count($Plots)-2;$j=$j+2) {
+             for ($j=2;$j<\count($Plots)-2;$j=$j+2) {
                  $Angle = $SliceAngle[$SliceID][$j/2];
                  if ($Angle < 270 && $Angle > 90) {
                      $Border = "";
@@ -652,28 +652,28 @@
           {
            $Angle = $SliceAngle[$SliceID][1];
            if ($Angle < 270 && $Angle > 90) {
-               $Xc = cos(($Angle-90)*PI/180) * $Radius + $X;
-               $Yc = sin(($Angle-90)*PI/180) * $Radius*$SkewFactor + $Y;
+               $Xc = \cos(($Angle-90)*PI/180) * $Radius + $X;
+               $Yc = \sin(($Angle-90)*PI/180) * $Radius*$SkewFactor + $Y;
                $this->pChartObject->drawLine($Xc, $Yc, $Xc, $Yc-$SliceHeight, $Settings);
            }
           }
 
-                 $Angle = $SliceAngle[$SliceID][count($SliceAngle[$SliceID])-1];
+                 $Angle = $SliceAngle[$SliceID][\count($SliceAngle[$SliceID])-1];
                  if ($Angle < 270 && $Angle > 90) {
-                     $Xc = cos(($Angle-90)*PI/180) * $Radius + $X;
-                     $Yc = sin(($Angle-90)*PI/180) * $Radius*$SkewFactor + $Y;
+                     $Xc = \cos(($Angle-90)*PI/180) * $Radius + $X;
+                     $Yc = \sin(($Angle-90)*PI/180) * $Radius*$SkewFactor + $Y;
                      $this->pChartObject->drawLine($Xc, $Yc, $Xc, $Yc-$SliceHeight, $Settings);
                  }
 
-                 if (isset($SliceAngle[$SliceID][1]) && $SliceAngle[$SliceID][1] > 270 && $SliceAngle[$SliceID][count($SliceAngle[$SliceID])-1] < 270) {
-                     $Xc = cos((270-90)*PI/180) * $Radius + $X;
-                     $Yc = sin((270-90)*PI/180) * $Radius*$SkewFactor + $Y;
+                 if (isset($SliceAngle[$SliceID][1]) && $SliceAngle[$SliceID][1] > 270 && $SliceAngle[$SliceID][\count($SliceAngle[$SliceID])-1] < 270) {
+                     $Xc = \cos((270-90)*PI/180) * $Radius + $X;
+                     $Yc = \sin((270-90)*PI/180) * $Radius*$SkewFactor + $Y;
                      $this->pChartObject->drawLine($Xc, $Yc, $Xc, $Yc-$SliceHeight, $Settings);
                  }
 
-                 if (isset($SliceAngle[$SliceID][1]) && $SliceAngle[$SliceID][1] > 90 && $SliceAngle[$SliceID][count($SliceAngle[$SliceID])-1] < 90) {
-                     $Xc = cos((0)*PI/180) * $Radius + $X;
-                     $Yc = sin((0)*PI/180) * $Radius*$SkewFactor + $Y;
+                 if (isset($SliceAngle[$SliceID][1]) && $SliceAngle[$SliceID][1] > 90 && $SliceAngle[$SliceID][\count($SliceAngle[$SliceID])-1] < 90) {
+                     $Xc = \cos((0)*PI/180) * $Radius + $X;
+                     $Yc = \sin((0)*PI/180) * $Radius*$SkewFactor + $Y;
                      $this->pChartObject->drawLine($Xc, $Yc, $Xc, $Yc-$SliceHeight, $Settings);
                  }
              }
@@ -687,14 +687,14 @@
              $Settings["B"]+= 20;
 
              $Top = "";
-             for ($j=0;$j<count($Plots);$j=$j+2) {
+             for ($j=0;$j<\count($Plots);$j=$j+2) {
                  $Top[] = $Plots[$j];
                  $Top[] = $Plots[$j+1]- $SliceHeight;
              }
              $this->pChartObject->drawPolygon($Top, $Settings);
 
              if ($RecordImageMap && !$Shadow) {
-                 $this->pChartObject->addToImageMap("POLY", $this->arraySerialize($Top), $this->pChartObject->toHTMLColor($Settings["R"], $Settings["G"], $Settings["B"]), $Data["Series"][$Data["Abscissa"]]["Data"][count($Slices)-$SliceID-1], $Values[$SliceID]);
+                 $this->pChartObject->addToImageMap("POLY", $this->arraySerialize($Top), $this->pChartObject->toHTMLColor($Settings["R"], $Settings["G"], $Settings["B"]), $Data["Series"][$Data["Abscissa"]]["Data"][\count($Slices)-$SliceID-1], $Values[$SliceID]);
              }
          }
 
@@ -703,7 +703,7 @@
          if ($SecondPass) {
              $Step = 360 / (2 * PI * $Radius);
              $Offset = 360;
-             $ID = count($Values)-1;
+             $ID = \count($Values)-1;
              foreach ($Values as $Key => $Value) {
                  $FirstPoint = true;
                  if ($Shadow) {
@@ -726,15 +726,15 @@
                      $Y0 = $Y- $SliceHeight;
                  } else {
                      $Angle = ($EndAngle - $Offset)/2 + $Offset;
-                     $X0 = cos(($Angle-90)*PI/180) * $DataGapRadius + $X;
-                     $Y0 = sin(($Angle-90)*PI/180) * $DataGapRadius*$SkewFactor + $Y - $SliceHeight;
+                     $X0 = \cos(($Angle-90)*PI/180) * $DataGapRadius + $X;
+                     $Y0 = \sin(($Angle-90)*PI/180) * $DataGapRadius*$SkewFactor + $Y - $SliceHeight;
                  }
                  $Plots[] = $X0;
                  $Plots[] = $Y0;
 
                  for ($i=$Offset;$i>=$EndAngle;$i=$i-$Step) {
-                     $Xc = cos(($i-90)*PI/180) * $Radius + $X;
-                     $Yc = sin(($i-90)*PI/180) * $Radius*$SkewFactor + $Y - $SliceHeight;
+                     $Xc = \cos(($i-90)*PI/180) * $Radius + $X;
+                     $Yc = \sin(($i-90)*PI/180) * $Radius*$SkewFactor + $Y - $SliceHeight;
 
                      if ($FirstPoint) {
                          $this->pChartObject->drawLine($Xc, $Yc, $X0, $Y0, $Settings);
@@ -756,7 +756,7 @@
          if ($WriteValues != null) {
              $Step = 360 / (2 * PI * $Radius);
              $Offset = 360;
-             $ID = count($Values)-1;
+             $ID = \count($Values)-1;
              $Settings = array("Align"=>TEXT_ALIGN_MIDDLEMIDDLE,"R"=>$ValueR,"G"=>$ValueG,"B"=>$ValueB,"Alpha"=>$ValueAlpha);
              foreach ($Values as $Key => $Value) {
                  $EndAngle = $Offset-($Value*$ScaleFactor);
@@ -767,15 +767,15 @@
                  $Angle = ($EndAngle - $Offset)/2 + $Offset;
 
                  if ($ValuePosition == PIE_VALUE_OUTSIDE) {
-                     $Xc = cos(($Angle-90)*PI/180) * ($Radius+$ValuePadding) + $X;
-                     $Yc = sin(($Angle-90)*PI/180) * (($Radius*$SkewFactor)+$ValuePadding) + $Y - $SliceHeight;
+                     $Xc = \cos(($Angle-90)*PI/180) * ($Radius+$ValuePadding) + $X;
+                     $Yc = \sin(($Angle-90)*PI/180) * (($Radius*$SkewFactor)+$ValuePadding) + $Y - $SliceHeight;
                  } else {
-                     $Xc = cos(($Angle-90)*PI/180) * ($Radius)/2 + $X;
-                     $Yc = sin(($Angle-90)*PI/180) * ($Radius*$SkewFactor)/2 + $Y - $SliceHeight;
+                     $Xc = \cos(($Angle-90)*PI/180) * ($Radius)/2 + $X;
+                     $Yc = \sin(($Angle-90)*PI/180) * ($Radius*$SkewFactor)/2 + $Y - $SliceHeight;
                  }
 
                  if ($WriteValues == PIE_VALUE_PERCENTAGE) {
-                     $Display = round((100 / $SerieSum) * $Value, $Precision)."%";
+                     $Display = \round((100 / $SerieSum) * $Value, $Precision)."%";
                  } elseif ($WriteValues == PIE_VALUE_NATURAL) {
                      $Display = $Value.$ValueSuffix;
                  }
@@ -790,7 +790,7 @@
          if ($DrawLabels) {
              $Step = 360 / (2 * PI * $Radius);
              $Offset = 360;
-             $ID = count($Values)-1;
+             $ID = \count($Values)-1;
              foreach ($Values as $Key => $Value) {
                  if ($LabelColor == PIE_LABEL_COLOR_AUTO) {
                      $Settings = array("FillR"=>$Palette[$ID]["R"],"FillG"=>$Palette[$ID]["G"],"FillB"=>$Palette[$ID]["B"],"Alpha"=>$Palette[$ID]["Alpha"]);
@@ -804,8 +804,8 @@
                  }
 
                  $Angle = ($EndAngle - $Offset)/2 + $Offset;
-                 $Xc = cos(($Angle-90)*PI/180) * $Radius + $X;
-                 $Yc = sin(($Angle-90)*PI/180) * $Radius*$SkewFactor + $Y - $SliceHeight;
+                 $Xc = \cos(($Angle-90)*PI/180) * $Radius + $X;
+                 $Yc = \sin(($Angle-90)*PI/180) * $Radius*$SkewFactor + $Y - $SliceHeight;
 
                  if (isset($Data["Series"][$Data["Abscissa"]]["Data"][$ID])) {
                      $Label = $Data["Series"][$Data["Abscissa"]]["Data"][$ID];
@@ -858,7 +858,7 @@
              $BorderB = $B + $Surrounding;
          }
 
-         $YStep = max($this->pChartObject->FontSize, $BoxSize) + 5;
+         $YStep = \max($this->pChartObject->FontSize, $BoxSize) + 5;
          $XStep = $BoxSize + 5;
 
          /* Data Processing */
@@ -967,8 +967,8 @@
 
              $this->pChartObject->drawArrowLabel($X, $Y, " ".$Label." ", $Settings);
          } else {
-             $X2 = cos(deg2rad($Angle-90))*20+$X;
-             $Y2 = sin(deg2rad($Angle-90))*20+$Y;
+             $X2 = \cos(\deg2rad($Angle-90))*20+$X;
+             $Y2 = \sin(\deg2rad($Angle-90))*20+$Y;
 
              $TxtPos = $this->pChartObject->getTextBox($X, $Y, $FontName, $FontSize, 0, $Label);
              $Height = $TxtPos[0]["Y"] - $TxtPos[2]["Y"];
@@ -1122,7 +1122,7 @@
          }
 
          /* Compute the wasted angular space between series */
-         if (count($Values)==1) {
+         if (\count($Values)==1) {
              $WastedAngular = 0;
          } else {
              $WastedAngular = 0;
@@ -1171,8 +1171,8 @@
                  $EndAngle = 360;
              }
              for ($i=$Offset;$i<=$EndAngle;$i=$i+$Step) {
-                 $Xc = cos(($i-90)*PI/180) * $OuterRadius + $X;
-                 $Yc = sin(($i-90)*PI/180) * $OuterRadius + $Y;
+                 $Xc = \cos(($i-90)*PI/180) * $OuterRadius + $X;
+                 $Yc = \sin(($i-90)*PI/180) * $OuterRadius + $Y;
 
                  if (!isset($Boundaries[0]["X1"])) {
                      $Boundaries[0]["X1"] = $Xc;
@@ -1199,8 +1199,8 @@
              $Lasti = $EndAngle;
 
              for ($i=$EndAngle;$i>=$Offset;$i=$i-$Step) {
-                 $Xc = cos(($i-90)*PI/180) * ($InnerRadius-1) + $X;
-                 $Yc = sin(($i-90)*PI/180) * ($InnerRadius-1) + $Y;
+                 $Xc = \cos(($i-90)*PI/180) * ($InnerRadius-1) + $X;
+                 $Yc = \sin(($i-90)*PI/180) * ($InnerRadius-1) + $Y;
 
                  if (!isset($Boundaries[1]["X2"])) {
                      $Boundaries[1]["X2"] = $Xc;
@@ -1208,8 +1208,8 @@
                  }
                  $AAPixels[] = array($Xc,$Yc);
 
-                 $Xc = cos(($i-90)*PI/180) * $InnerRadius + $X;
-                 $Yc = sin(($i-90)*PI/180) * $InnerRadius + $Y;
+                 $Xc = \cos(($i-90)*PI/180) * $InnerRadius + $X;
+                 $Yc = \sin(($i-90)*PI/180) * $InnerRadius + $Y;
 
                  if ($i<90) {
                      $Yc++;
@@ -1249,8 +1249,8 @@
                  }
 
                  $Angle = ($EndAngle - $Offset)/2 + $Offset;
-                 $Xc = cos(($Angle-90)*PI/180) * $OuterRadius + $X;
-                 $Yc = sin(($Angle-90)*PI/180) * $OuterRadius + $Y;
+                 $Xc = \cos(($Angle-90)*PI/180) * $OuterRadius + $X;
+                 $Yc = \sin(($Angle-90)*PI/180) * $OuterRadius + $Y;
 
                  $Label = $Data["Series"][$Data["Abscissa"]]["Data"][$Key];
 
@@ -1280,8 +1280,8 @@
 
                  $Angle = $Offset+($Value*$ScaleFactor)/2;
                  if ($ValuePosition == PIE_VALUE_OUTSIDE) {
-                     $Xc = cos(($Angle-90)*PI/180) * ($OuterRadius+$ValuePadding) + $X;
-                     $Yc = sin(($Angle-90)*PI/180) * ($OuterRadius+$ValuePadding) + $Y;
+                     $Xc = \cos(($Angle-90)*PI/180) * ($OuterRadius+$ValuePadding) + $X;
+                     $Yc = \sin(($Angle-90)*PI/180) * ($OuterRadius+$ValuePadding) + $Y;
                      if ($Angle >=0 && $Angle <= 90) {
                          $Align = TEXT_ALIGN_BOTTOMLEFT;
                      }
@@ -1295,13 +1295,13 @@
                          $Align = TEXT_ALIGN_BOTTOMRIGHT;
                      }
                  } else {
-                     $Xc = cos(($Angle-90)*PI/180) * (($OuterRadius-$InnerRadius)/2+$InnerRadius) + $X;
-                     $Yc = sin(($Angle-90)*PI/180) * (($OuterRadius-$InnerRadius)/2+$InnerRadius) + $Y;
+                     $Xc = \cos(($Angle-90)*PI/180) * (($OuterRadius-$InnerRadius)/2+$InnerRadius) + $X;
+                     $Yc = \sin(($Angle-90)*PI/180) * (($OuterRadius-$InnerRadius)/2+$InnerRadius) + $Y;
                      $Align = TEXT_ALIGN_MIDDLEMIDDLE;
                  }
 
                  if ($WriteValues == PIE_VALUE_PERCENTAGE) {
-                     $Display = round((100 / $SerieSum) * $Value, $Precision)."%";
+                     $Display = \round((100 / $SerieSum) * $Value, $Precision)."%";
                  } elseif ($WriteValues == PIE_VALUE_NATURAL) {
                      $Display = $Value.$ValueSuffix;
                  } else {
@@ -1395,10 +1395,10 @@
          }
 
          /* Compute the wasted angular space between series */
-         if (count($Values)==1) {
+         if (\count($Values)==1) {
              $WastedAngular = 0;
          } else {
-             $WastedAngular = count($Values) * $DataGapAngle;
+             $WastedAngular = \count($Values) * $DataGapAngle;
          }
 
          /* Compute the scale */
@@ -1411,8 +1411,8 @@
 
          /* Draw the polygon ring elements */
          $Offset = 360;
-         $ID = count($Values)-1;
-         $Values = array_reverse($Values);
+         $ID = \count($Values)-1;
+         $Values = \array_reverse($Values);
          $Slice  = 0;
          $Slices = "";
          $SliceColors = "";
@@ -1449,16 +1449,16 @@
              $OutX1 = VOID;
              $OutY1 = VOID;
              for ($i=$Offset;$i>=$EndAngle;$i=$i-$Step) {
-                 $Xc = cos(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius-2) + $X;
-                 $Yc = sin(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius-2)*$SkewFactor + $Y;
+                 $Xc = \cos(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius-2) + $X;
+                 $Yc = \sin(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius-2)*$SkewFactor + $Y;
                  $Slices[$Slice]["AA"][] = array($Xc,$Yc);
 
-                 $Xc = cos(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius-1) + $X;
-                 $Yc = sin(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius-1)*$SkewFactor + $Y;
+                 $Xc = \cos(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius-1) + $X;
+                 $Yc = \sin(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius-1)*$SkewFactor + $Y;
                  $Slices[$Slice]["AA"][] = array($Xc,$Yc);
 
-                 $Xc = cos(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius) + $X;
-                 $Yc = sin(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius)*$SkewFactor + $Y;
+                 $Xc = \cos(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius) + $X;
+                 $Yc = \sin(($i-90)*PI/180) * ($OuterRadius+$DataGapRadius)*$SkewFactor + $Y;
                  $this->pChartObject->drawAntialiasPixel($Xc, $Yc, $Settings);
 
                  if ($OutX1 == VOID) {
@@ -1480,10 +1480,10 @@
                      $Yc++;
                  }
 
-                 $Slices[$Slice]["BottomPoly"][] = floor($Xc);
-                 $Slices[$Slice]["BottomPoly"][] = floor($Yc);
-                 $Slices[$Slice]["TopPoly"][] = floor($Xc);
-                 $Slices[$Slice]["TopPoly"][] = floor($Yc)-$SliceHeight;
+                 $Slices[$Slice]["BottomPoly"][] = \floor($Xc);
+                 $Slices[$Slice]["BottomPoly"][] = \floor($Yc);
+                 $Slices[$Slice]["TopPoly"][] = \floor($Xc);
+                 $Slices[$Slice]["TopPoly"][] = \floor($Yc)-$SliceHeight;
                  $Slices[$Slice]["Angle"][] = $i;
              }
              $OutX2 = $Xc;
@@ -1496,12 +1496,12 @@
              $InX1 = VOID;
              $InY1 = VOID;
              for ($i=$EndAngle;$i<=$Offset;$i=$i+$Step) {
-                 $Xc = cos(($i-90)*PI/180) * ($InnerRadius+$DataGapRadius-1) + $X;
-                 $Yc = sin(($i-90)*PI/180) * ($InnerRadius+$DataGapRadius-1)*$SkewFactor + $Y;
+                 $Xc = \cos(($i-90)*PI/180) * ($InnerRadius+$DataGapRadius-1) + $X;
+                 $Yc = \sin(($i-90)*PI/180) * ($InnerRadius+$DataGapRadius-1)*$SkewFactor + $Y;
                  $Slices[$Slice]["AA"][] = array($Xc,$Yc);
 
-                 $Xc = cos(($i-90)*PI/180) * ($InnerRadius+$DataGapRadius) + $X;
-                 $Yc = sin(($i-90)*PI/180) * ($InnerRadius+$DataGapRadius)*$SkewFactor + $Y;
+                 $Xc = \cos(($i-90)*PI/180) * ($InnerRadius+$DataGapRadius) + $X;
+                 $Yc = \sin(($i-90)*PI/180) * ($InnerRadius+$DataGapRadius)*$SkewFactor + $Y;
                  $Slices[$Slice]["AA"][] = array($Xc,$Yc);
 
                  if ($InX1 == VOID) {
@@ -1523,10 +1523,10 @@
                      $Yc++;
                  }
 
-                 $Slices[$Slice]["BottomPoly"][] = floor($Xc);
-                 $Slices[$Slice]["BottomPoly"][] = floor($Yc);
-                 $Slices[$Slice]["TopPoly"][] = floor($Xc);
-                 $Slices[$Slice]["TopPoly"][] = floor($Yc)-$SliceHeight;
+                 $Slices[$Slice]["BottomPoly"][] = \floor($Xc);
+                 $Slices[$Slice]["BottomPoly"][] = \floor($Yc);
+                 $Slices[$Slice]["TopPoly"][] = \floor($Xc);
+                 $Slices[$Slice]["TopPoly"][] = \floor($Yc)-$SliceHeight;
                  $Slices[$Slice]["Angle"][] = $i;
              }
              $InX2 = $Xc;
@@ -1560,8 +1560,8 @@
              $this->pChartObject->drawLine($Plots["InX2"], $Plots["InY2"], $Plots["OutX1"], $Plots["OutY1"], $Settings);
          }
 
-         $Slices      = array_reverse($Slices);
-         $SliceColors = array_reverse($SliceColors);
+         $Slices      = \array_reverse($Slices);
+         $SliceColors = \array_reverse($SliceColors);
 
          /* Draw the vertical edges (semi-visible) */
          foreach ($Slices as $SliceID => $Plots) {
@@ -1619,7 +1619,7 @@
              }
 
              if ($InnerPlotsA != "") {
-                 $InnerPlots = array_merge($InnerPlotsA, $this->arrayReverse($InnerPlotsB));
+                 $InnerPlots = \array_merge($InnerPlotsA, $this->arrayReverse($InnerPlotsB));
                  $this->pChartObject->drawPolygon($InnerPlots, $Settings);
              }
          }
@@ -1724,13 +1724,13 @@
                  }
              }
              if ($OuterPlotsA != "") {
-                 $OuterPlots = array_merge($OuterPlotsA, $this->arrayReverse($OuterPlotsB));
+                 $OuterPlots = \array_merge($OuterPlotsA, $this->arrayReverse($OuterPlotsB));
                  $this->pChartObject->drawPolygon($OuterPlots, $Settings);
              }
          }
 
-         $Slices      = array_reverse($Slices);
-         $SliceColors = array_reverse($SliceColors);
+         $Slices      = \array_reverse($Slices);
+         $SliceColors = \array_reverse($SliceColors);
 
 
          /* Draw the top pie splice */
@@ -1744,7 +1744,7 @@
              $this->pChartObject->drawPolygon($Plots["TopPoly"], $Settings);
 
              if ($RecordImageMap) {
-                 $this->pChartObject->addToImageMap("POLY", $this->arraySerialize($Plots["TopPoly"]), $this->pChartObject->toHTMLColor($Settings["R"], $Settings["G"], $Settings["B"]), $Data["Series"][$Data["Abscissa"]]["Data"][$SliceID], $Data["Series"][$DataSerie]["Data"][count($Slices)-$SliceID-1]);
+                 $this->pChartObject->addToImageMap("POLY", $this->arraySerialize($Plots["TopPoly"]), $this->pChartObject->toHTMLColor($Settings["R"], $Settings["G"], $Settings["B"]), $Data["Series"][$Data["Abscissa"]]["Data"][$SliceID], $Data["Series"][$DataSerie]["Data"][\count($Slices)-$SliceID-1]);
              }
 
              foreach ($Plots["AA"] as $Key => $Pos) {
@@ -1771,11 +1771,11 @@
                  }
 
                  $Angle = ($EndAngle - $Offset)/2 + $Offset;
-                 $Xc = cos(($Angle-90)*PI/180) * ($OuterRadius+$DataGapRadius) + $X;
-                 $Yc = sin(($Angle-90)*PI/180) * ($OuterRadius+$DataGapRadius)*$SkewFactor + $Y;
+                 $Xc = \cos(($Angle-90)*PI/180) * ($OuterRadius+$DataGapRadius) + $X;
+                 $Yc = \sin(($Angle-90)*PI/180) * ($OuterRadius+$DataGapRadius)*$SkewFactor + $Y;
 
                  if ($WriteValues == PIE_VALUE_PERCENTAGE) {
-                     $Label = $Display = round((100 / $SerieSum) * $Value, $Precision)."%";
+                     $Label = $Display = \round((100 / $SerieSum) * $Value, $Precision)."%";
                  } elseif ($WriteValues == PIE_VALUE_NATURAL) {
                      $Label = $Data["Series"][$Data["Abscissa"]]["Data"][$Key];
                  } else {
@@ -1808,9 +1808,9 @@
          $Result = "";
          foreach ($Data as $Key => $Value) {
              if ($Result == "") {
-                 $Result = floor($Value);
+                 $Result = \floor($Value);
              } else {
-                 $Result = $Result.",".floor($Value);
+                 $Result = $Result.",".\floor($Value);
              }
          }
 
@@ -1822,7 +1822,7 @@
      {
          $Result = "";
 
-         for ($i=count($Plots)-1;$i>=0;$i=$i-2) {
+         for ($i=\count($Plots)-1;$i>=0;$i=$i-2) {
              $Result[] = $Plots[$i-1];
              $Result[] = $Plots[$i];
          }

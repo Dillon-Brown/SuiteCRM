@@ -53,8 +53,8 @@ class OneLogin_Saml2_LogoutResponse
         }
 
         if ($response) {
-            $decoded = base64_decode($response);
-            $inflated = @gzinflate($decoded);
+            $decoded = \base64_decode($response);
+            $inflated = @\gzinflate($decoded);
             if ($inflated != false) {
                 $this->_logoutResponse = $inflated;
             } else {
@@ -155,7 +155,7 @@ class OneLogin_Saml2_LogoutResponse
                 if ($this->document->documentElement->hasAttribute('Destination')) {
                     $destination = $this->document->documentElement->getAttribute('Destination');
                     if (!empty($destination)) {
-                        if (strpos($destination, $currentURL) === false) {
+                        if (\strpos($destination, $currentURL) === false) {
                             throw new OneLogin_Saml2_ValidationError(
                                 "The LogoutResponse was received at $currentURL instead of $destination",
                                 OneLogin_Saml2_ValidationError::WRONG_DESTINATION
@@ -217,9 +217,9 @@ class OneLogin_Saml2_LogoutResponse
         $idpData = $this->_settings->getIdPData();
 
         $this->id = OneLogin_Saml2_Utils::generateUniqueID();
-        $issueInstant = OneLogin_Saml2_Utils::parseTime2SAML(time());
+        $issueInstant = OneLogin_Saml2_Utils::parseTime2SAML(\time());
 
-        $spEntityId = htmlspecialchars($spData['entityId'], ENT_QUOTES);
+        $spEntityId = \htmlspecialchars($spData['entityId'], ENT_QUOTES);
         $logoutResponse = <<<LOGOUTRESPONSE
 <samlp:LogoutResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -249,14 +249,14 @@ LOGOUTRESPONSE;
     {
         $subject = $this->_logoutResponse;
 
-        if (is_null($deflate)) {
+        if (\is_null($deflate)) {
             $deflate = $this->_settings->shouldCompressResponses();
         }
 
         if ($deflate) {
-            $subject = gzdeflate($this->_logoutResponse);
+            $subject = \gzdeflate($this->_logoutResponse);
         }
-        return base64_encode($subject);
+        return \base64_encode($subject);
     }
 
     /* After execute a validation process, if fails this method returns the cause.

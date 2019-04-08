@@ -83,7 +83,7 @@ class AOW_Condition extends Basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -106,7 +106,7 @@ class AOW_Condition extends Basic
             LoggerManager::getLogger()->warn('Posted field is undefined: ' . $field);
         }
 
-        $line_count = count((array)$postedField);
+        $line_count = \count((array)$postedField);
         $j = 0;
         for ($i = 0; $i < $line_count; ++$i) {
             if (!isset($post_data[$key . 'deleted'][$i])) {
@@ -120,13 +120,13 @@ class AOW_Condition extends Basic
                 foreach ($this->field_defs as $field_def) {
                     $field_name = $field_def['name'];
                     if (isset($post_data[$key . $field_name][$i])) {
-                        if (is_array($post_data[$key . $field_name][$i])) {
+                        if (\is_array($post_data[$key . $field_name][$i])) {
                             if ($field_name == 'module_path') {
-                                $post_data[$key . $field_name][$i] = base64_encode(serialize($post_data[$key . $field_name][$i]));
+                                $post_data[$key . $field_name][$i] = \base64_encode(\serialize($post_data[$key . $field_name][$i]));
                             } else {
                                 switch ($condition->value_type) {
                                     case 'Date':
-                                        $post_data[$key . $field_name][$i] = base64_encode(serialize($post_data[$key . $field_name][$i]));
+                                        $post_data[$key . $field_name][$i] = \base64_encode(\serialize($post_data[$key . $field_name][$i]));
                                         break;
                                     default:
                                         $post_data[$key . $field_name][$i] = encodeMultienumValue($post_data[$key . $field_name][$i]);
@@ -138,7 +138,7 @@ class AOW_Condition extends Basic
                         $condition->$field_name = $post_data[$key . $field_name][$i];
                     }
                 }
-                if (trim($condition->field) != '') {
+                if (\trim($condition->field) != '') {
                     $condition->condition_order = ++$j;
                     $condition->aow_workflow_id = $parent->id;
                     $condition->save();

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -46,7 +46,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 // load the correct demo data and main application language file depending upon the installer language selected; if
 // it's not found fall back on en_us
-if (file_exists("include/language/{$current_language}.lang.php")) {
+if (\file_exists("include/language/{$current_language}.lang.php")) {
     require_once("include/language/{$current_language}.lang.php");
 } else {
     require_once("include/language/en_us.lang.php");
@@ -55,17 +55,17 @@ require_once('install/UserDemoData.php');
 require_once('install/TeamDemoData.php');
 
 global $sugar_demodata;
-if (file_exists("install/demoData.{$current_language}.php")) {
+if (\file_exists("install/demoData.{$current_language}.php")) {
     require_once("install/demoData.{$current_language}.php");
 } else {
     require_once("install/demoData.en_us.php");
 }
 
-$last_name_count = count($sugar_demodata['last_name_array']);
-$first_name_count = count($sugar_demodata['first_name_array']);
-$company_name_count = count($sugar_demodata['company_name_array']);
-$street_address_count = count($sugar_demodata['street_address_array']);
-$city_array_count = count($sugar_demodata['city_array']);
+$last_name_count = \count($sugar_demodata['last_name_array']);
+$first_name_count = \count($sugar_demodata['first_name_array']);
+$company_name_count = \count($sugar_demodata['company_name_array']);
+$street_address_count = \count($sugar_demodata['street_address_array']);
+$city_array_count = \count($sugar_demodata['city_array']);
 global $app_list_strings;
 global $sugar_config;
 $_REQUEST['useEmailWidget'] = "true";
@@ -76,19 +76,19 @@ if (empty($app_list_strings)) {
  * Seed the random number generator with a fixed constant.  This will make all installs of the same code have the same
  * seed data.  This facilitates cross database testing..
  */
-mt_srand(93285903);
+\mt_srand(93285903);
 $db = DBManagerFactory::getInstance();
 $timedate = TimeDate::getInstance();
 // Set the max time to one hour (helps Windows load the seed data)
-ini_set("max_execution_time", "3600");
+\ini_set("max_execution_time", "3600");
 // ensure we have enough memory
 $memory_needed  = 256;
-$memory_limit   = ini_get('memory_limit');
+$memory_limit   = \ini_get('memory_limit');
 if ($memory_limit != "" && $memory_limit != "-1") { // if memory_limit is set
-    rtrim($memory_limit, 'M');
+    \rtrim($memory_limit, 'M');
     $memory_limit_int = (int) $memory_limit;
     if ($memory_limit_int < $memory_needed) {
-        ini_set("memory_limit", "$memory_needed" . "M");
+        \ini_set("memory_limit", "$memory_needed" . "M");
     }
 }
 $large_scale_test = empty($sugar_config['large_scale_test']) ?
@@ -104,7 +104,7 @@ $large_scale_test = empty($sugar_config['large_scale_test']) ? false : $sugar_co
 // If large scale test is set to true, increase the seed data.
 if ($large_scale_test) {
     // increase the cuttoff time to 1 hour
-    ini_set("max_execution_time", "3600");
+    \ini_set("max_execution_time", "3600");
     $number_contacts = 100000;
     $number_companies = 15000;
     $number_leads = 100000;
@@ -141,7 +141,7 @@ $replacements[] = '';
 ////	ACCOUNTS
 
 for ($i = 0; $i < $number_companies; $i++) {
-    $account_name = $sugar_demodata['company_name_array'][mt_rand(0, $company_name_count-1)];
+    $account_name = $sugar_demodata['company_name_array'][\mt_rand(0, $company_name_count-1)];
     // Create new accounts.
     $account = new Account();
     $account->name = $account_name;
@@ -150,11 +150,11 @@ for ($i = 0; $i < $number_companies; $i++) {
     $account->emailAddress->addAddress(createEmailAddress(), true);
     $account->emailAddress->addAddress(createEmailAddress());
     $account->website = createWebAddress();
-    $account->billing_address_street = $sugar_demodata['street_address_array'][mt_rand(0, $street_address_count-1)];
-    $account->billing_address_city = $sugar_demodata['city_array'][mt_rand(0, $city_array_count-1)];
+    $account->billing_address_street = $sugar_demodata['street_address_array'][\mt_rand(0, $street_address_count-1)];
+    $account->billing_address_city = $sugar_demodata['city_array'][\mt_rand(0, $city_array_count-1)];
     if ($i % 3 == 1) {
         $account->billing_address_state = "NY";
-        $assigned_user_id = mt_rand(9, 10);
+        $assigned_user_id = \mt_rand(9, 10);
         if ($assigned_user_id == 9) {
             $account->assigned_user_name = "seed_will";
             $account->assigned_user_id = $account->assigned_user_name."_id";
@@ -166,7 +166,7 @@ for ($i = 0; $i < $number_companies; $i++) {
         $account->assigned_user_id = $account->assigned_user_name."_id";
     } else {
         $account->billing_address_state = "CA";
-        $assigned_user_id = mt_rand(6, 8);
+        $assigned_user_id = \mt_rand(6, 8);
         if ($assigned_user_id == 6) {
             $account->assigned_user_name = "seed_sarah";
         } elseif ($assigned_user_id == 7) {
@@ -178,14 +178,14 @@ for ($i = 0; $i < $number_companies; $i++) {
         $account->assigned_user_id = $account->assigned_user_name."_id";
     }
 
-    $account->billing_address_postalcode = mt_rand(10000, 99999);
+    $account->billing_address_postalcode = \mt_rand(10000, 99999);
     $account->billing_address_country = 'USA';
     $account->shipping_address_street = $account->billing_address_street;
     $account->shipping_address_city = $account->billing_address_city;
     $account->shipping_address_state = $account->billing_address_state;
     $account->shipping_address_postalcode = $account->billing_address_postalcode;
     $account->shipping_address_country = $account->billing_address_country;
-    $account->industry = array_rand($app_list_strings['industry_dom']);
+    $account->industry = \array_rand($app_list_strings['industry_dom']);
     $account->account_type = "Customer";
     $account->save();
     $account_ids[] = $account->id;
@@ -194,9 +194,9 @@ for ($i = 0; $i < $number_companies; $i++) {
     // Create a case for the account
     $case = new aCase();
     $case->account_id = $account->id;
-    $case->priority = array_rand($app_list_strings['case_priority_dom']);
-    $case->status = array_rand($app_list_strings['case_status_dom']);
-    $case->name = $sugar_demodata['case_seed_names'][mt_rand(0, 4)];
+    $case->priority = \array_rand($app_list_strings['case_priority_dom']);
+    $case->status = \array_rand($app_list_strings['case_status_dom']);
+    $case->name = $sugar_demodata['case_seed_names'][\mt_rand(0, 4)];
     $case->assigned_user_id = $account->assigned_user_id;
     $case->assigned_user_name = $account->assigned_user_name;
     $case->save();
@@ -204,9 +204,9 @@ for ($i = 0; $i < $number_companies; $i++) {
     // Create a bug for the account
     $bug = new Bug();
     $bug->account_id = $account->id;
-    $bug->priority = array_rand($app_list_strings['bug_priority_dom']);
-    $bug->status = array_rand($app_list_strings['bug_status_dom']);
-    $bug->name = $sugar_demodata['bug_seed_names'][mt_rand(0, 4)];
+    $bug->priority = \array_rand($app_list_strings['bug_priority_dom']);
+    $bug->status = \array_rand($app_list_strings['bug_status_dom']);
+    $bug->name = $sugar_demodata['bug_seed_names'][\mt_rand(0, 4)];
     $bug->assigned_user_id = $account->assigned_user_id;
     $bug->assigned_user_name = $account->assigned_user_name;
     $bug->save();
@@ -214,7 +214,7 @@ for ($i = 0; $i < $number_companies; $i++) {
     $note = new Note();
     $note->parent_type = 'Accounts';
     $note->parent_id = $account->id;
-    $seed_data_index = mt_rand(0, 3);
+    $seed_data_index = \mt_rand(0, 3);
     $note->name = $sugar_demodata['note_seed_names_and_Descriptions'][$seed_data_index][0];
     $note->description = $sugar_demodata['note_seed_names_and_Descriptions'][$seed_data_index][1];
     $note->assigned_user_id = $account->assigned_user_id;
@@ -224,7 +224,7 @@ for ($i = 0; $i < $number_companies; $i++) {
     $call = new Call();
     $call->parent_type = 'Accounts';
     $call->parent_id = $account->id;
-    $call->name = $sugar_demodata['call_seed_data_names'][mt_rand(0, 3)];
+    $call->name = $sugar_demodata['call_seed_data_names'][\mt_rand(0, 3)];
     $call->assigned_user_id = $account->assigned_user_id;
     $call->assigned_user_name = $account->assigned_user_name;
     $call->direction='Outbound';
@@ -243,20 +243,20 @@ for ($i = 0; $i < $number_companies; $i++) {
     $opp = new Opportunity();
     $opp->assigned_user_id = $account->assigned_user_id;
     $opp->assigned_user_name = $account->assigned_user_name;
-    $opp->name = substr($account_name." - 1000 units", 0, 50);
+    $opp->name = \substr($account_name." - 1000 units", 0, 50);
     $opp->date_closed = create_date();
-    $opp->lead_source = array_rand($app_list_strings['lead_source_dom']);
-    $opp->sales_stage = array_rand($app_list_strings['sales_stage_dom']);
+    $opp->lead_source = \array_rand($app_list_strings['lead_source_dom']);
+    $opp->sales_stage = \array_rand($app_list_strings['sales_stage_dom']);
     // If the deal is already one, make the date closed occur in the past.
     if ($opp->sales_stage == "Closed Won" || $opp->sales_stage == "Closed Lost") {
         $opp->date_closed = create_past_date();
     }
-    $opp->opportunity_type = array_rand($app_list_strings['opportunity_type_dom']);
+    $opp->opportunity_type = \array_rand($app_list_strings['opportunity_type_dom']);
     $amount = array("10000", "25000", "50000", "75000");
-    $key = array_rand($amount);
+    $key = \array_rand($amount);
     $opp->amount = $amount[$key];
     $probability = array("10", "70", "40", "60");
-    $key = array_rand($probability);
+    $key = \array_rand($probability);
     $opp->probability = $probability[$key];
     $opp->save();
     $opportunity_ids[] = $opp->id;
@@ -265,67 +265,67 @@ for ($i = 0; $i < $number_companies; $i++) {
 }
 
 $titles = $sugar_demodata['titles'];
-$account_max = count($account_ids) - 1;
+$account_max = \count($account_ids) - 1;
 $first_name_max = $first_name_count - 1;
 $last_name_max = $last_name_count - 1;
 $street_address_max = $street_address_count - 1;
 $city_array_max = $city_array_count - 1;
-$lead_source_max = count($app_list_strings['lead_source_dom']) - 1;
-$lead_status_max = count($app_list_strings['lead_status_dom']) - 1;
-$title_max = count($titles) - 1;
+$lead_source_max = \count($app_list_strings['lead_source_dom']) - 1;
+$lead_status_max = \count($app_list_strings['lead_status_dom']) - 1;
+$title_max = \count($titles) - 1;
 ///////////////////////////////////////////////////////////////////////////////
 ////	DEMO CONTACTS
 for ($i=0; $i<$number_contacts; $i++) {
     $contact = new Contact();
-    $contact->first_name = $sugar_demodata['first_name_array'][mt_rand(0, $first_name_max)];
-    $contact->last_name = $sugar_demodata['last_name_array'][mt_rand(0, $last_name_max)];
+    $contact->first_name = $sugar_demodata['first_name_array'][\mt_rand(0, $first_name_max)];
+    $contact->last_name = $sugar_demodata['last_name_array'][\mt_rand(0, $last_name_max)];
     $contact->assigned_user_id = $account->assigned_user_id;
-    $contact->primary_address_street = $sugar_demodata['street_address_array'][mt_rand(0, $street_address_max)];
-    $contact->primary_address_city = $sugar_demodata['city_array'][mt_rand(0, $city_array_max)];
-    $contact->lead_source = array_rand($app_list_strings['lead_source_dom']);
-    $contact->title = $titles[mt_rand(0, $title_max)];
+    $contact->primary_address_street = $sugar_demodata['street_address_array'][\mt_rand(0, $street_address_max)];
+    $contact->primary_address_city = $sugar_demodata['city_array'][\mt_rand(0, $city_array_max)];
+    $contact->lead_source = \array_rand($app_list_strings['lead_source_dom']);
+    $contact->title = $titles[\mt_rand(0, $title_max)];
     $contact->emailAddress->addAddress(createEmailAddress(), true, true);
     $contact->emailAddress->addAddress(createEmailAddress(), false, false, false, true);
     $assignedUser = new User();
     $assignedUser->retrieve($contact->assigned_user_id);
     $contact->assigned_user_id = $assigned_user_id;
     $contact->email1 = createEmailAddress();
-    $key = array_rand($sugar_demodata['street_address_array']);
+    $key = \array_rand($sugar_demodata['street_address_array']);
     $contact->primary_address_street = $sugar_demodata['street_address_array'][$key];
-    $key = array_rand($sugar_demodata['city_array']);
+    $key = \array_rand($sugar_demodata['city_array']);
     $contact->primary_address_city = $sugar_demodata['city_array'][$key];
-    $contact->lead_source = array_rand($app_list_strings['lead_source_dom']);
-    $contact->title = $titles[array_rand($titles)];
+    $contact->lead_source = \array_rand($app_list_strings['lead_source_dom']);
+    $contact->title = $titles[\array_rand($titles)];
     $contact->phone_work = create_phone_number();
     $contact->phone_home = create_phone_number();
     $contact->phone_mobile = create_phone_number();
-    $account_number = mt_rand(0, $account_max);
+    $account_number = \mt_rand(0, $account_max);
     $account_id = $account_ids[$account_number];
     // Fill in a bogus address
     $contacts_account = $accounts[$account_number];
     $contact->primary_address_state = $contacts_account->billing_address_state;
     $contact->assigned_user_id = $contacts_account->assigned_user_id;
     $contact->assigned_user_name = $contacts_account->assigned_user_name;
-    $contact->primary_address_postalcode = mt_rand(10000, 99999);
+    $contact->primary_address_postalcode = \mt_rand(10000, 99999);
     $contact->primary_address_country = 'USA';
     $contact->save();
     // Create a linking table entry to assign an account to the contact.
     $contact->set_relationship('accounts_contacts', array('contact_id'=>$contact->id ,'account_id'=> $account_id), false);
     // This assumes that there will be one opportunity per company in the seed data.
-    $opportunity_key = array_rand($opportunity_ids);
+    $opportunity_key = \array_rand($opportunity_ids);
     $contact->set_relationship('opportunities_contacts', array('contact_id'=>$contact->id ,'opportunity_id'=> $opportunity_ids[$opportunity_key], 'contact_role'=>$app_list_strings['opportunity_relationship_type_default_key']), false);
 
     //Create new tasks
     $task = new Task();
-    $key = array_rand($sugar_demodata['task_seed_data_names']);
+    $key = \array_rand($sugar_demodata['task_seed_data_names']);
     $task->name = $sugar_demodata['task_seed_data_names'][$key];
     //separate date and time field have been merged into one.
     $task->date_due = create_date() . ' ' . create_time();
     $task->date_due_flag = 0;
     $task->assigned_user_id = $contacts_account->assigned_user_id;
     $task->assigned_user_name = $contacts_account->assigned_user_name;
-    $task->priority = array_rand($app_list_strings['task_priority_dom']);
-    $task->status = array_rand($app_list_strings['task_status_dom']);
+    $task->priority = \array_rand($app_list_strings['task_priority_dom']);
+    $task->status = \array_rand($app_list_strings['task_status_dom']);
     $task->contact_id = $contact->id;
     if ($contact->primary_address_city == "San Mateo") {
         $task->parent_id = $account_id;
@@ -335,17 +335,17 @@ for ($i=0; $i<$number_contacts; $i++) {
 
     //Create new meetings
     $meeting = new Meeting();
-    $key = array_rand($sugar_demodata['meeting_seed_data_names']);
+    $key = \array_rand($sugar_demodata['meeting_seed_data_names']);
     $meeting->name = $sugar_demodata['meeting_seed_data_names'][$key];
     $meeting->date_start = create_date(). ' ' . create_time();
     //$meeting->time_start = date("H:i",time());
-    $meeting->duration_hours = array_rand($possible_duration_hours_arr);
-    $meeting->duration_minutes = array_rand($possible_duration_minutes_arr);
+    $meeting->duration_hours = \array_rand($possible_duration_hours_arr);
+    $meeting->duration_minutes = \array_rand($possible_duration_minutes_arr);
     $meeting->assigned_user_id = $assigned_user_id;
     $meeting->assigned_user_id = $contacts_account->assigned_user_id;
     $meeting->assigned_user_name = $contacts_account->assigned_user_name;
     $meeting->description = $sugar_demodata['meeting_seed_data_descriptions'];
-    $meeting->status = array_rand($app_list_strings['meeting_status_dom']);
+    $meeting->status = \array_rand($app_list_strings['meeting_status_dom']);
     $meeting->contact_id = $contact->id;
     $meeting->parent_id = $account_id;
     $meeting->parent_type = 'Accounts';
@@ -358,12 +358,12 @@ for ($i=0; $i<$number_contacts; $i++) {
 
     //Create new emails
     $email = new Email();
-    $key = array_rand($sugar_demodata['email_seed_data_subjects']);
+    $key = \array_rand($sugar_demodata['email_seed_data_subjects']);
     $email->name = $sugar_demodata['email_seed_data_subjects'][$key];
     $email->date_start = create_date();
     $email->time_start = create_time();
-    $email->duration_hours = array_rand($possible_duration_hours_arr);
-    $email->duration_minutes = array_rand($possible_duration_minutes_arr);
+    $email->duration_hours = \array_rand($possible_duration_hours_arr);
+    $email->duration_minutes = \array_rand($possible_duration_minutes_arr);
     $email->assigned_user_id = $assigned_user_id;
     $email->assigned_user_id = $contacts_account->assigned_user_id;
     $email->assigned_user_name = $contacts_account->assigned_user_name;
@@ -386,13 +386,13 @@ for ($i=0; $i<$number_contacts; $i++) {
 
 for ($i=0; $i<$number_leads; $i++) {
     $lead = new Lead();
-    $lead->account_name = $sugar_demodata['company_name_array'][mt_rand(0, $company_name_count-1)];
-    $lead->first_name = $sugar_demodata['first_name_array'][mt_rand(0, $first_name_max)];
-    $lead->last_name = $sugar_demodata['last_name_array'][mt_rand(0, $last_name_max)];
-    $lead->primary_address_street = $sugar_demodata['street_address_array'][mt_rand(0, $street_address_max)];
-    $lead->primary_address_city = $sugar_demodata['city_array'][mt_rand(0, $city_array_max)];
-    $lead->lead_source = array_rand($app_list_strings['lead_source_dom']);
-    $lead->title = $sugar_demodata['titles'][mt_rand(0, $title_max)];
+    $lead->account_name = $sugar_demodata['company_name_array'][\mt_rand(0, $company_name_count-1)];
+    $lead->first_name = $sugar_demodata['first_name_array'][\mt_rand(0, $first_name_max)];
+    $lead->last_name = $sugar_demodata['last_name_array'][\mt_rand(0, $last_name_max)];
+    $lead->primary_address_street = $sugar_demodata['street_address_array'][\mt_rand(0, $street_address_max)];
+    $lead->primary_address_city = $sugar_demodata['city_array'][\mt_rand(0, $city_array_max)];
+    $lead->lead_source = \array_rand($app_list_strings['lead_source_dom']);
+    $lead->title = $sugar_demodata['titles'][\mt_rand(0, $title_max)];
     $lead->phone_work = create_phone_number();
     $lead->phone_home = create_phone_number();
     $lead->phone_mobile = create_phone_number();
@@ -401,11 +401,11 @@ for ($i=0; $i<$number_leads; $i++) {
     $lead->primary_address_state = $sugar_demodata['primary_address_state'];
     $leads_account = $accounts[$account_number];
     $lead->primary_address_state = $leads_account->billing_address_state;
-    $lead->status = array_rand($app_list_strings['lead_status_dom']);
-    $lead->lead_source = array_rand($app_list_strings['lead_source_dom']);
+    $lead->status = \array_rand($app_list_strings['lead_status_dom']);
+    $lead->lead_source = \array_rand($app_list_strings['lead_source_dom']);
     if ($i % 3 == 1) {
         $lead->billing_address_state = $sugar_demodata['billing_address_state']['east'];
-        $assigned_user_id = mt_rand(9, 10);
+        $assigned_user_id = \mt_rand(9, 10);
         if ($assigned_user_id == 9) {
             $lead->assigned_user_name = "seed_will";
             $lead->assigned_user_id = $lead->assigned_user_name."_id";
@@ -417,7 +417,7 @@ for ($i=0; $i<$number_leads; $i++) {
         $lead->assigned_user_id = $lead->assigned_user_name."_id";
     } else {
         $lead->billing_address_state = $sugar_demodata['billing_address_state']['west'];
-        $assigned_user_id = mt_rand(6, 8);
+        $assigned_user_id = \mt_rand(6, 8);
         if ($assigned_user_id == 6) {
             $lead->assigned_user_name = "seed_sarah";
         } elseif ($assigned_user_id == 7) {
@@ -432,12 +432,12 @@ for ($i=0; $i<$number_leads; $i++) {
 
     // If this is a large scale test, switch to the bulk teams 90% of the time.
     if ($large_scale_test) {
-        if (mt_rand(0, 100) < 90) {
+        if (\mt_rand(0, 100) < 90) {
             $assigned_team = $team_demo_data->get_random_team();
             $lead->assigned_user_name = $assigned_team;
         }
     }
-    $lead->primary_address_postalcode = mt_rand(10000, 99999);
+    $lead->primary_address_postalcode = \mt_rand(10000, 99999);
     $lead->primary_address_country = $sugar_demodata['primary_address_country'];
     $lead->save();
 }

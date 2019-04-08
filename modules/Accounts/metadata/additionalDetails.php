@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -84,7 +84,7 @@ function additionalDetailsAccount($fields)
         $overlib_string .= $fields['BILLING_ADDRESS_COUNTRY'] . '<br>';
     }
     
-    if (strlen($overlib_string) > 0 && !(strrpos($overlib_string, '<br>') == strlen($overlib_string) - 4)) {
+    if (\strlen($overlib_string) > 0 && !(\strrpos($overlib_string, '<br>') == \strlen($overlib_string) - 4)) {
         $overlib_string .= '<br>';
     }
     
@@ -101,8 +101,8 @@ function additionalDetailsAccount($fields)
         $overlib_string .= '<b>'. $mod_strings['LBL_INDUSTRY'] . '</b> ' . $fields['INDUSTRY'] . '<br>';
     }
     if (!empty($fields['DESCRIPTION'])) {
-        $overlib_string .= '<b>'. $mod_strings['LBL_DESCRIPTION'] . '</b> ' . substr($fields['DESCRIPTION'], 0, 300);
-        if (strlen($fields['DESCRIPTION']) > 300) {
+        $overlib_string .= '<b>'. $mod_strings['LBL_DESCRIPTION'] . '</b> ' . \substr($fields['DESCRIPTION'], 0, 300);
+        if (\strlen($fields['DESCRIPTION']) > 300) {
             $overlib_string .= '...';
         }
     }

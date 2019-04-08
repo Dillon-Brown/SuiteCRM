@@ -174,7 +174,7 @@ class Zend_Gdata_Gbase_Query extends Zend_Gdata_Query
      */
     public function getKey()
     {
-        if (array_key_exists('key', $this->_params)) {
+        if (\array_key_exists('key', $this->_params)) {
             return $this->_params['key'];
         } else {
             return null;
@@ -186,7 +186,7 @@ class Zend_Gdata_Gbase_Query extends Zend_Gdata_Query
      */
     public function getBq()
     {
-        if (array_key_exists('bq', $this->_params)) {
+        if (\array_key_exists('bq', $this->_params)) {
             return $this->_params['bq'];
         } else {
             return null;
@@ -198,7 +198,7 @@ class Zend_Gdata_Gbase_Query extends Zend_Gdata_Query
      */
     public function getRefine()
     {
-        if (array_key_exists('refine', $this->_params)) {
+        if (\array_key_exists('refine', $this->_params)) {
             return $this->_params['refine'];
         } else {
             return null;
@@ -210,7 +210,7 @@ class Zend_Gdata_Gbase_Query extends Zend_Gdata_Query
      */
     public function getContent()
     {
-        if (array_key_exists('content', $this->_params)) {
+        if (\array_key_exists('content', $this->_params)) {
             return $this->_params['content'];
         } else {
             return null;
@@ -222,7 +222,7 @@ class Zend_Gdata_Gbase_Query extends Zend_Gdata_Query
      */
     public function getOrderBy()
     {
-        if (array_key_exists('orderby', $this->_params)) {
+        if (\array_key_exists('orderby', $this->_params)) {
             return $this->_params['orderby'];
         } else {
             return null;
@@ -234,7 +234,7 @@ class Zend_Gdata_Gbase_Query extends Zend_Gdata_Query
      */
     public function getSortOrder()
     {
-        if (array_key_exists('sortorder', $this->_params)) {
+        if (\array_key_exists('sortorder', $this->_params)) {
             return $this->_params['sortorder'];
         } else {
             return null;
@@ -246,7 +246,7 @@ class Zend_Gdata_Gbase_Query extends Zend_Gdata_Query
      */
     public function getCrowdBy()
     {
-        if (array_key_exists('crowdby', $this->_params)) {
+        if (\array_key_exists('crowdby', $this->_params)) {
             return $this->_params['crowdby'];
         } else {
             return null;
@@ -258,7 +258,7 @@ class Zend_Gdata_Gbase_Query extends Zend_Gdata_Query
      */
     public function getAdjust()
     {
-        if (array_key_exists('adjust', $this->_params)) {
+        if (\array_key_exists('adjust', $this->_params)) {
             return $this->_params['adjust'];
         } else {
             return null;

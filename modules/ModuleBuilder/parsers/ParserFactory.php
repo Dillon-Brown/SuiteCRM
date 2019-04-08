@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -61,7 +61,7 @@ class ParserFactory
     {
         $GLOBALS [ 'log' ]->info("ParserFactory->getParser($view,$moduleName,$packageName,$subpanelName )") ;
         $sm = null;
-        $lView = strtolower($view);
+        $lView = \strtolower($view);
         if (empty($packageName) || ($packageName == 'studio')) {
             $packageName = null ;
             //For studio modules, check for view parser overrides
@@ -73,7 +73,7 @@ class ParserFactory
             //If we didn't find a specofic parser, see if there is a view to type mapping
             foreach ($sm->sources as $file => $def) {
                 if (!empty($def['view']) && $def['view'] == $view && !empty($def['type'])) {
-                    $lView = strtolower($def['type']);
+                    $lView = \strtolower($def['type']);
                     break;
                 }
             }
@@ -125,20 +125,20 @@ class ParserFactory
     protected static function checkForParserClass($view, $moduleName, $packageName, $nameOverride = false)
     {
         $prefix = '';
-        if (!is_null($packageName)) {
+        if (!\is_null($packageName)) {
             $prefix = empty($packageName) ? 'build' :'modify';
         }
         $fileNames = array(
-            "custom/modules/$moduleName/parsers/parser." . strtolower($prefix . $view) . ".php",
-            "modules/$moduleName/parsers/parser." . strtolower($prefix . $view) . ".php",
-            "custom/modules/ModuleBuilder/parsers/parser." . strtolower($prefix . $view) . ".php",
-            "modules/ModuleBuilder/parsers/parser." . strtolower($prefix . $view) . ".php",
+            "custom/modules/$moduleName/parsers/parser." . \strtolower($prefix . $view) . ".php",
+            "modules/$moduleName/parsers/parser." . \strtolower($prefix . $view) . ".php",
+            "custom/modules/ModuleBuilder/parsers/parser." . \strtolower($prefix . $view) . ".php",
+            "modules/ModuleBuilder/parsers/parser." . \strtolower($prefix . $view) . ".php",
         );
         foreach ($fileNames as $fileName) {
-            if (file_exists($fileName)) {
+            if (\file_exists($fileName)) {
                 require_once $fileName ;
-                $class = 'Parser' . $prefix . ucfirst($view) ;
-                if (class_exists($class)) {
+                $class = 'Parser' . $prefix . \ucfirst($view) ;
+                if (\class_exists($class)) {
                     $GLOBALS [ 'log' ]->debug('Using ModuleBuilder Parser ' . $fileName) ;
                     $parser = new $class() ;
                     return $parser ;
@@ -159,15 +159,15 @@ class ParserFactory
         require_once('modules/ModuleBuilder/Module/StudioModuleFactory.php');
         $sm = StudioModuleFactory::getStudioModule($moduleName);
         foreach ($sm->sources as $file => $def) {
-            if (!empty($def['view']) && $def['view'] == strtolower($view) && !empty($def['parser'])) {
+            if (!empty($def['view']) && $def['view'] == \strtolower($view) && !empty($def['parser'])) {
                 $pName = $def['parser'];
                 $path = "modules/ModuleBuilder/parsers/views/{$pName}.php";
-                if (file_exists("custom/$path")) {
+                if (\file_exists("custom/$path")) {
                     require_once("custom/$path");
-                } elseif (file_exists($path)) {
+                } elseif (\file_exists($path)) {
                     require_once($path);
                 }
-                if (class_exists($pName)) {
+                if (\class_exists($pName)) {
                     return new $pName($view, $moduleName, $packageName);
                 }
                 //If it wasn't defined directly, check for a generic parser name for the view

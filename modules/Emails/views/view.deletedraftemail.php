@@ -39,7 +39,7 @@
  * display the words  'Powered by SugarCRM' and 'Supercharged by SuiteCRM'.
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -67,7 +67,7 @@ class EmailsViewDeleteDraftEmail extends ViewAjax
         switch ($this->bean->status) {
             case 'draft':
                 $response['data'] = array(
-                    'type' => get_class($this->bean),
+                    'type' => \get_class($this->bean),
                     'id' => $this->bean->id,
                     'attributes' => array(),
                     'relationships' => array(),
@@ -76,20 +76,20 @@ class EmailsViewDeleteDraftEmail extends ViewAjax
                 break;
             case 'save_error':
                 $response['errors'] = array(
-                    'type' => get_class($this->bean),
+                    'type' => \get_class($this->bean),
                     'id' => $this->bean->id,
                     'title' => $app_strings['LBL_EMAIL_DRAFT_ERROR_DELETING']
                 );
                 break;
             default:
                 $response['errors'] = array(
-                    'type' => get_class($this->bean),
+                    'type' => \get_class($this->bean),
                     'id' => $this->bean->id,
                     'title' => $app_strings['ERR_BAD_RESPONSE_FROM_SERVER']
                 );
                 break;
         }
 
-        echo json_encode($response);
+        echo \json_encode($response);
     }
 }

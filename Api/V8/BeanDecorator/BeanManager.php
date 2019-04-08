@@ -35,14 +35,14 @@ class BeanManager
      */
     public function newBeanSafe($module)
     {
-        if (array_key_exists($module, $this->beanAliases)) {
+        if (\array_key_exists($module, $this->beanAliases)) {
             $module = $this->beanAliases[$module];
         }
 
         $bean = \BeanFactory::newBean($module);
 
         if (!$bean instanceof \SugarBean) {
-            throw new \InvalidArgumentException(sprintf('Module %s does not exist', $module));
+            throw new \InvalidArgumentException(\sprintf('Module %s does not exist', $module));
         }
 
         return $bean;
@@ -82,19 +82,19 @@ class BeanManager
         }
 
         $objectName = \BeanFactory::getObjectName($module);
-        if (!$objectName && array_key_exists($module, $this->beanAliases)) {
+        if (!$objectName && \array_key_exists($module, $this->beanAliases)) {
             $objectName = \BeanFactory::getObjectName($this->beanAliases[$module]);
             $module = $this->beanAliases[$module];
         }
 
         if (!$objectName) {
-            throw new \DomainException(sprintf('Module with name %s is not found', $module));
+            throw new \DomainException(\sprintf('Module with name %s is not found', $module));
         }
 
         $bean = $this->getBean($module, $id, $params, $deleted);
         if ($bean === false) {
             throw new \InvalidArgumentException(
-                sprintf('%s module with id %s is not found', $module, $id)
+                \sprintf('%s module with id %s is not found', $module, $id)
             );
         }
 
@@ -122,7 +122,7 @@ class BeanManager
     {
         if (!$sourceBean->load_relationship($relationship)) {
             throw new \RuntimeException(
-                sprintf('Cannot load relationship %s for module %s', $relationship, $sourceBean->getObjectName())
+                \sprintf('Cannot load relationship %s for module %s', $relationship, $sourceBean->getObjectName())
             );
         }
 
@@ -130,7 +130,7 @@ class BeanManager
 
         if (!$result) {
             throw new \RuntimeException(
-                sprintf(
+                \sprintf(
                     'Cannot create relationship %s between module %s and %s',
                     $relationship,
                     $sourceBean->getObjectName(),
@@ -151,7 +151,7 @@ class BeanManager
     {
         if (!$sourceBean->load_relationship($relationship)) {
             throw new \RuntimeException(
-                sprintf('Cannot load relationship %s for module %s', $relationship, $sourceBean->getObjectName())
+                \sprintf('Cannot load relationship %s for module %s', $relationship, $sourceBean->getObjectName())
             );
         }
 
@@ -159,7 +159,7 @@ class BeanManager
 
         if (!$result) {
             throw new \RuntimeException(
-                sprintf(
+                \sprintf(
                     'Cannot delete relationship %s between module %s and %s',
                     $relationship,
                     $sourceBean->getObjectName(),
@@ -194,7 +194,7 @@ class BeanManager
 
         if (!$linkFieldName) {
             throw new \DomainException(
-                sprintf(
+                \sprintf(
                     'Link field has not found in %s to determine relationship for %s',
                     $sourceBean->getObjectName(),
                     $relatedBean->getObjectName()
@@ -215,7 +215,7 @@ class BeanManager
     {
         $rowCount = $this->db->fetchRow(
             $this->db->query(
-                sprintf(
+                \sprintf(
                     "SELECT COUNT(*) AS cnt FROM %s %s",
                     $this->newBeanSafe($module)->getTableName(),
                     $where === '' ? '' : 'WHERE ' .  $where
@@ -223,6 +223,6 @@ class BeanManager
             )
         )["cnt"];
 
-        return intval($rowCount);
+        return \intval($rowCount);
     }
 }

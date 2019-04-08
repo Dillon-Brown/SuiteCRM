@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -61,7 +61,7 @@ class ViewSourceProperties extends ViewList
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -89,8 +89,8 @@ class ViewSourceProperties extends ViewList
 
         // treat string as a template (the string resource plugin is unavailable in the current Smarty version)
         if (isset($connector_language['LBL_LICENSING_INFO'])) {
-            $siteUrl = rtrim($sugar_config['site_url'], '/');
-            $connector_language['LBL_LICENSING_INFO'] = str_replace(
+            $siteUrl = \rtrim($sugar_config['site_url'], '/');
+            $connector_language['LBL_LICENSING_INFO'] = \str_replace(
                 '{$SITE_URL}',
                 $siteUrl,
                 $connector_language['LBL_LICENSING_INFO']

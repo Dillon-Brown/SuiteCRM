@@ -97,8 +97,8 @@ class Zend_Gdata_Health_Extension_Ccr extends Zend_Gdata_App_Extension_Element
      */
     public function __call($name, $args)
     {
-        if (substr($name, 0, 3) === 'get') {
-            $category = substr($name, 3);
+        if (\substr($name, 0, 3) === 'get') {
+            $category = \substr($name, 3);
 
             switch ($category) {
                 case 'Conditions':

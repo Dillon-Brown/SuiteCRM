@@ -26,7 +26,7 @@ abstract class BaseController
             ->withHeader('Accept', static::MEDIA_TYPE)
             ->withHeader('Content-type', static::MEDIA_TYPE)
             ->write(
-                json_encode(
+                \json_encode(
                     $response,
                     JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
                 )

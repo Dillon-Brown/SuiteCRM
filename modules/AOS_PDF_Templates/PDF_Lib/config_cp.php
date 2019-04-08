@@ -2,11 +2,11 @@
 
 
 function GetLangOpts($llcc, $adobeCJK) {
-	if (strlen($llcc) == 5) {
-		$lang = substr(strtolower($llcc),0,2);
-		$country = substr(strtoupper($llcc),3,2);
+	if (\strlen($llcc) == 5) {
+		$lang = \substr(\strtolower($llcc),0,2);
+		$country = \substr(\strtoupper($llcc),3,2);
 	}
-	else { $lang = strtolower($llcc); $country = ''; }
+	else { $lang = \strtolower($llcc); $country = ''; }
 	$unifonts = "";
 	$coreSuitable = false;
 
@@ -145,7 +145,7 @@ function GetLangOpts($llcc, $adobeCJK) {
 
 	$unifonts_arr = array();
 	if ($unifonts) {
-		$unifonts_arr = preg_split('/\s*,\s*/',$unifonts);
+		$unifonts_arr = \preg_split('/\s*,\s*/',$unifonts);
 	}
 	return array($coreSuitable ,$unifonts_arr);
 }

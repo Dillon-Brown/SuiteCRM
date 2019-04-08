@@ -152,7 +152,7 @@ class vCalTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $end_date_time = $now_date_time->get('tomorrow');
 
         $result = $vcal->create_sugar_freebusy($user_bean, $start_date_time, $end_date_time);
-        $this->assertGreaterThanOrEqual(0, strlen($result));
+        $this->assertGreaterThanOrEqual(0, \strlen($result));
         
         // clean up
         
@@ -252,7 +252,7 @@ class vCalTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test with longer strings
         $expected = "testkey11111111111111111111111111111111111111111111111111111111111111111111\r\n	11111111111111111111111111111111:testvalue11111111111111111111111111111111\r\n	11111111111111111111111111111111111111111111111111111111111111111111";
-        $result = vCal::fold_ical_lines('testkey'.str_repeat('1', 100), 'testvalue'.str_repeat('1', 100));
+        $result = vCal::fold_ical_lines('testkey'.\str_repeat('1', 100), 'testvalue'.\str_repeat('1', 100));
         $this->assertEquals($expected, $result);
     }
 

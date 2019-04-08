@@ -16,26 +16,26 @@
 # specific language governing permissions and limitations
 # under the License.
 
-define("HTTP_OK", 200);
-define("HTTP_CREATED", 201);
-define("HTTP_ACCEPTED", 202);
-define("HTTP_NONAUTHORITATIVE_INFORMATION", 203);
-define("HTTP_NO_CONTENT", 204);
-define("HTTP_RESET_CONTENT", 205);
-define("HTTP_PARTIAL_CONTENT", 206);
-define("HTTP_MULTIPLE_CHOICES", 300);
-define("HTTP_BAD_REQUEST", 400); // invalidArgument, filterNotValid
-define("HTTP_UNAUTHORIZED", 401);
-define("HTTP_FORBIDDEN", 403); // permissionDenied, streamNotSupported
-define("HTTP_NOT_FOUND", 404); // objectNotFound
-define("HTTP_METHOD_NOT_ALLOWED", 405); // notSupported
-define("HTTP_NOT_ACCEPTABLE", 406);
-define("HTTP_PROXY_AUTHENTICATION_REQUIRED", 407);
-define("xHTTP_REQUEST_TIMEOUT", 408); //Had to change this b/c HTTP_REQUEST_TIMEOUT conflicts with definition in Drupal 7
-define("HTTP_CONFLICT", 409); // constraint, contentAlreadyExists, versioning, updateConflict, nameConstraintViolation
-define("HTTP_UNSUPPORTED_MEDIA_TYPE", 415);
-define("HTTP_UNPROCESSABLE_ENTITY", 422);
-define("HTTP_INTERNAL_SERVER_ERROR", 500); // runtime, storage
+\define("HTTP_OK", 200);
+\define("HTTP_CREATED", 201);
+\define("HTTP_ACCEPTED", 202);
+\define("HTTP_NONAUTHORITATIVE_INFORMATION", 203);
+\define("HTTP_NO_CONTENT", 204);
+\define("HTTP_RESET_CONTENT", 205);
+\define("HTTP_PARTIAL_CONTENT", 206);
+\define("HTTP_MULTIPLE_CHOICES", 300);
+\define("HTTP_BAD_REQUEST", 400); // invalidArgument, filterNotValid
+\define("HTTP_UNAUTHORIZED", 401);
+\define("HTTP_FORBIDDEN", 403); // permissionDenied, streamNotSupported
+\define("HTTP_NOT_FOUND", 404); // objectNotFound
+\define("HTTP_METHOD_NOT_ALLOWED", 405); // notSupported
+\define("HTTP_NOT_ACCEPTABLE", 406);
+\define("HTTP_PROXY_AUTHENTICATION_REQUIRED", 407);
+\define("xHTTP_REQUEST_TIMEOUT", 408); //Had to change this b/c HTTP_REQUEST_TIMEOUT conflicts with definition in Drupal 7
+\define("HTTP_CONFLICT", 409); // constraint, contentAlreadyExists, versioning, updateConflict, nameConstraintViolation
+\define("HTTP_UNSUPPORTED_MEDIA_TYPE", 415);
+\define("HTTP_UNPROCESSABLE_ENTITY", 422);
+\define("HTTP_INTERNAL_SERVER_ERROR", 500); // runtime, storage
 
 class CmisInvalidArgumentException extends Exception
 {
@@ -89,7 +89,7 @@ class CMISRepositoryWrapper
 
     public function __construct($url, $username = null, $password = null, $options = null, array $addlCurlOptions = array())
     {
-        if (is_array($options) && $options["config:do_not_urlencode"]) {
+        if (\is_array($options) && $options["config:do_not_urlencode"]) {
             $this->do_not_urlencode=true;
         }
         $this->_addlCurlOptions = $addlCurlOptions; // additional cURL options
@@ -99,9 +99,9 @@ class CMISRepositoryWrapper
 
     public static function getOpUrl($url, $options = null)
     {
-        if (is_array($options) && (count($options) > 0)) {
-            $needs_question = strstr($url, "?") === false;
-            return $url . ($needs_question ? "?" : "&") . http_build_query($options);
+        if (\is_array($options) && (\count($options) > 0)) {
+            $needs_question = \strstr($url, "?") === false;
+            return $url . ($needs_question ? "?" : "&") . \http_build_query($options);
         }
         return $url;
     }
@@ -180,33 +180,33 @@ class CMISRepositoryWrapper
         // Process the HTTP request
         // 'til now only the GET request has been tested
         // Does not URL encode any inputs yet
-        if (is_array($this->auth_options)) {
+        if (\is_array($this->auth_options)) {
             $url = CMISRepositoryWrapper :: getOpUrl($url, $this->auth_options);
         }
-        $session = curl_init($url);
-        curl_setopt($session, CURLOPT_HEADER, false);
-        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+        $session = \curl_init($url);
+        \curl_setopt($session, CURLOPT_HEADER, false);
+        \curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
         if ($this->username) {
-            curl_setopt($session, CURLOPT_USERPWD, $this->username . ":" . $this->password);
+            \curl_setopt($session, CURLOPT_USERPWD, $this->username . ":" . $this->password);
         }
-        curl_setopt($session, CURLOPT_CUSTOMREQUEST, $method);
+        \curl_setopt($session, CURLOPT_CUSTOMREQUEST, $method);
         if ($contentType) {
-            curl_setopt($session, CURLOPT_HTTPHEADER, array(
+            \curl_setopt($session, CURLOPT_HTTPHEADER, array(
                 "Content-Type: " . $contentType
             ));
         }
         if ($content) {
-            curl_setopt($session, CURLOPT_POSTFIELDS, $content);
+            \curl_setopt($session, CURLOPT_POSTFIELDS, $content);
         }
         if ($method == "POST") {
-            curl_setopt($session, CURLOPT_POST, true);
+            \curl_setopt($session, CURLOPT_POST, true);
         }
 
         // apply addl. cURL options
         // WARNING: this may override previously set options
-        if (count($this->_addlCurlOptions)) {
+        if (\count($this->_addlCurlOptions)) {
             foreach ($this->_addlCurlOptions as $key => $value) {
-                curl_setopt($session, $key, $value);
+                \curl_setopt($session, $key, $value);
             }
         }
 
@@ -217,11 +217,11 @@ class CMISRepositoryWrapper
         $retval->method = $method;
         $retval->content_sent = $content;
         $retval->content_type_sent = $contentType;
-        $retval->body = curl_exec($session);
-        $retval->code = curl_getinfo($session, CURLINFO_HTTP_CODE);
-        $retval->content_type = curl_getinfo($session, CURLINFO_CONTENT_TYPE);
-        $retval->content_length = curl_getinfo($session, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-        curl_close($session);
+        $retval->body = \curl_exec($session);
+        $retval->code = \curl_getinfo($session, CURLINFO_HTTP_CODE);
+        $retval->content_type = \curl_getinfo($session, CURLINFO_CONTENT_TYPE);
+        $retval->content_length = \curl_getinfo($session, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+        \curl_close($session);
         $this->last_request = $retval;
         return $retval;
     }
@@ -276,13 +276,13 @@ class CMISRepositoryWrapper
     {
         // Fill in the blanks --
         $retval = $template;
-        if (is_array($values)) {
+        if (\is_array($values)) {
             foreach ($values as $name => $value) {
-                $retval = str_replace("{" . $name . "}", $value, $retval);
+                $retval = \str_replace("{" . $name . "}", $value, $retval);
             }
         }
         // Fill in any unpoupated variables with ""
-        return preg_replace("/{[a-zA-Z0-9_]+}/", "", $retval);
+        return \preg_replace("/{[a-zA-Z0-9_]+}/", "", $retval);
     }
 
     public static function doXQuery($xmldata, $xquery)
@@ -344,7 +344,7 @@ class CMISRepositoryWrapper
         if ($allowableActions->length > 0) {
             foreach ($allowableActions->item(0)->childNodes as $action) {
                 if (isset($action->localName)) {
-                    $result[$action->localName] = (preg_match("/^true$/i", $action->nodeValue) > 0);
+                    $result[$action->localName] = (\preg_match("/^true$/i", $action->nodeValue) > 0);
                 }
             }
         }
@@ -371,7 +371,7 @@ class CMISRepositoryWrapper
             if ($pn->attributes) {
                 $propDefId = $pn->attributes->getNamedItem("propertyDefinitionId");
                 // TODO: Maybe use ->length=0 to even detect null values
-                if (!is_null($propDefId) && $pn->getElementsByTagName("value") && $pn->getElementsByTagName("value")->item(0)) {
+                if (!\is_null($propDefId) && $pn->getElementsByTagName("value") && $pn->getElementsByTagName("value")->item(0)) {
                     if ($pn->getElementsByTagName("value")->length > 1) {
                         $retval->properties[$propDefId->nodeValue] = array();
                         for ($idx=0;$idx < $pn->getElementsByTagName("value")->length;$idx++) {
@@ -387,13 +387,13 @@ class CMISRepositoryWrapper
         $retval->id = $retval->properties["cmis:objectId"];
         //TODO: RRM FIX THIS
         $children_node = $xmlnode->getElementsByTagName("children");
-        if (is_object($children_node)) {
+        if (\is_object($children_node)) {
             $children_feed_c = $children_node->item(0);
         }
-        if (is_object($children_feed_c)) {
+        if (\is_object($children_feed_c)) {
             $children_feed_l = $children_feed_c->getElementsByTagName("feed");
         }
-        if (isset($children_feed_l) && is_object($children_feed_l) && is_object($children_feed_l->item(0))) {
+        if (isset($children_feed_l) && \is_object($children_feed_l) && \is_object($children_feed_l->item(0))) {
             $children_feed = $children_feed_l->item(0);
             $children_doc = new DOMDocument();
             $xnode = $children_doc->importNode($children_feed, true); // Avoid Wrong Document Error
@@ -406,7 +406,7 @@ class CMISRepositoryWrapper
 
     public function handleSpaces($path)
     {
-        return $this->do_not_urlencode ? $path : rawurlencode($path);
+        return $this->do_not_urlencode ? $path : \rawurlencode($path);
     }
 
     public static function extractTypeDef($xmldata)
@@ -428,7 +428,7 @@ class CMISRepositoryWrapper
         $retval->attributes = array();
         $result = CMISRepositoryWrapper :: doXQueryFromNode($xmlnode, "//cmisra:type/*");
         foreach ($result as $node) {
-            if ((substr($node->nodeName, 0, 13) == "cmis:property") && (substr($node->nodeName, -10) == "Definition")) {
+            if ((\substr($node->nodeName, 0, 13) == "cmis:property") && (\substr($node->nodeName, -10) == "Definition")) {
                 $id = $node->getElementsByTagName("id")->item(0)->nodeValue;
                 $cardinality = $node->getElementsByTagName("cardinality")->item(0)->nodeValue;
                 $propertyType = $node->getElementsByTagName("propertyType")->item(0)->nodeValue;
@@ -445,13 +445,13 @@ class CMISRepositoryWrapper
         }
         //TODO: RRM FIX THIS
         $children_node = $xmlnode->getElementsByTagName("children");
-        if (is_object($children_node)) {
+        if (\is_object($children_node)) {
             $children_feed_c = $children_node->item(0);
         }
-        if (is_object($children_feed_c)) {
+        if (\is_object($children_feed_c)) {
             $children_feed_l = $children_feed_c->getElementsByTagName("feed");
         }
-        if (is_object($children_feed_l) && is_object($children_feed_l->item(0))) {
+        if (\is_object($children_feed_l) && \is_object($children_feed_l->item(0))) {
             $children_feed = $children_feed_l->item(0);
             $children_doc = new DOMDocument();
             $xnode = $children_doc->importNode($children_feed, true); // Avoid Wrong Document Error
@@ -582,7 +582,7 @@ class CMISRepositoryWrapper
             $key = $node->getElementsByTagName("key")->item(0)->nodeValue;
             $values = array();
             foreach ($node->getElementsByTagName("permission") as $value) {
-                array_push($values, $value->nodeValue);
+                \array_push($values, $value->nodeValue);
             }
             $retval->permissionsMapping[$key] = $values;
         }
@@ -598,25 +598,25 @@ class CMISRepositoryWrapper
 // Option Contants for Array Indexing
 // -- Generally optional flags that control how much information is returned
 // -- Change log token is an anomoly -- but included in URL as parameter
-define("OPT_MAX_ITEMS", "maxItems");
-define("OPT_SKIP_COUNT", "skipCount");
-define("OPT_FILTER", "filter");
-define("OPT_INCLUDE_PROPERTY_DEFINITIONS", "includePropertyDefinitions");
-define("OPT_INCLUDE_RELATIONSHIPS", "includeRelationships");
-define("OPT_INCLUDE_POLICY_IDS", "includePolicyIds");
-define("OPT_RENDITION_FILTER", "renditionFilter");
-define("OPT_INCLUDE_ACL", "includeACL");
-define("OPT_INCLUDE_ALLOWABLE_ACTIONS", "includeAllowableActions");
-define("OPT_DEPTH", "depth");
-define("OPT_CHANGE_LOG_TOKEN", "changeLogToken");
+\define("OPT_MAX_ITEMS", "maxItems");
+\define("OPT_SKIP_COUNT", "skipCount");
+\define("OPT_FILTER", "filter");
+\define("OPT_INCLUDE_PROPERTY_DEFINITIONS", "includePropertyDefinitions");
+\define("OPT_INCLUDE_RELATIONSHIPS", "includeRelationships");
+\define("OPT_INCLUDE_POLICY_IDS", "includePolicyIds");
+\define("OPT_RENDITION_FILTER", "renditionFilter");
+\define("OPT_INCLUDE_ACL", "includeACL");
+\define("OPT_INCLUDE_ALLOWABLE_ACTIONS", "includeAllowableActions");
+\define("OPT_DEPTH", "depth");
+\define("OPT_CHANGE_LOG_TOKEN", "changeLogToken");
 
-define("LINK_ALLOWABLE_ACTIONS", "http://docs.oasis-open.org/ns/cmis/link/200908/allowableactions");
+\define("LINK_ALLOWABLE_ACTIONS", "http://docs.oasis-open.org/ns/cmis/link/200908/allowableactions");
 
-define("MIME_ATOM_XML", 'application/atom+xml');
-define("MIME_ATOM_XML_ENTRY", 'application/atom+xml;type=entry');
-define("MIME_ATOM_XML_FEED", 'application/atom+xml;type=feed');
-define("MIME_CMIS_TREE", 'application/cmistree+xml');
-define("MIME_CMIS_QUERY", 'application/cmisquery+xml');
+\define("MIME_ATOM_XML", 'application/atom+xml');
+\define("MIME_ATOM_XML_ENTRY", 'application/atom+xml;type=entry');
+\define("MIME_ATOM_XML_FEED", 'application/atom+xml;type=feed');
+\define("MIME_CMIS_TREE", 'application/cmistree+xml');
+\define("MIME_CMIS_QUERY", 'application/cmisquery+xml');
 
 // Many Links have a pattern to them based upon objectId -- but can that be depended upon?
 
@@ -842,7 +842,7 @@ class CMISService extends CMISRepositoryWrapper
 
     public static function getQueryTemplate()
     {
-        ob_start();
+        \ob_start();
         echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' . "\n"; ?>
 <cmis:query xmlns:cmis="http://docs.oasis-open.org/ns/cmis/core/200908/"
 xmlns:cmism="http://docs.oasis-open.org/ns/cmis/messaging/200908/"
@@ -859,7 +859,7 @@ xmlns:cmisra="http://docs.oasisopen.org/ns/cmis/restatom/200908/">
 </cmis:query>
 <?php
 
-        return ob_get_clean();
+        return \ob_get_clean();
     }
     public function query($statement, $options = array())
     {
@@ -884,7 +884,7 @@ xmlns:cmisra="http://docs.oasisopen.org/ns/cmis/restatom/200908/">
     //Object Services
     public static function getEntryTemplate()
     {
-        ob_start();
+        \ob_start();
         echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' . "\n"; ?>
 <atom:entry xmlns:cmis="http://docs.oasis-open.org/ns/cmis/core/200908/"
 xmlns:cmism="http://docs.oasis-open.org/ns/cmis/messaging/200908/"
@@ -898,18 +898,18 @@ xmlns:cmisra="http://docs.oasis-open.org/ns/cmis/restatom/200908/">
 </atom:entry>
 <?php
 
-        return ob_get_clean();
+        return \ob_get_clean();
     }
 
     public static function getPropertyTemplate()
     {
-        ob_start(); ?>
+        \ob_start(); ?>
 		<cmis:property{propertyType} propertyDefinitionId="{propertyId}">
 			<cmis:value>{properties}</cmis:value>
 		</cmis:property{propertyType}>
 <?php
 
-        return ob_get_clean();
+        return \ob_get_clean();
     }
 
     public function processPropertyTemplates($objectType, $propMap)
@@ -938,7 +938,7 @@ xmlns:cmisra="http://docs.oasis-open.org/ns/cmis/restatom/200908/">
         foreach ($propMap as $propId => $propValue) {
             $hash_values['propertyType'] = $propertyTypeMap[$this->getPropertyType($objectType, $propId)];
             $hash_values['propertyId'] = $propId;
-            if (is_array($propValue)) {
+            if (\is_array($propValue)) {
                 $first_one = true;
                 $hash_values['properties'] = "";
                 foreach ($propValue as $val) {
@@ -968,7 +968,7 @@ xmlns:cmisra="http://docs.oasis-open.org/ns/cmis/restatom/200908/">
         }
         if ($content) {
             return CMISRepositoryWrapper :: processTemplate($contentTemplate, array(
-                "content" => base64_encode(
+                "content" => \base64_encode(
                     $content
             ), "content_type" => $content_type));
         }
@@ -977,16 +977,16 @@ xmlns:cmisra="http://docs.oasis-open.org/ns/cmis/restatom/200908/">
 
     public static function getSummaryTemplate()
     {
-        ob_start(); ?>
+        \ob_start(); ?>
 		<atom:summary>{summary}</atom:summary>
 <?php
 
-        return ob_get_clean();
+        return \ob_get_clean();
     }
 
     public static function getContentTemplate()
     {
-        ob_start(); ?>
+        \ob_start(); ?>
 		<cmisra:content>
 			<cmisra:mediatype>
 				{content_type}
@@ -997,7 +997,7 @@ xmlns:cmisra="http://docs.oasis-open.org/ns/cmis/restatom/200908/">
 		</cmisra:content>
 <?php
 
-        return ob_get_clean();
+        return \ob_get_clean();
     }
     public static function createAtomEntry($name, $properties)
     {
@@ -1063,7 +1063,7 @@ xmlns:cmisra="http://docs.oasis-open.org/ns/cmis/restatom/200908/">
         if (!isset($entry_template)) {
             $entry_template = CMISService :: getEntryTemplate();
         }
-        if (is_array($properties)) {
+        if (\is_array($properties)) {
             $hash_values = $properties;
         } else {
             $hash_values = array();
@@ -1072,7 +1072,7 @@ xmlns:cmisra="http://docs.oasis-open.org/ns/cmis/restatom/200908/">
             $hash_values["cmis:objectTypeId"] = $objectType;
         }
         $properties_xml = $this->processPropertyTemplates($hash_values["cmis:objectTypeId"], $hash_values);
-        if (is_array($options)) {
+        if (\is_array($options)) {
             $hash_values = $options;
         } else {
             $hash_values = array();
@@ -1134,13 +1134,13 @@ xmlns:cmisra="http://docs.oasis-open.org/ns/cmis/restatom/200908/">
         if (!isset($entry_template)) {
             $entry_template = CMISService :: getEntryTemplate();
         }
-        if (is_array($properties)) {
+        if (\is_array($properties)) {
             $hash_values = $properties;
         } else {
             $hash_values = array();
         }
         $properties_xml = $this->processPropertyTemplates($objectType, $hash_values);
-        if (is_array($options)) {
+        if (\is_array($options)) {
             $hash_values = $options;
         } else {
             $hash_values = array();

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -54,7 +54,7 @@ class InsideViewLogicHook
             // Initialize it to an empty string, so it is always set
             $outArray[$dest] = '';
 
-            if (is_array($src)) {
+            if (\is_array($src)) {
                 // The source can be any one of a number of fields
                 // we must go deeper.
                 foreach ($src as $src2) {
@@ -72,10 +72,10 @@ class InsideViewLogicHook
 
         $outStr = '';
         foreach ($outArray as $k => $v) {
-            $outStr .= $k.'='.rawurlencode(html_entity_decode($v, ENT_QUOTES)).'&';
+            $outStr .= $k.'='.\rawurlencode(\html_entity_decode($v, ENT_QUOTES)).'&';
         }
         
-        $outStr = rtrim($outStr, '&');
+        $outStr = \rtrim($outStr, '&');
         
         return $outStr;
     }
@@ -166,21 +166,21 @@ class InsideViewLogicHook
             // Need some extra code here for the '1' admin user
             $myUserFieldMap = $userFieldMap;
             unset($myUserFieldMap['crm_user_id']);
-            $extraUrl = 'crm_user_id='.urlencode($GLOBALS['sugar_config']['unique_key']).'&'.$this->handleFieldMap($GLOBALS['current_user'], $myUserFieldMap);
+            $extraUrl = 'crm_user_id='.\urlencode($GLOBALS['sugar_config']['unique_key']).'&'.$this->handleFieldMap($GLOBALS['current_user'], $myUserFieldMap);
         }
-        $extraUrl .= '&crm_org_id='.urlencode($GLOBALS['sugar_config']['unique_key'])
-            .'&crm_org_name='.(!empty($GLOBALS['system_config']->settings['system_name']) ? urlencode($GLOBALS['system_config']->settings['system_name']) : '')
-            .'&crm_server_url='.urlencode($GLOBALS['sugar_config']['site_url'])
+        $extraUrl .= '&crm_org_id='.\urlencode($GLOBALS['sugar_config']['unique_key'])
+            .'&crm_org_name='.(!empty($GLOBALS['system_config']->settings['system_name']) ? \urlencode($GLOBALS['system_config']->settings['system_name']) : '')
+            .'&crm_server_url='.\urlencode($GLOBALS['sugar_config']['site_url'])
             .'&crm_session_id=&crm_version=v62&crm_deploy_id=3&crm_size=400&is_embed_version=true';
         
         // Use the per-module functions to build the frame
-        if (is_a($bean, 'Account')) {
+        if (\is_a($bean, 'Account')) {
             $url = $this->getAccountFrameUrl($bean, $extraUrl);
-        } elseif (is_a($bean, 'Contact')) {
+        } elseif (\is_a($bean, 'Contact')) {
             $url = $this->getContactFrameUrl($bean, $extraUrl);
-        } elseif (is_a($bean, 'Lead')) {
+        } elseif (\is_a($bean, 'Lead')) {
             $url = $this->getLeadFrameUrl($bean, $extraUrl);
-        } elseif (is_a($bean, 'Opportunity')) {
+        } elseif (\is_a($bean, 'Opportunity')) {
             $url = $this->getOpportunityFrameUrl($bean, $extraUrl);
         } else {
             $url = '';

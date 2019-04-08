@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -62,7 +62,7 @@ class EmailAddressRelationship extends M2MRelationship
         $lhsLinkName = $this->lhsLink;
 
         if (empty($lhs->$lhsLinkName) && !$lhs->load_relationship($lhsLinkName)) {
-            $lhsClass = get_class($lhs);
+            $lhsClass = \get_class($lhs);
             $GLOBALS['log']->fatal("could not load LHS $lhsLinkName in $lhsClass");
             return false;
         }

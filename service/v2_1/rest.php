@@ -1,6 +1,6 @@
 <?php
- if (!defined('sugarEntry')) {
-     define('sugarEntry', true);
+ if (!\defined('sugarEntry')) {
+     \define('sugarEntry', true);
  }
 /**
  *
@@ -45,7 +45,7 @@
 /**
  * This is a rest entry point for rest version 3.1
  */
-chdir('../..');
+\chdir('../..');
 require_once('SugarWebServiceImplv2_1.php');
 $webservice_class = 'SugarRestService';
 $webservice_path = 'service/core/SugarRestService.php';

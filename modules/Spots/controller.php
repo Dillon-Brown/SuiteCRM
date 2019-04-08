@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -100,7 +100,7 @@ class SpotsController extends SugarController
             $where = ' AND '.$owner_where;
         }
 
-        if (file_exists('modules/SecurityGroups/SecurityGroup.php')) {
+        if (\file_exists('modules/SecurityGroups/SecurityGroup.php')) {
             /* BEGIN - SECURITY GROUPS */
             if ($module->bean_implements('ACL') && ACLController::requireSecurityGroup($module->module_dir, 'list')) {
                 require_once 'modules/SecurityGroups/SecurityGroup.php';
@@ -127,11 +127,11 @@ class SpotsController extends SugarController
     {
         $userId = $_SESSION['authenticated_user_id'];
         $fileLocation = $this->spotFilePath.$userId.'_'.$this->accountsFileName;
-        if (file_exists($fileLocation) && (time() - filemtime($fileLocation) < $this->spotsStaleTime)) {
-            echo file_get_contents($fileLocation);
+        if (\file_exists($fileLocation) && (\time() - \filemtime($fileLocation) < $this->spotsStaleTime)) {
+            echo \file_get_contents($fileLocation);
         } else {
             $this->action_createAccountsSpotsData($fileLocation);
-            echo file_get_contents($fileLocation);
+            echo \file_get_contents($fileLocation);
         }
     }
 
@@ -171,7 +171,7 @@ EOF;
             $x->{$mod_strings['LBL_AN_ACCOUNTS_ACCOUNT_BILLING_COUNTRY']} = $row['billing_address_country'];
             $returnArray[] = $x;
         }
-        file_put_contents($filepath, json_encode($returnArray));
+        \file_put_contents($filepath, \json_encode($returnArray));
     }
 
     /**
@@ -183,11 +183,11 @@ EOF;
     {
         $userId = $_SESSION['authenticated_user_id'];
         $fileLocation = $this->spotFilePath.$userId.'_'.$this->leadsFileName;
-        if (file_exists($fileLocation) && (time() - filemtime($fileLocation) < $this->spotsStaleTime)) {
-            echo file_get_contents($fileLocation);
+        if (\file_exists($fileLocation) && (\time() - \filemtime($fileLocation) < $this->spotsStaleTime)) {
+            echo \file_get_contents($fileLocation);
         } else {
             $this->action_createLeadsSpotsData($fileLocation);
-            echo file_get_contents($fileLocation);
+            echo \file_get_contents($fileLocation);
         }
     }
 
@@ -276,7 +276,7 @@ EOF;
 
             $returnArray[] = $x;
         }
-        file_put_contents($filepath, json_encode($returnArray));
+        \file_put_contents($filepath, \json_encode($returnArray));
     }
 
     /**
@@ -288,11 +288,11 @@ EOF;
     {
         $userId = $_SESSION['authenticated_user_id'];
         $fileLocation = $this->spotFilePath.$userId.'_'.$this->salesFileName;
-        if (file_exists($fileLocation) && (time() - filemtime($fileLocation) < $this->spotsStaleTime)) {
-            echo file_get_contents($fileLocation);
+        if (\file_exists($fileLocation) && (\time() - \filemtime($fileLocation) < $this->spotsStaleTime)) {
+            echo \file_get_contents($fileLocation);
         } else {
             $this->action_createSalesSpotsData($fileLocation);
-            echo file_get_contents($fileLocation);
+            echo \file_get_contents($fileLocation);
         }
     }
 
@@ -408,7 +408,7 @@ EOF;
 
             $returnArray[] = $x;
         }
-        file_put_contents($filepath, json_encode($returnArray));
+        \file_put_contents($filepath, \json_encode($returnArray));
     }
 
     /**
@@ -420,11 +420,11 @@ EOF;
     {
         $userId = $_SESSION['authenticated_user_id'];
         $fileLocation = $this->spotFilePath.$userId.'_'.$this->servicesFileName;
-        if (file_exists($fileLocation) && (time() - filemtime($fileLocation) < $this->spotsStaleTime)) {
-            echo file_get_contents($fileLocation);
+        if (\file_exists($fileLocation) && (\time() - \filemtime($fileLocation) < $this->spotsStaleTime)) {
+            echo \file_get_contents($fileLocation);
         } else {
             $this->action_createServiceSpotsData($fileLocation);
-            echo file_get_contents($fileLocation);
+            echo \file_get_contents($fileLocation);
         }
     }
 
@@ -521,7 +521,7 @@ EOF;
 
             $returnArray[] = $x;
         }
-        file_put_contents($filepath, json_encode($returnArray));
+        \file_put_contents($filepath, \json_encode($returnArray));
     }
 
     /**
@@ -533,11 +533,11 @@ EOF;
     {
         $userId = $_SESSION['authenticated_user_id'];
         $fileLocation = $this->spotFilePath.$userId.'_'.$this->activitiesFileName;
-        if (file_exists($fileLocation) && (time() - filemtime($fileLocation) < $this->spotsStaleTime)) {
-            echo file_get_contents($fileLocation);
+        if (\file_exists($fileLocation) && (\time() - \filemtime($fileLocation) < $this->spotsStaleTime)) {
+            echo \file_get_contents($fileLocation);
         } else {
             $this->action_createActivitiesSpotsData($fileLocation);
-            echo file_get_contents($fileLocation);
+            echo \file_get_contents($fileLocation);
         }
     }
 
@@ -661,7 +661,7 @@ EOF;
 
             $returnArray[] = $x;
         }
-        file_put_contents($filepath, json_encode($returnArray));
+        \file_put_contents($filepath, \json_encode($returnArray));
     }
 
     /**
@@ -673,11 +673,11 @@ EOF;
     {
         $userId = $_SESSION['authenticated_user_id'];
         $fileLocation = $this->spotFilePath.$userId.'_'.$this->marketingsFileName;
-        if (file_exists($fileLocation) && (time() - filemtime($fileLocation) < $this->spotsStaleTime)) {
-            echo file_get_contents($fileLocation);
+        if (\file_exists($fileLocation) && (\time() - \filemtime($fileLocation) < $this->spotsStaleTime)) {
+            echo \file_get_contents($fileLocation);
         } else {
             $this->action_createMarketingSpotsData($fileLocation);
-            echo file_get_contents($fileLocation);
+            echo \file_get_contents($fileLocation);
         }
     }
 
@@ -776,7 +776,7 @@ EOF;
 
             $returnArray[] = $x;
         }
-        file_put_contents($filepath, json_encode($returnArray));
+        \file_put_contents($filepath, \json_encode($returnArray));
     }
 
     /**
@@ -788,11 +788,11 @@ EOF;
     {
         $userId = $_SESSION['authenticated_user_id'];
         $fileLocation = $this->spotFilePath.$userId.'_'.$this->marketingActivitiesFileName;
-        if (file_exists($fileLocation) && (time() - filemtime($fileLocation) < $this->spotsStaleTime)) {
-            echo file_get_contents($fileLocation);
+        if (\file_exists($fileLocation) && (\time() - \filemtime($fileLocation) < $this->spotsStaleTime)) {
+            echo \file_get_contents($fileLocation);
         } else {
             $this->action_createMarketingActivitySpotsData($fileLocation);
-            echo file_get_contents($fileLocation);
+            echo \file_get_contents($fileLocation);
         }
     }
 
@@ -838,7 +838,7 @@ EOF;
 
             $returnArray[] = $x;
         }
-        file_put_contents($filepath, json_encode($returnArray));
+        \file_put_contents($filepath, \json_encode($returnArray));
     }
 
     /**
@@ -850,11 +850,11 @@ EOF;
     {
         $userId = $_SESSION['authenticated_user_id'];
         $fileLocation = $this->spotFilePath.$userId.'_'.$this->quotesFileName;
-        if (file_exists($fileLocation) && (time() - filemtime($fileLocation) < $this->spotsStaleTime)) {
-            echo file_get_contents($fileLocation);
+        if (\file_exists($fileLocation) && (\time() - \filemtime($fileLocation) < $this->spotsStaleTime)) {
+            echo \file_get_contents($fileLocation);
         } else {
             $this->action_createQuotesSpotsData($fileLocation);
-            echo file_get_contents($fileLocation);
+            echo \file_get_contents($fileLocation);
         }
     }
 
@@ -1020,6 +1020,6 @@ EOF;
 
             $returnArray[] = $x;
         }
-        file_put_contents($filepath, json_encode($returnArray));
+        \file_put_contents($filepath, \json_encode($returnArray));
     }
 }

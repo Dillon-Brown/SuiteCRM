@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -21,7 +21,7 @@ class AOS_ContractsViewDetail extends ViewDetail
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -50,7 +50,7 @@ class AOS_ContractsViewDetail extends ViewDetail
     public function displayPopupHtml()
     {
         global $app_list_strings,$app_strings, $mod_strings;
-        $templates = array_keys($app_list_strings['template_ddown_c_list']);
+        $templates = \array_keys($app_list_strings['template_ddown_c_list']);
         if ($templates) {
             echo '	<div id="popupDiv_ara" style="display:none;position:fixed;top: 39%; left: 41%;opacity:1;z-index:9999;background:#FFFFFF;">
 				<form id="popupForm" action="index.php?entryPoint=generatePdf" method="post">
@@ -61,7 +61,7 @@ class AOS_ContractsViewDetail extends ViewDetail
 						</td>
 					</tr>';
             foreach ($templates as $template) {
-                $template = str_replace('^', '', $template);
+                $template = \str_replace('^', '', $template);
                 $js = "document.getElementById('popupDivBack_ara').style.display='none';document.getElementById('popupDiv_ara').style.display='none';var form=document.getElementById('popupForm');if(form!=null){form.templateID.value='".$template."';form.submit();}else{alert('Error!');}";
                 echo '<tr height="20">
 				<td width="17" valign="center"><a href="#" onclick="'.$js.'"><img src="themes/default/images/txt_image_inline.gif" width="16" height="16" /></a></td>
@@ -82,7 +82,7 @@ class AOS_ContractsViewDetail extends ViewDetail
 						var form=document.getElementById(\'popupForm\');
 						var ppd=document.getElementById(\'popupDivBack_ara\');
 						var ppd2=document.getElementById(\'popupDiv_ara\');
-						if('.count($templates).' == 1){
+						if('.\count($templates).' == 1){
 							form.task.value=task;
 							form.templateID.value=\''.$template.'\';
 							form.submit();

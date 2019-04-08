@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -50,7 +50,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 * Contributor(s): ______________________________________..
 ********************************************************************************/
 
-require_once dirname(__DIR__) . '/../include/database/DBManager.php';
+require_once \dirname(__DIR__) . '/../include/database/DBManager.php';
 
 /**
  * Database driver factory
@@ -76,14 +76,14 @@ class DBManagerFactory
             // standard types
             switch ($type) {
                 case "mysql":
-                    if (empty($sugar_config['mysqli_disabled']) && function_exists('mysqli_connect')) {
+                    if (empty($sugar_config['mysqli_disabled']) && \function_exists('mysqli_connect')) {
                         $my_db_manager = 'MysqliManager';
                     } else {
                         $my_db_manager = "MysqlManager";
                     }
                     break;
                 case "mssql":
-                      if (function_exists('sqlsrv_connect')
+                      if (\function_exists('sqlsrv_connect')
                                 && (empty($config['db_mssql_force_driver']) || $config['db_mssql_force_driver'] == 'sqlsrv')) {
                           $my_db_manager = 'SqlsrvManager';
                       } elseif (self::isFreeTDS()
@@ -105,19 +105,19 @@ class DBManagerFactory
         }
 
         // sanitize the name
-        $my_db_manager = preg_replace("/[^A-Za-z0-9_-]/", "", $my_db_manager);
+        $my_db_manager = \preg_replace("/[^A-Za-z0-9_-]/", "", $my_db_manager);
 
         if (!empty($config['db_manager_class'])) {
             $my_db_manager = $config['db_manager_class'];
         } else {
-            if (file_exists("custom/include/database/{$my_db_manager}.php")) {
+            if (\file_exists("custom/include/database/{$my_db_manager}.php")) {
                 require_once("custom/include/database/{$my_db_manager}.php");
             } else {
                 require_once("include/database/{$my_db_manager}.php");
             }
         }
 
-        if (class_exists($my_db_manager)) {
+        if (\class_exists($my_db_manager)) {
             return new $my_db_manager();
         }
         return null;
@@ -180,7 +180,7 @@ class DBManagerFactory
     {
         $drivers = self::getDbDrivers($validate);
         if (!empty($drivers[$type])) {
-            return get_class($drivers[$type]);
+            return \get_class($drivers[$type]);
         }
         return false;
     }
@@ -193,23 +193,23 @@ class DBManagerFactory
      */
     protected static function scanDriverDir($dir, &$drivers, $validate = true)
     {
-        if (!is_dir($dir)) {
+        if (!\is_dir($dir)) {
             return;
         }
-        $scandir = opendir($dir);
+        $scandir = \opendir($dir);
         if ($scandir === false) {
             return;
         }
-        while (($name = readdir($scandir)) !== false) {
-            if (substr($name, -11) != "Manager.php") {
+        while (($name = \readdir($scandir)) !== false) {
+            if (\substr($name, -11) != "Manager.php") {
                 continue;
             }
             if ($name == "DBManager.php") {
                 continue;
             }
             require_once("$dir/$name");
-            $classname = substr($name, 0, -4);
-            if (!class_exists($classname)) {
+            $classname = \substr($name, 0, -4);
+            if (!\class_exists($classname)) {
                 continue;
             }
             $driver = new $classname;
@@ -250,8 +250,8 @@ class DBManagerFactory
             if (empty($tdrivers)) {
                 continue;
             }
-            if (count($tdrivers) > 1) {
-                usort($tdrivers, array(__CLASS__, "_compareDrivers"));
+            if (\count($tdrivers) > 1) {
+                \usort($tdrivers, array(__CLASS__, "_compareDrivers"));
             }
             $result[$type] = $tdrivers[0];
         }
@@ -269,12 +269,12 @@ class DBManagerFactory
         static $is_freetds = null;
 
         if ($is_freetds === null) {
-            ob_start();
-            phpinfo(INFO_MODULES);
-            $info=ob_get_contents();
-            ob_end_clean();
+            \ob_start();
+            \phpinfo(INFO_MODULES);
+            $info=\ob_get_contents();
+            \ob_end_clean();
 
-            $is_freetds = (strpos($info, 'FreeTDS') !== false);
+            $is_freetds = (\strpos($info, 'FreeTDS') !== false);
         }
 
         return $is_freetds;

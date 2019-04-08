@@ -64,7 +64,7 @@ function installSystemEmailTemplates()
         $sugar_config['system_email_templates'][$configKey . "_id"] = $template->id;
     }
 
-    ksort($sugar_config);
+    \ksort($sugar_config);
     write_array_to_file('sugar_config', $sugar_config, 'config.php');
 }
 
@@ -91,7 +91,7 @@ function setSystemEmailTemplatesDefaultConfig()
             $sugar_config['system_email_templates']['confirm_opt_in_template' . "_id"];
     }
 
-    ksort($sugar_config);
+    \ksort($sugar_config);
     write_array_to_file('sugar_config', $sugar_config, 'config.php');
 }
 

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 //  Copyright (c) 2009 Facebook
@@ -49,11 +49,11 @@ function xhprof_http_header($name, $value)
         return null;
     }
 
-    if (!is_string($value)) {
+    if (!\is_string($value)) {
         xhprof_error('http_header value not a string');
     }
 
-    header($name.': '.$value, true);
+    \header($name.': '.$value, true);
 }
 
 /**
@@ -115,22 +115,22 @@ function xhprof_generate_image_by_dot($dot_script, $type)
 
     $cmd = " dot -T".$type;
 
-    $process = proc_open($cmd, $descriptorspec, $pipes, "/tmp", array());
-    if (is_resource($process)) {
-        fwrite($pipes[0], $dot_script);
-        fclose($pipes[0]);
+    $process = \proc_open($cmd, $descriptorspec, $pipes, "/tmp", array());
+    if (\is_resource($process)) {
+        \fwrite($pipes[0], $dot_script);
+        \fclose($pipes[0]);
 
-        $output = stream_get_contents($pipes[1]);
+        $output = \stream_get_contents($pipes[1]);
 
-        $err = stream_get_contents($pipes[2]);
+        $err = \stream_get_contents($pipes[2]);
         if (!empty($err)) {
             print "failed to execute cmd: \"$cmd\". stderr: `$err'\n";
             exit;
         }
 
-        fclose($pipes[2]);
-        fclose($pipes[1]);
-        proc_close($process);
+        \fclose($pipes[2]);
+        \fclose($pipes[1]);
+        \proc_close($process);
         return $output;
     }
     print "failed to execute cmd \"$cmd\"";
@@ -208,11 +208,11 @@ function xhprof_generate_dot_script(
                         continue;
                     }
                     if ($max_child === null ||
-            abs($raw_data[xhprof_build_parent_child_key(
+            \abs($raw_data[xhprof_build_parent_child_key(
                 $node,
                                                         $child
             )]["wt"]) >
-            abs($raw_data[xhprof_build_parent_child_key(
+            \abs($raw_data[xhprof_build_parent_child_key(
                 $node,
                                                         $max_child
             )]["wt"])) {
@@ -231,7 +231,7 @@ function xhprof_generate_dot_script(
     }
 
     // if it is a benchmark callgraph, we make the benchmarked function the root.
-    if ($source == "bm" && array_key_exists("main()", $sym_table)) {
+    if ($source == "bm" && \array_key_exists("main()", $sym_table)) {
         $total_times = $sym_table["main()"]["ct"];
         $remove_funcs = array("main()",
                           "hotprofiler_disable",
@@ -239,7 +239,7 @@ function xhprof_generate_dot_script(
                           "xhprof_disable");
 
         foreach ($remove_funcs as $cur_del_func) {
-            if (array_key_exists($cur_del_func, $sym_table) &&
+            if (\array_key_exists($cur_del_func, $sym_table) &&
           $sym_table[$cur_del_func]["ct"] == $total_times) {
                 unset($sym_table[$cur_del_func]);
             }
@@ -257,7 +257,7 @@ function xhprof_generate_dot_script(
             }
         }
         foreach ($sym_table as $symbol => $info) {
-            if (!array_key_exists($symbol, $interested_funcs)) {
+            if (!\array_key_exists($symbol, $interested_funcs)) {
                 unset($sym_table[$symbol]);
             }
         }
@@ -272,12 +272,12 @@ function xhprof_generate_dot_script(
     $cur_id = 0;
     $max_wt = 0;
     foreach ($sym_table as $symbol => $info) {
-        if (empty($func) && abs($info["wt"] / $totals["wt"]) < $threshold) {
+        if (empty($func) && \abs($info["wt"] / $totals["wt"]) < $threshold) {
             unset($sym_table[$symbol]);
             continue;
         }
-        if ($max_wt == 0 || $max_wt < abs($info["excl_wt"])) {
-            $max_wt = abs($info["excl_wt"]);
+        if ($max_wt == 0 || $max_wt < \abs($info["excl_wt"])) {
+            $max_wt = \abs($info["excl_wt"]);
         }
         $sym_table[$symbol]["id"] = $cur_id;
         $cur_id ++;
@@ -288,7 +288,7 @@ function xhprof_generate_dot_script(
         if ($info["excl_wt"] == 0) {
             $sizing_factor = $max_sizing_ratio;
         } else {
-            $sizing_factor = $max_wt / abs($info["excl_wt"]) ;
+            $sizing_factor = $max_wt / \abs($info["excl_wt"]) ;
             if ($sizing_factor > $max_sizing_ratio) {
                 $sizing_factor = $max_sizing_ratio;
             }
@@ -298,7 +298,7 @@ function xhprof_generate_dot_script(
 
         if ($critical_path) {
             // highlight nodes along critical path.
-            if (!$fillcolor && array_key_exists($symbol, $path)) {
+            if (!$fillcolor && \array_key_exists($symbol, $path)) {
                 $fillcolor = ", style=filled, fillcolor=yellow";
             }
         }
@@ -306,57 +306,57 @@ function xhprof_generate_dot_script(
         $fontsize = ", fontsize="
                .(int)($max_fontsize / (($sizing_factor - 1) / 10 + 1));
 
-        $width = ", width=".sprintf("%.1f", $max_width / $sizing_factor);
-        $height = ", height=".sprintf("%.1f", $max_height / $sizing_factor);
+        $width = ", width=".\sprintf("%.1f", $max_width / $sizing_factor);
+        $height = ", height=".\sprintf("%.1f", $max_height / $sizing_factor);
 
         if ($symbol == "main()") {
             $shape = "octagon";
             $name = "Total: ".($totals["wt"] / 1000.0)." ms\\n";
-            $name .= addslashes(isset($page) ? $page : $symbol);
+            $name .= \addslashes(isset($page) ? $page : $symbol);
         } else {
             $shape = "box";
-            $name = addslashes($symbol)."\\nInc: ". sprintf("%.3f", $info["wt"] / 1000) .
-              " ms (" . sprintf("%.1f%%", 100 * $info["wt"] / $totals["wt"]).")";
+            $name = \addslashes($symbol)."\\nInc: ". \sprintf("%.3f", $info["wt"] / 1000) .
+              " ms (" . \sprintf("%.1f%%", 100 * $info["wt"] / $totals["wt"]).")";
         }
         if ($left === null) {
             $label = ", label=\"".$name."\\nExcl: "
-               .(sprintf("%.3f", $info["excl_wt"] / 1000.0))." ms ("
-               .sprintf("%.1f%%", 100 * $info["excl_wt"] / $totals["wt"])
+               .(\sprintf("%.3f", $info["excl_wt"] / 1000.0))." ms ("
+               .\sprintf("%.1f%%", 100 * $info["excl_wt"] / $totals["wt"])
                . ")\\n".$info["ct"]." total calls\"";
         } else {
             if (isset($left[$symbol]) && isset($right[$symbol])) {
-                $label = ", label=\"".addslashes($symbol).
-                  "\\nInc: ".(sprintf("%.3f", $left[$symbol]["wt"] / 1000.0))
+                $label = ", label=\"".\addslashes($symbol).
+                  "\\nInc: ".(\sprintf("%.3f", $left[$symbol]["wt"] / 1000.0))
                   ." ms - "
-                  .(sprintf("%.3f", $right[$symbol]["wt"] / 1000.0))." ms = "
-                  .(sprintf("%.3f", $info["wt"] / 1000.0))." ms".
+                  .(\sprintf("%.3f", $right[$symbol]["wt"] / 1000.0))." ms = "
+                  .(\sprintf("%.3f", $info["wt"] / 1000.0))." ms".
                   "\\nExcl: "
-                  .(sprintf("%.3f", $left[$symbol]["excl_wt"] / 1000.0))
-                  ." ms - ".(sprintf("%.3f", $right[$symbol]["excl_wt"] / 1000.0))
-                   ." ms = ".(sprintf("%.3f", $info["excl_wt"] / 1000.0))." ms".
-                  "\\nCalls: ".(sprintf("%.3f", $left[$symbol]["ct"]))." - "
-                   .(sprintf("%.3f", $right[$symbol]["ct"]))." = "
-                   .(sprintf("%.3f", $info["ct"]))."\"";
+                  .(\sprintf("%.3f", $left[$symbol]["excl_wt"] / 1000.0))
+                  ." ms - ".(\sprintf("%.3f", $right[$symbol]["excl_wt"] / 1000.0))
+                   ." ms = ".(\sprintf("%.3f", $info["excl_wt"] / 1000.0))." ms".
+                  "\\nCalls: ".(\sprintf("%.3f", $left[$symbol]["ct"]))." - "
+                   .(\sprintf("%.3f", $right[$symbol]["ct"]))." = "
+                   .(\sprintf("%.3f", $info["ct"]))."\"";
             } elseif (isset($left[$symbol])) {
-                $label = ", label=\"".addslashes($symbol).
-                  "\\nInc: ".(sprintf("%.3f", $left[$symbol]["wt"] / 1000.0))
-                   ." ms - 0 ms = ".(sprintf("%.3f", $info["wt"] / 1000.0))
+                $label = ", label=\"".\addslashes($symbol).
+                  "\\nInc: ".(\sprintf("%.3f", $left[$symbol]["wt"] / 1000.0))
+                   ." ms - 0 ms = ".(\sprintf("%.3f", $info["wt"] / 1000.0))
                    ." ms"."\\nExcl: "
-                   .(sprintf("%.3f", $left[$symbol]["excl_wt"] / 1000.0))
+                   .(\sprintf("%.3f", $left[$symbol]["excl_wt"] / 1000.0))
                    ." ms - 0 ms = "
-                   .(sprintf("%.3f", $info["excl_wt"] / 1000.0))." ms".
-                  "\\nCalls: ".(sprintf("%.3f", $left[$symbol]["ct"]))." - 0 = "
-                  .(sprintf("%.3f", $info["ct"]))."\"";
+                   .(\sprintf("%.3f", $info["excl_wt"] / 1000.0))." ms".
+                  "\\nCalls: ".(\sprintf("%.3f", $left[$symbol]["ct"]))." - 0 = "
+                  .(\sprintf("%.3f", $info["ct"]))."\"";
             } else {
-                $label = ", label=\"".addslashes($symbol).
+                $label = ", label=\"".\addslashes($symbol).
                   "\\nInc: 0 ms - "
-                  .(sprintf("%.3f", $right[$symbol]["wt"] / 1000.0))
-                  ." ms = ".(sprintf("%.3f", $info["wt"] / 1000.0))." ms".
+                  .(\sprintf("%.3f", $right[$symbol]["wt"] / 1000.0))
+                  ." ms = ".(\sprintf("%.3f", $info["wt"] / 1000.0))." ms".
                   "\\nExcl: 0 ms - "
-                  .(sprintf("%.3f", $right[$symbol]["excl_wt"] / 1000.0))
-                  ." ms = ".(sprintf("%.3f", $info["excl_wt"] / 1000.0))." ms".
-                  "\\nCalls: 0 - ".(sprintf("%.3f", $right[$symbol]["ct"]))
-                  ." = ".(sprintf("%.3f", $info["ct"]))."\"";
+                  .(\sprintf("%.3f", $right[$symbol]["excl_wt"] / 1000.0))
+                  ." ms = ".(\sprintf("%.3f", $info["excl_wt"] / 1000.0))." ms".
+                  "\\nCalls: 0 - ".(\sprintf("%.3f", $right[$symbol]["ct"]))
+                  ." = ".(\sprintf("%.3f", $info["ct"]))."\"";
             }
         }
         $result .= "N" . $sym_table[$symbol]["id"];
@@ -374,12 +374,12 @@ function xhprof_generate_dot_script(
             $label = $info["ct"] == 1 ? $info["ct"]." call" : $info["ct"]." calls";
 
             $headlabel = $sym_table[$child]["wt"] > 0 ?
-                  sprintf("%.1f%%", 100 * $info["wt"]
+                  \sprintf("%.1f%%", 100 * $info["wt"]
                                     / $sym_table[$child]["wt"])
                   : "0.0%";
 
             $taillabel = ($sym_table[$parent]["wt"] > 0) ?
-        sprintf(
+        \sprintf(
             "%.1f%%",
                 100 * $info["wt"] /
                 ($sym_table[$parent]["wt"] - $sym_table["$parent"]["excl_wt"])
@@ -441,7 +441,7 @@ function xhprof_render_diff_image(
     );
     $content = xhprof_generate_image_by_dot($script, $type);
 
-    xhprof_generate_mime_header($type, strlen($content));
+    xhprof_generate_mime_header($type, \strlen($content));
     echo $content;
 }
 
@@ -537,6 +537,6 @@ function xhprof_render_image(
         exit();
     }
 
-    xhprof_generate_mime_header($type, strlen($content));
+    xhprof_generate_mime_header($type, \strlen($content));
     echo $content;
 }

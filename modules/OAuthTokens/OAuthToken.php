@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -121,7 +121,7 @@ class OAuthToken extends SugarBean
     protected static function randomValue()
     {
         $zop = new Zend_Oauth_Provider();
-        return bin2hex($zop->generateToken(6));
+        return \bin2hex($zop->generateToken(6));
     }
 
     /**
@@ -137,7 +137,7 @@ class OAuthToken extends SugarBean
 
     public function save($check_notify = false)
     {
-        $this->token_ts = time();
+        $this->token_ts = \time();
         if (!isset($this->id)) {
             $this->new_with_id = true;
             $this->id = $this->token;
@@ -240,9 +240,9 @@ class OAuthToken extends SugarBean
     {
         $db = DBManagerFactory::getInstance();
         // delete invalidated tokens older than 1 day
-        $db->query("DELETE FROM oauth_tokens WHERE tstate = ".self::INVALID." AND token_ts < ".(time()-60*60*24));
+        $db->query("DELETE FROM oauth_tokens WHERE tstate = ".self::INVALID." AND token_ts < ".(\time()-60*60*24));
         // delete request tokens older than 1 day
-        $db->query("DELETE FROM oauth_tokens WHERE tstate = ".self::REQUEST." AND token_ts < ".(time()-60*60*24));
+        $db->query("DELETE FROM oauth_tokens WHERE tstate = ".self::REQUEST." AND token_ts < ".(\time()-60*60*24));
     }
 
     /**
@@ -255,19 +255,19 @@ class OAuthToken extends SugarBean
     {
         $db = DBManagerFactory::getInstance();
 
-        $res = $db->query(sprintf("SELECT * FROM oauth_nonce WHERE conskey='%s' AND nonce_ts > %d", $db->quote($key), $ts));
+        $res = $db->query(\sprintf("SELECT * FROM oauth_nonce WHERE conskey='%s' AND nonce_ts > %d", $db->quote($key), $ts));
         if ($res && $db->fetchByAssoc($res)) {
             // we have later ts
             return Zend_Oauth_Provider::BAD_TIMESTAMP;
         }
 
-        $res = $db->query(sprintf("SELECT * FROM oauth_nonce WHERE conskey='%s' AND nonce='%s' AND nonce_ts = %d", $db->quote($key), $db->quote($nonce), $ts));
+        $res = $db->query(\sprintf("SELECT * FROM oauth_nonce WHERE conskey='%s' AND nonce='%s' AND nonce_ts = %d", $db->quote($key), $db->quote($nonce), $ts));
         if ($res && $db->fetchByAssoc($res)) {
             // Already seen this one
             return Zend_Oauth_Provider::BAD_NONCE;
         }
-        $db->query(sprintf("DELETE FROM oauth_nonce WHERE conskey='%s' AND nonce_ts < %d", $db->quote($key), $ts));
-        $db->query(sprintf("INSERT INTO oauth_nonce(conskey, nonce, nonce_ts) VALUES('%s', '%s', %d)", $db->quote($key), $db->quote($nonce), $ts));
+        $db->query(\sprintf("DELETE FROM oauth_nonce WHERE conskey='%s' AND nonce_ts < %d", $db->quote($key), $ts));
+        $db->query(\sprintf("INSERT INTO oauth_nonce(conskey, nonce, nonce_ts) VALUES('%s', '%s', %d)", $db->quote($key), $db->quote($nonce), $ts));
         return Zend_Oauth_Provider::OK;
     }
 
@@ -304,7 +304,7 @@ class OAuthToken extends SugarBean
 
 function displayDateFromTs($focus, $field, $value, $view='ListView')
 {
-    $field = strtoupper($field);
+    $field = \strtoupper($field);
     if (!isset($focus[$field])) {
         return '';
     }

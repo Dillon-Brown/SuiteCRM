@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -77,7 +77,7 @@ if (!empty($_REQUEST['saved_search_action'])) {
         $_SESSION['LastSavedView'][$_REQUEST['search_module']] = '';
         $current_user->setPreference('ListViewDisplayColumns', array(), 0, $_REQUEST['search_module']);
         $ajaxLoad = empty($_REQUEST['ajax_load']) ? "" : "&ajax_load=" . $_REQUEST['ajax_load'];
-        header("Location: index.php?action=index&module={$_REQUEST['search_module']}&searchFormTab={$searchFormTab}&query=true&clear_query=true$ajaxLoad");
+        \header("Location: index.php?action=index&module={$_REQUEST['search_module']}&searchFormTab={$searchFormTab}&query=true&clear_query=true$ajaxLoad");
         die();
     }
     $ss = new SavedSearch();

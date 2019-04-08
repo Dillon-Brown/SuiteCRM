@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -47,7 +47,7 @@ class FeedLinkHandlerImage extends FeedLinkHandlerLink
 {
     public function getDisplay(&$data)
     {
-        $imageData = unserialize(base64_decode($data['LINK_URL']));
+        $imageData = \unserialize(\base64_decode($data['LINK_URL']));
         if ($imageData['width'] != 0) {
             $image_style = 'width: '.$imageData['width'].'px; height: '.$imageData['height'].'px; border: 0px;';
         } else {
@@ -65,21 +65,21 @@ class FeedLinkHandlerImage extends FeedLinkHandlerLink
         // The FeedLinkHandlerLink class will help sort this url out for us
         $link_url = $feed->link_url;
 
-        $imageData = @getimagesize($link_url);
+        $imageData = @\getimagesize($link_url);
 
         if (! isset($imageData)) {
             // The image didn't pull down properly, could be a link and allow_url_fopen could be disabled
             $imageData[0] = 0;
             $imageData[1] = 0;
         } else {
-            if (max($imageData[0], $imageData[1]) > 425) {
+            if (\max($imageData[0], $imageData[1]) > 425) {
                 // This is a large image, we need to set some specific width/height properties so that the browser can scale it.
-                $scale = 425 / max($imageData[0], $imageData[1]);
-                $imageData[0] = floor($imageData[0]*$scale);
-                $imageData[1] = floor($imageData[1]*$scale);
+                $scale = 425 / \max($imageData[0], $imageData[1]);
+                $imageData[0] = \floor($imageData[0]*$scale);
+                $imageData[1] = \floor($imageData[1]*$scale);
             }
         }
 
-        $feed->link_url = base64_encode(serialize(array('url'=>$link_url,'width'=>$imageData[0],'height'=>$imageData[1])));
+        $feed->link_url = \base64_encode(\serialize(array('url'=>$link_url,'width'=>$imageData[0],'height'=>$imageData[1])));
     }
 }

@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -95,7 +95,7 @@ class EmailsSignatureResolver
         $this->html = $this->resolveHtml();
         $this->plaintext = $this->resolvePlaintext();
         $this->noDefaultAvailable = false;
-        if (in_array(self::ERR_HTML_NONE, $this->errors) && in_array(self::ERR_PLAINTEXT_NONE, $this->errors)) {
+        if (\in_array(self::ERR_HTML_NONE, $this->errors) && \in_array(self::ERR_PLAINTEXT_NONE, $this->errors)) {
             $this->noDefaultAvailable = true;
         }
         return $this->errors;

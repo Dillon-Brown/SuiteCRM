@@ -43,7 +43,7 @@ global $current_user;
 
 if (!empty($_REQUEST['target_module']) && !empty($_REQUEST['target_id'])) {
     $objects = $current_user->getPreference('objects', 'favorites');
-    if (!is_array($objects)) {
+    if (!\is_array($objects)) {
         $objects = array();
     }
     if (empty($objects[$_REQUEST['target_module']])) {

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -34,16 +34,16 @@ $groupFocus->retrieve($securitygroup);
 
 
 if (!empty($_REQUEST['uid'])) {
-    $_POST['mass'] = explode(',', $_REQUEST['uid']);
+    $_POST['mass'] = \explode(',', $_REQUEST['uid']);
 } // coming from listview
 elseif (isset($_REQUEST['entire'])) {
     if (isset($_SESSION['export_where']) && !empty($_SESSION['export_where'])) { // bug 4679
         $where = $_SESSION['export_where'];
-        $whereArr = explode(" ", trim($where));
-        if ($whereArr[0] == trim('where')) {
-            $whereClean = array_shift($whereArr);
+        $whereArr = \explode(" ", \trim($where));
+        if ($whereArr[0] == \trim('where')) {
+            $whereClean = \array_shift($whereArr);
         }
-        $where = implode(" ", $whereArr);
+        $where = \implode(" ", $whereArr);
     } else {
         $where = '';
     }
@@ -55,12 +55,12 @@ elseif (isset($_REQUEST['entire'])) {
 
     $new_arr = array();
     while ($val = $db->fetchByAssoc($result, -1, false)) {
-        array_push($new_arr, $val['id']);
+        \array_push($new_arr, $val['id']);
     }
     $_POST['mass'] = $new_arr;
 }
 
-if (isset($_POST['mass']) && is_array($_POST['mass'])) {
+if (isset($_POST['mass']) && \is_array($_POST['mass'])) {
     $rel_name = "";
     foreach ($_POST['mass'] as $id) {
         if (isset($_POST['Delete'])) {
@@ -116,4 +116,4 @@ if (isset($_POST['mass']) && is_array($_POST['mass'])) {
 }
 
 
-header("Location: index.php?action={$_POST['return_action']}&module={$_POST['return_module']}");
+\header("Location: index.php?action={$_POST['return_action']}&module={$_POST['return_module']}");

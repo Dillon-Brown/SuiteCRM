@@ -26,9 +26,9 @@ class OneLogin_Saml2_Metadata
     public static function builder($sp, $authnsign = false, $wsign = false, $validUntil = null, $cacheDuration = null, $contacts = array(), $organization = array(), $attributes = array())
     {
         if (!isset($validUntil)) {
-            $validUntil =  time() + self::TIME_VALID;
+            $validUntil =  \time() + self::TIME_VALID;
         }
-        $validUntilTime =  gmdate('Y-m-d\TH:i:s\Z', $validUntil);
+        $validUntilTime =  \gmdate('Y-m-d\TH:i:s\Z', $validUntil);
 
         if (!isset($cacheDuration)) {
             $cacheDuration = self::TIME_CACHED;
@@ -37,7 +37,7 @@ class OneLogin_Saml2_Metadata
         $sls = '';
 
         if (isset($sp['singleLogoutService'])) {
-            $slsUrl = htmlspecialchars($sp['singleLogoutService']['url'], ENT_QUOTES);
+            $slsUrl = \htmlspecialchars($sp['singleLogoutService']['url'], ENT_QUOTES);
             $sls = <<<SLS_TEMPLATE
         <md:SingleLogoutService Binding="{$sp['singleLogoutService']['binding']}"
                                 Location="{$slsUrl}" />
@@ -74,7 +74,7 @@ ORGANIZATION_DISPLAY;
        <md:OrganizationURL xml:lang="{$lang}">{$info['url']}</md:OrganizationURL>
 ORGANIZATION_URL;
             }
-            $orgData = implode("\n", $organizationInfoNames)."\n".implode("\n", $organizationInfoDisplaynames)."\n".implode("\n", $organizationInfoUrls);
+            $orgData = \implode("\n", $organizationInfoNames)."\n".\implode("\n", $organizationInfoDisplaynames)."\n".\implode("\n", $organizationInfoUrls);
             $strOrganization = <<<ORGANIZATIONSTR
 
     <md:Organization>
@@ -94,14 +94,14 @@ ORGANIZATIONSTR;
     </md:ContactPerson>
 CONTACT;
             }
-            $strContacts = "\n".implode("\n", $contactsInfo);
+            $strContacts = "\n".\implode("\n", $contactsInfo);
         }
 
         $strAttributeConsumingService = '';
         if (isset($sp['attributeConsumingService'])) {
             $attrCsDesc = '';
             if (isset($sp['attributeConsumingService']['serviceDescription'])) {
-                $attrCsDesc = sprintf(
+                $attrCsDesc = \sprintf(
                     '            <md:ServiceDescription xml:lang="en">%s</md:ServiceDescription>' . PHP_EOL,
                     $sp['attributeConsumingService']['serviceDescription']
                 );
@@ -111,21 +111,21 @@ CONTACT;
             }
             $requestedAttributeData = array();
             foreach ($sp['attributeConsumingService']['requestedAttributes'] as $attribute) {
-                $requestedAttributeStr = sprintf('            <md:RequestedAttribute Name="%s"', $attribute['name']);
+                $requestedAttributeStr = \sprintf('            <md:RequestedAttribute Name="%s"', $attribute['name']);
                 if (isset($attribute['nameFormat'])) {
-                    $requestedAttributeStr .= sprintf(' NameFormat="%s"', $attribute['nameFormat']);
+                    $requestedAttributeStr .= \sprintf(' NameFormat="%s"', $attribute['nameFormat']);
                 }
                 if (isset($attribute['friendlyName'])) {
-                    $requestedAttributeStr .= sprintf(' FriendlyName="%s"', $attribute['friendlyName']);
+                    $requestedAttributeStr .= \sprintf(' FriendlyName="%s"', $attribute['friendlyName']);
                 }
                 if (isset($attribute['isRequired'])) {
-                    $requestedAttributeStr .= sprintf(' isRequired="%s"', $attribute['isRequired'] === true ? 'true' : 'false');
+                    $requestedAttributeStr .= \sprintf(' isRequired="%s"', $attribute['isRequired'] === true ? 'true' : 'false');
                 }
                 $reqAttrAuxStr = " />";
 
                 if (isset($attribute['attributeValue']) && !empty($attribute['attributeValue'])) {
                     $reqAttrAuxStr = '>';
-                    if (is_string($attribute['attributeValue'])) {
+                    if (\is_string($attribute['attributeValue'])) {
                         $attribute['attributeValue'] = array($attribute['attributeValue']);
                     }
                     foreach ($attribute['attributeValue'] as $attrValue) {
@@ -140,7 +140,7 @@ ATTRIBUTEVALUE;
                 $requestedAttributeData[] = $requestedAttributeStr . $reqAttrAuxStr;
             }
 
-            $requestedAttributeStr = implode(PHP_EOL, $requestedAttributeData);
+            $requestedAttributeStr = \implode(PHP_EOL, $requestedAttributeData);
             $strAttributeConsumingService = <<<METADATA_TEMPLATE
 <md:AttributeConsumingService index="1">
             <md:ServiceName xml:lang="en">{$sp['attributeConsumingService']['serviceName']}</md:ServiceName>
@@ -149,8 +149,8 @@ ATTRIBUTEVALUE;
 METADATA_TEMPLATE;
         }
 
-        $spEntityId = htmlspecialchars($sp['entityId'], ENT_QUOTES);
-        $acsUrl = htmlspecialchars($sp['assertionConsumerService']['url'], ENT_QUOTES);
+        $spEntityId = \htmlspecialchars($sp['entityId'], ENT_QUOTES);
+        $acsUrl = \htmlspecialchars($sp['assertionConsumerService']['url'], ENT_QUOTES);
         $metadata = <<<METADATA_TEMPLATE
 <?xml version="1.0"?>
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"

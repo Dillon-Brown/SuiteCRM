@@ -160,7 +160,7 @@ class Zend_Oauth_Consumer extends Zend_Oauth
         Zend_Oauth_Http_UserAuthorization $request = null
     ) {
         $redirectUrl = $this->getRedirectUrl($customServiceParameters, $request);
-        header('Location: ' . $redirectUrl);
+        \header('Location: ' . $redirectUrl);
         exit(1);
     }
 
@@ -193,8 +193,8 @@ class Zend_Oauth_Consumer extends Zend_Oauth
         }
 
         // OAuth 1.0a Verifier
-        if (!is_null($authorizedToken->getParam('oauth_verifier'))) {
-            $params = array_merge($request->getParameters(), array(
+        if (!\is_null($authorizedToken->getParam('oauth_verifier'))) {
+            $params = \array_merge($request->getParameters(), array(
                 'oauth_verifier' => $authorizedToken->getParam('oauth_verifier')
             ));
             $request->setParameters($params);
@@ -265,10 +265,10 @@ class Zend_Oauth_Consumer extends Zend_Oauth
      */
     public function __call($method, array $args)
     {
-        if (!method_exists($this->_config, $method)) {
+        if (!\method_exists($this->_config, $method)) {
             require_once 'Zend/Oauth/Exception.php';
             throw new Zend_Oauth_Exception('Method does not exist: '.$method);
         }
-        return call_user_func_array(array($this->_config,$method), $args);
+        return \call_user_func_array(array($this->_config,$method), $args);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -51,7 +51,7 @@ $supportedExtensions = array('jpg', 'png', 'jpeg');
 $json = getJSONobj();
 $rmdir=true;
 $returnArray = array();
-if ($json->decode(html_entity_decode($_REQUEST['forQuotes']))) {
+if ($json->decode(\html_entity_decode($_REQUEST['forQuotes']))) {
     $returnArray['forQuotes']="quotes";
 } else {
     $returnArray['forQuotes']="company";
@@ -82,16 +82,16 @@ if (!$upload_ok) {
     sugar_cleanup();
     exit();
 }
-if (file_exists($file_name) && is_file($file_name)) {
-    $encoded_file_name = rawurlencode($upload->get_stored_file_name());
+if (\file_exists($file_name) && \is_file($file_name)) {
+    $encoded_file_name = \rawurlencode($upload->get_stored_file_name());
     $returnArray['path'] = $upload_path . '/' . $encoded_file_name;
     $returnArray['url']= 'cache/images/'.$encoded_file_name;
     if (!verify_uploaded_image($file_name, $returnArray['forQuotes'] == 'quotes')) {
         $returnArray['data']='other';
         $returnArray['path'] = '';
-        unlink($file_name);
+        \unlink($file_name);
     } else {
-        $img_size = getimagesize($file_name);
+        $img_size = \getimagesize($file_name);
         $filetype = $img_size['mime'];
         $test=$img_size[0]/$img_size[1];
         if (($test>10 || $test<1) && $returnArray['forQuotes'] == 'company') {
@@ -101,7 +101,7 @@ if (file_exists($file_name) && is_file($file_name)) {
         if (($test>20 || $test<3)&& $returnArray['forQuotes'] == 'quotes') {
             $returnArray['data']='size';
         }
-        copy($file_name, sugar_cached('images/'.$upload->get_stored_file_name()));
+        \copy($file_name, sugar_cached('images/'.$upload->get_stored_file_name()));
     }
     if (!empty($returnArray['data'])) {
         echo $json->encode($returnArray);

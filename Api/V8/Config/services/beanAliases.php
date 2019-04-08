@@ -56,6 +56,6 @@ return [
             'Invoices' => AOS_Invoices::class,
             'ProductQuotes' => AOS_Products_Quotes::class,
             'Quotes' => AOS_Quotes::class,
-        ], basename(__FILE__));
+        ], \basename(__FILE__));
     }
 ];

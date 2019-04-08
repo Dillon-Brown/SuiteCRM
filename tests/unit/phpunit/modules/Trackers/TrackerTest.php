@@ -44,7 +44,7 @@ class TrackerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $result = $tracker->get_recently_viewed(1);
 
         $this->assertInstanceOf('BreadCrumbStack', $_SESSION['breadCrumbs']);
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -98,7 +98,7 @@ class TrackerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test with headerDisplayed set
         $GLOBALS['app']->headerDisplayed = 1;
         Tracker::logPage();
-        $this->assertEquals(time(), $_SESSION['lpage']);
+        $this->assertEquals(\time(), $_SESSION['lpage']);
         
         //$this->assertEquals(time(), null);
         

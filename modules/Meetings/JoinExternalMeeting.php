@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -64,7 +64,7 @@ if ($_REQUEST['host_meeting'] == '1') {
     } else {
         //since they are now the owner of the meeting nor an Admin they cannot start the meeting.
         $tplFile = 'modules/Meetings/tpls/extMeetingNoStart.tpl';
-        if (file_exists('custom/'.$tplFile)) {
+        if (\file_exists('custom/'.$tplFile)) {
             $tplFile = 'custom/'.$tplFile;
         }
 
@@ -79,7 +79,7 @@ if ($_REQUEST['host_meeting'] == '1') {
     } else {
         //if the user is not invited or the owner of the meeting or an admin then they cannot join the meeting.
         $tplFile = 'modules/Meetings/tpls/extMeetingNotInvited.tpl';
-        if (file_exists('custom/'.$tplFile)) {
+        if (\file_exists('custom/'.$tplFile)) {
             $tplFile = 'custom/'.$tplFile;
         }
 

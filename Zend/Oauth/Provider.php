@@ -194,17 +194,17 @@ class Zend_Oauth_Provider
     {
         $className = '';
         $hashAlgo  = null;
-        $parts     = explode('-', $signatureMethod);
-        if (count($parts) > 1) {
-            $className = 'Zend_Oauth_Signature_' . ucfirst(strtolower($parts[0]));
+        $parts     = \explode('-', $signatureMethod);
+        if (\count($parts) > 1) {
+            $className = 'Zend_Oauth_Signature_' . \ucfirst(\strtolower($parts[0]));
         } else {
-            $className = 'Zend_Oauth_Signature_' . ucfirst(strtolower($signatureMethod));
+            $className = 'Zend_Oauth_Signature_' . \ucfirst(\strtolower($signatureMethod));
         }
-        $filename = str_replace('_', '/', $className) . '.php';
-        if (file_exists($filename)) {
+        $filename = \str_replace('_', '/', $className) . '.php';
+        if (\file_exists($filename)) {
             require_once $filename;
         }
-        if (!class_exists($className)) {
+        if (!\class_exists($className)) {
             throw new Zend_Oauth_Exception("Invalid signature method", self::SIGNATURE_METHOD_REJECTED);
         }
     }
@@ -216,12 +216,12 @@ class Zend_Oauth_Provider
      */
     protected function assembleParams($method, $params = array())
     {
-        $params = array_merge($_GET, $params);
+        $params = \array_merge($_GET, $params);
         if ($method == 'POST') {
-            $params = array_merge($_POST, $params);
+            $params = \array_merge($_POST, $params);
         }
         $auth = null;
-        if (function_exists('apache_request_headers')) {
+        if (\function_exists('apache_request_headers')) {
             $headers = apache_request_headers();
             if (isset($headers['Authorization'])) {
                 $auth = $headers['Authorization'];
@@ -233,14 +233,14 @@ class Zend_Oauth_Provider
             $auth = $_SERVER['HTTP_AUTHORIZATION'];
         }
 
-        if (!empty($auth) && substr($auth, 0, 6) == 'OAuth ') {
+        if (!empty($auth) && \substr($auth, 0, 6) == 'OAuth ') {
             // import header data
-            if (preg_match_all('/(oauth_[a-z_-]*)=(:?"([^"]*)"|([^,]*))/', $auth, $matches)) {
+            if (\preg_match_all('/(oauth_[a-z_-]*)=(:?"([^"]*)"|([^,]*))/', $auth, $matches)) {
                 foreach ($matches[1] as $num => $header) {
                     if ($header == 'realm') {
                         continue;
                     }
-                    $params[$header] = urldecode(empty($matches[3][$num])? $matches[4][$num] : $matches[3][$num]);
+                    $params[$header] = \urldecode(empty($matches[3][$num])? $matches[4][$num] : $matches[3][$num]);
                 }
             }
         }
@@ -304,20 +304,20 @@ class Zend_Oauth_Provider
         $this->nonce = $params['oauth_nonce'];
         $this->consumer_key = $params['oauth_consumer_key'];
 
-        if (!is_callable($this->nonceHandler)) {
+        if (!\is_callable($this->nonceHandler)) {
             throw new Zend_Oauth_Exception("Nonce handler not callable", self::BAD_NONCE);
         }
 
-        $res = call_user_func($this->nonceHandler, $this);
+        $res = \call_user_func($this->nonceHandler, $this);
         if ($res != self::OK) {
             throw new Zend_Oauth_Exception("Invalid request", $res);
         }
 
-        if (!is_callable($this->consumerHandler)) {
+        if (!\is_callable($this->consumerHandler)) {
             throw new Zend_Oauth_Exception("Consumer handler not callable", self::CONSUMER_KEY_UNKNOWN);
         }
 
-        $res = call_user_func($this->consumerHandler, $this);
+        $res = \call_user_func($this->consumerHandler, $this);
         // this will set $this->consumer_secret if OK
         if ($res != self::OK) {
             throw new Zend_Oauth_Exception("Consumer key invalid", $res);
@@ -328,10 +328,10 @@ class Zend_Oauth_Provider
             if (isset($params['oauth_verifier'])) {
                 $this->verifier = $params['oauth_verifier'];
             }
-            if (!is_callable($this->tokenHandler)) {
+            if (!\is_callable($this->tokenHandler)) {
                 throw new Zend_Oauth_Exception("Token handler not callable", self::TOKEN_REJECTED);
             }
-            $res = call_user_func($this->tokenHandler, $this);
+            $res = \call_user_func($this->tokenHandler, $this);
             // this will set $this->token_secret if OK
             if ($res != self::OK) {
                 throw new Zend_Oauth_Exception("Token invalid", $res);
@@ -366,9 +366,9 @@ class Zend_Oauth_Provider
     public function generateToken($size)
     {
         $str = '';
-        while (strlen($str) < $size) {
-            $str .= md5(uniqid(mt_rand(), true), true);
+        while (\strlen($str) < $size) {
+            $str .= \md5(\uniqid(\mt_rand(), true), true);
         }
-        return substr($str, 0, $size);
+        return \substr($str, 0, $size);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -109,7 +109,7 @@ class ProspectList extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -201,7 +201,7 @@ class ProspectList extends SugarBean
         $db = DBManagerFactory::getInstance();
         $result = $db->query(
             "select name, custom_module, type, ext1, ext2, ext3, ext4 from fields_meta_data where custom_module in ('" .
-            implode("', '", array_keys($members)) . "')",
+            \implode("', '", \array_keys($members)) . "')",
             true,
             "ProspectList::create_export_members_query() : error querying custom fields"
         );
@@ -224,7 +224,7 @@ class ProspectList extends SugarBean
                         $memberarr['fields'][$fieldname] = "'{{$val['type']} from=\"{$val['custom_module']}.{$val['name']}\" to=\"{$val['ext2']}.{$val['ext3']}\"}' AS " . $fieldname;
                     } else {
                         $memberarr['fields'][$fieldname] =
-                            strtolower($membername) . '_cstm.' . $fieldname . ' AS ' . $fieldname;
+                            \strtolower($membername) . '_cstm.' . $fieldname . ' AS ' . $fieldname;
                     }
                 }
                 // else, only if for this module no entry exists for this field, query an empty string
@@ -239,7 +239,7 @@ class ProspectList extends SugarBean
 				l.account_name AS account_name,
 				ea.email_address AS primary_email_address, ea.invalid_email AS invalid_email, ea.opt_out AS opt_out, ea.deleted AS ea_deleted, ear.deleted AS ear_deleted, ear.primary_address AS primary_address,
 				l.do_not_call AS do_not_call, l.phone_fax AS phone_fax, l.phone_other AS phone_other, l.phone_home AS phone_home, l.phone_mobile AS phone_mobile, l.phone_work AS phone_work
-				".(count($members['Leads']['fields']) ? ', ' : '') . implode(', ', $members['Leads']['fields'])."
+				".(\count($members['Leads']['fields']) ? ', ' : '') . \implode(', ', $members['Leads']['fields'])."
 				FROM prospect_lists_prospects plp
 				INNER JOIN leads l ON plp.related_id=l.id
 				".($members['Leads']['has_custom_fields'] ? 'LEFT join leads_cstm ON l.id = leads_cstm.id_c' : '')."
@@ -254,7 +254,7 @@ class ProspectList extends SugarBean
 				'' AS account_name,
 				ea.email_address AS email_address, ea.invalid_email AS invalid_email, ea.opt_out AS opt_out, ea.deleted AS ea_deleted, ear.deleted AS ear_deleted, ear.primary_address AS primary_address,
 				0 AS do_not_call, u.phone_fax AS phone_fax, u.phone_other AS phone_other, u.phone_home AS phone_home, u.phone_mobile AS phone_mobile, u.phone_work AS phone_work
-				".(count($members['Users']['fields']) ? ', ' : '') . implode(', ', $members['Users']['fields'])."
+				".(\count($members['Users']['fields']) ? ', ' : '') . \implode(', ', $members['Users']['fields'])."
 				FROM prospect_lists_prospects plp
 				INNER JOIN users u ON plp.related_id=u.id
 				".($members['Users']['has_custom_fields'] ? 'LEFT join users_cstm ON u.id = users_cstm.id_c' : '')."
@@ -269,7 +269,7 @@ class ProspectList extends SugarBean
 				a.name AS account_name,
 				ea.email_address AS email_address, ea.invalid_email AS invalid_email, ea.opt_out AS opt_out, ea.deleted AS ea_deleted, ear.deleted AS ear_deleted, ear.primary_address AS primary_address,
 				c.do_not_call AS do_not_call, c.phone_fax AS phone_fax, c.phone_other AS phone_other, c.phone_home AS phone_home, c.phone_mobile AS phone_mobile, c.phone_work AS phone_work
-				".(count($members['Contacts']['fields']) ? ', ' : '') . implode(', ', $members['Contacts']['fields'])."
+				".(\count($members['Contacts']['fields']) ? ', ' : '') . \implode(', ', $members['Contacts']['fields'])."
 FROM prospect_lists_prospects plp
 				INNER JOIN contacts c ON plp.related_id=c.id LEFT JOIN accounts_contacts ac ON ac.contact_id=c.id
 				LEFT JOIN accounts a ON ac.account_id=a.id AND ac.deleted=0
@@ -285,7 +285,7 @@ FROM prospect_lists_prospects plp
 				p.account_name AS account_name,
 				ea.email_address AS email_address, ea.invalid_email AS invalid_email, ea.opt_out AS opt_out, ea.deleted AS ea_deleted, ear.deleted AS ear_deleted, ear.primary_address AS primary_address,
 				p.do_not_call AS do_not_call, p.phone_fax AS phone_fax, p.phone_other AS phone_other, p.phone_home AS phone_home, p.phone_mobile AS phone_mobile, p.phone_work AS phone_work
-				".(count($members['Prospects']['fields']) ? ', ' : '') . implode(', ', $members['Prospects']['fields'])."
+				".(\count($members['Prospects']['fields']) ? ', ' : '') . \implode(', ', $members['Prospects']['fields'])."
 				FROM prospect_lists_prospects plp
 				INNER JOIN prospects p ON plp.related_id=p.id
 				".($members['Prospects']['has_custom_fields'] ? 'LEFT join prospects_cstm ON p.id = prospects_cstm.id_c' : '')."
@@ -300,7 +300,7 @@ FROM prospect_lists_prospects plp
 				'' AS account_name,
 				ea.email_address AS email_address, ea.invalid_email AS invalid_email, ea.opt_out AS opt_out, ea.deleted AS ea_deleted, ear.deleted AS ear_deleted, ear.primary_address AS primary_address,
 				0 AS do_not_call, a.phone_fax as phone_fax, a.phone_alternate AS phone_other, '' AS phone_home, '' AS phone_mobile, a.phone_office AS phone_office
-				".(count($members['Accounts']['fields']) ? ', ' : '') . implode(', ', $members['Accounts']['fields'])."
+				".(\count($members['Accounts']['fields']) ? ', ' : '') . \implode(', ', $members['Accounts']['fields'])."
 				FROM prospect_lists_prospects plp
 				INNER JOIN accounts a ON plp.related_id=a.id
 				".($members['Accounts']['has_custom_fields'] ? 'LEFT join accounts_cstm ON a.id = accounts_cstm.id_c' : '')."
@@ -330,7 +330,7 @@ FROM prospect_lists_prospects plp
 
     public function set_prospect_relationship($prospect_list_id, &$link_ids, $link_name)
     {
-        $link_field = sprintf("%s_id", $link_name);
+        $link_field = \sprintf("%s_id", $link_name);
 
         foreach ($link_ids as $link_id) {
             $this->set_relationship('prospect_lists_prospects', array( $link_field=>$link_id, 'prospect_list_id'=>$prospect_list_id ));
@@ -339,7 +339,7 @@ FROM prospect_lists_prospects plp
 
     public function set_prospect_relationship_single($prospect_list_id, $link_id, $link_name)
     {
-        $link_field = sprintf("%s_id", $link_name);
+        $link_field = \sprintf("%s_id", $link_name);
 
         $this->set_relationship('prospect_lists_prospects', array( $link_field=>$link_id, 'prospect_list_id'=>$prospect_list_id ));
     }
@@ -347,10 +347,10 @@ FROM prospect_lists_prospects plp
 
     public function clear_prospect_relationship($prospect_list_id, $link_id, $link_name)
     {
-        $link_field = sprintf("%s_id", $link_name);
+        $link_field = \sprintf("%s_id", $link_name);
         $where_clause = " AND $link_field = '$link_id' ";
 
-        $query = sprintf("DELETE FROM prospect_lists_prospects WHERE prospect_list_id='%s' AND deleted = '0' %s", $prospect_list_id, $where_clause);
+        $query = \sprintf("DELETE FROM prospect_lists_prospects WHERE prospect_list_id='%s' AND deleted = '0' %s", $prospect_list_id, $where_clause);
 
         $this->db->query($query, true, "Error clearing prospect/prospect_list relationship: ");
     }
@@ -404,7 +404,7 @@ FROM prospect_lists_prospects plp
     {
         $where_clauses = array();
         $the_query_string = DBManagerFactory::getInstance()->quote($the_query_string);
-        array_push($where_clauses, "prospect_lists.name like '$the_query_string%'");
+        \array_push($where_clauses, "prospect_lists.name like '$the_query_string%'");
 
         $the_where = "";
         foreach ($where_clauses as $clause) {

@@ -38,9 +38,9 @@ class AOR_ReportsViewDetail extends ViewDetail
             if (!$condition->parameter) {
                 continue;
             }
-            $condition->module_path = implode(":", unserialize(base64_decode($condition->module_path)));
+            $condition->module_path = \implode(":", \unserialize(\base64_decode($condition->module_path)));
             if ($condition->value_type == 'Date') {
-                $condition->value = unserialize(base64_decode($condition->value));
+                $condition->value = \unserialize(\base64_decode($condition->value));
             }
             $condition_item = $condition->toArray();
             $display = getDisplayForField($condition->module_path, $condition->field, $this->bean->report_module);
@@ -87,14 +87,14 @@ class AOR_ReportsViewDetail extends ViewDetail
         $this->ss->assign('report_content', $reportHTML);
 
         echo "<input type='hidden' name='report_module' id='report_module' value='{$this->bean->report_module}'>";
-        if (!is_file('cache/jsLanguage/AOR_Conditions/' . $GLOBALS['current_language'] . '.js')) {
+        if (!\is_file('cache/jsLanguage/AOR_Conditions/' . $GLOBALS['current_language'] . '.js')) {
             require_once('include/language/jsLanguage.php');
             jsLanguage::createModuleStringsCache('AOR_Conditions', $GLOBALS['current_language']);
         }
         echo '<script src="cache/jsLanguage/AOR_Conditions/'. $GLOBALS['current_language'] . '.js"></script>';
 
         $params = $this->getReportParameters();
-        echo "<script>var reportParameters = ".json_encode($params).";</script>";
+        echo "<script>var reportParameters = ".\json_encode($params).";</script>";
 
         $resizeGraphsPerRow = <<<EOD
 

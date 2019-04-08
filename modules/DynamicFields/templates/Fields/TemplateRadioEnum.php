@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -50,7 +50,7 @@ class TemplateRadioEnum extends TemplateEnum
     public function get_html_edit()
     {
         $this->prepare();
-        $xtpl_var = strtoupper($this->name);
+        $xtpl_var = \strtoupper($this->name);
         return "{RADIOOPTIONS_".$xtpl_var. "}";
     }
     
@@ -80,10 +80,10 @@ class TemplateRadioEnum extends TemplateEnum
         
         global $app_list_strings;
         $returnXTPL = array();
-        $returnXTPL[strtoupper($this->name)] = $value;
+        $returnXTPL[\strtoupper($this->name)] = $value;
 
         
-        $returnXTPL[strtoupper('RADIOOPTIONS_'.$this->name)] = $this->generateRadioButtons($value, false);
+        $returnXTPL[\strtoupper('RADIOOPTIONS_'.$this->name)] = $this->generateRadioButtons($value, false);
         return $returnXTPL;
     }
     
@@ -112,8 +112,8 @@ class TemplateRadioEnum extends TemplateEnum
         }
         global $app_list_strings;
         $returnXTPL = array();
-        $returnXTPL[strtoupper($this->name)] = $searchFor;
-        $returnXTPL[strtoupper('RADIOOPTIONS_'.$this->name)] = $this->generateRadioButtons($searchFor, true);
+        $returnXTPL[\strtoupper($this->name)] = $searchFor;
+        $returnXTPL[\strtoupper('RADIOOPTIONS_'.$this->name)] = $this->generateRadioButtons($searchFor, true);
         return $returnXTPL;
     }
     

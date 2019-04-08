@@ -31,8 +31,8 @@ class DayOfWeekField extends AbstractField
         $lastDayOfMonth = $date->format('t');
 
         // Find out if this is the last specific weekday of the month
-        if (strpos($value, 'L')) {
-            $weekday = str_replace('7', '0', substr($value, 0, strpos($value, 'L')));
+        if (\strpos($value, 'L')) {
+            $weekday = \str_replace('7', '0', \substr($value, 0, \strpos($value, 'L')));
             $tdate = clone $date;
             $tdate->setDate($currentYear, $currentMonth, $lastDayOfMonth);
             while ($tdate->format('w') != $weekday) {
@@ -43,8 +43,8 @@ class DayOfWeekField extends AbstractField
         }
 
         // Handle # hash tokens
-        if (strpos($value, '#')) {
-            list($weekday, $nth) = explode('#', $value);
+        if (\strpos($value, '#')) {
+            list($weekday, $nth) = \explode('#', $value);
 
             // 0 and 7 are both Sunday, however 7 matches date('N') format ISO-8601
             if ($weekday === '0') {
@@ -80,18 +80,18 @@ class DayOfWeekField extends AbstractField
         }
 
         // Handle day of the week values
-        if (strpos($value, '-')) {
-            $parts = explode('-', $value);
+        if (\strpos($value, '-')) {
+            $parts = \explode('-', $value);
             if ($parts[0] == '7') {
                 $parts[0] = '0';
             } elseif ($parts[1] == '0') {
                 $parts[1] = '7';
             }
-            $value = implode('-', $parts);
+            $value = \implode('-', $parts);
         }
 
         // Test to see which Sunday to use -- 0 == 7 == Sunday
-        $format = in_array(7, str_split($value)) ? 'N' : 'w';
+        $format = \in_array(7, \str_split($value)) ? 'N' : 'w';
         $fieldValue = $date->format($format);
 
         return $this->isSatisfied($fieldValue, $value);
@@ -114,8 +114,8 @@ class DayOfWeekField extends AbstractField
     {
         $value = $this->convertLiterals($value);
 
-        foreach (explode(',', $value) as $expr) {
-            if (!preg_match('/^(\*|[0-7](L?|#[1-5]))([\/\,\-][0-7]+)*$/', $expr)) {
+        foreach (\explode(',', $value) as $expr) {
+            if (!\preg_match('/^(\*|[0-7](L?|#[1-5]))([\/\,\-][0-7]+)*$/', $expr)) {
                 return false;
             }
         }
@@ -125,9 +125,9 @@ class DayOfWeekField extends AbstractField
 
     private function convertLiterals($string)
     {
-        return str_ireplace(
+        return \str_ireplace(
             array('SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'),
-            range(0, 6),
+            \range(0, 6),
             $string
         );
     }

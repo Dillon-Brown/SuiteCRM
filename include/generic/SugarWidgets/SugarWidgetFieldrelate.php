@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -53,7 +53,7 @@ class SugarWidgetFieldRelate extends SugarWidgetReportField
     public function displayInput($layout_def)
     {
         $values = array();
-        if (is_array($layout_def['input_name0'])) {
+        if (\is_array($layout_def['input_name0'])) {
             $values = $layout_def['input_name0'];
         } else {
             $values[] = $layout_def['input_name0'];
@@ -64,10 +64,10 @@ class SugarWidgetFieldRelate extends SugarWidgetReportField
         $result = $this->reporter->db->query($query);
         while ($row = $this->reporter->db->fetchByAssoc($result)) {
             $html .= '<option value="' . $row['id'] . '"';
-            if (in_array($row['id'], $values)) {
+            if (\in_array($row['id'], $values)) {
                 $html .= ' selected="selected"';
             }
-            $html .= '>' . htmlspecialchars($row['title']) . '</option>';
+            $html .= '>' . \htmlspecialchars($row['title']) . '</option>';
         }
 
         $html .= '</select>';
@@ -129,7 +129,7 @@ class SugarWidgetFieldRelate extends SugarWidgetReportField
             $ids[] = $row['id'];
         }
         $layout_def['name'] = 'id';
-        return $this->_get_column_select($layout_def) . " IN ('" . implode("', '", $ids) . "')";
+        return $this->_get_column_select($layout_def) . " IN ('" . \implode("', '", $ids) . "')";
     }
 
     /**
@@ -163,9 +163,9 @@ class SugarWidgetFieldRelate extends SugarWidgetReportField
                 $ids[] = $row['id'];
             }
         }
-        $ids = array_unique($ids);
+        $ids = \array_unique($ids);
         $layout_def['name'] = 'id';
-        return $this->_get_column_select($layout_def) . " IN ('" . implode("', '", $ids) . "')";
+        return $this->_get_column_select($layout_def) . " IN ('" . \implode("', '", $ids) . "')";
     }
 
     //for to_pdf/to_csv
@@ -173,14 +173,14 @@ class SugarWidgetFieldRelate extends SugarWidgetReportField
     {
         $reporter = $this->layout_manager->getAttribute("reporter");
         $field_def = $reporter->all_fields[$layout_def['column_key']];
-        $display = strtoupper($field_def['secondary_table'].'_name');
+        $display = \strtoupper($field_def['secondary_table'].'_name');
         //#31797  , we should get the table alias in a global registered array:selected_loaded_custom_links
         if (!empty($reporter->selected_loaded_custom_links) && !empty($reporter->selected_loaded_custom_links[$field_def['secondary_table']])) {
-            $display = strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table']]['join_table_alias'].'_name');
+            $display = \strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table']]['join_table_alias'].'_name');
         } elseif (isset($field_def['rep_rel_name']) && isset($reporter->selected_loaded_custom_links) && !empty($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['rep_rel_name']])) {
-            $display = strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['rep_rel_name']]['join_table_alias'].'_name');
+            $display = \strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['rep_rel_name']]['join_table_alias'].'_name');
         } elseif (!empty($reporter->selected_loaded_custom_links) && !empty($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['name']])) {
-            $display = strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['name']]['join_table_alias'].'_name');
+            $display = \strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['name']]['join_table_alias'].'_name');
         }
         $cell = $layout_def['fields'][$display];
         return $cell;
@@ -190,17 +190,17 @@ class SugarWidgetFieldRelate extends SugarWidgetReportField
     {
         $reporter = $this->layout_manager->getAttribute("reporter");
         $field_def = $reporter->all_fields[$layout_def['column_key']];
-        $display = strtoupper($field_def['secondary_table'].'_name');
+        $display = \strtoupper($field_def['secondary_table'].'_name');
 
         //#31797  , we should get the table alias in a global registered array:selected_loaded_custom_links
         if (!empty($reporter->selected_loaded_custom_links) && !empty($reporter->selected_loaded_custom_links[$field_def['secondary_table']])) {
-            $display = strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table']]['join_table_alias'].'_name');
+            $display = \strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table']]['join_table_alias'].'_name');
         } elseif (isset($field_def['rep_rel_name']) && isset($reporter->selected_loaded_custom_links) && !empty($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['rep_rel_name']])) {
-            $display = strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['rep_rel_name']]['join_table_alias'].'_name');
+            $display = \strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['rep_rel_name']]['join_table_alias'].'_name');
         } elseif (!empty($reporter->selected_loaded_custom_links) && !empty($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['name']])) {
-            $display = strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['name']]['join_table_alias'].'_name');
+            $display = \strtoupper($reporter->selected_loaded_custom_links[$field_def['secondary_table'].'_'.$field_def['name']]['join_table_alias'].'_name');
         }
-        $recordField = $this->getTruncatedColumnAlias(strtoupper($layout_def['table_alias']).'_'.strtoupper($layout_def['name']));
+        $recordField = $this->getTruncatedColumnAlias(\strtoupper($layout_def['table_alias']).'_'.\strtoupper($layout_def['name']));
 
         $record = $layout_def['fields'][$recordField];
         $cell = "<a target='_blank' class=\"listViewTdLinkS1\" href=\"index.php?action=DetailView&module=".$field_def['ext2']."&record=$record\">";

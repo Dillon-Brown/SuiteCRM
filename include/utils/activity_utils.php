@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -44,7 +44,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 function build_related_list_by_user_id($bean, $user_id, $where)
 {
-    $bean_id_name = strtolower($bean->object_name).'_id';
+    $bean_id_name = \strtolower($bean->object_name).'_id';
 
     if (isset($bean->rel_users_table) && !empty($bean->rel_users_table)) {
         $select = "SELECT {$bean->table_name}.* from {$bean->rel_users_table},{$bean->table_name} ";
@@ -84,7 +84,7 @@ function build_related_list_by_user_id($bean, $user_id, $where)
              * Need to clone it if we're using 5.0+
              * clone() not supported by 4.x
              */
-            if (version_compare(phpversion(), "5.0", ">=")) {
+            if (\version_compare(\phpversion(), "5.0", ">=")) {
                 $newBean = clone($bean);
             } else {
                 $newBean = $bean;
@@ -131,7 +131,7 @@ function build_related_list_by_user_id($bean, $user_id, $where)
          * Need to clone it if we're using 5.0+
          * clone() not supported by 4.x
          */
-        if (version_compare(phpversion(), "5.0", ">=")) {
+        if (\version_compare(\phpversion(), "5.0", ">=")) {
             $newBean = clone($bean);
         } else {
             $newBean = $bean;

@@ -100,10 +100,10 @@ class CustomLoader
         $result = [];
         foreach ((array)$arrays as $array) {
             foreach ($array as $key => $value) {
-                if (is_integer($key)) {
+                if (\is_integer($key)) {
                     // is indexed?
                     $result[] = $value;
-                } elseif (isset($result[$key]) && is_array($value) && is_array($result[$key])) {
+                } elseif (isset($result[$key]) && \is_array($value) && \is_array($result[$key])) {
                     // is associative?
                     $result[$key] = self::arrayMerge([$result[$key], $value]);
                 } else {
@@ -126,12 +126,12 @@ class CustomLoader
     {
         self::getLastError();
         $customFile = self::$customPath . $customFile;
-        if (!file_exists($customFile)) {
+        if (!\file_exists($customFile)) {
             self::$lastError = self::ERR_FILE_NOT_FOUND;
             LoggerManager::getLogger()->debug('Custom file is not exists: ' . $customFile);
         } else {
             $customs = include $customFile;
-            if (!is_array($customs)) {
+            if (!\is_array($customs)) {
                 throw new Exception('Custom file should return an array.', self::ERR_WRONG_CUSTOM_FORMAT);
             }
             $array = self::arrayMerge([$array, $customs]);
@@ -150,7 +150,7 @@ class CustomLoader
     {
         self::getLastError();
         $customRoutesFile = self::$customPath . $customRoutesFile;
-        if (!file_exists($customRoutesFile)) {
+        if (!\file_exists($customRoutesFile)) {
             self::$lastError = self::ERR_ROUTE_FILE_NOT_FOUND;
             LoggerManager::getLogger()->debug('Custom routes file is not exists: ' . $customRoutesFile);
         } else {

@@ -41,8 +41,8 @@ class jjwg_Address_CacheTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstrac
         $jjwgAddressCache->configuration();
 
         $this->assertInstanceOf('jjwg_Maps', $jjwgAddressCache->jjwg_Maps);
-        $this->assertTrue(is_array($jjwgAddressCache->settings));
-        $this->assertGreaterThan(0, count($jjwgAddressCache->settings));
+        $this->assertTrue(\is_array($jjwgAddressCache->settings));
+        $this->assertGreaterThan(0, \count($jjwgAddressCache->settings));
     }
 
     public function testSaveAndGetAddressCacheInfoAndDeleteAllAddressCache()
@@ -78,7 +78,7 @@ class jjwg_Address_CacheTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstrac
         $jjwgAddressCache->settings['address_cache_get_enabled'] = 1;
         $ainfo = array('address' => 'test', 'lat' => '24.861462', 'lng' => '67.009939', 'description' => 'test description');
         $result = $jjwgAddressCache->getAddressCacheInfo($ainfo);
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         //test deleteAllAddressCache
         $jjwgAddressCache->deleteAllAddressCache();

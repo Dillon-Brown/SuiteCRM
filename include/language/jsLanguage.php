@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -61,7 +61,7 @@ class jsLanguage
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -84,8 +84,8 @@ EOQ;
 
         $cacheDir = create_cache_directory('jsLanguage/');
         if ($fh = @sugar_fopen($cacheDir . $lang . '.js', "w")) {
-            fputs($fh, $str);
-            fclose($fh);
+            \fputs($fh, $str);
+            \fclose($fh);
         }
     }
 
@@ -100,9 +100,9 @@ EOQ;
 
         $cacheDir = create_cache_directory('jsLanguage/' . $moduleDir . '/');
 
-        if ($fh = @fopen($cacheDir . $lang . '.js', "w")) {
-            fputs($fh, $str);
-            fclose($fh);
+        if ($fh = @\fopen($cacheDir . $lang . '.js', "w")) {
+            \fputs($fh, $str);
+            \fclose($fh);
         }
 
         if ($return) {

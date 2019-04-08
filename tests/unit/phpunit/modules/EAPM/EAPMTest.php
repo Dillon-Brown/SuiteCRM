@@ -147,7 +147,7 @@ class EAPMTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($eapm->id));
-        $this->assertEquals(36, strlen($eapm->id));
+        $this->assertEquals(36, \strlen($eapm->id));
 
         //test validated method finally after save
         $this->assertEquals(null, $eapm->validated());

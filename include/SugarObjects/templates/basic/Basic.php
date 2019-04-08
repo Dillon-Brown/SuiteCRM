@@ -69,7 +69,7 @@ class Basic extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -158,11 +158,11 @@ class Basic extends SugarBean
      */
     protected function validateSugarEmailAddressField($emailField)
     {
-        if (!is_string($emailField)) {
+        if (!\is_string($emailField)) {
             throw new InvalidArgumentException('Invalid type. $emailField must be a string value, eg. email1');
         }
 
-        if (!preg_match('/^email\d+/', $emailField)) {
+        if (!\preg_match('/^email\d+/', $emailField)) {
             throw new InvalidArgumentException(
                 '$emailField is invalid, "' . $emailField . '" given. Expected valid name eg. email1'
             );
@@ -177,8 +177,8 @@ class Basic extends SugarBean
     private function cleanUpEmailAddress($emailAddress)
     {
         $ret = $emailAddress;
-        $ret = trim($ret);
-        $ret = strtolower($ret);
+        $ret = \trim($ret);
+        $ret = \strtolower($ret);
 
         return $ret;
     }

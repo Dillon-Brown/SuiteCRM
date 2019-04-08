@@ -35,7 +35,7 @@ abstract class AbstractField implements FieldInterface
      */
     public function isRange($value)
     {
-        return strpos($value, '-') !== false;
+        return \strpos($value, '-') !== false;
     }
 
     /**
@@ -47,7 +47,7 @@ abstract class AbstractField implements FieldInterface
      */
     public function isIncrementsOfRanges($value)
     {
-        return strpos($value, '/') !== false;
+        return \strpos($value, '/') !== false;
     }
 
     /**
@@ -60,7 +60,7 @@ abstract class AbstractField implements FieldInterface
      */
     public function isInRange($dateValue, $value)
     {
-        $parts = array_map('trim', explode('-', $value, 2));
+        $parts = \array_map('trim', \explode('-', $value, 2));
 
         return $dateValue >= $parts[0] && $dateValue <= $parts[1];
     }
@@ -75,13 +75,13 @@ abstract class AbstractField implements FieldInterface
      */
     public function isInIncrementsOfRanges($dateValue, $value)
     {
-        $parts = array_map('trim', explode('/', $value, 2));
+        $parts = \array_map('trim', \explode('/', $value, 2));
         $stepSize = isset($parts[1]) ? $parts[1] : 0;
         if (($parts[0] == '*' || $parts[0] === '0') && 0 !== $stepSize) {
             return (int) $dateValue % $stepSize == 0;
         }
 
-        $range = explode('-', $parts[0], 2);
+        $range = \explode('-', $parts[0], 2);
         $offset = $range[0];
         $to = isset($range[1]) ? $range[1] : $dateValue;
         // Ensure that the date value is within the range

@@ -77,7 +77,7 @@ class TemplateHandler
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -115,15 +115,15 @@ class TemplateHandler
     public static function clearCache($module, $view = '')
     {
         $cacheDir = create_cache_directory('modules/' . $module . '/');
-        $d = dir($cacheDir);
+        $d = \dir($cacheDir);
         while ($e = $d->read()) {
             if (!empty($view) && $e !== $view) {
                 continue;
             }
 
-            $end = strlen($e) - 4;
-            if (is_file($cacheDir . $e) && $end > 1 && substr($e, $end) === '.tpl') {
-                unlink($cacheDir . $e);
+            $end = \strlen($e) - 4;
+            if (\is_file($cacheDir . $e) && $end > 1 && \substr($e, $end) === '.tpl') {
+                \unlink($cacheDir . $e);
             }
         }
 
@@ -133,23 +133,23 @@ class TemplateHandler
          * So we need to also clear tpl files in eg cache/[Current Theme]/[modules]/**.tpl
          * The tpl files for each theme should be cleared for consistency.
          */
-        $cacheDir = rtrim($GLOBALS['sugar_config']['cache_dir'], '/\\');
-        $themesDir = array_filter(glob($cacheDir . '/themes/*'), 'is_dir');
+        $cacheDir = \rtrim($GLOBALS['sugar_config']['cache_dir'], '/\\');
+        $themesDir = \array_filter(\glob($cacheDir . '/themes/*'), 'is_dir');
 
         foreach ($themesDir as $theme) {
             $tplDir = $theme . '/modules/' . $module . '/';
-            if (!file_exists($tplDir)) {
+            if (!\file_exists($tplDir)) {
                 continue;
             }
-            $d = dir($tplDir);
+            $d = \dir($tplDir);
             while ($e = $d->read()) {
                 if (!empty($view) && $e !== $view) {
                     continue;
                 }
 
-                $end = strlen($e) - 4;
-                if ($end > 1 && is_file($tplDir . $e) && substr($e, $end) === '.tpl') {
-                    unlink($tplDir . $e);
+                $end = \strlen($e) - 4;
+                if ($end > 1 && \is_file($tplDir . $e) && \substr($e, $end) === '.tpl') {
+                    \unlink($tplDir . $e);
                 }
             }
         }
@@ -183,7 +183,7 @@ class TemplateHandler
         );
         $contents = $this->ss->fetch($tpl);
         // Insert validation and quick search stuff here
-        if ($view === 'EditView' || $ajaxSave || $view === 'ConvertLead' || strpos($view, 'QuickCreate')) {
+        if ($view === 'EditView' || $ajaxSave || $view === 'ConvertLead' || \strpos($view, 'QuickCreate')) {
             global $dictionary, $beanList, $app_strings, $mod_strings;
             $mod = $beanList[$module];
 
@@ -203,7 +203,7 @@ class TemplateHandler
                             continue;
                         }
 
-                        if (is_array($entry) &&
+                        if (\is_array($entry) &&
                             isset($entry['name']) &&
                             isset($entry['displayParams']['required']) &&
                             $entry['displayParams']['required']
@@ -211,7 +211,7 @@ class TemplateHandler
                             $panelFields[$entry['name']] = $entry;
                         }
 
-                        if (is_array($entry)) {
+                        if (\is_array($entry)) {
                             $defs2[$entry['name']] = $entry;
                         } else {
                             $defs2[$entry] = array('name' => $entry);
@@ -222,7 +222,7 @@ class TemplateHandler
 
             foreach ($panelFields as $field => $value) {
                 $nameList = array();
-                if (!is_array($value['displayParams']['required'])) {
+                if (!\is_array($value['displayParams']['required'])) {
                     $nameList[] = $field;
                 } else {
                     foreach ($value['displayParams']['required'] as $groupedField) {
@@ -275,7 +275,7 @@ class TemplateHandler
                     isset($defs2[$name]) &&
                     (!isset($defs2[$name]['validateDependency']) || $defs2[$name]['validateDependency'] === true) &&
                     isset($def['id_name']) &&
-                    !in_array($name, $validatedFields)
+                    !\in_array($name, $validatedFields)
                 ) {
                     if (isset($mod_strings[$def['vname']])
                         || isset($app_strings[$def['vname']])
@@ -302,7 +302,7 @@ class TemplateHandler
             $contents .= $this->createQuickSearchCode($defs, $defs2, $view, $module);
             $contents .= "{/literal}\n";
         } else {
-            if (preg_match('/^SearchForm_.+/', $view)) {
+            if (\preg_match('/^SearchForm_.+/', $view)) {
                 global $dictionary, $beanList;
                 if (!isset($beanList[$module])) {
                     LoggerManager::getLogger()->warn('Template handler trying to build a template but module not found in module list. Module was: ' . $module);
@@ -323,11 +323,11 @@ class TemplateHandler
         }//if
 
         //Remove all the copyright comments
-        $contents = preg_replace('/\{\*[^\}]*?\*\}/', '', $contents);
+        $contents = \preg_replace('/\{\*[^\}]*?\*\}/', '', $contents);
 
         if ($fh = @sugar_fopen($file, 'w')) {
-            fwrite($fh, $contents);
-            fclose($fh);
+            \fwrite($fh, $contents);
+            \fclose($fh);
         }
 
 
@@ -352,7 +352,7 @@ class TemplateHandler
         }
         $view = $checkFormName ? $formName : $view;
 
-        return file_exists($this->cacheDir . $this->themeDir . $theme . '/' . $this->templateDir . $module . '/' . $view . '.tpl');
+        return \file_exists($this->cacheDir . $this->themeDir . $theme . '/' . $this->templateDir . $module . '/' . $view . '.tpl');
     }
 
     /**
@@ -373,7 +373,7 @@ class TemplateHandler
             $this->buildTemplate($module, $view, $tpl, $ajaxSave, $metaDataDefs);
         }
         $file = $this->cacheDir . $this->themeDir . $theme . '/' . $this->templateDir . $module . '/' . $view . '.tpl';
-        if (file_exists($file)) {
+        if (\file_exists($file)) {
             return $this->ss->fetch($file);
         }
         global $app_strings;
@@ -392,7 +392,7 @@ class TemplateHandler
     public function deleteTemplate($module, $view)
     {
         global $theme;
-        if (is_file($this->cacheDir . $this->themeDir . $theme . '/' . $this->templateDir . $module . '/' . $view . '.tpl')) {
+        if (\is_file($this->cacheDir . $this->themeDir . $theme . '/' . $this->templateDir . $module . '/' . $view . '.tpl')) {
             // Bug #54634 : RTC 18144 : Cannot add more than 1 user to role but popup is multi-selectable
             if (!isset($this->ss)) {
                 $this->loadSmarty();
@@ -400,7 +400,7 @@ class TemplateHandler
             $cache_file_name = $this->ss->_get_compile_path($this->cacheDir . $this->themeDir . $theme . '/' . $this->templateDir . $module . '/' . $view . '.tpl');
             SugarCache::cleanFile($cache_file_name);
 
-            return unlink($this->cacheDir . $this->themeDir . $theme . '/' . $this->templateDir . $module . '/' . $view . '.tpl');
+            return \unlink($this->cacheDir . $this->themeDir . $theme . '/' . $this->templateDir . $module . '/' . $view . '.tpl');
         }
 
         return false;
@@ -429,13 +429,13 @@ class TemplateHandler
             $qsd = QuickSearchDefaults::getQuickSearchDefaults(array());
         }
         $qsd->setFormName($view);
-        if (preg_match('/^SearchForm_.+/', $view)) {
-            if (strpos($view, 'popup_query_form')) {
+        if (\preg_match('/^SearchForm_.+/', $view)) {
+            if (\strpos($view, 'popup_query_form')) {
                 $qsd->setFormName('popup_query_form');
                 $parsedView = 'advanced';
             } else {
                 $qsd->setFormName('search_form');
-                $parsedView = preg_replace('/^SearchForm_/', '', $view);
+                $parsedView = \preg_replace('/^SearchForm_/', '', $view);
             }
             //Loop through the Meta-Data fields to see which ones need quick search support
             foreach ($defs as $f) {
@@ -445,10 +445,10 @@ class TemplateHandler
                 if (($field['type'] === 'relate' &&
                         isset($field['module']) &&
                         !empty($field['module']) &&
-                        preg_match('/_name$|_c$/si', $name)) ||
+                        \preg_match('/_name$|_c$/si', $name)) ||
                     !empty($field['quicksearch'])
                 ) {
-                    if (preg_match('/^(Campaigns|Teams|Users|Contacts|Accounts)$/si', $field['module'], $matches)) {
+                    if (\preg_match('/^(Campaigns|Teams|Users|Contacts|Accounts)$/si', $field['module'], $matches)) {
                         if ($matches[0] === 'Campaigns') {
                             $sqs_objects[$name . '_' . $parsedView] = $qsd->loadQSObject(
                                 'Campaigns',
@@ -544,11 +544,11 @@ class TemplateHandler
                     $field['name'] = $module . $field['name'];
                     if (isset($field['module']) &&
                         isset($field['id_name']) &&
-                        substr($field['id_name'], -4) === '_ida'
+                        \substr($field['id_name'], -4) === '_ida'
                     ) {
-                        $lc_module = strtolower($field['module']);
+                        $lc_module = \strtolower($field['module']);
                         $ida_suffix = '_' . $lc_module . $lc_module . '_ida';
-                        if (preg_match('/' . $ida_suffix . '$/', $field['id_name']) > 0) {
+                        if (\preg_match('/' . $ida_suffix . '$/', $field['id_name']) > 0) {
                             $field['id_name'] = $module . $field['id_name'];
                         } else {
                             $field['id_name'] = $field['name'] . '_' . $field['id_name'];
@@ -562,14 +562,14 @@ class TemplateHandler
                 $name = $qsd->form_name . '_' . $field['name'];
 
 
-                if ($field['type'] === 'relate' && isset($field['module']) && (preg_match(
+                if ($field['type'] === 'relate' && isset($field['module']) && (\preg_match(
                     '/_name$|_c$/si',
                             $name
                 ) || !empty($field['quicksearch']))
                 ) {
-                    if (!preg_match('/_c$/si', $name)
-                        && (!isset($field['id_name']) || !preg_match('/_c$/si', $field['id_name']))
-                        && preg_match('/^(Campaigns|Teams|Users|Contacts|Accounts)$/si', $field['module'], $matches)
+                    if (!\preg_match('/_c$/si', $name)
+                        && (!isset($field['id_name']) || !\preg_match('/_c$/si', $field['id_name']))
+                        && \preg_match('/^(Campaigns|Teams|Users|Contacts|Accounts)$/si', $field['module'], $matches)
                     ) {
                         if ($matches[0] === 'Campaigns') {
                             $sqs_objects[$name] = $qsd->loadQSObject(
@@ -621,7 +621,7 @@ class TemplateHandler
                                     } else {
                                         if ($matches[0] === 'Contacts') {
                                             $sqs_objects[$name] = $qsd->getQSContact($field['name'], $field['id_name']);
-                                            if (preg_match('/_c$/si', $name) || !empty($field['quicksearch'])) {
+                                            if (\preg_match('/_c$/si', $name) || !empty($field['quicksearch'])) {
                                                 $sqs_objects[$name]['field_list'] = array(
                                                     'salutation',
                                                     'first_name',
@@ -670,14 +670,14 @@ class TemplateHandler
 
                 //merge populate_list && field_list with vardef
                 if (!empty($field['field_list']) && !empty($field['populate_list'])) {
-                    $totalFields = count($field['field_list']);
+                    $totalFields = \count($field['field_list']);
                     for ($j = 0; $j < $totalFields; $j++) {
                         //search for the same couple (field_list_item,populate_field_item)
                         $field_list_item = $field['field_list'][$j];
                         $field_list_item_alternate = $qsd->form_name . '_' . $field['field_list'][$j];
                         $populate_list_item = $field['populate_list'][$j];
                         $found = false;
-                        $totalSqsObjects = count($sqs_objects[$name]['field_list']);
+                        $totalSqsObjects = \count($sqs_objects[$name]['field_list']);
                         for ($k = 0; $k < $totalSqsObjects; $k++) {
                             if (
                                 (
@@ -700,7 +700,7 @@ class TemplateHandler
         }
 
         //Implement QuickSearch for the field
-        if (!empty($sqs_objects) && count($sqs_objects) > 0) {
+        if (!empty($sqs_objects) && \count($sqs_objects) > 0) {
             $quicksearch_js = '<script language="javascript">';
             $quicksearch_js .= 'if(typeof sqs_objects == \'undefined\'){var sqs_objects = new Array;}';
             $json = getJSONobj();

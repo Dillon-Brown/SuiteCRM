@@ -128,21 +128,21 @@ class Minifier
         }
 
         try {
-            ob_start();
-            $currentOptions = array_merge(self::$defaultOptions, $options);
+            \ob_start();
+            $currentOptions = \array_merge(self::$defaultOptions, $options);
 
             if (!isset(self::$jshrink)) {
                 self::$jshrink = new Minifier();
             }
 
             self::$jshrink->breakdownScript($js, $currentOptions);
-            return ob_get_clean();
+            return \ob_get_clean();
         } catch (Exception $e) {
             if (isset(self::$jshrink)) {
                 self::$jshrink->clean();
             }
 
-            ob_end_clean();
+            \ob_end_clean();
             throw $e;
         }
     }
@@ -160,26 +160,26 @@ class Minifier
 
         $this->options = $currentOptions;
 
-        $js = str_replace("\r\n", "\n", $js);
-        $this->input = str_replace("\r", "\n", $js);
-        $this->input = preg_replace('/\h/u', ' ', $this->input);
+        $js = \str_replace("\r\n", "\n", $js);
+        $this->input = \str_replace("\r", "\n", $js);
+        $this->input = \preg_replace('/\h/u', ' ', $this->input);
 
 
         $this->a = $this->getReal();
 
         // the only time the length can be higher than 1 is if a conditional comment needs to be displayed
         // and the only time that can happen for $a is on the very first run
-        while (strlen($this->a) > 1) {
+        while (\strlen($this->a) > 1) {
             echo $this->a;
             $this->a = $this->getReal();
         }
 
         $this->b = $this->getReal();
 
-        while ($this->a !== false && !is_null($this->a) && $this->a !== '') {
+        while ($this->a !== false && !\is_null($this->a) && $this->a !== '') {
 
             // now we give $b the same check for conditional comments we gave $a before we began looping
-            if (strlen($this->b) > 1) {
+            if (\strlen($this->b) > 1) {
                 echo $this->a . $this->b;
                 $this->a = $this->getReal();
                 $this->b = $this->getReal();
@@ -190,7 +190,7 @@ class Minifier
                 // new lines
                 case "\n":
                     // if the next line is something that can't stand alone preserve the newline
-                    if ($this->b != '' && strpos('(-+{[@', $this->b) !== false) {
+                    if ($this->b != '' && \strpos('(-+{[@', $this->b) !== false) {
                         echo $this->a;
                         $this->saveString();
                         break;
@@ -215,7 +215,7 @@ class Minifier
                 default:
                     switch ($this->b) {
                         case "\n":
-                            if (strpos('}])+-"\'', $this->a) !== false) {
+                            if (\strpos('}])+-"\'', $this->a) !== false) {
                                 echo $this->a;
                                 $this->saveString();
                                 break;
@@ -249,7 +249,7 @@ class Minifier
             // do reg check of doom
             $this->b = $this->getReal();
 
-            if (($this->b == '/' && strpos('(,=:[!&|?', $this->a) !== false)) {
+            if (($this->b == '/' && \strpos('(,=:[!&|?', $this->a) !== false)) {
                 $this->saveRegex();
             }
         }
@@ -267,7 +267,7 @@ class Minifier
             $char = $this->c;
             unset($this->c);
         } else {
-            $tchar = substr($this->input, $this->index, 1);
+            $tchar = \substr($this->input, $this->index, 1);
             if (isset($tchar) && $tchar !== false) {
                 $char = $tchar;
                 $this->index++;
@@ -276,7 +276,7 @@ class Minifier
             }
         }
 
-        if ($char !== "\n" && ord($char) < 32) {
+        if ($char !== "\n" && \ord($char) < 32) {
             return ' ';
         }
 
@@ -299,7 +299,7 @@ class Minifier
             $this->c = $this->getChar();
 
             if ($this->c == '/') {
-                $thirdCommentString = substr($this->input, $this->index, 1);
+                $thirdCommentString = \substr($this->input, $this->index, 1);
 
                 // kill rest of line
                 $char = $this->getNext("\n");
@@ -307,7 +307,7 @@ class Minifier
                 if ($thirdCommentString == '@') {
                     $endPoint = ($this->index) - $startIndex;
                     unset($this->c);
-                    $char = "\n" . substr($this->input, $startIndex, $endPoint);// . "\n";
+                    $char = "\n" . \substr($this->input, $startIndex, $endPoint);// . "\n";
                 } else {
                     $char = $this->getChar();
                     $char = $this->getChar();
@@ -334,7 +334,7 @@ class Minifier
                     // if YUI-style comments are enabled we reinsert it into the stream
                     if ($this->options['flaggedComments'] && $thirdCommentString == '!') {
                         $endPoint = ($this->index - 1) - $startIndex;
-                        echo "\n" . substr($this->input, $startIndex, $endPoint) . "\n";
+                        echo "\n" . \substr($this->input, $startIndex, $endPoint) . "\n";
                     }
                 } else {
                     $char = false;
@@ -361,14 +361,14 @@ class Minifier
      */
     protected function getNext($string)
     {
-        $pos = strpos($this->input, $string, $this->index);
+        $pos = \strpos($this->input, $string, $this->index);
 
         if ($pos === false) {
             return false;
         }
 
         $this->index = $pos;
-        return substr($this->input, $this->index, 1);
+        return \substr($this->input, $this->index, 1);
     }
 
     /**
@@ -447,6 +447,6 @@ class Minifier
      */
     protected static function isAlphaNumeric($char)
     {
-        return preg_match('/^[\w\$]$/', $char) === 1 || $char == '/';
+        return \preg_match('/^[\w\$]$/', $char) === 1 || $char == '/';
     }
 }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -85,7 +85,7 @@ class TopCampaignsDashlet extends Dashlet
         $row = $this->seedBean->db->fetchByAssoc($result);
 
         while ($row != null) {
-            array_push($this->top_campaigns, $row);
+            \array_push($this->top_campaigns, $row);
             $row = $this->seedBean->db->fetchByAssoc($result);
         }
     }

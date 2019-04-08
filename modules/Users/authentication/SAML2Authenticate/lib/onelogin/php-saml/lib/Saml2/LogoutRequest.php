@@ -58,7 +58,7 @@ class OneLogin_Saml2_LogoutRequest
             $this->id = $id;
 
             $nameIdValue = OneLogin_Saml2_Utils::generateUniqueID();
-            $issueInstant = OneLogin_Saml2_Utils::parseTime2SAML(time());
+            $issueInstant = OneLogin_Saml2_Utils::parseTime2SAML(\time());
 
             $cert = null;
             if (isset($security['nameIdEncrypted']) && $security['nameIdEncrypted']) {
@@ -92,7 +92,7 @@ class OneLogin_Saml2_LogoutRequest
 
             $sessionIndexStr = isset($sessionIndex) ? "<samlp:SessionIndex>{$sessionIndex}</samlp:SessionIndex>" : "";
 
-            $spEntityId = htmlspecialchars($spData['entityId'], ENT_QUOTES);
+            $spEntityId = \htmlspecialchars($spData['entityId'], ENT_QUOTES);
             $logoutRequest = <<<LOGOUTREQUEST
 <samlp:LogoutRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -107,9 +107,9 @@ class OneLogin_Saml2_LogoutRequest
 </samlp:LogoutRequest>
 LOGOUTREQUEST;
         } else {
-            $decoded = base64_decode($request);
+            $decoded = \base64_decode($request);
             // We try to inflate
-            $inflated = @gzinflate($decoded);
+            $inflated = @\gzinflate($decoded);
             if ($inflated != false) {
                 $logoutRequest = $inflated;
             } else {
@@ -132,15 +132,15 @@ LOGOUTREQUEST;
     {
         $subject = $this->_logoutRequest;
 
-        if (is_null($deflate)) {
+        if (\is_null($deflate)) {
             $deflate = $this->_settings->shouldCompressRequests();
         }
 
         if ($deflate) {
-            $subject = gzdeflate($this->_logoutRequest);
+            $subject = \gzdeflate($this->_logoutRequest);
         }
 
-        return base64_encode($subject);
+        return \base64_encode($subject);
     }
 
     /**
@@ -322,7 +322,7 @@ LOGOUTREQUEST;
                 // Check NotOnOrAfter
                 if ($dom->documentElement->hasAttribute('NotOnOrAfter')) {
                     $na = OneLogin_Saml2_Utils::parseSAML2Time($dom->documentElement->getAttribute('NotOnOrAfter'));
-                    if ($na <= time()) {
+                    if ($na <= \time()) {
                         throw new OneLogin_Saml2_ValidationError(
                             "Could not validate timestamp: expired. Check system clock.",
                             OneLogin_Saml2_ValidationError::RESPONSE_EXPIRED
@@ -334,7 +334,7 @@ LOGOUTREQUEST;
                 if ($dom->documentElement->hasAttribute('Destination')) {
                     $destination = $dom->documentElement->getAttribute('Destination');
                     if (!empty($destination)) {
-                        if (strpos($destination, $currentURL) === false) {
+                        if (\strpos($destination, $currentURL) === false) {
                             throw new OneLogin_Saml2_ValidationError(
                                 "The LogoutRequest was received at $currentURL instead of $destination",
                                 OneLogin_Saml2_ValidationError::WRONG_DESTINATION

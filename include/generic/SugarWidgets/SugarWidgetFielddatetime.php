@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -63,7 +63,7 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($layout_manager);
     }
@@ -137,7 +137,7 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
         }
 
         //C.L. Bug 48616 - If the $date is set to the Today macro, then adjust accordingly
-        if (strtolower($date) == 'today') {
+        if (\strtolower($date) == 'today') {
             $startEnd = $timedate->getDayStartEndGMT($timedate->getNow(true));
             return $end ? $startEnd['end'] : $startEnd['start'];
         }
@@ -208,10 +208,10 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
         if (!$timestamp) {
             return $begin;
         }
-        $begin_parts = explode(' ', $begin);
-        $date_parts=explode('-', $begin_parts[0]);
-        $time_parts=explode(':', $begin_parts[1]);
-        $curr_timestamp=mktime($time_parts[0], $time_parts[1], 0, $date_parts[1], $date_parts[2], $date_parts[0]);
+        $begin_parts = \explode(' ', $begin);
+        $date_parts=\explode('-', $begin_parts[0]);
+        $time_parts=\explode(':', $begin_parts[1]);
+        $curr_timestamp=\mktime($time_parts[0], $time_parts[1], 0, $date_parts[1], $date_parts[2], $date_parts[0]);
         return $curr_timestamp;
     }
     /**
@@ -223,16 +223,16 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
     {
         global $timedate;
 
-        $begin = date($GLOBALS['timedate']->get_db_date_time_format(), time()+(86400 * $days));  //gmt date with day adjustment applied.
+        $begin = \date($GLOBALS['timedate']->get_db_date_time_format(), \time()+(86400 * $days));  //gmt date with day adjustment applied.
         //kbrill bug #13884
         //$begin = $timedate->to_display_date_time($begin,true,true,$this->assigned_user);
         $begin = $timedate->handle_offset($begin, $timedate->get_db_date_time_format(), false, $this->assigned_user);
 
         if ($time=='start') {
-            $begin_parts = explode(' ', $begin);
+            $begin_parts = \explode(' ', $begin);
             $be = $begin_parts[0] . ' 00:00:00';
         } elseif ($time=='end') {
-            $begin_parts = explode(' ', $begin);
+            $begin_parts = \explode(' ', $begin);
             $be = $begin_parts[0] . ' 23:59:59';
         } else {
             $be=$begin;
@@ -422,7 +422,7 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
 
         $begin->setDate(
             $begin->year,
-            floor(($begin->month - 1) / 3) * 3 + 1, // Find starting month of quarter
+            \floor(($begin->month - 1) / 3) * 3 + 1, // Find starting month of quarter
             1
         )->setTime(0, 0);
 
@@ -505,7 +505,7 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
         // i guess qualifier and column_function are the same..
         if (!empty($layout_def['qualifier'])) {
             $func_name = 'queryGroupBy'.$layout_def['qualifier'];
-            if (method_exists($this, $func_name)) {
+            if (\method_exists($this, $func_name)) {
                 return $this-> $func_name($layout_def)." \n";
             }
         }
@@ -516,7 +516,7 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
     {
         if (!empty($layout_def['qualifier'])) {
             $func_name ='queryOrderBy'.$layout_def['qualifier'];
-            if (method_exists($this, $func_name)) {
+            if (\method_exists($this, $func_name)) {
                 return $this-> $func_name($layout_def)."\n";
             }
         }
@@ -529,12 +529,12 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
         global $timedate;
         $content = parent:: displayListPlain($layout_def);
         // awu: this if condition happens only in Reports where group by month comes back as YYYY-mm format
-        if (count(explode('-', $content)) == 2) {
+        if (\count(\explode('-', $content)) == 2) {
             return $content;
         // if date field
-        } elseif (substr_count($layout_def['type'], 'date') > 0) {
+        } elseif (\substr_count($layout_def['type'], 'date') > 0) {
             // if date time field
-            if (substr_count($layout_def['type'], 'time') > 0 && $this->get_time_part($content)!= false) {
+            if (\substr_count($layout_def['type'], 'time') > 0 && $this->get_time_part($content)!= false) {
                 $td = $timedate->to_display_date_time($content);
                 return $td;
             }  // if date only field
@@ -548,7 +548,7 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
         global $timedate;
 
         $date_parts=$timedate->split_date_time($date_time_value);
-        if (count($date_parts) > 1) {
+        if (\count($date_parts) > 1) {
             return $date_parts[1];
         }
         return false;
@@ -560,7 +560,7 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
         // i guess qualifier and column_function are the same..
         if (!empty($layout_def['column_function'])) {
             $func_name = 'displayList'.$layout_def['column_function'];
-            if (method_exists($this, $func_name)) {
+            if (\method_exists($this, $func_name)) {
                 return $this-> $func_name($layout_def);
             }
         }
@@ -573,7 +573,7 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
         // i guess qualifier and column_function are the same..
         if (!empty($layout_def['column_function'])) {
             $func_name = 'querySelect'.$layout_def['column_function'];
-            if (method_exists($this, $func_name)) {
+            if (\method_exists($this, $func_name)) {
                 return $this-> $func_name($layout_def)." \n";
             }
         }
@@ -597,8 +597,8 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
         global $app_list_strings;
         $display = '';
         $match = array();
-        if (preg_match('/(\d{4})-(\d\d)/', $this->displayListPlain($layout_def), $match)) {
-            $match[2] = preg_replace('/^0/', '', $match[2]);
+        if (\preg_match('/(\d{4})-(\d\d)/', $this->displayListPlain($layout_def), $match)) {
+            $match[2] = \preg_replace('/^0/', '', $match[2]);
             $display = $app_list_strings['dom_cal_month_long'][$match[2]]." {$match[1]}";
         }
         return $display;
@@ -728,7 +728,7 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
     public function displayListquarter(& $layout_def)
     {
         $match = array();
-        if (preg_match('/(\d{4})-(\d)/', $this->displayListPlain($layout_def), $match)) {
+        if (\preg_match('/(\d{4})-(\d)/', $this->displayListPlain($layout_def), $match)) {
             return "Q".$match[2]." ".$match[1];
         }
         return '';
@@ -805,6 +805,6 @@ class SugarWidgetFieldDateTime extends SugarWidgetReportField
      */
     protected function hasTime($date)
     {
-        return strlen(trim($date)) < 11 ? false : true;
+        return \strlen(\trim($date)) < 11 ? false : true;
     }
 }

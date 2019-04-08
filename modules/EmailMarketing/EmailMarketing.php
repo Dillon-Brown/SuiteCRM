@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -86,7 +86,7 @@ class EmailMarketing extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -96,9 +96,9 @@ class EmailMarketing extends SugarBean
     {
         global $current_user;
 
-        $date_start = trim($this->date_start);
-        $time_start = trim($this->time_start);
-        if ($time_start && strpos($date_start, $time_start) === false) {
+        $date_start = \trim($this->date_start);
+        $time_start = \trim($this->time_start);
+        if ($time_start && \strpos($date_start, $time_start) === false) {
             $this->date_start = "$date_start $time_start";
             $this->time_start = '';
         }
@@ -121,8 +121,8 @@ class EmailMarketing extends SugarBean
         parent::retrieve($id, $encode, $deleted);
 
         global $timedate;
-        $date_start_array=explode(" ", trim($this->date_start));
-        if (count($date_start_array)==2) {
+        $date_start_array=\explode(" ", \trim($this->date_start));
+        if (\count($date_start_array)==2) {
             $this->time_start = $date_start_array[1];
             $this->date_start = $date_start_array[0];
         }

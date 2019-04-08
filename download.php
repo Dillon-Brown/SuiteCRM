@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -50,7 +50,7 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
     require_once("data/BeanFactory.php");
     $file_type = ''; // bug 45896
     require_once("data/BeanFactory.php");
-    ini_set(
+    \ini_set(
         'zlib.output_compression',
         'Off'
     );//bug 27089, if use gzip here, the Content-Length in header may be incorrect.
@@ -59,14 +59,14 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
     $GLOBALS['current_language'] = $_SESSION['authenticated_user_language'];
     $app_strings = return_application_language($GLOBALS['current_language']);
     $mod_strings = return_module_language($GLOBALS['current_language'], 'ACL');
-    $file_type = strtolower($_REQUEST['type']);
+    $file_type = \strtolower($_REQUEST['type']);
     if (!isset($_REQUEST['isTempFile'])) {
         //Custom modules may have capitalizations anywhere in their names. We should check the passed in format first.
         require('include/modules.php');
         $module = $db->quote($_REQUEST['type']);
         if (empty($beanList[$module])) {
             //start guessing at a module name
-            $module = ucfirst($file_type);
+            $module = \ucfirst($file_type);
             if (empty($beanList[$module])) {
                 die($app_strings['ERROR_TYPE_NOT_VALID']);
             }
@@ -75,7 +75,7 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
         if ($bean_name == 'aCase') {
             $bean_name = 'Case';
         }
-        if (!file_exists('modules/' . $module . '/' . $bean_name . '.php')) {
+        if (!\file_exists('modules/' . $module . '/' . $bean_name . '.php')) {
             die($app_strings['ERROR_TYPE_NOT_VALID']);
         }
 
@@ -103,17 +103,17 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
 
         // See if it is a remote file, if so, send them that direction
         if (isset($focus->doc_url) && !empty($focus->doc_url)) {
-            header('Location: ' . $focus->doc_url);
+            \header('Location: ' . $focus->doc_url);
             sugar_die("Remote file detected, location header sent.");
         }
 
         if (isset($focusRevision) && isset($focusRevision->doc_url) && !empty($focusRevision->doc_url)) {
-            header('Location: ' . $focusRevision->doc_url);
+            \header('Location: ' . $focusRevision->doc_url);
             sugar_die("Remote file detected, location header sent.");
         }
     } // if
-    $temp = explode("_", $_REQUEST['id'], 2);
-    if (is_array($temp)) {
+    $temp = \explode("_", $_REQUEST['id'], 2);
+    if (\is_array($temp)) {
         $image_field = isset($temp[1]) ? $temp[1] : null;
         $image_id = $temp[0];
     }
@@ -133,15 +133,15 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
         $local_location = "include/images/default-profile.png";
     }
 
-    if (!file_exists($local_location) || strpos($local_location, "..")) {
+    if (!\file_exists($local_location) || \strpos($local_location, "..")) {
         if (isset($image_field)) {
-            header("Content-Type: image/png");
-            header("Content-Disposition: attachment; filename=\"No-Image.png\"");
-            header("X-Content-Type-Options: nosniff");
-            header("Content-Length: " . filesize('include/SugarFields/Fields/Image/no_image.png'));
-            header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 2592000));
-            set_time_limit(0);
-            readfile('include/SugarFields/Fields/Image/no_image.png');
+            \header("Content-Type: image/png");
+            \header("Content-Disposition: attachment; filename=\"No-Image.png\"");
+            \header("X-Content-Type-Options: nosniff");
+            \header("Content-Length: " . \filesize('include/SugarFields/Fields/Image/no_image.png'));
+            \header('Expires: ' . \gmdate('D, d M Y H:i:s \G\M\T', \time() + 2592000));
+            \set_time_limit(0);
+            \readfile('include/SugarFields/Fields/Image/no_image.png');
             die();
         }
         die($app_strings['ERR_INVALID_FILE_REFERENCE']);
@@ -165,7 +165,7 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
             // Fix for issue #1195: because the module was created using Module Builder and it does not create any _cstm table,
             // there is a need to check whether the field has _c extension.
             $query = "SELECT " . $image_field . " FROM " . $file_type . " ";
-            if (substr($image_field, -2) == "_c") {
+            if (\substr($image_field, -2) == "_c") {
                 $query .= "LEFT JOIN " . $file_type . "_cstm cstm ON cstm.id_c = " . $file_type . ".id ";
             }
             $query .= "WHERE " . $file_type . ".id= '" . $db->quote($image_id) . "'";
@@ -179,7 +179,7 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
         }
 
         // Fix for issue 1506 and issue 1304 : IE11 and Microsoft Edge cannot display generic 'application/octet-stream' (which is defined as "arbitrary binary data" in RFC 2046).
-        $mime_type = mime_content_type($local_location);
+        $mime_type = \mime_content_type($local_location);
         if ($mime_type == null || $mime_type == '') {
             $mime_type = 'application/octet-stream';
         }
@@ -199,7 +199,7 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
             }
             // expose original mime type only for images, otherwise the content of arbitrary type
             // may be interpreted/executed by browser
-            if (isset($row['file_mime_type']) && strpos($row['file_mime_type'], 'image/') === 0) {
+            if (isset($row['file_mime_type']) && \strpos($row['file_mime_type'], 'image/') === 0) {
                 $mime_type = $row['file_mime_type'];
             }
             if (isset($_REQUEST['field'])) {
@@ -221,38 +221,38 @@ if ((!isset($_REQUEST['isProfile']) && empty($_REQUEST['id'])) || empty($_REQUES
             }
         }
 
-        if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match("/MSIE/", $_SERVER['HTTP_USER_AGENT'])) {
-            $name = urlencode($name);
-            $name = str_replace("+", "_", $name);
+        if (isset($_SERVER['HTTP_USER_AGENT']) && \preg_match("/MSIE/", $_SERVER['HTTP_USER_AGENT'])) {
+            $name = \urlencode($name);
+            $name = \str_replace("+", "_", $name);
         }
 
-        header("Pragma: public");
-        header("Cache-Control: maxage=1, post-check=0, pre-check=0");
+        \header("Pragma: public");
+        \header("Cache-Control: maxage=1, post-check=0, pre-check=0");
         if (isset($_REQUEST['isTempFile']) && ($_REQUEST['type'] == "SugarFieldImage")) {
-            $mime = getimagesize($download_location);
+            $mime = \getimagesize($download_location);
             if (!empty($mime)) {
-                header("Content-Type: {$mime['mime']}");
+                \header("Content-Type: {$mime['mime']}");
             } else {
-                header("Content-Type: image/png");
+                \header("Content-Type: image/png");
             }
         } else {
-            header('Content-type: ' . $mime_type);
+            \header('Content-type: ' . $mime_type);
             if ($_REQUEST['preview'] === "yes") {
-                header("Content-Disposition: inline; filename=\"".$name."\";");
+                \header("Content-Disposition: inline; filename=\"".$name."\";");
             } else {
-                header("Content-Disposition: attachment; filename=\"" . $name . "\";");
+                \header("Content-Disposition: attachment; filename=\"" . $name . "\";");
             }
         }
         // disable content type sniffing in MSIE
-        header("X-Content-Type-Options: nosniff");
-        header("Content-Length: " . filesize($local_location));
-        header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 2592000));
-        set_time_limit(0);
+        \header("X-Content-Type-Options: nosniff");
+        \header("Content-Length: " . \filesize($local_location));
+        \header('Expires: ' . \gmdate('D, d M Y H:i:s \G\M\T', \time() + 2592000));
+        \set_time_limit(0);
 
         // When output_buffering = On, ob_get_level() may return 1 even if ob_end_clean() returns false
         // This happens on some QA stacks. See Bug#64860
-        while (ob_get_level() && @ob_end_clean()) {
+        while (\ob_get_level() && @\ob_end_clean()) {
             ;
         }
 
-        readfile($download_location);
+        \readfile($download_location);

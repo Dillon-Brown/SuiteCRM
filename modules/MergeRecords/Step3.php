@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -134,9 +134,9 @@ foreach ($merge_ids_array as $id) {
     $merged_ids.="<input type='hidden' name='merged_ids[]' value='$id'>";
 }
 
-$col_width=floor(80/$records).'%';
+$col_width=\floor(80/$records).'%';
 global $max_data_length;
-$max_data_length=floor(65/$records);
+$max_data_length=\floor(65/$records);
 global $xtpl;
 $xtpl = new XTemplate("modules/MergeRecords/Step3.html");
 $xtpl->assign("MOD", $mod_strings);
@@ -208,7 +208,7 @@ foreach ($temp_field_array as $field_array) {
         }
 
 
-        if (preg_match('/.*?_address_street$/', $tempName)) {
+        if (\preg_match('/.*?_address_street$/', $tempName)) {
             $field_check = 'text';
         }
 
@@ -272,7 +272,7 @@ foreach ($temp_field_array as $field_array) {
                 $xtpl->assign("POPUP_ID_VALUE", $focus->merge_bean->$tempId);
                 $xtpl->assign("POPUP_MODULE", $field_array['module']);
                 $xtpl->assign("CELL_WIDTH", $col_width);
-                $xtpl->assign("MERGED_LINKS", implode(',', $exclude));
+                $xtpl->assign("MERGED_LINKS", \implode(',', $exclude));
 
                 $popup_data = array('call_back_function' => 'set_return', 'form_name' => 'EditView', 'field_to_name_array' => array('id' =>$tempId, 'name' =>$tempName,),);
                 $xtpl->assign('ENCODED_POPUP_DATA', $json->encode($popup_data));
@@ -335,9 +335,9 @@ foreach ($temp_field_array as $field_array) {
                     break;
                 case ('multienum'):
                     if ($mergeBeanArray[$id]->$tempName != '' and isset($field_array['options']) and isset($app_list_strings[$field_array['options']][$mergeBeanArray[$id]->$tempName])) {
-                        display_field_value(str_replace("^", "", $app_list_strings[$field_array['options']][$mergeBeanArray[$id]->$tempName]));
+                        display_field_value(\str_replace("^", "", $app_list_strings[$field_array['options']][$mergeBeanArray[$id]->$tempName]));
                     } else {
-                        display_field_value(str_replace("^", "", $mergeBeanArray[$id]->$tempName));
+                        display_field_value(\str_replace("^", "", $mergeBeanArray[$id]->$tempName));
                     }
                     $field_name="main.".$section_name.".merge_cell_field_value";
                     break;
@@ -389,7 +389,7 @@ foreach ($temp_field_array as $field_array) {
 $header_cols= array();
 foreach ($merge_ids_array as $id) {
     $td="<td width='$col_width' valign='top' class='dataLabel' align='left'><input type='button' class='button' id='$id' onclick=\"change_primary(this,'{$id}');\" value='<<'>&nbsp;{$mod_strings['LBL_CHANGE_PARENT']}";
-    if (count($merge_ids_array) > 1) {
+    if (\count($merge_ids_array) > 1) {
         $td.="&nbsp;|<a id='remove_$id' onclick=\"remove_me(this,'{$id}');\" href='#' >{$mod_strings['LBL_REMOVE_FROM_MERGE']}</a>";
     }
     $td.="</td>";
@@ -397,11 +397,11 @@ foreach ($merge_ids_array as $id) {
 }
 
 if ($diff_field_count>0) {
-    $xtpl->assign("DIFF_HEADER", "<tr height='20'><td colspan=2><strong>{$mod_strings['LBL_DIFF_COL_VALUES']}</strong></td>".implode(' ', $header_cols)."</tr>");
+    $xtpl->assign("DIFF_HEADER", "<tr height='20'><td colspan=2><strong>{$mod_strings['LBL_DIFF_COL_VALUES']}</strong></td>".\implode(' ', $header_cols)."</tr>");
     $xtpl->assign("SIMILAR_HEADER", "<tr height='20'><td colspan=20><strong>{$mod_strings['LBL_SAME_COL_VALUES']}</strong></td></tr>");
     $xtpl->assign("GROUP_PARTITION", "<tr height=3><td colspan=20' class='listViewHRS1'></td></tr>");
 } else {
-    $xtpl->assign("SIMILAR_HEADER", "<tr height='20'><td colspan=2><strong>{$mod_strings['LBL_SAME_COL_VALUES']}</strong></td>".implode(' ', $header_cols)."</tr>");
+    $xtpl->assign("SIMILAR_HEADER", "<tr height='20'><td colspan=2><strong>{$mod_strings['LBL_SAME_COL_VALUES']}</strong></td>".\implode(' ', $header_cols)."</tr>");
 }
 $merge_verify=$mod_strings['LBL_DELETE_MESSAGE'].'\\n';
 foreach ($merge_records_names as $name) {
@@ -418,7 +418,7 @@ if ($focus->merge_bean->object_name == 'Case') {
     $focus->merge_bean->object_name = 'aCase';
 }
 
-$mod=array_search($focus->merge_bean->object_name, $beanList);
+$mod=\array_search($focus->merge_bean->object_name, $beanList);
 $mod_strings = return_module_language($current_language, $mod);
 
 //add javascript for required fields enforcement.
@@ -441,8 +441,8 @@ $xtpl->out("main");
 function display_field_value($value)
 {
     global $xtpl, $max_data_length, $mod_strings;
-    if (strlen($value)-$max_data_length > 3) {
-        $xtpl->assign("FIELD_VALUE", substr($value, 0, $max_data_length).'...');
+    if (\strlen($value)-$max_data_length > 3) {
+        $xtpl->assign("FIELD_VALUE", \substr($value, 0, $max_data_length).'...');
     } else {
         $xtpl->assign("FIELD_VALUE", $value);
     }

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -115,8 +115,8 @@ abstract class DashletGenericChart extends Dashlet
         }
 
         // load searchfields
-        $classname = get_class($this);
-        if (is_file("modules/Charts/Dashlets/$classname/$classname.data.php")) {
+        $classname = \get_class($this);
+        if (\is_file("modules/Charts/Dashlets/$classname/$classname.data.php")) {
             require("modules/Charts/Dashlets/$classname/$classname.data.php");
             $this->_searchFields = $dashletData[$classname]['searchFields'];
         }
@@ -203,8 +203,8 @@ abstract class DashletGenericChart extends Dashlet
         $options = array();
 
         foreach ($req as $name => $value) {
-            if (!is_array($value)) {
-                $req[$name] = trim($value);
+            if (!\is_array($value)) {
+                $req[$name] = \trim($value);
             }
         }
 
@@ -242,10 +242,10 @@ abstract class DashletGenericChart extends Dashlet
     {
         $currentSearchFields = array();
 
-        if (is_array($this->_searchFields)) {
+        if (\is_array($this->_searchFields)) {
             foreach ($this->_searchFields as $name=>$params) {
                 if (!empty($name)) {
-                    $name = strtolower($name);
+                    $name = \strtolower($name);
                     $currentSearchFields[$name] = array();
 
                     $widgetDef = $params;
@@ -351,8 +351,8 @@ abstract class DashletGenericChart extends Dashlet
         if (empty($dashletOffset)) {
             $dashletOffset = 0;
             $module = $_REQUEST['module'];
-            if (isset($_REQUEST[$module.'2_'.strtoupper($this->getSeedBean()->object_name).'_offset'])) {
-                $dashletOffset = $_REQUEST[$module.'2_'.strtoupper($this->getSeedBean()->object_name).'_offset'];
+            if (isset($_REQUEST[$module.'2_'.\strtoupper($this->getSeedBean()->object_name).'_offset'])) {
+                $dashletOffset = $_REQUEST[$module.'2_'.\strtoupper($this->getSeedBean()->object_name).'_offset'];
             }
         }
 
@@ -365,7 +365,7 @@ abstract class DashletGenericChart extends Dashlet
         $autoRefreshSS = new Sugar_Smarty();
         $autoRefreshSS->assign('dashletOffset', $dashletOffset);
         $autoRefreshSS->assign('dashletId', $this->id);
-        $autoRefreshSS->assign('strippedDashletId', str_replace("-", "", $this->id)); //javascript doesn't like "-" in function names
+        $autoRefreshSS->assign('strippedDashletId', \str_replace("-", "", $this->id)); //javascript doesn't like "-" in function names
         $autoRefreshSS->assign('dashletRefreshInterval', $this->getAutoRefresh());
         $autoRefreshSS->assign('url', "predefined_chart");
         $tpl = 'include/Dashlets/DashletGenericAutoRefresh.tpl';
@@ -413,12 +413,12 @@ abstract class DashletGenericChart extends Dashlet
         foreach ($data_set as $row) {
             $sortby1[]  = $row[$keycolname1];
         }
-        $sortby1 = array_unique($sortby1);
+        $sortby1 = \array_unique($sortby1);
         //The data is from the database, the sorting should be done in the sql. So I will not do the sort here.
         if ($translate1) {
             $temp_sortby1 = array();
-            foreach (array_keys($app_list_strings[$keycolname1.'_dom']) as $sortby1_value) {
-                if (in_array($sortby1_value, $sortby1)) {
+            foreach (\array_keys($app_list_strings[$keycolname1.'_dom']) as $sortby1_value) {
+                if (\in_array($sortby1_value, $sortby1)) {
                     $temp_sortby1[] = $sortby1_value;
                 }
             }
@@ -440,11 +440,11 @@ abstract class DashletGenericChart extends Dashlet
                 $sortby2[]  = $row[$keycolname2];
             }
             //The data is from the database, the sorting should be done in the sql. So I will not do the sort here.
-            $sortby2 = array_unique($sortby2);
+            $sortby2 = \array_unique($sortby2);
             if ($translate2) {
                 $temp_sortby2 = array();
-                foreach (array_keys($app_list_strings[$keycolname2.'_dom']) as $sortby2_value) {
-                    if (in_array($sortby2_value, $sortby2)) {
+                foreach (\array_keys($app_list_strings[$keycolname2.'_dom']) as $sortby2_value) {
+                    if (\in_array($sortby2_value, $sortby2)) {
                         $temp_sortby2[] = $sortby2_value;
                     }
                 }
@@ -469,7 +469,7 @@ abstract class DashletGenericChart extends Dashlet
                             $value[$keycolname2.'_dom_option'] = $value[$keycolname2];
                             $value[$keycolname2] = $app_list_strings[$keycolname2.'_dom'][$value[$keycolname2]];
                         }
-                        array_push($data, $value);
+                        \array_push($data, $value);
                         unset($data_set[$key]);
                         $a=1;
                     }
@@ -490,7 +490,7 @@ abstract class DashletGenericChart extends Dashlet
                     } elseif ($keycolname2!=null) {
                         $val[$keycolname2] = $sort2;
                     }
-                    array_push($data, $val);
+                    \array_push($data, $val);
                 }
             }
         }

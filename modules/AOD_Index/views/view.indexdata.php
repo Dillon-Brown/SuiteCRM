@@ -22,7 +22,7 @@
  *
  * @author SalesAgility Ltd <support@salesagility.com>
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -52,7 +52,7 @@ class AOD_IndexViewIndexData extends SugarView
 
         foreach ($beanList as $beanModule => $beanName) {
             $bean = BeanFactory::getBean($beanModule);
-            if (!$bean || !method_exists($bean, "getTableName") || !$bean->getTableName()) {
+            if (!$bean || !\method_exists($bean, "getTableName") || !$bean->getTableName()) {
                 continue;
             }
             $query = "SELECT COUNT(DISTINCT b.id) FROM ".$bean->getTableName()." b WHERE b.deleted = 0";
@@ -60,11 +60,11 @@ class AOD_IndexViewIndexData extends SugarView
         }
 
 
-        $revisionCount = array_sum($moduleCounts);
+        $revisionCount = \array_sum($moduleCounts);
         $indexedCount = $db->getOne("SELECT COUNT(*) FROM aod_indexevent WHERE deleted = 0 AND success = 1");
         $failedCount = $db->getOne("SELECT COUNT(*) FROM aod_indexevent WHERE deleted = 0 AND success = 0");
 
-        $indexFiles = count(glob($index->location."/*.cfs"));
+        $indexFiles = \count(\glob($index->location."/*.cfs"));
 
         $this->ss->assign("revisionCount", $revisionCount);
         $this->ss->assign("indexedCount", $indexedCount);
@@ -85,7 +85,7 @@ class AOD_IndexViewIndexData extends SugarView
 
             require('modules/'.$seed->module_dir.'/metadata/listviewdefs.php');
 
-            if (file_exists('custom/modules/'.$seed->module_dir.'/metadata/listviewdefs.php')) {
+            if (\file_exists('custom/modules/'.$seed->module_dir.'/metadata/listviewdefs.php')) {
                 require('custom/modules/'.$seed->module_dir.'/metadata/listviewdefs.php');
             }
 

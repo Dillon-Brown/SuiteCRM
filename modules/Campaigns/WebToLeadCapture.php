@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -183,11 +183,11 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
             $redirect_url = $_POST['redirect_url'];
             $query_string = '';
             $first_char = '&';
-            if (strpos($redirect_url, '?') === false) {
+            if (\strpos($redirect_url, '?') === false) {
                 $first_char = '?';
             }
             $first_iteration = true;
-            $get_and_post = array_merge($_GET, $_POST);
+            $get_and_post = \array_merge($_GET, $_POST);
             foreach ($get_and_post as $param => $value) {
                 if ($param == 'redirect_url' && $param == 'submit') {
                     continue;
@@ -199,7 +199,7 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
                 } else {
                     $query_string .= "&";
                 }
-                $query_string .= "{$param}=".urlencode($value);
+                $query_string .= "{$param}=".\urlencode($value);
             }
             if (empty($lead)) {
                 if ($first_iteration) {
@@ -215,7 +215,7 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
 
             // Check if the headers have been sent, or if the redirect url is greater than 2083 characters (IE max URL length)
             //   and use a javascript form submission if that is the case.
-            if (headers_sent() || strlen($redirect_url) > 2083) {
+            if (\headers_sent() || \strlen($redirect_url) > 2083) {
                 echo '<html ' . get_language_header() . '><head><title>SugarCRM</title></head><body>';
                 echo '<form name="redirect" action="' .$_POST['redirect_url']. '" method="GET">';
     
@@ -247,7 +247,7 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
 }
 
 if (!empty($_POST['redirect'])) {
-    if (headers_sent()) {
+    if (\headers_sent()) {
         echo '<html ' . get_language_header() . '><head><title>SugarCRM</title></head><body>';
         echo '<form name="redirect" action="' .$_POST['redirect']. '" method="GET">';
         echo '</form><script language="javascript" type="text/javascript">document.redirect.submit();</script>';

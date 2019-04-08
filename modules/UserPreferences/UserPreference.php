@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -112,7 +112,7 @@ class UserPreference extends SugarBean
         // check to see if a default preference ( i.e. $sugar_config setting ) exists for this value )
         // if so, return it
         $value = $this->getDefaultPreference($name, $category);
-        if (!is_null($value)) {
+        if (!\is_null($value)) {
             return $value;
         }
         return null;
@@ -232,15 +232,15 @@ class UserPreference extends SugarBean
         if (!isset($_SESSION[$user->user_name . '_PREFERENCES'])) {
             $_SESSION[$user->user_name . '_PREFERENCES'] = array();
         }
-        if (!isset($user->user_preferences) || !is_array($user->user_preferences)) {
+        if (!isset($user->user_preferences) || !\is_array($user->user_preferences)) {
             $user->user_preferences = array();
         }
         $db = DBManagerFactory::getInstance();
         $result = $db->query("SELECT contents FROM user_preferences WHERE assigned_user_id='$user->id' AND category = '" . $category . "' AND deleted = 0", false, 'Failed to load user preferences');
         $row = $db->fetchByAssoc($result);
         if ($row) {
-            $_SESSION[$user->user_name . '_PREFERENCES'][$category] = unserialize(base64_decode($row['contents']));
-            $user->user_preferences[$category] = unserialize(base64_decode($row['contents']));
+            $_SESSION[$user->user_name . '_PREFERENCES'][$category] = \unserialize(\base64_decode($row['contents']));
+            $user->user_preferences[$category] = \unserialize(\base64_decode($row['contents']));
             return true;
         }
         $_SESSION[$user->user_name . '_PREFERENCES'][$category] = array();
@@ -329,10 +329,10 @@ class UserPreference extends SugarBean
         }
 
         $GLOBALS['log']->debug('Saving Preferences to DB ' . $user->user_name);
-        if (isset($_SESSION[$user->user_name. '_PREFERENCES']) && is_array($_SESSION[$user->user_name. '_PREFERENCES'])) {
+        if (isset($_SESSION[$user->user_name. '_PREFERENCES']) && \is_array($_SESSION[$user->user_name. '_PREFERENCES'])) {
             $GLOBALS['log']->debug("Saving Preferences to DB: {$user->user_name}");
             // only save the categories that have been modified or all?
-            if (!$all && isset($GLOBALS['savePreferencesToDBCats']) && is_array($GLOBALS['savePreferencesToDBCats'])) {
+            if (!$all && isset($GLOBALS['savePreferencesToDBCats']) && \is_array($GLOBALS['savePreferencesToDBCats'])) {
                 $catsToSave = array();
                 foreach ($GLOBALS['savePreferencesToDBCats'] as $category => $value) {
                     if (isset($_SESSION[$user->user_name. '_PREFERENCES'][$category])) {
@@ -351,7 +351,7 @@ class UserPreference extends SugarBean
                     ));
                 $focus->assigned_user_id = $user->id; // MFH Bug #13862
                 $focus->deleted = 0;
-                $focus->contents = base64_encode(serialize($contents));
+                $focus->contents = \base64_encode(\serialize($contents));
                 $focus->category = $category;
                 $focus->save();
             }
@@ -387,12 +387,12 @@ class UserPreference extends SugarBean
         if ($category) {
             unset($_SESSION[$user->user_name."_PREFERENCES"][$category]);
         } else {
-            if (!empty($_COOKIE['sugar_user_theme']) && !headers_sent()) {
-                setcookie('sugar_user_theme', '', time() - 3600, null, null, isSSL(), true); // expire the sugar_user_theme cookie
+            if (!empty($_COOKIE['sugar_user_theme']) && !\headers_sent()) {
+                \setcookie('sugar_user_theme', '', \time() - 3600, null, null, isSSL(), true); // expire the sugar_user_theme cookie
             }
             unset($_SESSION[$user->user_name."_PREFERENCES"]);
             if ($user->id == $GLOBALS['current_user']->id) {
-                session_destroy();
+                \session_destroy();
             }
             $this->setPreference('remove_tabs', $remove_tabs);
             $this->setPreference('favorites', $favorite_reports, 'Reports');
@@ -423,7 +423,7 @@ class UserPreference extends SugarBean
         }
 
         // we can skip this if we've already upgraded to the user_preferences format.
-        if (!array_key_exists('user_preferences', $db->getHelper()->get_columns('users'))) {
+        if (!\array_key_exists('user_preferences', $db->getHelper()->get_columns('users'))) {
             return;
         }
 
@@ -432,7 +432,7 @@ class UserPreference extends SugarBean
             $prefs = array();
             $newprefs = array();
 
-            $prefs = unserialize(base64_decode($row['user_preferences']));
+            $prefs = \unserialize(\base64_decode($row['user_preferences']));
 
             if (!empty($sub_key)) {
                 if ($is_value_array) {
@@ -489,7 +489,7 @@ class UserPreference extends SugarBean
                 }
             }
 
-            $newstr = $db->quote(base64_encode(serialize($prefs)));
+            $newstr = $db->quote(\base64_encode(\serialize($prefs)));
             $db->query("UPDATE users SET user_preferences = '{$newstr}' WHERE id = '{$row['id']}'");
         }
 

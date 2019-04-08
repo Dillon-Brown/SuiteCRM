@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -43,8 +43,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 
 if (isset($_SESSION['authenticated_user_id'])) {
-    ob_clean();
-    header('Location: ' . $GLOBALS['app']->getLoginRedirect());
+    \ob_clean();
+    \header('Location: ' . $GLOBALS['app']->getLoginRedirect());
     sugar_cleanup(true);
     return;
 }

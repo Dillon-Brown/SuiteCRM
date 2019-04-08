@@ -23,7 +23,7 @@ class SaleModuleCest
     {
         if (!$this->fakeData) {
             $this->fakeData = Faker\Factory::create();
-            $this->fakeDataSeed = rand(0, 2048);
+            $this->fakeDataSeed = \rand(0, 2048);
         }
         $this->fakeData->seed($this->fakeDataSeed);
     }
@@ -129,9 +129,9 @@ class SaleModuleCest
         // Create a record
         $this->fakeData->seed($this->fakeDataSeed);
         $editView->waitForEditViewVisible();
-        $editView->fillField('#name', implode(' ', $this->fakeData->words()));
+        $editView->fillField('#name', \implode(' ', $this->fakeData->words()));
         $this->fakeData->seed($this->fakeDataSeed);
-        $editView->selectOption(strtolower('#test_'.\Page\SaleModule::$NAME.'_type'), 'New Business');
+        $editView->selectOption(\strtolower('#test_'.\Page\SaleModule::$NAME.'_type'), 'New Business');
         $this->fakeData->seed($this->fakeDataSeed);
         $editView->fillField('#amount', $this->fakeData->randomFloat(2));
         $editView->click('#date_closed_trigger');
@@ -169,7 +169,7 @@ class SaleModuleCest
         $listView->clickFilterButton();
         $listView->click('Quick Filter');
         $this->fakeData->seed($this->fakeDataSeed);
-        $name = implode(' ', $this->fakeData->words());
+        $name = \implode(' ', $this->fakeData->words());
         $listView->fillField('#name_basic', $name);
         $listView->click('Search', '.submitButtons');
         $listView->wait(1);
@@ -210,7 +210,7 @@ class SaleModuleCest
         $listView->clickFilterButton();
         $listView->click('Quick Filter');
         $this->fakeData->seed($this->fakeDataSeed);
-        $name = implode(' ', $this->fakeData->words());
+        $name = \implode(' ', $this->fakeData->words());
         $listView->fillField('#name_basic', $name);
         $listView->click('Search', '.submitButtons');
         $listView->waitForListViewVisible();
@@ -259,7 +259,7 @@ class SaleModuleCest
         $listView->clickFilterButton();
         $listView->click('Quick Filter');
         $this->fakeData->seed($this->fakeDataSeed);
-        $name = implode(' ', $this->fakeData->words());
+        $name = \implode(' ', $this->fakeData->words());
         $listView->fillField('#name_basic', $name);
         $listView->click('Search', '.submitButtons');
         $listView->waitForListViewVisible();
@@ -312,7 +312,7 @@ class SaleModuleCest
         $listView->clickFilterButton();
         $listView->click('Quick Filter');
         $this->fakeData->seed($this->fakeDataSeed);
-        $name = implode(' ', $this->fakeData->words());
+        $name = \implode(' ', $this->fakeData->words());
         $listView->fillField('#name_basic', $name);
         $listView->click('Search', '.submitButtons');
         $listView->waitForListViewVisible();

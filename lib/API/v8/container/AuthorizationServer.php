@@ -49,7 +49,7 @@ $container['AuthorizationServer'] = function () {
         $keys->getPublicKey()
     );
 
-    $server->setEncryptionKey(base64_encode(random_bytes(32)));
+    $server->setEncryptionKey(\base64_encode(\random_bytes(32)));
 
     $passwordGrant = new League\OAuth2\Server\Grant\PasswordGrant(
         new SuiteCRM\API\OAuth2\Repositories\UserRepository(),

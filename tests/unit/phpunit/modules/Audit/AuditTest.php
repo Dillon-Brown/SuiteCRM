@@ -183,7 +183,7 @@ class AuditTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method and verify that it returns an array
         $result = $audit->get_audit_list();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testgetAssociatedFieldName()

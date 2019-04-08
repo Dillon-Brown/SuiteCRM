@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,9 +71,9 @@ class SugarMerge
 
     public function __construct($new_path='', $original_path='', $custom_path='custom')
     {
-        $this->new_path = empty($new_path) || preg_match('/[\/]$/', $new_path) ? $new_path : $new_path . '/';
-        $this->original_path = empty($original_path) || preg_match('/[\/]$/', $original_path) ? $original_path : $original_path . '/';
-        $this->custom_path = empty($custom_path) || preg_match('/[\/]$/', $custom_path) ? $custom_path : $custom_path . '/';
+        $this->new_path = empty($new_path) || \preg_match('/[\/]$/', $new_path) ? $new_path : $new_path . '/';
+        $this->original_path = empty($original_path) || \preg_match('/[\/]$/', $original_path) ? $original_path : $original_path . '/';
+        $this->custom_path = empty($custom_path) || \preg_match('/[\/]$/', $custom_path) ? $custom_path : $custom_path . '/';
 
         $this->mergeMapping = array(
             'editviewdefs.php'=> new EditViewMerge(),
@@ -93,7 +93,7 @@ class SugarMerge
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($new_path, $original_path, $custom_path);
     }
@@ -120,30 +120,30 @@ class SugarMerge
     {
         $this->merged = array();
         $searchDirectory = $this->custom_path;
-        if (!preg_match('/[\/]modules$/si', $searchDirectory)) {
-            $searchDirectory .= preg_match('/[\/]$/', $this->custom_path) ? 'modules' : '/modules';
+        if (!\preg_match('/[\/]modules$/si', $searchDirectory)) {
+            $searchDirectory .= \preg_match('/[\/]$/', $this->custom_path) ? 'modules' : '/modules';
         }
 
-        if (file_exists($searchDirectory)) {
-            $dir = dir($searchDirectory);
+        if (\file_exists($searchDirectory)) {
+            $dir = \dir($searchDirectory);
             while ($e = $dir->read()) {
-                if (substr($e, 0, 1) != '.') {
-                    if (is_dir("{$searchDirectory}/{$e}/metadata")) {
+                if (\substr($e, 0, 1) != '.') {
+                    if (\is_dir("{$searchDirectory}/{$e}/metadata")) {
 
                         //lets make sure that the directory matches the case of the module before we pass it in
                         global $moduleList;
                         //lets populate an array with the available modules, and make the key's lowercase
-                        $checkModList =  array_combine($moduleList, $moduleList);
-                        $checkModList = array_change_key_case($checkModList);
+                        $checkModList =  \array_combine($moduleList, $moduleList);
+                        $checkModList = \array_change_key_case($checkModList);
 
                         //now lets compare with the current directory.  This accounts for cases in which the directory was created in lowercase
-                        if (!empty($checkModList[strtolower($e)])) {
+                        if (!empty($checkModList[\strtolower($e)])) {
                             //directory was lowercase, let's use the right module value
-                            $e = $checkModList[strtolower($e)];
+                            $e = $checkModList[\strtolower($e)];
                         }
 
-                        if (is_array($merge)) {
-                            if (in_array($e, $merge)) {
+                        if (\is_array($merge)) {
+                            if (\in_array($e, $merge)) {
                                 $this->merged[$e] = $this->mergeModule($e, true, $save, $logHistory);
                             } else {
                                 $GLOBALS['log']->debug("SugarMerge is skipping $e module as filter array passed in but module not specified for merge.");
@@ -180,7 +180,7 @@ class SugarMerge
         $custom_path = $this->custom_path . 'modules/' . $module . '/metadata/';
         $new_path = $this->new_path . 'modules/' . $module . '/metadata/';
         foreach ($this->mergeMapping as $file=>&$object) {
-            if (file_exists("{$custom_path}{$file}") && file_exists("{$new_path}{$file}")) {
+            if (\file_exists("{$custom_path}{$file}") && \file_exists("{$new_path}{$file}")) {
                 if ($merge) {
                     $merged[$file] = $this->mergeFile($module, $file, $save, $logHistory);
                 } else {
@@ -208,7 +208,7 @@ class SugarMerge
         if ($this->fp) {
             $this->mergeMapping[$file]->setLogFilePointer($this->fp);
         }
-        if (isset($this->mergeMapping[$file]) && file_exists("{$path}{$file}") && file_exists("{$custom_path}{$file}") && file_exists("{$new_path}{$file}")) {
+        if (isset($this->mergeMapping[$file]) && \file_exists("{$path}{$file}") && \file_exists("{$custom_path}{$file}") && \file_exists("{$new_path}{$file}")) {
             //Create a log entry of the custom file before it is merged
             if ($logHistory && $save) {
                 $this->createHistoryLog($module, "{$custom_path}{$file}", $file);

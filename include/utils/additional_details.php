@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -54,11 +54,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
                 continue;
             }
 
-            if (!isset($bean->field_name_map[strtolower($i)])) {
+            if (!isset($bean->field_name_map[\strtolower($i)])) {
                 continue;
             }
 
-            if ($bean->field_name_map[strtolower($i)]['type'] == 'datetime' or $bean->field_name_map[strtolower($i)]['type'] == 'datetimecombo') {
+            if ($bean->field_name_map[\strtolower($i)]['type'] == 'datetime' or $bean->field_name_map[\strtolower($i)]['type'] == 'datetimecombo') {
                 $db_date = $timedate->fromUser($f);
                 $db_date_format = $db_date->format('Y-m-d H:i:s');
                 $fields['DB_'.$i] = $db_date_format;

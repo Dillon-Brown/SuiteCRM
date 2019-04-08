@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -58,4 +58,4 @@ include_once __DIR__ . '/../../include/Imap/ImapHandlerFactory.php';
 
 $imapFactory = new ImapHandlerFactory();
 $imap = $imapFactory->getImapHandler();
-new SyncInboundEmailAccountsPage(get_defined_vars(), $imap);
+new SyncInboundEmailAccountsPage(\get_defined_vars(), $imap);

@@ -267,15 +267,15 @@ class Zend_Oauth_Client extends Zend_Http_Client
             $params = array();
             $query = $this->getUri()->getQuery();
             if ($query) {
-                $queryParts = explode('&', $this->getUri()->getQuery());
+                $queryParts = \explode('&', $this->getUri()->getQuery());
                 foreach ($queryParts as $queryPart) {
-                    $kvTuple = explode('=', $queryPart);
+                    $kvTuple = \explode('=', $queryPart);
                     $params[$kvTuple[0]] =
-                        (array_key_exists(1, $kvTuple) ? $kvTuple[1] : null);
+                        (\array_key_exists(1, $kvTuple) ? $kvTuple[1] : null);
                 }
             }
             if (!empty($this->paramsPost)) {
-                $params = array_merge($params, $this->paramsPost);
+                $params = \array_merge($params, $this->paramsPost);
                 $query  = $this->getToken()->toQueryString(
                     $this->getUri(true),
                     $this->_config,
@@ -306,7 +306,7 @@ class Zend_Oauth_Client extends Zend_Http_Client
     {
         $params = array();
         if (!empty($this->paramsGet)) {
-            $params = array_merge($params, $this->paramsGet);
+            $params = \array_merge($params, $this->paramsGet);
             $query  = $this->getToken()->toQueryString(
                     $this->getUri(true),
                     $this->_config,
@@ -314,7 +314,7 @@ class Zend_Oauth_Client extends Zend_Http_Client
                 );
         }
         if (!empty($this->paramsPost)) {
-            $params = array_merge($params, $this->paramsPost);
+            $params = \array_merge($params, $this->paramsPost);
             $query  = $this->getToken()->toQueryString(
                     $this->getUri(true),
                     $this->_config,
@@ -336,10 +336,10 @@ class Zend_Oauth_Client extends Zend_Http_Client
      */
     public function __call($method, array $args)
     {
-        if (!method_exists($this->_config, $method)) {
+        if (!\method_exists($this->_config, $method)) {
             require_once 'Zend/Oauth/Exception.php';
             throw new Zend_Oauth_Exception('Method does not exist: ' . $method);
         }
-        return call_user_func_array(array($this->_config,$method), $args);
+        return \call_user_func_array(array($this->_config,$method), $args);
     }
 }

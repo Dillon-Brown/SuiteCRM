@@ -38,46 +38,46 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-$GLOBALS['starttTime'] = microtime(true);
+$GLOBALS['starttTime'] = \microtime(true);
 
-set_include_path(
-    dirname(__FILE__).'/..'.PATH_SEPARATOR.
-    get_include_path()
+\set_include_path(
+    \dirname(__FILE__).'/..'.PATH_SEPARATOR.
+    \get_include_path()
 );
 
-if (!defined('PHP_VERSION_ID')) {
-    $version_array = explode('.', phpversion());
-    define('PHP_VERSION_ID', ($version_array[0] * 10000 + $version_array[1] * 100 + $version_array[2]));
+if (!\defined('PHP_VERSION_ID')) {
+    $version_array = \explode('.', \phpversion());
+    \define('PHP_VERSION_ID', ($version_array[0] * 10000 + $version_array[1] * 100 + $version_array[2]));
 }
 
-if (empty($GLOBALS['installing']) && !file_exists('config.php')) {
-    header('Location: install.php');
+if (empty($GLOBALS['installing']) && !\file_exists('config.php')) {
+    \header('Location: install.php');
     throw new Exception('SuiteCRM is not installed. Entry point needs an installed SuiteCRM, please install first.');
 }
 
-$BASE_DIR = realpath(dirname(__DIR__));
+$BASE_DIR = \realpath(\dirname(__DIR__));
 $autoloader = $BASE_DIR.'/vendor/autoload.php';
-if (file_exists($autoloader)) {
+if (\file_exists($autoloader)) {
     require_once $autoloader;
 } else {
     die('Composer autoloader not found. please run "composer install"');
 }
 
 // config|_override.php
-if (is_file('config.php')) {
+if (\is_file('config.php')) {
     require_once 'config.php'; // provides $sugar_config
 }
 
 // load up the config_override.php file.  This is used to provide default user settings
-if (is_file('config_override.php')) {
+if (\is_file('config_override.php')) {
     require_once 'config_override.php';
 }
 if (empty($GLOBALS['installing']) && empty($sugar_config['dbconfig']['db_name'])) {
-    header('Location: install.php');
+    \header('Location: install.php');
     exit();
 }
 
@@ -112,7 +112,7 @@ require_once 'include/TimeDate.php';
 require_once 'include/modules.php'; // provides $moduleList, $beanList, $beanFiles, $modInvisList, $adminOnlyList, $modInvisListActivities
 
 require_once 'include/utils/autoloader.php';
-spl_autoload_register(array('SugarAutoLoader', 'autoload'));
+\spl_autoload_register(array('SugarAutoLoader', 'autoload'));
 require_once 'data/SugarBean.php';
 require_once 'include/utils/mvc_utils.php';
 require 'include/SugarObjects/LanguageManager.php';
@@ -145,8 +145,8 @@ UploadStream::register();
 
 ///////////////////////////////////////////////////////////////////////////////
 ////    Handle loading and instantiation of various Sugar* class
-if (!defined('SUGAR_PATH')) {
-    define('SUGAR_PATH', realpath(dirname(__FILE__).'/..'));
+if (!\defined('SUGAR_PATH')) {
+    \define('SUGAR_PATH', \realpath(\dirname(__FILE__).'/..'));
 }
 require_once 'include/SugarObjects/SugarRegistry.php';
 
@@ -159,15 +159,15 @@ if (empty($GLOBALS['installing'])) {
 
     // Allow for the session information to be passed via the URL for printing.
     if (isset($_GET['PHPSESSID'])) {
-        if (!empty($_COOKIE['PHPSESSID']) && strcmp($_GET['PHPSESSID'], $_COOKIE['PHPSESSID']) == 0) {
-            session_id($_REQUEST['PHPSESSID']);
+        if (!empty($_COOKIE['PHPSESSID']) && \strcmp($_GET['PHPSESSID'], $_COOKIE['PHPSESSID']) == 0) {
+            \session_id($_REQUEST['PHPSESSID']);
         } else {
             unset($_GET['PHPSESSID']);
         }
     }
 
     if (!empty($sugar_config['session_dir'])) {
-        session_save_path($sugar_config['session_dir']);
+        \session_save_path($sugar_config['session_dir']);
     }
 
     SugarApplication::preLoadLanguages();
@@ -177,7 +177,7 @@ if (empty($GLOBALS['installing'])) {
     $GLOBALS['sugar_version'] = $sugar_version;
     $GLOBALS['sugar_flavor'] = $sugar_flavor;
     $GLOBALS['timedate'] = $timedate;
-    $GLOBALS['js_version_key'] = md5($GLOBALS['sugar_config']['unique_key'].$GLOBALS['sugar_version'].$GLOBALS['sugar_flavor']);
+    $GLOBALS['js_version_key'] = \md5($GLOBALS['sugar_config']['unique_key'].$GLOBALS['sugar_version'].$GLOBALS['sugar_flavor']);
 
     $db = DBManagerFactory::getInstance();
     $db->resetQueryCount();

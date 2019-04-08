@@ -46,7 +46,7 @@ class OperatingSystem
      */
     public function isOsBSD()
     {
-        return stristr(php_uname('s'), 'BSD') !== false;
+        return \stristr(\php_uname('s'), 'BSD') !== false;
     }
 
     /**
@@ -54,7 +54,7 @@ class OperatingSystem
      */
     public function isOsLinux()
     {
-        return stristr(php_uname('s'), 'Linux') !== false;
+        return \stristr(\php_uname('s'), 'Linux') !== false;
     }
 
     /**
@@ -62,7 +62,7 @@ class OperatingSystem
      */
     public function isOsMacOSX()
     {
-        return stristr(php_uname('s'), 'Darwin') !== false;
+        return \stristr(\php_uname('s'), 'Darwin') !== false;
     }
 
     /**
@@ -70,7 +70,7 @@ class OperatingSystem
      */
     public function isOsSolaris()
     {
-        return stristr(php_uname('s'), 'Solaris') !== false;
+        return \stristr(\php_uname('s'), 'Solaris') !== false;
     }
 
     /**
@@ -78,7 +78,7 @@ class OperatingSystem
      */
     public function isOsUnknown()
     {
-        return php_uname('s') === 'Unknown';
+        return \php_uname('s') === 'Unknown';
     }
 
     /**
@@ -86,7 +86,7 @@ class OperatingSystem
      */
     public function isOsWindows()
     {
-        return stristr(php_uname('s'), 'Windows') !== false;
+        return \stristr(\php_uname('s'), 'Windows') !== false;
     }
 
     /**
@@ -97,16 +97,16 @@ class OperatingSystem
     public function toOsPath($path, $ds = DIRECTORY_SEPARATOR)
     {
         // strip " - windows can use double quotes instead of escaping strings
-        $trimmedPath = trim($path, '"');
+        $trimmedPath = \trim($path, '"');
 
-        $removeEscapedSpace = str_replace('\ ', ' ', $trimmedPath);
-        $removeEscapedTab = str_replace('\	', '	', $removeEscapedSpace);
+        $removeEscapedSpace = \str_replace('\ ', ' ', $trimmedPath);
+        $removeEscapedTab = \str_replace('\	', '	', $removeEscapedSpace);
 
-        $replaceSeparator = preg_replace('/[\\\\\/]/', $ds, $removeEscapedTab);
+        $replaceSeparator = \preg_replace('/[\\\\\/]/', $ds, $removeEscapedTab);
 
         if ($ds === '/') {
-            $addEscapedSpace = str_replace(' ', '\\ ', $replaceSeparator);
-            $addEscapedTab = str_replace('	', '\\	', $addEscapedSpace);
+            $addEscapedSpace = \str_replace(' ', '\\ ', $replaceSeparator);
+            $addEscapedTab = \str_replace('	', '\\	', $addEscapedSpace);
             $newPath = $addEscapedTab;
         } else {
             $newPath = $replaceSeparator;

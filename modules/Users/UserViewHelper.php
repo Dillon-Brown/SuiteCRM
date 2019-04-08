@@ -267,7 +267,7 @@ class UserViewHelper
         }
 
         $userTypeDropdown = '<select id="UserType" name="UserType" onchange="user_status_display(this);" ';
-        if (count($availableUserTypes) == 1) {
+        if (\count($availableUserTypes) == 1) {
             $userTypeDropdown .= ' disabled ';
         }
         $userTypeDropdown .= '>';
@@ -350,7 +350,7 @@ class UserViewHelper
         } else {
             $this->ss->assign("THEMES", get_select_options_with_id(SugarThemeRegistry::availableThemes(), $GLOBALS['sugar_config']['default_theme']));
         }
-        $this->ss->assign("SHOW_THEMES", count(SugarThemeRegistry::availableThemes()) > 1);
+        $this->ss->assign("SHOW_THEMES", \count(SugarThemeRegistry::availableThemes()) > 1);
         $this->ss->assign("USER_THEME_COLOR", $this->bean->getPreference('user_theme_color'));
         $this->ss->assign("USER_THEME_FONT", $this->bean->getPreference('user_theme_font'));
         $this->ss->assign("USER_THEME", $user_theme);
@@ -377,7 +377,7 @@ class UserViewHelper
                 $themeGroupList[$themeId] = false;
             }
         }
-        $this->ss->assign("themeGroupListJSON", json_encode($themeGroupList));
+        $this->ss->assign("themeGroupListJSON", \json_encode($themeGroupList));
     }
 
     protected function setupAdvancedTab()
@@ -451,7 +451,7 @@ class UserViewHelper
         //determine if the web server is running IIS
         //if so then change the publish url
         if (isset($_SERVER) && !empty($_SERVER['SERVER_SOFTWARE'])) {
-            $position = strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'iis');
+            $position = \strpos(\strtolower($_SERVER['SERVER_SOFTWARE']), 'iis');
             if ($position !== false) {
                 $token = '?parms=';
             }
@@ -583,7 +583,7 @@ class UserViewHelper
         $dformat = $locale->getPrecedentPreference($this->bean->id?'datef':'default_date_format', $this->bean);
         $tformat = $locale->getPrecedentPreference($this->bean->id?'timef':'default_time_format', $this->bean);
         $nformat = $locale->getPrecedentPreference('default_locale_name_format', $this->bean);
-        if (!array_key_exists($nformat, $sugar_config['name_formats'])) {
+        if (!\array_key_exists($nformat, $sugar_config['name_formats'])) {
             $nformat = $sugar_config['default_locale_name_format'];
         }
         $timeOptions = get_select_options_with_id($sugar_config['time_formats'], $tformat);
@@ -654,7 +654,7 @@ class UserViewHelper
         foreach ($locale->currencies as $id => $val) {
             $currencyList[$id] = $val['symbol'];
         }
-        $currencySymbolJSON = json_encode($currencyList);
+        $currencySymbolJSON = \json_encode($currencyList);
         $this->ss->assign('currencySymbolJSON', $currencySymbolJSON);
 
         $currencyDisplay = new Currency();

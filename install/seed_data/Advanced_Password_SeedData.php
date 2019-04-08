@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -46,7 +46,7 @@ require __DIR__ . '/../../config.php';
 
 global $current_language;
 
-if (file_exists(__DIR__ . '/../language/' . $current_language . '.lang.php')) {
+if (\file_exists(__DIR__ . '/../language/' . $current_language . '.lang.php')) {
     require_once __DIR__ . '/../language/' . $current_language . '.lang.php';
 } else {
     require_once __DIR__ . '/../language/en_us.lang.php';

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -50,14 +50,14 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 $focus = new Role();
 
-$tabs_def = urldecode($_REQUEST['display_tabs_def']);
-$tabs_hide = urldecode($_REQUEST['hide_tabs_def']);
+$tabs_def = \urldecode($_REQUEST['display_tabs_def']);
+$tabs_hide = \urldecode($_REQUEST['hide_tabs_def']);
 
-$allow_modules = explode(':::', $tabs_def);
-$disallow_modules = explode(':::', $tabs_hide);
+$allow_modules = \explode(':::', $tabs_def);
+$disallow_modules = \explode(':::', $tabs_hide);
 
 $focus->retrieve($_POST['record']);
-print_r($_POST);
+\print_r($_POST);
 unset($_POST['id']);
 
 
@@ -95,4 +95,4 @@ if (isset($_POST['return_id']) && $_POST['return_id'] != "") {
 }
 
     $GLOBALS['log']->debug("Saved record with id of ".$return_id);
-    header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+    \header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");

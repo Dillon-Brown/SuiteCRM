@@ -33,7 +33,7 @@ function display_lines($focus, $field, $value, $view)
 
     if ($view == 'EditView') {
         $html .= '<script src="modules/AOS_Products_Quotes/line_items.js"></script>';
-        if (file_exists('custom/modules/AOS_Products_Quotes/line_items.js')) {
+        if (\file_exists('custom/modules/AOS_Products_Quotes/line_items.js')) {
             $html .= '<script src="custom/modules/AOS_Products_Quotes/line_items.js"></script>';
         }
         $html .= '<script language="javascript">var sig_digits = '.$locale->getPrecision().';';
@@ -65,13 +65,13 @@ function display_lines($focus, $field, $value, $view)
             while ($row = $focus->db->fetchByAssoc($result)) {
                 $line_item = new AOS_Products_Quotes();
                 $line_item->retrieve($row['id'], false);
-                $line_item = json_encode($line_item->toArray());
+                $line_item = \json_encode($line_item->toArray());
 
                 $group_item = 'null';
                 if ($row['group_id'] != null) {
                     $group_item = new AOS_Line_Item_Groups();
                     $group_item->retrieve($row['group_id'], false);
-                    $group_item = json_encode($group_item->toArray());
+                    $group_item = \json_encode($group_item->toArray());
                 }
                 $html .= "<script>
                         insertLineItems(" . $line_item . "," . $group_item . ");
@@ -166,7 +166,7 @@ function display_lines($focus, $field, $value, $view)
                 }
 
                 $product .= "<tr>";
-                $product_note = wordwrap($line_item->description, 40, "<br />\n");
+                $product_note = \wordwrap($line_item->description, 40, "<br />\n");
                 $product .= "<td class='tabDetailViewDF' style='text-align: left; padding:2px;'>".++$productCount."</td>";
                 $product .= "<td class='tabDetailViewDF' style='padding:2px;'>".stripDecimalPointsAndTrailingZeroes(format_number($line_item->product_qty), $sep[1])."</td>";
 
@@ -177,7 +177,7 @@ function display_lines($focus, $field, $value, $view)
 
                 $product .= "<td class='tabDetailViewDF' style='text-align: right; padding:2px;'>".currency_format_number($line_item->product_unit_price, $params)."</td>";
                 if ($locale->getPrecision()) {
-                    $product .= "<td class='tabDetailViewDF' style='text-align: right; padding:2px;'>".rtrim(rtrim(format_number($line_item->vat), '0'), $sep[1])."%</td>";
+                    $product .= "<td class='tabDetailViewDF' style='text-align: right; padding:2px;'>".\rtrim(\rtrim(format_number($line_item->vat), '0'), $sep[1])."%</td>";
                 } else {
                     $product .= "<td class='tabDetailViewDF' style='text-align: right; padding:2px;'>".format_number($line_item->vat)."%</td>";
                 }
@@ -207,7 +207,7 @@ function display_lines($focus, $field, $value, $view)
 
 
                 $service .= "<td class='tabDetailViewDF' style='text-align: right; padding:2px;'>".currency_format_number($line_item->product_unit_price, $params)."</td>";
-                $service .= "<td class='tabDetailViewDF' style='text-align: right; padding:2px;'>".rtrim(rtrim(format_number($line_item->vat), '0'), $sep[1])."%</td>";
+                $service .= "<td class='tabDetailViewDF' style='text-align: right; padding:2px;'>".\rtrim(\rtrim(format_number($line_item->vat), '0'), $sep[1])."%</td>";
                 $service .= "<td class='tabDetailViewDF' style='text-align: right; padding:2px;'>".currency_format_number($line_item->vat_amt, $params)."</td>";
                 $service .= "<td class='tabDetailViewDF' style='text-align: right; padding:2px;'>".currency_format_number($line_item->product_total_price, $params)."</td>";
                 $service .= "</tr>";
@@ -227,7 +227,7 @@ function display_lines($focus, $field, $value, $view)
 //will also be stripped off) The custom decimal separator is passed in to the function from the locale settings
 function stripDecimalPointsAndTrailingZeroes($inputString, $decimalSeparator)
 {
-    return preg_replace('/'.preg_quote($decimalSeparator).'[0]+$/', '', $inputString);
+    return \preg_replace('/'.\preg_quote($decimalSeparator).'[0]+$/', '', $inputString);
 }
 
 function get_discount_string($type, $amount, $params, $locale, $sep)
@@ -236,7 +236,7 @@ function get_discount_string($type, $amount, $params, $locale, $sep)
         if ($type == 'Amount') {
             return currency_format_number($amount, $params)."</td>";
         } elseif ($locale->getPrecision()) {
-            return rtrim(rtrim(format_number($amount), '0'), $sep[1])."%";
+            return \rtrim(\rtrim(format_number($amount), '0'), $sep[1])."%";
         }
         return format_number($amount)."%";
     }

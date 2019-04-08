@@ -75,7 +75,7 @@ class CallTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($call->id));
-        $this->assertEquals(36, strlen($call->id));
+        $this->assertEquals(36, \strlen($call->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $call->mark_deleted($call->id);
@@ -99,7 +99,7 @@ class CallTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method and verify if it returns an array
         $result = $call->get_contacts();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testget_summary_text()
@@ -260,7 +260,7 @@ class CallTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method and verify it returns an array
         $result = $call->get_call_users();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testget_invite_calls()
@@ -270,7 +270,7 @@ class CallTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method and verify it returns an array
         $result = $call->get_invite_calls($user);
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testset_accept_status()
@@ -295,7 +295,7 @@ class CallTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $call->set_accept_status($user, 'test');
 
         $call_users = $call->get_linked_beans('users', $call->object_name);
-        $this->assertEquals(1, count($call_users));
+        $this->assertEquals(1, \count($call_users));
 
         $call->delete_linked($call->id);
         
@@ -313,13 +313,13 @@ class CallTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test without setting any user list
         $result = $call->get_notification_recipients();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         //test with a user in notofication list set
         $call->users_arr = array(1);
         $result = $call->get_notification_recipients();
-        $this->assertTrue(is_array($result));
-        $this->assertEquals(1, count($result));
+        $this->assertTrue(\is_array($result));
+        $this->assertEquals(1, \count($result));
     }
 
     public function testbean_implements()

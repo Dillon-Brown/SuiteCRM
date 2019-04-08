@@ -273,13 +273,13 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
                     return $gen1;
                 }
 
-                usleep(self::GENERATION_RETRIEVE_PAUSE * 1000);
+                \usleep(self::GENERATION_RETRIEVE_PAUSE * 1000);
             }
 
             // All passes are failed
             throw new Zend_Search_Lucene_Exception('Index is under processing now');
         } catch (Zend_Search_Lucene_Exception $e) {
-            if (strpos($e->getMessage(), 'is not readable') !== false) {
+            if (\strpos($e->getMessage(), 'is not readable') !== false) {
                 try {
                     // Try to open old style segments file
                     $segmentsFile = $directory->getFileObject('segments', false);
@@ -287,7 +287,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
                     // It's pre-2.1 index
                     return 0;
                 } catch (Zend_Search_Lucene_Exception $e) {
-                    if (strpos($e->getMessage(), 'is not readable') !== false) {
+                    if (\strpos($e->getMessage(), 'is not readable') !== false) {
                         return -1;
                     }
                     throw new Zend_Search_Lucene_Exception($e->getMessage(), $e->getCode(), $e);
@@ -327,7 +327,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
             return 'segments';
         }
 
-        return 'segments_' . base_convert($generation, 10, 36);
+        return 'segments_' . \base_convert($generation, 10, 36);
     }
 
     /**
@@ -515,7 +515,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
             throw new Zend_Search_Exception('No index directory specified');
         }
 
-        if (is_string($directory)) {
+        if (\is_string($directory)) {
             require_once 'Zend/Search/Lucene/Storage/Directory/Filesystem.php';
             $this->_directory      = new Zend_Search_Lucene_Storage_Directory_Filesystem($directory);
             $this->_closeDirOnExit = true;
@@ -538,7 +538,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
             } catch (Zend_Search_Lucene_Exception $e) {
                 Zend_Search_Lucene_LockManager::releaseReadLock($this->_directory);
 
-                if (strpos($e->getMessage(), 'Can\'t obtain exclusive index lock') === false) {
+                if (\strpos($e->getMessage(), 'Can\'t obtain exclusive index lock') === false) {
                     throw new Zend_Search_Lucene_Exception($e->getMessage(), $e->getCode(), $e);
                 }
                 throw new Zend_Search_Lucene_Exception('Can\'t create index. It\'s under processing now', 0, $e);
@@ -923,7 +923,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
      */
     public function find($query)
     {
-        if (is_string($query)) {
+        if (\is_string($query)) {
             require_once 'Zend/Search/Lucene/Search/QueryParser.php';
 
             $query = Zend_Search_Lucene_Search_QueryParser::parse($query);
@@ -965,12 +965,12 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
                 }
             }
 
-            if (self::$_resultSetLimit != 0  &&  count($hits) >= self::$_resultSetLimit) {
+            if (self::$_resultSetLimit != 0  &&  \count($hits) >= self::$_resultSetLimit) {
                 break;
             }
         }
 
-        if (count($hits) == 0) {
+        if (\count($hits) == 0) {
             // skip sorting, which may cause a error on empty index
             return array();
         }
@@ -981,9 +981,9 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
             }
         }
 
-        if (func_num_args() == 1) {
+        if (\func_num_args() == 1) {
             // sort by scores
-            array_multisort(
+            \array_multisort(
                 $scores,
                 SORT_DESC,
                 SORT_NUMERIC,
@@ -995,7 +995,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
         } else {
             // sort by given field names
 
-            $argList    = func_get_args();
+            $argList    = \func_get_args();
             $fieldNames = $this->getFieldNames();
             $sortArgs   = array();
 
@@ -1009,17 +1009,17 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
             $sortFieldValues = array();
 
             require_once 'Zend/Search/Lucene/Exception.php';
-            for ($count = 1; $count < count($argList); $count++) {
+            for ($count = 1; $count < \count($argList); $count++) {
                 $fieldName = $argList[$count];
 
-                if (!is_string($fieldName)) {
+                if (!\is_string($fieldName)) {
                     throw new Zend_Search_Lucene_Exception('Field name must be a string.');
                 }
 
-                if (strtolower($fieldName) == 'score') {
+                if (\strtolower($fieldName) == 'score') {
                     $sortArgs[] = &$scores;
                 } else {
-                    if (!in_array($fieldName, $fieldNames)) {
+                    if (!\in_array($fieldName, $fieldNames)) {
                         throw new Zend_Search_Lucene_Exception('Wrong field name.');
                     }
 
@@ -1029,7 +1029,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
                             try {
                                 $value = $hit->getDocument()->getFieldValue($fieldName);
                             } catch (Zend_Search_Lucene_Exception $e) {
-                                if (strpos($e->getMessage(), 'not found') === false) {
+                                if (\strpos($e->getMessage(), 'not found') === false) {
                                     throw new Zend_Search_Lucene_Exception($e->getMessage(), $e->getCode(), $e);
                                 }
                                 $value = null;
@@ -1047,11 +1047,11 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
                     $sortArgs[] = &$sortFieldValues[$fieldName];
                 }
 
-                if ($count + 1 < count($argList)  &&  is_integer($argList[$count+1])) {
+                if ($count + 1 < \count($argList)  &&  \is_integer($argList[$count+1])) {
                     $count++;
                     $sortArgs[] = &$argList[$count];
 
-                    if ($count + 1 < count($argList)  &&  is_integer($argList[$count+1])) {
+                    if ($count + 1 < \count($argList)  &&  \is_integer($argList[$count+1])) {
                         $count++;
                         $sortArgs[] = &$argList[$count];
                     } else {
@@ -1076,7 +1076,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
             $sortArgs[] = &$hits;
 
             // Do sort
-            call_user_func_array('array_multisort', $sortArgs);
+            \call_user_func_array('array_multisort', $sortArgs);
         }
 
         return $hits;
@@ -1093,7 +1093,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
     {
         $result = array();
         foreach ($this->_segmentInfos as $segmentInfo) {
-            $result = array_merge($result, $segmentInfo->getFields($indexed));
+            $result = \array_merge($result, $segmentInfo->getFields($indexed));
         }
         return $result;
     }
@@ -1208,14 +1208,14 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
             $segmentStartDocId += $segmentInfo->count();
         }
 
-        if (count($subResults) == 0) {
+        if (\count($subResults) == 0) {
             return array();
-        } elseif (count($subResults) == 1) {
+        } elseif (\count($subResults) == 1) {
             // Index is optimized (only one segment)
             // Do not perform array reindexing
-            return reset($subResults);
+            return \reset($subResults);
         }
-        $result = call_user_func_array('array_merge', $subResults);
+        $result = \call_user_func_array('array_merge', $subResults);
         
 
         return $result;
@@ -1242,14 +1242,14 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
             $segmentStartDocId += $segmentInfo->count();
         }
 
-        if (count($subResults) == 0) {
+        if (\count($subResults) == 0) {
             return array();
-        } elseif (count($subResults) == 1) {
+        } elseif (\count($subResults) == 1) {
             // Index is optimized (only one segment)
             // Do not perform array reindexing
-            return reset($subResults);
+            return \reset($subResults);
         }
-        $result = call_user_func_array('array_merge', $subResults);
+        $result = \call_user_func_array('array_merge', $subResults);
         
 
         return $result;
@@ -1465,7 +1465,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
         // Commit changes if any changes have been made
         $this->commit();
 
-        if (count($this->_segmentInfos) > 1 || $this->hasDeletions()) {
+        if (\count($this->_segmentInfos) > 1 || $this->hasDeletions()) {
             $this->_getIndexWriter()->optimize();
             $this->_updateDocCount();
         }

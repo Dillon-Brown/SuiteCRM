@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -81,7 +81,7 @@ class ChartsDashlet extends Dashlet
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id, $report_id, $def);
     }
@@ -101,7 +101,7 @@ class ChartsDashlet extends Dashlet
         $chartReport = new SavedReport();
         $chartExists = $chartReport->retrieve($this->report_id, false);
 
-        if (!is_null($chartExists)) {
+        if (!\is_null($chartExists)) {
             $title = getReportNameTranslation($chartReport->name);
             $this->title = $title;
 
@@ -113,10 +113,10 @@ class ChartsDashlet extends Dashlet
 
             require_once("modules/Reports/templates/templates_chart.php");
 
-            ob_start();
+            \ob_start();
             template_chart($reporter, true, true, $this->id);
-            $str = ob_get_contents();
-            ob_end_clean();
+            $str = \ob_get_contents();
+            \ob_end_clean();
 
             $xmlFile = get_cache_file_name($reporter);
 
@@ -145,7 +145,7 @@ class ChartsDashlet extends Dashlet
         $chartReport = new SavedReport();
         $chartExists = $chartReport->retrieve($this->report_id, false);
 
-        if (!is_null($chartExists)) {
+        if (!\is_null($chartExists)) {
             $this->title = $chartReport->name;
 
             require_once("modules/Reports/templates/templates_chart.php");

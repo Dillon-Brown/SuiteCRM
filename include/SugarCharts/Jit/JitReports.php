@@ -96,10 +96,10 @@ class JitReports extends Jit
         foreach ($dataset as $key=>$value) {
             if ($first && empty($value)) {
                 $data .= $this->processDataGroup(4, $key, 'NULL', '', '');
-            } elseif (array_key_exists('numerical_value', $dataset)) {
+            } elseif (\array_key_exists('numerical_value', $dataset)) {
                 $link = (isset($dataset['link'])) ? '#'.$dataset['link'] : '';
                 $data .= $this->processDataGroup($level, $dataset['group_base_text'], $dataset['numerical_value'], $dataset['numerical_value'], $link);
-                array_push($this->processed_report_keys, $dataset['group_base_text']);
+                \array_push($this->processed_report_keys, $dataset['group_base_text']);
                 return $data;
             } else {
                 $data .= $this->processReportData($value, $level+1);
@@ -115,22 +115,22 @@ class JitReports extends Jit
 
         foreach ($dataset as $groupBy => $groups) {
             $prev_super_set = $super_set;
-            if (count($groups) > count($super_set)) {
-                $super_set = array_keys($groups);
+            if (\count($groups) > \count($super_set)) {
+                $super_set = \array_keys($groups);
                 foreach ($prev_super_set as $prev_group) {
-                    if (!in_array($prev_group, $groups)) {
-                        array_push($super_set, $prev_group);
+                    if (!\in_array($prev_group, $groups)) {
+                        \array_push($super_set, $prev_group);
                     }
                 }
             } else {
                 foreach ($groups as $group => $groupData) {
-                    if (!in_array($group, $super_set)) {
-                        array_push($super_set, $group);
+                    if (!\in_array($group, $super_set)) {
+                        \array_push($super_set, $group);
                     }
                 }
             }
         }
-        $super_set = array_unique($super_set);
+        $super_set = \array_unique($super_set);
 
         return $super_set;
     }
@@ -186,9 +186,9 @@ class JitReports extends Jit
 
             $data .= $this->tab('<subgroups>', 3);
             
-            if (count($this->group_by) > 1) {
+            if (\count($this->group_by) > 1) {
                 $data .= $this->processReportData($dataset, 4, $first);
-            } elseif (count($this->data_set) == 1 && $first) {
+            } elseif (\count($this->data_set) == 1 && $first) {
                 foreach ($dataset as $k=>$v) {
                     if (isset($v['numerical_value'])) {
                         $data .= $this->processDataGroup(4, $k, $v['numerical_value'], $v['numerical_value'], '');
@@ -197,8 +197,8 @@ class JitReports extends Jit
             }
 
             if (!$first) {
-                $not_processed = array_diff($this->super_set, $this->processed_report_keys);
-                $processed_diff_count = count($this->super_set) - count($not_processed);
+                $not_processed = \array_diff($this->super_set, $this->processed_report_keys);
+                $processed_diff_count = \count($this->super_set) - \count($not_processed);
 
                 if ($processed_diff_count != 0) {
                     foreach ($not_processed as $title) {
@@ -224,7 +224,7 @@ class JitReports extends Jit
         $single_value = false;
 
         foreach ($this->data_set as $key => $dataset) {
-            if ((isset($dataset[$key]) && count($this->data_set[$key]) == 1)) {
+            if ((isset($dataset[$key]) && \count($this->data_set[$key]) == 1)) {
                 $single_value = true;
             } else {
                 $single_value = false;

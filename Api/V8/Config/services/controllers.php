@@ -50,4 +50,4 @@ return CustomLoader::mergeCustomArray([
             $container->get(RelationshipService::class)
         );
     },
-], basename(__FILE__));
+], \basename(__FILE__));

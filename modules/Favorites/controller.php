@@ -51,7 +51,7 @@ class FavoritesController extends SugarController
         $favorite->parent_id = $_REQUEST['record_id'];
         $favorite->assigned_user_id = $current_user->id;
         $favorite->save();
-        echo json_encode($favorite->id);
+        echo \json_encode($favorite->id);
     }
 
     public function action_remove_record()
@@ -61,9 +61,9 @@ class FavoritesController extends SugarController
 
         if ($favorite_id) {
             $deleted = $favourite_class->deleteFavorite($favorite_id);
-            echo json_encode($deleted);
+            echo \json_encode($deleted);
         } else {
-            echo json_encode(false);
+            echo \json_encode(false);
         }
     }
 
@@ -76,13 +76,13 @@ class FavoritesController extends SugarController
             $return = false;
         }
 
-        echo json_encode($return);
+        echo \json_encode($return);
     }
 
     public function action_get_sidebar_elements()
     {
         $favourite_class = new Favorites();
         $return = $favourite_class->getCurrentUserSidebarFavorites($_REQUEST['record_id']);
-        echo json_encode($return);
+        echo \json_encode($return);
     }
 }

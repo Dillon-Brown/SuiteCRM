@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -60,25 +60,25 @@ class default_formatter
     public function getDetailViewFormat()
     {
         $source = $this->_component->getSource();
-        $class = get_class($source);
-        $dir = str_replace('_', '/', $class);
+        $class = \get_class($source);
+        $dir = \str_replace('_', '/', $class);
         $config = $source->getConfig();
         $this->_ss->assign('config', $config);
         $this->_ss->assign('source', $class);
         $this->_ss->assign('module', $this->_module);
         $mapping = $source->getMapping();
-        $mapping = !empty($mapping['beans'][$this->_module]) ? implode(',', array_values($mapping['beans'][$this->_module])) : '';
+        $mapping = !empty($mapping['beans'][$this->_module]) ? \implode(',', \array_values($mapping['beans'][$this->_module])) : '';
         $this->_ss->assign('mapping', $mapping);
 
-        if (file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl")) {
+        if (\file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl")) {
             return $this->_ss->fetch("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl");
-        } elseif (file_exists("modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl")) {
+        } elseif (\file_exists("modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl")) {
             return $this->_ss->fetch("modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl");
-        } elseif (file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/default.tpl")) {
+        } elseif (\file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/default.tpl")) {
             return $this->_ss->fetch("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/default.tpl");
-        } elseif (file_exists("modules/Connectors/connectors/formatters/{$dir}/tpls/default.tpl")) {
+        } elseif (\file_exists("modules/Connectors/connectors/formatters/{$dir}/tpls/default.tpl")) {
             return $this->_ss->fetch("modules/Connectors/connectors/formatters/{$dir}/tpls/default.tpl");
-        } elseif (preg_match('/_soap_/', $class)) {
+        } elseif (\preg_match('/_soap_/', $class)) {
             return $this->_ss->fetch("include/connectors/formatters/ext/soap/tpls/default.tpl");
         }
         return $this->_ss->fetch("include/connectors/formatters/ext/rest/tpls/default.tpl");
@@ -102,17 +102,17 @@ class default_formatter
     protected function fetchSmarty()
     {
         $source = $this->_component->getSource();
-        $class = get_class($source);
-        $dir = str_replace('_', '/', $class);
+        $class = \get_class($source);
+        $dir = \str_replace('_', '/', $class);
         $config = $source->getConfig();
         $this->_ss->assign('config', $config);
         $this->_ss->assign('source', $class);
         $this->_ss->assign('module', $this->_module);
-        if (file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl")) {
+        if (\file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl")) {
             return $this->_ss->fetch("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl");
-        } elseif (file_exists("modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl")) {
+        } elseif (\file_exists("modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl")) {
             return $this->_ss->fetch("modules/Connectors/connectors/formatters/{$dir}/tpls/{$this->_module}.tpl");
-        } elseif (file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/default.tpl")) {
+        } elseif (\file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/default.tpl")) {
             return $this->_ss->fetch("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/default.tpl");
         }
         return $this->_ss->fetch("modules/Connectors/connectors/formatters/{$dir}/tpls/default.tpl");

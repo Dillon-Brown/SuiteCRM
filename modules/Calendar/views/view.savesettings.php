@@ -62,7 +62,7 @@ class CalendarViewSaveSettings extends SugarView
         $current_user->setPreference('day_start_time', $db_start, 0, 'global', $current_user);
         $current_user->setPreference('day_end_time', $db_end, 0, 'global', $current_user);
         
-        $current_user->setPreference('CalendarActivities', base64_encode(serialize($_POST['activity'])));
+        $current_user->setPreference('CalendarActivities', \base64_encode(\serialize($_POST['activity'])));
 
         $current_user->setPreference('calendar_display_timeslots', $_REQUEST['display_timeslots'], 0, 'global', $current_user);
         $current_user->setPreference('show_tasks', $_REQUEST['show_tasks'], 0, 'global', $current_user);
@@ -71,17 +71,17 @@ class CalendarViewSaveSettings extends SugarView
         $current_user->setPreference('calendar_display_shared_separate', $_REQUEST['shared_calendar_separate'], 0, 'global', $current_user);
 
         if (isset($_REQUEST['day']) && !empty($_REQUEST['day'])) {
-            header("Location: index.php?module=Calendar&action=index&view=".$_REQUEST['view']."&hour=0&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']);
+            \header("Location: index.php?module=Calendar&action=index&view=".$_REQUEST['view']."&hour=0&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']);
         } else {
-            header("Location: index.php?module=Calendar&action=index");
+            \header("Location: index.php?module=Calendar&action=index");
         }
     }
     
     private function to_db_time($hours, $minutes, $mer)
     {
-        $hours = intval($hours);
-        $minutes = intval($minutes);
-        $mer = strtolower($mer);
+        $hours = \intval($hours);
+        $minutes = \intval($minutes);
+        $mer = \strtolower($mer);
         if (!empty($mer)) {
             if (($mer) == 'am') {
                 if ($hours == 12) {

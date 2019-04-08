@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -61,13 +61,13 @@ $focus = new Administration();
 // filter for relevant POST data and update config table
 foreach ($_POST as $key => $val) {
     $prefix = $focus->get_config_prefix($key);
-    if (in_array($prefix[0], $focus->config_categories)) {
+    if (\in_array($prefix[0], $focus->config_categories)) {
         if ($prefix[0] == "license") {
             if ($prefix[1] == "expire_date") {
                 global $timedate;
                 $val = $timedate->swap_formats($val, $timedate->get_date_format(), $timedate->dbDayFormat);
             } elseif ($prefix[1] == "key") {
-                $val = trim($val); // bug 16860 tyoung - trim whitespace from the start and end of the licence key value
+                $val = \trim($val); // bug 16860 tyoung - trim whitespace from the start and end of the licence key value
             }
         }
 
@@ -80,4 +80,4 @@ foreach ($_POST as $key => $val) {
 
 
 
-header("Location: index.php?action={$_POST['return_action']}&module={$_POST['return_module']}");
+\header("Location: index.php?action={$_POST['return_action']}&module={$_POST['return_module']}");

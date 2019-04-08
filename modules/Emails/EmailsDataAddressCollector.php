@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -147,8 +147,8 @@ class EmailsDataAddressCollector
         foreach ($ieAccounts as $inboundEmail) {
             $this->validateInboundEmail($inboundEmail);
 
-            if (in_array($inboundEmail->id, $showFolders, false)) {
-                $storedOptions = unserialize(base64_decode($inboundEmail->stored_options));
+            if (\in_array($inboundEmail->id, $showFolders, false)) {
+                $storedOptions = \unserialize(\base64_decode($inboundEmail->stored_options));
                 $isGroupEmailAccount = $inboundEmail->isGroupEmailAccount();
                 $isPersonalEmailAccount = $inboundEmail->isPersonalEmailAccount();
 
@@ -187,7 +187,7 @@ class EmailsDataAddressCollector
     {
         if (!$inboundEmail instanceof InboundEmail) {
             throw new InvalidArgumentException(
-                'Inbound Email Account should be a valid Inbound Email. ' . gettype($inboundEmail) . ' given.',
+                'Inbound Email Account should be a valid Inbound Email. ' . \gettype($inboundEmail) . ' given.',
                 self::ERR_INVALID_INBOUND_EMAIL_TYPE
             );
         }
@@ -242,9 +242,9 @@ class EmailsDataAddressCollector
             $this->oeId = null;
             $this->oeName = null;
         } else {
-            $this->replyTo = utf8_encode($storedOptions['reply_to_addr']);
-            $this->fromName = utf8_encode($storedOptions['from_name']);
-            $this->fromAddr = utf8_encode($storedOptions['from_addr']);
+            $this->replyTo = \utf8_encode($storedOptions['reply_to_addr']);
+            $this->fromName = \utf8_encode($storedOptions['from_name']);
+            $this->fromAddr = \utf8_encode($storedOptions['from_addr']);
             $this->oeId = $this->oe->id;
             $this->oeName = $this->oe->name;
         }
@@ -261,8 +261,8 @@ class EmailsDataAddressCollector
             LoggerManager::getLogger()->error('EmailController::action_getFromFields() panic: An Outbound Email Reply-to Address is not found.');
             $replyToErr = self::ERR_REPLY_TO_ADDR_NOT_FOUND;
         } else {
-            $splits = explode(' ', $this->replyTo);
-            if (count($splits) !== 2) {
+            $splits = \explode(' ', $this->replyTo);
+            if (\count($splits) !== 2) {
                 LoggerManager::getLogger()->error('Incorrect "replay to" format found: ' . $this->replyTo);
                 $replyToErr = self::ERR_REPLY_TO_FORMAT_INVALID_SPLITS;
             } else {
@@ -382,13 +382,13 @@ class EmailsDataAddressCollector
                 $dataAddress['emailSignatures'] = $defaultEmailSignature;
             } else {
                 $dataAddress['emailSignatures'] = array(
-                    'html' => utf8_encode(html_entity_decode($defaultEmailSignature['signature_html'])),
+                    'html' => \utf8_encode(\html_entity_decode($defaultEmailSignature['signature_html'])),
                     'plain' => $defaultEmailSignature['signature'],
                 );
             }
         } else {
             $dataAddress['emailSignatures'] = array(
-                'html' => utf8_encode(html_entity_decode($signature['signature_html'])),
+                'html' => \utf8_encode(\html_entity_decode($signature['signature_html'])),
                 'plain' => $signature['signature'],
             );
         }
@@ -641,7 +641,7 @@ class EmailsDataAddressCollector
             null,
             null,
             [
-                'html' => utf8_encode(html_entity_decode($signatureHtml)),
+                'html' => \utf8_encode(\html_entity_decode($signatureHtml)),
                 'plain' => $signatureTxt,
             ]
         );

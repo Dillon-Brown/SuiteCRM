@@ -43,7 +43,7 @@ namespace SuiteCRM;
 
 use PHPUnit_Framework_TestCase;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -64,10 +64,10 @@ abstract class StateCheckerPHPUnitTestCaseAbstract extends PHPUnit_Framework_Tes
     protected function setUp()
     {
         if (self::$verbose) {
-            $currentTestName = get_class($this) . '::' . $this->getName(false);
-            fwrite(STDOUT, "\t" . $currentTestName  . " ..");
-            for ($i = 60; $i > strlen($currentTestName); $i--) {
-                fwrite(STDOUT,".");
+            $currentTestName = \get_class($this) . '::' . $this->getName(false);
+            \fwrite(STDOUT, "\t" . $currentTestName  . " ..");
+            for ($i = 60; $i > \strlen($currentTestName); $i--) {
+                \fwrite(STDOUT,".");
             }
         }
         
@@ -84,7 +84,7 @@ abstract class StateCheckerPHPUnitTestCaseAbstract extends PHPUnit_Framework_Tes
         $this->afterStateCheck();
         
         if (self::$verbose) {
-            fwrite(STDOUT, " [done]\n");
+            \fwrite(STDOUT, " [done]\n");
         }
     }
 }

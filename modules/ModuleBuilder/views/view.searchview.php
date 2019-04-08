@@ -1,5 +1,5 @@
 <?php
-if (! defined('sugarEntry') || ! sugarEntry) {
+if (! \defined('sugarEntry') || ! sugarEntry) {
     die('Not A Valid Entry Point') ;
 }
 /**
@@ -104,7 +104,7 @@ class ViewSearchView extends ViewListView
         $ajax = new AjaxCompose() ;
         switch ($this->editLayout) {
             default:
-                $searchLabel = 'LBL_' . strtoupper($this->editLayout) ;
+                $searchLabel = 'LBL_' . \strtoupper($this->editLayout) ;
         }
 
         $layoutLabel = 'LBL_LAYOUTS' ;

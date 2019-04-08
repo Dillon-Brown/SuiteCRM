@@ -4,9 +4,9 @@
  *  SP Assertion Consumer Service Endpoint
  */
 
-session_start();
+\session_start();
 
-require_once dirname(dirname(__FILE__)) . '/_toolkit_loader.php';
+require_once \dirname(\dirname(__FILE__)) . '/_toolkit_loader.php';
 
 $auth = new OneLogin_Saml2_Auth();
 
@@ -15,7 +15,7 @@ $auth->processResponse();
 $errors = $auth->getErrors();
 
 if (!empty($errors)) {
-    print_r('<p>'.implode(', ', $errors).'</p>');
+    \print_r('<p>'.\implode(', ', $errors).'</p>');
     exit();
 }
 
@@ -33,12 +33,12 @@ if (isset($_POST['RelayState']) && OneLogin_Saml2_Utils::getSelfURL() != $_POST[
 $attributes = $_SESSION['samlUserdata'];
 
 if (!empty($attributes)) {
-    echo '<h1>'._('User attributes:').'</h1>';
-    echo '<table><thead><th>'._('Name').'</th><th>'._('Values').'</th></thead><tbody>';
+    echo '<h1>'.\_('User attributes:').'</h1>';
+    echo '<table><thead><th>'.\_('Name').'</th><th>'.\_('Values').'</th></thead><tbody>';
     foreach ($attributes as $attributeName => $attributeValues) {
-        echo '<tr><td>'.htmlentities($attributeName).'</td><td><ul>';
+        echo '<tr><td>'.\htmlentities($attributeName).'</td><td><ul>';
         foreach ($attributeValues as $attributeValue) {
-            echo '<li>'.htmlentities($attributeValue).'</li>';
+            echo '<li>'.\htmlentities($attributeValue).'</li>';
         }
         echo '</ul></td></tr>';
     }
@@ -47,5 +47,5 @@ if (!empty($attributes)) {
         echo '<p>The SessionIndex of the IdP is: '.$_SESSION['IdPSessionIndex'].'</p>';
     }
 } else {
-    echo _('Attributes not found');
+    echo \_('Attributes not found');
 }

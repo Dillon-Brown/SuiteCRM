@@ -45,18 +45,18 @@ class Zend_Gdata_App_Util
         $rfc3339 = '/^(\d{4})\-?(\d{2})\-?(\d{2})((T|t)(\d{2})\:?(\d{2})' .
                    '\:?(\d{2})(\.\d{1,})?((Z|z)|([\+\-])(\d{2})\:?(\d{2})))?$/';
 
-        if (ctype_digit($timestamp)) {
-            return gmdate('Y-m-d\TH:i:sP', $timestamp);
-        } elseif (preg_match($rfc3339, $timestamp) > 0) {
+        if (\ctype_digit($timestamp)) {
+            return \gmdate('Y-m-d\TH:i:sP', $timestamp);
+        } elseif (\preg_match($rfc3339, $timestamp) > 0) {
             // timestamp is already properly formatted
             return $timestamp;
         } else {
-            $ts = strtotime($timestamp);
+            $ts = \strtotime($timestamp);
             if ($ts === false) {
                 require_once 'Zend/Gdata/App/InvalidArgumentException.php';
                 throw new Zend_Gdata_App_InvalidArgumentException("Invalid timestamp: $timestamp.");
             }
-            return date('Y-m-d\TH:i:s', $ts);
+            return \date('Y-m-d\TH:i:s', $ts);
         }
     }
 
@@ -76,23 +76,23 @@ class Zend_Gdata_App_Util
         $foundKey = $maximumKey;
 
         // Sanity check: Make sure that the collection isn't empty
-        if (sizeof($collection) == 0) {
+        if (\sizeof($collection) == 0) {
             require_once 'Zend/Gdata/App/Exception.php';
             throw new Zend_Gdata_App_Exception("Empty namespace collection encountered.");
         }
 
         if ($maximumKey === null) {
             // If the key is null, then we return the maximum available
-            $keys = array_keys($collection);
-            sort($keys);
+            $keys = \array_keys($collection);
+            \sort($keys);
             $found = true;
-            $foundKey = end($keys);
+            $foundKey = \end($keys);
         } else {
             // Otherwise, we optimistically guess that the current version
             // will have a matching namespce. If that fails, we decrement the
             // version until we find a match.
             while (!$found && $foundKey >= 0) {
-                if (array_key_exists($foundKey, $collection)) {
+                if (\array_key_exists($foundKey, $collection)) {
                     $found = true;
                 } else {
                     $foundKey--;

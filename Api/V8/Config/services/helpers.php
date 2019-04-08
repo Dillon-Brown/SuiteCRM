@@ -24,4 +24,4 @@ return CustomLoader::mergeCustomArray([
     ApiHelper\PaginationObjectHelper::class => function (Container $container) {
         return new ApiHelper\PaginationObjectHelper();
     },
-], basename(__FILE__));
+], \basename(__FILE__));

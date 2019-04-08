@@ -26,14 +26,14 @@ class ViewXMLTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $view = new ViewXML();
 
         try {
-            ob_start();
+            \ob_start();
 
             $view->display();
 
-            $renderedContent = ob_get_contents();
-            ob_end_clean();
+            $renderedContent = \ob_get_contents();
+            \ob_end_clean();
 
-            $this->assertGreaterThan(0, strlen($renderedContent));
+            $this->assertGreaterThan(0, \strlen($renderedContent));
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }

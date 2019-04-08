@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -96,10 +96,10 @@ class Importer
         $this->bean = $bean;
 
         // use our own error handler
-        set_error_handler(array('Importer','handleImportErrors'), E_ALL);
+        \set_error_handler(array('Importer','handleImportErrors'), E_ALL);
 
         // Increase the max_execution_time since this step can take awhile
-        ini_set("max_execution_time", max($sugar_config['import_max_execution_time'], 3600));
+        \ini_set("max_execution_time", \max($sugar_config['import_max_execution_time'], 3600));
 
         // stop the tracker
         TrackerManager::getInstance()->pause();
@@ -167,9 +167,9 @@ class Importer
                 $locale = new Localization();
             }
             if (isset($row[$fieldNum])) {
-                $rowValue = $locale->translateCharset(strip_tags(trim($row[$fieldNum])), $this->importSource->importlocale_charset, $sugar_config['default_charset']);
+                $rowValue = $locale->translateCharset(\strip_tags(\trim($row[$fieldNum])), $this->importSource->importlocale_charset, $sugar_config['default_charset']);
             } elseif (isset($this->sugarToExternalSourceFieldMap[$field]) && isset($row[$this->sugarToExternalSourceFieldMap[$field]])) {
-                $rowValue = $locale->translateCharset(strip_tags(trim($row[$this->sugarToExternalSourceFieldMap[$field]])), $this->importSource->importlocale_charset, $sugar_config['default_charset']);
+                $rowValue = $locale->translateCharset(\strip_tags(\trim($row[$this->sugarToExternalSourceFieldMap[$field]])), $this->importSource->importlocale_charset, $sugar_config['default_charset']);
             } else {
                 $rowValue = '';
             }
@@ -187,7 +187,7 @@ class Importer
             }
 
             // Bug 22705 - Don't update the First Name or Last Name value if Full Name is set
-            if (in_array($field, array('first_name','last_name')) && !empty($focus->full_name)) {
+            if (\in_array($field, array('first_name','last_name')) && !empty($focus->full_name)) {
                 continue;
             }
 
@@ -197,7 +197,7 @@ class Importer
             }
 
             // If the field is required and blank then error out
-            if (array_key_exists($field, $focus->get_import_required_fields()) && empty($rowValue) && $rowValue!='0') {
+            if (\array_key_exists($field, $focus->get_import_required_fields()) && empty($rowValue) && $rowValue!='0') {
                 $this->importSource->writeError($mod_strings['LBL_REQUIRED_VALUE'], $fieldTranslated, 'NULL');
                 $do_save = false;
             }
@@ -207,9 +207,9 @@ class Importer
                 /**
                  * Bug #41194 : if true used as value of sync_contact - add curent user to list to sync
                  */
-                if (true == $rowValue || 'true' == strtolower($rowValue)) {
+                if (true == $rowValue || 'true' == \strtolower($rowValue)) {
                     $focus->sync_contact = $focus->id;
-                } elseif (false == $rowValue || 'false' == strtolower($rowValue)) {
+                } elseif (false == $rowValue || 'false' == \strtolower($rowValue)) {
                     $focus->sync_contact = '';
                 } else {
                     $bad_names = array();
@@ -229,8 +229,8 @@ class Importer
 
             // Handle email field, if it's a semi-colon separated export
             if ($field == 'email_addresses_non_primary' && !empty($rowValue)) {
-                if (strpos($rowValue, ';') !== false) {
-                    $rowValue = explode(';', $rowValue);
+                if (\strpos($rowValue, ';') !== false) {
+                    $rowValue = \explode(';', $rowValue);
                 } else {
                     $rowValue = array($rowValue);
                 }
@@ -265,7 +265,7 @@ class Importer
 
             // to maintain 451 compatiblity
             if (!isset($fieldDef['module']) && $fieldDef['type']=='relate') {
-                $fieldDef['module'] = ucfirst($fieldDef['table']);
+                $fieldDef['module'] = \ucfirst($fieldDef['table']);
             }
 
             if (isset($fieldDef['custom_type']) && !empty($fieldDef['custom_type'])) {
@@ -275,7 +275,7 @@ class Importer
             // If the field is empty then there is no need to check the data
             if (!empty($rowValue)) {
                 // If it's an array of non-primary e-mails, check each mail
-                if ($field == "email_addresses_non_primary" && is_array($rowValue)) {
+                if ($field == "email_addresses_non_primary" && \is_array($rowValue)) {
                     foreach ($rowValue as $tempRow) {
                         $tempRow = $this->sanitizeFieldValueByType($tempRow, $fieldDef, $defaultRowValue, $focus, $fieldTranslated);
                         if ($tempRow === false) {
@@ -326,8 +326,8 @@ class Importer
 
         // check to see that the indexes being entered are unique.
         if (isset($_REQUEST['enabled_dupes']) && $_REQUEST['enabled_dupes'] != "") {
-            $toDecode = html_entity_decode($_REQUEST['enabled_dupes'], ENT_QUOTES);
-            $enabled_dupes = json_decode($toDecode);
+            $toDecode = \html_entity_decode($_REQUEST['enabled_dupes'], ENT_QUOTES);
+            $enabled_dupes = \json_decode($toDecode);
             $idc = new ImportDuplicateCheck($focus);
 
             if ($idc->isADuplicateRecord($enabled_dupes)) {
@@ -338,8 +338,8 @@ class Importer
         }
         //Allow fields to be passed in for dup check as well (used by external adapters)
         elseif (!empty($_REQUEST['enabled_dup_fields'])) {
-            $toDecode = html_entity_decode($_REQUEST['enabled_dup_fields'], ENT_QUOTES);
-            $enabled_dup_fields = json_decode($toDecode);
+            $toDecode = \html_entity_decode($_REQUEST['enabled_dup_fields'], ENT_QUOTES);
+            $enabled_dup_fields = \json_decode($toDecode);
             $idc = new ImportDuplicateCheck($focus);
             if ($idc->isADuplicateRecordByFields($enabled_dup_fields)) {
                 $this->importSource->markRowAsDuplicate($idc->_dupedFields);
@@ -415,7 +415,7 @@ class Importer
 
                 if ($returnValue === false) {
                     $this->importSource->writeError(
-                        $mod_strings['LBL_ERROR_NOT_IN_ENUM'] . implode(",", $app_list_strings[$fieldDef['options']]),
+                        $mod_strings['LBL_ERROR_NOT_IN_ENUM'] . \implode(",", $app_list_strings[$fieldDef['options']]),
                         $fieldTranslated,
                         $rowValue
                     );
@@ -451,7 +451,7 @@ class Importer
                     $returnValue = $this->ifs->$fieldtype($defaultRowValue, $fieldDef, $focus);
                 }
                 if (!$returnValue) {
-                    $this->importSource->writeError($mod_strings['LBL_ERROR_INVALID_'.strtoupper($fieldtype)], $fieldTranslated, $rowValue, $focus);
+                    $this->importSource->writeError($mod_strings['LBL_ERROR_INVALID_'.\strtoupper($fieldtype)], $fieldTranslated, $rowValue, $focus);
                     return false;
                 }
                 return $returnValue;
@@ -466,7 +466,7 @@ class Importer
         }
         $newData = $focus->toArray();
         foreach ($newData as $focus_key => $focus_value) {
-            if (in_array($focus_key, $this->importColumns)) {
+            if (\in_array($focus_key, $this->importColumns)) {
                 $existing_focus->$focus_key = $focus_value;
             }
         }
@@ -522,7 +522,7 @@ class Importer
         //bug# 46411 importing Calls will not populate Leads or Contacts Subpanel
         if (!empty($focus->parent_type) && !empty($focus->parent_id)) {
             foreach ($focus->relationship_fields as $key => $val) {
-                if ($val == strtolower($focus->parent_type)) {
+                if ($val == \strtolower($focus->parent_type)) {
                     $focus->$key = $focus->parent_id;
                 }
             }
@@ -538,7 +538,7 @@ class Importer
         
         if (!empty($dataChanges)) {
             foreach ($dataChanges as $field=>$fieldData) {
-                if ($fieldData['data_type'] != 'date' || strtotime($fieldData['before']) != strtotime($fieldData['after'])) {
+                if ($fieldData['data_type'] != 'date' || \strtotime($fieldData['before']) != \strtotime($fieldData['after'])) {
                     $hasDataChanges = true;
                     break;
                 }
@@ -577,7 +577,7 @@ class Importer
     {
         global $current_user;
 
-        $firstrow    = json_decode(html_entity_decode($_REQUEST['firstrow']), true);
+        $firstrow    = \json_decode(\html_entity_decode($_REQUEST['firstrow']), true);
         $mappingValsArr = $this->importColumns;
         $mapping_file = new ImportMap();
         if (isset($_REQUEST['has_header']) && $_REQUEST['has_header'] == 'on') {
@@ -594,7 +594,7 @@ class Importer
         $advMapping = $this->retrieveAdvancedMapping();
 
         //merge with mappingVals array
-        if (!empty($advMapping) && is_array($advMapping)) {
+        if (!empty($advMapping) && \is_array($advMapping)) {
             $mappingValsArr = $advMapping + $mappingValsArr;
         }
 
@@ -648,7 +648,7 @@ class Importer
             $_REQUEST['source'],
             (isset($_REQUEST['has_header']) && $_REQUEST['has_header'] == 'on'),
             $_REQUEST['custom_delimiter'],
-            html_entity_decode($_REQUEST['custom_enclosure'], ENT_QUOTES)
+            \html_entity_decode($_REQUEST['custom_enclosure'], ENT_QUOTES)
         );
     }
 
@@ -657,7 +657,7 @@ class Importer
     {
         global $timedate, $current_user;
 
-        if (is_array($fieldValue)) {
+        if (\is_array($fieldValue)) {
             $defaultRowValue = encodeMultienumValue($fieldValue);
         } else {
             $defaultRowValue = $_REQUEST[$field];
@@ -675,17 +675,17 @@ class Importer
             $defaultRowValue = $timedate->swap_formats($defaultRowValue, $this->ifs->dateformat.' '.$this->ifs->timeformat, $timedate->get_date_time_format());
         }
 
-        if (in_array($fieldDef['type'], array('currency','float','int','num')) && $this->ifs->num_grp_sep != $current_user->getPreference('num_grp_sep')) {
-            $defaultRowValue = str_replace($current_user->getPreference('num_grp_sep'), $this->ifs->num_grp_sep, $defaultRowValue);
+        if (\in_array($fieldDef['type'], array('currency','float','int','num')) && $this->ifs->num_grp_sep != $current_user->getPreference('num_grp_sep')) {
+            $defaultRowValue = \str_replace($current_user->getPreference('num_grp_sep'), $this->ifs->num_grp_sep, $defaultRowValue);
         }
 
-        if (in_array($fieldDef['type'], array('currency','float')) && $this->ifs->dec_sep != $current_user->getPreference('dec_sep')) {
-            $defaultRowValue = str_replace($current_user->getPreference('dec_sep'), $this->ifs->dec_sep, $defaultRowValue);
+        if (\in_array($fieldDef['type'], array('currency','float')) && $this->ifs->dec_sep != $current_user->getPreference('dec_sep')) {
+            $defaultRowValue = \str_replace($current_user->getPreference('dec_sep'), $this->ifs->dec_sep, $defaultRowValue);
         }
 
         $user_currency_symbol = $this->defaultUserCurrency->symbol;
         if ($fieldDef['type'] == 'currency' && $this->ifs->currency_symbol != $user_currency_symbol) {
-            $defaultRowValue = str_replace($user_currency_symbol, $this->ifs->currency_symbol, $defaultRowValue);
+            $defaultRowValue = \str_replace($user_currency_symbol, $this->ifs->currency_symbol, $defaultRowValue);
         }
 
         return $defaultRowValue;
@@ -697,12 +697,12 @@ class Importer
         $importColumns = array();
         foreach ($_REQUEST as $name => $value) {
             // only look for var names that start with "fieldNum"
-            if (strncasecmp($name, "colnum_", 7) != 0) {
+            if (\strncasecmp($name, "colnum_", 7) != 0) {
                 continue;
             }
 
             // pull out the column position for this field name
-            $pos = substr($name, 7);
+            $pos = \substr($name, 7);
 
             if (isset($importable_fields[$value])) {
                 // now mark that we've seen this field
@@ -763,10 +763,10 @@ class Importer
     protected function _convertId($string)
     {
         $function = function ($matches) {
-            return ord($matches[0]);
+            return \ord($matches[0]);
         };
 
-        return preg_replace_callback(
+        return \preg_replace_callback(
             '|[^A-Za-z0-9\-\_]|',
             $function,
             $string
@@ -779,8 +779,8 @@ class Importer
 
         //harvest the dupe index settings
         if (isset($_REQUEST['enabled_dupes'])) {
-            $toDecode = html_entity_decode($_REQUEST['enabled_dupes'], ENT_QUOTES);
-            $dupe_ind = json_decode($toDecode);
+            $toDecode = \html_entity_decode($_REQUEST['enabled_dupes'], ENT_QUOTES);
+            $dupe_ind = \json_decode($toDecode);
 
             foreach ($dupe_ind as $dupe) {
                 $advancedMappingSettings['dupe_'.$dupe] = $dupe;
@@ -789,7 +789,7 @@ class Importer
 
         foreach ($_REQUEST as $rk=>$rv) {
             //harvest the import locale settings
-            if (strpos($rk, 'portlocale_')>0) {
+            if (\strpos($rk, 'portlocale_')>0) {
                 $advancedMappingSettings[$rk] = $rv;
             }
         }
@@ -801,7 +801,7 @@ class Importer
         global $beanList;
         $importableModules = array();
         foreach ($beanList as $moduleName => $beanName) {
-            if (class_exists($beanName)) {
+            if (\class_exists($beanName)) {
                 $tmp = new $beanName();
                 if (isset($tmp->importable) && $tmp->importable) {
                     $label = isset($GLOBALS['app_list_strings']['moduleList'][$moduleName]) ? $GLOBALS['app_list_strings']['moduleList'][$moduleName] : $moduleName;
@@ -810,7 +810,7 @@ class Importer
             }
         }
 
-        asort($importableModules);
+        \asort($importableModules);
         return $importableModules;
     }
 
@@ -827,11 +827,11 @@ class Importer
     {
         $GLOBALS['log']->fatal("Caught error: $errstr");
 
-        if (!defined('E_DEPRECATED')) {
-            define('E_DEPRECATED', '8192');
+        if (!\defined('E_DEPRECATED')) {
+            \define('E_DEPRECATED', '8192');
         }
-        if (!defined('E_USER_DEPRECATED')) {
-            define('E_USER_DEPRECATED', '16384');
+        if (!\defined('E_USER_DEPRECATED')) {
+            \define('E_USER_DEPRECATED', '16384');
         }
 
         $isFatal = false;
@@ -862,7 +862,7 @@ class Importer
 
         // check to see if current reporting level should be included based upon error_reporting() setting, if not
         // then just return
-        if (error_reporting() & $errno) {
+        if (\error_reporting() & $errno) {
             echo $message;
         }
 
@@ -885,12 +885,12 @@ class Importer
 
         //check relationship fields first
         if (!empty($focus->parent_id) && !empty($focus->parent_type)) {
-            $relParentName = strtolower($focus->parent_type);
-            $relParentID = strtolower($focus->parent_id);
+            $relParentName = \strtolower($focus->parent_type);
+            $relParentID = \strtolower($focus->parent_id);
         }
         if (!empty($focus->related_id) && !empty($focus->related_type)) {
-            $relName = strtolower($focus->related_type);
-            $relID = strtolower($focus->related_id);
+            $relName = \strtolower($focus->related_type);
+            $relID = \strtolower($focus->related_id);
         }
 
         //now refresh the bean and process for parent relationship
@@ -904,7 +904,7 @@ class Importer
                 $rel_ids = $focus->$relParentName->get();
 
                 //if the current parent_id is not part of the stored rels, then add it
-                if (!in_array($relParentID, $rel_ids)) {
+                if (!\in_array($relParentID, $rel_ids)) {
                     $focus->$relParentName->add($relParentID);
                 }
             }
@@ -918,7 +918,7 @@ class Importer
                 $rel_ids = $focus->$relName->get();
 
                 //if the related_id is not part of the stored rels, then add it
-                if (!in_array($relID, $rel_ids)) {
+                if (!\in_array($relID, $rel_ids)) {
                     $focus->$relName->add($relID);
                 }
             }

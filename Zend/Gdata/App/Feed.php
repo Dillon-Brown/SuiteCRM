@@ -130,7 +130,7 @@ class Zend_Gdata_App_Feed extends Zend_Gdata_App_FeedSourceParent implements Ite
      */
     public function count()
     {
-        return count($this->_entry);
+        return \count($this->_entry);
     }
 
     /**
@@ -240,7 +240,7 @@ class Zend_Gdata_App_Feed extends Zend_Gdata_App_FeedSourceParent implements Ite
      */
     public function offsetGet($key)
     {
-        if (array_key_exists($key, $this->_entry)) {
+        if (\array_key_exists($key, $this->_entry)) {
             return $this->_entry[$key];
         }
     }
@@ -253,7 +253,7 @@ class Zend_Gdata_App_Feed extends Zend_Gdata_App_FeedSourceParent implements Ite
      */
     public function offsetUnset($key)
     {
-        if (array_key_exists($key, $this->_entry)) {
+        if (\array_key_exists($key, $this->_entry)) {
             unset($this->_entry[$key]);
         }
     }
@@ -266,7 +266,7 @@ class Zend_Gdata_App_Feed extends Zend_Gdata_App_FeedSourceParent implements Ite
      */
     public function offsetExists($key)
     {
-        return (array_key_exists($key, $this->_entry));
+        return (\array_key_exists($key, $this->_entry));
     }
 
     /**
@@ -287,7 +287,7 @@ class Zend_Gdata_App_Feed extends Zend_Gdata_App_FeedSourceParent implements Ite
         $nextLinkHref = $nextLink->getHref();
         $service = new Zend_Gdata_App($this->getHttpClient());
 
-        return $service->getFeed($nextLinkHref, get_class($this));
+        return $service->getFeed($nextLinkHref, \get_class($this));
     }
 
     /**
@@ -308,7 +308,7 @@ class Zend_Gdata_App_Feed extends Zend_Gdata_App_FeedSourceParent implements Ite
         $previousLinkHref = $previousLink->getHref();
         $service = new Zend_Gdata_App($this->getHttpClient());
 
-        return $service->getFeed($previousLinkHref, get_class($this));
+        return $service->getFeed($previousLinkHref, \get_class($this));
     }
 
     /**

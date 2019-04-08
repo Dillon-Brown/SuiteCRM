@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -20,7 +20,7 @@ class Jjwg_MapsViewGeocoding_Test extends SugarView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -40,7 +40,7 @@ class Jjwg_MapsViewGeocoding_Test extends SugarView
 <input type="hidden" name="action" value="geocoding_test" />
 <strong><?php echo $GLOBALS['mod_strings']['LBL_MAP_ADDRESS'].': '; ?> </strong>
 <input autocomplete="off" type="text" name="geocoding_address" id="geocoding_address"
-value="<?php echo htmlspecialchars($_REQUEST['geocoding_address']); ?>" title='' tabindex='1' size="40" maxlength="255">
+value="<?php echo \htmlspecialchars($_REQUEST['geocoding_address']); ?>" title='' tabindex='1' size="40" maxlength="255">
 <br /><br />
 <input class="button" type="submit" name="submit" value="<?php echo $GLOBALS['mod_strings']['LBL_MAP_PROCESS']; ?>" align="bottom">
 <input type="hidden" name="process_trigger" value="yes">
@@ -49,7 +49,7 @@ value="<?php echo htmlspecialchars($_REQUEST['geocoding_address']); ?>" title=''
 <?php
     if (!empty($_REQUEST['process_trigger'])) {
         echo '<br /><br /><pre>';
-        print_r($this->bean->geocoding_results);
+        \print_r($this->bean->geocoding_results);
         echo '</pre><br /><br />';
     }
     }

@@ -54,7 +54,7 @@ class LeadsController extends SugarController
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -85,11 +85,11 @@ class LeadsController extends SugarController
 
     protected function callLegacyCode()
     {
-        if (strtolower($this->do_action) == 'convertlead') {
-            if (file_exists('modules/Leads/ConvertLead.php') && !file_exists('custom/modules/Leads/metadata/convertdefs.php')) {
+        if (\strtolower($this->do_action) == 'convertlead') {
+            if (\file_exists('modules/Leads/ConvertLead.php') && !\file_exists('custom/modules/Leads/metadata/convertdefs.php')) {
                 if (!empty($_REQUEST['emailAddressWidget'])) {
                     foreach ($_REQUEST as $key=>$value) {
-                        if (preg_match('/^Leads.*?emailAddress[\d]+$/', $key)) {
+                        if (\preg_match('/^Leads.*?emailAddress[\d]+$/', $key)) {
                             $_REQUEST['Leads_email_widget_id'] = 0;
                             break;
                         }

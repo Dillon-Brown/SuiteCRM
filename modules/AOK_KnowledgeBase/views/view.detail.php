@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -59,7 +59,7 @@ class AOK_KnowledgeBaseViewDetail extends ViewDetail
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -73,6 +73,6 @@ class AOK_KnowledgeBaseViewDetail extends ViewDetail
 
     public function setDecodeHTML()
     {
-        $this->bean->description = html_entity_decode(str_replace('&nbsp;', ' ', $this->bean->description));
+        $this->bean->description = \html_entity_decode(\str_replace('&nbsp;', ' ', $this->bean->description));
     }
 }

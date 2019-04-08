@@ -41,8 +41,8 @@
 require_once('include/nusoap/nusoap.php');
 require_once('ModuleInstall/PackageManager/PackageManagerDownloader.php');
 
-define("HTTPS_URL", "https://depot.sugarcrm.com/depot/SugarDepotSoap.php");
-define("ACTIVE_STATUS", "ACTIVE");
+\define("HTTPS_URL", "https://depot.sugarcrm.com/depot/SugarDepotSoap.php");
+\define("ACTIVE_STATUS", "ACTIVE");
 
 class PackageManagerComm
 {
@@ -117,10 +117,10 @@ class PackageManagerComm
             if (empty($license)) {
                 loadLicense();
             }
-            $info = sugarEncode('2813', serialize(getSystemInfo(true)));
+            $info = sugarEncode('2813', \serialize(getSystemInfo(true)));
             $pm = new PackageManager();
             $installed = $pm->buildInstalledReleases();
-            $installed = base64_encode(serialize($installed));
+            $installed = \base64_encode(\serialize($installed));
             $params = array('installed_modules' => $installed, 'terms_checked' => $terms_checked, 'system_name' => $credentials['system_name']);
             $terms_version = (!empty($_SESSION['SugarDepot_TermsVersion']) ? $_SESSION['SugarDepot_TermsVersion'] : '');
             if (!empty($terms_version)) {
@@ -129,7 +129,7 @@ class PackageManagerComm
 
             $result = $GLOBALS['SugarDepot']->call('depotLogin', array(array('user_name' => $credentials['username'], 'password' => $credentials['password']),'info'=>$info, 'params' => $params));
             PackageManagerComm::errorCheck();
-            if (!is_array($result)) {
+            if (!\is_array($result)) {
                 $_SESSION['SugarDepotSessionID'] = $result;
             }
             $GLOBALS['log']->debug("End SugarDepot Login");

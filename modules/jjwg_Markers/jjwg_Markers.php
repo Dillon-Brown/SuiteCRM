@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -34,7 +34,7 @@ class jjwg_Markers extends jjwg_Markers_sugar
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($init);
     }
@@ -63,11 +63,11 @@ class jjwg_Markers extends jjwg_Markers_sugar
             $marker = $this;
         }
         $loc = array();
-        if (is_object($marker)) {
+        if (\is_object($marker)) {
             $loc['name'] = $marker->name;
             $loc['lat'] = $marker->jjwg_maps_lat;
             $loc['lng'] = $marker->jjwg_maps_lng;
-        } elseif (is_array($marker)) {
+        } elseif (\is_array($marker)) {
             $loc['name'] = $marker['name'];
             $loc['lat'] = $marker['lat'];
             $loc['lng'] = $marker['lng'];
@@ -102,7 +102,7 @@ class jjwg_Markers extends jjwg_Markers_sugar
      */
     public function is_valid_lng($lng)
     {
-        return (is_numeric($lng) && $lng >= -180 && $lng <= 180);
+        return (\is_numeric($lng) && $lng >= -180 && $lng <= 180);
     }
 
     /**
@@ -112,6 +112,6 @@ class jjwg_Markers extends jjwg_Markers_sugar
      */
     public function is_valid_lat($lat)
     {
-        return (is_numeric($lat) && $lat >= -90 && $lat <= 90);
+        return (\is_numeric($lat) && $lat >= -90 && $lat <= 90);
     }
 }

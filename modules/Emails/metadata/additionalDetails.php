@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -62,10 +62,10 @@ function additionalDetailsEmail($fields)
             $overlib_string .= '<br>';
         }
         $overlib_string .= '<b>'.$mod_strings['LBL_BODY'].'</b><br>';
-        $descH = strip_tags($fields['DESCRIPTION_HTML'], '<a>');
-        $desc = str_replace($newLines, ' ', $descH);
-        $overlib_string .= substr($desc, 0, 300);
-        if (strlen($descH) > 300) {
+        $descH = \strip_tags($fields['DESCRIPTION_HTML'], '<a>');
+        $desc = \str_replace($newLines, ' ', $descH);
+        $overlib_string .= \substr($desc, 0, 300);
+        if (\strlen($descH) > 300) {
             $overlib_string .= '...';
         }
     } elseif (!empty($fields['DESCRIPTION'])) {
@@ -73,11 +73,11 @@ function additionalDetailsEmail($fields)
             $overlib_string .= '<br>';
         }
         $overlib_string .= '<b>'.$mod_strings['LBL_BODY'].'</b><br>';
-        $descH = strip_tags(nl2br($fields['DESCRIPTION']));
-        $desc = str_replace($newLines, ' ', $descH);
-        $overlib_string .= substr($desc, 0, 300);
-        $overlib_string .= substr($desc, 0, 300);
-        if (strlen($descH) > 300) {
+        $descH = \strip_tags(\nl2br($fields['DESCRIPTION']));
+        $desc = \str_replace($newLines, ' ', $descH);
+        $overlib_string .= \substr($desc, 0, 300);
+        $overlib_string .= \substr($desc, 0, 300);
+        if (\strlen($descH) > 300) {
             $overlib_string .= '...';
         }
     }

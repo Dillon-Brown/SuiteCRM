@@ -61,7 +61,7 @@ class Paths
      */
     public function getLibraryPath()
     {
-        return realpath(dirname(__DIR__));
+        return \realpath(\dirname(__DIR__));
     }
 
     /**
@@ -71,8 +71,8 @@ class Paths
     {
         $projectPath = $this->getProjectPath();
         $libPath = $this->getLibraryPath();
-        $customLibraryPath = str_replace($projectPath, $projectPath . DIRECTORY_SEPARATOR . 'custom', $libPath);
-        return realpath($customLibraryPath);
+        $customLibraryPath = \str_replace($projectPath, $projectPath . DIRECTORY_SEPARATOR . 'custom', $libPath);
+        return \realpath($customLibraryPath);
     }
 
     /**
@@ -80,6 +80,6 @@ class Paths
      */
     public function getProjectPath()
     {
-        return realpath(dirname($this->getLibraryPath()));
+        return \realpath(\dirname($this->getLibraryPath()));
     }
 }

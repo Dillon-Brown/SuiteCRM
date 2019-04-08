@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -51,8 +51,8 @@ $uh = new UpgradeHistory();
 function unlinkTempFiles()
 {
     global $sugar_config;
-    @unlink($_FILES['upgrade_zip']['tmp_name']);
-    @unlink("upload://".$_FILES['upgrade_zip']['name']);
+    @\unlink($_FILES['upgrade_zip']['tmp_name']);
+    @\unlink("upload://".$_FILES['upgrade_zip']['name']);
 }
 
 $base_upgrade_dir       = "upload://upgrades";
@@ -60,7 +60,7 @@ $base_tmp_upgrade_dir   = sugar_cached('upgrades/temp');
 
 // make sure dirs exist
 foreach ($GLOBALS['subdirs'] as $subdir) {
-    if (!file_exists("$base_upgrade_dir/$subdir")) {
+    if (!\file_exists("$base_upgrade_dir/$subdir")) {
         sugar_mkdir("$base_upgrade_dir/$subdir", 0770, true);
     }
 }
@@ -80,14 +80,14 @@ if ($view == "module") {
 // check that the upload limit is set to 6M or greater
 //
 
-define('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES', 6 * 1024 * 1024);  // 6 Megabytes
+\define('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES', 6 * 1024 * 1024);  // 6 Megabytes
 
-$upload_max_filesize = ini_get('upload_max_filesize');
+$upload_max_filesize = \ini_get('upload_max_filesize');
 $upload_max_filesize_bytes = return_bytes($upload_max_filesize);
-if ($upload_max_filesize_bytes < constant('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
+if ($upload_max_filesize_bytes < \constant('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
     $GLOBALS['log']->debug("detected upload_max_filesize: $upload_max_filesize");
     print('<p class="error">' . $mod_strings['MSG_INCREASE_UPLOAD_MAX_FILESIZE'] . ' '
-        . get_cfg_var('cfg_file_path') . "</p>\n");
+        . \get_cfg_var('cfg_file_path') . "</p>\n");
 }
 
 //
@@ -104,20 +104,20 @@ if (isset($_REQUEST['run']) && ($_REQUEST['run'] != "")) {
             $pm = new PackageManager();
             $tempFile = $pm->download('', '', $_REQUEST['release_id']);
             $perform = true;
-            $base_filename = urldecode($tempFile);
+            $base_filename = \urldecode($tempFile);
         } elseif (!empty($_REQUEST['load_module_from_dir'])) {
             //copy file to proper location then call performSetup
-            copy($_REQUEST['load_module_from_dir'].'/'.$_REQUEST['upgrade_zip_escaped'], "upload://".$_REQUEST['upgrade_zip_escaped']);
+            \copy($_REQUEST['load_module_from_dir'].'/'.$_REQUEST['upgrade_zip_escaped'], "upload://".$_REQUEST['upgrade_zip_escaped']);
 
             $perform = true;
-            $base_filename = urldecode($_REQUEST['upgrade_zip_escaped']);
+            $base_filename = \urldecode($_REQUEST['upgrade_zip_escaped']);
         } else {
             if (empty($_FILES['upgrade_zip']['tmp_name'])) {
                 echo $mod_strings['ERR_UW_NO_UPLOAD_FILE'];
             } else {
                 $upload = new UploadFile('upgrade_zip');
                 if (!$upload->confirm_upload() ||
-                    strtolower(pathinfo($upload->get_stored_file_name(), PATHINFO_EXTENSION)) != 'zip' ||
+                    \strtolower(\pathinfo($upload->get_stored_file_name(), PATHINFO_EXTENSION)) != 'zip' ||
                     !$upload->final_move($upload->get_stored_file_name())
                     ) {
                     unlinkTempFiles();
@@ -125,13 +125,13 @@ if (isset($_REQUEST['run']) && ($_REQUEST['run'] != "")) {
                 } else {
                     $tempFile = "upload://".$upload->get_stored_file_name();
                     $perform = true;
-                    $base_filename = urldecode($_REQUEST['upgrade_zip_escaped']);
+                    $base_filename = \urldecode($_REQUEST['upgrade_zip_escaped']);
                 }
             }
         }
         if ($perform) {
             $manifest_file = extractManifest($tempFile);
-            if (is_file($manifest_file)) {
+            if (\is_file($manifest_file)) {
                 //SCAN THE MANIFEST FILE TO MAKE SURE NO COPIES OR ANYTHING ARE HAPPENING IN IT
                 $ms = new ModuleScanner();
                 $ms->lockConfig();
@@ -164,7 +164,7 @@ if (isset($_REQUEST['run']) && ($_REQUEST['run'] != "")) {
                     }
                 }
 
-                $base_filename = pathinfo($tempFile, PATHINFO_BASENAME);
+                $base_filename = \pathinfo($tempFile, PATHINFO_BASENAME);
 
                 mkdir_recursive("$base_upgrade_dir/$upgrade_zip_type");
                 $target_path = "$base_upgrade_dir/$upgrade_zip_type/$base_filename";
@@ -172,11 +172,11 @@ if (isset($_REQUEST['run']) && ($_REQUEST['run'] != "")) {
 
                 if (isset($manifest['icon']) && $manifest['icon'] != "") {
                     $icon_location = extractFile($tempFile, $manifest['icon']);
-                    copy($icon_location, remove_file_extension($target_path)."-icon.".pathinfo($icon_location, PATHINFO_EXTENSION));
+                    \copy($icon_location, remove_file_extension($target_path)."-icon.".\pathinfo($icon_location, PATHINFO_EXTENSION));
                 }
 
-                if (rename($tempFile, $target_path)) {
-                    copy($manifest_file, $target_manifest);
+                if (\rename($tempFile, $target_path)) {
+                    \copy($manifest_file, $target_manifest);
                     $GLOBALS['ML_STATUS_MESSAGE'] = $base_filename.$mod_strings['LBL_UW_UPLOAD_SUCCESS'];
                 } else {
                     $GLOBALS['ML_STATUS_MESSAGE'] = $mod_strings['ERR_UW_UPLOAD_ERROR'];
@@ -193,13 +193,13 @@ if (isset($_REQUEST['run']) && ($_REQUEST['run'] != "")) {
 
         $delete_me = hashToFile($delete_me);
 
-        $checkFile = strtolower($delete_me);
+        $checkFile = \strtolower($delete_me);
 
-        if (substr($delete_me, -4) != ".zip" || substr($delete_me, 0, 9) != "upload://" ||
-        strpos($checkFile, "..") !== false || !file_exists($checkFile)) {
+        if (\substr($delete_me, -4) != ".zip" || \substr($delete_me, 0, 9) != "upload://" ||
+        \strpos($checkFile, "..") !== false || !\file_exists($checkFile)) {
             die("<span class='error'>File is not a zipped archive.</span>");
         }
-        if (unlink($delete_me)) { // successful deletion?
+        if (\unlink($delete_me)) { // successful deletion?
             echo "Package $delete_me has been removed.<br>";
         } else {
             die("Problem removing package $delete_me.");
@@ -219,9 +219,9 @@ if (!empty($GLOBALS['sugar_config']['use_common_ml_dir']) && $GLOBALS['sugar_con
     $form = '<form name="move_form" action="index.php?module=Administration&view=module&action=UpgradeWizard" method="post"  ><input type=hidden name="run" value="upload" /><input type=hidden name="load_module_from_dir" id="load_module_from_dir" value="'.$GLOBALS['sugar_config']['common_ml_dir'].'" /><input type=hidden name="upgrade_zip_escaped" value="" />';
     $form .= '<br>'.$mod_strings['LBL_MODULE_UPLOAD_DISABLE_HELP_TEXT'].'</br>';
     $form .='<table width="100%" class="edit view"><tr><th align="left">'.$mod_strings['LBL_ML_NAME'].'</th><th align="left">'.$mod_strings['LBL_ML_ACTION'].'</th></tr>';
-    if ($handle = opendir($GLOBALS['sugar_config']['common_ml_dir'])) {
-        while (false !== ($filename = readdir($handle))) {
-            if ($filename == '.' || $filename == '..' || !preg_match("#.*\.zip\$#", $filename)) {
+    if ($handle = \opendir($GLOBALS['sugar_config']['common_ml_dir'])) {
+        while (false !== ($filename = \readdir($handle))) {
+            if ($filename == '.' || $filename == '..' || !\preg_match("#.*\.zip\$#", $filename)) {
                 continue;
             }
             $form .= '<tr><td>'.$filename.'</td><td><input type=button class="button" value="'.$mod_strings['LBL_UW_BTN_UPLOAD'].'" onClick="document.move_form.upgrade_zip_escaped.value = escape( \''.$filename.'\');document.move_form.submit();" /></td></tr>';

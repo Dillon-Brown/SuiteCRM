@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -97,7 +97,7 @@ class Currency extends SugarBean
      */
     public function convertToDollar($amount, $precision = 6)
     {
-        return $this->conversion_rate ? round(($amount / $this->conversion_rate), $precision) : 0;
+        return $this->conversion_rate ? \round(($amount / $this->conversion_rate), $precision) : 0;
     }
 
     /**
@@ -111,7 +111,7 @@ class Currency extends SugarBean
      */
     public function convertFromDollar($amount, $precision = 6)
     {
-        return round(($amount * $this->conversion_rate), $precision);
+        return \round(($amount * $this->conversion_rate), $precision);
     }
 
     /**
@@ -238,7 +238,7 @@ class Currency extends SugarBean
     public function getPdfCurrencySymbol()
     {
         if ($this->symbol == '&#8364;' || $this->symbol == '€') {
-            return chr(2);
+            return \chr(2);
         }
         return $this->symbol;
     }
@@ -270,12 +270,12 @@ class Currency extends SugarBean
 function currency_format_number($amount, $params = array())
 {
     global $locale;
-    if (isset($params['round']) && is_int($params['round'])) {
+    if (isset($params['round']) && \is_int($params['round'])) {
         $real_round = $params['round'];
     } else {
         $real_round = $locale->getPrecedentPreference('default_currency_significant_digits');
     }
-    if (isset($params['decimals']) && is_int($params['decimals'])) {
+    if (isset($params['decimals']) && \is_int($params['decimals'])) {
         $real_decimals = $params['decimals'];
     } else {
         $real_decimals = $locale->getPrecedentPreference('default_currency_significant_digits');
@@ -342,10 +342,10 @@ function format_number($amount, $round = null, $decimals = null, $params = array
     $dec_sep = $seps[1];
 
     // cn: bug 8522 - sig digits not honored in pdfs
-    if (is_null($decimals)) {
+    if (\is_null($decimals)) {
         $decimals = $locale->getPrecision();
     }
-    if (is_null($round)) {
+    if (\is_null($round)) {
         $round = $locale->getPrecision();
     }
 
@@ -400,17 +400,17 @@ function format_number($amount, $round = null, $decimals = null, $params = array
     }
 
     if (empty($params['human'])) {
-        $amount = number_format(round($amount, $round), $decimals, $dec_sep, $num_grp_sep);
+        $amount = \number_format(\round($amount, $round), $decimals, $dec_sep, $num_grp_sep);
         $amount = format_place_symbol($amount, $symbol, (empty($params['symbol_space']) ? false : true));
     } else {
         // If amount is more greater than a thousand(positive or negative)
-        if (strpos($amount, '.') > 0) {
-            $checkAmount = strlen(substr($amount, 0, strpos($amount, '.')));
+        if (\strpos($amount, '.') > 0) {
+            $checkAmount = \strlen(\substr($amount, 0, \strpos($amount, '.')));
         }
 
         if ($checkAmount >= 1000 || $checkAmount <= -1000) {
-            $amount = round(($amount / 1000), 0);
-            $amount = number_format($amount, 0, $dec_sep, $num_grp_sep); // add for SI bug 52498
+            $amount = \round(($amount / 1000), 0);
+            $amount = \number_format($amount, 0, $dec_sep, $num_grp_sep); // add for SI bug 52498
             $amount = $amount . 'k';
             $amount = format_place_symbol($amount, $symbol, (empty($params['symbol_space']) ? false : true));
         } else {
@@ -441,7 +441,7 @@ function format_place_symbol($amount, $symbol, $symbol_space)
 function unformat_number($string)
 {
     // Just in case someone passes an already unformatted number through.
-    if (!is_string($string)) {
+    if (!\is_string($string)) {
         return $string;
     }
 
@@ -462,13 +462,13 @@ function unformat_number($string)
 
     $seps = get_number_seperators();
     // remove num_grp_sep and replace decimal separator with decimal
-    $string = trim(str_replace(array($seps[0], $seps[1], $currency->symbol), array('', '.', ''), $string));
-    if (preg_match('/^[+-]?\d(\.\d+)?[Ee]([+-]?\d+)?$/', $string)) {
-        $string = sprintf("%.0f", $string);
+    $string = \trim(\str_replace(array($seps[0], $seps[1], $currency->symbol), array('', '.', ''), $string));
+    if (\preg_match('/^[+-]?\d(\.\d+)?[Ee]([+-]?\d+)?$/', $string)) {
+        $string = \sprintf("%.0f", $string);
     }//for scientific number format. After round(), we may get this number type.
-    preg_match('/[\-\+]?[0-9\.]*/', $string, $string);
+    \preg_match('/[\-\+]?[0-9\.]*/', $string, $string);
 
-    $out_number = trim($string[0]);
+    $out_number = \trim($string[0]);
     if ($out_number == '') {
         return '';
     }
@@ -483,11 +483,11 @@ function format_money($amount, $for_display = true)
     // Currently, it stays closer to the existing format, and just rounds to two decimal points
     if (isset($amount)) {
         if ($for_display) {
-            return sprintf("%0.02f", $amount);
+            return \sprintf("%0.02f", $amount);
         }
         // If it's an editable field, don't use a thousand seperator.
         // Or perhaps we will want to, but it doesn't matter right now.
-        return sprintf("%0.02f", $amount);
+        return \sprintf("%0.02f", $amount);
     }
     return;
 }
@@ -554,7 +554,7 @@ function toString($echo = true)
 
 function getCurrencyDropDown($focus, $field='currency_id', $value='', $view='DetailView')
 {
-    $view = ucfirst($view);
+    $view = \ucfirst($view);
     if ($view == 'EditView' || $view == 'MassUpdate' || $view == 'QuickCreate' || $view == 'ConvertLead') {
         if (isset($_REQUEST[$field]) && !empty($_REQUEST[$field])) {
             $value = $_REQUEST[$field];
@@ -573,10 +573,10 @@ function getCurrencyDropDown($focus, $field='currency_id', $value='', $view='Det
             LoggerManager::getLogger()->warn('Currency Dorp-down error: Focus not defined.');
             $defs = null;
         } elseif (!isset($focus->field_defs)) {
-            LoggerManager::getLogger()->warn('Currency Dorp-down error: Undefined field definition for focus. Focus was: ' . get_class($focus));
+            LoggerManager::getLogger()->warn('Currency Dorp-down error: Undefined field definition for focus. Focus was: ' . \get_class($focus));
             $defs = null;
-        } elseif (!is_object($focus)) {
-            LoggerManager::getLogger()->warn('Currency Dorp-down error: Focus is not an object. Given type of focus was: ' . gettype($focus));
+        } elseif (!\is_object($focus)) {
+            LoggerManager::getLogger()->warn('Currency Dorp-down error: Focus is not an object. Given type of focus was: ' . \gettype($focus));
             $defs = null;
         } else {
             $defs = isset($focus->field_defs) ? $focus->field_defs : null;
@@ -623,10 +623,10 @@ function getCurrencyNameDropDown($focus, $field='currency_name', $value='', $vie
             LoggerManager::getLogger()->warn('Currency Dorp-down error: Focus not defined.');
             $defs = null;
         } elseif (!isset($focus->field_defs)) {
-            LoggerManager::getLogger()->warn('Currency Dorp-down error: Undefined field definition for focus. Focus was: ' . get_class($focus));
+            LoggerManager::getLogger()->warn('Currency Dorp-down error: Undefined field definition for focus. Focus was: ' . \get_class($focus));
             $defs = null;
-        } elseif (!is_object($focus)) {
-            LoggerManager::getLogger()->warn('Currency Dorp-down error: Focus is not an object. Given type of focus was: ' . gettype($focus));
+        } elseif (!\is_object($focus)) {
+            LoggerManager::getLogger()->warn('Currency Dorp-down error: Focus is not an object. Given type of focus was: ' . \gettype($focus));
             $defs = null;
         } else {
             $defs = isset($focus->field_defs) ? $focus->field_defs : null;
@@ -668,10 +668,10 @@ function getCurrencySymbolDropDown($focus, $field='currency_name', $value='', $v
             LoggerManager::getLogger()->warn('Currency Dorp-down error: Focus not defined.');
             $defs = null;
         } elseif (!isset($focus->field_defs)) {
-            LoggerManager::getLogger()->warn('Currency Dorp-down error: Undefined field definition for focus. Focus was: ' . get_class($focus));
+            LoggerManager::getLogger()->warn('Currency Dorp-down error: Undefined field definition for focus. Focus was: ' . \get_class($focus));
             $defs = null;
-        } elseif (!is_object($focus)) {
-            LoggerManager::getLogger()->warn('Currency Dorp-down error: Focus is not an object. Given type of focus was: ' . gettype($focus));
+        } elseif (!\is_object($focus)) {
+            LoggerManager::getLogger()->warn('Currency Dorp-down error: Focus is not an object. Given type of focus was: ' . \gettype($focus));
             $defs = null;
         } else {
             $defs = isset($focus->field_defs) ? $focus->field_defs : null;

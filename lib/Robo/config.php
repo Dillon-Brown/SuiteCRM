@@ -37,18 +37,18 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-$root = dirname(dirname(__DIR__));
+$root = \dirname(\dirname(__DIR__));
 $sugar_config = array();
 // get config
-if (!defined('sugarEntry') || !sugarEntry) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry') || !sugarEntry) {
+    \define('sugarEntry', true);
 }
 // config|_override.php
-if (is_file($root . '/config.php')) {
+if (\is_file($root . '/config.php')) {
     require_once $root . '/config.php';
 }
 
-if (is_file($root . '/config_override.php')) {
+if (\is_file($root . '/config_override.php')) {
     require_once $root . '/config_override.php';
 }
 

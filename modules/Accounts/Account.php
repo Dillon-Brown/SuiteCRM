@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -174,7 +174,7 @@ class Account extends Company implements EmailInterface
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -276,11 +276,11 @@ class Account extends Company implements EmailInterface
     {
         $where_clauses = array();
         $the_query_string = $this->db->quote($the_query_string);
-        array_push($where_clauses, "accounts.name like '$the_query_string%'");
-        if (is_numeric($the_query_string)) {
-            array_push($where_clauses, "accounts.phone_alternate like '%$the_query_string%'");
-            array_push($where_clauses, "accounts.phone_fax like '%$the_query_string%'");
-            array_push($where_clauses, "accounts.phone_office like '%$the_query_string%'");
+        \array_push($where_clauses, "accounts.name like '$the_query_string%'");
+        if (\is_numeric($the_query_string)) {
+            \array_push($where_clauses, "accounts.phone_alternate like '%$the_query_string%'");
+            \array_push($where_clauses, "accounts.phone_fax like '%$the_query_string%'");
+            \array_push($where_clauses, "accounts.phone_office like '%$the_query_string%'");
         }
 
         $the_where = "";
@@ -299,21 +299,21 @@ class Account extends Company implements EmailInterface
     {
         $relatedJoins = [];
         $relatedSelects = [];
-        foreach (explode('AND', $where) as $whereClause) {
-            $newWhereClause = str_replace('( ', '(', $whereClause);
+        foreach (\explode('AND', $where) as $whereClause) {
+            $newWhereClause = \str_replace('( ', '(', $whereClause);
             foreach ($this->field_defs as $field_def) {
                 $needle = '(' . $field_def['name'] . ' like';
-                if (strpos($newWhereClause, $needle) !== false) {
-                    $joinAlias = 'rjt' . count($relatedJoins);
+                if (\strpos($newWhereClause, $needle) !== false) {
+                    $joinAlias = 'rjt' . \count($relatedJoins);
                     $relatedJoins[] = ' LEFT JOIN ' . $field_def['table'] . ' as ' . $joinAlias . ' on ' .
                             $joinAlias . '.id ' . ' = accounts.' . $field_def['id_name'] . ' ';
                     $relatedSelects[] = ' ,' . $joinAlias . '.id ,' . $joinAlias . '.' . $field_def['rname'] . ' ';
-                    $newWhereClause = str_replace(
+                    $newWhereClause = \str_replace(
                             $field_def['name'],
                             $joinAlias . '.' . $field_def['rname'],
                             $newWhereClause
                         );
-                    $where = str_replace($whereClause, $newWhereClause, $where);
+                    $where = \str_replace($whereClause, $newWhereClause, $where);
                 }
             }
         }
@@ -328,7 +328,7 @@ class Account extends Company implements EmailInterface
                                 users.user_name as assigned_user_name ";
         $query .= $custom_join['select'];
 
-        $query .= implode('', $relatedSelects);
+        $query .= \implode('', $relatedSelects);
 
         $query .= " FROM accounts ";
         $query .= "LEFT JOIN users
@@ -338,7 +338,7 @@ class Account extends Company implements EmailInterface
         $query .=  ' LEFT JOIN  email_addr_bean_rel on accounts.id = email_addr_bean_rel.bean_id and email_addr_bean_rel.bean_module=\'Accounts\' and email_addr_bean_rel.deleted=0 and email_addr_bean_rel.primary_address=1 ';
         $query .=  ' LEFT JOIN email_addresses on email_addresses.id = email_addr_bean_rel.email_address_id ' ;
 
-        $query .= implode('', $relatedJoins);
+        $query .= \implode('', $relatedJoins);
 
         $query .= $custom_join['join'];
 

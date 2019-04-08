@@ -1,5 +1,5 @@
 <?php
-if (! defined('sugarEntry') || ! sugarEntry) {
+if (! \defined('sugarEntry') || ! sugarEntry) {
     die('Not A Valid Entry Point') ;
 }
 
@@ -48,7 +48,7 @@ function get_body(&$ss, $vardef)
     $modules = array( ) ;
     
     require_once 'modules/ModuleBuilder/parsers/relationships/DeployedRelationships.php' ;
-    $relatableModules = array_keys(DeployedRelationships::findRelatableModules()) ;
+    $relatableModules = \array_keys(DeployedRelationships::findRelatableModules()) ;
     
     foreach ($relatableModules as $module) {
         $modules [ $module ] = translate('LBL_MODULE_NAME', $module) ;
@@ -67,7 +67,7 @@ function get_body(&$ss, $vardef)
     
     // C.L. - Merge from studio_rel_user branch
     $modules['Users'] = translate('LBL_MODULE_NAME', 'Users');
-    asort($modules);
+    \asort($modules);
 
     $ss->assign('modules', $modules) ;
     

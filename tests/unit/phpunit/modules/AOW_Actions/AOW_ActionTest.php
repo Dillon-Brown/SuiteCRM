@@ -54,7 +54,7 @@ class AOW_ActionTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //get the linked beans and verify if records created
         $aow_actions = $aowWorkFlow->get_linked_beans('aow_actions', $aowWorkFlow->object_name);
-        $this->assertEquals(count($post_data['action']), count($aow_actions));
+        $this->assertEquals(\count($post_data['action']), \count($aow_actions));
 
         //cleanup afterwards
         foreach ($aow_actions as $lineItem) {

@@ -167,7 +167,7 @@ class CurrencyTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($currency->id));
-        $this->assertEquals(36, strlen($currency->id));
+        $this->assertEquals(36, \strlen($currency->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $currency->mark_deleted($currency->id);

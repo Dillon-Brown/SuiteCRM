@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -46,6 +46,6 @@ class TemplateEmail extends TemplateText
 {
     public function get_html_detail()
     {
-        return '<a href="mailto:{'. strtoupper($this->name).'}">{'. strtoupper($this->name).'}</a>';
+        return '<a href="mailto:{'. \strtoupper($this->name).'}">{'. \strtoupper($this->name).'}</a>';
     }
 }

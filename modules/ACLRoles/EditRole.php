@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -93,7 +93,7 @@ if (isset($_REQUEST['return_module'])) {
 $sugar_smarty->assign('RETURN', $return);
 $names = ACLAction::setupCategoriesMatrix($categories);
 if (!empty($names)) {
-    $tdwidth = 100 / sizeof($names);
+    $tdwidth = 100 / \sizeof($names);
 }
 $sugar_smarty->assign('CATEGORIES', $categories);
 $sugar_smarty->assign('CATEGORY_NAME', $_REQUEST['category_name']);
@@ -101,7 +101,7 @@ $sugar_smarty->assign('TDWIDTH', $tdwidth);
 $sugar_smarty->assign('ACTION_NAMES', $names);
 $actions = $categories[$_REQUEST['category_name']]['module'];
 $sugar_smarty->assign('ACTIONS', $actions);
-ob_clean();
+\ob_clean();
 
 if ($_REQUEST['category_name'] == 'All') {
     echo $sugar_smarty->fetch('modules/ACLRoles/EditAllBody.tpl');

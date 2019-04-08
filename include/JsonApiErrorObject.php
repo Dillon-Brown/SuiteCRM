@@ -44,7 +44,7 @@ use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use SuiteCRM\API\v8\Exception\ApiException;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -283,7 +283,7 @@ class JsonApiErrorObject
      */
     protected function isValidId($id)
     {
-        return is_string($id) || is_numeric($id);
+        return \is_string($id) || \is_numeric($id);
     }
 
     /**
@@ -293,7 +293,7 @@ class JsonApiErrorObject
      */
     protected function isValidCode($code)
     {
-        return is_string($code) || is_numeric($code);
+        return \is_string($code) || \is_numeric($code);
     }
 
     /**
@@ -303,7 +303,7 @@ class JsonApiErrorObject
      */
     protected function isValidStatus($status)
     {
-        return is_string($status) || is_numeric($status);
+        return \is_string($status) || \is_numeric($status);
     }
 
     /**
@@ -313,7 +313,7 @@ class JsonApiErrorObject
      */
     protected function isValidLinks($links)
     {
-        return is_array($links) && isset($links['about']);
+        return \is_array($links) && isset($links['about']);
     }
 
     /**
@@ -323,7 +323,7 @@ class JsonApiErrorObject
      */
     protected function isValidSource($source)
     {
-        return is_array($source) && isset($source['pointer']) && isset($source['parameter']);
+        return \is_array($source) && isset($source['pointer']) && isset($source['parameter']);
     }
 
     /**
@@ -333,7 +333,7 @@ class JsonApiErrorObject
      */
     protected function getValidMeta($meta)
     {
-        return is_array($meta);
+        return \is_array($meta);
     }
 
     /**
@@ -506,10 +506,10 @@ class JsonApiErrorObject
      */
     public function exportJson()
     {
-        $json = json_encode($this->export());
-        $error = json_last_error();
+        $json = \json_encode($this->export());
+        $error = \json_last_error();
         if ($error !== JSON_ERROR_NONE) {
-            ErrorMessage::log('API Error Object JSON export error: ' . json_last_error_msg());
+            ErrorMessage::log('API Error Object JSON export error: ' . \json_last_error_msg());
         }
         return $json;
     }
@@ -524,7 +524,7 @@ class JsonApiErrorObject
     {
         $meta = [
             'about' => 'Exception',
-            'class' => get_class($e),
+            'class' => \get_class($e),
             'code' => $e->getCode(),
         ];
         

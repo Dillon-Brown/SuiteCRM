@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -79,4 +79,4 @@ $GLOBALS['log']->debug("Saved record with id of ".$recordID);
 $header_URL = "Location: index.php?action={$_REQUEST['return_action']}&module={$_REQUEST['return_module']}&record={$_REQUEST['return_id']}";
 $GLOBALS['log']->debug("about to post header URL of: $header_URL");
 
-header($header_URL);
+\header($header_URL);

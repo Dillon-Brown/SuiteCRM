@@ -123,7 +123,7 @@ $dictionary['AOBH_BusinessHours'] = array(
     'optimistic_locking' => true,
     'unified_search' => false,
 );
-if (!class_exists('VardefManager')) {
+if (!\class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('AOBH_BusinessHours', 'AOBH_BusinessHours', array('basic'));

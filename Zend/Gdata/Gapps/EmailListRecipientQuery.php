@@ -121,7 +121,7 @@ class Zend_Gdata_Gapps_EmailListRecipientQuery extends Zend_Gdata_Gapps_Query
      */
     public function getStartRecipient()
     {
-        if (array_key_exists('startRecipient', $this->_params)) {
+        if (\array_key_exists('startRecipient', $this->_params)) {
             return $this->_params['startRecipient'];
         } else {
             return null;

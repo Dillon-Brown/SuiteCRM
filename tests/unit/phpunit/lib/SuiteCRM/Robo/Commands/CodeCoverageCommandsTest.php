@@ -31,7 +31,7 @@ class CodeCoverageCommandsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstr
             self::$testClass
         );
 
-        $returnType = is_string($actual) || is_array($actual) || is_bool($actual);
+        $returnType = \is_string($actual) || \is_array($actual) || \is_bool($actual);
         $this->assertTrue($returnType);
     }
 
@@ -45,7 +45,7 @@ class CodeCoverageCommandsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstr
             self::$testClass
         );
 
-        $returnType = is_string($actual) || is_array($actual) || is_bool($actual);
+        $returnType = \is_string($actual) || \is_array($actual) || \is_bool($actual);
         $this->assertTrue($returnType);
     }
 
@@ -54,7 +54,7 @@ class CodeCoverageCommandsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstr
         // backup configure override
         $configOverrideData = '';
         $configOverridePath = 'config_override.php';
-        if (file_exists($configOverridePath)) {
+        if (\file_exists($configOverridePath)) {
             $configOverrideData = \file_get_contents($configOverridePath);
         }
 

@@ -99,18 +99,18 @@ class Zend_Gdata_HttpClient extends Zend_Http_Client
         $passphrase = null,
                                              $useIncludePath = false
     ) {
-        $fp = @fopen($file, "r", $useIncludePath);
+        $fp = @\fopen($file, "r", $useIncludePath);
         if (!$fp) {
             require_once 'Zend/Gdata/App/InvalidArgumentException.php';
             throw new Zend_Gdata_App_InvalidArgumentException('Failed to open private key file for AuthSub.');
         }
 
         $key = '';
-        while (!feof($fp)) {
-            $key .= fread($fp, 8192);
+        while (!\feof($fp)) {
+            $key .= \fread($fp, 8192);
         }
         $this->setAuthSubPrivateKey($key, $passphrase);
-        fclose($fp);
+        \fclose($fp);
     }
 
     /**
@@ -127,14 +127,14 @@ class Zend_Gdata_HttpClient extends Zend_Http_Client
      */
     public function setAuthSubPrivateKey($key, $passphrase = null)
     {
-        if ($key != null && !function_exists('openssl_pkey_get_private')) {
+        if ($key != null && !\function_exists('openssl_pkey_get_private')) {
             require_once 'Zend/Gdata/App/InvalidArgumentException.php';
             throw new Zend_Gdata_App_InvalidArgumentException(
                     'You cannot enable secure AuthSub if the openssl module ' .
                     'is not enabled in your PHP installation.'
             );
         }
-        $this->_authSubPrivateKeyId = openssl_pkey_get_private(
+        $this->_authSubPrivateKeyId = \openssl_pkey_get_private(
                 $key,
             $passphrase
         );
@@ -222,13 +222,13 @@ class Zend_Gdata_HttpClient extends Zend_Http_Client
             // AuthSub authentication
             if ($this->getAuthSubPrivateKeyId() != null) {
                 // secure AuthSub
-                $time = time();
-                $nonce = mt_rand(0, 999999999);
+                $time = \time();
+                $nonce = \mt_rand(0, 999999999);
                 $dataToSign = $method . ' ' . $url . ' ' . $time . ' ' . $nonce;
 
                 // compute signature
                 $pKeyId = $this->getAuthSubPrivateKeyId();
-                $signSuccess = openssl_sign(
+                $signSuccess = \openssl_sign(
                     $dataToSign,
                     $signature,
                     $pKeyId,
@@ -241,7 +241,7 @@ class Zend_Gdata_HttpClient extends Zend_Http_Client
                     );
                 }
                 // encode signature
-                $encodedSignature = base64_encode($signature);
+                $encodedSignature = \base64_encode($signature);
 
                 // final header
                 $headers['authorization'] = 'AuthSub token="' . $this->getAuthSubToken() . '" ' .

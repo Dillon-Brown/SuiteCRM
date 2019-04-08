@@ -54,7 +54,7 @@ class DocumentTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($document->id));
-        $this->assertEquals(36, strlen($document->id));
+        $this->assertEquals(36, \strlen($document->id));
 
         //execute Get_document_name() method and verify it gets the name correctly
         $this->assertEquals(null, $document->get_document_name(1));

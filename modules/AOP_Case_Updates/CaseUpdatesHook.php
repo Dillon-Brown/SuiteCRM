@@ -65,7 +65,7 @@ class CaseUpdatesHook
         $count = 0;
         foreach ($_FILES['case_update_file'] as $key => $vals) {
             foreach ($vals as $index => $val) {
-                if (!array_key_exists('case_update_file' . $index, $_FILES)) {
+                if (!\array_key_exists('case_update_file' . $index, $_FILES)) {
                     $_FILES['case_update_file' . $index] = array();
                     ++$count;
                 }
@@ -117,10 +117,10 @@ class CaseUpdatesHook
         $case_update->internal = $case->internal;
         $case->internal = false;
         $case_update->assigned_user_id = $current_user->id;
-        if (strlen($text) > $this->slug_size) {
-            $case_update->name = substr($text, 0, $this->slug_size) . '...';
+        if (\strlen($text) > $this->slug_size) {
+            $case_update->name = \substr($text, 0, $this->slug_size) . '...';
         }
-        $case_update->description = nl2br($text);
+        $case_update->description = \nl2br($text);
         $case_update->case_id = $case->id;
         $case_update->save();
 
@@ -143,7 +143,7 @@ class CaseUpdatesHook
         }
         $postPrefix = 'case_update_id_';
         foreach ($_POST as $key => $val) {
-            if (empty($val) || strpos($key, $postPrefix) !== 0) {
+            if (empty($val) || \strpos($key, $postPrefix) !== 0) {
                 continue;
             }
             //Val is selected doc id
@@ -158,7 +158,7 @@ class CaseUpdatesHook
             $note->save();
             $srcFile = "upload://{$doc->document_revision_id}";
             $destFile = "upload://{$note->id}";
-            copy($srcFile, $destFile);
+            \copy($srcFile, $destFile);
         }
     }
 
@@ -275,7 +275,7 @@ class CaseUpdatesHook
             $newNote->save();
             $srcFile = "upload://{$note->id}";
             $destFile = "upload://{$newNote->id}";
-            copy($srcFile, $destFile);
+            \copy($srcFile, $destFile);
         }
 
         $this->updateCaseStatus($caseUpdate->case_id);
@@ -292,7 +292,7 @@ class CaseUpdatesHook
         if (empty($caseId) || empty($sugar_config['aop']['case_status_changes'])) {
             return;
         }
-        $statusMap = json_decode($sugar_config['aop']['case_status_changes'], 1);
+        $statusMap = \json_decode($sugar_config['aop']['case_status_changes'], 1);
         if (empty($statusMap)) {
             return;
         }
@@ -300,10 +300,10 @@ class CaseUpdatesHook
         if (empty($case->id)) {
             return;
         }
-        if (array_key_exists($case->status, $statusMap)) {
+        if (\array_key_exists($case->status, $statusMap)) {
             $case->status = $statusMap[$case->status];
-            $statusBits = explode('_', $case->status);
-            $case->state = array_shift($statusBits);
+            $statusBits = \explode('_', $case->status);
+            $case->state = \array_shift($statusBits);
             $case->save();
         }
     }
@@ -316,11 +316,11 @@ class CaseUpdatesHook
     private function unquoteEmail($text)
     {
         global $app_strings;
-        $text = html_entity_decode($text);
-        $text = preg_replace('/(\r\n|\r|\n)/s', "\n", $text);
-        $pos = strpos($text, $app_strings['LBL_AOP_EMAIL_REPLY_DELIMITER']);
+        $text = \html_entity_decode($text);
+        $text = \preg_replace('/(\r\n|\r|\n)/s', "\n", $text);
+        $pos = \strpos($text, $app_strings['LBL_AOP_EMAIL_REPLY_DELIMITER']);
         if ($pos !== false) {
-            $text = substr($text, 0, $pos);
+            $text = \substr($text, 0, $pos);
         }
 
         return $text;
@@ -467,7 +467,7 @@ class CaseUpdatesHook
         $ret['subject'] = from_html(aop_parse_template($template->subject, $beans));
         $ret['body'] = from_html(
             $app_strings['LBL_AOP_EMAIL_REPLY_DELIMITER'] . aop_parse_template(
-                str_replace(
+                \str_replace(
                     '$sugarurl',
                     $sugar_config['site_url'],
                     $template->body_html
@@ -475,10 +475,10 @@ class CaseUpdatesHook
                 $beans
             )
         );
-        $ret['body_alt'] = strip_tags(
+        $ret['body_alt'] = \strip_tags(
             from_html(
                 aop_parse_template(
-                    str_replace(
+                    \str_replace(
                         '$sugarurl',
                         $sugar_config['site_url'],
                         $template->body
@@ -497,7 +497,7 @@ class CaseUpdatesHook
     private function getAOPConfig()
     {
         global $sugar_config;
-        if (!array_key_exists('aop', $sugar_config)) {
+        if (!\array_key_exists('aop', $sugar_config)) {
             return array();
         }
 

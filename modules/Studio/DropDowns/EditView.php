@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -64,11 +64,11 @@ if ($selected_lang == $GLOBALS['current_language']) {
     $my_list_strings = return_app_list_strings_language($selected_lang);
 }
 foreach ($my_list_strings as $key=>$value) {
-    if (!is_array($value)) {
+    if (!\is_array($value)) {
         unset($my_list_strings[$key]);
     }
 }
-$modules = array_keys($dh->modules);
+$modules = \array_keys($dh->modules);
 $dropdown_modules = array(''=>$GLOBALS['mod_strings']['LBL_DD_ALL']);
 foreach ($modules as $module) {
     $dropdown_modules[$module] = (!empty($app_list_strings['moduleList'][$module]))?$app_list_strings['moduleList'][$module]: $module;
@@ -78,7 +78,7 @@ if (!empty($_REQUEST['dropdown_module']) &&  !empty($dropdown_modules[$_REQUEST[
     $smarty->assign('dropdown_module', $_REQUEST['dropdown_module']);
     $dropdowns = (!empty($dh->modules[$_REQUEST['dropdown_module']]))?$dh->modules[$_REQUEST['dropdown_module']]: array();
     foreach ($dropdowns as $ok=>$dk) {
-        if (!isset($my_list_strings[$dk]) || !is_array($my_list_strings[$dk])) {
+        if (!isset($my_list_strings[$dk]) || !\is_array($my_list_strings[$dk])) {
             unset($dropdowns[$ok]);
         }
     }
@@ -86,16 +86,16 @@ if (!empty($_REQUEST['dropdown_module']) &&  !empty($dropdown_modules[$_REQUEST[
     if (!empty($_REQUEST['dropdown_module'])) {
         $smarty->assign('error', 'Module does not have any known dropdowns');
     }
-    $dropdowns = array_keys($my_list_strings);
+    $dropdowns = \array_keys($my_list_strings);
 }
-asort($dropdowns);
+\asort($dropdowns);
 if (!empty($_REQUEST['newDropdown'])) {
     $smarty->assign('newDropDown', true);
 } else {
-    $keys = array_keys($dropdowns);
+    $keys = \array_keys($dropdowns);
     $first_string = $dropdowns[$keys[0]];
     $smarty->assign('dropdowns', $dropdowns);
-    if (empty($_REQUEST['dropdown_name']) || !in_array($_REQUEST['dropdown_name'], $dropdowns)) {
+    if (empty($_REQUEST['dropdown_name']) || !\in_array($_REQUEST['dropdown_name'], $dropdowns)) {
         $_REQUEST['dropdown_name'] = $first_string;
     }
     $selected_dropdown = $my_list_strings[$_REQUEST['dropdown_name']];
@@ -115,7 +115,7 @@ if (!empty($_REQUEST['newDropdown'])) {
 }
 
 $smarty->assign('dropdown_languages', get_languages());
-if (strcmp($_REQUEST['dropdown_name'], 'moduleList') == 0) {
+if (\strcmp($_REQUEST['dropdown_name'], 'moduleList') == 0) {
     $smarty->assign('disable_remove', true);
     $smarty->assign('disable_add', true);
     $smarty->assign('use_push', 1);

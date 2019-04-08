@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -116,7 +116,7 @@ class SugarCronJobs
      */
     protected function markLastRun()
     {
-        if (!file_put_contents($this->lockfile, time())) {
+        if (!\file_put_contents($this->lockfile, \time())) {
             $GLOBALS['log']->fatal('Scheduler cannot write PID file.  Please check permissions on '.$this->lockfile);
         }
     }
@@ -131,13 +131,13 @@ class SugarCronJobs
             return true;
         }
         create_cache_directory($this->lockfile);
-        if (!file_exists($this->lockfile)) {
+        if (!\file_exists($this->lockfile)) {
             $this->markLastRun();
             return true;
         }
-        $ts = file_get_contents($this->lockfile);
+        $ts = \file_get_contents($this->lockfile);
         $this->markLastRun();
-        $now = time();
+        $now = \time();
         if ($now - $ts < $this->min_interval) {
             // run too frequently
             return false;
@@ -156,7 +156,7 @@ class SugarCronJobs
         if (!empty($job)) {
             $GLOBALS['log']->fatal("Job {$job->id} ({$job->name}) failed in CRON run");
             if ($this->verbose) {
-                printf(translate('ERR_JOB_FAILED_VERBOSE', 'SchedulersJobs'), $job->id, $job->name);
+                \printf(translate('ERR_JOB_FAILED_VERBOSE', 'SchedulersJobs'), $job->id, $job->name);
             }
         }
     }
@@ -179,7 +179,7 @@ class SugarCronJobs
      */
     public function getMyId()
     {
-        return 'CRON'.$GLOBALS['sugar_config']['unique_key'].':'.getmypid();
+        return 'CRON'.$GLOBALS['sugar_config']['unique_key'].':'.\getmypid();
     }
 
     /**
@@ -193,8 +193,8 @@ class SugarCronJobs
             $this->jobFailed($this->job);
         }
         // If the job produced a session, destroy it - we won't need it anymore
-        if (session_id()) {
-            session_destroy();
+        if (\session_id()) {
+            \session_destroy();
         }
     }
 
@@ -220,8 +220,8 @@ class SugarCronJobs
             $this->queue->runSchedulers();
         }
         // run jobs
-        $cutoff = time()+$this->max_runtime;
-        register_shutdown_function(array($this, "unexpectedExit"));
+        $cutoff = \time()+$this->max_runtime;
+        \register_shutdown_function(array($this, "unexpectedExit"));
         $myid = $this->getMyId();
         for ($count=0;$count<$this->max_jobs;$count++) {
             $this->job = $this->queue->nextJob($myid);
@@ -229,7 +229,7 @@ class SugarCronJobs
                 return;
             }
             $this->executeJob($this->job);
-            if (time() >= $cutoff) {
+            if (\time() >= $cutoff) {
                 break;
             }
         }

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -78,7 +78,7 @@ if (!empty($_REQUEST['identifier'])) {
 
 
 
-if (preg_match('/^[0-9A-Za-z\-]*$/', $track)) {
+if (\preg_match('/^[0-9A-Za-z\-]*$/', $track)) {
     $track = $db->quote($track);
     $query = "SELECT tracker_url FROM campaign_trkrs WHERE id='$track'";
     $res = $db->query($query);

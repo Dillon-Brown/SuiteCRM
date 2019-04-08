@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -42,7 +42,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -83,9 +83,9 @@ class populateSeedData
         while ($this->monitorIds-- > 0) {
             $this->monitorId = create_guid();
             $this->trackerManager->setMonitorId($this->monitorId);
-            $this->user = $this->userDemoData->guids[array_rand($this->userDemoData->guids)];
-            $this->module = $this->modules[array_rand($this->modules)];
-            $this->action = $this->actions[array_rand($this->actions)];
+            $this->user = $this->userDemoData->guids[\array_rand($this->userDemoData->guids)];
+            $this->module = $this->modules[\array_rand($this->modules)];
+            $this->action = $this->actions[\array_rand($this->actions)];
             $this->date = $this->randomTimestamp();
             $this->populate_tracker();
             $this->trackerManager->save();
@@ -101,8 +101,8 @@ class populateSeedData
             $monitor->setValue('visible', (($monitor->action == 'detailview') || ($monitor->action == 'editview')) ? 1 : 0);
             $monitor->setValue('date_modified', $this->randomTimestamp());
             $monitor->setValue('session_id', $this->getSessionId());
-            if ($this->action != 'settimezone' && isset($this->beanIdMap[$this->module][array_rand($this->beanIdMap[$this->module])])) {
-                $monitor->setValue('item_id', $this->beanIdMap[$this->module][array_rand($this->beanIdMap[$this->module])]);
+            if ($this->action != 'settimezone' && isset($this->beanIdMap[$this->module][\array_rand($this->beanIdMap[$this->module])])) {
+                $monitor->setValue('item_id', $this->beanIdMap[$this->module][\array_rand($this->beanIdMap[$this->module])]);
                 $monitor->setValue('item_summary', 'random stuff'); //don't really need this
             }
         }
@@ -113,7 +113,7 @@ class populateSeedData
     {
         global $timedate;
         // 1201852800 is 1 Feb 2008
-        return $timedate->fromTimestamp(rand(1201852800, $timedate->getNow()->ts))->asDb();
+        return $timedate->fromTimestamp(\rand(1201852800, $timedate->getNow()->ts))->asDb();
     }
 
     public function getSessionId()

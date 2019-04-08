@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -71,7 +71,7 @@ class NonDBLocalization extends Localization
         foreach ($options as $key => $val) {
             if ($this->isAllowedNameFormat($key) && $this->isAllowedNameFormat($val)) {
                 $newVal = '';
-                $pieces = str_split($val);
+                $pieces = \str_split($val);
                 foreach ($pieces as $piece) {
                     if (isset($examples[$piece])) {
                         $newVal .= $examples[$piece];
@@ -315,7 +315,7 @@ EOQ2;
 FORM;
                     //if the type is password, set a hidden field to capture the value.  This is so that we can properly encode special characters, which is a limitation with password fields
                     if ($type=='password') {
-                        $form .= "</div><div class=\"install_block\"><label>{$mod_strings['LBL_DBCONF_TITLE_PSWD_INFO_LABEL']}</label><span>&nbsp;</span><input type='$type' name='{$name}_entry' id='{$name}_entry' value='".urldecode($sessval)."'><input type='hidden' name='$name' id='$name' value='".urldecode($sessval)."'></div><div class=\"install_block\">";
+                        $form .= "</div><div class=\"install_block\"><label>{$mod_strings['LBL_DBCONF_TITLE_PSWD_INFO_LABEL']}</label><span>&nbsp;</span><input type='$type' name='{$name}_entry' id='{$name}_entry' value='".\urldecode($sessval)."'><input type='hidden' name='$name' id='$name' value='".\urldecode($sessval)."'></div><div class=\"install_block\">";
                     } else {
                         $form .= "<input type='$type' name='$name' id='$name' value='$sessval'>";
                     }
@@ -350,7 +350,7 @@ FORM;
                 if ($_SESSION['dbUSRData'] == 'provide') {
                     $provide_select = 'selected';
                 }
-                if (isset($_SESSION['install_type']) && !empty($_SESSION['install_type']) && strtolower($_SESSION['install_type']) == 'custom') {
+                if (isset($_SESSION['install_type']) && !empty($_SESSION['install_type']) && \strtolower($_SESSION['install_type']) == 'custom') {
                     if ($_SESSION['dbUSRData'] == 'create') {
                         $create_select = 'selected';
                     }
@@ -368,9 +368,9 @@ FORM;
             $dbUSRDD .= "</select><br>&nbsp;";
 
 
-            $setup_db_sugarsales_password = urldecode($_SESSION['setup_db_sugarsales_password']);
-            $setup_db_sugarsales_user = urldecode($_SESSION['setup_db_sugarsales_user']);
-            $setup_db_sugarsales_password_retype = urldecode($_SESSION['setup_db_sugarsales_password_retype']);
+            $setup_db_sugarsales_password = \urldecode($_SESSION['setup_db_sugarsales_password']);
+            $setup_db_sugarsales_user = \urldecode($_SESSION['setup_db_sugarsales_user']);
+            $setup_db_sugarsales_password_retype = \urldecode($_SESSION['setup_db_sugarsales_password_retype']);
 
 
             $out2 .= <<<EOQ2
@@ -425,7 +425,7 @@ EOQ2;
                     <h3>{$mod_strings['LBL_SITECFG_TITLE2']}<div class="tooltip-toggle"><em> i </em><div class="tooltip">{$mod_strings['LBL_SITECFG_PASSWORD_MSG']}</div></div></h3>
 EOQ;
         //hide this in typical mode
-        if (!empty($_SESSION['install_type']) && strtolower($_SESSION['install_type'])=='custom') {
+        if (!empty($_SESSION['install_type']) && \strtolower($_SESSION['install_type'])=='custom') {
             $out .=<<<EOQ
 <div class='install_block'>
     {$mod_strings['LBL_SITECFG_URL_MSG']}
@@ -448,7 +448,7 @@ EOQ;
                 } else {
                     $default = $db->getDefaultCollation();
                 }
-                $options = get_select_options_with_id(array_combine($collationOptions, $collationOptions), $default);
+                $options = get_select_options_with_id(\array_combine($collationOptions, $collationOptions), $default);
                 $out .=<<<EOQ
      <div class='install_block'>
         <br>{$mod_strings['LBL_SITECFG_COLLATION_MSG']}
@@ -569,7 +569,7 @@ EOQ3;
             foreach ($_SESSION['installation_scenarios'] as $scenario) {
                 $key = $scenario['key'];
                 $description = $scenario['description'];
-                $scenarioModuleList =  implode($scenario['modulesScenarioDisplayName'], ',');
+                $scenarioModuleList =  \implode($scenario['modulesScenarioDisplayName'], ',');
                 $title = $scenario['title'];
 
                 $scenarioSelection.= "<input type='checkbox' name='scenarios[]' value='$key' checked><b>$title</b>.  $description ($scenarioModuleList).<br>";
@@ -950,7 +950,7 @@ EOQ2;
         $currentLogoLink = SugarThemeRegistry::current()->getImageURL('company_logo.png');
         // show logo if we have
         $hiddenLogo = '';
-        if (!file_exists($currentLogoLink)) {
+        if (!\file_exists($currentLogoLink)) {
             $hiddenLogo = 'display:none;';
         }
 
@@ -1016,7 +1016,7 @@ EOQ;
         $defaultDateFormatSelect = self::getSelect('default_date_format', $sugarConfigDefaults['date_formats'], empty($_SESSION['default_date_format']) ? $sugarConfigDefaults['default_date_format'] : $_SESSION['default_date_format']);
         $defaultTimeFormatSelect = self::getSelect('default_time_format', $sugarConfigDefaults['time_formats'], empty($_SESSION['default_time_format']) ? 'h:ia' : $_SESSION['default_time_format'] /* $sugarConfigDefaults['timef'] */);
 
-        $timezoneSelect = self::getSelect('timezone', array_merge(array(TimeDate::guessTimezone() => TimeDate::guessTimezone()), TimeDate::getTimezoneList()), TimeDate::guessTimezone());
+        $timezoneSelect = self::getSelect('timezone', \array_merge(array(TimeDate::guessTimezone() => TimeDate::guessTimezone()), TimeDate::getTimezoneList()), TimeDate::guessTimezone());
 
         //$defaultLanguageSelect = get_select_options_with_id($supportedLanguages, $current_language);
         $defaultLanguageSelect = self::getSelect('default_language', $supportedLanguages, $current_language);
@@ -1765,20 +1765,20 @@ class DisplayErrors
 
     public static function show()
     {
-        array_push(self::$settingsStack, array(
-            'level' => error_reporting(),
-            'display_errors' => ini_get('display_errors'),
+        \array_push(self::$settingsStack, array(
+            'level' => \error_reporting(),
+            'display_errors' => \ini_get('display_errors'),
         ));
 
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
+        \error_reporting(E_ALL);
+        \ini_set('display_errors', 1);
     }
 
     public static function restore()
     {
-        $settings = array_pop(self::$settingsStack);
-        error_reporting($settings['level']);
-        ini_set('display_errors', $settings['display_errors']);
+        $settings = \array_pop(self::$settingsStack);
+        \error_reporting($settings['level']);
+        \ini_set('display_errors', $settings['display_errors']);
     }
 }
 
@@ -1804,7 +1804,7 @@ $setup_db_type = $_SESSION['setup_db_type'];
 
 $errs = '';
 if (isset($validation_errors)) {
-    if (count($validation_errors) > 0) {
+    if (\count($validation_errors) > 0) {
         $errs  = '<div id="errorMsgs">';
         $errs .= "<p>{$mod_strings['LBL_SYSOPTS_ERRS_TITLE']}</p>";
         $errs .= '<ul>';
@@ -1819,7 +1819,7 @@ if (isset($validation_errors)) {
 }
 
 $drivers = DBManagerFactory::getDbDrivers();
-foreach (array_keys($drivers) as $dname) {
+foreach (\array_keys($drivers) as $dname) {
     $checked[$dname] = '';
 }
 $checked[$setup_db_type] = 'checked="checked"';
@@ -1860,7 +1860,7 @@ $db = getInstallDbInstance();
 //----------------- siteConfig_a.php Site Config & admin user
 
 
-if (is_file("config.php")) {
+if (\is_file("config.php")) {
     if (!empty($sugar_config['default_theme'])) {
         $_SESSION['site_default_theme'] = $sugar_config['default_theme'];
     }
@@ -1902,8 +1902,8 @@ if (is_file("config.php")) {
             $language_values[] = $value;
         }
 
-        $_SESSION['language_keys'] = urlencode(implode(",", $language_keys));
-        $_SESSION['language_values'] = urlencode(implode(",", $language_values));
+        $_SESSION['language_keys'] = \urlencode(\implode(",", $language_keys));
+        $_SESSION['language_values'] = \urlencode(\implode(",", $language_values));
     }
 }
 
@@ -1915,8 +1915,8 @@ if (isset($installation_scenarios)) {
 
 ////	errors
 $errors = '';
-if (isset($validation_errors) && is_array($validation_errors)) {
-    if (count($validation_errors) > 0) {
+if (isset($validation_errors) && \is_array($validation_errors)) {
+    if (\count($validation_errors) > 0) {
         $errors  = '<div id="errorMsgs">';
         $errors .= '<p>'.$mod_strings['LBL_SITECFG_FIX_ERRORS'].'</p><ul>';
         foreach ($validation_errors as $error) {
@@ -1942,8 +1942,8 @@ $customIdHidden = (isset($_SESSION['setup_site_specify_guid']) && !empty($_SESSI
 
 // defaults or user sets
 // warn: may the system bring it up
-$_SESSION = array_merge($_SESSION, $_POST);
-$sugarConfigDefaults = array_merge(get_sugar_config_defaults(), $_SESSION);
+$_SESSION = \array_merge($_SESSION, $_POST);
+$sugarConfigDefaults = \array_merge(get_sugar_config_defaults(), $_SESSION);
 
 //----- show layout
 
@@ -1951,7 +1951,7 @@ $sugarConfigDefaults = array_merge(get_sugar_config_defaults(), $_SESSION);
 // DisplayErrors::show();
 
 $installConfigLayout = new InstallLayout();
-$installConfigLayout->show(get_defined_vars());
+$installConfigLayout->show(\get_defined_vars());
 
 // restore display errors
 // DisplayErrors::restore();

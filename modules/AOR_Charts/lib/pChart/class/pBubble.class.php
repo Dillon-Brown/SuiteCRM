@@ -13,8 +13,8 @@
      You can find the whole class documentation on the pChart web site.
  */
 
- define("BUBBLE_SHAPE_ROUND", 700001);
- define("BUBBLE_SHAPE_SQUARE", 700002);
+ \define("BUBBLE_SHAPE_ROUND", 700001);
+ \define("BUBBLE_SHAPE_SQUARE", 700002);
 
  /* pBubble class definition */
  class pBubble
@@ -32,10 +32,10 @@
      /* Prepare the scale */
      public function bubbleScale($DataSeries, $WeightSeries)
      {
-         if (!is_array($DataSeries)) {
+         if (!\is_array($DataSeries)) {
              $DataSeries = array($DataSeries);
          }
-         if (!is_array($WeightSeries)) {
+         if (!\is_array($WeightSeries)) {
              $WeightSeries = array($WeightSeries);
          }
 
@@ -50,8 +50,8 @@
 
              $this->pDataObject->setSerieDrawable($SerieWeightName, false);
 
-             if (count($this->pDataObject->Data["Series"][$SerieName]["Data"]) > $MaxValues) {
-                 $MaxValues = count($this->pDataObject->Data["Series"][$SerieName]["Data"]);
+             if (\count($this->pDataObject->Data["Series"][$SerieName]["Data"]) > $MaxValues) {
+                 $MaxValues = \count($this->pDataObject->Data["Series"][$SerieName]["Data"]);
              }
 
              foreach ($this->pDataObject->Data["Series"][$SerieName]["Data"] as $Key => $Value) {
@@ -133,10 +133,10 @@
          $BorderAlpha	= isset($Format["BorderAlpha"]) ? $Format["BorderAlpha"] : 30;
          $RecordImageMap	= isset($Format["RecordImageMap"]) ? $Format["RecordImageMap"] : false;
 
-         if (!is_array($DataSeries)) {
+         if (!\is_array($DataSeries)) {
              $DataSeries = array($DataSeries);
          }
-         if (!is_array($WeightSeries)) {
+         if (!\is_array($WeightSeries)) {
              $WeightSeries = array($WeightSeries);
          }
 
@@ -222,12 +222,12 @@
                      } else {
                          $XStep = ($this->pChartObject->GraphAreaX2-$this->pChartObject->GraphAreaX1-$XMargin*2)/$XDivs;
                      }
-                     $Y = floor($PosArray);
-                     $CircleRadius = floor(abs($PosArray - $WeightArray)/2);
+                     $Y = \floor($PosArray);
+                     $CircleRadius = \floor(\abs($PosArray - $WeightArray)/2);
 
                      if ($Shape == BUBBLE_SHAPE_SQUARE) {
                          if ($RecordImageMap) {
-                             $this->pChartObject->addToImageMap("RECT", floor($X-$CircleRadius).",".floor($Y-$CircleRadius).",".floor($X+$CircleRadius).",".floor($Y+$CircleRadius), $this->pChartObject->toHTMLColor($Palette[$Key]["R"], $Palette[$Key]["G"], $Palette[$Key]["B"]), $SerieDescription, $Data["Series"][$WeightSeries[$Key]]["Data"][$iKey]);
+                             $this->pChartObject->addToImageMap("RECT", \floor($X-$CircleRadius).",".\floor($Y-$CircleRadius).",".\floor($X+$CircleRadius).",".\floor($Y+$CircleRadius), $this->pChartObject->toHTMLColor($Palette[$Key]["R"], $Palette[$Key]["G"], $Palette[$Key]["B"]), $SerieDescription, $Data["Series"][$WeightSeries[$Key]]["Data"][$iKey]);
                          }
 
                          if ($BorderWidth != 1) {
@@ -238,7 +238,7 @@
                          }
                      } elseif ($Shape == BUBBLE_SHAPE_ROUND) {
                          if ($RecordImageMap) {
-                             $this->pChartObject->addToImageMap("CIRCLE", floor($X).",".floor($Y).",".floor($CircleRadius), $this->pChartObject->toHTMLColor($Palette[$Key]["R"], $Palette[$Key]["G"], $Palette[$Key]["B"]), $SerieDescription, $Data["Series"][$WeightSeries[$Key]]["Data"][$iKey]);
+                             $this->pChartObject->addToImageMap("CIRCLE", \floor($X).",".\floor($Y).",".\floor($CircleRadius), $this->pChartObject->toHTMLColor($Palette[$Key]["R"], $Palette[$Key]["G"], $Palette[$Key]["B"]), $SerieDescription, $Data["Series"][$WeightSeries[$Key]]["Data"][$iKey]);
                          }
 
                          if ($BorderWidth != 1) {
@@ -256,12 +256,12 @@
                      } else {
                          $XStep = ($this->pChartObject->GraphAreaY2-$this->pChartObject->GraphAreaY1-$XMargin*2)/$XDivs;
                      }
-                     $X = floor($PosArray);
-                     $CircleRadius = floor(abs($PosArray - $WeightArray)/2);
+                     $X = \floor($PosArray);
+                     $CircleRadius = \floor(\abs($PosArray - $WeightArray)/2);
 
                      if ($Shape == BUBBLE_SHAPE_SQUARE) {
                          if ($RecordImageMap) {
-                             $this->pChartObject->addToImageMap("RECT", floor($X-$CircleRadius).",".floor($Y-$CircleRadius).",".floor($X+$CircleRadius).",".floor($Y+$CircleRadius), $this->pChartObject->toHTMLColor($Palette[$Key]["R"], $Palette[$Key]["G"], $Palette[$Key]["B"]), $SerieDescription, $Data["Series"][$WeightSeries[$Key]]["Data"][$iKey]);
+                             $this->pChartObject->addToImageMap("RECT", \floor($X-$CircleRadius).",".\floor($Y-$CircleRadius).",".\floor($X+$CircleRadius).",".\floor($Y+$CircleRadius), $this->pChartObject->toHTMLColor($Palette[$Key]["R"], $Palette[$Key]["G"], $Palette[$Key]["B"]), $SerieDescription, $Data["Series"][$WeightSeries[$Key]]["Data"][$iKey]);
                          }
 
                          if ($BorderWidth != 1) {
@@ -272,7 +272,7 @@
                          }
                      } elseif ($Shape == BUBBLE_SHAPE_ROUND) {
                          if ($RecordImageMap) {
-                             $this->pChartObject->addToImageMap("CIRCLE", floor($X).",".floor($Y).",".floor($CircleRadius), $this->pChartObject->toHTMLColor($Palette[$Key]["R"], $Palette[$Key]["G"], $Palette[$Key]["B"]), $SerieDescription, $Data["Series"][$WeightSeries[$Key]]["Data"][$iKey]);
+                             $this->pChartObject->addToImageMap("CIRCLE", \floor($X).",".\floor($Y).",".\floor($CircleRadius), $this->pChartObject->toHTMLColor($Palette[$Key]["R"], $Palette[$Key]["G"], $Palette[$Key]["B"]), $SerieDescription, $Data["Series"][$WeightSeries[$Key]]["Data"][$iKey]);
                          }
 
                          if ($BorderWidth != 1) {
@@ -294,7 +294,7 @@
          $OverrideTitle	= isset($Format["OverrideTitle"]) ? $Format["OverrideTitle"] : null;
          $DrawPoint		= isset($Format["DrawPoint"]) ? $Format["DrawPoint"] : LABEL_POINT_BOX;
 
-         if (!is_array($Points)) {
+         if (!\is_array($Points)) {
              $Point = $Points;
              $Points = "";
              $Points[] = $Point;
@@ -350,8 +350,8 @@
                      $XStep = ($this->pChartObject->GraphAreaX2-$this->pChartObject->GraphAreaX1-$XMargin*2)/$XDivs;
                  }
 
-                 $X = floor($X + $Point * $XStep);
-                 $Y = floor($PosArray);
+                 $X = \floor($X + $Point * $XStep);
+                 $Y = \floor($PosArray);
              } else {
                  if ($XDivs == 0) {
                      $YStep = 0;
@@ -359,8 +359,8 @@
                      $YStep = ($this->pChartObject->GraphAreaY2-$this->pChartObject->GraphAreaY1-$XMargin*2)/$XDivs;
                  }
 
-                 $X = floor($PosArray);
-                 $Y = floor($Y + $Point * $YStep);
+                 $X = \floor($PosArray);
+                 $Y = \floor($Y + $Point * $YStep);
              }
 
              if ($DrawPoint == LABEL_POINT_CIRCLE) {

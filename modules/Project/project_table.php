@@ -55,7 +55,7 @@ class ProjectTable
 
         $task_count = 0;
 
-        if (!is_null($tasks)) {
+        if (!\is_null($tasks)) {
             foreach ($tasks as $task) {
                 //Get resources
                 $project = new Project();
@@ -156,6 +156,6 @@ class ProjectTable
     // Function for basic field validation (present and neither empty nor only white space
     public function IsNullOrEmptyString($question)
     {
-        return (!isset($question) || trim($question)==='');
+        return (!isset($question) || \trim($question)==='');
     }
 }

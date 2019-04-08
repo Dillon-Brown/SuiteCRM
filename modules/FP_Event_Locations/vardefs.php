@@ -224,7 +224,7 @@ $dictionary['FP_Event_Locations'] = array(
         ),
 );
 
-if (!class_exists('VardefManager')) {
+if (!\class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('FP_Event_Locations', 'FP_Event_Locations', array('basic', 'assignable', 'security_groups'));

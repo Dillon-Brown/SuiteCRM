@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -115,7 +115,7 @@ class SchedulersJob extends Basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -172,19 +172,19 @@ class SchedulersJob extends Basic
     {
         // TODO: figure out what error is thrown when no more apache instances can be spun off
         // cURL inits
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $job); // set url
-        curl_setopt($ch, CURLOPT_FAILONERROR, true); // silent failure (code >300);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // do not follow location(); inits - we always use the current
-        curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
-        curl_setopt($ch, CURLOPT_DNS_USE_GLOBAL_CACHE, false);  // not thread-safe
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // return into a variable to continue program execution
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout); // never times out - bad idea?
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5); // 5 secs for connect timeout
-        curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);  // open brand new conn
-        curl_setopt($ch, CURLOPT_HEADER, true); // do not return header info with result
-        curl_setopt($ch, CURLOPT_NOPROGRESS, true); // do not have progress bar
-        $urlparts = parse_url($job);
+        $ch = \curl_init();
+        \curl_setopt($ch, CURLOPT_URL, $job); // set url
+        \curl_setopt($ch, CURLOPT_FAILONERROR, true); // silent failure (code >300);
+        \curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // do not follow location(); inits - we always use the current
+        \curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
+        \curl_setopt($ch, CURLOPT_DNS_USE_GLOBAL_CACHE, false);  // not thread-safe
+        \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // return into a variable to continue program execution
+        \curl_setopt($ch, CURLOPT_TIMEOUT, $timeout); // never times out - bad idea?
+        \curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5); // 5 secs for connect timeout
+        \curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);  // open brand new conn
+        \curl_setopt($ch, CURLOPT_HEADER, true); // do not return header info with result
+        \curl_setopt($ch, CURLOPT_NOPROGRESS, true); // do not have progress bar
+        $urlparts = \parse_url($job);
         if (empty($urlparts['port'])) {
             if (isset($urlparts['scheme']) && $urlparts['scheme'] == 'https') {
                 $urlparts['port'] = 443;
@@ -192,29 +192,29 @@ class SchedulersJob extends Basic
                 $urlparts['port'] = 80;
             }
         }
-        curl_setopt($ch, CURLOPT_PORT, $urlparts['port']); // set port as reported by Server
+        \curl_setopt($ch, CURLOPT_PORT, $urlparts['port']); // set port as reported by Server
         //TODO make the below configurable
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); // most customers will not have Certificate Authority account
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // most customers will not have Certificate Authority account
+        \curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); // most customers will not have Certificate Authority account
+        \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // most customers will not have Certificate Authority account
 
-        curl_setopt($ch, CURLOPT_NOSIGNAL, true); // ignore any cURL signals to PHP (for multi-threading)
-        $result = curl_exec($ch);
-        $cInfo = curl_getinfo($ch);	//url,content_type,header_size,request_size,filetime,http_code
+        \curl_setopt($ch, CURLOPT_NOSIGNAL, true); // ignore any cURL signals to PHP (for multi-threading)
+        $result = \curl_exec($ch);
+        $cInfo = \curl_getinfo($ch);	//url,content_type,header_size,request_size,filetime,http_code
         //ssl_verify_result,total_time,namelookup_time,connect_time
         //pretransfer_time,size_upload,size_download,speed_download,
         //speed_upload,download_content_length,upload_content_length
         //starttransfer_time,redirect_time
-        if (curl_errno($ch)) {
+        if (\curl_errno($ch)) {
             if (!isset($this->errors) || !$this->errors) {
                 $this->errors = '';
             }
-            $this->errors .= curl_errno($ch)."\n";
+            $this->errors .= \curl_errno($ch)."\n";
         }
-        curl_close($ch);
+        \curl_close($ch);
 
         if ($result !== false && $cInfo['http_code'] < 400) {
             $GLOBALS['log']->debug("----->Firing was successful: $job");
-            $GLOBALS['log']->debug('----->WTIH RESULT: '.strip_tags($result).' AND '.strip_tags(print_r($cInfo, true)));
+            $GLOBALS['log']->debug('----->WTIH RESULT: '.\strip_tags($result).' AND '.\strip_tags(\print_r($cInfo, true)));
             return true;
         }
         $GLOBALS['log']->fatal("Job failed: $job");
@@ -362,7 +362,7 @@ class SchedulersJob extends Basic
         $this->addMessages($message);
         $this->resolution = self::JOB_PARTIAL;
         if (empty($delay)) {
-            $delay = intval($this->job_delay);
+            $delay = \intval($this->job_delay);
         }
         $this->execute_time = $GLOBALS['timedate']->getNow()->modify("+$delay seconds")->asDb();
         $GLOBALS['log']->info("Postponing job {$this->id} to {$this->execute_time}: $message");
@@ -414,7 +414,7 @@ class SchedulersJob extends Basic
             return "Job $id belongs to another client, can not run as $client.";
         }
         $job->job_done = false;
-        register_shutdown_function(array($job, "unexpectedExit"));
+        \register_shutdown_function(array($job, "unexpectedExit"));
         $res = $job->runJob();
         $job->job_done = true;
         return $res;
@@ -452,8 +452,8 @@ class SchedulersJob extends Basic
                 // Ignore errors we don't know about
                 return;
         }
-        $errstr = strip_tags($errstr);
-        $this->errors .= sprintf(translate('ERR_PHP', 'SchedulersJobs'), $type, $errno, $errstr, $errfile, $errline)."\n";
+        $errstr = \strip_tags($errstr);
+        $this->errors .= \sprintf(translate('ERR_PHP', 'SchedulersJobs'), $type, $errno, $errstr, $errfile, $errline)."\n";
     }
 
     /**
@@ -464,12 +464,12 @@ class SchedulersJob extends Basic
     {
         $GLOBALS['current_user'] = $user;
         // Reset the session
-        if (session_id()) {
-            session_destroy();
+        if (\session_id()) {
+            \session_destroy();
         }
-        if (!headers_sent()) {
-            session_start();
-            session_regenerate_id();
+        if (!\headers_sent()) {
+            \session_start();
+            \session_regenerate_id();
         }
         $_SESSION['is_valid_session']= true;
         $_SESSION['user_id'] = $user->id;
@@ -489,7 +489,7 @@ class SchedulersJob extends Basic
             if (empty($this->user->id) || $this->assigned_user_id != $this->user->id) {
                 $this->user = BeanFactory::getBean('Users', $this->assigned_user_id);
                 if (empty($this->user->id)) {
-                    $this->resolveJob(self::JOB_FAILURE, sprintf(translate('ERR_NOSUCHUSER', 'SchedulersJobs'), $this->assigned_user_id));
+                    $this->resolveJob(self::JOB_FAILURE, \sprintf(translate('ERR_NOSUCHUSER', 'SchedulersJobs'), $this->assigned_user_id));
                     return false;
                 }
             }
@@ -520,7 +520,7 @@ class SchedulersJob extends Basic
         require_once('modules/Schedulers/_AddJobsHere.php');
 
         $this->errors = "";
-        $exJob = explode('::', $this->target, 2);
+        $exJob = \explode('::', $this->target, 2);
         if ($exJob[0] == 'function') {
             // set up the current user and drop session
             if (!$this->setJobUser()) {
@@ -528,16 +528,16 @@ class SchedulersJob extends Basic
             }
             $func = $exJob[1];
             $GLOBALS['log']->debug("----->SchedulersJob calling function: $func");
-            set_error_handler(array($this, "errorHandler"), E_ALL & ~E_NOTICE & ~E_STRICT);
-            if (!is_callable($func)) {
-                $this->resolveJob(self::JOB_FAILURE, sprintf(translate('ERR_CALL', 'SchedulersJobs'), $func));
+            \set_error_handler(array($this, "errorHandler"), E_ALL & ~E_NOTICE & ~E_STRICT);
+            if (!\is_callable($func)) {
+                $this->resolveJob(self::JOB_FAILURE, \sprintf(translate('ERR_CALL', 'SchedulersJobs'), $func));
             }
             $data = array($this);
             if (!empty($this->data)) {
                 $data[] = $this->data;
             }
-            $res = call_user_func_array($func, $data);
-            restore_error_handler();
+            $res = \call_user_func_array($func, $data);
+            \restore_error_handler();
             $this->restoreJobUser();
             if ($this->status == self::JOB_STATUS_RUNNING) {
                 // nobody updated the status yet - job function could do that
@@ -550,15 +550,15 @@ class SchedulersJob extends Basic
             }
             return $this->resolution != self::JOB_FAILURE;
         } elseif ($exJob[0] == 'url') {
-            if (function_exists('curl_init')) {
+            if (\function_exists('curl_init')) {
                 $GLOBALS['log']->debug('----->SchedulersJob firing URL job: '.$exJob[1]);
-                set_error_handler(array($this, "errorHandler"), E_ALL & ~E_NOTICE & ~E_STRICT);
+                \set_error_handler(array($this, "errorHandler"), E_ALL & ~E_NOTICE & ~E_STRICT);
                 if ($this->fireUrl($exJob[1])) {
-                    restore_error_handler();
+                    \restore_error_handler();
                     $this->resolveJob(self::JOB_SUCCESS);
                     return true;
                 }
-                restore_error_handler();
+                \restore_error_handler();
                 $this->resolveJob(self::JOB_FAILURE);
                 return false;
             }
@@ -584,9 +584,9 @@ class SchedulersJob extends Basic
                 }
                 return $this->resolution != self::JOB_FAILURE;
             }
-            return $this->resolveJob(self::JOB_FAILURE, sprintf(translate('ERR_JOBTYPE', 'SchedulersJobs'), strip_tags($this->target)));
+            return $this->resolveJob(self::JOB_FAILURE, \sprintf(translate('ERR_JOBTYPE', 'SchedulersJobs'), \strip_tags($this->target)));
         } else {
-            return $this->resolveJob(self::JOB_FAILURE, sprintf(translate('ERR_JOBTYPE', 'SchedulersJobs'), strip_tags($this->target)));
+            return $this->resolveJob(self::JOB_FAILURE, \sprintf(translate('ERR_JOBTYPE', 'SchedulersJobs'), \strip_tags($this->target)));
         }
         return false;
     }

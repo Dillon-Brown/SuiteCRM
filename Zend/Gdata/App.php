@@ -187,7 +187,7 @@ class Zend_Gdata_App
      */
     public function registerPackage($name)
     {
-        array_unshift($this->_registeredPackages, $name);
+        \array_unshift($this->_registeredPackages, $name);
     }
 
     /**
@@ -334,7 +334,7 @@ class Zend_Gdata_App
      */
     public static function setGzipEnabled($enabled = false)
     {
-        if ($enabled && !function_exists('gzinflate')) {
+        if ($enabled && !\function_exists('gzinflate')) {
             require_once 'Zend/Gdata/App/InvalidArgumentException.php';
             throw new Zend_Gdata_App_InvalidArgumentException(
                     'You cannot enable gzipped responses if the zlib module ' .
@@ -505,7 +505,7 @@ class Zend_Gdata_App
             $url = $this->_defaultPostUri;
         }
 
-        if (is_string($data)) {
+        if (\is_string($data)) {
             $rawData = $data;
             if ($contentTypeOverride === null) {
                 $finalContentType = 'application/atom+xml';
@@ -552,8 +552,8 @@ class Zend_Gdata_App
         //   - A similar header (If-Match/If-None-Match) hasn't already been
         //     set.
         if ($method != 'DELETE' && (
-                !array_key_exists('If-Match', $headers) &&
-                !array_key_exists('If-None-Match', $headers)
+                !\array_key_exists('If-Match', $headers) &&
+                !\array_key_exists('If-None-Match', $headers)
                 )) {
             $allowWeak = $method == 'GET';
             if ($ifMatchHeader = $this->generateIfMatchHeaderData(
@@ -638,7 +638,7 @@ class Zend_Gdata_App
         if (Zend_Gdata_App::getGzipEnabled()) {
             // some services require the word 'gzip' to be in the user-agent
             // header in addition to the accept-encoding header
-            if (strpos(
+            if (\strpos(
                 $this->_httpClient->getHeader('User-Agent'),
                 'gzip'
             ) === false) {
@@ -659,7 +659,7 @@ class Zend_Gdata_App
         // Set the params for the new request to be performed
         $this->_httpClient->setHeaders($headers);
         $uri = Zend_Uri_Http::fromString($url);
-        preg_match("/^(.*?)(\?.*)?$/", $url, $matches);
+        \preg_match("/^(.*?)(\?.*)?$/", $url, $matches);
         $this->_httpClient->setUri($matches[1]);
         $queryArray = $uri->getQueryAsArray();
         foreach ($queryArray as $name => $value) {
@@ -803,10 +803,10 @@ class Zend_Gdata_App
         $minorProtocolVersion = null;
         if ($protocolVersionStr !== null) {
             // Extract protocol major and minor version from header
-            $delimiterPos = strpos($protocolVersionStr, '.');
-            $length = strlen($protocolVersionStr);
-            $major = substr($protocolVersionStr, 0, $delimiterPos);
-            $minor = substr($protocolVersionStr, $delimiterPos + 1, $length);
+            $delimiterPos = \strpos($protocolVersionStr, '.');
+            $length = \strlen($protocolVersionStr);
+            $major = \substr($protocolVersionStr, 0, $delimiterPos);
+            $minor = \substr($protocolVersionStr, $delimiterPos + 1, $length);
             $majorProtocolVersion = $major;
             $minorProtocolVersion = $minor;
         }
@@ -846,16 +846,16 @@ class Zend_Gdata_App
         $majorProtocolVersion = null,
         $minorProtocolVersion = null
     ) {
-        if (!class_exists($className, false)) {
+        if (!\class_exists($className, false)) {
             require_once 'Zend/Loader.php';
             @Zend_Loader::loadClass($className);
         }
 
         // Load the feed as an XML DOMDocument object
-        @ini_set('track_errors', 1);
+        @\ini_set('track_errors', 1);
         $doc = new DOMDocument();
         $success = @$doc->loadXML($string);
-        @ini_restore('track_errors');
+        @\ini_restore('track_errors');
 
         if (!$success) {
             require_once 'Zend/Gdata/App/Exception.php';
@@ -887,9 +887,9 @@ class Zend_Gdata_App
             $className='Zend_Gdata_App_Feed',
         $useIncludePath = false
     ) {
-        @ini_set('track_errors', 1);
-        $feed = @file_get_contents($filename, $useIncludePath);
-        @ini_restore('track_errors');
+        @\ini_set('track_errors', 1);
+        $feed = @\file_get_contents($filename, $useIncludePath);
+        @\ini_restore('track_errors');
         if ($feed === false) {
             require_once 'Zend/Gdata/App/Exception.php';
             throw new Zend_Gdata_App_Exception(
@@ -1003,7 +1003,7 @@ class Zend_Gdata_App
      */
     public function delete($data, $remainingRedirects = null)
     {
-        if (is_string($data)) {
+        if (\is_string($data)) {
             $requestData = $this->prepareRequest('DELETE', $data);
         } else {
             $headers = array();
@@ -1043,7 +1043,7 @@ class Zend_Gdata_App
         $className='Zend_Gdata_App_Entry',
         $extraHeaders = array()
     ) {
-        if (!class_exists($className, false)) {
+        if (!\class_exists($className, false)) {
             require_once 'Zend/Loader.php';
             @Zend_Loader::loadClass($className);
         }
@@ -1082,12 +1082,12 @@ class Zend_Gdata_App
         $extraHeaders = array()
     ) {
         if ($className === null && $data instanceof Zend_Gdata_App_Entry) {
-            $className = get_class($data);
+            $className = \get_class($data);
         } elseif ($className === null) {
             $className = 'Zend_Gdata_App_Entry';
         }
 
-        if (!class_exists($className, false)) {
+        if (!\class_exists($className, false)) {
             require_once 'Zend/Loader.php';
             @Zend_Loader::loadClass($className);
         }
@@ -1119,14 +1119,14 @@ class Zend_Gdata_App
      */
     public function __call($method, $args)
     {
-        if (preg_match('/^new(\w+)/', $method, $matches)) {
+        if (\preg_match('/^new(\w+)/', $method, $matches)) {
             $class = $matches[1];
             $foundClassName = null;
             foreach ($this->_registeredPackages as $name) {
                 try {
                     // Autoloading disabled on next line for compatibility
                     // with magic factories. See ZF-6660.
-                    if (!class_exists($name . '_' . $class, false)) {
+                    if (!\class_exists($name . '_' . $class, false)) {
                         require_once 'Zend/Loader.php';
                         @Zend_Loader::loadClass($name . '_' . $class);
                     }
@@ -1175,7 +1175,7 @@ class Zend_Gdata_App
      */
     public function retrieveAllEntriesForFeed($feed)
     {
-        $feedClass = get_class($feed);
+        $feedClass = \get_class($feed);
         $reflectionObj = new ReflectionClass($feedClass);
         $result = $reflectionObj->newInstance();
         do {
@@ -1230,7 +1230,7 @@ class Zend_Gdata_App
         $nextLinkHref = $nextLink->getHref();
 
         if ($className === null) {
-            $className = get_class($feed);
+            $className = \get_class($feed);
         }
 
         return $this->getFeed($nextLinkHref, $className);
@@ -1257,7 +1257,7 @@ class Zend_Gdata_App
         $previousLinkHref = $previousLink->getHref();
 
         if ($className === null) {
-            $className = get_class($feed);
+            $className = \get_class($feed);
         }
 
         return $this->getFeed($previousLinkHref, $className);
@@ -1280,7 +1280,7 @@ class Zend_Gdata_App
                 $data instanceof Zend_Gdata_App_Entry) {
             $etag = $data->getEtag();
             if (($etag !== null) &&
-                    ($allowWeek || substr($etag, 0, 2) != 'W/')) {
+                    ($allowWeek || \substr($etag, 0, 2) != 'W/')) {
                 $result = $data->getEtag();
             }
         }

@@ -1,5 +1,5 @@
 <?php
-if (! defined('sugarEntry') || ! sugarEntry) {
+if (! \defined('sugarEntry') || ! sugarEntry) {
     die('Not A Valid Entry Point') ;
 }
 /**
@@ -57,8 +57,8 @@ class ViewPopupview extends ViewListView
         $this->fromModuleBuilder = isset($_REQUEST [ 'MB' ]) || (isset($_REQUEST['view_package']) && $_REQUEST['view_package'] && $_REQUEST['view_package'] != 'studio') ;
         if (!$this->fromModuleBuilder) {
             global $app_list_strings ;
-            $moduleNames = array_change_key_case($app_list_strings [ 'moduleList' ]) ;
-            $this->translatedEditModule = $moduleNames [ strtolower($this->editModule) ] ;
+            $moduleNames = \array_change_key_case($app_list_strings [ 'moduleList' ]) ;
+            $this->translatedEditModule = $moduleNames [ \strtolower($this->editModule) ] ;
         }
     }
     
@@ -161,8 +161,8 @@ class ViewPopupview extends ViewListView
         foreach ($groups as $groupKey => $group) {
             foreach ($group as $fieldKey => $field) {
                 if (isset($field [ 'width' ])) {
-                    if (substr($field [ 'width' ], - 1, 1) == '%') {
-                        $groups [ $groupKey ] [ $fieldKey ] [ 'width' ] = substr($field [ 'width' ], 0, strlen($field [ 'width' ]) - 1) ;
+                    if (\substr($field [ 'width' ], - 1, 1) == '%') {
+                        $groups [ $groupKey ] [ $fieldKey ] [ 'width' ] = \substr($field [ 'width' ], 0, \strlen($field [ 'width' ]) - 1) ;
                     }
                 }
             }

@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -119,10 +119,10 @@ class EmailsDataAddress
     protected function getDataArrayAttributes($attributesReplyTo, $attributesFrom, $attributesName, $attributesOe)
     {
         return [
-            'reply_to' => utf8_encode($attributesReplyTo),
-            'from' => utf8_encode($attributesFrom),
-            'name' => utf8_encode($attributesName),
-            'oe' => utf8_encode($attributesOe),
+            'reply_to' => \utf8_encode($attributesReplyTo),
+            'from' => \utf8_encode($attributesFrom),
+            'name' => \utf8_encode($attributesName),
+            'oe' => \utf8_encode($attributesOe),
         ];
     }
 }

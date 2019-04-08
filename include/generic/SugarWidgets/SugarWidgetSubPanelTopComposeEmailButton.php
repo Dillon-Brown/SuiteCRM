@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -80,9 +80,9 @@ class SugarWidgetSubPanelTopComposeEmailButton extends SugarWidgetSubPanelTopBut
             // awu: Not all beans have emailAddress property, we must account for this
             if (isset($bean->emailAddress)) {
                 $to_addrs = $bean->emailAddress->getPrimaryAddress($bean);
-                $button = "<input class='button' type='button'  value='$value'  id='" . $this->getWidgetId() . "'  name='" . preg_replace('[ ]', '', $value) . "'   title='$title' onclick=\"location.href='mailto:$to_addrs';return false;\" />";
+                $button = "<input class='button' type='button'  value='$value'  id='" . $this->getWidgetId() . "'  name='" . \preg_replace('[ ]', '', $value) . "'   title='$title' onclick=\"location.href='mailto:$to_addrs';return false;\" />";
             } else {
-                $button = "<input class='button' type='button'  value='$value'  id='" . $this->getWidgetId() . "'  name='" . preg_replace('[ ]', '', $value) . "'  title='$title' onclick=\"location.href='mailto:';return false;\" />";
+                $button = "<input class='button' type='button'  value='$value'  id='" . $this->getWidgetId() . "'  name='" . \preg_replace('[ ]', '', $value) . "'  title='$title' onclick=\"location.href='mailto:';return false;\" />";
             }
         } else {
             // Generate the compose package for the quick create options.

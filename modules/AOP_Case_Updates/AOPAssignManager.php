@@ -135,7 +135,7 @@ class AOPAssignManager
         }
         switch ($distributionOptions[0]) {
             case 'security_group':
-                if (file_exists('modules/SecurityGroups/SecurityGroup.php')) {
+                if (\file_exists('modules/SecurityGroups/SecurityGroup.php')) {
                     require_once 'modules/SecurityGroups/SecurityGroup.php';
                     $security_group = new SecurityGroup();
                     $security_group->retrieve($distributionOptions[1]);
@@ -194,7 +194,7 @@ class AOPAssignManager
             return $this->leastBusyUsers;
         }
         $db = DBManagerFactory::getInstance();
-        $idIn = implode("','", $db->arrayQuote(array_keys($this->assignableUsers)));
+        $idIn = \implode("','", $db->arrayQuote(\array_keys($this->assignableUsers)));
         if ($idIn) {
             $idIn = "'".$idIn."'";
         }
@@ -213,10 +213,10 @@ class AOPAssignManager
     private function getLeastBusyUser()
     {
         $leastBusyCounts = $this->getLeastBusyCounts();
-        asort($leastBusyCounts);
-        reset($leastBusyCounts);
+        \asort($leastBusyCounts);
+        \reset($leastBusyCounts);
 
-        return key($leastBusyCounts);
+        return \key($leastBusyCounts);
     }
 
     /**
@@ -235,7 +235,7 @@ class AOPAssignManager
      */
     private function getRandomUser()
     {
-        $randKey = array_rand($this->assignableUsers);
+        $randKey = \array_rand($this->assignableUsers);
 
         return $this->assignableUsers[$randKey];
     }
@@ -277,20 +277,20 @@ class AOPAssignManager
         $lastUserId = '';
         if (isset($_SESSION['AOPLastUser'][$id]) && $_SESSION['AOPLastUser'][$id] !== '') {
             $lastUserId = $_SESSION['AOPLastUser'][$id];
-        } elseif (is_file($file)) {
+        } elseif (\is_file($file)) {
             include $file;
             if (isset($lastUser['User']) && $lastUser['User'] !== '') {
                 $lastUserId = $lastUser['User'];
             }
         }
-        $users = array_keys($this->assignableUsers);
-        $lastOffset = array_search($lastUserId, $users, false);
-        $newOffset = count($users) !== 0 ? ($lastOffset + 1) % count($users) : 0;
+        $users = \array_keys($this->assignableUsers);
+        $lastOffset = \array_search($lastUserId, $users, false);
+        $newOffset = \count($users) !== 0 ? ($lastOffset + 1) % \count($users) : 0;
         if (!empty($users[$newOffset])) {
             return $users[$newOffset];
         }
 
-        return reset($users);
+        return \reset($users);
     }
 
     /**
@@ -310,8 +310,8 @@ class AOPAssignManager
 ?>
 eoq;
         if ($fh = @sugar_fopen($file, 'w')) {
-            fwrite($fh, $content);
-            fclose($fh);
+            \fwrite($fh, $content);
+            \fclose($fh);
         }
 
         return true;

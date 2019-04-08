@@ -86,7 +86,7 @@ class Zend_Search_Lucene_Search_Highlighter_Default implements Zend_Search_Lucen
     public function highlight($words)
     {
         $color = $this->_highlightColors[$this->_currentColorIndex];
-        $this->_currentColorIndex = ($this->_currentColorIndex + 1) % count($this->_highlightColors);
+        $this->_currentColorIndex = ($this->_currentColorIndex + 1) % \count($this->_highlightColors);
 
         $this->_doc->highlight($words, $color);
     }

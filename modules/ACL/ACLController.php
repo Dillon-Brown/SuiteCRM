@@ -38,12 +38,12 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
 /* BEGIN - SECURITY GROUPS */
-if (file_exists("modules/ACLActions/actiondefs.override.php")) {
+if (\file_exists("modules/ACLActions/actiondefs.override.php")) {
     require_once("modules/ACLActions/actiondefs.override.php");
 } else {
     require_once('modules/ACLActions/actiondefs.php');
@@ -369,7 +369,7 @@ class ACLController
             $class = $beanList[$module];
             require_once($beanFiles[$class]);
             $mod = new $class();
-            if (!is_subclass_of($mod, 'SugarBean')) {
+            if (!\is_subclass_of($mod, 'SugarBean')) {
                 $checkModules[$module] = false;
             } else {
                 $checkModules[$module] = $mod->bean_implements('ACL');

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -67,7 +67,7 @@ if (isset($_REQUEST['next_free']) && $_REQUEST['next_free'] == true) {
         foreach ($ids as $k => $id) {
             $in .= '"'.$id.'", ';
         }
-        $in = substr($in, 0, (strlen($in) - 2));
+        $in = \substr($in, 0, (\strlen($in) - 2));
         $in .= ') ';
         
         $team = '';
@@ -84,14 +84,14 @@ if (isset($_REQUEST['next_free']) && $_REQUEST['next_free'] == true) {
             $next->assigned_user_id = $current_user->id;
             $next->save();
             
-            header('Location: index.php?module=Emails&action=DetailView&record='.$next->id);
+            \header('Location: index.php?module=Emails&action=DetailView&record='.$next->id);
         } else {
             // no free items
-            header('Location: index.php?module=Emails&action=ListView&type=inbound&group=true');
+            \header('Location: index.php?module=Emails&action=ListView&type=inbound&group=true');
         }
     } else {
         // no groups
-        header('Location: index.php?module=Emails&action=ListView&type=inbound&group=true');
+        \header('Location: index.php?module=Emails&action=ListView&type=inbound&group=true');
     }
 }
 ?>

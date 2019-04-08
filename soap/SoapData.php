@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -42,7 +42,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 require_once('soap/SoapRelationshipHelper.php');
-set_time_limit(360);
+\set_time_limit(360);
  
 $server->register(
     'sync_get_modified_relationships',
@@ -143,15 +143,15 @@ function sync_get_modified_relationships($session, $module_name, $related_module
         $output_list[] = $val;
     }
     $xml .= '</items>';
-    $next_offset = $offset + sizeof($output_list);
+    $next_offset = $offset + \sizeof($output_list);
 
     if ($php_serialize == 0) {
-        $myoutput = base64_encode($xml);
+        $myoutput = \base64_encode($xml);
     } else {
         $myoutput = get_encoded($output_list);
     }
 
-    return array('result_count'=>sizeof($output_list),'next_offset'=>0, 'total_count'=>sizeof($output_list), 'field_list'=>array(), 'entry_list'=>$myoutput , 'error'=>$error->get_soap_array());
+    return array('result_count'=>\sizeof($output_list),'next_offset'=>0, 'total_count'=>\sizeof($output_list), 'field_list'=>array(), 'entry_list'=>$myoutput , 'error'=>$error->get_soap_array());
 }
 
 
@@ -206,7 +206,7 @@ function get_modified_entries($session, $module_name, $ids, $select_fields)
         }
         $field_select .= $table_name.".".$field;
 
-        if ($index < (count($select_fields) - 1)) {
+        if ($index < (\count($select_fields) - 1)) {
             $field_select .= ",";
             $index++;
         }
@@ -220,7 +220,7 @@ function get_modified_entries($session, $module_name, $ids, $select_fields)
     }
 
     $ret_array = $seed->create_new_list_query('', "$table_name.id IN $in", $select_fields, array(), -2, '', true, $seed, true);
-    if (!is_array($params)) {
+    if (!\is_array($params)) {
         $params = array();
     }
     if (!isset($params['custom_select'])) {
@@ -240,7 +240,7 @@ function get_modified_entries($session, $module_name, $ids, $select_fields)
 
     $xml = '<?xml version="1.0" encoding="utf-8"?><items>';
     while ($row = $seed->db->fetchByAssoc($result)) {
-        if (version_compare(phpversion(), '5.0') < 0) {
+        if (\version_compare(\phpversion(), '5.0') < 0) {
             $temp = $seed;
         } else {
             $temp = @clone($seed);
@@ -256,7 +256,7 @@ function get_modified_entries($session, $module_name, $ids, $select_fields)
     }
     $xml .= "</items>";
 
-    $xml = base64_encode($xml);
+    $xml = \base64_encode($xml);
 
     return array('result'=>$xml, 'error'=>$error->get_soap_array());
 }
@@ -298,7 +298,7 @@ function get_attendee_list($session, $module_name, $id)
     $xml = '<?xml version="1.0" encoding="utf-8"?>';
     if ($module_name == 'Meetings' || $module_name == 'Calls') {
         //if we find a meeting or call we want to send back the attendees
-        $l_module_name = strtolower($module_name);
+        $l_module_name = \strtolower($module_name);
         $table_name = $l_module_name."_users";
         if ($module_name == 'Meetings') {
             $join_field = "meeting";
@@ -334,6 +334,6 @@ function get_attendee_list($session, $module_name, $id)
         }
         $xml .= '</attendees>';
     }
-    $xml = base64_encode($xml);
+    $xml = \base64_encode($xml);
     return array('result'=>$xml, 'error'=>$error->get_soap_array());
 }

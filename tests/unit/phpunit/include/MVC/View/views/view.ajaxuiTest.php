@@ -8,7 +8,7 @@ class ViewAjaxUITest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $view = new ViewAjaxUI();
         $this->assertInstanceOf('ViewAjaxUI', $view);
         $this->assertInstanceOf('SugarView', $view);
-        $this->assertTrue(is_array($view->options));
+        $this->assertTrue(\is_array($view->options));
     }
 
     public function testdisplay()

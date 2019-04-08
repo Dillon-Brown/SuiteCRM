@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -47,7 +47,7 @@ class formLetter
     public static function LVSmarty()
     {
         global $app_strings, $sugar_config;
-        if (preg_match('/^6\./', $sugar_config['sugar_version'])) {
+        if (\preg_match('/^6\./', $sugar_config['sugar_version'])) {
             $script = '<a href="#" class="menuItem" onmouseover="hiliteItem(this,\'yes\');
 " onmouseout="unhiliteItem(this);" onclick="showPopup()">' . $app_strings['LBL_PRINT_AS_PDF'] . '</a>';
         } else {

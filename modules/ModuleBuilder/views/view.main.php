@@ -56,7 +56,7 @@ class ViewMain extends SugarView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -83,7 +83,7 @@ class ViewMain extends SugarView
         $type = (!empty($_REQUEST['type']))?$_REQUEST['type']:'main';
         $mbt = false;
         $admin = false;
-        $mb = strtolower($type);
+        $mb = \strtolower($type);
         $smarty->assign('TYPE', $type);
         $smarty->assign('app_strings', $app_strings);
         $smarty->assign('mod', $mod_strings);

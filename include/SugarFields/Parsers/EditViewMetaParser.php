@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -68,7 +68,7 @@ class EditViewMetaParser extends MetaParser
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -87,7 +87,7 @@ class EditViewMetaParser extends MetaParser
     public function parse($filePath, $vardefs = array(), $moduleDir = '', $merge=false, $masterCopy=null)
     {
         global $app_strings;
-        $contents = file_get_contents($filePath);
+        $contents = \file_get_contents($filePath);
         $contents = $this->trimHTML($contents);
         $contents = $this->stripFlavorTags($contents);
         $moduleName = '';
@@ -100,7 +100,7 @@ class EditViewMetaParser extends MetaParser
         $hiddenInputs = array();
         foreach ($formElements as $elem) {
             $type = $this->getTagAttribute("type", $elem);
-            if (preg_match('/hidden/si', $type)) {
+            if (\preg_match('/hidden/si', $type)) {
                 $name = $this->getTagAttribute("name", $elem);
                 $value = $this->getTagAttribute("value", $elem);
                 $hiddenInputs[$name] = $value;
@@ -108,7 +108,7 @@ class EditViewMetaParser extends MetaParser
         }
 
         // Get the second table in the page and onward
-        $tables = array_slice($tables, 1);
+        $tables = \array_slice($tables, 1);
         $panels = array();
         $tableCount = 0;
         $addedElements = array();
@@ -122,10 +122,10 @@ class EditViewMetaParser extends MetaParser
                 $data = array();
                 $panelKey = $tableCount == 0 ? "default" : '';
                 foreach ($tabledata as $t) {
-                    $vals = array_values($this->getElementsByType("tr", $t));
-                    if (preg_match_all('/<h4[^>]*?>.*?(\{MOD\.|\{APP\.)(LBL_[^\}]*?)[\}].*?<\/h4>/s', $vals[0], $matches, PREG_SET_ORDER)) {
-                        array_shift($vals);
-                        $panelKey = count($matches[0]) == 3 ? strtolower($matches[0][2]) : $panelKey;
+                    $vals = \array_values($this->getElementsByType("tr", $t));
+                    if (\preg_match_all('/<h4[^>]*?>.*?(\{MOD\.|\{APP\.)(LBL_[^\}]*?)[\}].*?<\/h4>/s', $vals[0], $matches, PREG_SET_ORDER)) {
+                        \array_shift($vals);
+                        $panelKey = \count($matches[0]) == 3 ? \strtolower($matches[0][2]) : $panelKey;
                     }
 
                     //If $panelKey is empty use the maxTableCountNum value
@@ -172,8 +172,8 @@ class EditViewMetaParser extends MetaParser
                }
 
                // If there wasn't any slot numbering/lettering then just default to expect label->vallue pairs
-               $sugarAttrLabel = count($sugarAttrLabel) != 0 ? $sugarAttrLabel : ($slot % 2 == 0) ? true : false;
-               $sugarAttrValue = count($sugarAttrValue) != 0 ? $sugarAttrValue : ($slot % 2 == 1) ? true : false;
+               $sugarAttrLabel = \count($sugarAttrLabel) != 0 ? $sugarAttrLabel : ($slot % 2 == 0) ? true : false;
+               $sugarAttrValue = \count($sugarAttrValue) != 0 ? $sugarAttrValue : ($slot % 2 == 1) ? true : false;
                $slot++;
 
                if ($sugarAttrValue) {
@@ -198,38 +198,38 @@ class EditViewMetaParser extends MetaParser
                    if (!empty($customField)) {
                        // If it's a custom field we just set the name
                        $name = $customField;
-                   } elseif (empty($formElementNames) && preg_match_all('/[\{]([^\}]*?)[\}]/s', $spanValue, $matches, PREG_SET_ORDER)) {
+                   } elseif (empty($formElementNames) && \preg_match_all('/[\{]([^\}]*?)[\}]/s', $spanValue, $matches, PREG_SET_ORDER)) {
                        // We are here if the $spanValue did not contain a form element for editing.
                        // We will assume that it is read only (since there were no edit form elements)
 
 
                        // If there is more than one matching {} value then try to find the right one to key off
                        // based on vardefs.php file.  Also, use the entire spanValue as customCode
-                       if (count($matches) > 1) {
+                       if (\count($matches) > 1) {
                            $name = $matches[0][1];
                            $customCode = $spanValue;
                            foreach ($matches as $pair) {
-                               if (preg_match("/^(mod[\.]|app[\.]).*?/i", $pair[1])) {
-                                   $customCode = str_replace($pair[1], '$'.strtoupper($pair[1]), $customCode);
+                               if (\preg_match("/^(mod[\.]|app[\.]).*?/i", $pair[1])) {
+                                   $customCode = \str_replace($pair[1], '$'.\strtoupper($pair[1]), $customCode);
                                } else {
                                    if (!empty($vardefs[$pair[1]])) {
                                        $name = $pair[1];
-                                       $customCode = str_replace($pair[1], '$fields.'.strtolower($pair[1]).'.value', $customCode);
+                                       $customCode = \str_replace($pair[1], '$fields.'.\strtolower($pair[1]).'.value', $customCode);
                                    } else {
                                        $phpName = $this->findAssignedVariableName($pair[1], $filePath);
-                                       $customCode = str_replace($pair[1], '$fields.'.strtolower($phpName).'.value', $customCode);
+                                       $customCode = \str_replace($pair[1], '$fields.'.\strtolower($phpName).'.value', $customCode);
                                    } //if-else
                                }
                            } //foreach
                        } else {
                            //If it is only a label, skip
-                           if (preg_match("/^(mod[\.]|app[\.]).*?/i", $matches[0][1])) {
+                           if (\preg_match("/^(mod[\.]|app[\.]).*?/i", $matches[0][1])) {
                                continue;
                            }
-                           $name = strtolower($matches[0][1]);
+                           $name = \strtolower($matches[0][1]);
                        }
-                   } elseif (is_array($formElementNames)) {
-                       if (count($formElementNames) == 1) {
+                   } elseif (\is_array($formElementNames)) {
+                       if (\count($formElementNames) == 1) {
                            if (!empty($vardefs[$formElementNames[0]])) {
                                $name = $formElementNames[0];
                            } else {
@@ -239,7 +239,7 @@ class EditViewMetaParser extends MetaParser
                                //If it's still empty, just use the entire block as customCode
                                if (empty($vardefs[$name])) {
                                    //Replace any { characters just in case
-                                   $customCode = str_replace('{', '{$', $spanValue);
+                                   $customCode = \str_replace('{', '{$', $spanValue);
                                }
                            } //if-else
                        } else {
@@ -266,7 +266,7 @@ class EditViewMetaParser extends MetaParser
                    }
 
                    // Build the entry
-                   if (preg_match("/<textarea/si", $spanValue)) {
+                   if (\preg_match("/<textarea/si", $spanValue)) {
                        //special case for textarea form elements (add the displayParams)
                        $displayParams = array();
                        $displayParams['rows'] = $this->getTagAttribute("rows", $spanValue);
@@ -296,37 +296,37 @@ class EditViewMetaParser extends MetaParser
                        }
                    } //if-else if-else block
 
-                   $addedField = is_array($field) ? $field['name'] : $field;
+                   $addedField = \is_array($field) ? $field['name'] : $field;
                    if (empty($addedField) || empty($addedElements[$addedField])) {
                        //Add the meta-data definition for required fields
                        if ($hasRequiredLabel) {
-                           if (is_array($field)) {
-                               if (isset($field['displayParams']) && is_array($field['displayParams'])) {
+                           if (\is_array($field)) {
+                               if (isset($field['displayParams']) && \is_array($field['displayParams'])) {
                                    $field['displayParams']['required']=true;
                                } else {
                                    $field['displayParams'] = array('required'=>true);
                                }
                            } else {
-                               $field = array('name'=>strtolower($field), 'displayParams'=>array('required'=>true));
+                               $field = array('name'=>\strtolower($field), 'displayParams'=>array('required'=>true));
                            }
                        }
-                       $col[] = is_array($field) ? $field : strtolower($field);
+                       $col[] = \is_array($field) ? $field : \strtolower($field);
                        $addedElements[$addedField] = $addedField;
                    }
                } //if($sugarAttValue)
            } //foreach
 
            // One last final check.  If $emptyCount does not equal Array $col count, don't add
-           if ($emptyCount != count($col)) {
+           if ($emptyCount != \count($col)) {
                if ($hasRequiredLabel) {
-                   if (is_array($col)) {
+                   if (\is_array($col)) {
                        if (isset($col['displayParams'])) {
                            $col['displayParams']['required']=true;
                        } else {
                            $col['displayParams']=array('required'=>true);
                        }
                    } else {
-                       $col = array('name'=>strtolower($col), 'displayParams'=>array('required'=>true));
+                       $col = array('name'=>\strtolower($col), 'displayParams'=>array('required'=>true));
                    }
                }
 
@@ -341,7 +341,7 @@ class EditViewMetaParser extends MetaParser
         $panels = $this->applyPreRules($moduleDir, $panels);
 
         $templateMeta = array();
-        if ($merge && !empty($masterCopy) && file_exists($masterCopy)) {
+        if ($merge && !empty($masterCopy) && \file_exists($masterCopy)) {
             $panels = $this->mergePanels($panels, $vardefs, $moduleDir, $masterCopy);
             $templateMeta = $this->mergeTemplateMeta($templateMeta, $moduleDir, $masterCopy);
         }

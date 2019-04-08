@@ -148,7 +148,7 @@ class SugarFeedTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($sugarFeed->id));
-        $this->assertEquals(36, strlen($sugarFeed->id));
+        $this->assertEquals(36, \strlen($sugarFeed->id));
 
         //mark the record as deleted
         $sugarFeed->mark_deleted($sugarFeed->id);
@@ -176,7 +176,7 @@ class SugarFeedTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($sugarFeed->id));
-        $this->assertEquals(36, strlen($sugarFeed->id));
+        $this->assertEquals(36, \strlen($sugarFeed->id));
 
         //test fetchReplies method
         $this->fetchReplies();
@@ -194,7 +194,7 @@ class SugarFeedTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $sugarFeed = new SugarFeed();
 
         $actual = $sugarFeed->fetchReplies(array('ID' => '1'));
-        $this->assertGreaterThan(0, strlen($actual));
+        $this->assertGreaterThan(0, \strlen($actual));
     }
 
     public function testgetLinkTypes()
@@ -234,14 +234,14 @@ class SugarFeedTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $sugarFeed = new SugarFeed();
 
         $result = $sugarFeed->get_list_view_data();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testgetTimeLapse()
     {
         $result = SugarFeed::getTimeLapse('2016-01-15 11:16:02');
         $this->assertTrue(isset($result));
-        $this->assertGreaterThanOrEqual(0, strlen($result));
+        $this->assertGreaterThanOrEqual(0, \strlen($result));
     }
 
     public function testparseMessage()

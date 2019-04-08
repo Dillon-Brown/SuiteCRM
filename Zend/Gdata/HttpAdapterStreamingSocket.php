@@ -72,7 +72,7 @@ class Zend_Gdata_HttpAdapterStreamingSocket extends Zend_Http_Client_Adapter_Soc
         }
 
         $host = $uri->getHost();
-        $host = (strtolower($uri->getScheme()) == 'https' ? $this->config['ssltransport'] : 'tcp') . '://' . $host;
+        $host = (\strtolower($uri->getScheme()) == 'https' ? $this->config['ssltransport'] : 'tcp') . '://' . $host;
         if ($this->connected_to[0] != $host || $this->connected_to[1] != $uri->getPort()) {
             require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception(
@@ -90,15 +90,15 @@ class Zend_Gdata_HttpAdapterStreamingSocket extends Zend_Http_Client_Adapter_Soc
         }
         $request = "{$method} {$path} HTTP/{$http_ver}\r\n";
         foreach ($headers as $k => $v) {
-            if (is_string($k)) {
-                $v = ucfirst($k) . ": $v";
+            if (\is_string($k)) {
+                $v = \ucfirst($k) . ": $v";
             }
             $request .= "$v\r\n";
         }
 
         // Send the headers over
         $request .= "\r\n";
-        if (! @fwrite($this->socket, $request)) {
+        if (! @\fwrite($this->socket, $request)) {
             require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception(
                 'Error writing request to server'
@@ -109,7 +109,7 @@ class Zend_Gdata_HttpAdapterStreamingSocket extends Zend_Http_Client_Adapter_Soc
         //read from $body, write to socket
         $chunk = $body->read(self::CHUNK_SIZE);
         while ($chunk !== false) {
-            if (! @fwrite($this->socket, $chunk)) {
+            if (! @\fwrite($this->socket, $chunk)) {
                 require_once 'Zend/Http/Client/Adapter/Exception.php';
                 throw new Zend_Http_Client_Adapter_Exception(
                     'Error writing request to server'

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -74,7 +74,7 @@ class LayoutManager
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -250,10 +250,10 @@ class LayoutManager
         );
 
         $fieldDef = $this->getFieldDef($widget_def);
-        if (!empty($fieldDef) &&  !empty($fieldDef['type']) && strtolower(trim($fieldDef['type'])) == 'multienum') {
+        if (!empty($fieldDef) &&  !empty($fieldDef['type']) && \strtolower(\trim($fieldDef['type'])) == 'multienum') {
             $widget_def['widget_class'] = 'Fieldmultienum';
         }
-        if (!empty($fieldDef) &&  !empty($fieldDef['type']) && strtolower(trim($fieldDef['type'])) == 'bool') {
+        if (!empty($fieldDef) &&  !empty($fieldDef['type']) && \strtolower(\trim($fieldDef['type'])) == 'bool') {
             $widget_def['widget_class'] = 'Fieldbool';
         }
 
@@ -291,7 +291,7 @@ class LayoutManager
             if (empty($class_map[$class_name]['widget_class'])) {
                 $widget = new SugarWidgetSubPanelTopButton($class_map[$class_name]);
             } else {
-                if (!class_exists($class_map[$class_name]['widget_class'])) {
+                if (!\class_exists($class_map[$class_name]['widget_class'])) {
                     require_once('include/generic/SugarWidgets/'.$class_map[$class_name]['widget_class'].'.php');
                 }
 
@@ -303,16 +303,16 @@ class LayoutManager
         }
 
         // At this point, we have a class name and we do not have a valid class defined.
-        if (!class_exists($class_name)) {
+        if (!\class_exists($class_name)) {
 
             // The class does not exist.  Try including it.
-            if (file_exists('custom/include/generic/SugarWidgets/'.$class_name.'.php')) {
+            if (\file_exists('custom/include/generic/SugarWidgets/'.$class_name.'.php')) {
                 require_once('custom/include/generic/SugarWidgets/'.$class_name.'.php');
-            } elseif (file_exists('include/generic/SugarWidgets/'.$class_name.'.php')) {
+            } elseif (\file_exists('include/generic/SugarWidgets/'.$class_name.'.php')) {
                 require_once('include/generic/SugarWidgets/'.$class_name.'.php');
             }
 
-            if (!class_exists($class_name)) {
+            if (!\class_exists($class_name)) {
                 // If we still do not have a class, oops....
                 die("LayoutManager: Class not found:".$class_name);
             }
@@ -352,14 +352,14 @@ class LayoutManager
     {
         $theclass = $this->getClassFromWidgetDef($widget_def, $use_default);
         $label = isset($widget_def['module']) ? $widget_def['module'] : '';
-        if (is_subclass_of($theclass, 'SugarWidgetSubPanelTopButton')) {
+        if (\is_subclass_of($theclass, 'SugarWidgetSubPanelTopButton')) {
             $label = $theclass->get_subpanel_relationship_name($widget_def);
         }
         $theclass->setWidgetId($label);
 
         //#27426
         $fieldDef = $this->getFieldDef($widget_def);
-        if (!empty($fieldDef) &&  !empty($fieldDef['type']) && strtolower(trim($fieldDef['type'])) == 'multienum') {
+        if (!empty($fieldDef) &&  !empty($fieldDef['type']) && \strtolower(\trim($fieldDef['type'])) == 'multienum') {
             $widget_def['fields']  = sugarArrayMerge($widget_def['fields'], $fieldDef);
             $widget_def['fields']['module']  = $label;
         }

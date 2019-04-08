@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -121,7 +121,7 @@ class Campaign extends SugarBean
 
         //_ppd($user);
         if (!empty($user)) {
-            if (is_array($user)) {
+            if (\is_array($user)) {
                 $fullName = $locale->getLocaleFormattedName($user['first_name'], $user['last_name']);
             } else /*if(is_object($user))*/ {
                 $fullName = $locale->getLocaleFormattedName($user->first_name, $user->last_name);
@@ -232,7 +232,7 @@ class Campaign extends SugarBean
     {
         $where_clauses = array();
         $the_query_string = $this->db->quote($the_query_string);
-        array_push($where_clauses, "campaigns.name like '$the_query_string%'");
+        \array_push($where_clauses, "campaigns.name like '$the_query_string%'");
 
         $the_where = "";
         foreach ($where_clauses as $clause) {
@@ -297,13 +297,13 @@ class Campaign extends SugarBean
         $query_array['select'] = 'SELECT campaign_log.* ';
         $query_array['where']  = $query_array['where']. " AND activity_type = 'lead' AND archived = 0 AND target_id IS NOT NULL";
 
-        return implode(' ', $query_array);
+        return \implode(' ', $query_array);
     }
 
     public function track_log_entries($type=array())
     {
         //get arguments being passed in
-        $args = func_get_args();
+        $args = \func_get_args();
         $mkt_id ='';
 
         $this->load_relationship('log_entries');
@@ -338,8 +338,8 @@ class Campaign extends SugarBean
             //perform the inner join with the group by if a marketing id is defined, which means we need to filter out duplicates.
             //if no marketing id is specified then we are displaying results from multiple marketing emails and it is understood there might be duplicate target entries
             if (!empty($mkt_id)) {
-                $group_by = str_replace("campaign_log", "cl", $query_array['group_by']);
-                $join_where = str_replace("campaign_log", "cl", $query_array['where']);
+                $group_by = \str_replace("campaign_log", "cl", $query_array['group_by']);
+                $join_where = \str_replace("campaign_log", "cl", $query_array['where']);
                 $query_array['from'] .= " INNER JOIN (select min(id) as id from campaign_log cl $join_where GROUP BY $group_by  ) secondary
 					on campaign_log.id = secondary.id	";
             }
@@ -349,7 +349,7 @@ class Campaign extends SugarBean
             unset($query_array['group_by']);
         }
 
-        $query = (implode(" ", $query_array));
+        $query = (\implode(" ", $query_array));
         return $query;
     }
 
@@ -357,7 +357,7 @@ class Campaign extends SugarBean
     public function get_queue_items()
     {
         //get arguments being passed in
-        $args = func_get_args();
+        $args = \func_get_args();
         $mkt_id ='';
 
         $this->load_relationship('queueitems');
@@ -381,7 +381,7 @@ class Campaign extends SugarBean
 
         //get select query from email man
         $man = new EmailMan();
-        $listquery= $man->create_queue_items_query('', str_replace(array("WHERE","where"), "", $query_array['where']), null, $query_array);
+        $listquery= $man->create_queue_items_query('', \str_replace(array("WHERE","where"), "", $query_array['where']), null, $query_array);
         return $listquery;
     }
     //	function get_prospect_list_entries() {
@@ -435,10 +435,10 @@ class Campaign extends SugarBean
     {
         //include the distinct filter if a marketing id is defined, which means we need to filter out duplicates by the passed in group by.
         //if no marketing id is specified, it is understood there might be duplicate target entries so no need to filter out
-        if ((strpos($query, 'marketing_id') !== false)&& isset($params['distinct'])) {
+        if ((\strpos($query, 'marketing_id') !== false)&& isset($params['distinct'])) {
             $pattern = '/SELECT(.*?)(\s){1}FROM(\s){1}/is';  // ignores the case
             $replacement = 'SELECT COUNT(DISTINCT ' . $params['distinct'] . ') c FROM ';
-            $query = preg_replace($pattern, $replacement, $query, 1);
+            $query = \preg_replace($pattern, $replacement, $query, 1);
             return $query;
         }
 

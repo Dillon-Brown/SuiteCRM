@@ -95,7 +95,7 @@ class ProjectTaskTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($projectTask->id));
-        $this->assertEquals(36, strlen($projectTask->id));
+        $this->assertEquals(36, \strlen($projectTask->id));
 
         //test _get_depends_on_name method
         $this->_get_depends_on_name($projectTask->id);
@@ -160,7 +160,7 @@ class ProjectTaskTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $projectTask = new ProjectTask();
 
         $result = $projectTask->getAllSubProjectTasks();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testupdateStatistic()

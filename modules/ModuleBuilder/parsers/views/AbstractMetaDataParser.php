@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -137,7 +137,7 @@ abstract class AbstractMetaDataParser
     {
         //Studio invisible fields should always be hidden
         if (isset($def['studio'])) {
-            if (is_array($def ['studio'])) {
+            if (\is_array($def ['studio'])) {
                 if (!empty($view) && isset($def ['studio'][$view])) {
                     return $def ['studio'][$view] !== false && $def ['studio'][$view] !== 'false' && $def ['studio'][$view] !== 'hidden';
                 }
@@ -156,11 +156,11 @@ abstract class AbstractMetaDataParser
                     (empty($def ['source']) || $def ['source'] === 'db' || $def ['source'] === 'custom_fields')
                     && isset($def ['type']) && $def ['type'] !== 'id' && $def ['type'] !== 'parent_type'
                     && (empty($def ['dbType']) || $def ['dbType'] !== 'id')
-                    && (isset($def ['name']) && strcmp($def ['name'], 'deleted') != 0)
+                    && (isset($def ['name']) && \strcmp($def ['name'], 'deleted') != 0)
                 ) // db and custom fields that aren't ID fields
                 ||
                 // exclude fields named *_name regardless of their type...just convention
-                (isset($def ['name']) && substr($def ['name'], -5) === '_name'));
+                (isset($def ['name']) && \substr($def ['name'], -5) === '_name'));
     }
 
     /**
@@ -191,7 +191,7 @@ abstract class AbstractMetaDataParser
         $newAry = array();
         foreach ($fieldDefs as $field) {
             if (isset($field['required']) && $field['required'] && isset($field['name']) && empty($field['readonly'])) {
-                array_push($newAry, '"' . $field['name'] . '"');
+                \array_push($newAry, '"' . $field['name'] . '"');
             }
         }
 
@@ -207,8 +207,8 @@ abstract class AbstractMetaDataParser
      */
     protected static function isTrue($val)
     {
-        if (is_string($val)) {
-            $str = strtolower($val);
+        if (\is_string($val)) {
+            $str = \strtolower($val);
 
             return ($str !== '0' && $str !== 'false' && $str !== '');
         }

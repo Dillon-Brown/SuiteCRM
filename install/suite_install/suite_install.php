@@ -11,7 +11,7 @@ $sugar_config['sugarbeet'] = false;
 $sugar_config['enable_action_menu'] = true;
 $sugar_config['imap_test'] = false;
 
-ksort($sugar_config);
+\ksort($sugar_config);
 write_array_to_file('sugar_config', $sugar_config, 'config.php');
 
 require_once('modules/Administration/updater_utils.php');

@@ -9,4 +9,4 @@ return CustomLoader::mergeCustomArray([
         /** Routes are accessible in middleware. */
         'determineRouteBeforeAppMiddleware' => true,
     ]
-], basename(__FILE__));
+], \basename(__FILE__));

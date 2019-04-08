@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -60,11 +60,11 @@ class EntryPointConfirmOptInHandler
      */
     public function __construct($request = null, $post = null)
     {
-        if (is_null($request)) {
+        if (\is_null($request)) {
             $request = $_REQUEST;
         }
 
-        if (is_null($post)) {
+        if (\is_null($post)) {
             $post = $_POST;
         }
 
@@ -111,7 +111,7 @@ class EntryPointConfirmOptInHandler
         }
 
         $module = $post['module'];
-        $uids = explode(',', $post['uid']);
+        $uids = \explode(',', $post['uid']);
         $confirmedOptInEmailsSent = 0;
         $errors = 0;
         $warnings = 0;
@@ -129,15 +129,15 @@ class EntryPointConfirmOptInHandler
         }
 
         if ($confirmedOptInEmailsSent > 0) {
-            $msg .= sprintf($app_strings['RESPONSE_SEND_CONFIRM_OPT_IN_EMAIL'], $confirmedOptInEmailsSent);
+            $msg .= \sprintf($app_strings['RESPONSE_SEND_CONFIRM_OPT_IN_EMAIL'], $confirmedOptInEmailsSent);
         }
 
         if ($warnings > 0) {
-            $msg .=  sprintf($app_strings['RESPONSE_SEND_CONFIRM_OPT_IN_EMAIL_NOT_OPT_IN'], $warnings);
+            $msg .=  \sprintf($app_strings['RESPONSE_SEND_CONFIRM_OPT_IN_EMAIL_NOT_OPT_IN'], $warnings);
         }
 
         if ($errors > 0) {
-            $msg .=  sprintf($app_strings['RESPONSE_SEND_CONFIRM_OPT_IN_EMAIL_MISSING_EMAIL_ADDRESS_ID'], $errors);
+            $msg .=  \sprintf($app_strings['RESPONSE_SEND_CONFIRM_OPT_IN_EMAIL_MISSING_EMAIL_ADDRESS_ID'], $errors);
         }
 
 

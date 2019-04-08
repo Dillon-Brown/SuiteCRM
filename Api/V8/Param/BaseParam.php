@@ -78,8 +78,8 @@ abstract class BaseParam implements \JsonSerializable
     protected function setOptions(OptionsResolver $optionResolver, array $options)
     {
         foreach ($options as $key => $option) {
-            if (!class_exists($option)) {
-                throw new \InvalidArgumentException(sprintf('Option %s does not exist!', $option));
+            if (!\class_exists($option)) {
+                throw new \InvalidArgumentException(\sprintf('Option %s does not exist!', $option));
             }
 
             /** @var BaseOption $class */

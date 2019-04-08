@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -129,7 +129,7 @@ class ImportController extends SugarController
             }
         }
         
-        echo json_encode($results);
+        echo \json_encode($results);
         sugar_cleanup(true);
     }
     public function action_RefreshMapping()
@@ -144,7 +144,7 @@ class ImportController extends SugarController
             $delim = "\t";
         }
         $enclosure = $_REQUEST['qualif'];
-        $enclosure = html_entity_decode($enclosure, ENT_QUOTES);
+        $enclosure = \html_entity_decode($enclosure, ENT_QUOTES);
         $hasHeader = isset($_REQUEST['header']) && !empty($_REQUEST['header']) ? true : false;
 
         $importFile = new ImportFile($fileName, $delim, $enclosure, false);

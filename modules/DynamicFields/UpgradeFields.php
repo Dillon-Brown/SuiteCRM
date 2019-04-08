@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -96,7 +96,7 @@ require_once('modules/DynamicFields/DynamicField.php');
                  echo "Dropping Column $col from $mod->table_name" . "_cstm for module $the_module<br>";
              } else {
                  if ($col != 'id_c') {
-                     if (trim($the_field->get_db_type()) != trim($type)) {
+                     if (\trim($the_field->get_db_type()) != \trim($type)) {
                          echo "Fixing Column Type for $col changing $type to ". $the_field->get_db_type() . "<br>";
                          if (!$simulate) {
                              $db->query($the_field->get_db_modify_alter_table($mod->table_name . '_cstm'));
@@ -108,7 +108,7 @@ require_once('modules/DynamicFields/DynamicField.php');
              }
          }
 
-         echo sizeof($fields) . " field(s) missing from $mod->table_name" . "_cstm<br>";
+         echo \sizeof($fields) . " field(s) missing from $mod->table_name" . "_cstm<br>";
          foreach ($fields as $field) {
              echo "Adding Column $field to $mod->table_name" . "_cstm<br>";
              if (!$simulate) {

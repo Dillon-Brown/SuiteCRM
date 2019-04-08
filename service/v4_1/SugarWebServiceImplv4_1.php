@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -146,7 +146,7 @@ class SugarWebServiceImplv4_1 extends SugarWebServiceImplv4
         );
 
         if (self::$helperObject->isLogLevelDebug()) {
-            $GLOBALS['log']->debug('SoapHelperWebServices->get_relationships - return data for getRelationshipResults is ' . var_export(
+            $GLOBALS['log']->debug('SoapHelperWebServices->get_relationships - return data for getRelationshipResults is ' . \var_export(
                 $result,
                     true
             ));
@@ -155,7 +155,7 @@ class SugarWebServiceImplv4_1 extends SugarWebServiceImplv4
             $list = $result['rows'];
             $filterFields = $result['fields_set_on_rows'];
 
-            if (sizeof($list) > 0) {
+            if (\sizeof($list) > 0) {
                 // get the related module name and instantiate a bean for that
                 $submodulename = $mod->$link_field_name->getRelatedModuleName();
                 $submoduletemp = BeanFactory::getBean($submodulename);
@@ -352,10 +352,10 @@ class SugarWebServiceImplv4_1 extends SugarWebServiceImplv4
             $output_list[] = self::$helperObject->array_get_return_value($value, $results['table_name']);
         }
 
-        $next_offset = $offset + count($output_list);
+        $next_offset = $offset + \count($output_list);
 
         return array(
-            'result_count' => count($output_list),
+            'result_count' => \count($output_list),
             'next_offset' => $next_offset,
             'entry_list' => $output_list,
             'error' => $error->get_soap_array()

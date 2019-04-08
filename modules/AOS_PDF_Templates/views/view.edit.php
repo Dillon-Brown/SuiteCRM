@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -21,7 +21,7 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -41,12 +41,12 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
         //Loading Sample Files
         $json = getJSONobj();
         $samples = array();
-        if ($handle = opendir('modules/AOS_PDF_Templates/samples')) {
+        if ($handle = \opendir('modules/AOS_PDF_Templates/samples')) {
             $sample_options_array[] = ' ';
-            while (false !== ($file = readdir($handle))) {
-                if ($value = ltrim(rtrim($file, '.php'), 'smpl_')) {
+            while (false !== ($file = \readdir($handle))) {
+                if ($value = \ltrim(\rtrim($file, '.php'), 'smpl_')) {
                     require_once('modules/AOS_PDF_Templates/samples/'.$file);
-                    $file = rtrim($file, '.php');
+                    $file = \rtrim($file, '.php');
                     $file = new $file();
                     $fileArray =
                         array(
@@ -56,12 +56,12 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
                             $file->getFooter()
                         );
                     $fileArray = $json->encode($fileArray);
-                    $value = $mod_strings['LBL_'.strtoupper($value)];
+                    $value = $mod_strings['LBL_'.\strtoupper($value)];
                     $sample_options_array[$fileArray] = $value;
                 }
             }
             $samples = get_select_options($sample_options_array, '');
-            closedir($handle);
+            \closedir($handle);
         }
 
         $this->ss->assign('CUSTOM_SAMPLE', '<select id="sample" name="sample" onchange="insertSample(this.options[this.selectedIndex].value)">'.
@@ -84,14 +84,14 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
             $module = new $beanList[$moduleName]();
 
             foreach ($module->field_defs as $name => $arr) {
-                if (!((isset($arr['dbType']) && strtolower($arr['dbType']) == 'id') || (isset($arr['type']) && $arr['type'] == 'id') || (isset($arr['type']) && $arr['type'] == 'link'))) {
+                if (!((isset($arr['dbType']) && \strtolower($arr['dbType']) == 'id') || (isset($arr['type']) && $arr['type'] == 'id') || (isset($arr['type']) && $arr['type'] == 'link'))) {
                     if (!isset($arr['reportable']) || $arr['reportable']) {
                         $options_array['$'.$module->table_name.'_'.$name] = translate($arr['vname'], $module->module_dir);
                     }
                 }
             } //End loop.
 
-            $options = json_encode($options_array);
+            $options = \json_encode($options_array);
             $mod_options_array[$module->module_dir] = translate('LBL_MODULE_NAME', $module->module_dir);
             $insert_fields_js2 .="'$moduleName':$options,\n";
             $firstOptions = $options;
@@ -105,14 +105,14 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
                         $relate_module = new $relate_module_name();
 
                         foreach ($relate_module->field_defs as $relate_name => $relate_arr) {
-                            if (!((isset($relate_arr['dbType']) && strtolower($relate_arr['dbType']) == 'id') || $relate_arr['type'] == 'id' || $relate_arr['type'] == 'link')) {
+                            if (!((isset($relate_arr['dbType']) && \strtolower($relate_arr['dbType']) == 'id') || $relate_arr['type'] == 'id' || $relate_arr['type'] == 'link')) {
                                 if ((!isset($relate_arr['reportable']) || $relate_arr['reportable']) && isset($relate_arr['vname'])) {
                                     $options_array['$'.$module_arr['name'].'_'.$relate_name] = translate($relate_arr['vname'], $relate_module->module_dir);
                                 }
                             }
                         } //End loop.
 
-                        $options = json_encode($options_array);
+                        $options = \json_encode($options_array);
 
                         if ($module_arr['vname'] != 'LBL_DELETED') {
                             $options_array['$'.$module->table_name.'_'.$name] = translate($module_arr['vname'], $module->module_dir);
@@ -131,14 +131,14 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
                 $options_array = array(''=>'');
                 $group_quote = new AOS_Line_Item_Groups();
                 foreach ($group_quote->field_defs as $line_name => $line_arr) {
-                    if (!((isset($line_arr['dbType']) && strtolower($line_arr['dbType']) == 'id') || $line_arr['type'] == 'id' || $line_arr['type'] == 'link')) {
+                    if (!((isset($line_arr['dbType']) && \strtolower($line_arr['dbType']) == 'id') || $line_arr['type'] == 'id' || $line_arr['type'] == 'link')) {
                         if ((!isset($line_arr['reportable']) || $line_arr['reportable'])) {//&& $line_arr['vname']  != 'LBL_NAME'
                             $options_array['$'.$group_quote->table_name.'_'.$line_name] = translate($line_arr['vname'], $group_quote->module_dir);
                         }
                     }
                 }
 
-                $options = json_encode($options_array);
+                $options = \json_encode($options_array);
 
                 $line_module_name = $beanList['AOS_Line_Item_Groups'];
                 $fmod_options_array[$line_module_name] = translate('LBL_LINE_ITEMS', 'AOS_Quotes').' : '.translate('LBL_MODULE_NAME', 'AOS_Line_Item_Groups');
@@ -149,7 +149,7 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
 
                 $product_quote = new AOS_Products_Quotes();
                 foreach ($product_quote->field_defs as $line_name => $line_arr) {
-                    if (!((isset($line_arr['dbType']) && strtolower($line_arr['dbType']) == 'id') || $line_arr['type'] == 'id' || $line_arr['type'] == 'link')) {
+                    if (!((isset($line_arr['dbType']) && \strtolower($line_arr['dbType']) == 'id') || $line_arr['type'] == 'id' || $line_arr['type'] == 'link')) {
                         if (!isset($line_arr['reportable']) || $line_arr['reportable']) {
                             $options_array['$'.$product_quote->table_name.'_'.$line_name] = translate($line_arr['vname'], $product_quote->module_dir);
                         }
@@ -158,14 +158,14 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
 
                 $product_quote = new AOS_Products();
                 foreach ($product_quote->field_defs as $line_name => $line_arr) {
-                    if (!((isset($line_arr['dbType']) && strtolower($line_arr['dbType']) == 'id') || $line_arr['type'] == 'id' || $line_arr['type'] == 'link')) {
+                    if (!((isset($line_arr['dbType']) && \strtolower($line_arr['dbType']) == 'id') || $line_arr['type'] == 'id' || $line_arr['type'] == 'link')) {
                         if ((!isset($line_arr['reportable']) || $line_arr['reportable']) && $line_arr['vname']  != 'LBL_NAME') {
                             $options_array['$'.$product_quote->table_name.'_'.$line_name] = translate($line_arr['vname'], $product_quote->module_dir);
                         }
                     }
                 }
 
-                $options = json_encode($options_array);
+                $options = \json_encode($options_array);
 
                 $line_module_name = $beanList['AOS_Products_Quotes'];
                 $fmod_options_array[$line_module_name] = translate('LBL_LINE_ITEMS', 'AOS_Quotes').' : '.translate('LBL_MODULE_NAME', 'AOS_Products');
@@ -182,7 +182,7 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
                 $options_array['$aos_services_quotes_vat'] = translate('LBL_VAT', 'AOS_Quotes');
                 $options_array['$aos_services_quotes_service_total_price'] = translate('LBL_TOTAL_PRICE', 'AOS_Quotes');
 
-                $options = json_encode($options_array);
+                $options = \json_encode($options_array);
 
                 $s_line_module_name = 'AOS_Service_Quotes';
                 $fmod_options_array[$s_line_module_name] = translate('LBL_LINE_ITEMS', 'AOS_Quotes').' : '.translate('LBL_SERVICE_MODULE_NAME', 'AOS_Products_Quotes');
@@ -192,21 +192,21 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
                 $options_array = array(''=>'');
                 $currencies = new currency();
                 foreach ($currencies->field_defs as $name => $arr) {
-                    if (!((isset($arr['dbType']) && strtolower($arr['dbType']) == 'id') || $arr['type'] == 'id' || $arr['type'] == 'link' || $arr['type'] == 'bool' || $arr['type'] == 'datetime' || (isset($arr['link_type']) && $arr['link_type'] == 'relationship_info'))) {
+                    if (!((isset($arr['dbType']) && \strtolower($arr['dbType']) == 'id') || $arr['type'] == 'id' || $arr['type'] == 'link' || $arr['type'] == 'bool' || $arr['type'] == 'datetime' || (isset($arr['link_type']) && $arr['link_type'] == 'relationship_info'))) {
                         if (isset($arr['vname']) && $arr['vname'] != 'LBL_DELETED' && $arr['vname'] != 'LBL_CURRENCIES_HASH' && $arr['vname'] != 'LBL_LIST_ACCEPT_STATUS' && $arr['vname'] != 'LBL_AUTHENTICATE_ID' && $arr['vname'] != 'LBL_MODIFIED_BY' && $arr['name'] != 'created_by_name') {
                             $options_array['$currencies_'.$name] = translate($arr['vname'], 'Currencies');
                         }
                     }
                 }
-                $options = json_encode($options_array);
+                $options = \json_encode($options_array);
 
                 $line_module_name = $beanList['Currencies'];
                 $fmod_options_array[$line_module_name] = translate('LBL_MODULE_NAME', 'Currencies').' : '.translate('LBL_MODULE_NAME', 'Currencies');
                 $insert_fields_js2 .="'$line_module_name':$options,\n";
             }
-            array_multisort($fmod_options_array, SORT_ASC, $fmod_options_array);
-            $mod_options_array = array_merge($mod_options_array, $fmod_options_array);
-            $module_options = json_encode($mod_options_array);
+            \array_multisort($fmod_options_array, SORT_ASC, $fmod_options_array);
+            $mod_options_array = \array_merge($mod_options_array, $fmod_options_array);
+            $module_options = \json_encode($mod_options_array);
 
 
             $insert_fields_js .="'$moduleName':$module_options,\n";
@@ -218,7 +218,7 @@ class AOS_PDF_TemplatesViewEdit extends ViewEdit
         $insert_fields_js2 .= "} ;</script>";
         //echo $this->bean->type;
         if ($this->bean->type=='') {
-            $type = key($app_list_strings['pdf_template_type_dom']);
+            $type = \key($app_list_strings['pdf_template_type_dom']);
         } else {
             $type = $this->bean->type;
         }

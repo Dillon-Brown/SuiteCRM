@@ -83,7 +83,7 @@ class AlertsController extends SugarController
         }
 
         if ($url_redirect == null) {
-            $url_redirect = 'index.php?fakeid='. uniqid('fake_', true);
+            $url_redirect = 'index.php?fakeid='. \uniqid('fake_', true);
         }
 
         if (isset($_POST['target_module'])) {
@@ -124,7 +124,7 @@ class AlertsController extends SugarController
         $this->view_object_map['Result'] = '';
         $this->view = 'ajax';
 
-        echo json_encode(['result' => intval($shouldShowReminderPopup)], true);
+        echo \json_encode(['result' => \intval($shouldShowReminderPopup)], true);
     }
 
     public function action_markAsRead()

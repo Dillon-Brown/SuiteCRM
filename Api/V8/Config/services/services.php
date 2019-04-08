@@ -53,4 +53,4 @@ return CustomLoader::mergeCustomArray([
             $container->get(AttributeObjectHelper::class)
         );
     },
-], basename(__FILE__));
+], \basename(__FILE__));

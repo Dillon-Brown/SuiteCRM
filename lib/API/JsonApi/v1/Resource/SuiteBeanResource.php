@@ -89,13 +89,13 @@ class SuiteBeanResource extends Resource
             // Filter security sensitive information from attributes
             if (
                 isset($config['filter_module_fields'][$sugarBean->module_name]) &&
-                in_array($fieldName, $config['filter_module_fields'][$sugarBean->module_name], true)
+                \in_array($fieldName, $config['filter_module_fields'][$sugarBean->module_name], true)
             ) {
                 continue;
             }
 
             // Skip the reserved keywords which can be safely skipped
-            if (in_array($fieldName, Resource::$JSON_API_SKIP_RESERVED_KEYWORDS, true)) {
+            if (\in_array($fieldName, Resource::$JSON_API_SKIP_RESERVED_KEYWORDS, true)) {
                 $exception = new ReservedKeywordNotAllowedException();
                 $logMessage =
                     ' Code: [' . $exception->getCode() . ']' .
@@ -108,7 +108,7 @@ class SuiteBeanResource extends Resource
             }
 
             // Throw when the field names match the reserved keywords
-            if (in_array($fieldName, Resource::$JSON_API_SKIP_RESERVED_KEYWORDS, true)) {
+            if (\in_array($fieldName, Resource::$JSON_API_SKIP_RESERVED_KEYWORDS, true)) {
                 $exception = new ReservedKeywordNotAllowedException($fieldName);
                 $exception->setDetail('Reserved keyword not allowed in attribute field name.');
                 $exception->setSource('/data/attributes/' . $fieldName);
@@ -159,7 +159,7 @@ class SuiteBeanResource extends Resource
                 }
                 continue;
             } else {
-                if (property_exists($sugarBean, $fieldName)) {
+                if (\property_exists($sugarBean, $fieldName)) {
                     $this->attributes[$fieldName] = isset($sugarBean->$fieldName) ? $sugarBean->$fieldName : '';
                 }
             }
@@ -220,13 +220,13 @@ class SuiteBeanResource extends Resource
             // Filter security sensitive information from attributes
             if (
                 isset($config['filter_module_fields'][$sugarBean->module_name]) &&
-                in_array($fieldName, $config['filter_module_fields'][$sugarBean->module_name], true)
+                \in_array($fieldName, $config['filter_module_fields'][$sugarBean->module_name], true)
             ) {
                 continue;
             }
 
             // Skip the reserved keywords which can be safely skipped
-            if (in_array($fieldName, self::$JSON_API_SKIP_RESERVED_KEYWORDS)) {
+            if (\in_array($fieldName, self::$JSON_API_SKIP_RESERVED_KEYWORDS)) {
                 $exception = new ReservedKeywordNotAllowedException();
                 $logMessage =
                     ' Code: [' . $exception->getCode() . ']' .
@@ -361,19 +361,19 @@ class SuiteBeanResource extends Resource
                             if ($added !== true) {
                                 throw new ConflictException(
                                     '[SugarBeanResource] [Unable to add relationships (to many)] while converting toSugarBean()'.
-                                    json_encode($added)
+                                    \json_encode($added)
                                 );
                             }
                         }
 
                         // Remove missing relationships
-                        $relatedResourceIdsToRemove = array_diff($relatedSugarBeanIds, $relatedResourceIds);
+                        $relatedResourceIdsToRemove = \array_diff($relatedSugarBeanIds, $relatedResourceIds);
                         if (empty($relatedResourceIdsToRemove)  === false) {
                             $removed = $toManySugarBeanLink->remove($relatedResourceIdsToRemove);
                             if ($removed !== true) {
                                 throw new ConflictException(
                                     '[SugarBeanResource] [Unable to remove relationships (to many)] while converting toSugarBean()'.
-                                    json_encode($removed)
+                                    \json_encode($removed)
                                 );
                             }
                         }
@@ -406,7 +406,7 @@ class SuiteBeanResource extends Resource
                         if ($added !== true) {
                             throw new ConflictException(
                                 '[SugarBeanResource] [Unable to add relationships (to one}] while converting toSugarBean()'.
-                                json_encode($added)
+                                \json_encode($added)
                             );
                         }
                     }
@@ -436,7 +436,7 @@ class SuiteBeanResource extends Resource
     private function fromResource(Resource $resource)
     {
         $sugarBeanResource = clone $this;
-        $objValues = get_object_vars($resource); // return array of object values
+        $objValues = \get_object_vars($resource); // return array of object values
         foreach ($objValues as $key => $value) {
             $sugarBeanResource->$key = $value;
         }
@@ -488,7 +488,7 @@ class SuiteBeanResource extends Resource
             );
         }
 
-        $file_contents = file_get_contents($file_path);
+        $file_contents = \file_get_contents($file_path);
 
         if ($file_contents === false) {
             throw new ApiException(
@@ -497,7 +497,7 @@ class SuiteBeanResource extends Resource
             );
         }
 
-        $file = base64_encode($file_contents);
+        $file = \base64_encode($file_contents);
         $this->attributes[$fileFieldName] = $file;
     }
 
@@ -515,13 +515,13 @@ class SuiteBeanResource extends Resource
         $hasRevision = $bean instanceof \Document;
         $dataFieldName = $fieldName . '_file';
 
-        $decodedFile = base64_decode($this->attributes[$dataFieldName]);
+        $decodedFile = \base64_decode($this->attributes[$dataFieldName]);
         $uploadFile = new \UploadFile($fieldName);
         $uploadFile->set_for_soap($this->attributes[$fieldName], $decodedFile);
 
-        $ext_pos = strrpos($uploadFile->stored_file_name, '.');
-        $uploadFile->file_ext = substr($uploadFile->stored_file_name, $ext_pos + 1);
-        if (in_array($uploadFile->file_ext, $config['upload_badext'], true)) {
+        $ext_pos = \strrpos($uploadFile->stored_file_name, '.');
+        $uploadFile->file_ext = \substr($uploadFile->stored_file_name, $ext_pos + 1);
+        if (\in_array($uploadFile->file_ext, $config['upload_badext'], true)) {
             $uploadFile->stored_file_name .= '.txt';
             $uploadFile->file_ext = 'txt';
         }

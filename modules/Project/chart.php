@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -138,7 +138,7 @@ class chart
 
         //From the query above, populates the select box
         foreach ($project_list as $project) {
-            if (in_array($project->id, $sel_projects)) {//Check if the select box option matches the resource passed in.
+            if (\in_array($project->id, $sel_projects)) {//Check if the select box option matches the resource passed in.
                 $selected = "selected='selected'"; //if so set it to selected
             } else {
                 $selected = "";
@@ -166,8 +166,8 @@ class chart
         foreach ($user_list as $user) {
             $user_obj = new User();
             $user_obj->retrieve($user->id);
-            var_dump($user_obj->id);
-            if (in_array($user->id, $sel_users)) {//Check if the select box option matches the resource passed in.
+            \var_dump($user_obj->id);
+            if (\in_array($user->id, $sel_users)) {//Check if the select box option matches the resource passed in.
                 $selected = "selected='selected'"; //if so set it to selected
             } else {
                 $selected = "";
@@ -195,7 +195,7 @@ class chart
             $contact_obj = new Contact();
             $contact_obj->retrieve($contact->id);
 
-            if (in_array($contact->id, $sel_contacts)) {//Check if the select box option matches the resource passed in.
+            if (\in_array($contact->id, $sel_contacts)) {//Check if the select box option matches the resource passed in.
                 $selected = "selected='selected'"; //if so set it to selected
             } else {
                 $selected = "";
@@ -384,7 +384,7 @@ class chart
             foreach ($time_span as $year => $months) {
                 foreach ($months as $month => $weeks) {//count the number of days in each month
 
-                    echo '<td class="main_table weeks" colspan="' . count($weeks) . '">'.$month .'</td>';
+                    echo '<td class="main_table weeks" colspan="' . \count($weeks) . '">'.$month .'</td>';
                 }
             }
 
@@ -396,7 +396,7 @@ class chart
                     {
                         $wcount++;
                     }*/
-                    $wcount+= count($weeks);
+                    $wcount+= \count($weeks);
                 }
                 $width = $wcount * 26; //used to set width on years row. width needed for css text clipping
                 echo '<td colspan="'.$wcount.'" class="main_table years"><div style="width: '.$width.'px;" class="year_div">' . $year.'</div></td>';
@@ -450,10 +450,10 @@ class chart
                     $dup = 0;
 
                     for ($c=0; $c < $count; $c++) {
-                        if ($x == floor($resource->tasks[$c]['start_day'] /7) && ($resource->tasks[$c]['start_day'] /7) > 0) {
+                        if ($x == \floor($resource->tasks[$c]['start_day'] /7) && ($resource->tasks[$c]['start_day'] /7) > 0) {
                             $dup++;
                             $square =  '<td class="inner_td"><div style="color: #ffffff;"  rel="'.$dateq.'|'.$resource->id.'|'.$resource->type.'" class="cell_width day_block '.$class.' ' . $this->get_cell_class($dup) .'"></div></td>';
-                        } elseif ($x > floor($resource->tasks[$c]['start_day']/7) && $x <= floor($resource->tasks[$c]['end_day']/7)) {
+                        } elseif ($x > \floor($resource->tasks[$c]['start_day']/7) && $x <= \floor($resource->tasks[$c]['end_day']/7)) {
                             $dup++;
                             $square =  '<td class="inner_td"><div rel="'.$dateq.'|'.$resource->id.'|'.$resource->type.'" class="cell_width day_block '.$class.' ' . $this->get_cell_class($dup) .'"></div></td>';
                         }
@@ -474,7 +474,7 @@ class chart
             foreach ($time_span as $year => $quarters) {
                 foreach ($quarters as $quarter => $months) {//count the number of days in each month
                     
-                    echo '<td class="main_table weeks" colspan="' . count($months) . '">'.$quarter .'</td>';
+                    echo '<td class="main_table weeks" colspan="' . \count($months) . '">'.$quarter .'</td>';
                 }
             }
 
@@ -483,7 +483,7 @@ class chart
                 $qcount= 0;
                 foreach ($quarters as $quarter => $months) {//count the number of months in each quarter
                 
-                    $qcount+= count($months);
+                    $qcount+= \count($months);
                 }
                 $width = $qcount * 26; //used to set width on years row. width needed for css text clipping
                 echo '<td colspan="'.$qcount.'" class="main_table years"><div style="width: '.$width.'px;" class="year_div">' . $year.'</div></td>';
@@ -575,8 +575,8 @@ class chart
         foreach ($period as $dt) {
             $count++;
             $y = $dt->format('Y');
-            $c = ceil($dt->format('m')/3);
-            $m = mb_substr($GLOBALS['app_list_strings']['dom_cal_month_short'][$dt->format('n')], 0, 3);
+            $c = \ceil($dt->format('m')/3);
+            $m = \mb_substr($GLOBALS['app_list_strings']['dom_cal_month_short'][$dt->format('n')], 0, 3);
             
             $aResult[$y][$c][$count] = $m;
         }
@@ -621,9 +621,9 @@ class chart
     
         foreach ($period as $dt) {
             $y = $dt->format('Y');
-            $m = mb_substr($GLOBALS['app_list_strings']['dom_cal_month_short'][$dt->format('n')], 0, 3);
+            $m = \mb_substr($GLOBALS['app_list_strings']['dom_cal_month_short'][$dt->format('n')], 0, 3);
             $j = $dt->format('j');
-            $d = mb_substr($GLOBALS['app_list_strings']['dom_cal_day_short'][$dt->format('w')+1], 0, 1);
+            $d = \mb_substr($GLOBALS['app_list_strings']['dom_cal_day_short'][$dt->format('w')+1], 0, 1);
 
             $aResult[$y][$m][$j] = $d;
         }
@@ -692,9 +692,9 @@ class chart
 
         $date->modify('+'.($weeks + 1).' weeks');
 
-        $ts = strtotime($date->format('Y-m-d'));
-        $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
-        return date('Y-m-d', $start) . "|" . date('Y-m-d', strtotime('next sunday', $start));
+        $ts = \strtotime($date->format('Y-m-d'));
+        $start = (\date('w', $ts) == 0) ? $ts : \strtotime('last monday', $ts);
+        return \date('Y-m-d', $start) . "|" . \date('Y-m-d', \strtotime('next sunday', $start));
     }
 
     //returns first and last date of a month

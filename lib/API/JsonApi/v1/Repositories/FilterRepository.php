@@ -93,11 +93,11 @@ class FilterRepository
             /** @var array $filters */
             $filters = $queries['filter'];
 
-            if (is_array($filters)) {
+            if (\is_array($filters)) {
                 foreach ($filters as $filterKey => $filter) {
-                    $response = array_merge($response, $this->filterParser->parseFilter($filterKey, $filter, $args));
+                    $response = \array_merge($response, $this->filterParser->parseFilter($filterKey, $filter, $args));
                 }
-            } elseif (is_string($filters)) {
+            } elseif (\is_string($filters)) {
                 $response = array($filters);
             } else {
                 throw new BadRequestException('[JsonApi][v1][Repositories][FilterRepository][filter type is invalid]');

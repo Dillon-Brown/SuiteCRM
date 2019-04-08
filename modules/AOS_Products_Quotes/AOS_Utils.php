@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -45,12 +45,12 @@ function perform_aos_save($focus)
                 }
 
                 if (!isset($focus->$fieldName)) {
-                    LoggerManager::getLogger()->warn('Perform AOS Save error: Undefined field name of focus. Focus and field name were: ' . get_class($focus) . ', ' . $fieldName);
+                    LoggerManager::getLogger()->warn('Perform AOS Save error: Undefined field name of focus. Focus and field name were: ' . \get_class($focus) . ', ' . $fieldName);
                 }
                 $amountToConvert = isset($focus->$fieldName) ? $focus->$fieldName : null;
                 if (!amountToConvertIsDatabaseValue($focus, $fieldName)) {
                     if (!isset($focus->$fieldName)) {
-                        LoggerManager::getLogger()->warn('Undefined field for AOS utils / perform aos save. Focus and field name were: [' . get_class($focus) . '], [' . $fieldName . ']');
+                        LoggerManager::getLogger()->warn('Undefined field for AOS utils / perform aos save. Focus and field name were: [' . \get_class($focus) . '], [' . $fieldName . ']');
                         $focusFieldValue = null;
                     } else {
                         $focusFieldValue = $focus->$fieldName;

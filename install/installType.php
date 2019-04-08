@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -64,7 +64,7 @@ if (!isset($_SESSION['licenseKey_submitted']) || !$_SESSION['licenseKey_submitte
 //php version suggestion
 $php_suggested_ver = '';
 if (check_php_version() === -1) {
-    $php_suggested_ver=$mod_strings['LBL_YOUR_PHP_VERSION'].phpversion().$mod_strings['LBL_RECOMMENDED_PHP_VERSION'];
+    $php_suggested_ver=$mod_strings['LBL_YOUR_PHP_VERSION'].\phpversion().$mod_strings['LBL_RECOMMENDED_PHP_VERSION'];
 }
 
 ///////////////////////////////////////////////////////////////////////////////

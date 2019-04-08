@@ -859,7 +859,7 @@ $dictionary['AOS_Contracts'] = array(
     'optimistic_locking' => true,
     'unified_search' => true,
 );
-if (!class_exists('VardefManager')) {
+if (!\class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOS_Contracts', 'AOS_Contracts', array('basic', 'assignable', 'security_groups'));

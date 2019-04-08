@@ -17,7 +17,7 @@ class MetaResponse implements \JsonSerializable
      */
     public function __construct($properties = [])
     {
-        if (!is_array($properties) && !$properties instanceof \stdClass) {
+        if (!\is_array($properties) && !$properties instanceof \stdClass) {
             throw new \InvalidArgumentException('The properties must be an array or sdtClass');
         }
 

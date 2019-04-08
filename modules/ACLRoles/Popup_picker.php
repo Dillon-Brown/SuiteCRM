@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -69,7 +69,7 @@ class Popup_Picker
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -127,10 +127,10 @@ class Popup_Picker
         $form->assign('NAME', $name);
         $form->assign('request_data', $request_data);
 
-        ob_start();
+        \ob_start();
         insert_popup_header();
-        $output_html .= ob_get_contents();
-        ob_end_clean();
+        $output_html .= \ob_get_contents();
+        \ob_end_clean();
 
         $output_html .= get_form_header($mod_strings['LBL_SEARCH_FORM_TITLE'], '', false);
 
@@ -151,10 +151,10 @@ class Popup_Picker
         $ListView->setQuery($where, '', 'name', 'ROLE');
         $ListView->setModStrings($mod_strings);
 
-        ob_start();
+        \ob_start();
         $ListView->processListView($seed_bean, 'main', 'ROLE');
-        $output_html .= ob_get_contents();
-        ob_end_clean();
+        $output_html .= \ob_get_contents();
+        \ob_end_clean();
 
         $output_html .= insert_popup_footer();
         return $output_html;

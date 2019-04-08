@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -83,7 +83,7 @@ class CalendarGrid
 
         $this->scrollable = false;
         if (!($this->cal->isPrint() && $this->cal->view == 'day')) {
-            if (in_array($this->cal->view, array('day','week'))) {
+            if (\in_array($this->cal->view, array('day','week'))) {
                 $this->scrollable = true;
                 if ($this->cal->time_step < 30) {
                     $this->scroll_height = 480;
@@ -106,7 +106,7 @@ class CalendarGrid
      */
     public function display()
     {
-        $action = "display_".strtolower($this->cal->view);
+        $action = "display_".\strtolower($this->cal->view);
         return $this->$action();
     }
 
@@ -196,27 +196,27 @@ class CalendarGrid
         $str = "<div class='mobile_calendar_container'>";
 
         foreach ($this->cal->items as $cal_item) {
-            if (date("Y-m-d", $cal_item['ts_start']) >= date("Y-m-d", $this->today_ts)) {
+            if (\date("Y-m-d", $cal_item['ts_start']) >= \date("Y-m-d", $this->today_ts)) {
                 $agenda_array[$cal_item['ts_start']][] = $cal_item;
-                ksort($agenda_array);
+                \ksort($agenda_array);
             }
         }
 
-        $days = array_keys($agenda_array);
+        $days = \array_keys($agenda_array);
 
         if ($days) {
             foreach ($days as $day) {
                 $agenda_array[$day] = $this->mobile_sort_items($agenda_array[$day]);
 
                 if ($day == $this->today_ts) {
-                    $str .= "<div class='mobile_calendar_title today'><b>Today</b> " . date("D dS, M Y", $agenda_array[$day][0]['ts_start']) . "</div>";
+                    $str .= "<div class='mobile_calendar_title today'><b>Today</b> " . \date("D dS, M Y", $agenda_array[$day][0]['ts_start']) . "</div>";
                 } else {
-                    $str .= "<div class='mobile_calendar_title'>" . date("D dS, M Y", $agenda_array[$day][0]['ts_start']) . "</div>";
+                    $str .= "<div class='mobile_calendar_title'>" . \date("D dS, M Y", $agenda_array[$day][0]['ts_start']) . "</div>";
                 }
 
                 $i = 0;
 
-                while ($i < count($agenda_array[$day])) {
+                while ($i < \count($agenda_array[$day])) {
                     $day_item = $agenda_array[$day][$i];
 
                     $str .= $this->mobile_display_items($day_item);
@@ -248,7 +248,7 @@ class CalendarGrid
         $display .= "<div class='mobile_calendar_item_left' >";
 
         $display .= "<div class='mobile_calendar_item_left_type' style='background-color:" . $type_color .";'>";
-        $display .=  ucfirst($day_item['type']);
+        $display .=  \ucfirst($day_item['type']);
         $display .= "</div>";
 
         $display .= "<div class='mobile_calendar_item_left_date'>";
@@ -270,12 +270,12 @@ class CalendarGrid
 
         if ($day_item['type'] == "task") {
             $display .= "<div class='mobile_calendar_item_edit'>";
-            $display .= "<a class='button' module_name ='" . ucfirst($day_item['type']) ."s' href='index.php?action=EditView&module=Tasks&return_module=Calendar&return_action=index&record=" . $day_item['record'] . "'>Edit</a>";
+            $display .= "<a class='button' module_name ='" . \ucfirst($day_item['type']) ."s' href='index.php?action=EditView&module=Tasks&return_module=Calendar&return_action=index&record=" . $day_item['record'] . "'>Edit</a>";
             $display .= "</div>";
             $display .= "</div>";
         } else {
             $display .= "<div class='mobile_calendar_item_edit'>";
-            $display .= "<a class='button' href='#' module_name ='" . ucfirst($day_item['type']) ."s' record = '" . $day_item['record'] ."' onclick=CAL.load_form(this.getAttribute('module_name'),this.getAttribute('record'),true);>Edit</a>";
+            $display .= "<a class='button' href='#' module_name ='" . \ucfirst($day_item['type']) ."s' record = '" . $day_item['record'] ."' onclick=CAL.load_form(this.getAttribute('module_name'),this.getAttribute('record'),true);>Edit</a>";
             $display .= "</div>";
             $display .= "</div>";
         }
@@ -341,7 +341,7 @@ class CalendarGrid
             $times[$key] = $row['timestamp'];
         }
 
-        array_multisort($times, SORT_ASC, $agenda_array);
+        \array_multisort($times, SORT_ASC, $agenda_array);
 
         return $agenda_array;
     }

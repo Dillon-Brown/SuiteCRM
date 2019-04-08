@@ -37,7 +37,7 @@ class CampaignLogTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method and verify it returns an array
         $actual = $campaignLog->get_list_view_data();
-        $this->assertTrue(is_array($actual));
+        $this->assertTrue(\is_array($actual));
         $this->assertSame(array(), $actual);
         
         // clean up

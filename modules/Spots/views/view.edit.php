@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -67,18 +67,18 @@ class SpotsViewEdit extends ViewEdit
 
         $theTitle = "<div class='moduleTitle'>\n";
 
-        $module = preg_replace("/ /", "", $this->module);
+        $module = \preg_replace("/ /", "", $this->module);
 
         $params = $this->_getModuleTitleParams();
         $index = 0;
 
         if (SugarThemeRegistry::current()->directionality == "rtl") {
-            $params = array_reverse($params);
+            $params = \array_reverse($params);
         }
-        if (count($params) > 1) {
-            array_shift($params);
+        if (\count($params) > 1) {
+            \array_shift($params);
         }
-        $count = count($params);
+        $count = \count($params);
         $paramString = '';
         foreach ($params as $parm) {
             $index++;

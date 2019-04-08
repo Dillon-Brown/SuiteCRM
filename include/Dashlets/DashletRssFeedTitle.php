@@ -78,14 +78,14 @@ class DashletRssFeedTitle
     public function readFeed()
     {
         if ($this->url) {
-            if (!in_array(strtolower(parse_url($this->url, PHP_URL_SCHEME)), array("http", "https"), true)) {
+            if (!\in_array(\strtolower(\parse_url($this->url, PHP_URL_SCHEME)), array("http", "https"), true)) {
                 return false;
             }
-            $fileOpen = @fopen($this->url, 'r');
+            $fileOpen = @\fopen($this->url, 'r');
             if ($fileOpen) {
                 $this->fileOpen = true;
-                $this->contents = fread($fileOpen, $this->readBytes);
-                fclose($fileOpen);
+                $this->contents = \fread($fileOpen, $this->readBytes);
+                \fclose($fileOpen);
                 return true;
             }
         }
@@ -98,25 +98,25 @@ class DashletRssFeedTitle
     public function getTitle()
     {
         $matches = array();
-        preg_match("/<title>.*?<\/title>/i", $this->contents, $matches);
+        \preg_match("/<title>.*?<\/title>/i", $this->contents, $matches);
         if (isset($matches[0])) {
-            $this->title = str_replace(array('<![CDATA[', '<title>', '</title>', ']]>'), '', $matches[0]);
+            $this->title = \str_replace(array('<![CDATA[', '<title>', '</title>', ']]>'), '', $matches[0]);
         }
     }
 
     public function cutLength()
     {
-        if (mb_strlen(trim($this->title), $this->defaultEncoding) > $this->cut) {
-            $this->title = mb_substr($this->title, 0, $this->cut, $this->defaultEncoding) . $this->endWith;
+        if (\mb_strlen(\trim($this->title), $this->defaultEncoding) > $this->cut) {
+            $this->title = \mb_substr($this->title, 0, $this->cut, $this->defaultEncoding) . $this->endWith;
         }
     }
 
     private function _identifyXmlEncoding()
     {
         $matches = array();
-        preg_match('/encoding\=*\".*?\"/', $this->contents, $matches);
+        \preg_match('/encoding\=*\".*?\"/', $this->contents, $matches);
         if (isset($matches[0])) {
-            $this->xmlEncoding = trim(str_replace('encoding="', '"', $matches[0]), '"');
+            $this->xmlEncoding = \trim(\str_replace('encoding="', '"', $matches[0]), '"');
         }
     }
 
@@ -124,7 +124,7 @@ class DashletRssFeedTitle
     {
         $this->_identifyXmlEncoding();
         if ($this->xmlEncoding && $this->xmlEncoding != $this->defaultEncoding) {
-            $this->title = iconv($this->xmlEncoding, $this->defaultEncoding, $this->title);
+            $this->title = \iconv($this->xmlEncoding, $this->defaultEncoding, $this->title);
         }
     }
 }

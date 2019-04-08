@@ -182,7 +182,7 @@ class EmailManTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $result = $emailMan->create_indiv_email(new Contact(), new Email());
 
         //test for record ID to verify that record is saved
-        $this->assertEquals(36, strlen($result));
+        $this->assertEquals(36, \strlen($result));
 
         $email = new Email();
         $email->mark_deleted($result);
@@ -408,7 +408,7 @@ class EmailManTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         );
 
         //test for email id returned and mark delete for cleanup
-        $this->assertEquals(36, strlen($result));
+        $this->assertEquals(36, \strlen($result));
         $email = new Email();
         $email->mark_deleted($result);
 

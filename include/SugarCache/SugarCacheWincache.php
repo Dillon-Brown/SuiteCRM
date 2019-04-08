@@ -57,7 +57,7 @@ class SugarCacheWincache extends SugarCacheAbstract
             return false;
         }
         
-        if (function_exists("wincache_ucache_get")
+        if (\function_exists("wincache_ucache_get")
                 && empty($GLOBALS['sugar_config']['external_cache_disabled_wincache'])) {
             return true;
         }

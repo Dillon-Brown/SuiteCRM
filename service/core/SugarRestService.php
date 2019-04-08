@@ -1,6 +1,6 @@
 <?php
- if (!defined('sugarEntry')) {
-     define('sugarEntry', true);
+ if (!\defined('sugarEntry')) {
+     \define('sugarEntry', true);
  }
 /**
  *
@@ -69,7 +69,7 @@ class SugarRestService extends SugarWebService
 
         $name = clean_string($name, 'ALPHANUM');
         $type = '';
-        switch (strtolower($name)) {
+        switch (\strtolower($name)) {
             case 'json':
                 $type = 'JSON';
                 break;
@@ -81,7 +81,7 @@ class SugarRestService extends SugarWebService
                 break;
         }
         $classname = "SugarRest$type";
-        if (!file_exists('service/core/REST/' . $classname . '.php')) {
+        if (!\file_exists('service/core/REST/' . $classname . '.php')) {
             return 'SugarRest';
         }
         return $classname;
@@ -123,7 +123,7 @@ class SugarRestService extends SugarWebService
      */
     public function registerFunction($function, $input, $output)
     {
-        if (in_array($function, $this->excludeFunctions)) {
+        if (\in_array($function, $this->excludeFunctions)) {
             return;
         }
         $this->registeredFunc[$function] = array('input'=> $input, 'output'=>$output);

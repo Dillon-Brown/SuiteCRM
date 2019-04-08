@@ -76,7 +76,7 @@ class Zend_Oauth_Http_RequestToken extends Zend_Oauth_Http
         }
 
         if (!empty($this->_parameters)) {
-            $params = array_merge($params, $this->_parameters);
+            $params = \array_merge($params, $this->_parameters);
         }
 
         $params['oauth_signature'] = $this->_httpUtility->sign(

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -72,14 +72,14 @@ class SugarFeedDashlet extends DashletGeneric
         $replacements = array();
         $replacements[] = '';
         $replacements[] = '';
-        $this->idjs = preg_replace($pattern, $replacements, $this->id);
+        $this->idjs = \preg_replace($pattern, $replacements, $this->id);
         // Add in some default categories.
         $this->categories['ALL'] = translate('LBL_ALL', 'SugarFeed');
         // Need to get the rest of the active SugarFeed modules
         $module_list = SugarFeed::getActiveFeedModules();
 
         // Translate the category names
-        if (! is_array($module_list)) {
+        if (! \is_array($module_list)) {
             $module_list = array();
         }
         foreach ($module_list as $module) {
@@ -93,7 +93,7 @@ class SugarFeedDashlet extends DashletGeneric
 
         // Need to add the external api's here
         $this->externalAPIList = ExternalAPIFactory::getModuleDropDown('SugarFeed', true);
-        if (!is_array($this->externalAPIList)) {
+        if (!\is_array($this->externalAPIList)) {
             $this->externalAPIList = array();
         }
         foreach ($this->externalAPIList as $apiObj => $apiName) {
@@ -127,13 +127,13 @@ class SugarFeedDashlet extends DashletGeneric
             $this->categories["Twitter"] = "Twitter";
         }
 
-        $catCount = count($this->categories);
+        $catCount = \count($this->categories);
         ACLController::filterModuleList($this->categories, false);
-        if (count($this->categories) < $catCount) {
+        if (\count($this->categories) < $catCount) {
             if (!empty($this->selectedCategories)) {
                 ACLController::filterModuleList($this->selectedCategories, true);
             } else {
-                $this->selectedCategories = array_keys($this->categories);
+                $this->selectedCategories = \array_keys($this->categories);
                 unset($this->selectedCategories[0]);
             }
         }
@@ -149,7 +149,7 @@ class SugarFeedDashlet extends DashletGeneric
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id, $def);
     }
@@ -175,8 +175,8 @@ class SugarFeedDashlet extends DashletGeneric
         // columns
         foreach ($this->columns as $name => $val) {
             if (!empty($val['default']) && $val['default']) {
-                $displayColumns[strtoupper($name)] = $val;
-                $displayColumns[strtoupper($name)]['label'] = trim($displayColumns[strtoupper($name)]['label'], ':');
+                $displayColumns[\strtoupper($name)] = $val;
+                $displayColumns[\strtoupper($name)]['label'] = \trim($displayColumns[\strtoupper($name)]['label'], ':');
             }
         }
 
@@ -194,7 +194,7 @@ class SugarFeedDashlet extends DashletGeneric
         if (empty($this->selectedCategories)) {
             $mod_list = $this->categories;
         } else {
-            $mod_list = array_flip($this->selectedCategories);//27949, here the key of $this->selectedCategories is not module name, the value is module name, so array_flip it.
+            $mod_list = \array_flip($this->selectedCategories);//27949, here the key of $this->selectedCategories is not module name, the value is module name, so array_flip it.
         }
 
         $external_modules = array();
@@ -216,7 +216,7 @@ class SugarFeedDashlet extends DashletGeneric
                 continue;
             }
 
-            if (in_array($module, $this->externalAPIList)) {
+            if (\in_array($module, $this->externalAPIList)) {
                 $external_modules[] = $module;
             }
             if (ACLAction::getUserAccessLevel($current_user->id, $module, 'view') <= ACL_ALLOW_NONE) {
@@ -237,23 +237,23 @@ class SugarFeedDashlet extends DashletGeneric
             //MFH BUG #14296
             $where = '';
             if (!empty($whereArray)) {
-                $where = '(' . implode(') AND (', $whereArray) . ')';
+                $where = '(' . \implode(') AND (', $whereArray) . ')';
             }
 
             $additional_where = '';
 
 
-            $module_limiter = " sugarfeed.related_module in ('" . implode("','", $regular_modules) . "')";
+            $module_limiter = " sugarfeed.related_module in ('" . \implode("','", $regular_modules) . "')";
 
             if (is_admin($GLOBALS['current_user'])) {
-                $all_modules = array_merge($regular_modules, $owner_modules, $admin_modules);
-                $module_limiter = " sugarfeed.related_module in ('" . implode("','", $all_modules) . "')";
-            } elseif (count($owner_modules) > 0
+                $all_modules = \array_merge($regular_modules, $owner_modules, $admin_modules);
+                $module_limiter = " sugarfeed.related_module in ('" . \implode("','", $all_modules) . "')";
+            } elseif (\count($owner_modules) > 0
                 ) {
-                $module_limiter = " ((sugarfeed.related_module IN ('".implode("','", $regular_modules)."') "
+                $module_limiter = " ((sugarfeed.related_module IN ('".\implode("','", $regular_modules)."') "
                     .") ";
-                if (count($owner_modules) > 0) {
-                    $module_limiter .= "OR (sugarfeed.related_module IN('".implode("','", $owner_modules)."') AND sugarfeed.assigned_user_id = '".$current_user->id."' "
+                if (\count($owner_modules) > 0) {
+                    $module_limiter .= "OR (sugarfeed.related_module IN('".\implode("','", $owner_modules)."') AND sugarfeed.assigned_user_id = '".$current_user->id."' "
                         .") ";
                 }
                 $module_limiter .= ")";
@@ -290,20 +290,20 @@ class SugarFeedDashlet extends DashletGeneric
             );
 
             foreach ($this->lvs->data['data'] as $row => $data) {
-                $this->lvs->data['data'][$row]['NAME'] = str_replace("{this.CREATED_BY}", get_assigned_user_name($this->lvs->data['data'][$row]['CREATED_BY']), $data['NAME']);
+                $this->lvs->data['data'][$row]['NAME'] = \str_replace("{this.CREATED_BY}", get_assigned_user_name($this->lvs->data['data'][$row]['CREATED_BY']), $data['NAME']);
 
                 //Translate the SugarFeeds labels if necessary.
-                preg_match('/\{([^\^ }]+)\.([^\}]+)\}/', $this->lvs->data['data'][$row]['NAME'], $modStringMatches);
-                if (count($modStringMatches) == 3 && $modStringMatches[1] == 'SugarFeed' && !empty($data['RELATED_MODULE'])) {
+                \preg_match('/\{([^\^ }]+)\.([^\}]+)\}/', $this->lvs->data['data'][$row]['NAME'], $modStringMatches);
+                if (\count($modStringMatches) == 3 && $modStringMatches[1] == 'SugarFeed' && !empty($data['RELATED_MODULE'])) {
                     $modKey = $modStringMatches[2];
                     $modString = translate($modKey, $modStringMatches[1]);
-                    if (strpos($modString, '{0}') === false || !isset($GLOBALS['app_list_strings']['moduleListSingular'][$data['RELATED_MODULE']])) {
+                    if (\strpos($modString, '{0}') === false || !isset($GLOBALS['app_list_strings']['moduleListSingular'][$data['RELATED_MODULE']])) {
                         continue;
                     }
 
                     $modStringSingular = $GLOBALS['app_list_strings']['moduleListSingular'][$data['RELATED_MODULE']];
                     $modString = string_format($modString, array($modStringSingular));
-                    $this->lvs->data['data'][$row]['NAME'] = preg_replace('/' . $modStringMatches[0] . '/', strtolower($modString), $this->lvs->data['data'][$row]['NAME']);
+                    $this->lvs->data['data'][$row]['NAME'] = \preg_replace('/' . $modStringMatches[0] . '/', \strtolower($modString), $this->lvs->data['data'][$row]['NAME']);
                 }
                 //if social then unless the user is the assigned user it wont show. IJD1986
                 if (($data['RELATED_MODULE'] == "facebook" || $data['RELATED_MODULE'] == "twitter") && $data['ASSIGNED_USER_ID'] != $current_user->id) {
@@ -335,24 +335,24 @@ class SugarFeedDashlet extends DashletGeneric
             if ($api !== false) {
                 // FIXME: Actually calculate the oldest sugar feed we can see, once we get an API that supports this sort of filter.
                 $reply = $api->getLatestUpdates(0, $fetchRecordCount);
-                if ($reply['success'] && count($reply['messages']) > 0) {
-                    array_splice($resortQueue, count($resortQueue), 0, $reply['messages']);
+                if ($reply['success'] && \count($reply['messages']) > 0) {
+                    \array_splice($resortQueue, \count($resortQueue), 0, $reply['messages']);
                 } elseif (!$reply['success']) {
                     $feedErrors[] = $reply['errorMessage'];
                 }
             }
         }
 
-        if (count($feedErrors) > 0) {
+        if (\count($feedErrors) > 0) {
             $this->lvs->ss->assign('feedErrors', $feedErrors);
         }
 
         // If we need to resort, get to work!
         foreach ($this->lvs->data['data'] as $normalMessage) {
-            list($user_date, $user_time) = explode(' ', $normalMessage['DATE_ENTERED']);
+            list($user_date, $user_time) = \explode(' ', $normalMessage['DATE_ENTERED']);
             list($db_date, $db_time) = $td->to_db_date_time($user_date, $user_time);
 
-            $unix_timestamp = strtotime($db_date.' '.$db_time);
+            $unix_timestamp = \strtotime($db_date.' '.$db_time);
 
             $normalMessage['sort_key'] = $unix_timestamp;
             $normalMessage['NAME'] = '</b>'.$normalMessage['NAME'];
@@ -364,12 +364,12 @@ class SugarFeedDashlet extends DashletGeneric
             return $a["sort_key"] < $b["sort_key"];
         };
 
-        usort($resortQueue, $function);
+        \usort($resortQueue, $function);
 
         // Trim it down to the necessary number of records
-        $numRecords = count($resortQueue);
+        $numRecords = \count($resortQueue);
         $numRecords = $numRecords - $this->lvs->data['pageData']['offsets']['current'];
-        $numRecords = min($this->displayRows, $numRecords);
+        $numRecords = \min($this->displayRows, $numRecords);
 
         $this->lvs->data['data'] = $resortQueue;
     }
@@ -387,9 +387,9 @@ class SugarFeedDashlet extends DashletGeneric
     public function pushUserFeed()
     {
         if (!empty($_REQUEST['text']) || (!empty($_REQUEST['link_url']) && !empty($_REQUEST['link_type']))) {
-            $text = htmlspecialchars($_REQUEST['text']);
+            $text = \htmlspecialchars($_REQUEST['text']);
             //allow for bold and italic user tags
-            $text = preg_replace('/&amp;lt;(\/*[bi])&amp;gt;/i', '<$1>', $text);
+            $text = \preg_replace('/&amp;lt;(\/*[bi])&amp;gt;/i', '<$1>', $text);
             SugarFeed::pushFeed(
                 $text,
                 'UserFeed',
@@ -404,9 +404,9 @@ class SugarFeedDashlet extends DashletGeneric
     public function pushUserFeedReply()
     {
         if (!empty($_REQUEST['text'])&&!empty($_REQUEST['parentFeed'])) {
-            $text = htmlspecialchars($_REQUEST['text']);
+            $text = \htmlspecialchars($_REQUEST['text']);
             //allow for bold and italic user tags
-            $text = preg_replace('/&amp;lt;(\/*[bi])&amp;gt;/i', '<$1>', $text);
+            $text = \preg_replace('/&amp;lt;(\/*[bi])&amp;gt;/i', '<$1>', $text);
             SugarFeed::pushFeed(
                 $text,
                 'SugarFeed',
@@ -466,7 +466,7 @@ class SugarFeedDashlet extends DashletGeneric
         global $sugar_config, $timedate, $current_user, $theme;
         $options = array();
         $options['title'] = $req['title'];
-        $rows = intval($_REQUEST['rows']);
+        $rows = \intval($_REQUEST['rows']);
         if ($rows <= 0) {
             $rows = 15;
         }
@@ -530,14 +530,14 @@ enableQS(false);
             return translate($matches[2], $matches[1]);
         };
 
-        $listview = preg_replace_callback('/\{([^\^ }]+)\.([^\}]+)\}/', $function, $listview);
+        $listview = \preg_replace_callback('/\{([^\^ }]+)\.([^\}]+)\}/', $function, $listview);
 
 
         //grab each token and store the module for later processing
-        preg_match_all('/\[(\w+)\:/', $listview, $alt_modules);
+        \preg_match_all('/\[(\w+)\:/', $listview, $alt_modules);
 
         //now process each token to create the proper url and image tags in feed, leaving a string for the alt to be replaced in next step
-        $listview = preg_replace('/\[(\w+)\:([\w\-\d]*)\:([^\]]*)\]/', '<a href="index.php?module=$1&action=DetailView&record=$2"><img src="themes/default/images/$1.gif" border=0 REPLACE_ALT>$3</a>', $listview); /*SKIP_IMAGE_TAG*/
+        $listview = \preg_replace('/\[(\w+)\:([\w\-\d]*)\:([^\]]*)\]/', '<a href="index.php?module=$1&action=DetailView&record=$2"><img src="themes/default/images/$1.gif" border=0 REPLACE_ALT>$3</a>', $listview); /*SKIP_IMAGE_TAG*/
 
 
         //process each module for the singular version so we can populate the alt tag on the image
@@ -553,7 +553,7 @@ enableQS(false);
             }
 
             $altString = 'alt="'.translate('LBL_VIEW', 'SugarFeed').' '.$moduleListSingularAlt.'"';
-            $listview = preg_replace('/REPLACE_ALT/', $altString, $listview, 1);
+            $listview = \preg_replace('/REPLACE_ALT/', $altString, $listview, 1);
         }
 
 
@@ -596,12 +596,12 @@ enableQS(false);
     {
         global $current_user;
 
-        if ((!empty($this->selectedCategories) && !in_array('UserFeed', $this->selectedCategories))
+        if ((!empty($this->selectedCategories) && !\in_array('UserFeed', $this->selectedCategories))
             ) {
             // The user feed system isn't enabled, don't let them post notes
             return '';
         }
-        $user_name = ucfirst($GLOBALS['current_user']->user_name);
+        $user_name = \ucfirst($GLOBALS['current_user']->user_name);
         $moreimg = SugarThemeRegistry::current()->getImage('advanced_search', 'onclick="toggleDisplay(\'more_' . $this->id . '\'); toggleDisplay(\'more_img_'.$this->id.'\'); toggleDisplay(\'less_img_'.$this->id.'\');"', null, null, '.gif', translate('LBL_SHOW_MORE_OPTIONS', 'SugarFeed'));
         $lessimg = SugarThemeRegistry::current()->getImage('basic_search', 'onclick="toggleDisplay(\'more_' . $this->id . '\'); toggleDisplay(\'more_img_'.$this->id.'\'); toggleDisplay(\'less_img_'.$this->id.'\');"', null, null, '.gif', translate('LBL_HIDE_OPTIONS', 'SugarFeed'));
         $ss = new Sugar_Smarty();

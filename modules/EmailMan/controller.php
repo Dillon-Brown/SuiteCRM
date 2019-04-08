@@ -144,12 +144,12 @@ class EmailManController extends SugarController
         }
         $security['script'] = 'script';
 
-        $configurator->config['email_xss'] = base64_encode(serialize($security));
+        $configurator->config['email_xss'] = \base64_encode(\serialize($security));
 
         ////	SECURITY
         ///////////////////////////////////////////////////////////////////////////////
 
-        ksort($sugar_config);
+        \ksort($sugar_config);
 
         $configurator->handleOverride();
         

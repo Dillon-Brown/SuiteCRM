@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,15 +71,15 @@ class AddressRule extends BaseRule
             foreach ($panel as $rowCount=>$row) {
                 foreach ($row as $key=>$column) {
                     if ($this->matches($column, '/_address_(city|state|country|postalcode)$/si')) {
-                        if ($view == 'DetailView' && !is_array($column)) {
+                        if ($view == 'DetailView' && !\is_array($column)) {
                             $panels[$name][$rowCount][$key] = '';
-                        } elseif ($view == 'DetailView' && $this->matches($column, '/_address_country$/') && is_array($column)) {
+                        } elseif ($view == 'DetailView' && $this->matches($column, '/_address_country$/') && \is_array($column)) {
                             $match = $this->getMatch($column, '/(.*?)_address_country$/');
                             $panels[$name][$rowCount][$key]['name'] = $match[1] . '_address_street';
-                            $panels[$name][$rowCount][$key]['label'] = 'LBL_' . strtoupper($match[1]) . '_ADDRESS';
+                            $panels[$name][$rowCount][$key]['label'] = 'LBL_' . \strtoupper($match[1]) . '_ADDRESS';
                         } elseif ($view == 'EditView' && $isAddressPanel) {
-                            $field = is_array($column) ? $column['name'] : $column;
-                            preg_match('/^(.*?)_address_/si', $field, $matches);
+                            $field = \is_array($column) ? $column['name'] : $column;
+                            \preg_match('/^(.*?)_address_/si', $field, $matches);
 
                             if (empty($searchedAddressPanel[$matches[1]])) {
                                 $intact = $this->hasAddressFieldsIntact($panel, $matches[1]);

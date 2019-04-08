@@ -40,7 +40,7 @@
 
 use SuiteCRM\LangText;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -147,7 +147,7 @@ class EmailFromValidator
         }
         if (!($this->email instanceof Email)) {
             throw new EmailValidatorException(
-                'Trying to get Email but object type is incorrect:' . gettype($this->email),
+                'Trying to get Email but object type is incorrect:' . \gettype($this->email),
                 EmailValidatorException::EMAIL_ISNT_EMAILOBJ
             );
         }
@@ -172,11 +172,11 @@ class EmailFromValidator
     {
         if ($error !== (int)$error) {
             throw new InvalidArgumentException(
-                'Error code should be an integer, ' . gettype($error) . ' given',
+                'Error code should be an integer, ' . \gettype($error) . ' given',
                 self::EX_ERROR_CODE_TYRE_IS_INCORRECT
             );
         }
-        if (!in_array($error, $this->errors)) {
+        if (!\in_array($error, $this->errors)) {
             $this->errors[] = $error;
         }
     }
@@ -187,8 +187,8 @@ class EmailFromValidator
      */
     protected function addErrors($errors)
     {
-        $this->errors = array_merge($this->errors, $errors);
-        $this->errors = array_unique($this->errors);
+        $this->errors = \array_merge($this->errors, $errors);
+        $this->errors = \array_unique($this->errors);
     }
 
     /**
@@ -216,8 +216,8 @@ class EmailFromValidator
         }
 
         return [
-            'messages' => implode("\n", $txts),
-            'codes' => implode(', ', $errorsArray)
+            'messages' => \implode("\n", $txts),
+            'codes' => \implode(', ', $errorsArray)
         ];
     }
 
@@ -230,7 +230,7 @@ class EmailFromValidator
     {
         if ($error !== (int)$error) {
             throw new InvalidArgumentException(
-                'Error code should be an integer, ' . gettype($error) . ' given',
+                'Error code should be an integer, ' . \gettype($error) . ' given',
                 self::EX_ERROR_CODE_TYRE_IS_INCORRECT
             );
         }
@@ -248,7 +248,7 @@ class EmailFromValidator
     {
         if ($error !== (int)$error) {
             throw new InvalidArgumentException(
-                'Error code should be an integer, ' . gettype($error) . ' given',
+                'Error code should be an integer, ' . \gettype($error) . ' given',
                 self::EX_ERROR_CODE_TYRE_IS_INCORRECT
             );
         }
@@ -345,7 +345,7 @@ class EmailFromValidator
      */
     protected function isValidEmailAddress($emailAddress)
     {
-        return is_string($emailAddress) && isValidEmailAddress($emailAddress, '', false, '');
+        return \is_string($emailAddress) && isValidEmailAddress($emailAddress, '', false, '');
     }
 
     /**
@@ -356,7 +356,7 @@ class EmailFromValidator
     protected function isValidNonEmailAddress($nonEmailAddress)
     {
         $valid = true;
-        if (!is_string($nonEmailAddress) || !$nonEmailAddress || isValidEmailAddress($nonEmailAddress, '', false, '')) {
+        if (!\is_string($nonEmailAddress) || !$nonEmailAddress || isValidEmailAddress($nonEmailAddress, '', false, '')) {
             $valid = false;
         }
 
@@ -394,7 +394,7 @@ class EmailFromValidator
     {
         $valid = false;
         $matches = null;
-        $results = preg_match('/([^<]+)\s+<([^>]+)>/', $fromAddrName, $matches);
+        $results = \preg_match('/([^<]+)\s+<([^>]+)>/', $fromAddrName, $matches);
         if ($results === false) {
             throw new EmailValidatorException(
                 'preg_match error occurred at from_addr_name check.',

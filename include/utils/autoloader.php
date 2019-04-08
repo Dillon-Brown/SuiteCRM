@@ -59,7 +59,7 @@ class SugarAutoLoader
      */
     public static function autoload($class)
     {
-        $uclass = ucfirst($class);
+        $uclass = \ucfirst($class);
         if (!empty(self::$noAutoLoad[$class])) {
             return false;
         }
@@ -77,7 +77,7 @@ class SugarAutoLoader
                 self::$moduleMap = $beanFiles;
             }
         }
-        if (!empty(self::$moduleMap[$class]) && file_exists(self::$moduleMap[$class])) {
+        if (!empty(self::$moduleMap[$class]) && \file_exists(self::$moduleMap[$class])) {
             require_once self::$moduleMap[$class];
 
             return true;
@@ -105,28 +105,28 @@ class SugarAutoLoader
     protected static function getFilenameForViewClass($class)
     {
         $module = false;
-        if (!empty($_REQUEST['module']) && substr($class, 0, strlen($_REQUEST['module'])) == $_REQUEST['module']) {
+        if (!empty($_REQUEST['module']) && \substr($class, 0, \strlen($_REQUEST['module'])) == $_REQUEST['module']) {
             //This is a module view
             $module = $_REQUEST['module'];
-            $class = substr($class, strlen($module));
+            $class = \substr($class, \strlen($module));
         }
 
-        if (substr($class, 0, 4) == 'View') {
-            $view = strtolower(substr($class, 4));
+        if (\substr($class, 0, 4) == 'View') {
+            $view = \strtolower(\substr($class, 4));
             if ($module) {
                 $modulepath = "modules/$module/views/view.$view.php";
-                if (file_exists("custom/$modulepath")) {
+                if (\file_exists("custom/$modulepath")) {
                     return "custom/$modulepath";
                 }
-                if (file_exists($modulepath)) {
+                if (\file_exists($modulepath)) {
                     return $modulepath;
                 }
             } else {
                 $basepath = "include/MVC/View/views/view.$view.php";
-                if (file_exists("custom/$basepath")) {
+                if (\file_exists("custom/$basepath")) {
                     return "custom/$basepath";
                 }
-                if (file_exists($basepath)) {
+                if (\file_exists($basepath)) {
                     return $basepath;
                 }
             }
@@ -150,17 +150,17 @@ class SugarAutoLoader
     protected static function getFilenameForSugarWidget($class)
     {
         //Only bother to check if the class name starts with SugarWidget
-        if (strpos($class, 'SugarWidget') !== false) {
-            if (strpos($class, 'SugarWidgetField') !== false) {
+        if (\strpos($class, 'SugarWidget') !== false) {
+            if (\strpos($class, 'SugarWidgetField') !== false) {
                 //We need to lowercase the portion after SugarWidgetField
-                $name = substr($class, 16);
+                $name = \substr($class, 16);
                 if (!empty($name)) {
-                    $class = 'SugarWidgetField'.strtolower($name);
+                    $class = 'SugarWidgetField'.\strtolower($name);
                 }
             }
 
             $file = get_custom_file_if_exists("include/generic/SugarWidgets/{$class}.php");
-            if (file_exists($file)) {
+            if (\file_exists($file)) {
                 return $file;
             }
         }

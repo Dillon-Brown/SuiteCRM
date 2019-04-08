@@ -50,7 +50,7 @@ class ValidatorFactory
                 return true;
             }
 
-            if (!is_array($value) && !$value instanceof \Iterator) {
+            if (!\is_array($value) && !$value instanceof \Iterator) {
                 return false;
             }
 

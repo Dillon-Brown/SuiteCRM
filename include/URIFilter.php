@@ -28,7 +28,7 @@ class URIFilter extends \HTMLPurifier_URIFilter
         $sugar_config = $configurator->config;
 
         if (!empty($sugar_config['security_trusted_domains'])
-            && is_array($sugar_config['security_trusted_domains'])
+            && \is_array($sugar_config['security_trusted_domains'])
         ) {
             $this->allowed = $sugar_config['security_trusted_domains'];
         }
@@ -48,8 +48,8 @@ class URIFilter extends \HTMLPurifier_URIFilter
         }
 
         if (!empty($uri->scheme)
-            && strtolower($uri->scheme) != 'http'
-            && strtolower($uri->scheme) != 'https'
+            && \strtolower($uri->scheme) != 'http'
+            && \strtolower($uri->scheme) != 'https'
         ) {
             // do not touch non-HTTP URLs
             return true;
@@ -66,7 +66,7 @@ class URIFilter extends \HTMLPurifier_URIFilter
         foreach ($this->allowed as $allow) {
             // must be equal to our domain or subdomain of our domain
             if ($uri->host == $allow
-                || substr($uri->host, -(strlen($allow) + 1)) == ".$allow"
+                || \substr($uri->host, -(\strlen($allow) + 1)) == ".$allow"
             ) {
                 return true;
             }
@@ -78,8 +78,8 @@ class URIFilter extends \HTMLPurifier_URIFilter
         if (!empty($uri->path)
             && $uri->path != '/'
         ) {
-            $lpath = strtolower($uri->path);
-            if (substr($lpath, -10) != '/index.php'
+            $lpath = \strtolower($uri->path);
+            if (\substr($lpath, -10) != '/index.php'
                 && $lpath != 'index.php'
             ) {
                 return true;
@@ -87,7 +87,7 @@ class URIFilter extends \HTMLPurifier_URIFilter
         }
 
         $query_items = array();
-        parse_str(from_html($uri->query), $query_items);
+        \parse_str(from_html($uri->query), $query_items);
         // weird query, probably harmless
         if (empty($query_items)) {
             return true;
@@ -101,7 +101,7 @@ class URIFilter extends \HTMLPurifier_URIFilter
 
         // looks like non-download entry point - allow only specific entry points
         if (!empty($query_items['entryPoint'])
-            && !in_array(
+            && !\in_array(
                 $query_items['entryPoint'],
                 array(
                     'download',

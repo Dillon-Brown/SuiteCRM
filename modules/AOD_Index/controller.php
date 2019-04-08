@@ -22,7 +22,7 @@
  *
  * @author SalesAgility Ltd <support@salesagility.com>
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -36,7 +36,7 @@ class AOD_IndexController extends SugarController
     }
     public function action_optimise()
     {
-        set_time_limit(6000);
+        \set_time_limit(6000);
         $index = BeanFactory::getBean("AOD_Index")->getIndex();
         $index->optimise();
         SugarApplication::redirect('index.php?module=AOD_Index');

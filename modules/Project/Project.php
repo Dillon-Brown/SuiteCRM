@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -111,7 +111,7 @@ class Project extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -155,7 +155,7 @@ class Project extends SugarBean
         $new_rel_id = false;
         $new_rel_link = false;
         //this allows us to dynamically relate modules without adding it to the relationship_fields array
-        if (!empty($_REQUEST['relate_id']) && !in_array($_REQUEST['relate_to'], $exclude) && $_REQUEST['relate_id'] != $this->id) {
+        if (!empty($_REQUEST['relate_id']) && !\in_array($_REQUEST['relate_to'], $exclude) && $_REQUEST['relate_id'] != $this->id) {
             $new_rel_id = $_REQUEST['relate_id'];
             $new_rel_relname = $_REQUEST['relate_to'];
             if (!empty($this->in_workflow) && !empty($this->not_use_rel_in_req)) {
@@ -235,7 +235,7 @@ class Project extends SugarBean
     {
         $where_clauses = array();
         $the_query_string = DBManagerFactory::getInstance()->quote($the_query_string);
-        array_push($where_clauses, "project.name LIKE '%$the_query_string%'");
+        \array_push($where_clauses, "project.name LIKE '%$the_query_string%'");
 
         $the_where = '';
         foreach ($where_clauses as $clause) {
@@ -287,7 +287,7 @@ class Project extends SugarBean
 
         if (!empty($order_by)) {
             //check to see if order by variable already has table name by looking for dot "."
-            $table_defined_already = strpos($order_by, ".");
+            $table_defined_already = \strpos($order_by, ".");
 
             if ($table_defined_already === false) {
                 //table not defined yet, define accounts to avoid "ambigous column" SQL error
@@ -311,7 +311,7 @@ class Project extends SugarBean
             $projectTaskBean = new ProjectTask();
             $projectTaskBean->id = $row['id'];
             $projectTaskBean->retrieve();
-            array_push($projectTasks, $projectTaskBean);
+            \array_push($projectTasks, $projectTaskBean);
 
             $row = $this->db->fetchByAssoc($result);
         }
@@ -327,7 +327,7 @@ class Project extends SugarBean
         }
         $app = return_app_list_strings_language($GLOBALS['current_language']);
         if (isset($def['options']) && isset($app[$def['options']])) {
-            $keys = array_keys($app[$def['options']]);
+            $keys = \array_keys($app[$def['options']]);
             return $keys[0];
         }
 
@@ -340,7 +340,7 @@ class Project extends SugarBean
         $focus = $this;
 
         //--- check if project template is same or changed.
-        $new_template_id = property_exists($focus, 'am_projecttemplates_project_1am_projecttemplates_ida') ?
+        $new_template_id = \property_exists($focus, 'am_projecttemplates_project_1am_projecttemplates_ida') ?
             $focus->am_projecttemplates_project_1am_projecttemplates_ida : null;
         $current_template_id = "";
 
@@ -365,14 +365,14 @@ class Project extends SugarBean
             $return_id = $focus->id;
         } else {
             if (!empty($_POST['user_invitees'])) {
-                $userInvitees = explode(',', trim($_POST['user_invitees'], ','));
+                $userInvitees = \explode(',', \trim($_POST['user_invitees'], ','));
             } else {
                 $userInvitees = array();
             }
 
 
             if (!empty($_POST['contact_invitees'])) {
-                $contactInvitees = explode(',', trim($_POST['contact_invitees'], ','));
+                $contactInvitees = \explode(',', \trim($_POST['contact_invitees'], ','));
             } else {
                 $contactInvitees = array();
             }
@@ -395,19 +395,19 @@ class Project extends SugarBean
                 $focus->load_relationship('users');
                 $users = $focus->get_linked_beans('project_users_1', 'User');
                 foreach ($users as $a) {
-                    if (!in_array($a->id, $userInvitees)) {
+                    if (!\in_array($a->id, $userInvitees)) {
                         $deleteUsers[$a->id] = $a->id;
                     } else {
                         $existingUsers[$a->id] = $a->id;
                     }
                 }
 
-                if (count($deleteUsers) > 0) {
+                if (\count($deleteUsers) > 0) {
                     $sql = '';
                     foreach ($deleteUsers as $u) {
                         $sql .= ",'" . $u . "'";
                     }
-                    $sql = substr($sql, 1);
+                    $sql = \substr($sql, 1);
                     // We could run a delete SQL statement here, but will just mark as deleted instead
                     $sql = "UPDATE project_users_1_c set deleted = 1 where project_users_1users_idb in ($sql) AND project_users_1project_ida = '". $focus->id . "'";
                     $focus->db->query($sql);
@@ -418,19 +418,19 @@ class Project extends SugarBean
                 $focus->load_relationship('contacts');
                 $contacts = $focus->get_linked_beans('project_contacts_1', 'Contact');
                 foreach ($contacts as $a) {
-                    if (!in_array($a->id, $contactInvitees)) {
+                    if (!\in_array($a->id, $contactInvitees)) {
                         $deleteContacts[$a->id] = $a->id;
                     } else {
                         $existingContacts[$a->id] = $a->id;
                     }
                 }
 
-                if (count($deleteContacts) > 0) {
+                if (\count($deleteContacts) > 0) {
                     $sql = '';
                     foreach ($deleteContacts as $u) {
                         $sql .= ",'" . $u . "'";
                     }
-                    $sql = substr($sql, 1);
+                    $sql = \substr($sql, 1);
                     // We could run a delete SQL statement here, but will just mark as deleted instead
                     $sql = "UPDATE project_contacts_1_c set deleted = 1 where project_contacts_1contacts_idb in ($sql) AND project_contacts_1project_ida = '". $focus->id . "'";
                     $focus->db->query($sql);
@@ -494,7 +494,7 @@ class Project extends SugarBean
             $template = new AM_ProjectTemplates();
             $template->retrieve($new_template_id);
 
-            $override_business_hours = intval($template->override_business_hours);
+            $override_business_hours = \intval($template->override_business_hours);
 
 
             //------ build business hours array
@@ -576,7 +576,7 @@ class Project extends SugarBean
                 $project_task = new ProjectTask();
                 $project_task->name = $row['name'];
                 $project_task->status = $row['status'];
-                $project_task->priority = strtolower($row['priority']);
+                $project_task->priority = \strtolower($row['priority']);
                 $project_task->percent_complete = $row['percent_complete'];
                 $project_task->predecessors = $row['predecessors'];
                 $project_task->milestone_flag = $row['milestone_flag'];

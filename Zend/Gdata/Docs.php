@@ -124,7 +124,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
      */
     public static function lookupMimeType($fileExtension)
     {
-        return self::$SUPPORTED_FILETYPES[strtoupper($fileExtension)];
+        return self::$SUPPORTED_FILETYPES[\strtoupper($fileExtension)];
     }
 
     /**
@@ -284,8 +284,8 @@ class Zend_Gdata_Docs extends Zend_Gdata
         // Set the mime type of the data.
         if ($mimeType === null) {
             $slugHeader =  $fs->getSlug();
-            $filenameParts = explode('.', $slugHeader);
-            $fileExtension = end($filenameParts);
+            $filenameParts = \explode('.', $slugHeader);
+            $fileExtension = \end($filenameParts);
             $mimeType = self::lookupMimeType($fileExtension);
         }
 

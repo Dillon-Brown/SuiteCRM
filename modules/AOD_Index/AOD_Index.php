@@ -63,7 +63,7 @@ class AOD_Index extends AOD_Index_sugar
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -77,7 +77,7 @@ class AOD_Index extends AOD_Index_sugar
 
     public function find($queryString)
     {
-        $queryString = strtolower($queryString);
+        $queryString = \strtolower($queryString);
         $hits = $this->getLuceneIndex()->find($queryString);
         return $hits;
     }
@@ -115,7 +115,7 @@ class AOD_Index extends AOD_Index_sugar
     private function getDocumentForRevision($revision)
     {
         $path = getDocumentRevisionPath($revision->id);
-        if (!file_exists($path)) {
+        if (!\file_exists($path)) {
             return array("error"=>"File not found");
         }
         //Convert the file to a lucene document
@@ -178,15 +178,15 @@ class AOD_Index extends AOD_Index_sugar
         foreach ($GLOBALS['dictionary'][$bean->getObjectName()]['fields'] as $key => $field) {
             switch ($field['type']) {
                 case "enum":
-                    if (property_exists($bean, $key)) {
-                        $document["document"]->addField(Zend_Search_Lucene_Field::Keyword($key, strtolower($bean->$key), 'UTF-8'));
+                    if (\property_exists($bean, $key)) {
+                        $document["document"]->addField(Zend_Search_Lucene_Field::Keyword($key, \strtolower($bean->$key), 'UTF-8'));
                     }
                     break;
 
                 case "multienum":
-                    if (property_exists($bean, $key)) {
+                    if (\property_exists($bean, $key)) {
                         $vals = unencodeMultienum($bean->$key);
-                        $document["document"]->addField(Zend_Search_Lucene_Field::unStored($key, strtolower(implode(" ", $vals)), 'UTF-8'));
+                        $document["document"]->addField(Zend_Search_Lucene_Field::unStored($key, \strtolower(\implode(" ", $vals)), 'UTF-8'));
                     }
                     break;
                 case "name":
@@ -195,8 +195,8 @@ class AOD_Index extends AOD_Index_sugar
                 case "text":
                 case "url":
                 case "varchar":
-                    if (property_exists($bean, $key)) {
-                        $val = strtolower($bean->$key);
+                    if (\property_exists($bean, $key)) {
+                        $val = \strtolower($bean->$key);
                     } else {
                         $val = '';
                     }
@@ -244,8 +244,8 @@ class AOD_Index extends AOD_Index_sugar
         $indexEvents = $indexEventBean->get_full_list('', "aod_indexevent.record_id = '".$beanId."' AND aod_indexevent.record_module = '".$module."'");
         if ($indexEvents) {
             $indexEvent = $indexEvents[0];
-            if (count($indexEvents) > 1) {
-                for ($x = 1; $x < count($indexEvents); $x++) {
+            if (\count($indexEvents) > 1) {
+                for ($x = 1; $x < \count($indexEvents); $x++) {
                     $duplicateIE = $indexEvents[$x];
                     $duplicateIE->mark_deleted($duplicateIE->id);
                 }
@@ -276,11 +276,11 @@ class AOD_Index extends AOD_Index_sugar
     public static function isModuleSearchable($module, $beanName)
     {
         $whiteList = array("DocumentRevisions","Cases");
-        if (in_array($module, $whiteList)) {
+        if (\in_array($module, $whiteList)) {
             return true;
         }
         $blackList = array("AOD_IndexEvent","AOD_Index","AOW_Actions","AOW_Conditions","AOW_Processed","SchedulersJobs");
-        if (in_array($module, $blackList)) {
+        if (\in_array($module, $blackList)) {
             return false;
         }
         $manager = new VardefManager();
@@ -356,7 +356,7 @@ class AOD_Index extends AOD_Index_sugar
      */
     private function getLuceneIndex()
     {
-        if (file_exists($this->location)) {
+        if (\file_exists($this->location)) {
             $this->index = new Zend_Search_Lucene($this->location);
         } else {
             $this->index = Zend_Search_Lucene::create($this->location);
@@ -373,7 +373,7 @@ class AOD_Index extends AOD_Index_sugar
     {
         $modules = array();
         $beanList = $GLOBALS['beanList'];
-        ksort($beanList);
+        \ksort($beanList);
         foreach ($beanList as $beanModule => $beanName) {
             if (self::isModuleSearchable($beanModule, $beanName)) {
                 $modules[$beanModule] = $beanName;

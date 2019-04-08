@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -82,31 +82,31 @@ class History implements HistoryInterface
      */
     public function __construct($previewFilename)
     {
-        $GLOBALS ['log']->debug(get_class($this) . "->__construct( {$previewFilename} )");
+        $GLOBALS ['log']->debug(\get_class($this) . "->__construct( {$previewFilename} )");
         $this->_previewFilename = $previewFilename;
         $this->_list = array();
 
-        $this->_basename = basename($this->_previewFilename);
-        $this->_dirname = dirname($this->_previewFilename);
+        $this->_basename = \basename($this->_previewFilename);
+        $this->_dirname = \dirname($this->_previewFilename);
         $this->_historyLimit = isset($GLOBALS ['sugar_config'] ['studio_max_history']) ? $GLOBALS ['sugar_config'] ['studio_max_history'] : 50;
 
         // create the history directory if it does not already exist
-        if (!is_dir($this->_dirname)) {
+        if (!\is_dir($this->_dirname)) {
             mkdir_recursive($this->_dirname);
         } else {
             // Reconstruct the history from the saved files
-            $filenameList = glob($this->getFileByTimestamp('*'));
+            $filenameList = \glob($this->getFileByTimestamp('*'));
             if (!empty($filenameList)) {
                 foreach ($filenameList as $filename) {
-                    if (preg_match('/(\d+)$/', $filename, $match)) {
+                    if (\preg_match('/(\d+)$/', $filename, $match)) {
                         $this->_list [] = $match[1];
                     }
                 }
             }
         }
         // now sort the files, oldest first
-        if (count($this->_list) > 0) {
-            sort($this->_list);
+        if (\count($this->_list) > 0) {
+            \sort($this->_list);
         }
     }
 
@@ -117,7 +117,7 @@ class History implements HistoryInterface
      */
     public function getCount()
     {
-        return count($this->_list);
+        return \count($this->_list);
     }
 
     /**
@@ -126,7 +126,7 @@ class History implements HistoryInterface
      */
     public function getFirst()
     {
-        return end($this->_list);
+        return \end($this->_list);
     }
 
     /**
@@ -135,7 +135,7 @@ class History implements HistoryInterface
      */
     public function getLast()
     {
-        return reset($this->_list);
+        return \reset($this->_list);
     }
 
     /**
@@ -144,7 +144,7 @@ class History implements HistoryInterface
      */
     public function getNext()
     {
-        return prev($this->_list);
+        return \prev($this->_list);
     }
 
     /**
@@ -154,10 +154,10 @@ class History implements HistoryInterface
      */
     public function getNth($index)
     {
-        $value = end($this->_list);
+        $value = \end($this->_list);
         $i = 0;
         while ($i < $index) {
-            $value = prev($this->_list);
+            $value = \prev($this->_list);
             $i++;
         }
 
@@ -177,14 +177,14 @@ class History implements HistoryInterface
 
         $now = TimeDate::getInstance()->getNow();
         $new_file = null;
-        for ($retries = 0; !file_exists($new_file) && $retries < 5; $retries++) {
+        for ($retries = 0; !\file_exists($new_file) && $retries < 5; $retries++) {
             $now->modify("+1 second");
             $time = $now->__get('ts');
             $new_file = $this->getFileByTimestamp($time);
         }
         // now we have a unique filename, copy the file into the history
-        if (file_exists($path)) {
-            copy($path, $new_file);
+        if (\file_exists($path)) {
+            \copy($path, $new_file);
         }
         $this->_list [] = $time;
 
@@ -195,17 +195,17 @@ class History implements HistoryInterface
             // most recent files are at the end of the list, so we strip out the first count-max_history records
             // can't just use array_shift because it renumbers numeric keys (our timestamp keys) to start from zero...
             for ($i = 0; $i < $to_delete; $i++) {
-                $timestamp = array_shift($this->_list);
-                if (!unlink($this->getFileByTimestamp($timestamp))) {
+                $timestamp = \array_shift($this->_list);
+                if (!\unlink($this->getFileByTimestamp($timestamp))) {
                     $GLOBALS ['log']->warn("History.php: unable to remove history file {$timestamp} from directory {$this->_dirname} - permissions problem?");
                 }
             }
         }
 
         // finally, remove any history preview file that might be lurking around - as soon as we append a new record it supercedes any old preview, so that must be removed (bug 20130)
-        if (file_exists($this->_previewFilename)) {
-            $GLOBALS ['log']->debug(get_class($this) . "->append(): removing old history file at {$this->_previewFilename}");
-            unlink($this->_previewFilename);
+        if (\file_exists($this->_previewFilename)) {
+            $GLOBALS ['log']->debug(\get_class($this) . "->append(): removing old history file at {$this->_previewFilename}");
+            \unlink($this->_previewFilename);
         }
 
         return $time;
@@ -219,10 +219,10 @@ class History implements HistoryInterface
     public function restoreByTimestamp($timestamp)
     {
         $filename = $this->getFileByTimestamp($timestamp);
-        $GLOBALS ['log']->debug(get_class($this) . ": restoring from $filename to {$this->_previewFilename}");
+        $GLOBALS ['log']->debug(\get_class($this) . ": restoring from $filename to {$this->_previewFilename}");
 
-        if (file_exists($filename)) {
-            copy($filename, $this->_previewFilename);
+        if (\file_exists($filename)) {
+            \copy($filename, $this->_previewFilename);
 
             return $timestamp;
         }
@@ -235,8 +235,8 @@ class History implements HistoryInterface
      */
     public function undoRestore()
     {
-        if (file_exists($this->_previewFilename)) {
-            unlink($this->_previewFilename);
+        if (\file_exists($this->_previewFilename)) {
+            \unlink($this->_previewFilename);
         }
     }
 

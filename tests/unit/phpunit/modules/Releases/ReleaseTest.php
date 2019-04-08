@@ -43,11 +43,11 @@ class ReleaseTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test with default params
         $result = $release->get_releases();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         //test with custom params
         $result = $release->get_releases(true, 'Hidden', 'name is not null');
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testfill_in_additional_list_fields()

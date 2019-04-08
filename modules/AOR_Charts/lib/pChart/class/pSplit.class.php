@@ -13,8 +13,8 @@
      You can find the whole class documentation on the pChart web site.
  */
 
- define("TEXT_POS_TOP", 690001);
- define("TEXT_POS_RIGHT", 690002);
+ \define("TEXT_POS_TOP", 690001);
+ \define("TEXT_POS_RIGHT", 690002);
 
  /* pSplit class definition */
  class pSplit
@@ -56,8 +56,8 @@
              }
          }
 
-         $DataSerieSum   = array_sum($Data["Series"][$DataSerie]["Data"]);
-         $DataSerieCount = count($Data["Series"][$DataSerie]["Data"]);
+         $DataSerieSum   = \array_sum($Data["Series"][$DataSerie]["Data"]);
+         $DataSerieCount = \count($Data["Series"][$DataSerie]["Data"]);
 
          /* Scale Processing */
          if ($TextPos == TEXT_POS_RIGHT) {
@@ -103,10 +103,10 @@
              $PolyGon = "";
 
              $Angle    = $Object->getAngle($X2, $RightY1, $X1, $LeftY1);
-             $VectorX1 = cos(deg2rad($Angle+90)) * $Force + ($X2-$X1)/2 + $X1;
-             $VectorY1 = sin(deg2rad($Angle+90)) * $Force + ($RightY1-$LeftY1)/2 + $LeftY1;
-             $VectorX2 = cos(deg2rad($Angle-90)) * $Force + ($X2-$X1)/2 + $X1;
-             $VectorY2 = sin(deg2rad($Angle-90)) * $Force + ($RightY1-$LeftY1)/2 + $LeftY1;
+             $VectorX1 = \cos(\deg2rad($Angle+90)) * $Force + ($X2-$X1)/2 + $X1;
+             $VectorY1 = \sin(\deg2rad($Angle+90)) * $Force + ($RightY1-$LeftY1)/2 + $LeftY1;
+             $VectorX2 = \cos(\deg2rad($Angle-90)) * $Force + ($X2-$X1)/2 + $X1;
+             $VectorY2 = \sin(\deg2rad($Angle-90)) * $Force + ($RightY1-$LeftY1)/2 + $LeftY1;
 
              $Points = $Object->drawBezier($X1, $LeftY1, $X2, $RightY1, $VectorX1, $VectorY1, $VectorX2, $VectorY2, $Settings);
              foreach ($Points as $Key => $Pos) {
@@ -116,13 +116,13 @@
 
 
              $Angle    = $Object->getAngle($X2, $RightY2, $X1, $LeftY2);
-             $VectorX1 = cos(deg2rad($Angle+90)) * $Force + ($X2-$X1)/2 +$X1;
-             $VectorY1 = sin(deg2rad($Angle+90)) * $Force + ($RightY2-$LeftY2)/2 + $LeftY2;
-             $VectorX2 = cos(deg2rad($Angle-90)) * $Force + ($X2-$X1)/2 +$X1;
-             $VectorY2 = sin(deg2rad($Angle-90)) * $Force + ($RightY2-$LeftY2)/2 + $LeftY2;
+             $VectorX1 = \cos(\deg2rad($Angle+90)) * $Force + ($X2-$X1)/2 +$X1;
+             $VectorY1 = \sin(\deg2rad($Angle+90)) * $Force + ($RightY2-$LeftY2)/2 + $LeftY2;
+             $VectorX2 = \cos(\deg2rad($Angle-90)) * $Force + ($X2-$X1)/2 +$X1;
+             $VectorY2 = \sin(\deg2rad($Angle-90)) * $Force + ($RightY2-$LeftY2)/2 + $LeftY2;
 
              $Points = $Object->drawBezier($X1, $LeftY2, $X2, $RightY2, $VectorX1, $VectorY1, $VectorX2, $VectorY2, $Settings);
-             $Points = array_reverse($Points);
+             $Points = \array_reverse($Points);
              foreach ($Points as $Key => $Pos) {
                  $PolyGon[] = $Pos["X"];
                  $PolyGon[] = $Pos["Y"];

@@ -47,7 +47,7 @@ class AOS_QuotesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($aosQuotes->id));
-        $this->assertEquals(36, strlen($aosQuotes->id));
+        $this->assertEquals(36, \strlen($aosQuotes->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $aosQuotes->mark_deleted($aosQuotes->id);

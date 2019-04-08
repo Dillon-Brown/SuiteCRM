@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -80,7 +80,7 @@ class SugarFieldBase
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($type);
     }
@@ -120,10 +120,10 @@ class SugarFieldBase
             return $tplCache[$this->type][$view];
         }
 
-        $lastClass = get_class($this);
-        $classList = array($this->type, str_replace('SugarField', '', $lastClass));
-        while ($lastClass = get_parent_class($lastClass)) {
-            $classList[] = str_replace('SugarField', '', $lastClass);
+        $lastClass = \get_class($this);
+        $classList = array($this->type, \str_replace('SugarField', '', $lastClass));
+        while ($lastClass = \get_parent_class($lastClass)) {
+            $classList[] = \str_replace('SugarField', '', $lastClass);
         }
 
         $tplName = '';
@@ -131,20 +131,20 @@ class SugarFieldBase
             global $current_language;
             if (isset($current_language)) {
                 $tplName = 'include/SugarFields/Fields/' . $className . '/' . $current_language . '.' . $view . '.tpl';
-                if (file_exists('custom/' . $tplName)) {
+                if (\file_exists('custom/' . $tplName)) {
                     $tplName = 'custom/' . $tplName;
                     break;
                 }
-                if (file_exists($tplName)) {
+                if (\file_exists($tplName)) {
                     break;
                 }
             }
             $tplName = 'include/SugarFields/Fields/' . $className . '/' . $view . '.tpl';
-            if (file_exists('custom/' . $tplName)) {
+            if (\file_exists('custom/' . $tplName)) {
                 $tplName = 'custom/' . $tplName;
                 break;
             }
-            if (file_exists($tplName)) {
+            if (\file_exists($tplName)) {
                 break;
             }
         }
@@ -186,7 +186,7 @@ class SugarFieldBase
      */
     public function getSmartyView($parentFieldArray, $vardef, $displayParams, $tabindex, $view)
     {
-        if (is_null($tabindex) || !is_numeric($tabindex)) {
+        if (\is_null($tabindex) || !\is_numeric($tabindex)) {
             $tabindex = 0;
         }
 
@@ -211,7 +211,7 @@ class SugarFieldBase
         if ($this->type != 'Enum' && $this->type != 'Radioenum') {
             $parentFieldArray = $this->setupFieldArray($parentFieldArray, $vardef);
         } else {
-            $vardef['name'] = strtoupper($vardef['name']);
+            $vardef['name'] = \strtoupper($vardef['name']);
         }
 
         $this->setup($parentFieldArray, $vardef, $displayParams, $tabindex, false);
@@ -316,7 +316,7 @@ class SugarFieldBase
      */
     public function getPopupViewSmarty($parentFieldArray, $vardef, $displayParams, $tabindex)
     {
-        if (is_array($displayParams) && !isset($displayParams['formName'])) {
+        if (\is_array($displayParams) && !isset($displayParams['formName'])) {
             $displayParams['formName'] = 'popup_query_form';
         } else {
             if (empty($displayParams)) {
@@ -341,7 +341,7 @@ class SugarFieldBase
 
     public function displayFromFunc($displayType, $parentFieldArray, $vardef, $displayParams, $tabindex = 0)
     {
-        if (!is_array($vardef['function'])) {
+        if (!\is_array($vardef['function'])) {
             $funcName = $vardef['function'];
             $includeFile = '';
             $onListView = false;
@@ -377,7 +377,7 @@ class SugarFieldBase
                 return $funcName(
                     $parentFieldArray,
                     $vardef['name'],
-                    $parentFieldArray[strtoupper($vardef['name'])],
+                    $parentFieldArray[\strtoupper($vardef['name'])],
                     $displayType
                 );
             }
@@ -524,11 +524,11 @@ class SugarFieldBase
 
         // Labels are always in uppercase
         if (isset($fieldType)) {
-            $fieldType = strtoupper($fieldType);
+            $fieldType = \strtoupper($fieldType);
         }
 
         if (isset($module)) {
-            $module = strtoupper($module);
+            $module = \strtoupper($module);
         }
 
         // The vardef is the most specific, then the module + fieldType, then the module, then the fieldType
@@ -602,7 +602,7 @@ class SugarFieldBase
     {
         if (isset($params[$prefix . $field])) {
             if (isset($properties['len']) && isset($properties['type']) && $this->isTrimmable($properties['type'])) {
-                $bean->$field = trim($this->unformatField($params[$prefix . $field], $properties));
+                $bean->$field = \trim($this->unformatField($params[$prefix . $field], $properties));
             } else {
                 $bean->$field = $this->unformatField($params[$prefix . $field], $properties);
             }
@@ -617,7 +617,7 @@ class SugarFieldBase
      */
     protected function isTrimmable($type)
     {
-        return in_array($type, array('varchar', 'name'));
+        return \in_array($type, array('varchar', 'name'));
     }
 
     /**
@@ -667,14 +667,14 @@ class SugarFieldBase
     protected function setupFieldArray($parentFieldArray, $vardef)
     {
         $fieldName = $vardef['name'];
-        if (is_array($parentFieldArray)) {
-            $fieldNameUpper = strtoupper($fieldName);
+        if (\is_array($parentFieldArray)) {
+            $fieldNameUpper = \strtoupper($fieldName);
             if (isset($parentFieldArray[$fieldNameUpper])) {
                 $parentFieldArray[$fieldName] = $this->formatField($parentFieldArray[$fieldNameUpper], $vardef);
             } else {
                 $parentFieldArray[$fieldName] = '';
             }
-        } elseif (is_object($parentFieldArray)) {
+        } elseif (\is_object($parentFieldArray)) {
             if (isset($parentFieldArray->$fieldName)) {
                 $parentFieldArray->$fieldName = $this->formatField($parentFieldArray->$fieldName, $vardef);
             } else {

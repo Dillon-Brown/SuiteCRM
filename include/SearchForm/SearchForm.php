@@ -96,7 +96,7 @@ class SearchForm
 
         $this->module = $module;
         require_once('modules/' . $module . '/metadata/SearchFields.php');
-        if (file_exists('custom/modules/' . $module . '/metadata/SearchFields.php')) {
+        if (\file_exists('custom/modules/' . $module . '/metadata/SearchFields.php')) {
             require_once('custom/modules/' . $module . '/metadata/SearchFields.php');
         }
 
@@ -121,7 +121,7 @@ class SearchForm
                                   'link'   => $module . '|advanced_search',
                                   'key'    => $module . '|advanced_search'));
 
-        if (file_exists('modules/'.$this->module.'/index.php')) {
+        if (\file_exists('modules/'.$this->module.'/index.php')) {
             $this->tabs[] = array('title'  => $app_strings['LNK_SAVED_VIEWS'],
                                   'link'   => $module . '|saved_views',
                                   'key'    => $module . '|saved_views');
@@ -137,7 +137,7 @@ class SearchForm
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($module, $seedBean, $tpl);
     }
@@ -158,8 +158,8 @@ class SearchForm
         }
 
         if (!empty($array['searchFormTab']) || !empty($switchVar)) {
-            $arrayKeys = array_keys($array);
-            $searchFieldsKeys = array_keys($this->searchFields);
+            $arrayKeys = \array_keys($array);
+            $searchFieldsKeys = \array_keys($this->searchFields);
             if (empty($switchVar)) {
                 $switchVar = $array['searchFormTab'];
             }
@@ -168,12 +168,12 @@ class SearchForm
                     foreach ($this->searchFields as $name => $params) {
                         if (isset($array[$name . '_basic'])) {
                             $this->searchFields[$name]['value'] =
-                                is_string($array[$name . '_basic'])?trim($array[$name . '_basic']):$array[$name . '_basic'];
+                                \is_string($array[$name . '_basic'])?\trim($array[$name . '_basic']):$array[$name . '_basic'];
                         }
                     }
                     if ($addAllBeanFields) {
                         foreach ($this->bean->field_name_map as $key => $params) {
-                            if (in_array($key . '_basic', $arrayKeys) && !in_array($key, $searchFieldsKeys)) {
+                            if (\in_array($key . '_basic', $arrayKeys) && !\in_array($key, $searchFieldsKeys)) {
                                 $this->searchFields[$key] = array('query_type' => 'default',
                                                                   'value'      => $array[$key . '_basic']);
                             }
@@ -183,12 +183,12 @@ class SearchForm
                 case 'advanced_search':
                    foreach ($this->searchFields as $name => $params) {
                        if (isset($array[$name])) {
-                           $this->searchFields[$name]['value'] = is_string($array[$name])?trim($array[$name]):$array[$name];
+                           $this->searchFields[$name]['value'] = \is_string($array[$name])?\trim($array[$name]):$array[$name];
                        }
                    }
                     if ((empty($array['massupdate']) || $array['massupdate'] == 'false') && $addAllBeanFields) {
                         foreach ($this->bean->field_name_map as $key => $params) {
-                            if (in_array($key, $arrayKeys) && !in_array($key, $searchFieldsKeys)) {
+                            if (\in_array($key, $arrayKeys) && !\in_array($key, $searchFieldsKeys)) {
                                 $this->searchFields[$key] = array('query_type' => 'default',
                                                                   'value'      => $array[$key]);
                             }
@@ -206,12 +206,12 @@ class SearchForm
                     }
                     if ($addAllBeanFields) {
                         foreach ($this->bean->field_name_map as $key => $params) {
-                            if (!in_array($key, $searchFieldsKeys)) {
-                                if (in_array($key . '_basic', $arrayKeys)) {
+                            if (!\in_array($key, $searchFieldsKeys)) {
+                                if (\in_array($key . '_basic', $arrayKeys)) {
                                     $this->searchFields[$key] = array('query_type' => 'default',
                                                                       'value'      => $array[$key . '_basic']);
                                 }
-                                if (in_array($key, $arrayKeys)) {
+                                if (\in_array($key, $arrayKeys)) {
                                     $this->searchFields[$key] = array('query_type' => 'default',
                                                                       'value'      => $array[$key]);
                                 }
@@ -259,13 +259,13 @@ class SearchForm
 
             if ($type == 'int') {
                 if (!empty($parms['value'])) {
-                    $tempVal = explode(',', $parms['value']);
+                    $tempVal = \explode(',', $parms['value']);
                     $newVal = '';
                     foreach ($tempVal as $key => $val) {
                         if (!empty($newVal)) {
                             $newVal .= ',';
                         }
-                        if (!empty($val) && !(is_numeric($val))) {
+                        if (!empty($val) && !(\is_numeric($val))) {
                             $newVal .= -1;
                         } else {
                             $newVal .= $val;
@@ -286,10 +286,10 @@ class SearchForm
             if (isset($parms['value']) && $parms['value'] != "") {
                 $operator = 'like';
                 if (!empty($parms['operator'])) {
-                    $operator = strtolower($parms['operator']);
+                    $operator = \strtolower($parms['operator']);
                 }
 
-                if (is_array($parms['value'])) {
+                if (\is_array($parms['value'])) {
                     $field_value = '';
 
                     // If it is a custom field of multiselect we have to do some special processing
@@ -335,7 +335,7 @@ class SearchForm
                 $itr = 0;
                 if ($field_value != '') {
                     foreach ($parms['db_field'] as $db_field) {
-                        if (strstr($db_field, '.') === false) {
+                        if (\strstr($db_field, '.') === false) {
                             if (!$customField) {
                                 $db_field = $this->bean->table_name .  "." . $db_field;
                             } else {
@@ -346,7 +346,7 @@ class SearchForm
                         if ($type == 'date') {
                             // The regular expression check is to circumvent special case YYYY-MM
                             $operator = '=';
-                            if (preg_match('/^\d{4}.\d{1,2}$/', $field_value) == 0) {
+                            if (\preg_match('/^\d{4}.\d{1,2}$/', $field_value) == 0) {
                                 $db_field = $this->bean->db->convert($db_field, "date_format", "%Y-%m");
                             } else {
                                 $field_value = $timedate->to_db_date($field_value, false);
@@ -363,7 +363,7 @@ class SearchForm
 
                         if ($this->bean->db->supports('case_sensitive') && isset($parms['query_type']) && $parms['query_type'] == 'case_insensitive') {
                             $db_field = 'upper(' . $db_field . ")";
-                            $field_value = strtoupper($field_value);
+                            $field_value = \strtoupper($field_value);
                         }
 
                         $itr++;
@@ -374,21 +374,21 @@ class SearchForm
                             case 'subquery':
                                 $in = 'IN';
                                 if (isset($parms['subquery_in_clause'])) {
-                                    if (!is_array($parms['subquery_in_clause'])) {
+                                    if (!\is_array($parms['subquery_in_clause'])) {
                                         $in = $parms['subquery_in_clause'];
                                     } elseif (isset($parms['subquery_in_clause'][$field_value])) {
                                         $in = $parms['subquery_in_clause'][$field_value];
                                     }
                                 }
                                 $sq = $parms['subquery'];
-                                if (is_array($sq)) {
+                                if (\is_array($sq)) {
                                     $and_or = ' AND ';
                                     if (isset($sq['OR'])) {
                                         $and_or = ' OR ';
                                     }
                                     $first = true;
                                     foreach ($sq as $q) {
-                                        if (empty($q) || strlen($q)<2) {
+                                        if (empty($q) || \strlen($q)<2) {
                                             continue;
                                         }
                                         if (!$first) {
@@ -415,8 +415,8 @@ class SearchForm
                                 $where .=  $db_field . " = ".$this->bean->db->quoted($field_value);
                                 break;
                             case 'between':
-                                if (!is_array($field_value)) {
-                                    $field_value = explode('<>', $field_value);
+                                if (!\is_array($field_value)) {
+                                    $field_value = \explode('<>', $field_value);
                                 }
                                 $where .= "(". $db_field . " >= ".$this->bean->db->quoted($field_value[0]) .
                                     " AND " .$db_field . " <= ".$this->bean->db->quoted($field_value[1]).")";
@@ -426,9 +426,9 @@ class SearchForm
                 }
                 if (!empty($where)) {
                     if ($itr > 1) {
-                        array_push($where_clauses, '( '.$where.' )');
+                        \array_push($where_clauses, '( '.$where.' )');
                     } else {
-                        array_push($where_clauses, $where);
+                        \array_push($where_clauses, $where);
                     }
                 }
             }
@@ -446,7 +446,7 @@ class SearchForm
      */
     public function displayTabs($currentKey)
     {
-        $GLOBALS['log']->debug('SearchForm.php->displayTabs(): tabs='.print_r($this->tabs, true));
+        $GLOBALS['log']->debug('SearchForm.php->displayTabs(): tabs='.\print_r($this->tabs, true));
 
         $tabPanel = new SugarWidgetTabs($this->tabs, $currentKey, 'SUGAR.searchForm.searchFormSelect');
 
@@ -502,13 +502,13 @@ class SearchForm
             if (isset($params['template_var'])) {
                 $templateVar = $params['template_var'];
             } else {
-                $templateVar = strtoupper($name);
+                $templateVar = \strtoupper($name);
             }
             if (isset($params['value'])) { // populate w/ preselected values
                 if (isset($params['options'])) {
                     $options = $app_list_strings[$params['options']];
                     if (isset($params['options_add_blank']) && $params['options_add_blank']) {
-                        array_unshift($options, '');
+                        \array_unshift($options, '');
                     }
                     $this->xtpl->assign($templateVar, get_select_options_with_id($options, $params['value']));
                 } else {
@@ -528,7 +528,7 @@ class SearchForm
                 if (isset($params['options'])) {
                     $options = $app_list_strings[$params['options']];
                     if (isset($params['options_add_blank']) && $params['options_add_blank']) {
-                        array_unshift($options, '');
+                        \array_unshift($options, '');
                     }
                     $this->xtpl->assign($templateVar, get_select_options_with_id($options, ''));
                 }

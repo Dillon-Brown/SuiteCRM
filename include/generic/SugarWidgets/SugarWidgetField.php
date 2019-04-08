@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -62,7 +62,7 @@ class SugarWidgetField extends SugarWidget
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($layout_manager);
     }
@@ -74,7 +74,7 @@ class SugarWidgetField extends SugarWidget
         $context = $this->layout_manager->getAttribute('context'); //_ppd($context);
         $func_name = 'display'.$context;
 
-        if (!empty($context) && method_exists($this, $func_name)) {
+        if (!empty($context) && \method_exists($this, $func_name)) {
             return $this-> $func_name($layout_def);
         }
         return 'display not found:'.$func_name;
@@ -89,14 +89,14 @@ class SugarWidgetField extends SugarWidget
         }
 
         if (!empty($layout_def['table_alias'])) {
-            array_push($alias_arr, $layout_def['table_alias']);
+            \array_push($alias_arr, $layout_def['table_alias']);
         }
 
         if (!empty($layout_def['name'])) {
-            array_push($alias_arr, $layout_def['name']);
+            \array_push($alias_arr, $layout_def['name']);
         }
 
-        return $this->getTruncatedColumnAlias(implode("_", $alias_arr));
+        return $this->getTruncatedColumnAlias(\implode("_", $alias_arr));
     }
 
     public function & displayDetailLabel(& $layout_def)
@@ -139,7 +139,7 @@ class SugarWidgetField extends SugarWidget
         if (empty($this->base_URL)) {
             $objListView = new ListView();
             $this->base_URL = $objListView -> getBaseURL($html_var);
-            $split_url = explode('&to_pdf=true&action=SubPanelViewer&subpanel=', $this->base_URL);
+            $split_url = \explode('&to_pdf=true&action=SubPanelViewer&subpanel=', $this->base_URL);
             $this->base_URL = $split_url[0];
             $this->base_URL .= '&inline=true&to_pdf=true&action=SubPanelViewer&subpanel=';
         }
@@ -178,7 +178,7 @@ class SugarWidgetField extends SugarWidget
     {
         $value= $this->_get_list_value($layout_def);
         if (isset($layout_def['widget_type']) && $layout_def['widget_type'] =='checkbox') {
-            if ($value != '' &&  ($value == 'on' || intval($value) == 1 || $value == 'yes')) {
+            if ($value != '' &&  ($value == 'on' || \intval($value) == 1 || $value == 'yes')) {
                 return "<input name='checkbox_display' class='checkbox' type='checkbox' disabled='true' checked>";
             }
             return "<input name='checkbox_display' class='checkbox' type='checkbox' disabled='true'>";
@@ -190,9 +190,9 @@ class SugarWidgetField extends SugarWidget
     {
         $key = '';
         if (isset($layout_def['varname'])) {
-            $key = strtoupper($layout_def['varname']);
+            $key = \strtoupper($layout_def['varname']);
         } else {
-            $key = strtoupper($this->_get_column_alias($layout_def));
+            $key = \strtoupper($this->_get_column_alias($layout_def));
         }
 
         if (isset($layout_def['fields'][$key])) {

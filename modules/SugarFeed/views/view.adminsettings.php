@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -93,12 +93,12 @@ class ViewAdminsettings extends SugarView
                     }
 
                     $active_modules = $_REQUEST['modules'];
-                    if (!is_array($active_modules)) {
+                    if (!\is_array($active_modules)) {
                         $active_modules = array();
                     }
 
                     foreach ($active_modules as $name => $is_active) {
-                        $module = substr($name, 7);
+                        $module = \substr($name, 7);
 
                         if ($is_active == '1') {
                             // They are activating something that was disabled before
@@ -133,7 +133,7 @@ class ViewAdminsettings extends SugarView
 
 
             if ($_REQUEST['process'] == 'true' || $_REQUEST['process'] == 'false') {
-                header('Location: index.php?module=Administration&action=index');
+                \header('Location: index.php?module=Administration&action=index');
                 return;
             }
         }

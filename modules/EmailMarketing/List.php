@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -80,4 +80,4 @@ if (isset($_REQUEST['func']) && $_REQUEST['func'] == 'createEmailMarketing') {
     $results['selectedId'] = null;
 }
 
-echo json_encode($results);
+echo \json_encode($results);

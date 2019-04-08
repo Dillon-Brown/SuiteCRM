@@ -38,22 +38,22 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         if (!$dir) {
             $dir = HTMLPURIFIER_PREFIX . '/HTMLPurifier/ConfigSchema/schema';
         }
-        if (file_exists($dir . '/info.ini')) {
-            $info = parse_ini_file($dir . '/info.ini');
+        if (\file_exists($dir . '/info.ini')) {
+            $info = \parse_ini_file($dir . '/info.ini');
             $interchange->name = $info['name'];
         }
 
         $files = array();
-        $dh = opendir($dir);
-        while (false !== ($file = readdir($dh))) {
-            if (!$file || $file[0] == '.' || strrchr($file, '.') !== '.txt') {
+        $dh = \opendir($dir);
+        while (false !== ($file = \readdir($dh))) {
+            if (!$file || $file[0] == '.' || \strrchr($file, '.') !== '.txt') {
                 continue;
             }
             $files[] = $file;
         }
-        closedir($dh);
+        \closedir($dh);
 
-        sort($files);
+        \sort($files);
         foreach ($files as $file) {
             $this->buildFile($interchange, $dir . '/' . $file);
         }
@@ -87,8 +87,8 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         if (!isset($hash['ID'])) {
             throw new HTMLPurifier_ConfigSchema_Exception('Hash does not have any ID');
         }
-        if (strpos($hash['ID'], '.') === false) {
-            if (count($hash) == 2 && isset($hash['DESCRIPTION'])) {
+        if (\strpos($hash['ID'], '.') === false) {
+            if (\count($hash) == 2 && isset($hash['DESCRIPTION'])) {
                 $hash->offsetGet('DESCRIPTION'); // prevent complaining
             } else {
                 throw new HTMLPurifier_ConfigSchema_Exception('All directives must have a namespace');
@@ -113,7 +113,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         $id = $directive->id->toString(); // convenience
 
         if (isset($hash['TYPE'])) {
-            $type = explode('/', $hash->offsetGet('TYPE'));
+            $type = \explode('/', $hash->offsetGet('TYPE'));
             if (isset($type[1])) {
                 $directive->typeAllowsNull = true;
             }
@@ -147,8 +147,8 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         }
 
         if (isset($hash['ALIASES'])) {
-            $raw_aliases = trim($hash->offsetGet('ALIASES'));
-            $aliases = preg_split('/\s*,\s*/', $raw_aliases);
+            $raw_aliases = \trim($hash->offsetGet('ALIASES'));
+            $aliases = \preg_split('/\s*,\s*/', $raw_aliases);
             foreach ($aliases as $alias) {
                 $directive->aliases[] = $this->id($alias);
             }
@@ -167,7 +167,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         }
 
         if (isset($hash['EXTERNAL'])) {
-            $directive->external = preg_split('/\s*,\s*/', trim($hash->offsetGet('EXTERNAL')));
+            $directive->external = \preg_split('/\s*,\s*/', \trim($hash->offsetGet('EXTERNAL')));
         }
 
         $interchange->addDirective($directive);
@@ -217,7 +217,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         $accessed = $hash->getAccessed();
         foreach ($hash as $k => $v) {
             if (!isset($accessed[$k])) {
-                trigger_error("String hash key '$k' not used by builder", E_USER_NOTICE);
+                \trigger_error("String hash key '$k' not used by builder", E_USER_NOTICE);
             }
         }
     }

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -65,8 +65,8 @@ function displayEmailAddressOptInField(Email $focus, $field, $value, $view)
     }
     
     if (
-        filter_var($focus->from_name, FILTER_VALIDATE_EMAIL) &&
-        !filter_var($focus->from_addr, FILTER_VALIDATE_EMAIL)
+        \filter_var($focus->from_name, FILTER_VALIDATE_EMAIL) &&
+        !\filter_var($focus->from_addr, FILTER_VALIDATE_EMAIL)
     ) {
         $log->error('Email address is stored in "from_name" field instead of "from_addr"');
     }

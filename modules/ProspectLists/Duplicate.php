@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -75,4 +75,4 @@ if (isset($_POST['isDuplicate']) && $_POST['isDuplicate'] == true) {
         }
     }
 }
-header("Location: index.php?action=DetailView&module=ProspectLists&record=$return_id");
+\header("Location: index.php?action=DetailView&module=ProspectLists&record=$return_id");

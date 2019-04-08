@@ -50,7 +50,7 @@ class mvc_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         //execute the method and test verify it returns true
         $result = ajaxBannedModules();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testajaxLink()
@@ -104,8 +104,8 @@ class mvc_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $bannedModules = ajaxBannedModules();
             foreach ($testModules as $module) {
                 $uri = "index.php?module=$module&action=detail&record=1";
-                if (!in_array($module, $bannedModules)) {
-                    $this->assertSame("?action=ajaxui#ajaxUILoc=" . urlencode($uri), ajaxLink($uri));
+                if (!\in_array($module, $bannedModules)) {
+                    $this->assertSame("?action=ajaxui#ajaxUILoc=" . \urlencode($uri), ajaxLink($uri));
                 } else {
                     $this->assertSame($uri, ajaxLink($uri));
                 }

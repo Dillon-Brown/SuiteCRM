@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 //  Copyright (c) 2009 Facebook
@@ -24,7 +24,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 function xhprof_error($message)
 {
-    error_log($message);
+    \error_log($message);
 }
 
 /*
@@ -65,7 +65,7 @@ function init_metrics($xhprof_data, $rep_symbol, $sort, $diff_report = false)
     $diff_mode = $diff_report;
 
     if (!empty($sort)) {
-        if (array_key_exists($sort, $sortable_columns)) {
+        if (\array_key_exists($sort, $sortable_columns)) {
             $sort_col = $sort;
         } else {
             print("Invalid Sort Key $sort specified in URL");
@@ -92,7 +92,7 @@ function init_metrics($xhprof_data, $rep_symbol, $sort, $diff_report = false)
     // parent/child report doesn't support exclusive times yet.
     // So, change sort hyperlinks to closest fit.
     if (!empty($rep_symbol)) {
-        $sort_col = str_replace("excl_", "", $sort_col);
+        $sort_col = \str_replace("excl_", "", $sort_col);
     }
 
     if ($display_calls) {
@@ -153,7 +153,7 @@ function xhprof_get_metrics($xhprof_data)
  */
 function xhprof_parse_parent_child($parent_child)
 {
-    $ret = explode("==>", $parent_child);
+    $ret = \explode("==>", $parent_child);
 
     // Return if both parent and child are set
     if (isset($ret[1])) {
@@ -214,12 +214,12 @@ function xhprof_valid_run($run_id, $raw_data)
         // basic sanity checks...
         if ($val < 0) {
             xhprof_error("XHProf: $metric should not be negative: Run ID $run_id"
-                   . serialize($info));
+                   . \serialize($info));
             return false;
         }
         if ($val > (86400000000)) {
             xhprof_error("XHProf: $metric > 1 day found in Run ID: $run_id "
-                   . serialize($info));
+                   . \serialize($info));
             return false;
         }
     }
@@ -248,7 +248,7 @@ function xhprof_trim_run($raw_data, $functions_to_keep)
 {
 
   // convert list of functions to a hash with function as the key
-    $function_map = array_fill_keys($functions_to_keep, 1);
+    $function_map = \array_fill_keys($functions_to_keep, 1);
 
     // always keep main() as well so that overall totals can still
     // be computed if need be.
@@ -336,8 +336,8 @@ function xhprof_aggregate_runs(
     $raw_data       = null;
     $metrics        = array();
 
-    $run_count = count($runs);
-    $wts_count = count($wts);
+    $run_count = \count($runs);
+    $wts_count = \count($wts);
 
     if (($run_count == 0) ||
       (($wts_count > 0) && ($run_count != $wts_count))) {
@@ -403,10 +403,10 @@ function xhprof_aggregate_runs(
             if ($use_script_name) {
                 // if this is an old edge originating from main(), it now
                 // needs to be from '__script::$page'
-                if (substr($parent_child, 0, 9) == "main()==>") {
-                    $child = substr($parent_child, 9);
+                if (\substr($parent_child, 0, 9) == "main()==>") {
+                    $child = \substr($parent_child, 9);
                     // ignore the newly added edge from main()
-                    if (substr($child, 0, 10) != "__script::") {
+                    if (\substr($child, 0, 10) != "__script::") {
                         $parent_child = xhprof_build_parent_child_key(
                             "__script::$page",
                                                           $child
@@ -427,17 +427,17 @@ function xhprof_aggregate_runs(
         }
     }
 
-    $runs_string = implode(",", $runs);
+    $runs_string = \implode(",", $runs);
 
     if (isset($wts)) {
-        $wts_string  = "in the ratio (" . implode(":", $wts) . ")";
-        $normalization_count = array_sum($wts);
+        $wts_string  = "in the ratio (" . \implode(":", $wts) . ")";
+        $normalization_count = \array_sum($wts);
     } else {
         $wts_string = "";
         $normalization_count = $run_count;
     }
 
-    $run_count = $run_count - count($bad_runs);
+    $run_count = $run_count - \count($bad_runs);
 
     $data['description'] = "Aggregated Report for $run_count runs: ".
                          "$runs_string $wts_string\n";
@@ -740,10 +740,10 @@ function xhprof_array_unset($arr, $k)
 /**
  * Type definitions for URL params
  */
-define('XHPROF_STRING_PARAM', 1);
-define('XHPROF_UINT_PARAM', 2);
-define('XHPROF_FLOAT_PARAM', 3);
-define('XHPROF_BOOL_PARAM', 4);
+\define('XHPROF_STRING_PARAM', 1);
+\define('XHPROF_UINT_PARAM', 2);
+\define('XHPROF_FLOAT_PARAM', 3);
+\define('XHPROF_BOOL_PARAM', 4);
 
 
 /**
@@ -803,10 +803,10 @@ function xhprof_get_uint_param($param, $default = 0)
     }
 
     // trim leading/trailing whitespace
-    $val = trim($val);
+    $val = \trim($val);
 
     // if it only contains digits, then ok..
-    if (ctype_digit($val)) {
+    if (\ctype_digit($val)) {
         return $val;
     }
 
@@ -834,7 +834,7 @@ function xhprof_get_float_param($param, $default = 0)
     }
 
     // trim leading/trailing whitespace
-    $val = trim($val);
+    $val = \trim($val);
 
     // TBD: confirm the value is indeed a float.
   if (true) { // for now..
@@ -864,9 +864,9 @@ function xhprof_get_bool_param($param, $default = false)
     }
 
     // trim leading/trailing whitespace
-    $val = trim($val);
+    $val = \trim($val);
 
-    switch (strtolower($val)) {
+    switch (\strtolower($val)) {
   case '0':
   case '1':
     $val = (bool)$val;
@@ -950,18 +950,18 @@ function xhprof_get_matching_functions($q, $xhprof_data)
 
     foreach ($xhprof_data as $parent_child => $info) {
         list($parent, $child) = xhprof_parse_parent_child($parent_child);
-        if (stripos($parent, $q) !== false) {
+        if (\stripos($parent, $q) !== false) {
             $matches[$parent] = 1;
         }
-        if (stripos($child, $q) !== false) {
+        if (\stripos($child, $q) !== false) {
             $matches[$child] = 1;
         }
     }
 
-    $res = array_keys($matches);
+    $res = \array_keys($matches);
 
     // sort it so the answers are in some reliable order...
-    asort($res);
+    \asort($res);
 
     return ($res);
 }

@@ -1,6 +1,6 @@
 <?php
-if (!defined('sugarEntry')) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry')) {
+    \define('sugarEntry', true);
 }
 /**
  *

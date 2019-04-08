@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -83,14 +83,14 @@ class ImportViewLast extends ImportView
         // Read the data if we successfully opened file
         if ($fp !== false) {
             // Read rows 1 by 1 and add the info
-            while ($row = fgetcsv($fp, 8192)) {
+            while ($row = \fgetcsv($fp, 8192)) {
                 $count         += (int) $row[0];
                 $errorCount    += (int) $row[1];
                 $dupeCount     += (int) $row[2];
                 $createdCount  += (int) $row[3];
                 $updatedCount  += (int) $row[4];
             }
-            fclose($fp);
+            \fclose($fp);
         }
         
         $this->ss->assign("showUndoButton", false);
@@ -172,7 +172,7 @@ class ImportViewLast extends ImportView
         }
 
         $module_mod_strings = return_module_language($current_language, $this->bean->module_dir);
-        $lvf->setup('', '', $params, $module_mod_strings, 0, -1, '', strtoupper($beanname), array(), 'id');
+        $lvf->setup('', '', $params, $module_mod_strings, 0, -1, '', \strtoupper($beanname), array(), 'id');
         global $app_list_strings;
         return $lvf->display($app_list_strings['moduleList'][$this->bean->module_dir], 'main', true);
     }

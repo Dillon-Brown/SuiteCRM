@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -118,8 +118,8 @@ while ($mbox_row = $focus->db->fetchByAssoc($mbox_res)) {
 }
     $mbox_msg = ' ';
 //if the array is not empty, then set "good" message
-if (isset($mbox) && count($mbox)>0) {
-    $mboxTable .= "<tr><td colspan='5' style='text-align: left;'><b>" .count($mbox) ." ". $mod_strings['LBL_MAILBOX_CHECK1_GOOD']." </b>.</td></tr>";
+if (isset($mbox) && \count($mbox)>0) {
+    $mboxTable .= "<tr><td colspan='5' style='text-align: left;'><b>" .\count($mbox) ." ". $mod_strings['LBL_MAILBOX_CHECK1_GOOD']." </b>.</td></tr>";
     $mboxTable .= "<tr><th scope='col' width='20%'><b>".$mod_strings['LBL_MAILBOX_NAME']."</b></th>"
                    .  " <th scope='col' width='20%'><b>".$mod_strings['LBL_LOGIN']."</b></th>"
                    .  " <th scope='col' width='20%'><b>".$mod_strings['LBL_MAILBOX']."</b></th>"
@@ -147,7 +147,7 @@ $ss->assign("MAILBOXES_DETECTED_MESSAGE", $mboxTable);
 
 //email settings configured
 $conf_msg="<table border='0' width='100%' class='detail view' cellpadding='0' cellspacing='0'>";
-if (strstr($focus->settings['notify_fromaddress'], 'example.com')) {
+if (\strstr($focus->settings['notify_fromaddress'], 'example.com')) {
     //if from address is the default, then set "bad" message and increment health counter
     $conf_msg .= "<tr><td colspan = '5'><b class='error'> ".$mod_strings['LBL_MAILBOX_CHECK2_BAD']." </b></td></td>";
     $email_health =$email_health +1;

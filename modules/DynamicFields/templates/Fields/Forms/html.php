@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -51,7 +51,7 @@ function get_body($ss, $vardef)
     $edValue = '';
     if (!empty($vardef['default_value'])) {
         $edValue = $vardef['default_value'];
-        $edValue = str_replace(array("\r\n", "\n"), " ", $edValue);
+        $edValue = \str_replace(array("\r\n", "\n"), " ", $edValue);
     }
     $ss->assign('HTML_EDITOR', $edValue);
     $ss->assign('disableInlineEdit', 1);

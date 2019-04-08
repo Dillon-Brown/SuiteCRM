@@ -40,7 +40,7 @@
 
 namespace SuiteCRM;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -106,7 +106,7 @@ trait StateCheckerTrait
      */
     protected static function getClassName()
     {
-        $class = get_called_class();
+        $class = \get_called_class();
         return $class;
     }
     
@@ -117,10 +117,10 @@ trait StateCheckerTrait
     protected static function getTestMethodsCount()
     {
         $count = 0;
-        $class = get_called_class();
-        $methods = get_class_methods($class);
+        $class = \get_called_class();
+        $methods = \get_class_methods($class);
         foreach ($methods as $method) {
-            if (preg_match('/^test/', $method)) {
+            if (\preg_match('/^test/', $method)) {
                 $count++;
             }
         }

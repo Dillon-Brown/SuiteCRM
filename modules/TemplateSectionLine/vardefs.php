@@ -108,7 +108,7 @@ $dictionary['TemplateSectionLine'] = array(
     'optimistic_locking' => true,
     'unified_search' => false,
 );
-if (!class_exists('VardefManager')) {
+if (!\class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('TemplateSectionLine', 'TemplateSectionLine', array('basic'));

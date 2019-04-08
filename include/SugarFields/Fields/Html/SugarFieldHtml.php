@@ -38,11 +38,11 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-require_once dirname(__DIR__) . '/Base/SugarFieldBase.php';
+require_once \dirname(__DIR__) . '/Base/SugarFieldBase.php';
 
 
 class SugarFieldHtml extends SugarFieldBase
@@ -113,6 +113,6 @@ class SugarFieldHtml extends SugarFieldBase
             }
         }
 
-        return utf8_decode($vardef['value']);
+        return \utf8_decode($vardef['value']);
     }
 }

@@ -83,7 +83,7 @@ class SugarFolderTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         $sugarfolder = new SugarFolder();
 
-        $this->assertTrue(is_object($sugarfolder));
+        $this->assertTrue(\is_object($sugarfolder));
     }
 
     public function testGenerateArchiveFolderQuery()
@@ -155,7 +155,7 @@ class SugarFolderTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $subscriptions = $sugarfolder->getSubscriptions($user);
 
-        $this->assertTrue((count($subscriptions) > 0));
+        $this->assertTrue((\count($subscriptions) > 0));
 
         // Access clear with user
         $sugarfolder->clearSubscriptions($user);
@@ -165,7 +165,7 @@ class SugarFolderTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $subscriptions = $sugarfolder->getSubscriptions(null);
 
-        $this->assertEquals(0, count($subscriptions));
+        $this->assertEquals(0, \count($subscriptions));
 
         // test the add subscription to group folder
         $sugarfolder->addSubscriptionsToGroupFolder();
@@ -239,11 +239,11 @@ class SugarFolderTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $ret = $sugarfolder->getFoldersForSettings();
 
-        $this->assertTrue(is_array($ret));
+        $this->assertTrue(\is_array($ret));
 
         $ret = $childSugarFolder->getParentIDRecursive($childSugarFolder->id);
 
-        $this->assertTrue(in_array($sugarfolder->id, $ret));
+        $this->assertTrue(\in_array($sugarfolder->id, $ret));
 
         $this->popState();
     }
@@ -448,7 +448,7 @@ class SugarFolderTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         }
 
         $results = $sugarFolder->getListItemsForEmailXML($sugarFolder->id);
-        $this->assertTrue(is_array($results));
+        $this->assertTrue(\is_array($results));
         $results = false;
 
         $dynamicSugarFolder = new SugarFolder($user);
@@ -469,7 +469,7 @@ class SugarFolderTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         }
 
         $results = $dynamicSugarFolder->getListItemsForEmailXML($dynamicSugarFolder->id);
-        $this->assertTrue(is_array($results));
+        $this->assertTrue(\is_array($results));
 
         $this->popState();
     }
@@ -734,7 +734,7 @@ class SugarFolderTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $parentFolderOne->getUserFolders($rootNode, sugar_unserialize($folderOpenState), null, true);
 
-        $this->assertTrue(is_object($rootNode));
+        $this->assertTrue(\is_object($rootNode));
 
         $this->popState();
     }

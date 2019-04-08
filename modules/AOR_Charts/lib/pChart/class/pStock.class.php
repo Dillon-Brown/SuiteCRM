@@ -13,7 +13,7 @@
      You can find the whole class documentation on the pChart web site.
  */
 
- define("STOCK_MISSING_SERIE", 180001);
+ \define("STOCK_MISSING_SERIE", 180001);
 
  /* pStock class definition */
  class pStock
@@ -175,14 +175,14 @@
                      $this->pChartObject->drawLine($X-$ExtremityLength, $PosArray[3], $X+$ExtremityLength, $PosArray[3], $ExtremitySettings);
 
                      if ($RecordImageMap) {
-                         $this->pChartObject->addToImageMap("RECT", floor($X-$ExtremityLength).",".floor($PosArray[2]).",".floor($X+$ExtremityLength).",".floor($PosArray[3]), $ImageMapColor, $ImageMapTitle, $Values);
+                         $this->pChartObject->addToImageMap("RECT", \floor($X-$ExtremityLength).",".\floor($PosArray[2]).",".\floor($X+$ExtremityLength).",".\floor($PosArray[3]), $ImageMapColor, $ImageMapTitle, $Values);
                      }
                  } else {
                      $this->pChartObject->drawFilledRectangle($X-$ExtremityLength, $PosArray[2], $X+$ExtremityLength, $PosArray[2]-$ExtremityWidth, $ExtremitySettings);
                      $this->pChartObject->drawFilledRectangle($X-$ExtremityLength, $PosArray[3], $X+$ExtremityLength, $PosArray[3]+$ExtremityWidth, $ExtremitySettings);
 
                      if ($RecordImageMap) {
-                         $this->pChartObject->addToImageMap("RECT", floor($X-$ExtremityLength).",".floor($PosArray[2]-$ExtremityWidth).",".floor($X+$ExtremityLength).",".floor($PosArray[3]+$ExtremityWidth), $ImageMapColor, $ImageMapTitle, $Values);
+                         $this->pChartObject->addToImageMap("RECT", \floor($X-$ExtremityLength).",".\floor($PosArray[2]-$ExtremityWidth).",".\floor($X+$ExtremityLength).",".\floor($PosArray[3]+$ExtremityWidth), $ImageMapColor, $ImageMapTitle, $Values);
                      }
                  }
 
@@ -231,14 +231,14 @@
                      $this->pChartObject->drawLine($PosArray[3], $Y-$ExtremityLength, $PosArray[3], $Y+$ExtremityLength, $ExtremitySettings);
 
                      if ($RecordImageMap) {
-                         $this->pChartObject->addToImageMap("RECT", floor($PosArray[2]).",".floor($Y-$ExtremityLength).",".floor($PosArray[3]).",".floor($Y+$ExtremityLength), $ImageMapColor, $ImageMapTitle, $Values);
+                         $this->pChartObject->addToImageMap("RECT", \floor($PosArray[2]).",".\floor($Y-$ExtremityLength).",".\floor($PosArray[3]).",".\floor($Y+$ExtremityLength), $ImageMapColor, $ImageMapTitle, $Values);
                      }
                  } else {
                      $this->pChartObject->drawFilledRectangle($PosArray[2], $Y-$ExtremityLength, $PosArray[2]-$ExtremityWidth, $Y+$ExtremityLength, $ExtremitySettings);
                      $this->pChartObject->drawFilledRectangle($PosArray[3], $Y-$ExtremityLength, $PosArray[3]+$ExtremityWidth, $Y+$ExtremityLength, $ExtremitySettings);
 
                      if ($RecordImageMap) {
-                         $this->pChartObject->addToImageMap("RECT", floor($PosArray[2]-$ExtremityWidth).",".floor($Y-$ExtremityLength).",".floor($PosArray[3]+$ExtremityWidth).",".floor($Y+$ExtremityLength), $ImageMapColor, $ImageMapTitle, $Values);
+                         $this->pChartObject->addToImageMap("RECT", \floor($PosArray[2]-$ExtremityWidth).",".\floor($Y-$ExtremityLength).",".\floor($PosArray[3]+$ExtremityWidth).",".\floor($Y+$ExtremityLength), $ImageMapColor, $ImageMapTitle, $Values);
                      }
                  }
 

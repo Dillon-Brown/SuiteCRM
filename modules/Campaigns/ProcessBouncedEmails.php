@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -89,7 +89,7 @@ function createBouncedCampaignLogEntry($row, $email, $email_description)
     $bounce->related_id= $email->id;
 
     //do we have the phrase permanent error in the email body.
-    if (preg_match('/permanent[ ]*error/', $email_description)) {
+    if (\preg_match('/permanent[ ]*error/', $email_description)) {
         $bounce->activity_type='invalid email';
         markEmailAddressInvalid($email);
     } else {
@@ -111,7 +111,7 @@ function markEmailAddressInvalid($email_address)
         return;
     }
     $sea = new SugarEmailAddress();
-    $rs = $sea->retrieve_by_string_fields(array('email_address_caps' => trim(strtoupper($email_address))));
+    $rs = $sea->retrieve_by_string_fields(array('email_address_caps' => \trim(\strtoupper($email_address))));
     if ($rs != null) {
         $sea->AddUpdateEmailAddress($email_address, 1, 0, $rs->id);
     }
@@ -147,12 +147,12 @@ function checkBouncedEmailForIdentifier($email_description)
     $identifiers = array();
     $found = false;
     //Check if the identifier is present in the header.
-    if (preg_match('/X-CampTrackID: [a-z0-9\-]*/', $email_description, $matches)) {
-        $identifiers = preg_split('/X-CampTrackID: /', $matches[0], -1, PREG_SPLIT_NO_EMPTY);
+    if (\preg_match('/X-CampTrackID: [a-z0-9\-]*/', $email_description, $matches)) {
+        $identifiers = \preg_split('/X-CampTrackID: /', $matches[0], -1, PREG_SPLIT_NO_EMPTY);
         $found = true;
         $GLOBALS['log']->debug("Found campaign identifier in header of email");
-    } elseif (preg_match('/index.php\?entryPoint=removeme&identifier=[a-z0-9\-]*/', $email_description, $matches)) {
-        $identifiers = preg_split('/index.php\?entryPoint=removeme&identifier=/', $matches[0], -1, PREG_SPLIT_NO_EMPTY);
+    } elseif (\preg_match('/index.php\?entryPoint=removeme&identifier=[a-z0-9\-]*/', $email_description, $matches)) {
+        $identifiers = \preg_split('/index.php\?entryPoint=removeme&identifier=/', $matches[0], -1, PREG_SPLIT_NO_EMPTY);
         $found = true;
         $GLOBALS['log']->debug("Found campaign identifier in body of email");
     }
@@ -173,8 +173,8 @@ function campaign_process_bounced_emails(&$email, &$email_header)
 
     $email_description .= retrieveErrorReportAttachment($email);
 
-    if (preg_match('/MAILER-DAEMON|POSTMASTER/i', $emailFromAddress)) {
-        $email_description=quoted_printable_decode($email_description);
+    if (\preg_match('/MAILER-DAEMON|POSTMASTER/i', $emailFromAddress)) {
+        $email_description=\quoted_printable_decode($email_description);
         $matches=array();
 
         //do we have the identifier tag in the email?
@@ -186,7 +186,7 @@ function campaign_process_bounced_emails(&$email, &$email_header)
 
             if (!empty($identifiers)) {
                 //array should have only one element in it.
-                $identifier = trim($identifiers[0]);
+                $identifier = \trim($identifiers[0]);
                 $row = getExistingCampaignLogEntry($identifier);
 
                 //Found entry

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -110,7 +110,7 @@ class Localization
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -203,7 +203,7 @@ class Localization
         }
 
         $load = sugar_cache_retrieve('currency_list');
-        if (!is_array($load)) {
+        if (!\is_array($load)) {
             // load default from config.php
             $this->currencies['-99'] = array(
                 'name'        => $sugar_config['default_currency_name'],
@@ -309,13 +309,13 @@ class Localization
     {
         // handle recursive
         foreach ($strings as $k => $v) {
-            if (is_array($v)) {
+            if (\is_array($v)) {
                 $strings[$k] = $this->translateStringPack($v, $charset);
             } else {
                 $strings[$k] = $this->translateCharset($v, 'UTF-8', $charset);
             }
         }
-        ksort($strings);
+        \ksort($strings);
         return $strings;
     }
 
@@ -326,7 +326,7 @@ class Localization
      */
     public function translateForEmail($var)
     {
-        if (is_array($var)) {
+        if (\is_array($var)) {
             foreach ($var as $k => $v) {
                 $var[$k] = $this->translateForEmail($v);
             }
@@ -345,7 +345,7 @@ class Localization
     public function prepBeanForExport($bean)
     {
         foreach ($bean->field_defs as $k => $field) {
-            if (is_string($bean->$k)) {
+            if (\is_string($bean->$k)) {
                 // $bean->$k = $this->translateCharset($bean->$k, 'UTF-8', $this->getExportCharset());
             } else {
                 $bean->$k = '';
@@ -368,14 +368,14 @@ class Localization
         $GLOBALS['log']->debug("Localization: translating [{$string}] from {$fromCharset} into {$toCharset}");
 
         // Bug #35413 Function has to use iconv if $fromCharset is not in mb_list_encodings
-        $isMb = function_exists('mb_convert_encoding') && !$forceIconv;
-        $isIconv = function_exists('iconv');
+        $isMb = \function_exists('mb_convert_encoding') && !$forceIconv;
+        $isIconv = \function_exists('iconv');
         if ($isMb == true) {
-            $fromCharset = strtoupper($fromCharset);
-            $listEncodings = mb_list_encodings();
+            $fromCharset = \strtoupper($fromCharset);
+            $listEncodings = \mb_list_encodings();
             $isFound = false;
             foreach ($listEncodings as $encoding) {
-                if (strtoupper($encoding) == $fromCharset) {
+                if (\strtoupper($encoding) == $fromCharset) {
                     $isFound = true;
                     break;
                 }
@@ -384,7 +384,7 @@ class Localization
         }
 
         if ($isMb) {
-            return mb_convert_encoding($string, $toCharset, $fromCharset);
+            return \mb_convert_encoding($string, $toCharset, $fromCharset);
         } elseif ($isIconv) {
             $newFromCharset = $fromCharset;
             if (isset($this->iconvCharsetMap[$fromCharset])) {
@@ -396,7 +396,7 @@ class Localization
                 $newToCharset = $this->iconvCharsetMap[$toCharset];
                 $GLOBALS['log']->debug("Localization: iconv using charset {$newToCharset} instead of {$toCharset}");
             }
-            return iconv($newFromCharset, $newToCharset, $string);
+            return \iconv($newFromCharset, $newToCharset, $string);
         }
         return $string;
         // end else clause
@@ -407,16 +407,16 @@ class Localization
      */
     public function translateCharsetMIME($string, $fromCharset, $toCharset='UTF-8', $encoding="Q")
     {
-        $previousEncoding = mb_internal_encoding();
-        mb_internal_encoding($fromCharset);
-        $result = mb_encode_mimeheader($string, $toCharset, $encoding);
-        mb_internal_encoding($previousEncoding);
+        $previousEncoding = \mb_internal_encoding();
+        \mb_internal_encoding($fromCharset);
+        $result = \mb_encode_mimeheader($string, $toCharset, $encoding);
+        \mb_internal_encoding($previousEncoding);
         return $result;
     }
 
     public function normalizeCharset($charset)
     {
-        $charset = strtolower(preg_replace("/[\-\_]*/", "", $charset));
+        $charset = \strtolower(\preg_replace("/[\-\_]*/", "", $charset));
         return $charset;
     }
 
@@ -504,11 +504,11 @@ class Localization
         $precision        = $this->getPrecision($user);
         $symbol            = empty($currencySymbol) ? $this->getCurrencySymbol($user) : $currencySymbol;
 
-        $exNum = explode($dec, $number);
+        $exNum = \explode($dec, $number);
         // handle grouping
-        if (is_array($exNum) && count($exNum) > 0) {
-            if (strlen($exNum[0]) > 3) {
-                $offset = strlen($exNum[0]) % 3;
+        if (\is_array($exNum) && \count($exNum) > 0) {
+            if (\strlen($exNum[0]) > 3) {
+                $offset = \strlen($exNum[0]) % 3;
                 if ($offset > 0) {
                     for ($i=0; $i<$offset; $i++) {
                         $majorDigits .= $exNum[0]{$i};
@@ -516,7 +516,7 @@ class Localization
                 }
 
                 $tic = 0;
-                for ($i=$offset; $i<strlen($exNum[0]); $i++) {
+                for ($i=$offset; $i<\strlen($exNum[0]); $i++) {
                     if ($tic % 3 == 0 && $i != 0) {
                         $majorDigits .= $thou; // add separator
                     }
@@ -532,7 +532,7 @@ class Localization
 
         // handle decimals
         if ($precision > 0) { // we toss the minor digits otherwise
-            if (is_array($exNum) && isset($exNum[1])) {
+            if (\is_array($exNum) && isset($exNum[1])) {
             }
         }
 
@@ -692,19 +692,19 @@ eoq;
 
         // parse localeNameFormat
         $formattedName = '';
-        for ($i=0; $i<strlen($this->localeNameFormat); $i++) {
-            $formattedName .= array_key_exists($this->localeNameFormat{$i}, $names) ? $names[$this->localeNameFormat{$i}] : $this->localeNameFormat{$i};
+        for ($i=0; $i<\strlen($this->localeNameFormat); $i++) {
+            $formattedName .= \array_key_exists($this->localeNameFormat{$i}, $names) ? $names[$this->localeNameFormat{$i}] : $this->localeNameFormat{$i};
         }
 
-        $formattedName = trim($formattedName);
-        if (strlen($formattedName)==0) {
+        $formattedName = \trim($formattedName);
+        if (\strlen($formattedName)==0) {
             return $returnEmptyStringIfEmpty ? '' : ' ';
         }
 
-        if (strpos($formattedName, ',', strlen($formattedName)-1)) { // remove trailing commas
-            $formattedName = substr($formattedName, 0, strlen($formattedName)-1);
+        if (\strpos($formattedName, ',', \strlen($formattedName)-1)) { // remove trailing commas
+            $formattedName = \substr($formattedName, 0, \strlen($formattedName)-1);
         }
-        return trim($formattedName);
+        return \trim($formattedName);
     }
 
     /**
@@ -761,7 +761,7 @@ eoq;
     public function isAllowedNameFormat($name_format)
     {
         // will result in a match as soon as a disallowed char is hit in $name_format
-        $match = preg_match('/[^sfl[:punct:][:^alnum:]\s]/', $name_format);
+        $match = \preg_match('/[^sfl[:punct:][:^alnum:]\s]/', $name_format);
         if ($match !== false && $match === 0) {
             return true;
         }
@@ -774,7 +774,7 @@ eoq;
      */
     public function invalidLocaleNameFormatUpgrade()
     {
-        return file_exists($this->invalidNameFormatUpgradeFilename);
+        return \file_exists($this->invalidNameFormatUpgradeFilename);
     }
 
     /**
@@ -782,8 +782,8 @@ eoq;
      */
     public function createInvalidLocaleNameFormatUpgradeNotice()
     {
-        $fh = fopen($this->invalidNameFormatUpgradeFilename, 'w');
-        fclose($fh);
+        $fh = \fopen($this->invalidNameFormatUpgradeFilename, 'w');
+        \fclose($fh);
     }
 
     /**
@@ -792,7 +792,7 @@ eoq;
     public function removeInvalidLocaleNameFormatUpgradeNotice()
     {
         if ($this->invalidLocaleNameFormatUpgrade()) {
-            unlink($this->invalidNameFormatUpgradeFilename);
+            \unlink($this->invalidNameFormatUpgradeFilename);
         }
     }
 
@@ -814,7 +814,7 @@ eoq;
         foreach ($options as $key => $val) {
             if ($this->isAllowedNameFormat($key) && $this->isAllowedNameFormat($val)) {
                 $newVal = '';
-                $pieces = str_split($val);
+                $pieces = \str_split($val);
                 foreach ($pieces as $piece) {
                     if (isset($examples[$piece])) {
                         $newVal .= $examples[$piece];
@@ -839,8 +839,8 @@ eoq;
      */
     public function detectCharset($str, $strict=false)
     {
-        if (function_exists('mb_convert_encoding')) {
-            return mb_detect_encoding($str, 'ASCII,JIS,UTF-8,EUC-JP,SJIS,ISO-8859-1', $strict);
+        if (\function_exists('mb_convert_encoding')) {
+            return \mb_detect_encoding($str, 'ASCII,JIS,UTF-8,EUC-JP,SJIS,ISO-8859-1', $strict);
         }
 
         return false;

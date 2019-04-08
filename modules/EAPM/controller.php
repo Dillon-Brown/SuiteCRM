@@ -53,7 +53,7 @@ class EAPMController extends SugarController
 
     public function process()
     {
-        if (!is_admin($GLOBALS['current_user']) && in_array(strtolower($this->action), $this->admin_actions)) {
+        if (!is_admin($GLOBALS['current_user']) && \in_array(\strtolower($this->action), $this->admin_actions)) {
             $this->hasAccess = false;
         }
         parent::process();
@@ -234,7 +234,7 @@ class EAPMController extends SugarController
             return;
         }
 
-        if (method_exists($api, 'loadDocCache')) {
+        if (\method_exists($api, 'loadDocCache')) {
             $api->loadDocCache(true);
         }
 

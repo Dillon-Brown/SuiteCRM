@@ -151,8 +151,8 @@ class ModuleController extends ApiController
                 $self = $config['site_url'] . '/api/v'. self::VERSION_MAJOR . '/modules/' . $moduleName . '/';
                 $actions = array();
                 foreach ($menu as $item) {
-                    $url = parse_url($item[0]);
-                    parse_str($url['query'], $orig);
+                    $url = \parse_url($item[0]);
+                    \parse_str($url['query'], $orig);
                     $actions[] = array(
                         'href' => $self . $item[2],
                         'label' => $item[1],
@@ -378,7 +378,7 @@ class ModuleController extends ApiController
             $currentOffset = (integer)$paginatedModuleRecords['current_offset'] < 0 ? 0 : (integer)$paginatedModuleRecords['current_offset'];
             $limit = isset($page['limit']) ? (integer)$page['limit'] : -1;
             $limitOffset = ($limit <= 0) ? $config['list_max_entries_per_page'] : $limit;
-            $lastOffset = (integer)floor((integer)$paginatedModuleRecords['row_count'] / $limitOffset);
+            $lastOffset = (integer)\floor((integer)$paginatedModuleRecords['row_count'] / $limitOffset);
 
             $payload['meta']['offsets'] = array(
                 'current' => $currentOffset,
@@ -409,7 +409,7 @@ class ModuleController extends ApiController
             $res = $res->withStatus(202);
             $moduleName = $args['module'];
             $module = BeanFactory::newBean($moduleName);
-            $body = json_decode($req->getBody()->getContents(), true);
+            $body = \json_decode($req->getBody()->getContents(), true);
             $payload = array();
 
             // Validate module
@@ -446,13 +446,13 @@ class ModuleController extends ApiController
                 $beanID = $body['data']['id'];
                 $isValidator = new SuiteValidator();
                 if (!$isValidator->isValidId($beanID)) {
-                    throw new InvalidArgumentException(sprintf('Bean id %s is invalid', $beanID));
+                    throw new InvalidArgumentException(\sprintf('Bean id %s is invalid', $beanID));
                 }
 
                 $bean = \BeanFactory::getBean($moduleName, $beanID);
 
                 if ($bean instanceof SugarBean) {
-                    throw new IdAlreadyExistsException(sprintf(
+                    throw new IdAlreadyExistsException(\sprintf(
                     'Bean id %s already exists in %s module',
                         $beanID,
                         $moduleName
@@ -481,7 +481,7 @@ class ModuleController extends ApiController
             $sugarBeanResource = $sugarBeanResource->fromSugarBean($sugarBean);
 
             if ($selectFields !== null && isset($selectFields[$moduleName])) {
-                $fields = explode(',', $selectFields[$moduleName]);
+                $fields = \explode(',', $selectFields[$moduleName]);
                 $payload['data'] = $sugarBeanResource->toJsonApiResponseWithFields($fields);
             } else {
                 $payload['data'] = $sugarBeanResource->toJsonApiResponse();
@@ -557,7 +557,7 @@ class ModuleController extends ApiController
             // filter fields
             $selectFields = $req->getParam('fields');
             if ($selectFields !== null && isset($selectFields[$moduleName])) {
-                $fields = explode(',', $selectFields[$moduleName]);
+                $fields = \explode(',', $selectFields[$moduleName]);
                 $payload['data'] = $resource->toJsonApiResponseWithFields($fields);
             } else {
                 $payload['data'] = $resource->toJsonApiResponse();
@@ -587,7 +587,7 @@ class ModuleController extends ApiController
             $moduleName = $args['module'];
             $moduleId = $args['id'];
             $module = BeanFactory::newBean($moduleName);
-            $body = json_decode($req->getBody()->getContents(), true);
+            $body = \json_decode($req->getBody()->getContents(), true);
             $payload = array();
 
             // Validate module
@@ -644,7 +644,7 @@ class ModuleController extends ApiController
             $selectFields = $req->getParam('fields');
 
             if ($selectFields !== null && isset($selectFields[$moduleName])) {
-                $fields = explode(',', $selectFields[$moduleName]);
+                $fields = \explode(',', $selectFields[$moduleName]);
                 $payload['data'] = $sugarBeanResource->toJsonApiResponseWithFields($fields);
             } else {
                 $payload['data'] = $sugarBeanResource->toJsonApiResponse();
@@ -841,8 +841,8 @@ class ModuleController extends ApiController
             $self = $config['site_url'] . '/api/v'. self::VERSION_MAJOR . '/modules/' . $args['module'] . '/';
             $results = array();
             foreach ($menu as $item) {
-                $url = parse_url($item[0]);
-                parse_str($url['query'], $orig);
+                $url = \parse_url($item[0]);
+                \parse_str($url['query'], $orig);
                 $results[] = array(
                     'href' => $self . $item[2],
                     'label' => $item[1],
@@ -1207,7 +1207,7 @@ class ModuleController extends ApiController
             /** @var Link2 $sugarBeanRelationship */
             $sugarBeanRelationship = $sugarBean->{$args['link']};
 
-            $requestPayload = json_decode($req->getBody(), true);
+            $requestPayload = \json_decode($req->getBody(), true);
 
             // Validate JSON
             if (empty($requestPayload)) {
@@ -1281,7 +1281,7 @@ class ModuleController extends ApiController
 
                     $added = $sugarBeanRelationship->add($links, $additional_fields);
                     if ($added !== true) {
-                        throw new ConflictException('[ModuleController] [Unable to add relationships (to many)] ' . json_encode($added));
+                        throw new ConflictException('[ModuleController] [Unable to add relationships (to many)] ' . \json_encode($added));
                     }
                     break;
                 case RelationshipType::TO_ONE:
@@ -1395,7 +1395,7 @@ class ModuleController extends ApiController
             /** @var \Link2 $sugarBeanRelationship */
             $sugarBeanRelationship = $sugarBean->{$args['link']};
 
-            $requestPayload = json_decode($req->getBody(), true);
+            $requestPayload = \json_decode($req->getBody(), true);
 
             // Validate JSON
             if (empty($requestPayload)) {
@@ -1545,7 +1545,7 @@ class ModuleController extends ApiController
             /** @var \Link2 $sugarBeanRelationship */
             $sugarBeanRelationship = $sugarBean->{$args['link']};
 
-            $requestPayload = json_decode($req->getBody(), true);
+            $requestPayload = \json_decode($req->getBody(), true);
 
             /** @var Relationship $relationship */
             $relationship = $this->containers->get('Relationship');
@@ -1572,7 +1572,7 @@ class ModuleController extends ApiController
                     $removed = $sugarBeanRelationship->remove($links);
                     if ($removed !== true) {
                         throw new ConflictException(
-                            '[ModuleController] [Unable to remove relationships (to many)]' . json_encode($removed)
+                            '[ModuleController] [Unable to remove relationships (to many)]' . \json_encode($removed)
                         );
                     }
                 }

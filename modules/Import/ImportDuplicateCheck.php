@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -83,7 +83,7 @@ class ImportDuplicateCheck
         //grab any custom indexes if they exist
         if ($this->_focus->hasCustomFields()) {
             $custmIndexes = $this->_focus->db->helper->get_indices($this->_focus->table_name.'_cstm');
-            $indexes = array_merge($custmIndexes, $indexes);
+            $indexes = \array_merge($custmIndexes, $indexes);
         }
 
         if ($this->_focus->getFieldDefinition('email1')) {
@@ -131,7 +131,7 @@ class ImportDuplicateCheck
                         $labelsArray[$fieldDef['name']] = $fieldDef['name'];
                     }
                 }
-                $index_array[$index['name']] = str_replace(":", "", implode(", ", $labelsArray));
+                $index_array[$index['name']] = \str_replace(":", "", \implode(", ", $labelsArray));
             }
         }
 
@@ -155,27 +155,27 @@ class ImportDuplicateCheck
                 }
             } else {
                 $index_fields = array('deleted' => '0');
-                if (is_array($field)) {
+                if (\is_array($field)) {
                     foreach ($field as $tmpField) {
                         if ($tmpField == 'deleted') {
                             continue;
                         }
-                        if (strlen($this->_focus->$tmpField) > 0) {
+                        if (\strlen($this->_focus->$tmpField) > 0) {
                             $index_fields[$tmpField] = $this->_focus->$tmpField;
                         }
                     }
-                } elseif ($field != 'deleted' && strlen($this->_focus->$field) > 0) {
+                } elseif ($field != 'deleted' && \strlen($this->_focus->$field) > 0) {
                     $index_fields[$field] = $this->_focus->$field;
                 }
 
-                if (count($index_fields) <= 1) {
+                if (\count($index_fields) <= 1) {
                     continue;
                 }
 
                 $newfocus = loadBean($this->_focus->module_dir);
                 $result = $newfocus->retrieve_by_string_fields($index_fields, true);
 
-                if (!is_null($result)) {
+                if (!\is_null($result)) {
                     return true;
                 }
             }
@@ -212,7 +212,7 @@ class ImportDuplicateCheck
             if (empty($iv)) {
                 continue;
             }
-            $field_index_array = explode('::', $iv);
+            $field_index_array = \explode('::', $iv);
             if ($field_index_array[0] == 'customfield') {
                 //this is a custom field, so place in custom array
                 $customIndexlist[] = $field_index_array[1];
@@ -227,11 +227,11 @@ class ImportDuplicateCheck
 
         //if full_name is set, then manually search on the first and last name fields before iterating through rest of fields
         //this is a special handling of the name fields on people objects, the rest of the fields are checked individually
-        if (in_array('full_name', $indexlist)) {
+        if (\in_array('full_name', $indexlist)) {
             $newfocus = loadBean($this->_focus->module_dir);
             $result = $newfocus->retrieve_by_string_fields(array('deleted' =>'0', 'first_name'=>$this->_focus->first_name, 'last_name'=>$this->_focus->last_name), true);
 
-            if (!is_null($result)) {
+            if (!\is_null($result)) {
                 //set dupe field to full_name and name fields
                 $this->_dupedFields[] = 'full_name';
                 $this->_dupedFields[] = 'first_name';
@@ -242,7 +242,7 @@ class ImportDuplicateCheck
         // loop through var def indexes and compare with selected indexes
         foreach ($this->_getIndexVardefs() as $index) {
             // if we get an index not in the indexlist, loop
-            if (!in_array($index['name'], $indexlist)) {
+            if (!\in_array($index['name'], $indexlist)) {
                 continue;
             }
 
@@ -264,38 +264,38 @@ class ImportDuplicateCheck
             }
             // Adds a hook so you can define a method in the bean to handle dupe checking
             elseif (isset($index['dupeCheckFunction'])) {
-                $functionName = substr_replace($index['dupeCheckFunction'], '', 0, 9);
-                if (method_exists($this->_focus, $functionName) && $this->_focus->$functionName($index) === true) {
+                $functionName = \substr_replace($index['dupeCheckFunction'], '', 0, 9);
+                if (\method_exists($this->_focus, $functionName) && $this->_focus->$functionName($index) === true) {
                     return $this->_focus->$functionName($index);
                 }
             } else {
                 $index_fields = array('deleted' => '0');
                 //search only for the field we have selected
                 foreach ($index['fields'] as $field) {
-                    if ($field == 'deleted' ||  !in_array($field, $fieldlist)) {
+                    if ($field == 'deleted' ||  !\in_array($field, $fieldlist)) {
                         continue;
                     }
-                    if (!in_array($field, $index_fields)) {
-                        if (isset($this->_focus->$field) && strlen($this->_focus->$field) > 0) {
+                    if (!\in_array($field, $index_fields)) {
+                        if (isset($this->_focus->$field) && \strlen($this->_focus->$field) > 0) {
                             $index_fields[$field] = $this->_focus->$field;
                         }
                     }
                 }
 
                 // if there are no valid fields in the index field list, loop
-                if (count($index_fields) <= 1) {
+                if (\count($index_fields) <= 1) {
                     continue;
                 }
 
                 $newfocus = loadBean($this->_focus->module_dir);
                 $result = $newfocus->retrieve_by_string_fields($index_fields, true);
 
-                if (!is_null($result)) {
+                if (!\is_null($result)) {
                     //remove deleted as a duped field
                     unset($index_fields['deleted']);
 
                     //create string based on array of dupe fields
-                    $this->_dupedFields = array_merge(array_keys($index_fields), $this->_dupedFields);
+                    $this->_dupedFields = \array_merge(\array_keys($index_fields), $this->_dupedFields);
                 }
             }
         }
@@ -313,14 +313,14 @@ class ImportDuplicateCheck
     {
         require_once('include/export_utils.php');
         $import_fields = $this->_focus->get_importable_fields();
-        $importable_keys = array_keys($import_fields);//
+        $importable_keys = \array_keys($import_fields);//
 
         $index_array = array();
         $fields_used = array();
         $mstr_exclude_array = array('all'=>array('team_set_id','id','deleted'),'contacts'=>array('email2'), array('leads'=>'reports_to_id'), array('prospects'=>'tracker_key'));
 
         //create exclude array from subset of applicable mstr_exclude_array elements
-        $exclude_array =  isset($mstr_exclude_array[strtolower($this->_focus->module_dir)])?array_merge($mstr_exclude_array[strtolower($this->_focus->module_dir)], $mstr_exclude_array['all']) : $mstr_exclude_array['all'];
+        $exclude_array =  isset($mstr_exclude_array[\strtolower($this->_focus->module_dir)])?\array_merge($mstr_exclude_array[\strtolower($this->_focus->module_dir)], $mstr_exclude_array['all']) : $mstr_exclude_array['all'];
 
 
 
@@ -331,13 +331,13 @@ class ImportDuplicateCheck
                     $fieldName='';
 
                     //skip this field if it is the deleted field, not in the importable keys array, or a field in the exclude array
-                    if (!in_array($field, $importable_keys) || in_array($field, $exclude_array)) {
+                    if (!\in_array($field, $importable_keys) || \in_array($field, $exclude_array)) {
                         continue;
                     }
                     $fieldDef = $this->_focus->getFieldDefinition($field);
 
                     //skip if this field is already defined (from another index)
-                    if (in_array($fieldDef['name'], $fields_used)) {
+                    if (\in_array($fieldDef['name'], $fields_used)) {
                         continue;
                     }
 
@@ -352,13 +352,13 @@ class ImportDuplicateCheck
         }
 
         //special handling for beans with first_name and last_name
-        if (in_array('first_name', $fields_used) && in_array('last_name', $fields_used)) {
+        if (\in_array('first_name', $fields_used) && \in_array('last_name', $fields_used)) {
             //since both full name and last name fields have been mapped, add full name index
             $index_array['full_name::full_name'] = translateForExport('full_name', $this->_focus);
             $fields_used[] = 'full_name';
         }
 
-        asort($index_array);
+        \asort($index_array);
         return $index_array;
     }
 }

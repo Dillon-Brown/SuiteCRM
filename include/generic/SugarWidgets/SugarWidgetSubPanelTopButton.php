@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -63,7 +63,7 @@ class SugarWidgetSubPanelTopButton extends SugarWidget
     {
         global $app_strings;
 
-        if (is_array($module)) {
+        if (\is_array($module)) {
             // it is really the class details from the mapping
             $class_details = $module;
 
@@ -111,14 +111,14 @@ class SugarWidgetSubPanelTopButton extends SugarWidget
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($module, $title, $access_key, $form_value);
     }
 
     public function getWidgetId($buttonSuffix = true)
     {
-        $widgetID = parent::getWidgetId() . '_'.preg_replace('[ ]', '', mb_strtolower($this->form_value, 'UTF-8'));
+        $widgetID = parent::getWidgetId() . '_'.\preg_replace('[ ]', '', \mb_strtolower($this->form_value, 'UTF-8'));
         if ($buttonSuffix) {
             $widgetID .= '_button';
         }
@@ -148,7 +148,7 @@ class SugarWidgetSubPanelTopButton extends SugarWidget
             $defines['child_module_name'] = $defines['module'];
         }
 
-        $defines['parent_bean_name'] = get_class($defines['focus']);
+        $defines['parent_bean_name'] = \get_class($defines['focus']);
         $relationship_name = $this->get_subpanel_relationship_name($defines);
 
 
@@ -156,10 +156,10 @@ class SugarWidgetSubPanelTopButton extends SugarWidget
 
         //module_button is used to override the value of module name
         $formValues['module'] = $defines['child_module_name'];
-        $formValues[strtolower($defines['parent_bean_name'])."_id"] = $defines['focus']->id;
+        $formValues[\strtolower($defines['parent_bean_name'])."_id"] = $defines['focus']->id;
 
         if (isset($defines['focus']->name)) {
-            $formValues[strtolower($defines['parent_bean_name'])."_name"] = $defines['focus']->name;
+            $formValues[\strtolower($defines['parent_bean_name'])."_name"] = $defines['focus']->name;
             // #26451,add these fields for custom one-to-many relate field.
             if (!empty($defines['child_module_name'])) {
                 $formValues[$relationship_name."_name"] = $defines['focus']->name;
@@ -183,7 +183,7 @@ class SugarWidgetSubPanelTopButton extends SugarWidget
 
         $formValues['return_id'] = $defines['focus']->id;
         $formValues['return_relationship'] = $relationship_name;
-        switch (strtolower($currentModule)) {
+        switch (\strtolower($currentModule)) {
             case 'prospects':
                 $name = $defines['focus']->account_name ;
                 break ;
@@ -250,7 +250,7 @@ class SugarWidgetSubPanelTopButton extends SugarWidget
             foreach ($additionalFormFields as $key => $value) {
                 $returnLink .= $key.'='.$value.'&';
             }
-            $returnLink = rtrim($returnLink, '&');
+            $returnLink = \rtrim($returnLink, '&');
 
             return $returnLink;
         }
@@ -304,7 +304,7 @@ class SugarWidgetSubPanelTopButton extends SugarWidget
      */
     public function _create_json_encoded_popup_request($popup_request_data)
     {
-        return json_encode($popup_request_data);
+        return \json_encode($popup_request_data);
     }
 
     /**

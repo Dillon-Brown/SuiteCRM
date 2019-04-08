@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -484,7 +484,7 @@ class Email extends Basic
      */
     protected function setLastSaveAndStoreInSentError($err)
     {
-        if (!is_int($err)) {
+        if (!\is_int($err)) {
             throw new InvalidArgumentException('Error code should be an integer.', self::ERR_CODE_SHOULD_BE_INT);
         }
 
@@ -568,7 +568,7 @@ class Email extends Basic
 
         $this->emailAddress = new SugarEmailAddress();
 
-        $this->imagePrefix = rtrim($GLOBALS['sugar_config']['site_url'], "/") . "/cache/images/";
+        $this->imagePrefix = \rtrim($GLOBALS['sugar_config']['site_url'], "/") . "/cache/images/";
     }
 
     /**
@@ -592,7 +592,7 @@ class Email extends Basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -642,7 +642,7 @@ class Email extends Basic
         $fileName = $upload->create_stored_filename();
         $GLOBALS['log']->debug("Email Attachment [$fileName]");
         if ($upload->final_move($guid)) {
-            copy("upload://$guid", sugar_cached("$email_uploads/$guid"));
+            \copy("upload://$guid", sugar_cached("$email_uploads/$guid"));
 
             return array(
                 'guid' => $guid,
@@ -665,17 +665,17 @@ class Email extends Basic
         global $sugar_config;
         $badExtension = false;
         //get position of last "." in file name
-        $file_ext_beg = strrpos($filename, ".");
+        $file_ext_beg = \strrpos($filename, ".");
         $file_ext = "";
 
         //get file extension
         if ($file_ext_beg !== false) {
-            $file_ext = substr($filename, $file_ext_beg + 1);
+            $file_ext = \substr($filename, $file_ext_beg + 1);
         }
 
         //check to see if this is a file with extension located in "badext"
         foreach ($sugar_config['upload_badext'] as $badExt) {
-            if (strtolower($file_ext) == strtolower($badExt)) {
+            if (\strtolower($file_ext) == \strtolower($badExt)) {
                 //if found, then append with .txt and break out of lookup
                 $filename = $filename . ".txt";
                 $badExtension = true;
@@ -697,16 +697,16 @@ class Email extends Basic
         $addresses = $this->et->unifyEmailString($addresses);
 
         $pattern = '/@.*,/U';
-        preg_match_all($pattern, $addresses, $matchs);
+        \preg_match_all($pattern, $addresses, $matchs);
         if (!empty($matchs[0])) {
             $total = $matchs[0];
             foreach ($total as $match) {
-                $convertedPattern = str_replace(',', '::;::', $match);
-                $addresses = str_replace($match, $convertedPattern, $addresses);
+                $convertedPattern = \str_replace(',', '::;::', $match);
+                $addresses = \str_replace($match, $convertedPattern, $addresses);
             } //foreach
         }
 
-        $exAddr = explode("::;::", $addresses);
+        $exAddr = \explode("::;::", $addresses);
 
         $ret = array();
         $clean = array("<", ">");
@@ -715,18 +715,18 @@ class Email extends Basic
         foreach ($exAddr as $addr) {
             $name = '';
 
-            $addr = str_replace($dirty, $clean, $addr);
+            $addr = \str_replace($dirty, $clean, $addr);
 
-            if ((strpos($addr, "<") === false) && (strpos($addr, ">") === false)) {
+            if ((\strpos($addr, "<") === false) && (\strpos($addr, ">") === false)) {
                 $address = $addr;
             } else {
-                $address = substr($addr, strpos($addr, "<") + 1, strpos($addr, ">") - 1 - strpos($addr, "<"));
-                $name = substr($addr, 0, strpos($addr, "<"));
+                $address = \substr($addr, \strpos($addr, "<") + 1, \strpos($addr, ">") - 1 - \strpos($addr, "<"));
+                $name = \substr($addr, 0, \strpos($addr, "<"));
             }
 
             $addrTemp = array();
-            $addrTemp['email'] = trim($address);
-            $addrTemp['display'] = trim($name);
+            $addrTemp['email'] = \trim($address);
+            $addrTemp['display'] = \trim($name);
             $ret[] = $addrTemp;
         }
 
@@ -742,16 +742,16 @@ class Email extends Basic
     {
         $addresses = from_html($addresses);
         $pattern = '/@.*,/U';
-        preg_match_all($pattern, $addresses, $matchs);
+        \preg_match_all($pattern, $addresses, $matchs);
         if (!empty($matchs[0])) {
             $total = $matchs[0];
             foreach ($total as $match) {
-                $convertedPattern = str_replace(',', '::;::', $match);
-                $addresses = str_replace($match, $convertedPattern, $addresses);
+                $convertedPattern = \str_replace(',', '::;::', $match);
+                $addresses = \str_replace($match, $convertedPattern, $addresses);
             } //foreach
         }
 
-        $exAddr = explode("::;::", $addresses);
+        $exAddr = \explode("::;::", $addresses);
 
         $ret = array();
         $clean = array("<", ">");
@@ -760,15 +760,15 @@ class Email extends Basic
         foreach ($exAddr as $addr) {
             $name = '';
 
-            $addr = str_replace($dirty, $clean, $addr);
+            $addr = \str_replace($dirty, $clean, $addr);
 
-            if (strpos($addr, "<") && strpos($addr, ">")) {
-                $address = substr($addr, strpos($addr, "<") + 1, strpos($addr, ">") - 1 - strpos($addr, "<"));
+            if (\strpos($addr, "<") && \strpos($addr, ">")) {
+                $address = \substr($addr, \strpos($addr, "<") + 1, \strpos($addr, ">") - 1 - \strpos($addr, "<"));
             } else {
                 $address = $addr;
             }
 
-            $ret[] = trim($address);
+            $ret[] = \trim($address);
         }
 
         return $ret;
@@ -781,12 +781,12 @@ class Email extends Basic
      */
     public function email2GetMime($fileLocation)
     {
-        if (!is_readable($fileLocation)) {
+        if (!\is_readable($fileLocation)) {
             return 'application/octet-stream';
         }
-        if (function_exists('mime_content_type')) {
-            $mime = mime_content_type($fileLocation);
-        } elseif (function_exists('ext2mime')) {
+        if (\function_exists('mime_content_type')) {
+            $mime = \mime_content_type($fileLocation);
+        } elseif (\function_exists('ext2mime')) {
             $mime = ext2mime($fileLocation);
         } else {
             $mime = 'application/octet-stream';
@@ -826,7 +826,7 @@ class Email extends Basic
         global $current_user, $app_strings;
         $mod_strings = return_module_language($GLOBALS['current_language'], 'Emails'); //Called from EmailMan as well.
         $mail = new SugarPHPMailer(true);
-        $mail->Mailer = strtolower($mail_sendtype);
+        $mail->Mailer = \strtolower($mail_sendtype);
         if ($mail->Mailer == 'smtp') {
             $mail->Host = $mailserver_url;
             $mail->Port = $port;
@@ -855,7 +855,7 @@ class Email extends Basic
         isValidEmailAddress($mail->From);
 
         if ($fromname != '') {
-            $mail->FromName = html_entity_decode($fromname, ENT_QUOTES);
+            $mail->FromName = \html_entity_decode($fromname, ENT_QUOTES);
         } else {
             $mail->FromName = $current_user->name;
         }
@@ -868,7 +868,7 @@ class Email extends Basic
         $return = array();
 
         if (!$mail->Send()) {
-            ob_clean();
+            \ob_clean();
             $return['status'] = false;
             $return['errorMessage'] = $app_strings['LBL_EMAIL_ERROR_PREPEND'] . $mail->ErrorInfo;
             $return['fullSmtpLog'] = $mail->fullSmtpLog;
@@ -885,8 +885,8 @@ class Email extends Basic
      */
     public function decodeDuringSend($htmlData)
     {
-        $htmlData = str_replace("sugarLessThan", "&lt;", $htmlData);
-        $htmlData = str_replace("sugarGreaterThan", "&gt;", $htmlData);
+        $htmlData = \str_replace("sugarLessThan", "&lt;", $htmlData);
+        $htmlData = \str_replace("sugarGreaterThan", "&gt;", $htmlData);
 
         return $htmlData;
     }
@@ -1010,7 +1010,7 @@ class Email extends Basic
                 if (isset($beanList[$request['parent_type']]) && !empty($beanList[$request['parent_type']])) {
                     $className = $beanList[$request['parent_type']];
                     if (isset($beanFiles[$className]) && !empty($beanFiles[$className])) {
-                        if (!class_exists($className)) {
+                        if (!\class_exists($className)) {
                             require_once($beanFiles[$className]);
                         }
                         $bean = new $className();
@@ -1037,7 +1037,7 @@ class Email extends Basic
             $this->description_html = EmailTemplate::parse_template($this->description_html, $object_arr);
             $this->name = EmailTemplate::parse_template($this->name, $object_arr);
             $this->description = EmailTemplate::parse_template($this->description, $object_arr);
-            $this->description = html_entity_decode($this->description, ENT_COMPAT, 'UTF-8');
+            $this->description = \html_entity_decode($this->description, ENT_COMPAT, 'UTF-8');
             if ($this->type != 'draft' && $this->status != 'draft') {
                 $this->id = create_guid();
                 $this->date_entered = "";
@@ -1075,7 +1075,7 @@ class Email extends Basic
             // passed -> user -> system default
             $ie = new InboundEmail();
             $ie->retrieve($request['fromAccount']);
-            $storedOptions = unserialize(base64_decode($ie->stored_options));
+            $storedOptions = \unserialize(\base64_decode($ie->stored_options));
             $fromName = "";
             $fromAddress = "";
             $replyToName = "";
@@ -1116,9 +1116,9 @@ class Email extends Basic
         isValidEmailAddress($mail->Sender);
 
         if (!empty($replyToAddress)) {
-            $mail->AddReplyTo($replyToAddress, $locale->translateCharsetMIME(trim($replyToName), 'UTF-8', $OBCharset));
+            $mail->AddReplyTo($replyToAddress, $locale->translateCharsetMIME(\trim($replyToName), 'UTF-8', $OBCharset));
         } else {
-            $mail->AddReplyTo($mail->From, $locale->translateCharsetMIME(trim($mail->FromName), 'UTF-8', $OBCharset));
+            $mail->AddReplyTo($mail->From, $locale->translateCharsetMIME(\trim($mail->FromName), 'UTF-8', $OBCharset));
         } // else
         $emailAddressCollection = array(); // used in linking to beans below
         // handle to/cc/bcc
@@ -1132,7 +1132,7 @@ class Email extends Basic
             } else {
                 $mail->AddAddress(
                     $addr_arr['email'],
-                    $locale->translateCharsetMIME(trim($addr_arr['display']), 'UTF-8', $OBCharset)
+                    $locale->translateCharsetMIME(\trim($addr_arr['display']), 'UTF-8', $OBCharset)
                 );
             }
             $emailAddressCollection[] = $addr_arr['email'];
@@ -1147,7 +1147,7 @@ class Email extends Basic
             } else {
                 $mail->AddCC(
                     $addr_arr['email'],
-                    $locale->translateCharsetMIME(trim($addr_arr['display']), 'UTF-8', $OBCharset)
+                    $locale->translateCharsetMIME(\trim($addr_arr['display']), 'UTF-8', $OBCharset)
                 );
             }
             $emailAddressCollection[] = $addr_arr['email'];
@@ -1163,7 +1163,7 @@ class Email extends Basic
             } else {
                 $mail->AddBCC(
                     $addr_arr['email'],
-                    $locale->translateCharsetMIME(trim($addr_arr['display']), 'UTF-8', $OBCharset)
+                    $locale->translateCharsetMIME(\trim($addr_arr['display']), 'UTF-8', $OBCharset)
                 );
             }
             $emailAddressCollection[] = $addr_arr['email'];
@@ -1173,28 +1173,28 @@ class Email extends Basic
         /* parse remove attachments array */
         $removeAttachments = array();
         if (!empty($request['templateAttachmentsRemove'])) {
-            $exRemove = explode("::", $request['templateAttachmentsRemove']);
+            $exRemove = \explode("::", $request['templateAttachmentsRemove']);
 
             foreach ($exRemove as $file) {
-                $removeAttachments = substr($file, 0, 36);
+                $removeAttachments = \substr($file, 0, 36);
             }
         }
 
         /* handle attachments */
         if (!empty($request['attachments'])) {
-            $exAttachments = explode("::", $request['attachments']);
+            $exAttachments = \explode("::", $request['attachments']);
 
             foreach ($exAttachments as $file) {
-                $file = trim(from_html($file));
-                $file = str_replace("\\", "", $file);
+                $file = \trim(from_html($file));
+                $file = \str_replace("\\", "", $file);
                 if (!empty($file)) {
                     //$fileLocation = $this->et->userCacheDir."/{$file}";
-                    $fileGUID = preg_replace('/[^a-z0-9\-]/', "", substr($file, 0, 36));
+                    $fileGUID = \preg_replace('/[^a-z0-9\-]/', "", \substr($file, 0, 36));
                     $fileLocation = $this->et->userCacheDir . "/{$fileGUID}";
-                    $filename = substr(
+                    $filename = \substr(
                         $file,
                         36,
-                        strlen($file)
+                        \strlen($file)
                     ); // strip GUID	for PHPMailer class to name outbound file
 
                     $mail->AddAttachment($fileLocation, $filename, 'base64', $this->email2GetMime($fileLocation));
@@ -1211,7 +1211,7 @@ class Email extends Basic
                         $note->filename = $filename;
                         $note->file_mime_type = $this->email2GetMime($fileLocation);
                         $dest = "upload://{$note->id}";
-                        if (!copy($fileLocation, $dest)) {
+                        if (!\copy($fileLocation, $dest)) {
                             $GLOBALS['log']->debug("EMAIL 2.0: could not copy attachment file to $fileLocation => $dest");
                         }
 
@@ -1223,10 +1223,10 @@ class Email extends Basic
 
         /* handle sugar documents */
         if (!empty($request['documents'])) {
-            $exDocs = explode("::", $request['documents']);
+            $exDocs = \explode("::", $request['documents']);
 
             foreach ($exDocs as $docId) {
-                $docId = trim($docId);
+                $docId = \trim($docId);
                 if (!empty($docId)) {
                     $doc = new Document();
                     $docRev = new DocumentRevision();
@@ -1234,12 +1234,12 @@ class Email extends Basic
                     $docRev->retrieve($doc->document_revision_id);
 
                     $filename = $docRev->filename;
-                    $docGUID = preg_replace('/[^a-z0-9\-]/', "", $docRev->id);
+                    $docGUID = \preg_replace('/[^a-z0-9\-]/', "", $docRev->id);
                     $fileLocation = "upload://{$docGUID}";
                     $mime_type = $docRev->file_mime_type;
                     $mail->AddAttachment(
                         $fileLocation,
-                        $locale->translateCharsetMIME(trim($filename), 'UTF-8', $OBCharset),
+                        $locale->translateCharsetMIME(\trim($filename), 'UTF-8', $OBCharset),
                         'base64',
                         $mime_type
                     );
@@ -1255,7 +1255,7 @@ class Email extends Basic
                         $note->filename = $filename;
                         $note->file_mime_type = $mime_type;
                         $dest = "upload://{$note->id}";
-                        if (!copy($fileLocation, $dest)) {
+                        if (!\copy($fileLocation, $dest)) {
                             $GLOBALS['log']->debug("EMAIL 2.0: could not copy SugarDocument revision file $fileLocation => $dest");
                         }
 
@@ -1267,15 +1267,15 @@ class Email extends Basic
 
         /* handle template attachments */
         if (!empty($request['templateAttachments'])) {
-            $exNotes = explode("::", $request['templateAttachments']);
+            $exNotes = \explode("::", $request['templateAttachments']);
             foreach ($exNotes as $noteId) {
-                $noteId = trim($noteId);
+                $noteId = \trim($noteId);
                 if (!empty($noteId)) {
                     $note = new Note();
                     $note->retrieve($noteId);
                     if (!empty($note->id)) {
                         $filename = $note->filename;
-                        $noteGUID = preg_replace('/[^a-z0-9\-]/', "", $note->id);
+                        $noteGUID = \preg_replace('/[^a-z0-9\-]/', "", $note->id);
                         $fileLocation = "upload://{$noteGUID}";
                         $mime_type = $note->file_mime_type;
                         if (!$note->embed_flag) {
@@ -1289,18 +1289,18 @@ class Email extends Basic
                         } // if
                     } else {
                         //$fileLocation = $this->et->userCacheDir."/{$file}";
-                        $fileGUID = preg_replace('/[^a-z0-9\-]/', "", substr($noteId, 0, 36));
+                        $fileGUID = \preg_replace('/[^a-z0-9\-]/', "", \substr($noteId, 0, 36));
                         $fileLocation = $this->et->userCacheDir . "/{$fileGUID}";
                         //$fileLocation = $this->et->userCacheDir."/{$noteId}";
-                        $filename = substr(
+                        $filename = \substr(
                             $noteId,
                             36,
-                            strlen($noteId)
+                            \strlen($noteId)
                         ); // strip GUID	for PHPMailer class to name outbound file
 
                         $mail->AddAttachment(
                             $fileLocation,
-                            $locale->translateCharsetMIME(trim($filename), 'UTF-8', $OBCharset),
+                            $locale->translateCharsetMIME(\trim($filename), 'UTF-8', $OBCharset),
                             'base64',
                             $this->email2GetMime($fileLocation)
                         );
@@ -1345,7 +1345,7 @@ class Email extends Basic
             $mail->AltBody = $this->decodeDuringSend($mail->AltBody);
             if (!$mail->Send()) {
                 $this->status = 'send_error';
-                ob_clean();
+                \ob_clean();
                 echo($app_strings['LBL_EMAIL_ERROR_PREPEND'] . $mail->ErrorInfo);
 
                 return false;
@@ -1384,7 +1384,7 @@ class Email extends Basic
         ) {
 
             // saving a draft OR saving a sent email
-            $decodedFromName = mb_decode_mimeheader($mail->FromName);
+            $decodedFromName = \mb_decode_mimeheader($mail->FromName);
             $this->from_addr = "{$decodedFromName} <{$mail->From}>";
             $this->from_addr_name = $this->from_addr;
             $this->to_addrs = $request['sendTo'];
@@ -1410,7 +1410,7 @@ class Email extends Basic
                     if (isset($beanList[$request['parent_type']]) && !empty($beanList[$request['parent_type']])) {
                         $className = $beanList[$request['parent_type']];
                         if (isset($beanFiles[$className]) && !empty($beanFiles[$className])) {
-                            if (!class_exists($className)) {
+                            if (!\class_exists($className)) {
                                 require_once($beanFiles[$className]);
                             }
                             $bean = new $className();
@@ -1422,7 +1422,7 @@ class Email extends Basic
                     } // if
                 } // if
             } else {
-                if (!class_exists('aCase')) {
+                if (!\class_exists('aCase')) {
                 } else {
                     $c = new aCase();
                     if ($caseId = InboundEmail::getCaseIdFromCaseNumber($mail->Subject, $c)) {
@@ -1497,7 +1497,7 @@ class Email extends Basic
                     $fullName = $bean->name;
 
                     // Depending on module, format the name
-                    if (in_array($module, array('Users', 'Employees'))) {
+                    if (\in_array($module, array('Users', 'Employees'))) {
                         $fullName = from_html(
                             $locale->getLocaleFormattedName(
                                 $bean->first_name,
@@ -1542,7 +1542,7 @@ class Email extends Basic
             $GLOBALS['sugar_config']['email_address_separator'] :
             ',';
 
-        return join($separator, array_values($arr));
+        return \join($separator, \array_values($arr));
     }
 
     /**
@@ -1581,7 +1581,7 @@ class Email extends Basic
             $this->description = SugarCleaner::cleanHtml($this->description);
             if (empty($this->description_html)) {
                 $this->description_html = $this->description;
-                $this->description_html = nl2br($this->description_html);
+                $this->description_html = \nl2br($this->description_html);
             }
             $this->description_html = SugarCleaner::cleanHtml($this->description_html, true);
             $this->raw_source = SugarCleaner::cleanHtml($this->raw_source, true);
@@ -1617,7 +1617,7 @@ class Email extends Basic
             }
             
 
-            if ((!isset($this->date_sent_received) || !$this->date_sent_received) && in_array($this->status, ['sent', 'replied'])) {
+            if ((!isset($this->date_sent_received) || !$this->date_sent_received) && \in_array($this->status, ['sent', 'replied'])) {
                 $this->date_sent_received = TimeDate::getInstance()->nowDb();
             }
 
@@ -1626,8 +1626,8 @@ class Email extends Basic
             if (!empty($this->parent_type) && !empty($this->parent_id)) {
                 if (!empty($this->fetched_row) && !empty($this->fetched_row['parent_id']) && !empty($this->fetched_row['parent_type'])) {
                     if ($this->fetched_row['parent_id'] != $this->parent_id || $this->fetched_row['parent_type'] != $this->parent_type) {
-                        $mod = strtolower($this->fetched_row['parent_type']);
-                        $rel = array_key_exists(
+                        $mod = \strtolower($this->fetched_row['parent_type']);
+                        $rel = \array_key_exists(
                             $mod,
                             $this->field_defs
                         ) ? $mod : $mod . "_activities_emails"; //Custom modules rel name
@@ -1636,8 +1636,8 @@ class Email extends Basic
                         }
                     }
                 }
-                $mod = strtolower($this->parent_type);
-                $rel = array_key_exists(
+                $mod = \strtolower($this->parent_type);
+                $rel = \array_key_exists(
                     $mod,
                     $this->field_defs
                 ) ? $mod : $mod . "_activities_emails"; //Custom modules rel name
@@ -1671,10 +1671,10 @@ class Email extends Basic
         $tmpNote->file_mime_type = $mimeType;
         $noteFile = "upload://{$tmpNote->id}";
 
-        if (!file_exists($fileLocation)) {
+        if (!\file_exists($fileLocation)) {
             LoggerManager::getLogger()->warn('Email error: File Location not found for save temp note attachments. File location was: "' . $fileLocation . '"');
         } else {
-            if (!copy($fileLocation, $noteFile)) {
+            if (!\copy($fileLocation, $noteFile)) {
                 $GLOBALS['log']->fatal("EMAIL 2.0: could not copy SugarDocument revision file $fileLocation => $noteFile");
             } else {
                 if (!$tmpNote->save()) {
@@ -1699,12 +1699,12 @@ class Email extends Basic
 
         // to, multiple
         $replace = array(",", ";");
-        $toaddrs = str_replace($replace, "::", from_html($this->to_addrs));
-        $exToAddrs = explode("::", $toaddrs);
+        $toaddrs = \str_replace($replace, "::", from_html($this->to_addrs));
+        $exToAddrs = \explode("::", $toaddrs);
 
         if (!empty($exToAddrs)) {
             foreach ($exToAddrs as $toaddr) {
-                $toaddr = trim($toaddr);
+                $toaddr = \trim($toaddr);
                 if (!empty($toaddr)) {
                     $toId = $this->emailAddress->getEmailGUID($toaddr);
                     $this->linkEmailToAddress($toId, 'to');
@@ -1714,12 +1714,12 @@ class Email extends Basic
         }
 
         // cc, multiple
-        $ccAddrs = str_replace($replace, "::", from_html($this->cc_addrs));
-        $exccAddrs = explode("::", $ccAddrs);
+        $ccAddrs = \str_replace($replace, "::", from_html($this->cc_addrs));
+        $exccAddrs = \explode("::", $ccAddrs);
 
         if (!empty($exccAddrs)) {
             foreach ($exccAddrs as $ccAddr) {
-                $ccAddr = trim($ccAddr);
+                $ccAddr = \trim($ccAddr);
                 if (!empty($ccAddr)) {
                     $ccId = $this->emailAddress->getEmailGUID($ccAddr);
                     $this->linkEmailToAddress($ccId, 'cc');
@@ -1729,11 +1729,11 @@ class Email extends Basic
         }
 
         // bcc, multiple
-        $bccAddrs = str_replace($replace, "::", from_html($this->bcc_addrs));
-        $exbccAddrs = explode("::", $bccAddrs);
+        $bccAddrs = \str_replace($replace, "::", from_html($this->bcc_addrs));
+        $exbccAddrs = \explode("::", $bccAddrs);
         if (!empty($exbccAddrs)) {
             foreach ($exbccAddrs as $bccAddr) {
-                $bccAddr = trim($bccAddr);
+                $bccAddr = \trim($bccAddr);
                 if (!empty($bccAddr)) {
                     $bccId = $this->emailAddress->getEmailGUID($bccAddr);
                     $this->linkEmailToAddress($bccId, 'bcc');
@@ -1778,8 +1778,8 @@ class Email extends Basic
         if (empty($emails)) {
             return '';
         }
-        $emails = str_replace(array(",", ";"), "::", from_html($emails));
-        $addrs = explode("::", $emails);
+        $emails = \str_replace(array(",", ";"), "::", from_html($emails));
+        $addrs = \explode("::", $emails);
         $res = array();
         foreach ($addrs as $addr) {
             $parts = $this->emailAddress->splitEmailAddress($addr);
@@ -1793,7 +1793,7 @@ class Email extends Basic
             }
         }
 
-        return implode(", ", $res);
+        return \implode(", ", $res);
     }
 
     protected function saveEmailText()
@@ -1823,14 +1823,14 @@ class Email extends Basic
             $email->description = $email->description;
             if (empty($email->description_html)) {
                 $email->description_html = $email->description;
-                $email->description_html = nl2br($email->description_html);
+                $email->description_html = \nl2br($email->description_html);
             }
             //$ret->description_html = SugarCleaner::cleanHtml($ret->description_html);
             $email->retrieveEmailAddresses();
 
             $email->date_start = '';
             $email->time_start = '';
-            $dateSent = explode(' ', $email->date_sent_received);
+            $dateSent = \explode(' ', $email->date_sent_received);
             if (!empty($dateSent)) {
                 $email->date_start = $dateSent[0];
                 if (isset($dateSent[1])) {
@@ -1863,18 +1863,18 @@ class Email extends Basic
             $return[$a['address_type']][] = $a['email_address'];
         }
 
-        if (count($return) > 0) {
+        if (\count($return) > 0) {
             if (isset($return['from'])) {
-                $this->from_addr_name = implode(", ", $return['from']);
+                $this->from_addr_name = \implode(", ", $return['from']);
             }
             if (isset($return['to'])) {
-                $this->to_addrs_names = implode(", ", $return['to']);
+                $this->to_addrs_names = \implode(", ", $return['to']);
             }
             if (isset($return['cc'])) {
-                $this->cc_addrs_names = implode(", ", $return['cc']);
+                $this->cc_addrs_names = \implode(", ", $return['cc']);
             }
             if (isset($return['bcc'])) {
-                $this->bcc_addrs_names = implode(", ", $return['bcc']);
+                $this->bcc_addrs_names = \implode(", ", $return['bcc']);
             }
         }
     }
@@ -1948,12 +1948,12 @@ class Email extends Basic
      */
     public function getNotes($id, $duplicate = false)
     {
-        if (!class_exists('Note')) {
+        if (!\class_exists('Note')) {
         }
 
         $exRemoved = array();
         if (isset($_REQUEST['removeAttachment'])) {
-            $exRemoved = explode('::', $_REQUEST['removeAttachment']);
+            $exRemoved = \explode('::', $_REQUEST['removeAttachment']);
         }
 
         $noteArray = array();
@@ -1961,13 +1961,13 @@ class Email extends Basic
         $r = $this->db->query($q);
 
         while ($a = $this->db->fetchByAssoc($r)) {
-            if (!in_array($a['id'], $exRemoved)) {
+            if (!\in_array($a['id'], $exRemoved)) {
                 $note = new Note();
                 $note->retrieve($a['id']);
 
                 // duplicate actual file when creating forwards
                 if ($duplicate) {
-                    if (!class_exists('UploadFile')) {
+                    if (!\class_exists('UploadFile')) {
                         require_once('include/upload_file.php');
                     }
                     // save a brand new Note
@@ -1998,7 +1998,7 @@ class Email extends Basic
         global $mod_strings;
         global $current_user;
 
-        $from = str_replace(array("&gt;", "&lt;", ">", "<"), array(")", "(", ")", "("), $this->from_name);
+        $from = \str_replace(array("&gt;", "&lt;", ">", "<"), array(")", "(", ")", "("), $this->from_name);
         $ret = "<br>{$mod_strings['LBL_REPLY_HEADER_1']} {$this->date_start}, {$this->time_start}, {$from} {$mod_strings['LBL_REPLY_HEADER_2']}";
 
         return from_html($ret);
@@ -2014,11 +2014,11 @@ class Email extends Basic
         $quoted = "\n";
 
         // plain-text
-        $desc = nl2br(trim($text));
-        $exDesc = explode('<br />', $desc);
+        $desc = \nl2br(\trim($text));
+        $exDesc = \explode('<br />', $desc);
 
         foreach ($exDesc as $k => $line) {
-            $quoted .= '> ' . trim($line) . "\r";
+            $quoted .= '> ' . \trim($line) . "\r";
         }
 
         return $quoted;
@@ -2031,7 +2031,7 @@ class Email extends Basic
      */
     public function quoteHtmlEmail($text)
     {
-        $text = trim(from_html($text));
+        $text = \trim(from_html($text));
 
         if (empty($text)) {
             return '';
@@ -2048,12 +2048,12 @@ class Email extends Basic
      */
     public function quoteHtmlEmailForNewEmailUI($text)
     {
-        $text = trim($text);
+        $text = \trim($text);
 
         if (empty($text)) {
             return '';
         }
-        $text = str_replace("\n", "<BR/>", $text);
+        $text = \str_replace("\n", "<BR/>", $text);
         $out = "<div style='border-left:1px solid #00c; padding:5px; margin-left:10px;'>{$text}</div>";
 
         return $out;
@@ -2236,20 +2236,20 @@ class Email extends Basic
     public function parse_addrs($addrs, $addrs_ids, $addrs_names, $addrs_emails)
     {
         // cn: bug 9406 - enable commas to separate email addresses
-        $addrs = str_replace(",", ";", $addrs);
+        $addrs = \str_replace(",", ";", $addrs);
 
         $ltgt = array('&lt;', '&gt;');
         $gtlt = array('<', '>');
 
         $return = array();
-        $addrs = str_replace($ltgt, '', $addrs);
-        $addrs_arr = explode(";", $addrs);
+        $addrs = \str_replace($ltgt, '', $addrs);
+        $addrs_arr = \explode(";", $addrs);
         $addrs_arr = $this->remove_empty_fields($addrs_arr);
-        $addrs_ids_arr = explode(";", $addrs_ids);
+        $addrs_ids_arr = \explode(";", $addrs_ids);
         $addrs_ids_arr = $this->remove_empty_fields($addrs_ids_arr);
-        $addrs_emails_arr = explode(";", $addrs_emails);
+        $addrs_emails_arr = \explode(";", $addrs_emails);
         $addrs_emails_arr = $this->remove_empty_fields($addrs_emails_arr);
-        $addrs_names_arr = explode(";", $addrs_names);
+        $addrs_names_arr = \explode(";", $addrs_names);
         $addrs_names_arr = $this->remove_empty_fields($addrs_names_arr);
 
         ///////////////////////////////////////////////////////////////////////
@@ -2258,7 +2258,7 @@ class Email extends Basic
         $knownEmails = array();
 
         foreach ($addrs_arr as $i => $v) {
-            if (trim($v) == "") {
+            if (\trim($v) == "") {
                 continue;
             } // skip any "blanks" - will always have 1
 
@@ -2266,15 +2266,15 @@ class Email extends Basic
 
             //// get the email to see if we're dealing with a dupe
             //// what crappy coding
-            preg_match("/[A-Z0-9._%-\']+@[A-Z0-9.-]+\.[A-Z]{2,}/i", $v, $match);
+            \preg_match("/[A-Z0-9._%-\']+@[A-Z0-9.-]+\.[A-Z]{2,}/i", $v, $match);
 
 
-            if (!empty($match[0]) && !in_array(trim($match[0]), $knownEmails)) {
+            if (!empty($match[0]) && !\in_array(\trim($match[0]), $knownEmails)) {
                 $knownEmails[] = $match[0];
                 $recipient['email'] = $match[0];
 
                 //// handle the Display name
-                $display = trim(str_replace($match[0], '', $v));
+                $display = \trim(\str_replace($match[0], '', $v));
 
                 //// only trigger a "displayName" <email@address> when necessary
                 if (isset($addrs_names_arr[$i])) {
@@ -2303,11 +2303,11 @@ class Email extends Basic
         $newarr = array();
 
         foreach ($arr as $field) {
-            $field = trim($field);
+            $field = \trim($field);
             if (empty($field)) {
                 continue;
             }
-            array_push($newarr, $field);
+            \array_push($newarr, $field);
         }
 
         return $newarr;
@@ -2342,11 +2342,11 @@ class Email extends Basic
 
         // cn: bug 8034 - attachments from forward/replies lost when saving in draft
         if (isset($_REQUEST['prior_attachments']) && !empty($_REQUEST['prior_attachments']) && $this->new_with_id == true) {
-            $exIds = explode(",", $_REQUEST['prior_attachments']);
+            $exIds = \explode(",", $_REQUEST['prior_attachments']);
             if (!isset($_REQUEST['template_attachment'])) {
                 $_REQUEST['template_attachment'] = array();
             }
-            $_REQUEST['template_attachment'] = array_merge($_REQUEST['template_attachment'], $exIds);
+            $_REQUEST['template_attachment'] = \array_merge($_REQUEST['template_attachment'], $exIds);
         }
         ////    END ATTACHMENTS FROM FORWARDS
         ///////////////////////////////////////////////////////////////////////////
@@ -2365,7 +2365,7 @@ class Email extends Basic
 
 
             foreach ($_REQUEST['template_attachment'] as $noteId) {
-                if (in_array($noteId, $removeArr)) {
+                if (\in_array($noteId, $removeArr)) {
                     continue;
                 }
                 $noteTemplate = new Note();
@@ -2381,7 +2381,7 @@ class Email extends Basic
                 $noteFile->duplicate_file($noteId, $noteTemplate->id, $noteTemplate->filename);
                 $noteArray[] = $noteTemplate;
             }
-            $this->attachments = array_merge($this->attachments, $noteArray);
+            $this->attachments = \array_merge($this->attachments, $noteArray);
         }
         ////	END ATTACHMENTS FROM TEMPLATES
         ///////////////////////////////////////////////////////////////////////////
@@ -2398,7 +2398,7 @@ class Email extends Basic
                 $where = "notes.parent_id='{$this->id}'";
                 $notes_list = $note->get_full_list("", $where, true);
             }
-            $this->attachments = array_merge($this->attachments, $notes_list);
+            $this->attachments = \array_merge($this->attachments, $notes_list);
         }
         // cn: Bug 5995 - rudimentary error checking
         $filesError = array(
@@ -2444,7 +2444,7 @@ class Email extends Basic
         $this->saved_attachments = array();
         foreach ($this->attachments as $note) {
             if (!empty($note->id)) {
-                array_push($this->saved_attachments, $note);
+                \array_push($this->saved_attachments, $note);
                 continue;
             }
             $note->parent_id = $this->id;
@@ -2501,7 +2501,7 @@ class Email extends Basic
 
         //this will remove attachments that have been selected to be removed from drafts.
         if (isset($_REQUEST['removeAttachment']) && !empty($_REQUEST['removeAttachment'])) {
-            $exRemoved = explode('::', $_REQUEST['removeAttachment']);
+            $exRemoved = \explode('::', $_REQUEST['removeAttachment']);
             foreach ($exRemoved as $noteId) {
                 $q = 'UPDATE notes SET deleted = 1 WHERE id = \'' . $noteId . '\'';
                 $this->db->query($q);
@@ -2544,11 +2544,11 @@ class Email extends Basic
 
         // cn: bug 8034 - attachments from forward/replies lost when saving in draft
         if (isset($_REQUEST['prior_attachments']) && !empty($_REQUEST['prior_attachments']) && $this->new_with_id == true) {
-            $exIds = explode(",", $_REQUEST['prior_attachments']);
+            $exIds = \explode(",", $_REQUEST['prior_attachments']);
             if (!isset($_REQUEST['template_attachment'])) {
                 $_REQUEST['template_attachment'] = array();
             }
-            $_REQUEST['template_attachment'] = array_merge($_REQUEST['template_attachment'], $exIds);
+            $_REQUEST['template_attachment'] = \array_merge($_REQUEST['template_attachment'], $exIds);
         }
         ////    END ATTACHMENTS FROM FORWARDS
         ///////////////////////////////////////////////////////////////////////////
@@ -2566,7 +2566,7 @@ class Email extends Basic
             }
 
             foreach ($_REQUEST['template_attachment'] as $noteId) {
-                if (in_array($noteId, $removeArr)) {
+                if (\in_array($noteId, $removeArr)) {
                     continue;
                 }
                 $noteTemplate = new Note();
@@ -2582,7 +2582,7 @@ class Email extends Basic
                 $noteFile->duplicate_file($noteId, $noteTemplate->id, $noteTemplate->filename);
                 $noteArray[] = $noteTemplate;
             }
-            $this->attachments = array_merge($this->attachments, $noteArray);
+            $this->attachments = \array_merge($this->attachments, $noteArray);
         }
         ////	END ATTACHMENTS FROM TEMPLATES
         ///////////////////////////////////////////////////////////////////////////
@@ -2599,7 +2599,7 @@ class Email extends Basic
                 $where = "notes.parent_id='{$this->id}'";
                 $notes_list = (array)$note->get_full_list("", $where, true);
             }
-            $this->attachments = array_merge($this->attachments, $notes_list);
+            $this->attachments = \array_merge($this->attachments, $notes_list);
         }
         // cn: Bug 5995 - rudimentary error checking
         $filesError = array(
@@ -2645,7 +2645,7 @@ class Email extends Basic
         $this->saved_attachments = array();
         foreach ((array)$this->attachments as $note) {
             if (!empty($note->id)) {
-                array_push($this->saved_attachments, $note);
+                \array_push($this->saved_attachments, $note);
                 continue;
             }
             $note->parent_id = $this->id;
@@ -2702,7 +2702,7 @@ class Email extends Basic
 
         //this will remove attachments that have been selected to be removed from drafts.
         if (isset($_REQUEST['removeAttachment']) && !empty($_REQUEST['removeAttachment'])) {
-            $exRemoved = explode('::', $_REQUEST['removeAttachment']);
+            $exRemoved = \explode('::', $_REQUEST['removeAttachment']);
             foreach ($exRemoved as $noteId) {
                 $q = 'UPDATE notes SET deleted = 1 WHERE id = \'' . $noteId . '\'';
                 $this->db->query($q);
@@ -2726,9 +2726,9 @@ class Email extends Basic
         $plainSig = $this->removeAllNewlines($sig['signature']);
 
         // cn: bug 11621 - empty sig triggers notice error
-        if (!empty($htmlSig) && false !== strpos($html, $htmlSig)) {
+        if (!empty($htmlSig) && false !== \strpos($html, $htmlSig)) {
             return true;
-        } elseif (!empty($plainSig) && false !== strpos($plain, $plainSig)) {
+        } elseif (!empty($plainSig) && false !== \strpos($plain, $plainSig)) {
             return true;
         }
         return false;
@@ -2744,7 +2744,7 @@ class Email extends Basic
         $bad = array("\r\n", "\n\r", "\n", "\r");
         $good = array('', '', '', '');
 
-        return str_replace($bad, $good, strip_tags(br2nl(from_html($str))));
+        return \str_replace($bad, $good, \strip_tags(br2nl(from_html($str))));
     }
 
 
@@ -2755,16 +2755,16 @@ class Email extends Basic
      */
     public function getStartPage($uri)
     {
-        if (strpos(
+        if (\strpos(
             $uri,
             '&'
         )) { // "&" to ensure that we can explode the GET vars - else we're gonna trigger a Notice error
-            $serial = substr($uri, (strpos($uri, '?') + 1), strlen($uri));
-            $exUri = explode('&', $serial);
+            $serial = \substr($uri, (\strpos($uri, '?') + 1), \strlen($uri));
+            $exUri = \explode('&', $serial);
             $start = array('module' => '', 'action' => '', 'group' => '', 'record' => '', 'type' => '');
 
             foreach ($exUri as $k => $pair) {
-                $exPair = explode('=', $pair);
+                $exPair = \explode('=', $pair);
                 $start[$exPair[0]] = $exPair[1];
             }
 
@@ -2851,8 +2851,8 @@ class Email extends Basic
         }
 
         // wp: if plain text version has lines greater than 998, use base64 encoding
-        foreach (explode("\n", ($mail->ContentType == "text/html") ? $mail->AltBody : $mail->Body) as $line) {
-            if (strlen($line) > 998) {
+        foreach (\explode("\n", ($mail->ContentType == "text/html") ? $mail->AltBody : $mail->Body) as $line) {
+            if (\strlen($line) > 998) {
                 $mail->Encoding = 'base64';
                 break;
             }
@@ -2872,13 +2872,13 @@ class Email extends Basic
         // wp: if body is html, then insert new lines at 996 characters. no effect on client side
         // due to RFC 2822 which limits email lines to 998
         $mail->IsHTML(true);
-        $body = from_html(wordwrap($this->description_html, 996));
+        $body = from_html(\wordwrap($this->description_html, 996));
         $mail->Body = $body;
 
         // cn: bug 9725
         // new plan is to use the selected type (html or plain) to fill the other
         $plainText = from_html($this->description_html);
-        $plainText = strip_tags(br2nl($plainText));
+        $plainText = \strip_tags(br2nl($plainText));
         $mail->AltBody = $plainText;
         $this->description = $plainText;
 
@@ -2937,7 +2937,7 @@ class Email extends Basic
             } else {
                 $mail->AddAddress(
                     $addr_arr['email'],
-                    $locale->translateCharsetMIME(trim($addr_arr['display']), 'UTF-8', $OBCharset)
+                    $locale->translateCharsetMIME(\trim($addr_arr['display']), 'UTF-8', $OBCharset)
                 );
             }
         }
@@ -2951,7 +2951,7 @@ class Email extends Basic
             } else {
                 $mail->AddCC(
                     $addr_arr['email'],
-                    $locale->translateCharsetMIME(trim($addr_arr['display']), 'UTF-8', $OBCharset)
+                    $locale->translateCharsetMIME(\trim($addr_arr['display']), 'UTF-8', $OBCharset)
                 );
             }
         }
@@ -2965,7 +2965,7 @@ class Email extends Basic
             } else {
                 $mail->AddBCC(
                     $addr_arr['email'],
-                    $locale->translateCharsetMIME(trim($addr_arr['display']), 'UTF-8', $OBCharset)
+                    $locale->translateCharsetMIME(\trim($addr_arr['display']), 'UTF-8', $OBCharset)
                 );
             }
         }
@@ -3021,7 +3021,7 @@ class Email extends Basic
 
         $mail->Sender = $sender; /* set Return-Path field in header to reduce spam score in emails sent via Sugar's Email module */
         isValidEmailAddress($mail->Sender);
-        $mail->AddReplyTo($ReplyToAddr, $locale->translateCharsetMIME(trim($ReplyToName), 'UTF-8', $OBCharset));
+        $mail->AddReplyTo($ReplyToAddr, $locale->translateCharsetMIME(\trim($ReplyToName), 'UTF-8', $OBCharset));
 
         //$mail->Subject = html_entity_decode($this->name, ENT_QUOTES, 'UTF-8');
         $mail->Subject = $this->name;
@@ -3032,7 +3032,7 @@ class Email extends Basic
             foreach ($this->saved_attachments as $note) {
                 $mime_type = 'text/plain';
                 if ($note->object_name == 'Note') {
-                    if (!empty($note->file->temp_file_location) && is_file($note->file->temp_file_location)) { // brandy-new file upload/attachment
+                    if (!empty($note->file->temp_file_location) && \is_file($note->file->temp_file_location)) { // brandy-new file upload/attachment
                         $file_location = "file://" . $note->file->temp_file_location;
                         $filename = $note->file->original_file_name;
                         $mime_type = $note->file->mime_type;
@@ -3051,12 +3051,12 @@ class Email extends Basic
                 }
 
                 // strip out the "Email attachment label if exists
-                $filename = str_replace($mod_strings['LBL_EMAIL_ATTACHMENT'] . ': ', '', $filename);
-                $file_ext = pathinfo($filename, PATHINFO_EXTENSION);
+                $filename = \str_replace($mod_strings['LBL_EMAIL_ATTACHMENT'] . ': ', '', $filename);
+                $file_ext = \pathinfo($filename, PATHINFO_EXTENSION);
                 //is attachment in our list of bad files extensions?  If so, append .txt to file location
                 //check to see if this is a file with extension located in "badext"
                 foreach ($sugar_config['upload_badext'] as $badExt) {
-                    if (strtolower($file_ext) == strtolower($badExt)) {
+                    if (\strtolower($file_ext) == \strtolower($badExt)) {
                         //if found, then append with .txt to filename and break out of lookup
                         //this will make sure that the file goes out with right extension, but is stored
                         //as a text in db.
@@ -3066,7 +3066,7 @@ class Email extends Basic
                 }
                 $mail->AddAttachment(
                     $file_location,
-                    $locale->translateCharsetMIME(trim($filename), 'UTF-8', $OBCharset),
+                    $locale->translateCharsetMIME(\trim($filename), 'UTF-8', $OBCharset),
                     'base64',
                     $mime_type
                 );
@@ -3351,12 +3351,12 @@ class Email extends Basic
 
         $query .= $custom_join['select'];
         $query .= " FROM emails\n";
-        if ($where != "" && (strpos($where, "contacts.first_name") > 0)) {
+        if ($where != "" && (\strpos($where, "contacts.first_name") > 0)) {
             $query .= " LEFT JOIN emails_beans ON emails.id = emails_beans.email_id\n";
         }
 
         $query .= " LEFT JOIN users ON emails.assigned_user_id=users.id \n";
-        if ($where != "" && (strpos($where, "contacts.first_name") > 0)) {
+        if ($where != "" && (\strpos($where, "contacts.first_name") > 0)) {
             $query .= " JOIN contacts ON contacts.id= emails_beans.bean_id AND emails_beans.bean_module='Contacts' and contacts.deleted=0 \n";
         }
 
@@ -3512,7 +3512,7 @@ class Email extends Basic
      */
     public function create_export_query($order_by, $where)
     {
-        $contact_required = stristr($where, "contacts");
+        $contact_required = \stristr($where, "contacts");
         $custom_join = $this->getCustomJoin(true, true, $where);
 
         if ($contact_required) {
@@ -3725,7 +3725,7 @@ class Email extends Basic
         }
 
         if (isset($_REQUEST['start']) && isset($_REQUEST['limit'])) {
-            $page = ceil($_REQUEST['start'] / $_REQUEST['limit']) + 1;
+            $page = \ceil($_REQUEST['start'] / $_REQUEST['limit']) + 1;
         } else {
             $page = 1;
         }
@@ -3745,8 +3745,8 @@ class Email extends Basic
         );
 
         $sort = !empty($_REQUEST['sort']) ? $this->db->getValidDBName($_REQUEST['sort']) : "";
-        $direction = !empty($_REQUEST['dir']) && in_array(
-            strtolower($_REQUEST['dir']),
+        $direction = !empty($_REQUEST['dir']) && \in_array(
+            \strtolower($_REQUEST['dir']),
             array("asc", "desc")
         ) ? $_REQUEST['dir'] : "";
 
@@ -3771,8 +3771,8 @@ class Email extends Basic
 
         while ($a = $this->db->fetchByAssoc($rs)) {
             $temp = array();
-            $temp['flagged'] = (is_null($a['flagged']) || $a['flagged'] == '0') ? '' : 1;
-            $temp['status'] = (is_null($a['reply_to_status']) || $a['reply_to_status'] == '0') ? '' : 1;
+            $temp['flagged'] = (\is_null($a['flagged']) || $a['flagged'] == '0') ? '' : 1;
+            $temp['status'] = (\is_null($a['reply_to_status']) || $a['reply_to_status'] == '0') ? '' : 1;
             $temp['subject'] = $a['name'];
             $temp['date'] = $timedate->to_display_date_time($a['date_sent_received']);
             $temp['uid'] = $a['id'];
@@ -3784,8 +3784,8 @@ class Email extends Basic
             $temp['hasAttach'] = $this->doesImportedEmailHaveAttachment($a['id']);
             //To and from addresses may be stored in emails_text, if nothing is found, revert to
             //regular email addresses.
-            $temp['to_addrs'] = preg_replace('/[\x00-\x08\x0B-\x1F]/', '', $a['to_addrs']);
-            $temp['from'] = preg_replace('/[\x00-\x08\x0B-\x1F]/', '', $a['from_addr']);
+            $temp['to_addrs'] = \preg_replace('/[\x00-\x08\x0B-\x1F]/', '', $a['to_addrs']);
+            $temp['from'] = \preg_replace('/[\x00-\x08\x0B-\x1F]/', '', $a['from_addr']);
             isValidEmailAddress($temp['from']);
             if (empty($temp['from']) || empty($temp['to_addrs'])) {
                 //Retrieve email addresses seperatly.
@@ -3847,14 +3847,14 @@ class Email extends Basic
 
         //Handle from and to addr joins
         if (!empty($_REQUEST['from_addr'])) {
-            $from_addr = $this->db->quote(strtolower($_REQUEST['from_addr']));
+            $from_addr = $this->db->quote(\strtolower($_REQUEST['from_addr']));
             isValidEmailAddress($from_addr);
             $query['joins'] .= "INNER JOIN emails_email_addr_rel er_from ON er_from.email_id = emails.id AND er_from.deleted = 0 INNER JOIN email_addresses ea_from ON ea_from.id = er_from.email_address_id
                                 AND er_from.address_type='from' AND emails_text.from_addr LIKE '%" . $from_addr . "%'";
         }
 
         if (!empty($_REQUEST['to_addrs'])) {
-            $to_addrs = $this->db->quote(strtolower($_REQUEST['to_addrs']));
+            $to_addrs = $this->db->quote(\strtolower($_REQUEST['to_addrs']));
             $query['joins'] .= "INNER JOIN emails_email_addr_rel er_to ON er_to.email_id = emails.id AND er_to.deleted = 0 INNER JOIN email_addresses ea_to ON ea_to.id = er_to.email_address_id
                                     AND er_to.address_type='to' AND ea_to.email_address LIKE '%" . $to_addrs . "%'";
         }
@@ -3940,7 +3940,7 @@ class Email extends Basic
             $additionalWhereClause[] = "emails.date_sent_received >= $dbFormatDateFrom ";
         }
 
-        $additionalWhereClause = implode(" AND ", $additionalWhereClause);
+        $additionalWhereClause = \implode(" AND ", $additionalWhereClause);
 
         return $additionalWhereClause;
     }
@@ -3953,12 +3953,12 @@ class Email extends Basic
      */
     public function trimLongTo($str)
     {
-        if (strpos($str, ',')) {
-            $exStr = explode(',', $str);
+        if (\strpos($str, ',')) {
+            $exStr = \explode(',', $str);
 
             return $exStr[0] . '...';
-        } elseif (strpos($str, ';')) {
-            $exStr = explode(';', $str);
+        } elseif (\strpos($str, ';')) {
+            $exStr = \explode(';', $str);
 
             return $exStr[0] . '...';
         }
@@ -4286,7 +4286,7 @@ eoq;
             $r = $this->db->query($q);
             while ($a = $this->db->fetchByAssoc($r)) {
                 if (!empty($a['name']) && !empty($a['id'])) {
-                    $this->parent_type = ucwords($table);
+                    $this->parent_type = \ucwords($table);
                     $this->parent_id = $a['id'];
                     $this->parent_name = $a['name'];
 
@@ -4307,21 +4307,21 @@ eoq;
         if (empty($this->description_html)) {
             return;
         }
-        list($type, $subtype) = explode('/', $noteType);
-        if (strtolower($type) != 'image') {
+        list($type, $subtype) = \explode('/', $noteType);
+        if (\strtolower($type) != 'image') {
             return;
         }
         $upload = new UploadFile();
-        $this->description_html = preg_replace(
+        $this->description_html = \preg_replace(
             "#class=\"image\" src=\"cid:$noteId\.(.+?)\"#",
             "class=\"image\" src=\"{$this->imagePrefix}{$noteId}.\\1\"",
             $this->description_html
         );
         // ensure the image is in the cache
-        $imgfilename = sugar_cached("images/") . "$noteId." . strtolower($subtype);
+        $imgfilename = sugar_cached("images/") . "$noteId." . \strtolower($subtype);
         $src = "upload://$noteId";
-        if (!file_exists($imgfilename) && file_exists($src)) {
-            copy($src, $imgfilename);
+        if (!\file_exists($imgfilename) && \file_exists($src)) {
+            \copy($src, $imgfilename);
         }
     }
 
@@ -4350,11 +4350,11 @@ eoq;
      */
     public function setFieldNullable($field)
     {
-        if (isset($this->field_defs[$field]) && is_array($this->field_defs[$field])) {
+        if (isset($this->field_defs[$field]) && \is_array($this->field_defs[$field])) {
             if (empty($this->modifiedFieldDefs[$field])) {
                 if (
                     isset($this->field_defs[$field]['isnull']) &&
-                    (strtolower($this->field_defs[$field]['isnull']) == 'false' || $this->field_defs[$field]['isnull'] === false)
+                    (\strtolower($this->field_defs[$field]['isnull']) == 'false' || $this->field_defs[$field]['isnull'] === false)
                 ) {
                     $this->modifiedFieldDefs[$field]['isnull'] = $this->field_defs[$field]['isnull'];
                     unset($this->field_defs[$field]['isnull']);
@@ -4377,7 +4377,7 @@ eoq;
      */
     public function revertFieldNullable($field)
     {
-        if (!empty($this->modifiedFieldDefs[$field]) && is_array($this->modifiedFieldDefs[$field])) {
+        if (!empty($this->modifiedFieldDefs[$field]) && \is_array($this->modifiedFieldDefs[$field])) {
             foreach ($this->modifiedFieldDefs[$field] as $k => $v) {
                 $this->field_defs[$field][$k] = $v;
             }
@@ -4405,7 +4405,7 @@ eoq;
 
 
         foreach ($request as $fieldName => $field) {
-            if (array_key_exists($fieldName, $bean->field_defs)) {
+            if (\array_key_exists($fieldName, $bean->field_defs)) {
                 $bean->$fieldName = $field;
             }
         }
@@ -4481,21 +4481,21 @@ eoq;
         }
 
         if (isset($request['from_addr']) && $request['from_addr'] != $request['from_addr_name'] . ' &lt;' . $request['from_addr_email'] . '&gt;') {
-            if (false === strpos($request['from_addr'], '&lt;')) { // we have an email only?
+            if (false === \strpos($request['from_addr'], '&lt;')) { // we have an email only?
                 $bean->from_addr = $request['from_addr'];
                 isValidEmailAddress($bean->from_addr);
                 $bean->from_name = '';
                 $bean->reply_to_addr = $bean->from_addr;
                 $bean->reply_to_name = $bean->from_name;
             } else { // we have a compound string
-                $newFromAddr = str_replace($old, $new, $request['from_addr']);
-                $bean->from_addr = substr(
+                $newFromAddr = \str_replace($old, $new, $request['from_addr']);
+                $bean->from_addr = \substr(
                     $newFromAddr,
-                    (1 + strpos($newFromAddr, '<')),
-                    (strpos($newFromAddr, '>') - strpos($newFromAddr, '<')) - 1
+                    (1 + \strpos($newFromAddr, '<')),
+                    (\strpos($newFromAddr, '>') - \strpos($newFromAddr, '<')) - 1
                 );
                 isValidEmailAddress($bean->from_addr);
-                $bean->from_name = substr($newFromAddr, 0, (strpos($newFromAddr, '<') - 1));
+                $bean->from_name = \substr($newFromAddr, 0, (\strpos($newFromAddr, '<') - 1));
                 $bean->reply_to_addr = $bean->from_addr;
                 $bean->reply_to_name = $bean->from_name;
             }
@@ -4513,18 +4513,18 @@ eoq;
 
 
         if (!empty($request['to_addrs_names'])) {
-            $bean->to_addrs_names = htmlspecialchars_decode($request['to_addrs_names']);
+            $bean->to_addrs_names = \htmlspecialchars_decode($request['to_addrs_names']);
         }
 
         if (!empty($bean->to_addrs_names)) {
-            $bean->to_addrs = htmlspecialchars_decode($bean->to_addrs_names);
+            $bean->to_addrs = \htmlspecialchars_decode($bean->to_addrs_names);
         }
 
 
-        $toEmailAddresses = preg_split('/[,;]/', $bean->to_addrs, null, PREG_SPLIT_NO_EMPTY);
+        $toEmailAddresses = \preg_split('/[,;]/', $bean->to_addrs, null, PREG_SPLIT_NO_EMPTY);
         $bean->to_addr_arr = array();
         foreach ($toEmailAddresses as $ea => $address) {
-            preg_match(
+            \preg_match(
                 '/([a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\ =\?\^\`\{\|\}\~\.\[\]\"\(\)\s]+)((<[a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\=\?\^\_\`\{\|\}\~\.\[\]\"\(\)]+)(@)([a-zA-z0-9\-\.]+\>))$/',
                 $address,
                 $matches
@@ -4532,19 +4532,19 @@ eoq;
 
             // Strip out name from email address
             // eg Angel Mcmahon <sales.vegan@example.it>
-            if (count($matches) > 3) {
+            if (\count($matches) > 3) {
                 $email = $matches[2];
-                $display = (str_replace($email, '', $address));
-                $display = (trim(str_replace('"', '', $display)));
+                $display = (\str_replace($email, '', $address));
+                $display = (\trim(\str_replace('"', '', $display)));
             } else {
                 $email = $address;
                 $display = '';
             }
 
-            $email = str_ireplace('<', '', $email);
-            $email = str_ireplace('>', '', $email);
-            $email = str_ireplace('&lt;', '', $email);
-            $email = str_ireplace('&rt;', '', $email);
+            $email = \str_ireplace('<', '', $email);
+            $email = \str_ireplace('>', '', $email);
+            $email = \str_ireplace('&lt;', '', $email);
+            $email = \str_ireplace('&rt;', '', $email);
 
 
             $bean->to_addrs_arr[] = array(
@@ -4556,20 +4556,20 @@ eoq;
 
         if (empty($bean->cc_addrs)) {
             if (!empty($request['cc_addrs_names'])) {
-                $bean->cc_addrs_names = htmlspecialchars_decode($request['cc_addrs_names']);
+                $bean->cc_addrs_names = \htmlspecialchars_decode($request['cc_addrs_names']);
             }
 
             if (!empty($bean->cc_addrs_names)) {
-                $bean->cc_addrs = htmlspecialchars_decode($bean->cc_addrs_names);
+                $bean->cc_addrs = \htmlspecialchars_decode($bean->cc_addrs_names);
             }
         }
 
-        $ccEmailAddresses = preg_split('/[,;]/', $bean->cc_addrs, null, PREG_SPLIT_NO_EMPTY);
+        $ccEmailAddresses = \preg_split('/[,;]/', $bean->cc_addrs, null, PREG_SPLIT_NO_EMPTY);
         $bean->cc_addrs_arr = array();
         foreach ($ccEmailAddresses as $ea => $address) {
             $email = '';
             $display = '';
-            preg_match(
+            \preg_match(
                 '/([a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\ =\?\^\`\{\|\}\~\.\[\]\"\(\)\s]+)((<[a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\=\?\^\_\`\{\|\}\~\.\[\]\"\(\)]+)(@)([a-zA-z0-9\-\.]+\>))$/',
                 $address,
                 $matches
@@ -4577,18 +4577,18 @@ eoq;
 
             // Strip out name from email address
             // eg Angel Mcmahon <sales.vegan@example.it>
-            if (count($matches) > 3) {
-                $display = trim($matches[1]);
+            if (\count($matches) > 3) {
+                $display = \trim($matches[1]);
                 $email = $matches[2];
             } else {
                 $email = $address;
                 $display = '';
             }
 
-            $email = str_ireplace('<', '', $email);
-            $email = str_ireplace('>', '', $email);
-            $email = str_ireplace('&lt;', '', $email);
-            $email = str_ireplace('&rt;', '', $email);
+            $email = \str_ireplace('<', '', $email);
+            $email = \str_ireplace('>', '', $email);
+            $email = \str_ireplace('&lt;', '', $email);
+            $email = \str_ireplace('&rt;', '', $email);
 
 
             $bean->cc_addrs_arr[] = array(
@@ -4600,20 +4600,20 @@ eoq;
 
         if (empty($bean->bcc_addrs)) {
             if (!empty($request['bcc_addrs_names'])) {
-                $bean->bcc_addrs_names = htmlspecialchars_decode($request['bcc_addrs_names']);
+                $bean->bcc_addrs_names = \htmlspecialchars_decode($request['bcc_addrs_names']);
             }
 
             if (!empty($bean->bcc_addrs_names)) {
-                $bean->bcc_addrs = htmlspecialchars_decode($bean->bcc_addrs_names);
+                $bean->bcc_addrs = \htmlspecialchars_decode($bean->bcc_addrs_names);
             }
         }
 
-        $bccEmailAddresses = preg_split('/[,;]/', $bean->bcc_addrs, null, PREG_SPLIT_NO_EMPTY);
+        $bccEmailAddresses = \preg_split('/[,;]/', $bean->bcc_addrs, null, PREG_SPLIT_NO_EMPTY);
         $bean->bcc_addrs_arr = array();
         foreach ($bccEmailAddresses as $ea => $address) {
             $email = '';
             $display = '';
-            preg_match(
+            \preg_match(
                 '/([a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\ =\?\^\`\{\|\}\~\.\[\]\"\(\)\s]+)((<[a-zA-z0-9\!\#\$\%\&\'\*\+\-\/\=\?\^\_\`\{\|\}\~\.\[\]\"\(\)]+)(@)([a-zA-z0-9\-\.]+\>))$/',
                 $address,
                 $matches
@@ -4621,18 +4621,18 @@ eoq;
 
             // Strip out name from email address
             // eg Angel Mcmahon <sales.vegan@example.it>
-            if (count($matches) > 3) {
-                $display = trim($matches[1]);
+            if (\count($matches) > 3) {
+                $display = \trim($matches[1]);
                 $email = $matches[2];
             } else {
                 $email = $address;
                 $display = '';
             }
 
-            $email = str_ireplace('<', '', $email);
-            $email = str_ireplace('>', '', $email);
-            $email = str_ireplace('&lt;', '', $email);
-            $email = str_ireplace('&rt;', '', $email);
+            $email = \str_ireplace('<', '', $email);
+            $email = \str_ireplace('>', '', $email);
+            $email = \str_ireplace('&lt;', '', $email);
+            $email = \str_ireplace('&rt;', '', $email);
 
 
             $bean->bcc_addrs_arr[] = array(
@@ -4663,7 +4663,7 @@ eoq;
         // We need to generate a new id
         if (isset($_REQUEST['refer_action']) && !empty($_REQUEST['refer_action'])) {
             $referActions = array('Forward', 'ReplyTo', 'ReplyToAll');
-            if (in_array($_REQUEST['refer_action'], $referActions)) {
+            if (\in_array($_REQUEST['refer_action'], $referActions)) {
                 $bean->id = create_guid();
                 $bean->new_with_id = true;
                 $bean->type = 'out';
@@ -4691,12 +4691,12 @@ eoq;
         $this->description_html = '';
         $mail->IsHTML(false);
         $plainText = from_html($this->description);
-        $plainText = str_replace("&nbsp;", " ", $plainText);
-        $plainText = str_replace("</p>", "</p><br />", $plainText);
-        $plainText = strip_tags(br2nl($plainText));
-        $plainText = str_replace("&amp;", "&", $plainText);
-        $plainText = str_replace("&#39;", "'", $plainText);
-        $mail->Body = wordwrap($plainText, 996);
+        $plainText = \str_replace("&nbsp;", " ", $plainText);
+        $plainText = \str_replace("</p>", "</p><br />", $plainText);
+        $plainText = \strip_tags(br2nl($plainText));
+        $plainText = \str_replace("&amp;", "&", $plainText);
+        $plainText = \str_replace("&#39;", "'", $plainText);
+        $mail->Body = \wordwrap($plainText, 996);
         $mail->Body = $this->decodeDuringSend($mail->Body);
         $this->description = $mail->Body;
     }
@@ -4843,7 +4843,7 @@ eoq;
      */
     private function isValidEmail($emailAddressString)
     {
-        return filter_var($emailAddressString, FILTER_VALIDATE_EMAIL);
+        return \filter_var($emailAddressString, FILTER_VALIDATE_EMAIL);
     }
 
     /**
@@ -4851,7 +4851,7 @@ eoq;
      */
     protected function validateSugarEmailAddressField($emailField)
     {
-        if (!is_string($emailField)) {
+        if (!\is_string($emailField)) {
             throw new InvalidArgumentException('Invalid type. $emailField must be a string value, eg. from_name');
         }
 

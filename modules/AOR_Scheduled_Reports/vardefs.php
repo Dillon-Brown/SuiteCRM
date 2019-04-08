@@ -140,7 +140,7 @@ $dictionary['AOR_Scheduled_Reports'] = array(
     'optimistic_locking' => true,
     'unified_search' => false,
 );
-if (!class_exists('VardefManager')) {
+if (!\class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('AOR_Scheduled_Reports', 'AOR_Scheduled_Reports', array('basic'));

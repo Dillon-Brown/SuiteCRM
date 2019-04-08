@@ -44,7 +44,7 @@ class SugarFieldMultienum extends SugarFieldEnum
 {
     public function setup($parentFieldArray, $vardef, $displayParams, $tabindex, $twopass=true)
     {
-        if (!isset($vardef['options_list']) && isset($vardef['options']) && !is_array($vardef['options'])) {
+        if (!isset($vardef['options_list']) && isset($vardef['options']) && !\is_array($vardef['options'])) {
             $vardef['options_list'] = $GLOBALS['app_list_strings'][$vardef['options']];
         }
         return parent::setup($parentFieldArray, $vardef, $displayParams, $tabindex, $twopass);
@@ -106,18 +106,18 @@ class SugarFieldMultienum extends SugarFieldEnum
         $focus,
         ImportFieldSanitize $settings
         ) {
-        if (!empty($value) && is_array($value)) {
+        if (!empty($value) && \is_array($value)) {
             $enum_list = $value;
         } else {
             // If someone was using the old style multienum import technique
-            $value = str_replace("^", "", $value);
+            $value = \str_replace("^", "", $value);
 
             // We will need to break it apart to put test it.
-            $enum_list = explode(",", $value);
+            $enum_list = \explode(",", $value);
         }
         // parse to see if all the values given are valid
         foreach ($enum_list as $key => $enum_value) {
-            $enum_list[$key] = $enum_value = trim($enum_value);
+            $enum_list[$key] = $enum_value = \trim($enum_value);
             $sanitizedValue = parent::importSanitize($enum_value, $vardef, $focus, $settings);
             if ($sanitizedValue  === false) {
                 return false;

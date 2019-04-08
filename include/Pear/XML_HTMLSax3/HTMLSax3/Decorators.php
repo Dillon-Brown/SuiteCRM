@@ -67,7 +67,7 @@ class XML_HTMLSax3_Trim
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($orig_obj, $orig_method);
     }
@@ -80,7 +80,7 @@ class XML_HTMLSax3_Trim
     */
     public function trimData(&$parser, $data)
     {
-        $data = trim($data);
+        $data = \trim($data);
         if ($data != '') {
             $this->orig_obj->{$this->orig_method}($parser, $data);
         }
@@ -133,7 +133,7 @@ class XML_HTMLSax3_CaseFolding
     */
     public function foldOpen(&$parser, $tag, $attrs=array(), $empty = false)
     {
-        $this->orig_obj->{$this->orig_open_method}($parser, strtoupper($tag), $attrs, $empty);
+        $this->orig_obj->{$this->orig_open_method}($parser, \strtoupper($tag), $attrs, $empty);
     }
     /**
     * Folds up close tag callbacks
@@ -143,7 +143,7 @@ class XML_HTMLSax3_CaseFolding
     */
     public function foldClose(&$parser, $tag, $empty = false)
     {
-        $this->orig_obj->{$this->orig_close_method}($parser, strtoupper($tag), $empty);
+        $this->orig_obj->{$this->orig_close_method}($parser, \strtoupper($tag), $empty);
     }
 }
 /**
@@ -185,7 +185,7 @@ class XML_HTMLSax3_Linefeed
     */
     public function breakData(&$parser, $data)
     {
-        $data = explode("\n", $data);
+        $data = \explode("\n", $data);
         foreach ($data as $chunk) {
             $this->orig_obj->{$this->orig_method}($parser, $chunk);
         }
@@ -230,7 +230,7 @@ class XML_HTMLSax3_Tab
     */
     public function breakData(&$parser, $data)
     {
-        $data = explode("\t", $data);
+        $data = \explode("\t", $data);
         foreach ($data as $chunk) {
             $this->orig_obj->{$this->orig_method}($this, $chunk);
         }
@@ -276,9 +276,9 @@ class XML_HTMLSax3_Entities_Parsed
     */
     public function breakData(&$parser, $data)
     {
-        $data = preg_split('/(&.+?;)/', $data, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        $data = \preg_split('/(&.+?;)/', $data, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         foreach ($data as $chunk) {
-            $chunk = html_entity_decode($chunk, ENT_NOQUOTES);
+            $chunk = \html_entity_decode($chunk, ENT_NOQUOTES);
             $this->orig_obj->{$this->orig_method}($this, $chunk);
         }
     }
@@ -286,12 +286,12 @@ class XML_HTMLSax3_Entities_Parsed
 /**
 * Compatibility with older PHP versions
 */
-if (version_compare(phpversion(), '4.3', '<') && !function_exists('html_entity_decode')) {
+if (\version_compare(\phpversion(), '4.3', '<') && !\function_exists('html_entity_decode')) {
     function html_entity_decode($str, $style=ENT_NOQUOTES)
     {
-        return strtr(
+        return \strtr(
             $str,
-            array_flip(get_html_translation_table(HTML_ENTITIES, $style))
+            \array_flip(\get_html_translation_table(HTML_ENTITIES, $style))
         );
     }
 }
@@ -334,7 +334,7 @@ class XML_HTMLSax3_Entities_Unparsed
     */
     public function breakData(&$parser, $data)
     {
-        $data = preg_split('/(&.+?;)/', $data, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        $data = \preg_split('/(&.+?;)/', $data, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         foreach ($data as $chunk) {
             $this->orig_obj->{$this->orig_method}($this, $chunk);
         }
@@ -381,20 +381,20 @@ class XML_HTMLSax3_Escape_Stripper
     public function strip(&$parser, $data)
     {
         // Check for HTML comments first
-        if (substr($data, 0, 2) == '--') {
+        if (\substr($data, 0, 2) == '--') {
             $patterns = array(
                 '/^\-\-/',          // Opening comment: --
                 '/\-\-$/',          // Closing comment: --
             );
-            $data = preg_replace($patterns, '', $data);
+            $data = \preg_replace($patterns, '', $data);
 
         // Check for XML CDATA sections (note: don't do both!)
-        } elseif (substr($data, 0, 1) == '[') {
+        } elseif (\substr($data, 0, 1) == '[') {
             $patterns = array(
                 '/^\[.*CDATA.*\[/s', // Opening CDATA
                 '/\].*\]$/s',       // Closing CDATA
                 );
-            $data = preg_replace($patterns, '', $data);
+            $data = \preg_replace($patterns, '', $data);
         }
 
         $this->orig_obj->{$this->orig_method}($this, $data);

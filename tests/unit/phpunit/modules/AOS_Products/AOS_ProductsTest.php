@@ -49,7 +49,7 @@ class AOS_ProductsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($aosProducts->id));
-        $this->assertEquals(36, strlen($aosProducts->id));
+        $this->assertEquals(36, \strlen($aosProducts->id));
         $this->assertEquals('', $aosProducts->product_image);
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
@@ -94,6 +94,6 @@ class AOS_ProductsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 				GROUP BY accounts.id
 			) AS aos_quotes";
         $actual = $aosProducts->getCustomersPurchasedProductsQuery();
-        $this->assertSame(trim($expected), trim($actual));
+        $this->assertSame(\trim($expected), \trim($actual));
     }
 }

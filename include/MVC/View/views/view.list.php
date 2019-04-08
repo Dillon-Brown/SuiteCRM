@@ -116,7 +116,7 @@ class ViewList extends SugarView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -135,8 +135,8 @@ class ViewList extends SugarView
 
         $metadataFile = $this->getMetaDataFile();
 
-        if (!file_exists($metadataFile)) {
-            sugar_die(sprintf($GLOBALS['app_strings']['LBL_NO_ACTION'], $this->do_action));
+        if (!\file_exists($metadataFile)) {
+            sugar_die(\sprintf($GLOBALS['app_strings']['LBL_NO_ACTION'], $this->do_action));
         }
 
         require($metadataFile);
@@ -147,16 +147,16 @@ class ViewList extends SugarView
             $this->lv->templateMeta = $viewdefs[$this->module]['ListView']['templateMeta'];
         }
 
-        if (!empty($this->bean->object_name) && isset($_REQUEST[$module . '2_' . strtoupper($this->bean->object_name) . '_offset'])) {//if you click the pagination button, it will populate the search criteria here
+        if (!empty($this->bean->object_name) && isset($_REQUEST[$module . '2_' . \strtoupper($this->bean->object_name) . '_offset'])) {//if you click the pagination button, it will populate the search criteria here
             if (!empty($_REQUEST['current_query_by_page'])) {//The code support multi browser tabs pagination
-                $blockVariables = array('mass', 'uid', 'massupdate', 'delete', 'merge', 'selectCount', 'request_data', 'current_query_by_page', $module . '2_' . strtoupper($this->bean->object_name) . '_ORDER_BY');
+                $blockVariables = array('mass', 'uid', 'massupdate', 'delete', 'merge', 'selectCount', 'request_data', 'current_query_by_page', $module . '2_' . \strtoupper($this->bean->object_name) . '_ORDER_BY');
                 if (isset($_REQUEST['lvso'])) {
                     $blockVariables[] = 'lvso';
                 }
-                $current_query_by_page = json_decode(html_entity_decode($_REQUEST['current_query_by_page']), true);
+                $current_query_by_page = \json_decode(\html_entity_decode($_REQUEST['current_query_by_page']), true);
                 foreach ($current_query_by_page as $search_key => $search_value) {
-                    if ($search_key != $module . '2_' . strtoupper($this->bean->object_name) . '_offset' && !in_array($search_key, $blockVariables)) {
-                        if (!is_array($search_value)) {
+                    if ($search_key != $module . '2_' . \strtoupper($this->bean->object_name) . '_offset' && !\in_array($search_key, $blockVariables)) {
+                        if (!\is_array($search_value)) {
                             $_REQUEST[$search_key] = securexss($search_value);
                         } else {
                             foreach ($search_value as $key => &$val) {
@@ -224,7 +224,7 @@ class ViewList extends SugarView
 
         $displayColumns = array();
         if (!empty($_REQUEST['displayColumns'])) {
-            foreach (explode('|', $_REQUEST['displayColumns']) as $num => $col) {
+            foreach (\explode('|', $_REQUEST['displayColumns']) as $num => $col) {
                 if (!empty($this->listViewDefs[$module][$col])) {
                     $displayColumns[$col] = $this->listViewDefs[$module][$col];
                 }
@@ -321,10 +321,10 @@ class ViewList extends SugarView
         }
 
         $this->use_old_search = true;
-        if ((file_exists('modules/' . $this->module . '/SearchForm.html')
-                && !file_exists('modules/' . $this->module . '/metadata/searchdefs.php'))
-            || (file_exists('custom/modules/' . $this->module . '/SearchForm.html')
-                && !file_exists('custom/modules/' . $this->module . '/metadata/searchdefs.php'))
+        if ((\file_exists('modules/' . $this->module . '/SearchForm.html')
+                && !\file_exists('modules/' . $this->module . '/metadata/searchdefs.php'))
+            || (\file_exists('custom/modules/' . $this->module . '/SearchForm.html')
+                && !\file_exists('custom/modules/' . $this->module . '/metadata/searchdefs.php'))
         ) {
             require_once('include/SearchForm/SearchForm.php');
             $this->searchForm = new SearchForm($this->module, $this->seed);
@@ -347,7 +347,7 @@ class ViewList extends SugarView
     {
         if (isset($_REQUEST['query'])) {
             // we have a query
-            if (!empty($_SERVER['HTTP_REFERER']) && preg_match('/action=EditView/', $_SERVER['HTTP_REFERER'])) { // from EditView cancel
+            if (!empty($_SERVER['HTTP_REFERER']) && \preg_match('/action=EditView/', $_SERVER['HTTP_REFERER'])) { // from EditView cancel
                 $this->searchForm->populateFromArray($this->storeQuery->query);
             } else {
                 $this->searchForm->populateFromRequest();
@@ -355,8 +355,8 @@ class ViewList extends SugarView
 
             $where_clauses = $this->searchForm->generateSearchWhere(true, $this->seed->module_dir);
 
-            if (count($where_clauses) > 0) {
-                $this->where = '(' . implode(' ) AND ( ', $where_clauses) . ')';
+            if (\count($where_clauses) > 0) {
+                $this->where = '(' . \implode(' ) AND ( ', $where_clauses) . ')';
             }
             $GLOBALS['log']->info("List View Where Clause: $this->where");
         }

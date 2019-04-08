@@ -94,27 +94,27 @@ class DetailView2 extends EditView
         if (isset($GLOBALS['sugar_config']['disable_vcr'])) {
             $this->showVCRControl = !$GLOBALS['sugar_config']['disable_vcr'];
         }
-        if (!empty($this->metadataFile) && file_exists($this->metadataFile)) {
+        if (!empty($this->metadataFile) && \file_exists($this->metadataFile)) {
             require($this->metadataFile);
         } else {
             //If file doesn't exist we create a best guess
-            if (!file_exists("modules/$this->module/metadata/$metadataFileName.php") &&
-                file_exists("modules/$this->module/DetailView.html")) {
+            if (!\file_exists("modules/$this->module/metadata/$metadataFileName.php") &&
+                \file_exists("modules/$this->module/DetailView.html")) {
                 global $dictionary;
                 $htmlFile = "modules/" . $this->module . "/DetailView.html";
                 $parser = new DetailViewMetaParser();
-                if (!file_exists('modules/'.$this->module.'/metadata')) {
+                if (!\file_exists('modules/'.$this->module.'/metadata')) {
                     sugar_mkdir('modules/'.$this->module.'/metadata');
                 }
                 $fp = sugar_fopen('modules/'.$this->module.'/metadata/$metadataFileName.php', 'w');
-                fwrite($fp, $parser->parse($htmlFile, $dictionary[$focus->object_name]['fields'], $this->module));
-                fclose($fp);
+                \fwrite($fp, $parser->parse($htmlFile, $dictionary[$focus->object_name]['fields'], $this->module));
+                \fclose($fp);
             }
 
             //Flag an error... we couldn't create the best guess meta-data file
-            if (!file_exists("modules/$this->module/metadata/$metadataFileName.php")) {
+            if (!\file_exists("modules/$this->module/metadata/$metadataFileName.php")) {
                 global $app_strings;
-                $error = str_replace("[file]", "modules/$this->module/metadata/$metadataFileName.php", $app_strings['ERR_CANNOT_CREATE_METADATA_FILE']);
+                $error = \str_replace("[file]", "modules/$this->module/metadata/$metadataFileName.php", $app_strings['ERR_CANNOT_CREATE_METADATA_FILE']);
                 $GLOBALS['log']->fatal($error);
                 echo $error;
                 die();

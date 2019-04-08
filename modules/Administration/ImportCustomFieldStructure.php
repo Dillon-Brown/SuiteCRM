@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -61,10 +61,10 @@ EOQ;
     $fmd = BeanFactory::getBean('EditCustomFields');
 
     echo $mod_strings['LBL_ICF_DROPPING'] . '<br>';
-    $lines = file($_FILES['sugfile']['tmp_name']);
+    $lines = \file($_FILES['sugfile']['tmp_name']);
     $cur = array();
     foreach ($lines as $line) {
-        if (trim($line) == 'DONE') {
+        if (\trim($line) == 'DONE') {
             $fmd->new_with_id = true;
             echo $mod_strings['LBL_IMPORT_CUSTOM_FIELDS_ADDING'] . ':' . $fmd->custom_module . '-' .
                  $fmd->name . '<br>';
@@ -72,13 +72,13 @@ EOQ;
             $fmd->save(false);
             $fmd = BeanFactory::getBean('EditCustomFields');
         } else {
-            $ln = explode(':::', $line, 2);
-            if (sizeof($ln) == 2) {
-                $KEY = trim($ln[0]);
+            $ln = \explode(':::', $line, 2);
+            if (\sizeof($ln) == 2) {
+                $KEY = \trim($ln[0]);
                 if ($KEY === 'table_name') {
                     continue;
                 }
-                $fmd->$KEY = trim($ln[1]);
+                $fmd->$KEY = \trim($ln[1]);
             }
         }
     }

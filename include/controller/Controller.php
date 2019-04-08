@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -75,7 +75,7 @@ class Controller extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -199,7 +199,7 @@ class Controller extends SugarBean
             $result = $this->db->query($query, true, " Error capturing max start order: ");
             $row = $this->db->fetchByAssoc($result);
 
-            if (!is_null($row['max_start'])) {
+            if (!\is_null($row['max_start'])) {
                 if ($this->focus->controller_def['start_axis']=="x") {
                     $this->focus->list_order_x = $row['max_start'] + 1;
                     if ($this->focus->controller_def['list_y']=="Y") {

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -81,7 +81,7 @@ function additionalDetailsProspect($fields)
     if (!empty($fields['PRIMARY_ADDRESS_COUNTRY'])) {
         $overlib_string .= $fields['PRIMARY_ADDRESS_COUNTRY'] . '<br>';
     }
-    if (strlen($overlib_string) > 0 && !(strrpos($overlib_string, '<br>') == strlen($overlib_string) - 4)) {
+    if (\strlen($overlib_string) > 0 && !(\strrpos($overlib_string, '<br>') == \strlen($overlib_string) - 4)) {
         $overlib_string .= '<br>';
     }
     if (!empty($fields['PHONE_MOBILE'])) {
@@ -99,7 +99,7 @@ function additionalDetailsProspect($fields)
                                  "<a href=index.php?module=Emails&action=Compose&contact_id={$fields['ID']}&" .
                                  "parent_type=Contacts&parent_id={$fields['ID']}&to_addrs_ids={$fields['ID']}&to_addrs_names" .
                                  "={$fields['FIRST_NAME']}&nbsp;{$fields['LAST_NAME']}&to_addrs_emails={$fields['EMAIL1']}&" .
-                                 "to_email_addrs=" . urlencode("{$fields['FIRST_NAME']} {$fields['LAST_NAME']} <{$fields['EMAIL1']}>") .
+                                 "to_email_addrs=" . \urlencode("{$fields['FIRST_NAME']} {$fields['LAST_NAME']} <{$fields['EMAIL1']}>") .
                                  "&return_module=Contacts&return_action=ListView'>{$fields['EMAIL1']}</a><br>";
     }
     if (!empty($fields['EMAIL2'])) {
@@ -107,13 +107,13 @@ function additionalDetailsProspect($fields)
                                  "<a href=index.php?module=Emails&action=Compose&contact_id={$fields['ID']}&" .
                                  "parent_type=Contacts&parent_id={$fields['ID']}&to_addrs_ids={$fields['ID']}&to_addrs_names" .
                                  "={$fields['FIRST_NAME']}&nbsp;{$fields['LAST_NAME']}&to_addrs_emails={$fields['EMAIL2']}&" .
-                                 "to_email_addrs=" . urlencode("{$fields['FIRST_NAME']} {$fields['LAST_NAME']} <{$fields['EMAIL2']}>") .
+                                 "to_email_addrs=" . \urlencode("{$fields['FIRST_NAME']} {$fields['LAST_NAME']} <{$fields['EMAIL2']}>") .
                                  "&return_module=Contacts&return_action=ListView'>{$fields['EMAIL2']}</a><br>";
     }
     
     if (!empty($fields['DESCRIPTION'])) {
-        $overlib_string .= '<b>'. $mod_strings['LBL_DESCRIPTION'] . '</b> ' . substr($fields['DESCRIPTION'], 0, 300);
-        if (strlen($fields['DESCRIPTION']) > 300) {
+        $overlib_string .= '<b>'. $mod_strings['LBL_DESCRIPTION'] . '</b> ' . \substr($fields['DESCRIPTION'], 0, 300);
+        if (\strlen($fields['DESCRIPTION']) > 300) {
             $overlib_string .= '...';
         }
     }

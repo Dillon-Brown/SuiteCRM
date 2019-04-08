@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -27,7 +27,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             if ($db->query($query) && $check != '1') {
                 if (!IsNullOrEmptyString($event->accept_redirect)) {
                     $url = $event->accept_redirect;
-                    header('Location: ' . $url);
+                    \header('Location: ' . $url);
                 } else {
                     echo 'Thank you for accepting';
                 }
@@ -44,7 +44,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             if ($db->query($query) && $check != '1') {
                 if (!IsNullOrEmptyString($event->decline_redirect)) {
                     $url = $event->decline_redirect;
-                    header('Location: ' . $url);
+                    \header('Location: ' . $url);
                 } else {
                     echo 'Thank you for declining';
                 }
@@ -66,7 +66,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             if ($db->query($query) && $check != '1') {
                 if (!IsNullOrEmptyString($event->accept_redirect)) {
                     $url = $event->accept_redirect;
-                    header('Location: ' . $url);
+                    \header('Location: ' . $url);
                 } else {
                     echo 'Thank you for accepting';
                 }
@@ -82,7 +82,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             if ($db->query($query) && $check != '1') {
                 if (!IsNullOrEmptyString($event->decline_redirect)) {
                     $url = $event->decline_redirect;
-                    header('Location: ' . $url);
+                    \header('Location: ' . $url);
                 } else {
                     echo 'Thank you for declining';
                 }
@@ -103,7 +103,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             if ($db->query($query) && $check != '1') {
                 if (!IsNullOrEmptyString($event->accept_redirect)) {
                     $url = $event->accept_redirect;
-                    header('Location: ' . $url);
+                    \header('Location: ' . $url);
                 } else {
                     echo 'Thank you for accepting';
                 }
@@ -120,7 +120,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             if ($db->query($query) && $check != '1') {
                 if (!IsNullOrEmptyString($event->decline_redirect)) {
                     $url = $event->decline_redirect;
-                    header('Location: ' . $url);
+                    \header('Location: ' . $url);
                 } else {
                     echo 'Thank you for declining';
                 }
@@ -132,5 +132,5 @@ if (!defined('sugarEntry') || !sugarEntry) {
     // Function for basic field validation (present and neither empty nor only white space nor just 'http://')
     function IsNullOrEmptyString($question)
     {
-        return (!isset($question) || trim($question)==='' || $question =='http://');
+        return (!isset($question) || \trim($question)==='' || $question =='http://');
     }

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -90,7 +90,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function __construct($logErrors = true, $logCalls = true, $charset = null)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $this->logErrors = $logErrors;
         $this->logCalls = $logCalls;
         $this->logger = LoggerManager::getLogger();
@@ -104,7 +104,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     protected function setStream($stream, $validate = true)
     {
-        if ($validate && !is_resource($stream)) {
+        if ($validate && !\is_resource($stream)) {
             $this->logger->error('ImapHandler trying to set a non valid resource az stream.');
         }
         $this->stream = $stream;
@@ -117,7 +117,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     protected function getStream($validate = true)
     {
-        if ($validate && !is_resource($this->stream)) {
+        if ($validate && !\is_resource($this->stream)) {
             $this->logger->error('ImapHandler trying to use a non valid resource stream.');
         }
         return $this->stream;
@@ -129,13 +129,13 @@ class ImapHandler implements ImapHandlerInterface
      */
     protected function log($errors)
     {
-        if (is_string($errors)) {
+        if (\is_string($errors)) {
             $this->log([$errors]);
         } else {
             if ($errors && $this->logErrors) {
                 foreach ($errors as $error) {
                     if ($error) {
-                        $this->logger->warn('An Imap error detected: ' . json_encode($error));
+                        $this->logger->warn('An Imap error detected: ' . \json_encode($error));
                     }
                 }
             }
@@ -150,7 +150,7 @@ class ImapHandler implements ImapHandlerInterface
     protected function logCall($func, $args)
     {
         if ($this->logCalls) {
-            $this->logger->debug('IMAP wrapper called: ' . __CLASS__ . "::$func(" . json_encode($args) . ')');
+            $this->logger->debug('IMAP wrapper called: ' . __CLASS__ . "::$func(" . \json_encode($args) . ')');
         }
     }
     
@@ -162,7 +162,7 @@ class ImapHandler implements ImapHandlerInterface
     protected function logReturn($func, $ret)
     {
         if ($this->logCalls) {
-            $this->logger->debug('IMAP wrapper return: ' . __CLASS__ . "::$func(...) => " . json_encode($ret));
+            $this->logger->debug('IMAP wrapper return: ' . __CLASS__ . "::$func(...) => " . \json_encode($ret));
         }
     }
     
@@ -172,7 +172,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function close()
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         if (!$ret = imap_close($this->getStream())) {
             $this->log('IMAP close error');
         }
@@ -186,7 +186,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function getAlerts()
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_alerts();
         $this->log($ret);
         $this->logReturn(__FUNCTION__, $ret);
@@ -199,7 +199,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function getConnection()
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = $this->getStream();
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -211,7 +211,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function getErrors()
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_errors();
         $this->log($ret);
         $this->logReturn(__FUNCTION__, $ret);
@@ -224,7 +224,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function getLastError()
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_last_error();
         $this->log($ret);
         $this->logReturn(__FUNCTION__, $ret);
@@ -239,7 +239,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function getMailboxes($ref, $pattern)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_getmailboxes($this->getStream(), $ref, $pattern);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -251,8 +251,8 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function isAvailable()
     {
-        $this->logCall(__FUNCTION__, func_get_args());
-        $ret = function_exists("imap_open") && function_exists("imap_timeout");
+        $this->logCall(__FUNCTION__, \func_get_args());
+        $ret = \function_exists("imap_open") && \function_exists("imap_timeout");
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
     }
@@ -269,7 +269,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function open($mailbox, $username, $password, $options = 0, $n_retries = 0, $params = null)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         
         // TODO: it makes a php notice, should be fixed on a way like this:
         // $stream = false;
@@ -299,7 +299,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function ping()
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_ping($this->getStream());
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -314,7 +314,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function reopen($mailbox, $options = 0, $n_retries = 0)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_reopen($this->getStream(), $mailbox, $options, $n_retries);
         if (!$ret) {
             $this->log('IMAP reopen error');
@@ -331,7 +331,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function setTimeout($timeout_type, $timeout = -1)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_timeout($timeout_type, $timeout);
         if (!$ret) {
             $this->log('IMAP set timeout error');
@@ -354,7 +354,7 @@ class ImapHandler implements ImapHandlerInterface
     {
         // Default to class charset if none is specified
         $emailCharset = (!empty($charset)) ? $charset : $this->charset;
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_sort($this->getStream(), $criteria, $reverse, $options, $search_criteria, $emailCharset);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -367,7 +367,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function getMessageNo($uid)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_msgno($this->getStream(), $uid);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -383,7 +383,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function getHeaderInfo($msg_number, $fromlength = 0, $subjectlength = 0, $defaulthost = null)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_headerinfo($this->getStream(), $msg_number, $fromlength, $subjectlength, $defaulthost);
         if (!$ret) {
             $this->log('IMAP get header info error');
@@ -400,7 +400,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function fetchHeader($msg_number, $options = 0)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_fetchheader($this->getStream(), $msg_number, $options);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -416,7 +416,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function append($mailbox, $message, $options = null, $internal_date = null)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         
         // ..to evolve a warning about an invalid internal date format
         // BUG at: https://github.com/php/php-src/blob/master/ext/imap/php_imap.c#L1357
@@ -441,7 +441,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function getUid($msg_number)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_uid($this->getStream(), $msg_number);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -452,7 +452,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function expunge()
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_append($this->getStream());
         if (!$ret) {
             $this->log('IMAP expunge error');
@@ -466,7 +466,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function check()
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_check($this->getStream());
         if (!$ret) {
             $this->log('IMAP check error');
@@ -484,7 +484,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function clearFlagFull($sequence, $flag, $options = 0)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_clearflag_full($this->getStream(), $sequence, $flag, $options);
         if (!$ret) {
             $this->log('IMAP clearFlagFull error');
@@ -500,7 +500,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function createMailbox($mailbox)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_createmailbox($this->getStream(), $mailbox);
         if (!$ret) {
             $this->log('IMAP createMailbox error');
@@ -517,7 +517,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function delete($msg_number, $options = 0)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_delete($this->getStream(), $msg_number, $options);
         if (!$ret) {
             $this->log('IMAP delete error');
@@ -533,7 +533,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function deleteMailbox($mailbox)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_deletemailbox($this->getStream(), $mailbox);
         if (!$ret) {
             $this->log('IMAP deleteMailbox error');
@@ -551,7 +551,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function fetchBody($msg_number, $section, $options = 0)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_fetchbody($this->getStream(), $msg_number, $section, $options);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -565,7 +565,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function fetchOverview($sequence, $options = 0)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_fetch_overview($this->getStream(), $sequence, $options);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -579,7 +579,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function fetchStructure($msg_number, $options = 0)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_fetchstructure($this->getStream(), $msg_number, $options);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -593,7 +593,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function getBody($msg_number, $options)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_body($this->getStream(), $msg_number, $options);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -604,7 +604,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function getNumberOfMessages()
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_num_msg($this->getStream());
         if (!$ret) {
             $this->log('IMAP getNumberOfMessages error');
@@ -621,7 +621,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function getStatus($mailbox, $options)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_status($this->getStream(), $mailbox, $options);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -636,7 +636,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function mailCopy($msglist, $mailbox, $options = 0)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_mail_copy($this->getStream(), $msglist, $mailbox, $options);
         if (!$ret) {
             $this->log('IMAP mailCopy error');
@@ -654,7 +654,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function mailMove($msglist, $mailbox, $options = 0)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_mail_move($this->getStream(), $msglist, $mailbox, $options);
         if (!$ret) {
             $this->log('IMAP mailMove error');
@@ -670,7 +670,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function mimeHeaderDecode($text)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_mime_header_decode($text);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -684,7 +684,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function renameMailbox($old_mbox, $new_mbox)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_renamemailbox($this->getStream(), $old_mbox, $new_mbox);
         if (!$ret) {
             $this->log('IMAP renameMailbox error');
@@ -701,7 +701,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function rfc822ParseHeaders($headers, $defaulthost = "UNKNOWN")
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_rfc822_parse_headers($headers, $defaulthost);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;
@@ -719,7 +719,7 @@ class ImapHandler implements ImapHandlerInterface
         // Default to class charset if none is specified
         $emailCharset = (!empty($charset)) ? $charset : $this->charset;
 
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
 
         $ret = imap_search($this->getStream(), $criteria, $options, $emailCharset);
 
@@ -739,7 +739,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function setFlagFull($sequence, $flag, $options = NIL)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_setflag_full($this->getStream(), $sequence, $flag, $options);
         if (!$ret) {
             $this->log('IMAP setFlagFull error');
@@ -755,7 +755,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function subscribe($mailbox)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_subscribe($this->getStream(), $mailbox);
         if (!$ret) {
             $this->log('IMAP subscribe error');
@@ -771,7 +771,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function unsubscribe($mailbox)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_unsubscribe($this->getStream(), $mailbox);
         if (!$ret) {
             $this->log('IMAP unsubscribe error');
@@ -787,7 +787,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function utf7Encode($data)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_utf7_decode($data);
         if (!$ret) {
             $this->log('IMAP utf7Encode error');
@@ -803,7 +803,7 @@ class ImapHandler implements ImapHandlerInterface
      */
     public function utf8($mime_encoded_text)
     {
-        $this->logCall(__FUNCTION__, func_get_args());
+        $this->logCall(__FUNCTION__, \func_get_args());
         $ret = imap_utf8($mime_encoded_text);
         $this->logReturn(__FUNCTION__, $ret);
         return $ret;

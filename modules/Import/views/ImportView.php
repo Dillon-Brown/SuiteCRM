@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -56,7 +56,7 @@ class ImportView extends SugarView
 
         parent::__construct($bean, $view_object_map);
 
-        if (isset($_REQUEST['button']) && trim($_REQUEST['button']) == htmlentities($mod_strings['LBL_BACK'])) {
+        if (isset($_REQUEST['button']) && \trim($_REQUEST['button']) == \htmlentities($mod_strings['LBL_BACK'])) {
             // if the request comes from the "Back" button, decrease the step count
             $this->currentStep = isset($_REQUEST['current_step']) ? ($_REQUEST['current_step'] - 1) : 1;
         } else {
@@ -67,7 +67,7 @@ class ImportView extends SugarView
 
     public function preDisplay()
     {
-        if (!is_file('cache/jsLanguage/Import/' . $GLOBALS['current_language'] . '.js')) {
+        if (!\is_file('cache/jsLanguage/Import/' . $GLOBALS['current_language'] . '.js')) {
             require_once('include/language/jsLanguage.php');
             jsLanguage::createModuleStringsCache('Import', $GLOBALS['current_language']);
         }
@@ -134,12 +134,12 @@ class ImportView extends SugarView
 
         if ($encode) {
             $function = function (&$val) {
-                $val = htmlspecialchars($val, ENT_NOQUOTES);
+                $val = \htmlspecialchars($val, ENT_NOQUOTES);
             };
 
-            array_walk($out, $function);
+            \array_walk($out, $function);
         }
-        echo json_encode($out);
+        echo \json_encode($out);
     }
 
     /**

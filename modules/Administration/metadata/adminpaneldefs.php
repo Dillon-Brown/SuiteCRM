@@ -57,7 +57,7 @@ $admin_option_defs['Administration']['configphp_settings']= array('Administratio
 $admin_option_defs['Administration']['import']= array('Import','LBL_IMPORT_WIZARD','LBL_IMPORT_WIZARD_DESC','./index.php?module=Import&action=step1&import_module=Administration', 'import');
 $admin_option_defs['Administration']['locale']= array('Currencies','LBL_MANAGE_LOCALE','LBL_LOCALE','./index.php?module=Administration&action=Locale&view=default', 'locale');
 
-if (!defined('TEMPLATE_URL')) {
+if (!\defined('TEMPLATE_URL')) {
     $admin_option_defs['Administration']['upgrade_wizard']= array('Upgrade','LBL_UPGRADE_WIZARD_TITLE','LBL_UPGRADE_WIZARD','./index.php?module=UpgradeWizard&action=index', 'upgrade-wizard');
 }
 
@@ -192,10 +192,10 @@ $admin_option_defs = array();
 $admin_option_defs['Administration']['securitygroup_management'] = array('SecuritySuiteGroupManagement', 'LBL_MANAGE_SECURITYGROUPS_TITLE', 'LBL_MANAGE_SECURITYGROUPS', './index.php?module=SecurityGroups&action=index', 'security');
 $admin_option_defs['Administration']['securitygroup_config'] = array('SecurityGroupsManagement', 'LBL_CONFIG_SECURITYGROUPS_TITLE', 'LBL_CONFIG_SECURITYGROUPS', './index.php?module=SecurityGroups&action=config', 'security-suite-group-management');
 
-$admin_option_defs['Administration'] = array_merge((array)$admin_group_header[0][3]['Administration'], (array)$admin_option_defs['Administration']);
+$admin_option_defs['Administration'] = \array_merge((array)$admin_group_header[0][3]['Administration'], (array)$admin_option_defs['Administration']);
 
 
-$admin_group_header[0] = array('LBL_USERS_TITLE', '', false, array_merge((array)$admin_group_header[0][3], (array)$admin_option_defs), 'LBL_USERS_DESC');
+$admin_group_header[0] = array('LBL_USERS_TITLE', '', false, \array_merge((array)$admin_group_header[0][3], (array)$admin_option_defs), 'LBL_USERS_DESC');
 
 
 $admin_option_defs=array();
@@ -244,7 +244,7 @@ $admin_option_defs['Bugs']['bug_tracker']= array('Releases','LBL_MANAGE_RELEASES
 $admin_group_header[]= array('LBL_BUG_TITLE','',false,$admin_option_defs, 'LBL_BUG_DESC');
 
 
-if (file_exists('custom/modules/Administration/Ext/Administration/administration.ext.php')) {
+if (\file_exists('custom/modules/Administration/Ext/Administration/administration.ext.php')) {
     include('custom/modules/Administration/Ext/Administration/administration.ext.php');
 }
 
@@ -252,12 +252,12 @@ if (file_exists('custom/modules/Administration/Ext/Administration/administration
 //lets process the $admin_group_header and apply all the access control rules.
 $access = $current_user->getDeveloperModules();
 foreach ($admin_group_header as $key=>$values) {
-    $module_index = array_keys($values[3]);  //get the actual links..
+    $module_index = \array_keys($values[3]);  //get the actual links..
     foreach ($module_index as $mod_key=>$mod_val) {
         if (is_admin($current_user) ||
-            in_array($mod_val, $access) ||
+            \in_array($mod_val, $access) ||
             $mod_val=='studio'||
-            ($mod_val=='Forecasts' && in_array('ForecastSchedule', $access)) ||
+            ($mod_val=='Forecasts' && \in_array('ForecastSchedule', $access)) ||
             ($mod_val =='any')
            ) {
             if (!is_admin($current_user)&& isset($values[3]['Administration'])) {
@@ -272,15 +272,15 @@ foreach ($admin_group_header as $key=>$values) {
             }
 
             // Need this check because Quotes and Products share the header group
-            if (!in_array('Quotes', $access)&& isset($values[3]['Quotes'])) {
+            if (!\in_array('Quotes', $access)&& isset($values[3]['Quotes'])) {
                 unset($values[3]['Quotes']);
             }
-            if (!in_array('Products', $access)&& isset($values[3]['Products'])) {
+            if (!\in_array('Products', $access)&& isset($values[3]['Products'])) {
                 unset($values[3]['Products']);
             }
 
             // Need this check because Emails and Campaigns share the header group
-            if (!in_array('Campaigns', $access)&& isset($values[3]['Campaigns'])) {
+            if (!\in_array('Campaigns', $access)&& isset($values[3]['Campaigns'])) {
                 unset($values[3]['Campaigns']);
             }
 

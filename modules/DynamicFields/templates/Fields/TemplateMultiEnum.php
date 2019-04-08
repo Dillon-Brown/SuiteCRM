@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -50,7 +50,7 @@ class TemplateMultiEnum extends TemplateEnum
     public function get_html_edit()
     {
         $this->prepare();
-        $xtpl_var = strtoupper($this->name);
+        $xtpl_var = \strtoupper($this->name);
         // MFH BUG#13645
         return "<input type='hidden' name='". $this->name. "' value='0'><select name='". $this->name . "[]' size='5' title='{" . $xtpl_var ."_HELP}' MULTIPLE=true>{OPTIONS_".$xtpl_var. "}</select>";
     }
@@ -67,17 +67,17 @@ class TemplateMultiEnum extends TemplateEnum
             }
         }
         if (!empty($this->help)) {
-            $returnXTPL[strtoupper($this->name . '_help')] = translate($this->help, $this->bean->module_dir);
+            $returnXTPL[\strtoupper($this->name . '_help')] = translate($this->help, $this->bean->module_dir);
         }
 
         global $app_list_strings;
         $returnXTPL = array();
 
-        $returnXTPL[strtoupper($this->name)] = str_replace('^,^', ',', $value);
+        $returnXTPL[\strtoupper($this->name)] = \str_replace('^,^', ',', $value);
         if (empty($this->ext1)) {
             $this->ext1 = $this->options;
         }
-        $returnXTPL[strtoupper('options_'.$this->name)] = get_select_options_with_id($app_list_strings[$this->ext1], unencodeMultienum($value));
+        $returnXTPL[\strtoupper('options_'.$this->name)] = get_select_options_with_id($app_list_strings[$this->ext1], unencodeMultienum($value));
 
         return $returnXTPL;
     }
@@ -110,12 +110,12 @@ class TemplateMultiEnum extends TemplateEnum
 
         foreach ($values as $val) {
             $translated = translate($this->options, '', $val);
-            if (is_string($translated)) {
+            if (\is_string($translated)) {
                 $translatedValues[] = $translated;
             }
         }
 
-        $returnXTPL[strtoupper($this->name)] = implode(', ', $translatedValues);
+        $returnXTPL[\strtoupper($this->name)] = \implode(', ', $translatedValues);
         return $returnXTPL;
     }
 
@@ -126,7 +126,7 @@ class TemplateMultiEnum extends TemplateEnum
             // turn off error reporting in case we are unpacking a value that hasn't been packed...
             // this is kludgy, but unserialize doesn't throw exceptions correctly
             if ($this->ext4[0] == 'a' && $this->ext4[1] == ':') {
-                $unpacked = @unserialize($this->ext4) ;
+                $unpacked = @\unserialize($this->ext4) ;
             } else {
                 $unpacked = false;
             }
@@ -158,13 +158,13 @@ class TemplateMultiEnum extends TemplateEnum
     public function save($df)
     {
         if (isset($this->default)) {
-            if (is_array($this->default)) {
+            if (\is_array($this->default)) {
                 $this->default = encodeMultienumValue($this->default);
             }
-            $this->ext4 = (isset($this->dependency)) ? serialize(array( 'default' => $this->default , 'dependency' => html_entity_decode($this->dependency) ))  : $this->default ;
+            $this->ext4 = (isset($this->dependency)) ? \serialize(array( 'default' => $this->default , 'dependency' => \html_entity_decode($this->dependency) ))  : $this->default ;
         } else {
             if (isset($this->dependency)) {
-                $this->ext4 = serialize(array( 'dependency' => html_entity_decode($this->dependency) )) ;
+                $this->ext4 = \serialize(array( 'dependency' => \html_entity_decode($this->dependency) )) ;
             }
         }
         parent::save($df);

@@ -27,7 +27,7 @@ class smpl_Invoice_Group_Sample
 </tr>
 <tr style="text-align: left;">
 <td style="text-align: left;">
-<h1>'.strtoupper(translate('LBL_PDF_NAME', 'AOS_Invoices')).'</h1>
+<h1>'.\strtoupper(translate('LBL_PDF_NAME', 'AOS_Invoices')).'</h1>
 </td>
 </tr>
 </tbody>

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -67,21 +67,21 @@ class SugarpdfFactory
         if (empty($type)) {
             $type = 'default';
         }
-        $type = strtolower(basename($type));
+        $type = \strtolower(\basename($type));
         //SugarpdfFactory::_loadConfig($sugarpdf, $type);
         //first let's check if the module handles this Tcpdf
         $sugarpdf = null;
         $path = '/sugarpdf/sugarpdf.'.$type.'.php';
-        if (file_exists('custom/modules/'.$module.$path)) {
+        if (\file_exists('custom/modules/'.$module.$path)) {
             $sugarpdf = SugarpdfFactory::_buildFromFile('custom/modules/'.$module.$path, $bean, $sugarpdf_object_map, $type, $module);
-        } elseif (file_exists('modules/'.$module.$path)) {
+        } elseif (\file_exists('modules/'.$module.$path)) {
             $sugarpdf = SugarpdfFactory::_buildFromFile('modules/'.$module.$path, $bean, $sugarpdf_object_map, $type, $module);
-        } elseif (file_exists('custom/include/Sugarpdf'.$path)) {
+        } elseif (\file_exists('custom/include/Sugarpdf'.$path)) {
             $sugarpdf = SugarpdfFactory::_buildFromFile('custom/include/Sugarpdf'.$path, $bean, $sugarpdf_object_map, $type, $module);
         } else {
             //if the module does not handle this Sugarpdf, then check if Sugar handles it OOTB
             $file = 'include/Sugarpdf'.$path;
-            if (file_exists($file)) {
+            if (\file_exists($file)) {
                 //it appears Sugar does have the proper logic for this file.
                 $sugarpdf = SugarpdfFactory::_buildFromFile($file, $bean, $sugarpdf_object_map, $type, $module);
             }
@@ -135,10 +135,10 @@ class SugarpdfFactory
     {
         require_once($file);
         //try ModuleSugarpdfType first then try SugarpdfType if that fails then use Sugarpdf
-        $class = ucfirst($module).'Sugarpdf'.ucfirst($type);
-        if (!class_exists($class)) {
-            $class = 'Sugarpdf'.ucfirst($type);
-            if (!class_exists($class)) {
+        $class = \ucfirst($module).'Sugarpdf'.\ucfirst($type);
+        if (!\class_exists($class)) {
+            $class = 'Sugarpdf'.\ucfirst($type);
+            if (!\class_exists($class)) {
                 return new Sugarpdf($bean, $sugarpdf_object_map);
             }
         }

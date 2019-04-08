@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 require_once 'include/Dashlets/Dashlet.php';
@@ -104,7 +104,7 @@ class SpotsDashlet extends Dashlet
 
         //As the dashlet may point to a pivot that has been marked as deleted, check this here
 
-        if (is_null($this->spotId) || $this->spotId === '') {
+        if (\is_null($this->spotId) || $this->spotId === '') {
             return parent::display('').'<span style="margin-left:10px;" class="dashletAnalyticMessage">'.$this->dashletStrings['LBL_NO_SPOTS_SELECTED'].'</span><br />'; // return parent::display for title and such
         }
         if ($this->checkIfSpotHasBeenDeleted($this->spotId)) {
@@ -170,18 +170,18 @@ class SpotsDashlet extends Dashlet
         $spotBean = BeanFactory::getBean('Spots');
         $beanList = $spotBean->get_full_list('name');
         $returnArray = [];
-        if (!is_null($beanList)) {
+        if (!\is_null($beanList)) {
             foreach ($beanList as $b) {
                 $bean = new stdClass();
                 $bean->type = $b->type;
-                $bean->config = htmlspecialchars_decode($b->config);
+                $bean->config = \htmlspecialchars_decode($b->config);
                 $bean->name = $b->name;
                 $bean->id = $b->id;
                 $returnArray[] = $bean;
             }
         }
 
-        return json_encode($returnArray);
+        return \json_encode($returnArray);
     }
 
     /**

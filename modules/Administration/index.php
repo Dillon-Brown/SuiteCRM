@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -83,7 +83,7 @@ $admin_group_header_tab = array();
 $j=0;
 
 foreach ($admin_group_header as $key=>$values) {
-    $module_index = array_keys($values[3]);
+    $module_index = \array_keys($values[3]);
     $addedHeaderGroups = array();
     foreach ($module_index as $mod_key=>$mod_val) {
         if (
@@ -99,14 +99,14 @@ foreach ($admin_group_header as $key=>$values) {
             }
             $colnum=0;
             $i=0;
-            $fix = array_keys($values[3]);
-            if (count($values[3])>1) {
+            $fix = \array_keys($values[3]);
+            if (\count($values[3])>1) {
 
                 //////////////////
                 $tmp_array = $values[3];
                 $return_array = array();
                 foreach ($tmp_array as $mod => $value) {
-                    $keys = array_keys($value);
+                    $keys = \array_keys($value);
                     foreach ($keys as $key) {
                         $return_array[$key] = $value[$key];
                     }
@@ -119,7 +119,7 @@ foreach ($admin_group_header as $key=>$values) {
             }
 
             foreach ($mod as $link_idx =>$admin_option) {
-                if (!empty($GLOBALS['admin_access_control_links']) && in_array($link_idx, $GLOBALS['admin_access_control_links'])) {
+                if (!empty($GLOBALS['admin_access_control_links']) && \in_array($link_idx, $GLOBALS['admin_access_control_links'])) {
                     continue;
                 }
                 $colnum+=1;

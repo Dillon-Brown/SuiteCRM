@@ -1,5 +1,5 @@
 <?php
-if (! defined('sugarEntry') || ! sugarEntry) {
+if (! \defined('sugarEntry') || ! sugarEntry) {
     die('Not A Valid Entry Point') ;
 }
 
@@ -61,8 +61,8 @@ class ViewLayoutView extends SugarView
             $this->type = $this->editLayout;
         } else {
             global $app_list_strings ;
-            $moduleNames = array_change_key_case($app_list_strings [ 'moduleList' ]) ;
-            $this->translatedEditModule = $moduleNames [ strtolower($this->editModule) ] ;
+            $moduleNames = \array_change_key_case($app_list_strings [ 'moduleList' ]) ;
+            $this->translatedEditModule = $moduleNames [ \strtolower($this->editModule) ] ;
             $this->sm = StudioModuleFactory::getStudioModule($this->editModule);
             $this->type = $this->sm->getViewType($this->editLayout);
         }
@@ -77,7 +77,7 @@ class ViewLayoutView extends SugarView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -125,8 +125,8 @@ class ViewLayoutView extends SugarView
             $smarty->assign($image, SugarThemeRegistry::current()->getImage($file, '', null, null, '.gif', $file)) ;
         }
 
-        $requiredFields = implode($parser->getRequiredFields(), ',');
-        $slashedRequiredFields = addslashes($requiredFields);
+        $requiredFields = \implode($parser->getRequiredFields(), ',');
+        $slashedRequiredFields = \addslashes($requiredFields);
         $buttons = array( ) ;
         $disableLayout = false;
 
@@ -261,8 +261,8 @@ class ViewLayoutView extends SugarView
         $ajax = new AjaxCompose() ;
 
         $translatedViewType = '' ;
-        if (isset($labels [ strtolower($this->editLayout) ])) {
-            $translatedViewType = translate($labels [ strtolower($this->editLayout) ], 'ModuleBuilder') ;
+        if (isset($labels [ \strtolower($this->editLayout) ])) {
+            $translatedViewType = translate($labels [ \strtolower($this->editLayout) ], 'ModuleBuilder') ;
         } elseif (isset($this->sm)) {
             foreach ($this->sm->sources as $file => $def) {
                 if (!empty($def['view']) && $def['view'] == $this->editLayout && !empty($def['name'])) {
@@ -270,7 +270,7 @@ class ViewLayoutView extends SugarView
                 }
             }
             if (empty($translatedViewType)) {
-                $label = "LBL_" . strtoupper($this->editLayout);
+                $label = "LBL_" . \strtoupper($this->editLayout);
                 $translated = translate($label, $this->editModule);
                 if ($translated != $label) {
                     $translatedViewType =  $translated;
@@ -297,7 +297,7 @@ class ViewLayoutView extends SugarView
         // set up language files
         $smarty->assign('language', $parser->getLanguage()) ; // for sugar_translate in the smarty template
         $smarty->assign('from_mb', $this->fromModuleBuilder);
-        $smarty->assign('calc_field_list', json_encode($parser->getCalculatedFields()));
+        $smarty->assign('calc_field_list', \json_encode($parser->getCalculatedFields()));
         if ($this->fromModuleBuilder) {
             $mb = new ModuleBuilder() ;
             $module = & $mb->getPackageModule($this->package, $this->editModule) ;

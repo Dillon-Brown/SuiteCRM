@@ -21,12 +21,12 @@ $showmissing = true;	// Show all missing unicode blocks / characters
 //////////////////////////////////
 //////////////////////////////////
 
-set_time_limit(600);
-ini_set("memory_limit","256M");
+\set_time_limit(600);
+\ini_set("memory_limit","256M");
 
 //==============================================================
 //==============================================================
-define('_MPDF_URI', '../');
+\define('_MPDF_URI', '../');
 include("../mpdf.php");
 
 $mpdf=new mPDF(''); 
@@ -47,21 +47,21 @@ $mpdf->percentSubset = 0;
 
 // This generates a .mtx.php file if not already generated
 $mpdf->WriteHTML('<style>td { border: 0.1mm solid #555555; } body { font-weight: normal; }</style>');
-$mpdf->WriteHTML('<h3 style="font-family:'.$font.'">'.strtoupper($font).'</h3>');	// Separate Paragraphs  defined by font
+$mpdf->WriteHTML('<h3 style="font-family:'.$font.'">'.\strtoupper($font).'</h3>');	// Separate Paragraphs  defined by font
 $html = '';
 //==============================================================
 //==============================================================
 //==============================================================
 //==============================================================
-$unifile = file('UnicodeData.txt');
+$unifile = \file('UnicodeData.txt');
 $unichars = array();
 
 foreach($unifile AS $line) {
-	if ($smp && preg_match('/^(1[0-9A-Za-z]{4});/',$line,$m)) { 
-	  $unichars[hexdec($m[1])] = hexdec($m[1]);
+	if ($smp && \preg_match('/^(1[0-9A-Za-z]{4});/',$line,$m)) { 
+	  $unichars[\hexdec($m[1])] = \hexdec($m[1]);
 	}
-	elseif (preg_match('/^([0-9A-Za-z]{4});/',$line,$m)) { 
-	  $unichars[hexdec($m[1])] = hexdec($m[1]);
+	elseif (\preg_match('/^([0-9A-Za-z]{4});/',$line,$m)) { 
+	  $unichars[\hexdec($m[1])] = \hexdec($m[1]);
 	}
 }
 
@@ -72,7 +72,7 @@ include('UnicodeRanges.php');
 
 
 
-$cw = file_get_contents(_MPDF_TTFONTDATAPATH.$font.'.cw.dat');
+$cw = \file_get_contents(_MPDF_TTFONTDATAPATH.$font.'.cw.dat');
 if (!$cw) { die("Error - Must be able to read font metrics file: "._MPDF_TTFONTDATAPATH.$font.'.cw.dat'); }
 $counter=0;
 
@@ -102,13 +102,13 @@ $justfinishedblankinvalid = false;
 	  $lastrange  = $range ;
     // create HTML content
     $html .= '<table cellpadding="2" cellspacing="0" style="font-family:'.$font.';text-align:center; border-collapse: collapse; ">';
-    $html .= '<tr><td colspan="18" style="font-family:helvetica;font-weight:bold">'.strtoupper($font).'</td></tr>';
-    $html .= '<tr><td colspan="18" style="font-family:helvetica;font-size:8pt;font-weight:bold">'.strtoupper($range).' (U+'.$rangestart .'-U+'.$rangeend.')</td></tr>';
+    $html .= '<tr><td colspan="18" style="font-family:helvetica;font-weight:bold">'.\strtoupper($font).'</td></tr>';
+    $html .= '<tr><td colspan="18" style="font-family:helvetica;font-size:8pt;font-weight:bold">'.\strtoupper($range).' (U+'.$rangestart .'-U+'.$rangeend.')</td></tr>';
     $html .= '<tr><td></td>';
 
     $html .= '<td></td>';
     for ($i = 0; $i < 16; $i++) {
-            $html .= '<td><b>-'.sprintf('%X', $i).'</b></td>';
+            $html .= '<td><b>-'.\sprintf('%X', $i).'</b></td>';
     }
 
 
@@ -155,11 +155,11 @@ $justfinishedblankinvalid = false;
 				$html .= '</tr></table><br />';
 				$mpdf->WriteHTML($html); $html = '';
 				$html .= '<table cellpadding="2" cellspacing="0" style="font-family:'.$font.';text-align:center; border-collapse: collapse; ">';
-    				$html .= '<tr><td colspan="18" style="font-family:helvetica;font-size:8pt;font-weight:bold">'.strtoupper($range).' (U+'.$rangestart.'-U+'.$rangeend.')</td></tr>';
+    				$html .= '<tr><td colspan="18" style="font-family:helvetica;font-size:8pt;font-weight:bold">'.\strtoupper($range).' (U+'.$rangestart.'-U+'.$rangeend.')</td></tr>';
 				$html .= '<tr><td></td>';
     				$html .= '<td></td>';
 				for ($k = 0; $k < 16; $k++) {
-      			      $html .= '<td><b>-'.sprintf('%X', $k).'</b></td>';
+      			      $html .= '<td><b>-'.\sprintf('%X', $k).'</b></td>';
 				}
 				$justfinishedblank = false;
 				$justfinishedblankinvalid = false;
@@ -184,18 +184,18 @@ $justfinishedblankinvalid = false;
 			$html .= '</tr></table><br />';
 			$mpdf->WriteHTML($html); $html = '';
 			$html .= '<table cellpadding="2" cellspacing="0" style="font-family:'.$font.';text-align:center; border-collapse: collapse; ">';
-    			$html .= '<tr><td colspan="18" style="font-family:helvetica;font-size:8pt;font-weight:bold">'.strtoupper($range).' (U+'.$rangestart.'-U+'.$rangeend.')</td></tr>';
+    			$html .= '<tr><td colspan="18" style="font-family:helvetica;font-size:8pt;font-weight:bold">'.\strtoupper($range).' (U+'.$rangestart.'-U+'.$rangeend.')</td></tr>';
 			$html .= '<tr><td></td>';
     			$html .= '<td></td>';
 			for ($k = 0; $k < 16; $k++) {
-      		      $html .= '<td><b>-'.sprintf('%X', $k).'</b></td>';
+      		      $html .= '<td><b>-'.\sprintf('%X', $k).'</b></td>';
 			}
 		}
 	  	$lastrange  = $range ;
 		$justfinishedblank = false;
 		$justfinishedblankinvalid = false;
-            $html .= '</tr><tr><td><i>'.(floor($i / 16)*16).'</i></td>';
-            $html .= '<td><b>'.sprintf('%03X', floor($i / 16)).'-</b></td>';
+            $html .= '</tr><tr><td><i>'.(\floor($i / 16)*16).'</i></td>';
+            $html .= '<td><b>'.\sprintf('%03X', \floor($i / 16)).'-</b></td>';
         }
 	  if ($mpdf->_charDefined($cw, $i)) { $html .= '<td>&#'.$i.';</td>'; $counter++; }
 	  elseif (isset($unichars[$i])) { $html .= '<td style="background-color: #FFAAAA;"></td>'; }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -159,6 +159,6 @@ class ImportMapSalesforce extends ImportMapOther
     public function getIgnoredFields(
         $module
         ) {
-        return array_merge(parent::getIgnoredFields($module), array('id'));
+        return \array_merge(parent::getIgnoredFields($module), array('id'));
     }
 }

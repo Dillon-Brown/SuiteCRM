@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -86,7 +86,7 @@ class BreadCrumbStack
         $module_query = '';
         if (!empty($modules)) {
             $history_max_viewed = 10;
-            $module_query = is_array($modules) ? ' AND module_name IN (\'' . implode("','", $modules) . '\')' :  ' AND module_name = \'' . $modules . '\'';
+            $module_query = \is_array($modules) ? ' AND module_name IN (\'' . \implode("','", $modules) . '\')' :  ' AND module_name = \'' . $modules . '\'';
         } else {
             $history_max_viewed = (!empty($GLOBALS['sugar_config']['history_max_viewed']))? $GLOBALS['sugar_config']['history_max_viewed'] : 50;
         }
@@ -97,7 +97,7 @@ class BreadCrumbStack
         while (($row = $db->fetchByAssoc($result))) {
             $items[] = $row;
         }
-        $items = array_reverse($items);
+        $items = \array_reverse($items);
         foreach ($items as $item) {
             $this->push($item);
         }
@@ -112,7 +112,7 @@ class BreadCrumbStack
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($user_id, $modules);
     }
@@ -127,7 +127,7 @@ class BreadCrumbStack
     public function contains($item_id)
     {
         if (!empty($this->stackMap)) {
-            return array_key_exists($item_id, $this->stackMap);
+            return \array_key_exists($item_id, $this->stackMap);
         }
         return false;
     }
@@ -142,7 +142,7 @@ class BreadCrumbStack
      */
     public function push($row)
     {
-        if (is_array($row) && !empty($row['item_id'])) {
+        if (\is_array($row) && !empty($row['item_id'])) {
             if ($this->contains($row['item_id'])) {
                 //if this item already exists in the stack then update the found items
                 //to visible = 0 and add our new item to the stack
@@ -169,7 +169,7 @@ class BreadCrumbStack
      */
     public function pop()
     {
-        $item = array_shift($this->stack);
+        $item = \array_shift($this->stack);
         if (!empty($item['item_id']) && isset($this->stackMap[$item['item_id']])) {
             unset($this->stackMap[$item['item_id']]);
             $this->heal();
@@ -225,7 +225,7 @@ class BreadCrumbStack
      */
     private function heal()
     {
-        $vals = array_values($this->stack);
+        $vals = \array_values($this->stack);
         $this->stack = array();
         $this->stackMap = array();
         foreach ($vals as $key => $val) {
@@ -240,7 +240,7 @@ class BreadCrumbStack
      */
     public function length()
     {
-        return count($this->stack);
+        return \count($this->stack);
     }
 
     /**
@@ -252,9 +252,9 @@ class BreadCrumbStack
     {
         if (!empty($filter_module)) {
             $s2 = array();
-            if (is_array($filter_module)) {
+            if (\is_array($filter_module)) {
                 foreach ($this->stack as $entry) {
-                    if (in_array($entry['module_name'], $filter_module)) {
+                    if (\in_array($entry['module_name'], $filter_module)) {
                         $s2[$entry['item_id']] = $entry;
                     }
                 }
@@ -266,17 +266,17 @@ class BreadCrumbStack
                 }
             }
 
-            $s2 = array_reverse($s2);
-            if (count($s2) > 10) {
-                $s2 = array_slice($s2, 0, 10);
+            $s2 = \array_reverse($s2);
+            if (\count($s2) > 10) {
+                $s2 = \array_slice($s2, 0, 10);
             }
             return $s2;
         }
 
         $s = $this->stack;
-        $s = array_reverse($s);
-        if (count($s) > 10) {
-            $s = array_slice($s, 0, 10);
+        $s = \array_reverse($s);
+        if (\count($s) > 10) {
+            $s = \array_slice($s, 0, 10);
         }
         return $s;
     }

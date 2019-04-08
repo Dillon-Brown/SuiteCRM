@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -96,21 +96,21 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
      */
     public function get_module_fields_md5($session, $module_name)
     {
-        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->get_module_fields_md5(v3_1) for module: ' . print_r(
+        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->get_module_fields_md5(v3_1) for module: ' . \print_r(
             $module_name,
                 true
         ));
 
         $results = array();
-        if (is_array($module_name)) {
+        if (\is_array($module_name)) {
             foreach ($module_name as $module) {
-                $results[$module] = md5(serialize(self::get_module_fields($session, $module)));
+                $results[$module] = \md5(\serialize(self::get_module_fields($session, $module)));
             }
         } else {
-            $results[$module_name] = md5(serialize(self::get_module_fields($session, $module_name)));
+            $results[$module_name] = \md5(\serialize(self::get_module_fields($session, $module_name)));
         }
 
-        $GLOBALS['log']->info('End: SugarWebServiceImpl->get_module_fields_md5 (v3_1) for module: ' . print_r(
+        $GLOBALS['log']->info('End: SugarWebServiceImpl->get_module_fields_md5 (v3_1) for module: ' . \print_r(
             $module_name,
                 true
         ));
@@ -241,7 +241,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
 
         $GLOBALS['log']->info('Begin: SugarWebServiceImpl->set_entry');
         if (self::$helperObject->isLogLevelDebug()) {
-            $GLOBALS['log']->debug('SoapHelperWebServices->set_entry - input data is ' . var_export(
+            $GLOBALS['log']->debug('SoapHelperWebServices->set_entry - input data is ' . \var_export(
                 $name_value_list,
                     true
             ));
@@ -264,7 +264,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
         require_once($beanFiles[$class_name]);
         $seed = new $class_name();
         foreach ($name_value_list as $name => $value) {
-            if (is_array($value) && $value['name'] == 'id') {
+            if (\is_array($value) && $value['name'] == 'id') {
                 $seed->retrieve($value['value']);
                 break;
             } elseif ($name === 'id') {
@@ -281,7 +281,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
                 continue;
             }
 
-            if (!is_array($value)) {
+            if (!\is_array($value)) {
                 $seed->$name = $value;
                 $return_fields[] = $name;
             } else {
@@ -351,7 +351,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
         $authController = new AuthenticationController();
         //rrs
         if (!empty($user_auth['encryption']) && $user_auth['encryption'] === 'PLAIN' && $authController->authController->userAuthenticateClass != "LDAPAuthenticateUser") {
-            $user_auth['password'] = md5($user_auth['password']);
+            $user_auth['password'] = \md5($user_auth['password']);
         }
         $isLoginSuccess = $authController->login(
             $user_auth['user_name'],
@@ -395,7 +395,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
             self::$helperObject->setFaultObject($error);
 
             return;
-        } elseif (function_exists('openssl_decrypt')) {
+        } elseif (\function_exists('openssl_decrypt')) {
             $password = self::$helperObject->decrypt_string($user_auth['password']);
             if ($authController->login(
                 $user_auth['user_name'],
@@ -407,7 +407,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
         }
 
         if ($success) {
-            session_start();
+            \session_start();
             global $current_user;
             //$current_user = $user;
             self::$helperObject->login_success($name_value_list);
@@ -474,7 +474,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
             );
             $_SESSION['user_language'] = $current_language;
 
-            return array('id' => session_id(), 'module_name' => 'Users', 'name_value_list' => $nameValueArray);
+            return array('id' => \session_id(), 'module_name' => 'Users', 'name_value_list' => $nameValueArray);
         }
         LogicHook::initialize();
         $GLOBALS['logic_hook']->call_custom_logic('Users', 'login_failed');
@@ -506,14 +506,14 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
         } // if
 
         $modules = array();
-        $availModules = array_keys($_SESSION['avail_modules']); //ACL check already performed.
+        $availModules = \array_keys($_SESSION['avail_modules']); //ACL check already performed.
         switch ($filter) {
             case 'default':
                 $modules = self::$helperObject->get_visible_modules($availModules);
                 break;
             case 'all':
             default:
-                $modules = self::$helperObject->getModulesFromList(array_flip($availModules), $availModules);
+                $modules = self::$helperObject->getModulesFromList(\array_flip($availModules), $availModules);
         }
 
         $GLOBALS['log']->info('End: SugarWebServiceImpl->get_available_modules');
@@ -544,16 +544,16 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
             return;
         }
 
-        if (is_string($modules)) {
+        if (\is_string($modules)) {
             $modules = array($modules);
         }
 
         $results = array();
         foreach ($modules as $mod) {
-            if (strtolower($mod) == 'app_strings') {
+            if (\strtolower($mod) == 'app_strings') {
                 $values = return_application_language($current_language);
                 $key = 'app_strings';
-            } elseif (strtolower($mod) == 'app_list_strings') {
+            } elseif (\strtolower($mod) == 'app_list_strings') {
                 $values = return_app_list_strings_language($current_language);
                 $key = 'app_list_strings';
             } else {
@@ -562,7 +562,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
             }
 
             if ($MD5) {
-                $values = md5(serialize($values));
+                $values = \md5(\serialize($values));
             }
 
             $results[$key] = $values;
@@ -607,12 +607,12 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
             $seed = new $class_name();
 
             foreach ($a_view as $view) {
-                $aclViewCheck = (strtolower($view) == 'subpanel') ? 'DetailView' : ucfirst(strtolower($view)) . 'View';
+                $aclViewCheck = (\strtolower($view) == 'subpanel') ? 'DetailView' : \ucfirst(\strtolower($view)) . 'View';
                 if (!$acl_check || $seed->ACLAccess($aclViewCheck, true)) {
                     foreach ($a_type as $type) {
                         $a_vardefs = self::$helperObject->get_module_view_defs($module_name, $type, $view);
                         if ($md5) {
-                            $results[$module_name][$type][$view] = md5(serialize($a_vardefs));
+                            $results[$module_name][$type][$view] = \md5(\serialize($a_vardefs));
                         } else {
                             $results[$module_name][$type][$view] = $a_vardefs;
                         }
@@ -748,7 +748,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
         } // foreach
 
         // Calculate the offset for the start of the next page
-        $next_offset = $offset + sizeof($output_list);
+        $next_offset = $offset + \sizeof($output_list);
 
         $returnRelationshipList = array();
         foreach ($linkoutput_list as $rel) {
@@ -771,7 +771,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
         $GLOBALS['log']->info('End: SugarWebServiceImpl->get_entry_list');
 
         return array(
-            'result_count' => sizeof($output_list),
+            'result_count' => \sizeof($output_list),
             'total_count' => $totalRecordCount,
             'next_offset' => $next_offset,
             'entry_list' => $output_list,
@@ -825,7 +825,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
         require_once('modules/Home/UnifiedSearchAdvanced.php');
         require_once 'include/utils.php';
         $usa = new UnifiedSearchAdvanced();
-        if (!file_exists($cachedfile = sugar_cached('modules/unified_search_modules.php'))) {
+        if (!\file_exists($cachedfile = sugar_cached('modules/unified_search_modules.php'))) {
             $usa->buildCache();
         }
 
@@ -848,7 +848,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
 
 
         foreach ($unified_search_modules as $module => $data) {
-            if (in_array($module, $modules)) {
+            if (\in_array($module, $modules)) {
                 $modules_to_search[$module] = $beanList[$module];
             } // if
         } // foreach
@@ -856,7 +856,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
         $GLOBALS['log']->info('SugarWebServiceImpl->search_by_module - search string = ' . $search_string);
 
         if (!empty($search_string) && isset($search_string)) {
-            $search_string = trim(DBManagerFactory::getInstance()->quote(securexss(from_html(clean_string(
+            $search_string = \trim(DBManagerFactory::getInstance()->quote(securexss(from_html(clean_string(
                 $search_string,
                 'UNIFIED_SEARCH'
             )))));
@@ -908,16 +908,16 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
                     $emailQuery = false;
 
                     $where = '';
-                    if (count($where_clauses) > 0) {
-                        $where = '(' . implode(' ) OR ( ', $where_clauses) . ')';
+                    if (\count($where_clauses) > 0) {
+                        $where = '(' . \implode(' ) OR ( ', $where_clauses) . ')';
                     }
 
                     $mod_strings = return_module_language($current_language, $seed->module_dir);
 
-                    if (count($select_fields) > 0) {
+                    if (\count($select_fields) > 0) {
                         $filterFields = $select_fields;
                     } else {
-                        if (file_exists('custom/modules/' . $seed->module_dir . '/metadata/listviewdefs.php')) {
+                        if (\file_exists('custom/modules/' . $seed->module_dir . '/metadata/listviewdefs.php')) {
                             require_once('custom/modules/' . $seed->module_dir . '/metadata/listviewdefs.php');
                         } else {
                             require_once('modules/' . $seed->module_dir . '/metadata/listviewdefs.php');
@@ -926,17 +926,17 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
                         $filterFields = array();
                         foreach ($listViewDefs[$seed->module_dir] as $colName => $param) {
                             if (!empty($param['default']) && $param['default'] == true) {
-                                $filterFields[] = strtolower($colName);
+                                $filterFields[] = \strtolower($colName);
                             }
                         }
-                        if (!in_array('id', $filterFields)) {
+                        if (!\in_array('id', $filterFields)) {
                             $filterFields[] = 'id';
                         }
                     }
 
                     //Pull in any db fields used for the unified search query so the correct joins will be added
                     foreach ($unifiedSearchFields[$name] as $field => $def) {
-                        if (isset($def['db_field']) && !in_array($field, $filterFields)) {
+                        if (isset($def['db_field']) && !\in_array($field, $filterFields)) {
                             $filterFields[] = $field;
                             $selectOnlyQueryFields[] = $field;
                         }
@@ -963,7 +963,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
                         $seed,
                         true
                     );
-                    if (empty($params) or !is_array($params)) {
+                    if (empty($params) or !\is_array($params)) {
                         $params = array();
                     }
                     if (!isset($params['custom_select'])) {
@@ -1013,7 +1013,7 @@ class SugarWebServiceImplv3_1 extends SugarWebServiceImplv3
                 while ($row = $seed->db->fetchByAssoc($result)) {
                     $nameValueArray = array();
                     foreach ($filterFields as $field) {
-                        if (in_array($field, $selectOnlyQueryFields)) {
+                        if (\in_array($field, $selectOnlyQueryFields)) {
                             continue;
                         }
                         $nameValue = array();

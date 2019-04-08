@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -69,9 +69,9 @@ class SugarAuthenticate
     {
         // check in custom dir first, in case someone want's to override an auth controller
 
-        if (file_exists('custom/modules/Users/authentication/'.$this->authenticationDir.'/' . $this->userAuthenticateClass . '.php')) {
+        if (\file_exists('custom/modules/Users/authentication/'.$this->authenticationDir.'/' . $this->userAuthenticateClass . '.php')) {
             require_once('custom/modules/Users/authentication/'.$this->authenticationDir.'/' . $this->userAuthenticateClass . '.php');
-        } elseif (file_exists('modules/Users/authentication/'.$this->authenticationDir.'/' . $this->userAuthenticateClass . '.php')) {
+        } elseif (\file_exists('modules/Users/authentication/'.$this->authenticationDir.'/' . $this->userAuthenticateClass . '.php')) {
             require_once('modules/Users/authentication/'.$this->authenticationDir.'/' . $this->userAuthenticateClass . '.php');
         }
 
@@ -87,7 +87,7 @@ class SugarAuthenticate
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -133,7 +133,7 @@ class SugarAuthenticate
             $usr->savePreferencesToDB();
         }
         
-        if (strtolower(get_class($this)) != 'sugarauthenticate') {
+        if (\strtolower(\get_class($this)) != 'sugarauthenticate') {
             $sa = new SugarAuthenticate();
             $error = (!empty($_SESSION['login_error']))?$_SESSION['login_error']:'';
             if ($sa->loginAuthenticate($username, $password, true, $PARAMS)) {
@@ -186,8 +186,8 @@ class SugarAuthenticate
         require_once('modules/Import/ImportCacheFiles.php');
         $tmp_file_name = ImportCacheFiles::getImportDir()."/IMPORT_" . $GLOBALS['current_user']->id;
 
-        if (file_exists($tmp_file_name)) {
-            unlink($tmp_file_name);
+        if (\file_exists($tmp_file_name)) {
+            \unlink($tmp_file_name);
         }
 
         return true;
@@ -215,7 +215,7 @@ class SugarAuthenticate
             $_REQUEST['action'] = $action;
             $_REQUEST['module'] = $module;
         }
-        if (empty($GLOBALS['current_user']->id) && !in_array($action, $allowed_actions)) {
+        if (empty($GLOBALS['current_user']->id) && !\in_array($action, $allowed_actions)) {
             $GLOBALS['log']->debug("The current user is not logged in going to login page");
             $action = "Login";
             $module = "Users";
@@ -240,20 +240,20 @@ class SugarAuthenticate
     public function postSessionAuthenticate()
     {
         global $action, $allowed_actions, $sugar_config, $app_strings;
-        $_SESSION['userTime']['last'] = time();
+        $_SESSION['userTime']['last'] = \time();
         $user_unique_key = (isset($_SESSION['unique_key'])) ? $_SESSION['unique_key'] : '';
         $server_unique_key = (isset($sugar_config['unique_key'])) ? $sugar_config['unique_key'] : '';
 
         //CHECK IF USER IS CROSSING SITES
-        if (($user_unique_key != $server_unique_key) && (!in_array($action, $allowed_actions)) && (!isset($_SESSION['login_error']))) {
+        if (($user_unique_key != $server_unique_key) && (!\in_array($action, $allowed_actions)) && (!isset($_SESSION['login_error']))) {
             $GLOBALS['log']->debug('Destroying Session User has crossed Sites');
-            session_destroy();
-            header("Location: index.php?action=Login&module=Users" . $GLOBALS['app']->getLoginRedirect());
+            \session_destroy();
+            \header("Location: index.php?action=Login&module=Users" . $GLOBALS['app']->getLoginRedirect());
             sugar_cleanup(true);
         }
         if (!$this->userAuthenticate->loadUserOnSession($_SESSION['authenticated_user_id'])) {
-            session_destroy();
-            header("Location: index.php?action=Login&module=Users&loginErrorMessage=LBL_SESSION_EXPIRED");
+            \session_destroy();
+            \header("Location: index.php?action=Login&module=Users&loginErrorMessage=LBL_SESSION_EXPIRED");
             $GLOBALS['log']->debug('Current user session does not exist redirecting to login');
             sugar_cleanup(true);
         }
@@ -339,7 +339,7 @@ class SugarAuthenticate
         if (!isset($_SESSION['factor_message'])) {
             $_SESSION['factor_message'] = array();
         }
-        if (!in_array($msg, $_SESSION['factor_message'])) {
+        if (!\in_array($msg, $_SESSION['factor_message'])) {
             $_SESSION['factor_message'][] = $msg;
         }
     }
@@ -353,9 +353,9 @@ class SugarAuthenticate
     {
         $factorMessage = false;
         if (isset($_SESSION['factor_message']) && $_SESSION['factor_message']) {
-            if (is_array($_SESSION['factor_message']) || is_object($_SESSION['factor_message'])) {
-                $factorMessage = implode($sep, $_SESSION['factor_message']);
-            } elseif (is_string($_SESSION['factor_message'])) {
+            if (\is_array($_SESSION['factor_message']) || \is_object($_SESSION['factor_message'])) {
+                $factorMessage = \implode($sep, $_SESSION['factor_message']);
+            } elseif (\is_string($_SESSION['factor_message'])) {
                 $factorMessage = $_SESSION['factor_message'];
             } else {
                 $msg = 'Incorrect login factor message type.';
@@ -382,9 +382,9 @@ class SugarAuthenticate
             // check to see if we've got a current ip address in $_SESSION
             // and check to see if the session has been hijacked by a foreign ip
             if (isset($_SESSION["ipaddress"])) {
-                $session_parts = explode(".", $_SESSION["ipaddress"]);
-                $client_parts = explode(".", $clientIP);
-                if (count($session_parts) < 4) {
+                $session_parts = \explode(".", $_SESSION["ipaddress"]);
+                $client_parts = \explode(".", $clientIP);
+                if (\count($session_parts) < 4) {
                     $classCheck = 0;
                 } else {
                     // match class C IP addresses
@@ -400,7 +400,7 @@ class SugarAuthenticate
                 // we have a different IP address
                 if ($_SESSION["ipaddress"] != $clientIP && empty($classCheck)) {
                     $GLOBALS['log']->fatal("IP Address mismatch: SESSION IP: {$_SESSION['ipaddress']} CLIENT IP: {$clientIP}");
-                    session_destroy();
+                    \session_destroy();
                     die($mod_strings['ERR_IP_CHANGE'] . "<a href=\"{$sugar_config['site_url']}\">" + $mod_strings['ERR_RETURN'] + "</a>");
                 }
             } else {
@@ -418,10 +418,10 @@ class SugarAuthenticate
      */
     public function logout()
     {
-        session_start();
-        session_destroy();
-        ob_clean();
-        header('Location: index.php?module=Users&action=Login');
+        \session_start();
+        \session_destroy();
+        \ob_clean();
+        \header('Location: index.php?module=Users&action=Login');
         sugar_cleanup(true);
     }
 
@@ -434,7 +434,7 @@ class SugarAuthenticate
      */
     public static function encodePassword($password)
     {
-        return strtolower(md5($password));
+        return \strtolower(\md5($password));
     }
 
     /**
@@ -463,10 +463,10 @@ class SugarAuthenticate
     public function pre_login()
     {
         if (isset($_SESSION['authenticated_user_id'])) {
-            ob_clean();
+            \ob_clean();
             // fixing bug #46837: Previosly links/URLs to records in Sugar from MSO Excel/Word were referred to the home screen and not the record
             // It used to appear when default browser was not MS IE
-            header("Location: ".$GLOBALS['app']->getLoginRedirect());
+            \header("Location: ".$GLOBALS['app']->getLoginRedirect());
             sugar_cleanup(true);
         }
     }

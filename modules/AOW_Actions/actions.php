@@ -44,6 +44,6 @@ $aow_actions_list[] = 'SendEmail';
 $aow_actions_list[] = 'ComputeField';
 
 
-if (file_exists('custom/modules/AOW_Actions/Ext/Actions/actions.ext.php')) {
+if (\file_exists('custom/modules/AOW_Actions/Ext/Actions/actions.ext.php')) {
     require('custom/modules/AOW_Actions/Ext/Actions/actions.ext.php');
 }

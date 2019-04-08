@@ -42,7 +42,7 @@
 
 
 global $sugar_version;
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -51,7 +51,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 $uwFilesCurrent = findAllFiles('modules/UpgradeWizard/', array());
 
 // handle 4.x to 4.5.x+ (no UpgradeWizard module)
-if (count($uwFilesCurrent) < 5) {
+if (\count($uwFilesCurrent) < 5) {
     $uwFiles = array(
         'modules/UpgradeWizard/language/en_us.lang.php',
         'modules/UpgradeWizard/cancel.php',
@@ -82,7 +82,7 @@ if (count($uwFilesCurrent) < 5) {
 
     $uwFiles = array();
     foreach ($uwFilesCurrent as $file) {
-        $uwFiles[] = str_replace("./", "", clean_path($file));
+        $uwFiles[] = \str_replace("./", "", clean_path($file));
     }
 }
 ////	END DYNAMICALLY GENERATE UPGRADEWIZARD MODULE FILE LIST
@@ -110,4 +110,4 @@ $uw_files = array(
     'include/database/DBManagerFactory.php',
 );
 
-$uw_files = array_merge($uw_files, $uwFiles);
+$uw_files = \array_merge($uw_files, $uwFiles);

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -127,7 +127,7 @@ class ImportListView
         $this->ss->assign('navStrings', $navStrings);
         $this->ss->assign('pageData', $this->generatePaginationData());
         $this->ss->assign('tableID', $this->tableID);
-        $this->ss->assign('colCount', count($this->headerColumns));
+        $this->ss->assign('colCount', \count($this->headerColumns));
         $this->ss->assign('APP', $app_strings);
         $this->ss->assign('rowColor', array('oddListRow', 'evenListRow'));
         $this->ss->assign('displayColumns', $this->headerColumns);
@@ -150,8 +150,8 @@ class ImportListView
     {
         $maxColumns = 0;
         foreach ($this->data as $data) {
-            if (count($data) > $maxColumns) {
-                $maxColumns = count($data);
+            if (\count($data) > $maxColumns) {
+                $maxColumns = \count($data);
             }
         }
         return $maxColumns;
@@ -168,11 +168,11 @@ class ImportListView
         $totalRecordsCount = $this->dataSource->getTotalRecordCount();
         $nextOffset =  $currentOffset+ $this->recordsPerPage;
         $nextOffset = $nextOffset > $totalRecordsCount ? 0 : $nextOffset;
-        $lastOffset = floor($totalRecordsCount / $this->recordsPerPage) * $this->recordsPerPage;
+        $lastOffset = \floor($totalRecordsCount / $this->recordsPerPage) * $this->recordsPerPage;
         $previousOffset = $currentOffset - $this->recordsPerPage;
         $offsets = array('totalCounted'=> true, 'total' => $totalRecordsCount, 'next' => $nextOffset,
                          'last' => $lastOffset, 'previous' => $previousOffset,
-                         'current' => $currentOffset, 'lastOffsetOnPage' => count($this->data) + $this->dataSource->getCurrentOffset() );
+                         'current' => $currentOffset, 'lastOffsetOnPage' => \count($this->data) + $this->dataSource->getCurrentOffset() );
 
         $pageData = array('offsets' => $offsets);
         return $pageData;

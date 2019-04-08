@@ -1,5 +1,5 @@
 <?php
-if (! defined('sugarEntry') || ! sugarEntry) {
+if (! \defined('sugarEntry') || ! sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -65,29 +65,29 @@ class ParserModifyLayoutView extends ModuleBuilderParser
      */
     public function init($module, $view, $submittedLayout = false)
     {
-        $this->_view = ucfirst($view);
+        $this->_view = \ucfirst($view);
         $this->_module = $module;
         $this->language_module = $module;
 
         $this->_baseDirectory = "modules/{$module}/metadata/";
-        $file =  $this->_baseDirectory . strtolower($view) . "defs.php";
+        $file =  $this->_baseDirectory . \strtolower($view) . "defs.php";
         $this->_customFile = "custom/" . $file;
         $this->_workingFile = "custom/working/" . $file;
 
         $this->_sourceView = $this->_view;
         $this->_originalFile = $file ;
         $this->_sourceFile = $file;
-        if (is_file($this->_workingFile)) {
+        if (\is_file($this->_workingFile)) {
             $this->_sourceFile = $this->_workingFile;
             $this->usingWorkingFile = true;
-        } elseif (is_file($this->_customFile)) {
+        } elseif (\is_file($this->_customFile)) {
             $this->_sourceFile = $this->_customFile;
-        } elseif (! is_file($this->_sourceFile)) {
+        } elseif (! \is_file($this->_sourceFile)) {
             // if we don't have ANY defined metadata then improvise as best we can
-            if (strtolower($this->_view) == 'quickcreate') {
+            if (\strtolower($this->_view) == 'quickcreate') {
                 // special handling for quickcreates - base the quickcreate on the editview if no quickcreatedef exists
                 $this->_sourceFile = $this->_baseDirectory."editviewdefs.php";
-                if (is_file("custom/" . $this->_sourceFile)) {
+                if (\is_file("custom/" . $this->_sourceFile)) {
                     $this->_sourceFile = "custom/" . $this->_sourceFile;
                 }
                 $this->_sourceView = 'EditView';
@@ -120,14 +120,14 @@ class ParserModifyLayoutView extends ModuleBuilderParser
         // Available fields are those that are in the Model and the original layout definition, but not already shown in the View
         // So, because the formats of the two are different we brute force loop through View and unset the fields we find in a copy of Model
         $availableFields = $this->_getModelFields();
-        $GLOBALS['log']->debug(get_class($this)."->getAvailableFields(): _getModelFields returns: ".implode(",", array_keys($availableFields)));
+        $GLOBALS['log']->debug(\get_class($this)."->getAvailableFields(): _getModelFields returns: ".\implode(",", \array_keys($availableFields)));
         if (! empty($this->_viewdefs)) {
             foreach ($this->_viewdefs ['panels'] as $panel) {
                 foreach ($panel as $row) {
                     foreach ($row as $fieldArray) { // fieldArray is an array('name'=>name,'label'=>label)
                         if (isset($fieldArray ['name'])) {
                             unset($availableFields [$fieldArray ['name']]);
-                            $GLOBALS['log']->debug(get_class($this)."->getAvailableFields(): removing ".$fieldArray ['name']);
+                            $GLOBALS['log']->debug(\get_class($this)."->getAvailableFields(): removing ".$fieldArray ['name']);
                         }
                     }
                 }
@@ -151,7 +151,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
         $this->_writeToFile($this->_customFile, $this->_view, $this->_module, $this->_viewdefs, $this->_variables);
         // now clear the cache so that the results are immediately visible
         include_once('include/TemplateHandler/TemplateHandler.php');
-        if (strtolower($this->_view) == 'quickcreate') {
+        if (\strtolower($this->_view) == 'quickcreate') {
             TemplateHandler::clearCache($this->_module, "form_SubPanelQuickCreate_{$this->_module}.tpl");
             TemplateHandler::clearCache($this->_module, "form_DCQuickCreate_{$this->_module}.tpl");
         } else {
@@ -182,7 +182,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
         }
         // replace any old values with new panel labels from the request
         foreach ($_REQUEST as $key => $value) {
-            $components = explode('-', $key);
+            $components = \explode('-', $key);
             if ($components [0] == 'panel') {
                 $panelMap [$components ['1']] = $value;
             }
@@ -199,14 +199,14 @@ class ParserModifyLayoutView extends ModuleBuilderParser
         }
 
         foreach ($_REQUEST as $slot => $value) {
-            $slotComponents = explode('-', $slot); // [0] = 'slot', [1] = panel #, [2] = slot #, [3] = property name
+            $slotComponents = \explode('-', $slot); // [0] = 'slot', [1] = panel #, [2] = slot #, [3] = property name
             if ($slotComponents [0] == 'slot') {
                 $slotNumber = $slotComponents ['2'];
                 $panelID = $panelMap [$slotComponents ['1']];
-                $rowID = floor($slotNumber / $this->maxColumns);
+                $rowID = \floor($slotNumber / $this->maxColumns);
                 $colID = $slotNumber - ($rowID * $this->maxColumns);
                 //If the original editview defined this field, copy that over.
-                if ($slotComponents ['3'] == 'name' && isset($origFieldDefs [$value]) && is_array($origFieldDefs [$value])) {
+                if ($slotComponents ['3'] == 'name' && isset($origFieldDefs [$value]) && \is_array($origFieldDefs [$value])) {
                     $this->_viewdefs ['panels'] [$panelID] [$rowID] [$colID] = $origFieldDefs [$value];
                 } else {
                     $property = $slotComponents ['3'];
@@ -267,7 +267,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
                             $row [$i] = array('name' => '(empty)', 'label' => '(empty)');
                         }
                     }
-                    ksort($row);
+                    \ksort($row);
                     $this->_viewdefs ['panels'] [$panelID] [$rowID] = $row;
                 }
             }
@@ -282,7 +282,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
 
         // if a panelID was not passed, use the first available panel in the list
         if (!$panelID) {
-            $panels = array_keys($this->_viewdefs['panels']);
+            $panels = \array_keys($this->_viewdefs['panels']);
             $panelID = $panels[0];
         }
 
@@ -302,8 +302,8 @@ class ParserModifyLayoutView extends ModuleBuilderParser
             }
 
             $panel = $this->_viewdefs ['panels'] [$panelID];
-            $lastrow = count($panel) - 1; // index starts at 0
-            $lastcol = count($panel [$lastrow]);
+            $lastrow = \count($panel) - 1; // index starts at 0
+            $lastcol = \count($panel [$lastrow]);
 
             // if we're on the last column of the last row, start a new row
             //          print "lastrow=$lastrow lastcol=$lastcol";
@@ -325,7 +325,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
 //        $GLOBALS['log']->debug("Original viewdefs = ".print_r($origViewDefs,true));
         foreach ($origViewDefs as $field => $def) {
             if (!empty($field)) {
-                if (! is_array($def)) {
+                if (! \is_array($def)) {
                     $def = array('name' => $field);
                 }
                 // get this field's label - if it has not been explicitly provided, see if the fieldDefs has a label for this field, and if not fallback to the field name
@@ -339,17 +339,17 @@ class ParserModifyLayoutView extends ModuleBuilderParser
                 $modelFields[$field] = array('name' => $field, 'label' => $def ['label']);
             }
         }
-        $GLOBALS['log']->debug(print_r($modelFields, true));
+        $GLOBALS['log']->debug(\print_r($modelFields, true));
         foreach ($this->_fieldDefs as $field => $def) {
             if ((!empty($def['studio']) && $def['studio'] == 'visible')
-            || (empty($def['studio']) &&  (empty($def ['source']) || $def ['source'] == 'db' || $def ['source'] == 'custom_fields') && $def ['type'] != 'id' && strcmp($field, 'deleted') != 0 && (empty($def ['dbType']) || $def ['dbType'] != 'id') && (empty($def ['dbtype']) || $def ['dbtype'] != 'id'))) {
+            || (empty($def['studio']) &&  (empty($def ['source']) || $def ['source'] == 'db' || $def ['source'] == 'custom_fields') && $def ['type'] != 'id' && \strcmp($field, 'deleted') != 0 && (empty($def ['dbType']) || $def ['dbType'] != 'id') && (empty($def ['dbtype']) || $def ['dbtype'] != 'id'))) {
                 $label = isset($def['vname']) ? $def['vname'] : $def['name'];
                 $modelFields [$field] = array('name' => $field, 'label' => $label);
             } else {
-                $GLOBALS['log']->debug(get_class($this)."->_getModelFields(): skipping $field from modelFields as it fails the test for inclusion");
+                $GLOBALS['log']->debug(\get_class($this)."->_getModelFields(): skipping $field from modelFields as it fails the test for inclusion");
             }
         }
-        $GLOBALS['log']->debug(get_class($this)."->_getModelFields(): remaining entries in modelFields are: ".implode(",", array_keys($modelFields)));
+        $GLOBALS['log']->debug(\get_class($this)."->_getModelFields(): remaining entries in modelFields are: ".\implode(",", \array_keys($modelFields)));
         return $modelFields;
     }
 
@@ -362,9 +362,9 @@ class ParserModifyLayoutView extends ModuleBuilderParser
 
         // Fix for a flexibility in the format of the panel sections - if only one panel, then we don't have a panel level defined, it goes straight into rows
         // See EditView2 for similar treatment
-        if (! empty($panels) && count($panels) > 0) {
-            $keys = array_keys($panels);
-            if (is_numeric($keys [0])) {
+        if (! empty($panels) && \count($panels) > 0) {
+            $keys = \array_keys($panels);
+            if (\is_numeric($keys [0])) {
                 $defaultPanel = $panels;
                 unset($panels); //blow away current value
                 $panels [''] = $defaultPanel;
@@ -377,7 +377,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
                     $properties = array();
 
                     if (! empty($col)) {
-                        if (is_string($col)) {
+                        if (\is_string($col)) {
                             $properties ['name'] = $col;
                         } elseif (! empty($col ['name'])) {
                             $properties = $col;
@@ -397,7 +397,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
                             }
                         }
 
-                        $displayData[strtoupper($panelID)] [$rowID] [$colID] = $properties;
+                        $displayData[\strtoupper($panelID)] [$rowID] [$colID] = $properties;
                     }
                 }
             }
@@ -409,15 +409,15 @@ class ParserModifyLayoutView extends ModuleBuilderParser
     {
         $origFieldDefs = array();
         $GLOBALS['log']->debug("Original File = ".$this->_originalFile);
-        if (file_exists($this->_originalFile)) {
+        if (\file_exists($this->_originalFile)) {
             include($this->_originalFile);
             $origdefs = $viewdefs [$this->_module] [$this->_sourceView] ['panels'];
 //          $GLOBALS['log']->debug($origdefs);
             // Fix for a flexibility in the format of the panel sections - if only one panel, then we don't have a panel level defined, it goes straight into rows
             // See EditView2 for similar treatment
-            if (! empty($origdefs) && count($origdefs) > 0) {
-                $keys = array_keys($origdefs);
-                if (is_numeric($keys [0])) {
+            if (! empty($origdefs) && \count($origdefs) > 0) {
+                $keys = \array_keys($origdefs);
+                if (\is_numeric($keys [0])) {
                     $defaultPanel = $origdefs;
                     unset($origdefs); //blow away current value
                     $origdefs [''] = $defaultPanel;
@@ -426,7 +426,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
             foreach ($origdefs as $pname => $paneldef) {
                 foreach ($paneldef as $row) {
                     foreach ($row as $fieldDef) {
-                        if (is_array($fieldDef)) {
+                        if (\is_array($fieldDef)) {
                             $fieldName = $fieldDef ['name'];
                         } else {
                             $fieldName = $fieldDef;

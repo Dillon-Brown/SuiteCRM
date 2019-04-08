@@ -1,6 +1,6 @@
 <?php
-if (!defined('sugarEntry')) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry')) {
+    \define('sugarEntry', true);
 }
 /**
  *
@@ -43,6 +43,6 @@ if (!defined('sugarEntry')) {
 
 
 
-ob_start();
+\ob_start();
 require_once('include/entryPoint.php');
 require("modules/iCals/Server.php");

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -64,7 +64,7 @@ class EmailAddressRule extends BaseRule
     {
         if ($view == 'DetailView') {
             foreach ($panels as $name=>$panel) {
-                if (preg_match('/lbl_email_addresses/si', $name)) {
+                if (\preg_match('/lbl_email_addresses/si', $name)) {
                     continue;
                 }
 
@@ -72,17 +72,17 @@ class EmailAddressRule extends BaseRule
                     foreach ($row as $key=>$column) {
                         if ($this->isCustomField($column)) {
                             continue;
-                        } elseif (is_array($column) && !empty($column['name']) && preg_match('/^email(s|2)$/si', $column['name']) && !isset($column['type'])) {
+                        } elseif (\is_array($column) && !empty($column['name']) && \preg_match('/^email(s|2)$/si', $column['name']) && !isset($column['type'])) {
                             $panels[$name][$rowCount][$key] = '';
                         } elseif ($this->matches($column, '/^email[1]_link$/si')) {
                             $panels[$name][$rowCount][$key] = 'email1';
                         } elseif ($this->matches($column, '/^email[2]_link$/si')) {
                             $panels[$name][$rowCount][$key] = '';
-                        } elseif (!is_array($column) && !empty($column)) {
-                            if (preg_match('/^email(s|2)$/si', $column) ||
-                      preg_match('/^invalid_email$/si', $column) ||
-                      preg_match('/^email_opt_out$/si', $column) ||
-                      preg_match('/^primary_email$/si', $column)) {
+                        } elseif (!\is_array($column) && !empty($column)) {
+                            if (\preg_match('/^email(s|2)$/si', $column) ||
+                      \preg_match('/^invalid_email$/si', $column) ||
+                      \preg_match('/^email_opt_out$/si', $column) ||
+                      \preg_match('/^primary_email$/si', $column)) {
                                 $panels[$name][$rowCount][$key] = '';
                             }
                         }
@@ -91,7 +91,7 @@ class EmailAddressRule extends BaseRule
             } //foreach
         } elseif ($view == 'EditView') {
             foreach ($panels as $name=>$panel) {
-                if (preg_match('/lbl_email_addresses/si', $name)) {
+                if (\preg_match('/lbl_email_addresses/si', $name)) {
                     continue;
                 }
 

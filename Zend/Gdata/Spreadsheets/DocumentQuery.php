@@ -196,7 +196,7 @@ class Zend_Gdata_Spreadsheets_DocumentQuery extends Zend_Gdata_Query
      */
     public function getTitle()
     {
-        if (array_key_exists('title', $this->_params)) {
+        if (\array_key_exists('title', $this->_params)) {
             return $this->_params['title'];
         } else {
             return null;
@@ -209,7 +209,7 @@ class Zend_Gdata_Spreadsheets_DocumentQuery extends Zend_Gdata_Query
      */
     public function getTitleExact()
     {
-        if (array_key_exists('title-exact', $this->_params)) {
+        if (\array_key_exists('title-exact', $this->_params)) {
             return $this->_params['title-exact'];
         } else {
             return null;

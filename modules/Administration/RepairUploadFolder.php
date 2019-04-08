@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -53,7 +53,7 @@ $validBeans = array();
 if (!is_admin($current_user)) {
     sugar_die($GLOBALS['app_strings']['ERR_NOT_ADMIN']);
 }
-set_time_limit(3600);
+\set_time_limit(3600);
 
 foreach ($beanList as $moduleName => $className) {
     $bean = BeanFactory::getBean($moduleName);
@@ -90,7 +90,7 @@ foreach ($directory as $node) {
             $where[] = $fieldName . '=' . $db->quoted($node->getFilename());
             $filter[] = $fieldName;
         }
-        $where = '(' . implode(' OR ', $where) . ')';
+        $where = '(' . \implode(' OR ', $where) . ')';
 
         $row = $db->fetchOne($bean->create_new_list_query('', $where, $filter, array(), 0));
         if (!empty($row)) {
@@ -103,7 +103,7 @@ foreach ($directory as $node) {
     }
 
     if ($row == false) {
-        if (unlink('upload://' . $node->getFilename())) {
+        if (\unlink('upload://' . $node->getFilename())) {
             $stat['removed'] ++;
         }
     } elseif ($row['deleted'] == 1) {
@@ -116,8 +116,8 @@ foreach ($directory as $node) {
     echo '.';
     if ($stat['total'] % 100 == 0) {
         echo '<br>';
-        ob_flush();
-        flush();
+        \ob_flush();
+        \flush();
     }
 }
 echo '</pre>';

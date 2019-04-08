@@ -234,12 +234,12 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
      */
     public static function getDefaultSearchField()
     {
-        if (count($this->_indices) == 0) {
+        if (\count($this->_indices) == 0) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('Indices list is empty');
         }
 
-        $defaultSearchField = reset($this->_indices)->getDefaultSearchField();
+        $defaultSearchField = \reset($this->_indices)->getDefaultSearchField();
 
         foreach ($this->_indices as $index) {
             if ($index->getDefaultSearchField() !== $defaultSearchField) {
@@ -275,12 +275,12 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
      */
     public static function getResultSetLimit()
     {
-        if (count($this->_indices) == 0) {
+        if (\count($this->_indices) == 0) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('Indices list is empty');
         }
 
-        $defaultResultSetLimit = reset($this->_indices)->getResultSetLimit();
+        $defaultResultSetLimit = \reset($this->_indices)->getResultSetLimit();
 
         foreach ($this->_indices as $index) {
             if ($index->getResultSetLimit() !== $defaultResultSetLimit) {
@@ -305,12 +305,12 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
      */
     public function getMaxBufferedDocs()
     {
-        if (count($this->_indices) == 0) {
+        if (\count($this->_indices) == 0) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('Indices list is empty');
         }
 
-        $maxBufferedDocs = reset($this->_indices)->getMaxBufferedDocs();
+        $maxBufferedDocs = \reset($this->_indices)->getMaxBufferedDocs();
 
         foreach ($this->_indices as $index) {
             if ($index->getMaxBufferedDocs() !== $maxBufferedDocs) {
@@ -354,12 +354,12 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
      */
     public function getMaxMergeDocs()
     {
-        if (count($this->_indices) == 0) {
+        if (\count($this->_indices) == 0) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('Indices list is empty');
         }
 
-        $maxMergeDocs = reset($this->_indices)->getMaxMergeDocs();
+        $maxMergeDocs = \reset($this->_indices)->getMaxMergeDocs();
 
         foreach ($this->_indices as $index) {
             if ($index->getMaxMergeDocs() !== $maxMergeDocs) {
@@ -410,12 +410,12 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
      */
     public function getMergeFactor()
     {
-        if (count($this->_indices) == 0) {
+        if (\count($this->_indices) == 0) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('Indices list is empty');
         }
 
-        $mergeFactor = reset($this->_indices)->getMergeFactor();
+        $mergeFactor = \reset($this->_indices)->getMergeFactor();
 
         foreach ($this->_indices as $index) {
             if ($index->getMergeFactor() !== $mergeFactor) {
@@ -462,7 +462,7 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
      */
     public function find($query)
     {
-        if (count($this->_indices) == 0) {
+        if (\count($this->_indices) == 0) {
             return array();
         }
 
@@ -484,7 +484,7 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
 
         /** @todo Implement advanced sorting */
 
-        return call_user_func_array('array_merge', $hitsList);
+        return \call_user_func_array('array_merge', $hitsList);
     }
 
     /**
@@ -501,7 +501,7 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
             $fieldNamesList[] = $index->getFieldNames($indexed);
         }
 
-        return array_unique(call_user_func_array('array_merge', $fieldNamesList));
+        return \array_unique(\call_user_func_array('array_merge', $fieldNamesList));
     }
 
     /**
@@ -583,7 +583,7 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
             $docsList[] = $docs;
         }
 
-        return call_user_func_array('array_merge', $docsList);
+        return \call_user_func_array('array_merge', $docsList);
     }
 
     /**
@@ -638,7 +638,7 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
             $freqsList[] = $freqs;
         }
 
-        return call_user_func_array('array_merge', $freqsList);
+        return \call_user_func_array('array_merge', $freqsList);
     }
 
     /**
@@ -676,7 +676,7 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
             $termPositionsList[] = $termPositions;
         }
 
-        return call_user_func_array('array_merge', $termPositions);
+        return \call_user_func_array('array_merge', $termPositions);
     }
 
     /**
@@ -704,12 +704,12 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
      */
     public function getSimilarity()
     {
-        if (count($this->_indices) == 0) {
+        if (\count($this->_indices) == 0) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('Indices list is empty');
         }
 
-        $similarity = reset($this->_indices)->getSimilarity();
+        $similarity = \reset($this->_indices)->getSimilarity();
 
         foreach ($this->_indices as $index) {
             if ($index->getSimilarity() !== $similarity) {
@@ -804,7 +804,7 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
      */
     public function setDocumentDistributorCallback($callback)
     {
-        if ($callback !== null  &&  !is_callable($callback)) {
+        if ($callback !== null  &&  !\is_callable($callback)) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('$callback parameter must be a valid callback.');
         }
@@ -831,9 +831,9 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
     public function addDocument(Zend_Search_Lucene_Document $document)
     {
         if ($this->_documentDistributorCallBack !== null) {
-            $index = call_user_func($this->_documentDistributorCallBack, $document, $this->_indices);
+            $index = \call_user_func($this->_documentDistributorCallBack, $document, $this->_indices);
         } else {
-            $index = $this->_indices[array_rand($this->_indices)];
+            $index = $this->_indices[\array_rand($this->_indices)];
         }
 
         $index->addDocument($document);
@@ -874,7 +874,7 @@ class Zend_Search_Lucene_MultiSearcher implements Zend_Search_Lucene_Interface
             $termsList[] = $index->terms();
         }
 
-        return array_unique(call_user_func_array('array_merge', $termsList));
+        return \array_unique(\call_user_func_array('array_merge', $termsList));
     }
 
 

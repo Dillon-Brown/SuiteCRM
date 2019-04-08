@@ -39,7 +39,7 @@
  */
 namespace SuiteCRM\Robo\Traits;
 
-require_once dirname(__DIR__) . '/config.php';
+require_once \dirname(__DIR__) . '/config.php';
 
 /**
  * Reusable methods for Robo commands which extends \Robo\Tasks

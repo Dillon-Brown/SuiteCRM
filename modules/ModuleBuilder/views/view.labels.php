@@ -70,8 +70,8 @@ class ViewLabels extends ViewModulefields
 
         if (!isset($_REQUEST['MB'])) {
             global $app_list_strings;
-            $moduleNames = array_change_key_case($app_list_strings['moduleList']);
-            $translatedEditModule = $moduleNames[strtolower($editModule)];
+            $moduleNames = \array_change_key_case($app_list_strings['moduleList']);
+            $translatedEditModule = $moduleNames[\strtolower($editModule)];
         }
         $selected_lang = (!empty($_REQUEST['selected_lang'])? $_REQUEST['selected_lang']:$_SESSION['authenticated_user_language']);
         if (empty($selected_lang)) {
@@ -131,8 +131,8 @@ class ViewLabels extends ViewModulefields
         //return_module_language($selected_lang, $editModule,false) : the mod_strings will be included from cache files here.
         foreach (return_module_language($selected_lang, $editModule, false) as $name=>$label) {
             //#25294
-            if ($allLabels || isset($vnames[$name]) || preg_match('/lbl_city|lbl_country|lbl_billing_address|lbl_alt_address|lbl_shipping_address|lbl_postal_code|lbl_state$/si', $name)) {
-                $formatted_mod_strings[$name] = htmlentities($label, ENT_QUOTES, 'UTF-8');
+            if ($allLabels || isset($vnames[$name]) || \preg_match('/lbl_city|lbl_country|lbl_billing_address|lbl_alt_address|lbl_shipping_address|lbl_postal_code|lbl_state$/si', $name)) {
+                $formatted_mod_strings[$name] = \htmlentities($label, ENT_QUOTES, 'UTF-8');
             }
         }
         //Grab everything from the custom files
@@ -143,15 +143,15 @@ class ViewLabels extends ViewModulefields
         );
         foreach ($files as $langfile) {
             $mod_strings = array();
-            if (is_file($langfile)) {
+            if (\is_file($langfile)) {
                 include($langfile);
                 foreach ($mod_strings as $key => $label) {
-                    $formatted_mod_strings[$key] = htmlentities($label, ENT_QUOTES, 'UTF-8');
+                    $formatted_mod_strings[$key] = \htmlentities($label, ENT_QUOTES, 'UTF-8');
                 }
             }
         }
         $mod_strings = $mod_bak;
-        ksort($formatted_mod_strings);
+        \ksort($formatted_mod_strings);
         $smarty->assign('MOD_LABELS', $formatted_mod_strings);
         $smarty->assign('view_module', $editModule);
         $smarty->assign('APP', $GLOBALS['app_strings']);
@@ -184,7 +184,7 @@ class ViewLabels extends ViewModulefields
                                            'Quotes',
                                            'ProductTemplates');
         
-        if (in_array($module, $hideQuickCreateForModules)) {
+        if (\in_array($module, $hideQuickCreateForModules)) {
             if (isset($variableMap['quickcreate'])) {
                 unset($variableMap['quickcreate']);
             }

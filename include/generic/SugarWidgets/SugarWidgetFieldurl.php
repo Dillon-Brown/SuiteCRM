@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -50,7 +50,7 @@ class SugarWidgetFieldURL extends SugarWidgetFieldVarchar
      */
     public function displayList(&$layout_def)
     {
-        $urlValue = trim($this->_get_list_value($layout_def));
+        $urlValue = \trim($this->_get_list_value($layout_def));
         return '<a target="_blank" href="' . $urlValue . '">' . $urlValue . "</a>";
     }
 }

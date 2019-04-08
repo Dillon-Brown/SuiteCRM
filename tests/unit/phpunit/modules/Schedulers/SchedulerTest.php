@@ -182,7 +182,7 @@ class SchedulerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //execute the method and verify related attributes
         $scheduler->parseInterval();
 
-        $this->assertTrue(is_array($scheduler->intervalParsed));
+        $this->assertTrue(\is_array($scheduler->intervalParsed));
         $this->assertSame($expected, $scheduler->intervalParsed);
     }
 
@@ -219,14 +219,14 @@ class SchedulerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $scheduler = new Scheduler();
 
         //execute the method and capture the echo output
-        ob_start();
+        \ob_start();
 
         $scheduler->displayCronInstructions();
 
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
 
-        $this->assertGreaterThanOrEqual(0, strlen($renderedContent));
+        $this->assertGreaterThanOrEqual(0, \strlen($renderedContent));
 
         // clean up
         
@@ -415,7 +415,7 @@ class SchedulerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         // test
         
         $result = Scheduler::getJobsList();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         

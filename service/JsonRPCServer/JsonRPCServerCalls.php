@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -103,10 +103,10 @@ class JsonRPCServerCalls
         $args = $params[0];
 
         //decode condition parameter values..
-        if (is_array($args['conditions'])) {
+        if (\is_array($args['conditions'])) {
             foreach ($args['conditions'] as $key => $condition) {
                 if (!empty($condition['value'])) {
-                    $where = $jsonParser::decode(utf8_encode($condition['value']));
+                    $where = $jsonParser::decode(\utf8_encode($condition['value']));
                     // cn: bug 12693 - API change due to CSRF security changes.
                     $where = empty($where) ? $condition['value'] : $where;
                     $args['conditions'][$key]['value'] = $where;
@@ -125,7 +125,7 @@ class JsonRPCServerCalls
 
             $query_orderby = '';
             if (!empty($args['order'])) {
-                $query_orderby = preg_replace('/[^\w_.-]+/i', '', $args['order']['by']);
+                $query_orderby = \preg_replace('/[^\w_.-]+/i', '', $args['order']['by']);
                 if (!empty($args['order']['desc'])) {
                     $query_orderby .= ' DESC';
                 } else {
@@ -147,15 +147,15 @@ class JsonRPCServerCalls
             if ($focus->ACLAccess('ListView', true)) {
                 $focus->ungreedy_count = false;
                 $curlist = $focus->get_list($query_orderby, $query_where, 0, $query_limit, -1, 0);
-                $list_return = array_merge($list_return, $curlist['list']);
+                $list_return = \array_merge($list_return, $curlist['list']);
             }
         }
 
         $app_list_strings = null;
 
-        $max = count($list_return);
+        $max = \count($list_return);
         for ($i = 0; $i < $max; $i++) {
-            if (isset($list_return[$i]->emailAddress) && is_object($list_return[$i]->emailAddress)) {
+            if (isset($list_return[$i]->emailAddress) && \is_object($list_return[$i]->emailAddress)) {
                 $list_return[$i]->emailAddress->handleLegacyRetrieve($list_return[$i]);
             }
 

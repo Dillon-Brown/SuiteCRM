@@ -646,12 +646,12 @@ class Zend_Gdata_Books_VolumeEntry extends Zend_Gdata_Entry
     public function getVolumeId()
     {
         $fullId = $this->getId()->getText();
-        $position = strrpos($fullId, '/');
+        $position = \strrpos($fullId, '/');
         if ($position === false) {
             require_once 'Zend/Gdata/App/Exception.php';
             throw new Zend_Gdata_App_Exception('Slash not found in atom:id');
         } else {
-            return substr($fullId, strrpos($fullId, '/') + 1);
+            return \substr($fullId, \strrpos($fullId, '/') + 1);
         }
     }
 

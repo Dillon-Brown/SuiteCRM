@@ -30,7 +30,7 @@ class CompanyModuleCest
             $this->fakeData->addProvider(new Faker\Provider\en_US\Address($this->fakeData));
             $this->fakeData->addProvider(new Faker\Provider\en_US\PhoneNumber($this->fakeData));
             $this->fakeData->addProvider(new Faker\Provider\en_US\Company($this->fakeData));
-            $this->fakeDataSeed = rand(0, 2048);
+            $this->fakeDataSeed = \rand(0, 2048);
         }
         $this->fakeData->seed($this->fakeDataSeed);
     }
@@ -149,7 +149,7 @@ class CompanyModuleCest
         $editView->fillField('#rating', $this->fakeData->randomAscii);
         $editView->fillField('#ownership', $this->fakeData->randomAscii);
         $editView->selectOption('#industry', 'Other');
-        $editView->selectOption('test_'.strtolower(\Page\CompanyModule::$NAME).'_type', 'Other');
+        $editView->selectOption('test_'.\strtolower(\Page\CompanyModule::$NAME).'_type', 'Other');
         $editView->fillField('#billing_address_street', $this->fakeData->streetAddress);
         $editView->fillField('#billing_address_city', $this->fakeData->city);
         $editView->fillField('#billing_address_state', $this->fakeData->randomAscii);

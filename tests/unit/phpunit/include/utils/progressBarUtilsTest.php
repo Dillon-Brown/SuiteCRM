@@ -34,9 +34,9 @@ class progress_bar_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstrac
         //execute the method and test if it doesn't throw an exception.
         //this method uses flush so we cannot get and verify content printed
         try {
-            ob_start();
+            \ob_start();
             display_flow_bar('test', 0, 200, false);
-            ob_end_clean();
+            \ob_end_clean();
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
@@ -56,9 +56,9 @@ class progress_bar_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstrac
         //execute the method and test if it doesn't throw an exception.
         //this method uses flush so we cannot get and verify content printed
         try {
-            ob_start();
+            \ob_start();
             start_flow_bar('test', 1, false);
-            ob_end_clean();
+            \ob_end_clean();
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
@@ -78,9 +78,9 @@ class progress_bar_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstrac
         //execute the method and test if it doesn't throw an exception.
         //this method uses flush so we cannot get and verify content printed
         try {
-            ob_start();
+            \ob_start();
             destroy_flow_bar('test', false);
-            ob_end_clean();
+            \ob_end_clean();
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
@@ -100,9 +100,9 @@ class progress_bar_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstrac
         //execute the method and test if it doesn't throw an exception.
         //this method uses flush so we cannot get and verify content printed
         try {
-            ob_start();
+            \ob_start();
             display_progress_bar('test', 80, 100, false);
-            ob_end_clean();
+            \ob_end_clean();
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
@@ -122,9 +122,9 @@ class progress_bar_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstrac
         //execute the method and test if it doesn't throw an exception.
         //this method uses flush so we cannot get and verify content printed
         try {
-            ob_start();
+            \ob_start();
             update_progress_bar('test', 80, 100, false);
-            ob_end_clean();
+            \ob_end_clean();
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());

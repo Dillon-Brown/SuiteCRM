@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -63,7 +63,7 @@ class TemplateDynamicenum extends TemplateEnum
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -89,16 +89,16 @@ class TemplateDynamicenum extends TemplateEnum
             }
         }
         if (!empty($this->help)) {
-            $returnXTPL[strtoupper($this->name . '_help')] = translate($this->help, $this->bean->module_dir);
+            $returnXTPL[\strtoupper($this->name . '_help')] = translate($this->help, $this->bean->module_dir);
         }
 
         global $app_list_strings;
         $returnXTPL = array();
-        $returnXTPL[strtoupper($this->name)] = $value;
+        $returnXTPL[\strtoupper($this->name)] = $value;
         if (empty($this->ext1)) {
             $this->ext1 = $this->options;
         }
-        $returnXTPL[strtoupper('options_' . $this->name)] = get_select_options_with_id($app_list_strings[$this->ext1], $value);
+        $returnXTPL[\strtoupper('options_' . $this->name)] = get_select_options_with_id($app_list_strings[$this->ext1], $value);
 
         return $returnXTPL;
     }

@@ -75,10 +75,10 @@
          $view->preDisplay();
          $view->ev->ss = new Sugar_Smarty();
 
-         ob_start();
+         \ob_start();
          $view->display();
-         $renderedContent = ob_get_contents();
-         ob_end_clean();
-         $this->assertGreaterThan(0, strlen($renderedContent));
+         $renderedContent = \ob_get_contents();
+         \ob_end_clean();
+         $this->assertGreaterThan(0, \strlen($renderedContent));
      }
  }

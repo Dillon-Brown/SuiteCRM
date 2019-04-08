@@ -38,8 +38,8 @@ class jjwg_AreasTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $jjwgAreas->configuration();
 
         $this->assertInstanceOf('jjwg_Maps', $jjwgAreas->jjwg_Maps);
-        $this->assertTrue(is_array($jjwgAreas->settings));
-        $this->assertGreaterThan(0, count($jjwgAreas->settings));
+        $this->assertTrue(\is_array($jjwgAreas->settings));
+        $this->assertGreaterThan(0, \count($jjwgAreas->settings));
         
         // clean up
     }
@@ -98,8 +98,8 @@ class jjwg_AreasTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test without pre settting attributes
         $result = $jjwgAreas->define_area_loc();
         $this->assertEquals('N/A', $result['name']);
-        $this->assertTrue(is_numeric($result['lat']));
-        $this->assertTrue(is_numeric($result['lng']));
+        $this->assertTrue(\is_numeric($result['lat']));
+        $this->assertTrue(\is_numeric($result['lng']));
 
         //test with required attributes preset
         $jjwgAreas->name = 'test';
@@ -150,8 +150,8 @@ class jjwg_AreasTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test without pre settting attributes
         $result = $jjwgAreas->define_loc(array());
         $this->assertEquals('N/A', $result['name']);
-        $this->assertTrue(is_numeric($result['lat']));
-        $this->assertTrue(is_numeric($result['lng']));
+        $this->assertTrue(\is_numeric($result['lat']));
+        $this->assertTrue(\is_numeric($result['lng']));
 
         //test with required attributes preset
         $marker = array('name' => 'test', 'lat' => 50, 'lng' => 100);

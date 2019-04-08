@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -55,21 +55,21 @@ function compare($table_name, $db_indexes, $var_indexes)
         //else by columns in the index.
         $sel_db_index = null;
         $var_fields_string ='';
-        if (count($var_i_def['fields'])>0) {
-            $var_fields_string = implode('', $var_i_def['fields']);
+        if (\count($var_i_def['fields'])>0) {
+            $var_fields_string = \implode('', $var_i_def['fields']);
         }
         $field_list_match = false;
         if (isset($db_indexes[$var_i_name])) {
             $sel_db_index = $db_indexes[$var_i_name];
-            $db_fields_string = implode('', $db_indexes[$var_i_name]['fields']);
-            if (strcasecmp($var_fields_string, $db_fields_string)==0) {
+            $db_fields_string = \implode('', $db_indexes[$var_i_name]['fields']);
+            if (\strcasecmp($var_fields_string, $db_fields_string)==0) {
                 $field_list_match=true;
             }
         } else {
             //search by column list.
             foreach ($db_indexes as $db_i_name=>$db_i_def) {
-                $db_fields_string=implode('', $db_i_def['fields']);
-                if (strcasecmp($var_fields_string, $db_fields_string)==0) {
+                $db_fields_string=\implode('', $db_i_def['fields']);
+                if (\strcasecmp($var_fields_string, $db_fields_string)==0) {
                     $sel_db_index=$db_indexes[$db_i_name];
                     $field_list_match=true;
                     break;
@@ -93,8 +93,8 @@ function compare($table_name, $db_indexes, $var_indexes)
         if ($var_i_def['type'] != 'primary' and $var_i_def['type'] != 'unique' and $var_i_def['name'] != $sel_db_index['name']) {
             //rename index.
             $rename=DBManagerFactory::getInstance()->renameIndexDefs($sel_db_index, $var_i_def, $table_name);
-            if (is_array($rename)) {
-                $change_index=array_merge($change_index, $rename);
+            if (\is_array($rename)) {
+                $change_index=\array_merge($change_index, $rename);
             } else {
                 $change_index[]=$rename;
             }
@@ -111,7 +111,7 @@ function compare($table_name, $db_indexes, $var_indexes)
 if (!is_admin($current_user)) {
     sugar_die("Unauthorized access to administration.");
 }
-set_time_limit(3600);
+\set_time_limit(3600);
 /**
  * Note: $_REQUEST['silent'] is set from ModuleInstaller::repair_indices();
  */
@@ -131,8 +131,8 @@ $processed_tables=array();
 
 ///////////////////////////////////////////////////////////////////////////////
 ////	PROCESS MODULE BEANS
-(function_exists('logThis')) ? logThis("found ".count($beanFiles)." Beans to process") : "";
-(function_exists('logThis')) ? logThis("found ".count($dictionary)." Dictionary entries to process") : "";
+(\function_exists('logThis')) ? logThis("found ".\count($beanFiles)." Beans to process") : "";
+(\function_exists('logThis')) ? logThis("found ".\count($dictionary)." Dictionary entries to process") : "";
 
 foreach ($beanFiles as $beanname=>$beanpath) {
     require_once($beanpath);
@@ -199,23 +199,23 @@ foreach ($dictionary as $rel=>$rel_def) {
 ///////////////////////////////////////////////////////////////////////////////
 
 
-(function_exists('logThis')) ? logThis("RepairIndex: we have ".count($drop_index)." indices to DROP.") : "";
-(function_exists('logThis')) ? logThis("RepairIndex: we have ".count($add_index)." indices to ADD.") : "";
-(function_exists('logThis')) ? logThis("RepairIndex: we have ".count($change_index)." indices to CHANGE.") : "";
+(\function_exists('logThis')) ? logThis("RepairIndex: we have ".\count($drop_index)." indices to DROP.") : "";
+(\function_exists('logThis')) ? logThis("RepairIndex: we have ".\count($add_index)." indices to ADD.") : "";
+(\function_exists('logThis')) ? logThis("RepairIndex: we have ".\count($change_index)." indices to CHANGE.") : "";
 
-if ((count($drop_index) > 0 or count($add_index) > 0 or count($change_index) > 0)) {
+if ((\count($drop_index) > 0 or \count($add_index) > 0 or \count($change_index) > 0)) {
     if (!isset($_REQUEST['mode']) or $_REQUEST['mode'] != 'execute') {
         echo ($_REQUEST['silent']) ? "" : "<BR><BR><BR>";
         echo ($_REQUEST['silent']) ? "" : "<a href='index.php?module=Administration&action=RepairIndex&mode=execute'>Execute Script</a>";
     }
 
     $focus = new Account();
-    if (count($drop_index) > 0) {
+    if (\count($drop_index) > 0) {
         if (isset($_REQUEST['mode']) and $_REQUEST['mode']=='execute') {
             echo ($_REQUEST['silent']) ? "" : $mod_strings['LBL_REPAIR_INDEX_DROPPING'];
             foreach ($drop_index as $statement) {
                 echo ($_REQUEST['silent']) ? "" : $mod_strings['LBL_REPAIR_INDEX_EXECUTING'].$statement;
-                (function_exists('logThis')) ? logThis("RepairIndex: {$statement}") : "";
+                (\function_exists('logThis')) ? logThis("RepairIndex: {$statement}") : "";
                 $focus->db->query($statement);
             }
         } else {
@@ -226,12 +226,12 @@ if ((count($drop_index) > 0 or count($add_index) > 0 or count($change_index) > 0
         }
     }
 
-    if (count($add_index) > 0) {
+    if (\count($add_index) > 0) {
         if (isset($_REQUEST['mode']) and $_REQUEST['mode']=='execute') {
             echo ($_REQUEST['silent']) ? "" : $mod_strings['LBL_REPAIR_INDEX_ADDING'];
             foreach ($add_index as $statement) {
                 echo ($_REQUEST['silent']) ? "" : $mod_strings['LBL_REPAIR_INDEX_EXECUTING'].$statement;
-                (function_exists('logThis')) ? logThis("RepairIndex: {$statement}") : "";
+                (\function_exists('logThis')) ? logThis("RepairIndex: {$statement}") : "";
                 $focus->db->query($statement);
             }
         } else {
@@ -241,12 +241,12 @@ if ((count($drop_index) > 0 or count($add_index) > 0 or count($change_index) > 0
             }
         }
     }
-    if (count($change_index) > 0) {
+    if (\count($change_index) > 0) {
         if (isset($_REQUEST['mode']) and $_REQUEST['mode']=='execute') {
             echo ($_REQUEST['silent']) ? "" : $mod_strings['LBL_REPAIR_INDEX_ALTERING'];
             foreach ($change_index as $statement) {
                 echo ($_REQUEST['silent']) ? "" : $mod_strings['LBL_REPAIR_INDEX_EXECUTING'].$statement;
-                (function_exists('logThis')) ? logThis("RepairIndex: {$statement}") : "";
+                (\function_exists('logThis')) ? logThis("RepairIndex: {$statement}") : "";
                 $focus->db->query($statement);
             }
         } else {
@@ -262,6 +262,6 @@ if ((count($drop_index) > 0 or count($add_index) > 0 or count($change_index) > 0
         echo ($_REQUEST['silent']) ? "" : "<a href='index.php?module=Administration&action=RepairIndex&mode=execute'>Execute Script</a>";
     }
 } else {
-    (function_exists('logThis')) ? logThis("RepairIndex: Index definitions are in sync.") : "";
+    (\function_exists('logThis')) ? logThis("RepairIndex: Index definitions are in sync.") : "";
     echo ($_REQUEST['silent']) ? "" : $mod_strings['LBL_REPAIR_INDEX_SYNC'];
 }

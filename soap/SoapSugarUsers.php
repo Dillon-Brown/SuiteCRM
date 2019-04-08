@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -137,7 +137,7 @@ function login($user_auth, $application)
 
             return array('id' => -1, 'error' => $error);
         }
-        if (function_exists('openssl_decrypt')) {
+        if (\function_exists('openssl_decrypt')) {
             $password = decrypt_string($user_auth['password']);
             $authController = new AuthenticationController();
             if ($authController->login(
@@ -151,7 +151,7 @@ function login($user_auth, $application)
     } // else if
 
     if ($success) {
-        session_start();
+        \session_start();
         global $current_user;
         //$current_user = $user;
         login_success();
@@ -166,7 +166,7 @@ function login($user_auth, $application)
 
         $current_user->call_custom_logic('after_login');
 
-        return array('id' => session_id(), 'error' => $error);
+        return array('id' => \session_id(), 'error' => $error);
     }
     $error->set_error('invalid_login');
     $GLOBALS['log']->fatal('SECURITY: User authentication for ' . $user_auth['user_name'] . ' failed');
@@ -210,8 +210,8 @@ function is_loopback()
 function validate_authenticated($session_id)
 {
     if (!empty($session_id)) {
-        session_id($session_id);
-        session_start();
+        \session_id($session_id);
+        \session_start();
 
         if (!empty($_SESSION['is_valid_session']) && is_valid_ip_address('ip_address') && $_SESSION['type'] == 'user') {
             global $current_user;
@@ -223,7 +223,7 @@ function validate_authenticated($session_id)
             return true;
         }
 
-        session_destroy();
+        \session_destroy();
     }
     LogicHook::initialize();
     $GLOBALS['log']->fatal('SECURITY: The session ID is invalid');
@@ -249,9 +249,9 @@ function is_valid_ip_address($session_var)
         // check to see if we've got a current ip address in $_SESSION
         // and check to see if the session has been hijacked by a foreign ip
         if (isset($_SESSION[$session_var])) {
-            $session_parts = explode(".", $_SESSION[$session_var]);
-            $client_parts = explode(".", $clientIP);
-            if (count($session_parts) < 4) {
+            $session_parts = \explode(".", $_SESSION[$session_var]);
+            $client_parts = \explode(".", $clientIP);
+            if (\count($session_parts) < 4) {
                 $classCheck = 0;
             } else {
                 // match class C IP addresses
@@ -431,7 +431,7 @@ function get_entry_list($session, $module_name, $query, $order_by, $offset, $sel
         $value->fill_in_additional_detail_fields();
 
         // bug 55129 - populate currency from user settings
-        if (property_exists($value, 'currency_id') && $userCurrency->deleted != 1) {
+        if (\property_exists($value, 'currency_id') && $userCurrency->deleted != 1) {
             // walk through all currency-related fields
             foreach ($value->field_defs as $temp_field) {
                 if (isset($temp_field['type']) && 'relate' == $temp_field['type']
@@ -445,7 +445,7 @@ function get_entry_list($session, $module_name, $query, $order_by, $offset, $sel
                 } elseif ($value->currency_id != $userCurrency->id
                     && isset($temp_field['type'])
                     && 'currency' == $temp_field['type']
-                    && substr($temp_field['name'], -9) != '_usdollar'
+                    && \substr($temp_field['name'], -9) != '_usdollar'
                 ) {
                     $temp_property = $temp_field['name'];
                     $value->$temp_property *= $userCurrency->conversion_rate;
@@ -469,10 +469,10 @@ function get_entry_list($session, $module_name, $query, $order_by, $offset, $sel
     $field_list = filter_return_list($field_list, $select_fields, $module_name);
 
     // Calculate the offset for the start of the next page
-    $next_offset = $offset + sizeof($output_list);
+    $next_offset = $offset + \sizeof($output_list);
 
     return array(
-        'result_count' => sizeof($output_list),
+        'result_count' => \sizeof($output_list),
         'next_offset' => $next_offset,
         'field_list' => $field_list,
         'entry_list' => $output_list,
@@ -650,10 +650,10 @@ function set_entry($session, $module_name, $name_value_list)
     $seed = new $class_name();
 
     foreach ($name_value_list as $value) {
-        if ($value['name'] == 'id' && isset($value['value']) && strlen($value['value']) > 0) {
+        if ($value['name'] == 'id' && isset($value['value']) && \strlen($value['value']) > 0) {
             $result = $seed->retrieve($value['value']);
             //bug: 44680 - check to ensure the user has access before proceeding.
-            if (is_null($result)) {
+            if (\is_null($result)) {
                 $error->set_error('no_access');
 
                 return array('id' => -1, 'error' => $error->get_soap_array());
@@ -931,7 +931,7 @@ function get_related_notes($session, $module_name, $module_id, $select_fields)
     $field_list = filter_field_list($field_list, $select_fields, $module_name);
 
     return array(
-        'result_count' => sizeof($output_list),
+        'result_count' => \sizeof($output_list),
         'next_offset' => 0,
         'field_list' => $field_list,
         'entry_list' => $output_list,
@@ -960,7 +960,7 @@ function logout($session)
     LogicHook::initialize();
     if (validate_authenticated($session)) {
         $current_user->call_custom_logic('before_logout');
-        session_destroy();
+        \session_destroy();
         $GLOBALS['logic_hook']->call_custom_logic('Users', 'after_logout');
 
         return $error->get_soap_array();
@@ -1052,7 +1052,7 @@ function get_available_modules($session)
 
         return array('modules' => $modules, 'error' => $error->get_soap_array());
     }
-    $modules = array_keys($_SESSION['avail_modules']);
+    $modules = \array_keys($_SESSION['avail_modules']);
 
     return array('modules' => $modules, 'error' => $error->get_soap_array());
 }
@@ -1193,7 +1193,7 @@ $server->register(
  */
 function get_server_time()
 {
-    return date('Y-m-d H:i:s');
+    return \date('Y-m-d H:i:s');
 }
 
 $server->register(
@@ -1329,13 +1329,13 @@ function get_relationships($session, $module_name, $module_id, $related_module, 
         $error->set_error('no_relationship_support');
 
         return array('ids' => $ids, 'error' => $error->get_soap_array());
-    } elseif (count($id_list) == 0) {
+    } elseif (\count($id_list) == 0) {
         return array('ids' => $ids, 'error' => $error->get_soap_array());
     }
 
     $list = array();
 
-    $in = "'" . implode("', '", $id_list) . "'";
+    $in = "'" . \implode("', '", $id_list) . "'";
 
     $related_class_name = $beanList[$related_module];
     require_once($beanFiles[$related_class_name]);
@@ -1487,7 +1487,7 @@ function handle_set_relationship($set_relationship_value, $session = '')
     if ($module1 == "Contacts" && $module2 == "Users") {
         $key = 'contacts_users_id';
     } else {
-        $key = array_search(strtolower($module2), $mod->relationship_fields);
+        $key = \array_search(\strtolower($module2), $mod->relationship_fields);
         if (!$key) {
             $key = Relationship::retrieve_by_modules($module1, $module2, $GLOBALS['db']);
 
@@ -1584,7 +1584,7 @@ function handle_set_relationship($set_relationship_value, $session = '')
     }
 
     if (($module1 == 'Meetings' || $module1 == 'Calls') && ($module2 == 'Contacts' || $module2 == 'Users')) {
-        $key = strtolower($module2);
+        $key = \strtolower($module2);
         $mod->load_relationship($key);
         $mod->$key->add($module2_id);
     } elseif ($module1 == 'Contacts' && ($module2 == 'Notes' || $module2 == 'Calls' || $module2 == 'Meetings' || $module2 == 'Tasks') && !empty($session)) {
@@ -1753,7 +1753,7 @@ function search_by_module($user_name, $password, $search_string, $modules, $offs
 
     $more_query_array = array();
     foreach ($modules as $module) {
-        if (!array_key_exists($module, $query_array)) {
+        if (!\array_key_exists($module, $query_array)) {
             $seed = new $beanList[$module]();
             $table_name = $seed->table_name;
             if (!empty($seed->field_defs['name']['db_concat_fields'])) {
@@ -1773,7 +1773,7 @@ function search_by_module($user_name, $password, $search_string, $modules, $offs
     }
 
     if (!empty($more_query_array)) {
-        $query_array = array_merge($query_array, $more_query_array);
+        $query_array = \array_merge($query_array, $more_query_array);
     }
 
     if (!empty($search_string) && isset($search_string)) {
@@ -1814,14 +1814,14 @@ function search_by_module($user_name, $password, $search_string, $modules, $offs
                             $tmpQuery .= " INNER JOIN email_addresses ea ON (ea.id = eabl.email_address_id) ";
                         }
                         $where = "WHERE (";
-                        $search_terms = explode(", ", $search_string);
-                        $termCount = count($search_terms);
+                        $search_terms = \explode(", ", $search_string);
+                        $termCount = \count($search_terms);
                         $count = 1;
                         if ($key != 'EmailAddresses') {
                             foreach ($search_terms as $term) {
-                                if (!strpos($where_clause, 'number')) {
+                                if (!\strpos($where_clause, 'number')) {
                                     $where .= string_format($where_clause, array(DBManagerFactory::getInstance()->quote($term)));
-                                } elseif (is_numeric($term)) {
+                                } elseif (\is_numeric($term)) {
                                     $where .= string_format($where_clause, array(DBManagerFactory::getInstance()->quote($term)));
                                 } else {
                                     $addQuery = false;
@@ -1871,10 +1871,10 @@ function search_by_module($user_name, $password, $search_string, $modules, $offs
         }//end foreach
     }
 
-    $next_offset = $offset + sizeof($output_list);
+    $next_offset = $offset + \sizeof($output_list);
 
     return array(
-        'result_count' => sizeof($output_list),
+        'result_count' => \sizeof($output_list),
         'next_offset' => $next_offset,
         'field_list' => $field_list,
         'entry_list' => $output_list,
@@ -1907,19 +1907,19 @@ function get_mailmerge_document($session, $file_name, $fields)
 
         return array('result' => '', 'error' => $error->get_soap_array());
     }
-    if (!preg_match('/^sugardata[\.\d\s]+\.php$/', $file_name)) {
+    if (!\preg_match('/^sugardata[\.\d\s]+\.php$/', $file_name)) {
         $error->set_error('no_records');
 
         return array('result' => '', 'error' => $error->get_soap_array());
     }
     $html = '';
 
-    $file_name = sugar_cached('MergedDocuments/') . pathinfo($file_name, PATHINFO_BASENAME);
+    $file_name = sugar_cached('MergedDocuments/') . \pathinfo($file_name, PATHINFO_BASENAME);
 
     $master_fields = array();
     $related_fields = array();
 
-    if (file_exists($file_name)) {
+    if (\file_exists($file_name)) {
         include($file_name);
 
         $class1 = $merge_array['master_module'];
@@ -1942,14 +1942,14 @@ function get_mailmerge_document($session, $file_name, $fields)
             $class1 = 'CampaignProspects';
         }
         foreach ($fields as $field) {
-            $pos = strpos(strtolower($field), strtolower($class1));
-            $pos2 = strpos(strtolower($field), strtolower($class2));
+            $pos = \strpos(\strtolower($field), \strtolower($class1));
+            $pos2 = \strpos(\strtolower($field), \strtolower($class2));
             if ($pos !== false) {
-                $fieldName = str_replace(strtolower($class1) . '_', '', strtolower($field));
-                array_push($master_fields, $fieldName);
+                $fieldName = \str_replace(\strtolower($class1) . '_', '', \strtolower($field));
+                \array_push($master_fields, $fieldName);
             } elseif ($pos2 !== false) {
-                $fieldName = str_replace(strtolower($class2) . '_', '', strtolower($field));
-                array_push($related_fields, $fieldName);
+                $fieldName = \str_replace(\strtolower($class2) . '_', '', \strtolower($field));
+                \array_push($related_fields, $fieldName);
             }
         }
 
@@ -2004,7 +2004,7 @@ function get_mailmerge_document($session, $file_name, $fields)
         $html .= "</table></body></html>";
     }
 
-    $result = base64_encode($html);
+    $result = \base64_encode($html);
 
     return array('result' => $result, 'error' => $error);
 }
@@ -2035,7 +2035,7 @@ function get_mailmerge_document2($session, $file_name, $fields)
 
         return array('result' => '', 'error' => $error->get_soap_array());
     }
-    if (!preg_match('/^sugardata[\.\d\s]+\.php$/', $file_name)) {
+    if (!\preg_match('/^sugardata[\.\d\s]+\.php$/', $file_name)) {
         $GLOBALS['log']->error($app_strings['ERR_NO_SUCH_FILE'] . " ({$file_name})");
         $error->set_error('no_records');
 
@@ -2043,12 +2043,12 @@ function get_mailmerge_document2($session, $file_name, $fields)
     }
     $html = '';
 
-    $file_name = sugar_cached('MergedDocuments/') . pathinfo($file_name, PATHINFO_BASENAME);
+    $file_name = sugar_cached('MergedDocuments/') . \pathinfo($file_name, PATHINFO_BASENAME);
 
     $master_fields = array();
     $related_fields = array();
 
-    if (file_exists($file_name)) {
+    if (\file_exists($file_name)) {
         include($file_name);
 
         $class1 = $merge_array['master_module'];
@@ -2071,14 +2071,14 @@ function get_mailmerge_document2($session, $file_name, $fields)
             $class1 = 'CampaignProspects';
         }
         foreach ($fields as $field) {
-            $pos = strpos(strtolower($field), strtolower($class1));
-            $pos2 = strpos(strtolower($field), strtolower($class2));
+            $pos = \strpos(\strtolower($field), \strtolower($class1));
+            $pos2 = \strpos(\strtolower($field), \strtolower($class2));
             if ($pos !== false) {
-                $fieldName = str_replace(strtolower($class1) . '_', '', strtolower($field));
-                array_push($master_fields, $fieldName);
+                $fieldName = \str_replace(\strtolower($class1) . '_', '', \strtolower($field));
+                \array_push($master_fields, $fieldName);
             } elseif ($pos2 !== false) {
-                $fieldName = str_replace(strtolower($class2) . '_', '', strtolower($field));
-                array_push($related_fields, $fieldName);
+                $fieldName = \str_replace(\strtolower($class2) . '_', '', \strtolower($field));
+                \array_push($related_fields, $fieldName);
             }
         }
 
@@ -2117,7 +2117,7 @@ function get_mailmerge_document2($session, $file_name, $fields)
                             $output = array();
                             foreach ($items as $item) {
                                 if (!empty($app_list_strings[$seed1->field_name_map[$master_field]['options']][$item])) {
-                                    array_push(
+                                    \array_push(
                                         $output,
                                         $app_list_strings[$seed1->field_name_map[$master_field]['options']][$item]
                                     );
@@ -2164,7 +2164,7 @@ function get_mailmerge_document2($session, $file_name, $fields)
         }
         $html .= "</table></body></html>";
     }
-    $result = base64_encode($html);
+    $result = \base64_encode($html);
 
     return array('html' => $result, 'name_value_list' => $resultIds, 'error' => $error);
 }
@@ -2200,7 +2200,7 @@ function get_document_revision($session, $id)
     $dr->retrieve($id);
     if (!empty($dr->filename)) {
         $filename = "upload://{$dr->id}";
-        $contents = base64_encode(sugar_file_get_contents($filename));
+        $contents = \base64_encode(sugar_file_get_contents($filename));
 
         return array(
             'document_revision' => array(
@@ -2242,7 +2242,7 @@ function set_campaign_merge($session, $targets, $campaign_id)
 
         return $error->get_soap_array();
     }
-    if (empty($campaign_id) or !is_array($targets) or count($targets) == 0) {
+    if (empty($campaign_id) or !\is_array($targets) or \count($targets) == 0) {
         $GLOBALS['log']->debug('set_campaign_merge: Merge action status will not be updated, because, campaign_id is null or no targets were selected.');
     } else {
         require_once('modules/Campaigns/utils.php');
@@ -2343,7 +2343,7 @@ function get_entries_count($session, $module_name, $query, $deleted)
 
     // if WHERE clauses exist, add them to query
     if (!empty($where_clauses)) {
-        $sql .= ' WHERE ' . implode(' AND ', $where_clauses);
+        $sql .= ' WHERE ' . \implode(' AND ', $where_clauses);
     }
 
     $res = DBManagerFactory::getInstance()->query($sql);
@@ -2417,7 +2417,7 @@ function handle_set_entries($module_name, $name_value_lists, $select_fields = fa
     require_once($beanFiles[$class_name]);
     $ids = array();
     $count = 1;
-    $total = sizeof($name_value_lists);
+    $total = \sizeof($name_value_lists);
 
     foreach ($name_value_lists as $name_value_list) {
         $seed = new $class_name();
@@ -2441,20 +2441,20 @@ function handle_set_entries($module_name, $name_value_lists, $select_fields = fa
             if ($seed->field_name_map[$value['name']]['type'] == 'enum' || $seed->field_name_map[$value['name']]['type'] == 'radioenum') {
                 $vardef = $seed->field_name_map[$value['name']];
                 if (isset($app_list_strings[$vardef['options']]) && !isset($app_list_strings[$vardef['options']][$val])) {
-                    if (in_array($val, $app_list_strings[$vardef['options']])) {
-                        $val = array_search($val, $app_list_strings[$vardef['options']]);
+                    if (\in_array($val, $app_list_strings[$vardef['options']])) {
+                        $val = \array_search($val, $app_list_strings[$vardef['options']]);
                     }
                 }
             } elseif ($seed->field_name_map[$value['name']]['type'] == 'multienum') {
                 $vardef = $seed->field_name_map[$value['name']];
 
                 if (isset($app_list_strings[$vardef['options']]) && !isset($app_list_strings[$vardef['options']][$value])) {
-                    $items = explode(",", $val);
+                    $items = \explode(",", $val);
                     $parsedItems = array();
                     foreach ($items as $item) {
-                        if (in_array($item, $app_list_strings[$vardef['options']])) {
-                            $keyVal = array_search($item, $app_list_strings[$vardef['options']]);
-                            array_push($parsedItems, $keyVal);
+                        if (\in_array($item, $app_list_strings[$vardef['options']])) {
+                            $keyVal = \array_search($item, $app_list_strings[$vardef['options']]);
+                            \array_push($parsedItems, $keyVal);
                         }
                     }
 

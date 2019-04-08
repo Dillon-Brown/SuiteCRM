@@ -108,7 +108,7 @@ class ApiTester extends \Codeception\Actor
         $I->canSeeResponseIsJson();
         $I->seeResponseCodeIs(200);
 
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         self::$tokenType = $response['token_type'];
         self::$tokenExpiresIn =  (int)$response['expires_in'];
         self::$accessToken = $response['access_token'];
@@ -135,7 +135,7 @@ class ApiTester extends \Codeception\Actor
         $I->canSeeResponseIsJson();
         $I->seeResponseCodeIs(200);
 
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         self::$tokenType = $response['token_type'];
         self::$tokenExpiresIn =  (int)$response['expires_in'];
         self::$accessToken = $response['access_token'];
@@ -204,7 +204,7 @@ class ApiTester extends \Codeception\Actor
         $I = $this;
         $I->canSeeResponseIsJson();
 
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayNotHasKey('errors', $response);
     }
 
@@ -216,7 +216,7 @@ class ApiTester extends \Codeception\Actor
         $I = $this;
         $I->canSeeResponseIsJson();
 
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('errors', $response);
     }
 
@@ -237,8 +237,8 @@ class ApiTester extends \Codeception\Actor
             'client_secret' => $this->getPasswordGrantClientSecret(),
         ]);
 
-        $response = json_decode($this->grabResponse(), true);
-        $this->setHeader('Authorization', sprintf('%s %s', $response['token_type'], $response['access_token']));
+        $response = \json_decode($this->grabResponse(), true);
+        $this->setHeader('Authorization', \sprintf('%s %s', $response['token_type'], $response['access_token']));
         $this->setHeader('Content-Type', \Api\V8\Controller\BaseController::MEDIA_TYPE);
 
         $this->seeResponseCodeIs(200);
@@ -257,12 +257,12 @@ class ApiTester extends \Codeception\Actor
         $accountType = 'Customer';
         $db = DBManagerFactory::getInstance();
 
-        $query = sprintf(
+        $query = \sprintf(
             "INSERT INTO accounts (id, name, account_type, date_entered) VALUES (%s, %s, %s, %s)",
             $db->quoted($id),
             $db->quoted($name),
             $db->quoted($accountType),
-            $db->quoted(date('Y-m-d H:i:s'))
+            $db->quoted(\date('Y-m-d H:i:s'))
         );
         $db->query($query);
 
@@ -279,10 +279,10 @@ class ApiTester extends \Codeception\Actor
         $id = create_guid();
         $db = DBManagerFactory::getInstance();
 
-        $query = sprintf(
+        $query = \sprintf(
             "INSERT INTO contacts (id, date_entered) VALUES (%s,%s)",
             $db->quoted($id),
-            $db->quoted(date('Y-m-d H:i:s'))
+            $db->quoted(\date('Y-m-d H:i:s'))
         );
         $db->query($query);
 
@@ -298,7 +298,7 @@ class ApiTester extends \Codeception\Actor
     public function deleteBean($tableName, $id)
     {
         $db = DBManagerFactory::getInstance();
-        $query = sprintf("DELETE FROM %s WHERE id = %s", $tableName, $db->quoted($id));
+        $query = \sprintf("DELETE FROM %s WHERE id = %s", $tableName, $db->quoted($id));
         $db->query($query);
     }
 }

@@ -62,10 +62,10 @@ if (isset($_REQUEST['current_post']) && $_REQUEST['current_post'] != '') {
     $result = DBManagerFactory::getInstance()->query($query, true);
     $uids = array();
     while ($val = DBManagerFactory::getInstance()->fetchByAssoc($result, false)) {
-        array_push($recordIds, $val['id']);
+        \array_push($recordIds, $val['id']);
     }
 } else {
-    $recordIds = explode(',', $_REQUEST['uid']);
+    $recordIds = \explode(',', $_REQUEST['uid']);
 }
 
 
@@ -75,7 +75,7 @@ if (!$template) {
     sugar_die("Invalid Template");
 }
 
-$file_name = str_replace(" ", "_", $template->name) . ".pdf";
+$file_name = \str_replace(" ", "_", $template->name) . ".pdf";
 
 $format = $template->page_size . ($template->orientation === 'Landscape' ? '-L' : '');
 
@@ -112,28 +112,28 @@ foreach ($recordIds as $recordId) {
         '<',
         '>',
         ' ',
-        chr(161),
+        \chr(161),
         '<br>'
     );
 
-    $text = preg_replace($search, $replace, $template->description);
-    $text = preg_replace_callback(
+    $text = \preg_replace($search, $replace, $template->description);
+    $text = \preg_replace_callback(
         '/\{DATE\s+(.*?)\}/',
         function ($matches) {
-            return date($matches[1]);
+            return \date($matches[1]);
         },
         $text
     );
-    $header = preg_replace($search, $replace, $template->pdfheader);
-    $footer = preg_replace($search, $replace, $template->pdffooter);
+    $header = \preg_replace($search, $replace, $template->pdfheader);
+    $footer = \preg_replace($search, $replace, $template->pdffooter);
 
     $converted = templateParser::parse_template($text, $object_arr);
     $header = templateParser::parse_template($header, $object_arr);
     $footer = templateParser::parse_template($footer, $object_arr);
 
-    $printable = str_replace("\n", "<br />", $converted);
+    $printable = \str_replace("\n", "<br />", $converted);
 
-    ob_clean();
+    \ob_clean();
     try {
         $note = new Note();
         $note->modified_user_id = $current_user->id;
@@ -150,8 +150,8 @@ foreach ($recordIds as $recordId) {
         }
         $note->save();
 
-        $fp = fopen($sugar_config['upload_dir'] . 'nfile.pdf', 'wb');
-        fclose($fp);
+        $fp = \fopen($sugar_config['upload_dir'] . 'nfile.pdf', 'wb');
+        \fclose($fp);
 
         $pdf_history->SetAutoFont();
         $pdf_history->SetHTMLHeader($header);
@@ -165,7 +165,7 @@ foreach ($recordIds as $recordId) {
         $pdf->SetHTMLFooter($footer);
         $pdf->writeHTML($printable);
 
-        rename($sugar_config['upload_dir'] . 'nfile.pdf', $sugar_config['upload_dir'] . $note->id);
+        \rename($sugar_config['upload_dir'] . 'nfile.pdf', $sugar_config['upload_dir'] . $note->id);
     } catch (mPDF_exception $e) {
         echo $e;
     }

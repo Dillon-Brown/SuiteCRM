@@ -79,7 +79,7 @@ class AOR_Scheduled_Reports extends basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -95,8 +95,8 @@ class AOR_Scheduled_Reports extends basic
 
     public function save($check_notify = false)
     {
-        if (isset($_POST['email_recipients']) && is_array($_POST['email_recipients'])) {
-            $this->email_recipients = base64_encode(serialize($_POST['email_recipients']));
+        if (isset($_POST['email_recipients']) && \is_array($_POST['email_recipients'])) {
+            $this->email_recipients = \base64_encode(\serialize($_POST['email_recipients']));
         }
 
         return parent::save($check_notify);
@@ -104,7 +104,7 @@ class AOR_Scheduled_Reports extends basic
 
     public function get_email_recipients()
     {
-        $params = unserialize(base64_decode($this->email_recipients));
+        $params = \unserialize(\base64_decode($this->email_recipients));
 
         $emails = array();
         if (isset($params['email_target_type'])) {
@@ -122,7 +122,7 @@ class AOR_Scheduled_Reports extends basic
                         $users = array();
                         switch ($params['email'][$key][0]) {
                             case 'security_group':
-                                if (file_exists('modules/SecurityGroups/SecurityGroup.php')) {
+                                if (\file_exists('modules/SecurityGroups/SecurityGroup.php')) {
                                     require_once('modules/SecurityGroups/SecurityGroup.php');
                                     $security_group = new SecurityGroup();
                                     $security_group->retrieve($params['email'][$key][1]);

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,7 +71,7 @@ class AdministrationViewThemeConfigSettings extends SugarView
         }
 
         // Check if the theme is valid
-        if (!isset($_REQUEST['theme']) || !in_array($_REQUEST['theme'], array_keys(SugarThemeRegistry::allThemes()))) {
+        if (!isset($_REQUEST['theme']) || !\in_array($_REQUEST['theme'], \array_keys(SugarThemeRegistry::allThemes()))) {
             sugar_die("theme is invalid.");
         }
 
@@ -91,7 +91,7 @@ class AdministrationViewThemeConfigSettings extends SugarView
                 }
             }
             $configurator->handleOverride();
-            sleep(3);
+            \sleep(3);
             SugarApplication::redirect('index.php?module=Administration&action=ThemeSettings');
             exit();
         }

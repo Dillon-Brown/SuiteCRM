@@ -56,7 +56,7 @@ r41724 - 2008-11-13 08:55:42 -0800 (Thu, 13 Nov 2008) - Collin Lee - Made change
 */
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -105,7 +105,7 @@ function smarty_function_sugar_connector_display($params, &$smarty)
     $field = $params['field'];
     $type = $bean->field_name_map[$field]['type'];
     if ($type == 'text') {
-        echo strlen($bean->$field) > 50 ? substr($bean->$field, 0, 47) . '...' : $bean->field;
+        echo \strlen($bean->$field) > 50 ? \substr($bean->$field, 0, 47) . '...' : $bean->field;
     } elseif ($type == 'link') {
         echo "<a href='{$bean->$field}' target='_blank'>{$bean->$field}</a>";
     } else {

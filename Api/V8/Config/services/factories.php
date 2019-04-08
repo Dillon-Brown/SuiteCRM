@@ -11,4 +11,4 @@ return CustomLoader::mergeCustomArray([
     Factory\ValidatorFactory::class => function (Container $container) {
         return new Factory\ValidatorFactory($container->get('Validation'));
     },
-], basename(__FILE__));
+], \basename(__FILE__));

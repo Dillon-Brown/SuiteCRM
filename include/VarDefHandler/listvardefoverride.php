@@ -40,12 +40,12 @@
 
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 //THIS IS TO FIX ANY VARDEFS IN CREATING LIST QUERIES (specifically relationships)
 if (isset($this->field_defs['assigned_user_name'])) {
-    $this->field_defs['assigned_user_name'] = array_merge(
+    $this->field_defs['assigned_user_name'] = \array_merge(
         $this->field_defs['assigned_user_name'],
         array(
             'name' => 'assigned_user_name',
@@ -66,7 +66,7 @@ if (isset($this->field_defs['created_by'])) {
         $this->field_defs['created_by_name'] = array();
     }
 
-    $this->field_defs['created_by_name'] = array_merge(
+    $this->field_defs['created_by_name'] = \array_merge(
         $this->field_defs['created_by_name'],
         array(
             'name' => 'created_by_name',
@@ -85,7 +85,7 @@ if (isset($this->field_defs['modified_user_id'])) {
         $this->field_defs['modified_by_name'] = array();
     }
 
-    $this->field_defs['modified_by_name'] = array_merge(
+    $this->field_defs['modified_by_name'] = \array_merge(
         $this->field_defs['modified_by_name'],
         array(
             'name' => 'modified_by_name',

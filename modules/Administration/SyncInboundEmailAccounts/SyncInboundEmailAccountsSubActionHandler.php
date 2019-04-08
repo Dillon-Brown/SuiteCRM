@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -152,9 +152,9 @@ class SyncInboundEmailAccountsSubActionHandler
             $ret = $_REQUEST['method'];
 
             // validate for correct method
-            if (!is_string($ret)) {
+            if (!\is_string($ret)) {
                 throw new SyncInboundEmailAccountsInvalidMethodTypeException(
-                    "Method name should be a string but received type is: " . gettype($ret)
+                    "Method name should be a string but received type is: " . \gettype($ret)
                 );
             }
         }
@@ -221,7 +221,7 @@ class SyncInboundEmailAccountsSubActionHandler
 
         // make sure there is no time limit
         // so we will having enough time to sync everything
-        set_time_limit(0);
+        \set_time_limit(0);
 
         $this->cleanup();
 
@@ -234,7 +234,7 @@ class SyncInboundEmailAccountsSubActionHandler
 
             // TODO: scrm-539 - BeanFactory::getBean() return value is SugarBean|bool but never can be (bool)true, it may cause confusion in future
             if ($ie = $this->getInboundEmailBean($ieId)) {
-                $this->output(sprintf($mod_strings['LBL_SYNC_PROCESSING'], $ie->name));
+                $this->output(\sprintf($mod_strings['LBL_SYNC_PROCESSING'], $ie->name));
                 try {
                     $IMAPHeaders = $this->getEmailHeadersOfIMAPServer($ie);
 
@@ -255,7 +255,7 @@ class SyncInboundEmailAccountsSubActionHandler
                         }
                     }
 
-                    $this->output(sprintf($mod_strings['LBL_SYNC_UPDATED'], $updated));
+                    $this->output(\sprintf($mod_strings['LBL_SYNC_UPDATED'], $updated));
                 } catch (SyncInboundEmailAccountsIMapConnectionException $e) {
                     $GLOBALS['log']->warn($e->getMessage());
                     $this->output($mod_strings['LBL_SYNC_ERROR_CONN']);
@@ -271,7 +271,7 @@ class SyncInboundEmailAccountsSubActionHandler
 
         $this->handleIMAPErrors();
 
-        $output = file_get_contents(self::PROCESS_OUTPUT_FILE);
+        $output = \file_get_contents(self::PROCESS_OUTPUT_FILE);
 
         $this->cleanup();
 
@@ -308,8 +308,8 @@ class SyncInboundEmailAccountsSubActionHandler
      */
     protected function cleanup()
     {
-        if (file_exists(self::PROCESS_OUTPUT_FILE)) {
-            if (!unlink(self::PROCESS_OUTPUT_FILE)) {
+        if (\file_exists(self::PROCESS_OUTPUT_FILE)) {
+            if (!\unlink(self::PROCESS_OUTPUT_FILE)) {
                 throw new SyncInboundEmailAccountsException(
                     "Unable to cleanup output file. Please check permission..",
                     SyncInboundEmailAccountsException::PROCESS_OUTPUT_CLEANUP_ERROR
@@ -325,7 +325,7 @@ class SyncInboundEmailAccountsSubActionHandler
     protected function output($msg)
     {
         $msg = "{$msg}<br>";
-        if (false === file_put_contents(self::PROCESS_OUTPUT_FILE, $msg, FILE_APPEND)) {
+        if (false === \file_put_contents(self::PROCESS_OUTPUT_FILE, $msg, FILE_APPEND)) {
             throw new SyncInboundEmailAccountsException(
                 "Unable to write output file. Please check permission..",
                 SyncInboundEmailAccountsException::PROCESS_OUTPUT_WRITE_ERROR
@@ -463,8 +463,8 @@ class SyncInboundEmailAccountsSubActionHandler
         $message_id = $header->message_id;
         $deliveredTo = $ie->id;
         $matches = array();
-        preg_match('/(delivered-to:|x-real-to:){1}\s*(\S+)\s*\n{1}/im', $fullHeader, $matches);
-        if (count($matches)) {
+        \preg_match('/(delivered-to:|x-real-to:){1}\s*(\S+)\s*\n{1}/im', $fullHeader, $matches);
+        if (\count($matches)) {
             $deliveredTo = $matches[2];
         }
         if (empty($message_id) || !isset($message_id)) {
@@ -473,10 +473,10 @@ class SyncInboundEmailAccountsSubActionHandler
         }
 
         // generate compound messageId
-        $compoundMessageId = trim($message_id) . trim($deliveredTo);
+        $compoundMessageId = \trim($message_id) . \trim($deliveredTo);
         // if the length > 255 then md5 it so that the data will be of smaller length
         //if (strlen($compoundMessageId) > 255) {
-        $compoundMessageId = md5($compoundMessageId);
+        $compoundMessageId = \md5($compoundMessageId);
         //} // if
 
         if (empty($compoundMessageId)) {
@@ -485,9 +485,9 @@ class SyncInboundEmailAccountsSubActionHandler
         //$counter++;
         $potentials = clean_xss($compoundMessageId, false);
 
-        if (is_array($potentials) && !empty($potentials)) {
+        if (\is_array($potentials) && !empty($potentials)) {
             foreach ($potentials as $bad) {
-                $compoundMessageId = str_replace($bad, "", $compoundMessageId);
+                $compoundMessageId = \str_replace($bad, "", $compoundMessageId);
             }
         }
 
@@ -531,7 +531,7 @@ class SyncInboundEmailAccountsSubActionHandler
 
         if (!$ieSel) {
             // if there is not any selected, just fill out with all inbound email
-            $ieSel = array_keys($this->getInboundEmailRows());
+            $ieSel = \array_keys($this->getInboundEmailRows());
         }
 
         return $ieSel;

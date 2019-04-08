@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -110,7 +110,7 @@ class SugarLogger implements LoggerTemplate
      */
     public function getLogFileName()
     {
-        return ltrim($this->full_log_file, "./");
+        return \ltrim($this->full_log_file, "./");
     }
 
     /**
@@ -139,8 +139,8 @@ class SugarLogger implements LoggerTemplate
      */
     protected function _doInitialization()
     {
-        if ($this->filesuffix && array_key_exists($this->filesuffix, self::$filename_suffix)) { //if the global config contains date-format suffix, it will create suffix by parsing datetime
-            $this->date_suffix = "_" . date(str_replace("%", "", $this->filesuffix));
+        if ($this->filesuffix && \array_key_exists($this->filesuffix, self::$filename_suffix)) { //if the global config contains date-format suffix, it will create suffix by parsing datetime
+            $this->date_suffix = "_" . \date(\str_replace("%", "", $this->filesuffix));
         }
         $this->full_log_file = $this->log_dir . $this->logfile . $this->date_suffix . $this->ext;
         $this->initialized = $this->_fileCanBeCreatedAndWrittenTo();
@@ -153,7 +153,7 @@ class SugarLogger implements LoggerTemplate
     protected function _fileCanBeCreatedAndWrittenTo()
     {
         $this->_attemptToCreateIfNecessary();
-        return file_exists($this->full_log_file) && is_writable($this->full_log_file);
+        return \file_exists($this->full_log_file) && \is_writable($this->full_log_file);
     }
 
     /**
@@ -161,10 +161,10 @@ class SugarLogger implements LoggerTemplate
      */
     protected function _attemptToCreateIfNecessary()
     {
-        if (file_exists($this->full_log_file)) {
+        if (\file_exists($this->full_log_file)) {
             return;
         }
-        @touch($this->full_log_file);
+        @\touch($this->full_log_file);
     }
 
     /**
@@ -175,7 +175,7 @@ class SugarLogger implements LoggerTemplate
     private function getTraceString()
     {
         $ret = '';
-        $trace = debug_backtrace();
+        $trace = \debug_backtrace();
         foreach ($trace as $call) {
             $file = isset($call['file']) ? $call['file'] : '???';
             $line = isset($call['line']) ? $call['line'] : '???';
@@ -208,17 +208,17 @@ class SugarLogger implements LoggerTemplate
 
         //if we haven't opened a file pointer yet let's do that
         if (! $this->fp) {
-            $this->fp = fopen($this->full_log_file, 'a');
+            $this->fp = \fopen($this->full_log_file, 'a');
         }
 
 
         // change to a string if there is just one entry
-        if (is_array($message) && count($message) == 1) {
-            $message = array_shift($message);
+        if (\is_array($message) && \count($message) == 1) {
+            $message = \array_shift($message);
         }
         // change to a human-readable array output if it's any other array
-        if (is_array($message)) {
-            $message = print_r($message, true);
+        if (\is_array($message)) {
+            $message = \print_r($message, true);
         }
 
 
@@ -228,9 +228,9 @@ class SugarLogger implements LoggerTemplate
         }
 
         //write out to the file including the time in the dateFormat the process id , the user id , and the log level as well as the message
-        fwrite(
+        \fwrite(
             $this->fp,
-            strftime($this->dateFormat) . ' [' . getmypid() . '][' . $userID . '][' . strtoupper($level) . '] ' . $message . "\n"
+            \strftime($this->dateFormat) . ' [' . \getmypid() . '][' . $userID . '][' . \strtoupper($level) . '] ' . $message . "\n"
             );
     }
 
@@ -250,14 +250,14 @@ class SugarLogger implements LoggerTemplate
             'm' => 1024 * 1024,         //MBytes
             'g' => 1024 * 1024 * 1024,  //GBytes
         );
-        if (preg_match('/^\s*([0-9]+\.[0-9]+|\.?[0-9]+)\s*(k|m|g|b)(b?ytes)?/i', $this->logSize, $match)) {
-            $rollAt = ( int ) $match[1] * $units[strtolower($match[2])];
+        if (\preg_match('/^\s*([0-9]+\.[0-9]+|\.?[0-9]+)\s*(k|m|g|b)(b?ytes)?/i', $this->logSize, $match)) {
+            $rollAt = ( int ) $match[1] * $units[\strtolower($match[2])];
         }
         //check if our log file is greater than that or if we are forcing the log to roll if and only if roll size assigned the value correctly
-        if ($force || ($rollAt && filesize($this->full_log_file) >= $rollAt)) {
+        if ($force || ($rollAt && \filesize($this->full_log_file) >= $rollAt)) {
             //now lets move the logs starting at the oldest and going to the newest
             for ($i = $this->maxLogs - 2; $i > 0; $i --) {
-                if (file_exists($this->log_dir . $this->logfile . $this->date_suffix . '_'. $i . $this->ext)) {
+                if (\file_exists($this->log_dir . $this->logfile . $this->date_suffix . '_'. $i . $this->ext)) {
                     $to = $i + 1;
                     $old_name = $this->log_dir . $this->logfile . $this->date_suffix . '_'. $i . $this->ext;
                     $new_name = $this->log_dir . $this->logfile . $this->date_suffix . '_'. $to . $this->ext;
@@ -279,7 +279,7 @@ class SugarLogger implements LoggerTemplate
     public function __wakeup()
     {
         // clean all properties
-        foreach (get_object_vars($this) as $k => $v) {
+        foreach (\get_object_vars($this) as $k => $v) {
             $this->$k = null;
         }
         throw new Exception("Not a serializable object");
@@ -293,7 +293,7 @@ class SugarLogger implements LoggerTemplate
     public function __destruct()
     {
         if ($this->fp) {
-            fclose($this->fp);
+            \fclose($this->fp);
             $this->fp = false;
         }
     }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -60,7 +60,7 @@ class SugarWidgetFieldBool extends SugarWidgetReportField
         $name = $layout_def['name'];
         $layout_def['name'] = 'id';
         $key = $this->_get_column_alias($layout_def);
-        $key = strtoupper($key);
+        $key = \strtoupper($key);
         
         if (empty($layout_def['fields'][$key])) {
             $layout_def['name'] = $name;

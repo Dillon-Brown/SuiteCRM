@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -152,7 +152,7 @@ class ListViewMerge extends EditViewMerge
      */
     protected function mergeFields()
     {
-        if ($this->sugarMerge instanceof SugarMerge && is_file($this->sugarMerge->getNewPath() . 'modules/ModuleBuilder/parsers/views/ListLayoutMetaDataParser.php')) {
+        if ($this->sugarMerge instanceof SugarMerge && \is_file($this->sugarMerge->getNewPath() . 'modules/ModuleBuilder/parsers/views/ListLayoutMetaDataParser.php')) {
             require_once($this->sugarMerge->getNewPath() . 'modules/ModuleBuilder/parsers/views/ListLayoutMetaDataParser.php');
         } else {
             require_once('modules/ModuleBuilder/parsers/views/ListLayoutMetaDataParser.php');
@@ -161,9 +161,9 @@ class ListViewMerge extends EditViewMerge
         VardefManager::loadVardef($this->module, $objectName);
 
         foreach ($this->customFields as $field=>$data) {
-            $fieldName = strtolower($data['loc']['row']);
+            $fieldName = \strtolower($data['loc']['row']);
             if (!empty($GLOBALS['dictionary'][$objectName]['fields'][$fieldName])) {
-                $data['data'] = array_merge(ListLayoutMetaDataParser::createViewDefsByFieldDefs($GLOBALS['dictionary'][$objectName]['fields'][$fieldName]), $data['data']);
+                $data['data'] = \array_merge(ListLayoutMetaDataParser::createViewDefsByFieldDefs($GLOBALS['dictionary'][$objectName]['fields'][$fieldName]), $data['data']);
             }
             //if we have this field in both the new fields and the original fields - it has existed since the last install/upgrade
             if (isset($this->newFields[$field]) && isset($this->originalFields[$field])) {
@@ -255,9 +255,9 @@ class ListViewMerge extends EditViewMerge
             return $custom;
         }
         
-        if (is_array($custom)) {
+        if (\is_array($custom)) {
             //if both new and custom are arrays then at this point new != custom and orig != custom and orig != new  so let's merge the custom and the new and return that
-            if (is_array($new)) {
+            if (\is_array($new)) {
                 $new = $this->arrayMerge($custom, $new);
                 $this->log($new);
                 $new['default'] = $custom['default'];

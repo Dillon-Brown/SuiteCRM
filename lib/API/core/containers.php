@@ -44,8 +44,8 @@ $version = 8;
 $container = new \Slim\Container;
 // Load Containers
 $paths = new \SuiteCRM\Utility\Paths();
-$containerFiles = (array)glob($paths->getLibraryPath() . '/API/v8/container/*.php');
-$customContainerFiles = (array)glob($paths->getCustomLibraryPath() . '/API/v8/container/*.php');
+$containerFiles = (array)\glob($paths->getLibraryPath() . '/API/v8/container/*.php');
+$customContainerFiles = (array)\glob($paths->getCustomLibraryPath() . '/API/v8/container/*.php');
 
 // load core files
 foreach ($containerFiles as $containerFile) {

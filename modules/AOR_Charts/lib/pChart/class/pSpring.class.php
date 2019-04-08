@@ -13,20 +13,20 @@
      You can find the whole class documentation on the pChart web site.
  */
 
- define("NODE_TYPE_FREE", 690001);
- define("NODE_TYPE_CENTRAL", 690002);
+ \define("NODE_TYPE_FREE", 690001);
+ \define("NODE_TYPE_CENTRAL", 690002);
 
- define("NODE_SHAPE_CIRCLE", 690011);
- define("NODE_SHAPE_TRIANGLE", 690012);
- define("NODE_SHAPE_SQUARE", 690013);
+ \define("NODE_SHAPE_CIRCLE", 690011);
+ \define("NODE_SHAPE_TRIANGLE", 690012);
+ \define("NODE_SHAPE_SQUARE", 690013);
 
- define("ALGORITHM_RANDOM", 690021);
- define("ALGORITHM_WEIGHTED", 690022);
- define("ALGORITHM_CIRCULAR", 690023);
- define("ALGORITHM_CENTRAL", 690024);
+ \define("ALGORITHM_RANDOM", 690021);
+ \define("ALGORITHM_WEIGHTED", 690022);
+ \define("ALGORITHM_CIRCULAR", 690023);
+ \define("ALGORITHM_CENTRAL", 690024);
 
- define("LABEL_CLASSIC", 690031);
- define("LABEL_LIGHT", 690032);
+ \define("LABEL_CLASSIC", 690031);
+ \define("LABEL_LIGHT", 690032);
 
  /* pSpring class definition */
  class pSpring
@@ -125,7 +125,7 @@
          /* Check connections reciprocity */
          foreach ($this->Data as $Key => $Settings) {
              if (isset($Settings["Connections"])) {
-                 $this->Data[$Key]["FreeZone"] = count($Settings["Connections"])*10 + 20;
+                 $this->Data[$Key]["FreeZone"] = \count($Settings["Connections"])*10 + 20;
              } else {
                  $this->Data[$Key]["FreeZone"] = 20;
              }
@@ -273,7 +273,7 @@
          $this->Data[$NodeID]["Shape"]		= $Shape;
          $this->Data[$NodeID]["FreeZone"]		= $FreeZone;
          if ($Connections != null) {
-             if (is_array($Connections)) {
+             if (\is_array($Connections)) {
                  foreach ($Connections as $Key => $Value) {
                      $this->Data[$NodeID]["Connections"][] = $Value;
                  }
@@ -286,7 +286,7 @@
      /* Set color attribute for a list of nodes */
      public function setNodesColor($Nodes, $Settings="")
      {
-         if (is_array($Nodes)) {
+         if (\is_array($Nodes)) {
              foreach ($Nodes as $Key => $NodeID) {
                  if (isset($this->Data[$NodeID])) {
                      if (isset($Settings["R"])) {
@@ -428,8 +428,8 @@
          $MaxConnections = 0;
          foreach ($this->Data as $Key => $Settings) {
              if (isset($Settings["Connections"])) {
-                 if ($MaxConnections < count($Settings["Connections"])) {
-                     $MaxConnections = count($Settings["Connections"]);
+                 if ($MaxConnections < \count($Settings["Connections"])) {
+                     $MaxConnections = \count($Settings["Connections"]);
                  }
              }
          }
@@ -442,23 +442,23 @@
                  }
                  if ($Settings["Type"] == NODE_TYPE_FREE) {
                      if (isset($Settings["Connections"])) {
-                         $Connections = count($Settings["Connections"]);
+                         $Connections = \count($Settings["Connections"]);
                      } else {
                          $Connections = 0;
                      }
 
                      $Ring  = $MaxConnections - $Connections;
-                     $Angle = rand(0, 360);
+                     $Angle = \rand(0, 360);
            
-                     $this->Data[$Key]["X"] = cos(deg2rad($Angle)) * ($Ring*$this->RingSize) + $CenterX;
-                     $this->Data[$Key]["Y"] = sin(deg2rad($Angle)) * ($Ring*$this->RingSize) + $CenterY;
+                     $this->Data[$Key]["X"] = \cos(\deg2rad($Angle)) * ($Ring*$this->RingSize) + $CenterX;
+                     $this->Data[$Key]["Y"] = \sin(\deg2rad($Angle)) * ($Ring*$this->RingSize) + $CenterY;
                  }
              }
          } elseif ($Algorithm == ALGORITHM_CENTRAL) {
              /* Put a weight on each nodes */
              foreach ($this->Data as $Key => $Settings) {
                  if (isset($Settings["Connections"])) {
-                     $this->Data[$Key]["Weight"] = count($Settings["Connections"]);
+                     $this->Data[$Key]["Weight"] = \count($Settings["Connections"]);
                  } else {
                      $this->Data[$Key]["Weight"] = 0;
                  }
@@ -473,7 +473,7 @@
                      }
                      if ($Settings["Type"] == NODE_TYPE_FREE) {
                          if (isset($Settings["Connections"])) {
-                             $Connections = count($Settings["Connections"]);
+                             $Connections = \count($Settings["Connections"]);
                          } else {
                              $Connections = 0;
                          }
@@ -488,19 +488,19 @@
                                  $Tries = 0;
                                  while (!$Done && $Tries <= $Weight*2) {
                                      $Tries++;
-                                     $Angle = floor(rand(0, $Weight)*$AngleDivision);
+                                     $Angle = \floor(\rand(0, $Weight)*$AngleDivision);
                                      if (!isset($this->Data[$BiggestPartner]["Angular"][$Angle]) || !isset($this->Data[$BiggestPartner]["Angular"])) {
                                          $this->Data[$BiggestPartner]["Angular"][$Angle] = $Angle;
                                          $Done = true;
                                      }
                                  }
                                  if (!$Done) {
-                                     $Angle = rand(0, 360);
+                                     $Angle = \rand(0, 360);
                                      $this->Data[$BiggestPartner]["Angular"][$Angle] = $Angle;
                                  }
 
-                                 $X = cos(deg2rad($Angle)) * ($Ring) + $this->Data[$BiggestPartner]["X"];
-                                 $Y = sin(deg2rad($Angle)) * ($Ring) + $this->Data[$BiggestPartner]["Y"];
+                                 $X = \cos(\deg2rad($Angle)) * ($Ring) + $this->Data[$BiggestPartner]["X"];
+                                 $Y = \sin(\deg2rad($Angle)) * ($Ring) + $this->Data[$BiggestPartner]["Y"];
 
                                  $this->Data[$Key]["X"] = $X;
                                  $this->Data[$Key]["Y"] = $Y;
@@ -519,17 +519,17 @@
                      }
                      if ($Settings["Type"] == NODE_TYPE_FREE) {
                          if (isset($Settings["Connections"])) {
-                             $Connections = count($Settings["Connections"]);
+                             $Connections = \count($Settings["Connections"]);
                          } else {
                              $Connections = 0;
                          }
 
                          if ($Connections == $i) {
                              $Ring  = $MaxConnections - $Connections;
-                             $Angle = rand(0, 360);
+                             $Angle = \rand(0, 360);
 
-                             $X = cos(deg2rad($Angle)) * ($Ring*$this->RingSize) + $CenterX;
-                             $Y = sin(deg2rad($Angle)) * ($Ring*$this->RingSize) + $CenterY;
+                             $X = \cos(\deg2rad($Angle)) * ($Ring*$this->RingSize) + $CenterX;
+                             $Y = \sin(\deg2rad($Angle)) * ($Ring*$this->RingSize) + $CenterY;
 
                              $MedianOffset = $this->getMedianOffset($Key, $X, $Y);
 
@@ -542,8 +542,8 @@
          } elseif ($Algorithm == ALGORITHM_RANDOM) {
              foreach ($this->Data as $Key => $Settings) {
                  if ($Settings["Type"] == NODE_TYPE_FREE) {
-                     $this->Data[$Key]["X"] = $CenterX + rand(-20, 20);
-                     $this->Data[$Key]["Y"] = $CenterY + rand(-20, 20);
+                     $this->Data[$Key]["X"] = $CenterX + \rand(-20, 20);
+                     $this->Data[$Key]["Y"] = $CenterY + \rand(-20, 20);
                  }
                  if ($Settings["Type"] == NODE_TYPE_CENTRAL) {
                      $this->Data[$Key]["X"] = $CenterX;
@@ -576,7 +576,7 @@
 
                          /* Nodes too close, repulsion occurs */
                          if ($Distance < $FreeZone) {
-                             $Force = log(pow(2, $FreeZone-$Distance));
+                             $Force = \log(\pow(2, $FreeZone-$Distance));
                              if ($Force > 1) {
                                  $this->Data[$Key]["Vectors"][] = array("Type"=>"R","Angle"=>$Angle % 360,"Force"=>$Force);
                              }
@@ -596,9 +596,9 @@
                              $Angle    = $this->getAngle($X1, $Y1, $X2, $Y2);
 
                              if ($Distance > $FreeZone) {
-                                 $Force = log(($Distance-$FreeZone)+1);
+                                 $Force = \log(($Distance-$FreeZone)+1);
                              } else {
-                                 $Force = log(($FreeZone-$Distance)+1);
+                                 $Force = \log(($FreeZone-$Distance)+1);
                                  ($Angle = $Angle + 180);
                              }
 
@@ -623,8 +623,8 @@
                      $Angle = $Vector["Angle"];
                      $Factor = $Type == "A" ? $this->MagneticForceA : $this->MagneticForceR;
 
-                     $X = cos(deg2rad($Angle)) * $Force * $Factor + $X;
-                     $Y = sin(deg2rad($Angle)) * $Force * $Factor + $Y;
+                     $X = \cos(\deg2rad($Angle)) * $Force * $Factor + $X;
+                     $Y = \sin(\deg2rad($Angle)) * $Force * $Factor + $Y;
                  }
              }
 
@@ -886,12 +886,12 @@
                  $this->pChartObject->drawFilledCircle($X, $Y, $Size, $Color);
              } elseif ($Shape == NODE_SHAPE_TRIANGLE) {
                  $Points = "";
-                 $Points[] = cos(deg2rad(270)) * $Size + $X;
-                 $Points[] = sin(deg2rad(270)) * $Size + $Y;
-                 $Points[] = cos(deg2rad(45)) * $Size + $X;
-                 $Points[] = sin(deg2rad(45)) * $Size + $Y;
-                 $Points[] = cos(deg2rad(135)) * $Size + $X;
-                 $Points[] = sin(deg2rad(135)) * $Size + $Y;
+                 $Points[] = \cos(\deg2rad(270)) * $Size + $X;
+                 $Points[] = \sin(\deg2rad(270)) * $Size + $Y;
+                 $Points[] = \cos(\deg2rad(45)) * $Size + $X;
+                 $Points[] = \sin(\deg2rad(45)) * $Size + $Y;
+                 $Points[] = \cos(\deg2rad(135)) * $Size + $X;
+                 $Points[] = \sin(\deg2rad(135)) * $Size + $Y;
                  $this->pChartObject->drawPolygon($Points, $Color);
              } elseif ($Shape == NODE_SHAPE_SQUARE) {
                  $Offset = $Size/2;
@@ -933,8 +933,8 @@
                          $Factor = $Type == "A" ? $this->MagneticForceA : $this->MagneticForceR;
                          $Color  = $Type == "A" ? array("FillR"=>255,"FillG"=>0,"FillB"=>0) : array("FillR"=>0,"FillG"=>255,"FillB"=>0);
 
-                         $X2 = cos(deg2rad($Angle)) * $Force * $Factor + $X1;
-                         $Y2 = sin(deg2rad($Angle)) * $Force * $Factor + $Y1;
+                         $X2 = \cos(\deg2rad($Angle)) * $Force * $Factor + $X1;
+                         $Y2 = \sin(\deg2rad($Angle)) * $Force * $Factor + $Y1;
 
                          $this->pChartObject->drawArrow($X1, $Y1, $X2, $Y2, $Color);
                      }
@@ -948,7 +948,7 @@
      /* Return the distance between two points */
      public function getDistance($X1, $Y1, $X2, $Y2)
      {
-         return (sqrt(($X2-$X1)*($X2-$X1)+($Y2-$Y1)*($Y2-$Y1)));
+         return (\sqrt(($X2-$X1)*($X2-$X1)+($Y2-$Y1)*($Y2-$Y1)));
      }
 
      /* Return the angle made by a line and the X axis */
@@ -956,11 +956,11 @@
      {
          $Opposite = $Y2 - $Y1;
          $Adjacent = $X2 - $X1;
-         $Angle = rad2deg(atan2($Opposite, $Adjacent));
+         $Angle = \rad2deg(\atan2($Opposite, $Adjacent));
          if ($Angle > 0) {
              return($Angle);
          }
-         return(360-abs($Angle));
+         return(360-\abs($Angle));
      }
 
      public function intersect($X1, $Y1, $X2, $Y2, $X3, $Y3, $X4, $Y4)
@@ -979,8 +979,8 @@
          }
          $Yi = $Xi * (($Y1 - $Y2)/$C) + (($X1 * $Y2 - $X2 * $Y1)/$C);
 
-         if ($Xi >= min($X1, $X2) && $Xi >= min($X3, $X4) && $Xi <= max($X1, $X2) && $Xi <= max($X3, $X4)) {
-             if ($Yi >= min($Y1, $Y2) && $Yi >= min($Y3, $Y4) && $Yi <= max($Y1, $Y2) && $Yi <= max($Y3, $Y4)) {
+         if ($Xi >= \min($X1, $X2) && $Xi >= \min($X3, $X4) && $Xi <= \max($X1, $X2) && $Xi <= \max($X3, $X4)) {
+             if ($Yi >= \min($Y1, $Y2) && $Yi >= \min($Y3, $Y4) && $Yi <= \max($Y1, $Y2) && $Yi <= \max($Y3, $Y4)) {
                  return(true);
              }
          }

@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -70,7 +70,7 @@ class AOS_QuotesViewDetail extends ViewDetail
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         $this->__construct();
     }
@@ -102,7 +102,7 @@ class AOS_QuotesViewDetail extends ViewDetail
     protected function displayPopupHtml()
     {
         global $app_list_strings, $app_strings, $mod_strings;
-        $templatesList = array_keys($app_list_strings['template_ddown_c_list']);
+        $templatesList = \array_keys($app_list_strings['template_ddown_c_list']);
         $template = new Sugar_Smarty();
         $template->assign('APP_LIST_STRINGS', $app_list_strings);
         $template->assign('APP', $app_strings);
@@ -111,9 +111,9 @@ class AOS_QuotesViewDetail extends ViewDetail
         $template->assign('TEMPLATES', $templatesList);
 
         if ($templatesList) {
-            $template->assign('TOTAL_TEMPLATES', count($templatesList));
+            $template->assign('TOTAL_TEMPLATES', \count($templatesList));
             foreach ($templatesList as $t => $templatesListItem) {
-                $templatesList[$t] = str_replace('^', '', $templatesListItem);
+                $templatesList[$t] = \str_replace('^', '', $templatesListItem);
             }
             echo $template->fetch('modules/AOS_Quotes/templates/showPopupWithTemplates.tpl');
         } else {

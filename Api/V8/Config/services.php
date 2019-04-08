@@ -25,4 +25,4 @@ return CustomLoader::mergeCustomArray([
     (require __DIR__ . '/services/middlewares.php') +
     (require __DIR__ . '/services/params.php') +
     (require __DIR__ . '/services/services.php') +
-    (require __DIR__ . '/services/validators.php'), basename(__FILE__));
+    (require __DIR__ . '/services/validators.php'), \basename(__FILE__));

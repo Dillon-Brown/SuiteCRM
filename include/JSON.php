@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -70,12 +70,12 @@ class JSON
      */
     public static function encode($array, $addSecurityEnvelope = false, $encodeSpecial = false)
     {
-        $encodedString = json_encode($array);
+        $encodedString = \json_encode($array);
 
         if ($encodeSpecial) {
             $charMap = array('<' => '\u003C', '>' => '\u003E', "'" => '\u0027', '&' => '\u0026');
             foreach ($charMap as $c => $enc) {
-                $encodedString = str_replace($c, $enc, $encodedString);
+                $encodedString = \str_replace($c, $enc, $encodedString);
             }
         }
 
@@ -92,7 +92,7 @@ class JSON
      */
     public static function decode($string, $examineEnvelope=false, $assoc = true)
     {
-        return json_decode($string, $assoc);
+        return \json_decode($string, $assoc);
     }
 
     /**

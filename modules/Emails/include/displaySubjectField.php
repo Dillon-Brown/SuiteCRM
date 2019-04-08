@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -59,14 +59,14 @@ function displaySubjectField($focus, $field, $value, $view)
         return $result;
     }
 
-    if (strtolower($field) !== 'subject') {
+    if (\strtolower($field) !== 'subject') {
         return $result;
     }
 
-    if (is_object($focus)) {
-        $focus = get_object_vars($focus);
-    } elseif (is_array($focus)) {
-        $focus = array_change_key_case($focus, CASE_LOWER);
+    if (\is_object($focus)) {
+        $focus = \get_object_vars($focus);
+    } elseif (\is_array($focus)) {
+        $focus = \array_change_key_case($focus, CASE_LOWER);
     }
 
 

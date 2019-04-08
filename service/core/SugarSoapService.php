@@ -37,8 +37,8 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry')) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry')) {
+    \define('sugarEntry', true);
 }
 
 require_once('service/core/SugarWebService.php');
@@ -100,7 +100,7 @@ abstract class SugarSoapService extends SugarWebService
         global $observers;
         if (!empty($observers)) {
             foreach ($observers as $observer) {
-                if (method_exists($observer, 'set_soap_server')) {
+                if (\method_exists($observer, 'set_soap_server')) {
                     $observer->set_soap_server($this->server);
                 }
             }

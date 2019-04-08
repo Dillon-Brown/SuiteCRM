@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -68,7 +68,7 @@ class LeadFormBase extends PersonFormBase
         $query .= " WHERE deleted != 1 AND (status <> 'Converted' OR status IS NULL) AND ";
 
         //Use the first and last name from the $_POST to filter.  If only last name supplied use that
-        if (isset($_POST[$prefix.'first_name']) && strlen($_POST[$prefix.'first_name']) != 0 && isset($_POST[$prefix.'last_name']) && strlen($_POST[$prefix.'last_name']) != 0) {
+        if (isset($_POST[$prefix.'first_name']) && \strlen($_POST[$prefix.'first_name']) != 0 && isset($_POST[$prefix.'last_name']) && \strlen($_POST[$prefix.'last_name']) != 0) {
             $query .= " (first_name='". $_POST[$prefix.'first_name'] . "' AND last_name = '". $_POST[$prefix.'last_name'] ."')";
         } else {
             $query .= " last_name = '". $_POST[$prefix.'last_name'] ."'";
@@ -224,7 +224,7 @@ EOQ;
             $focus = $exist_lead;
         }
 
-        if ($useRequired &&  !checkRequired($prefix, array_keys($focus->required_fields))) {
+        if ($useRequired &&  !checkRequired($prefix, \array_keys($focus->required_fields))) {
             return null;
         }
         $focus = populateFromPost($prefix, $focus);
@@ -256,21 +256,21 @@ EOQ;
 
                 //add all of the post fields to redirect get string
                 foreach ($focus->column_fields as $field) {
-                    if (!empty($focus->$field) && !is_object($focus->$field)) {
-                        $get .= "&Leads$field=".urlencode($focus->$field);
+                    if (!empty($focus->$field) && !\is_object($focus->$field)) {
+                        $get .= "&Leads$field=".\urlencode($focus->$field);
                     }
                 }
 
                 foreach ($focus->additional_column_fields as $field) {
                     if (!empty($focus->$field)) {
-                        $get .= "&Leads$field=".urlencode($focus->$field);
+                        $get .= "&Leads$field=".\urlencode($focus->$field);
                     }
                 }
 
                 if ($focus->hasCustomFields()) {
                     foreach ($focus->field_defs as $name=>$field) {
                         if (!empty($field['source']) && $field['source'] == 'custom_fields') {
-                            $get .= "&Leads$name=". (!empty($focus->$name) ? urlencode($focus->$name) : '');
+                            $get .= "&Leads$name=". (!empty($focus->$name) ? \urlencode($focus->$name) : '');
                         }
                     }
                 }
@@ -302,20 +302,20 @@ EOQ;
                         $urlData[$var] = $_POST[$var];
                     }
                 }
-                $get .= "&".http_build_query($urlData);
+                $get .= "&".\http_build_query($urlData);
                 $_SESSION['SHOW_DUPLICATES'] = $get;
 
                 if (!empty($_POST['is_ajax_call']) && $_POST['is_ajax_call'] == '1') {
-                    ob_clean();
+                    \ob_clean();
                     $json = getJSONobj();
                     echo $json->encode(array('status' => 'dupe', 'get' => $location));
                 } elseif (!empty($_REQUEST['ajax_load'])) {
                     echo "<script>SUGAR.ajaxUI.loadContent('index.php?$location');</script>";
                 } else {
                     if (!empty($_POST['to_pdf'])) {
-                        $location .= '&to_pdf='.urlencode($_POST['to_pdf']);
+                        $location .= '&to_pdf='.\urlencode($_POST['to_pdf']);
                     }
-                    header("Location: index.php?$location");
+                    \header("Location: index.php?$location");
                 }
                 return null;
             }
@@ -347,7 +347,7 @@ EOQ;
             $prospect->save();
 
             //if prospect id exists, make sure we are coming from prospect detail
-            if (strtolower($_POST['return_module']) =='prospects' && strtolower($_POST['return_action']) == 'detailview') {
+            if (\strtolower($_POST['return_module']) =='prospects' && \strtolower($_POST['return_action']) == 'detailview') {
                 //create campaing_log entry
 
                 if (isset($focus->campaign_id) && $focus->campaign_id != null) {
@@ -376,7 +376,7 @@ EOQ;
             $email->load_relationship('leads');
             $email->leads->add($focus->id);
 
-            header("Location: index.php?&module=Emails&action=EditView&type=out&inbound_email_id=".urlencode($_REQUEST['inbound_email_id'])."&parent_id=".$email->parent_id."&parent_type=".$email->parent_type.'&start='.urlencode($_REQUEST['start']));
+            \header("Location: index.php?&module=Emails&action=EditView&type=out&inbound_email_id=".\urlencode($_REQUEST['inbound_email_id'])."&parent_id=".$email->parent_id."&parent_type=".$email->parent_type.'&start='.\urlencode($_REQUEST['start']));
             exit();
         }
         ////	END INBOUND EMAIL HANDLING

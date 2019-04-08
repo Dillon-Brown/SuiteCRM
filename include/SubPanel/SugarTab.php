@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -62,7 +62,7 @@ class SugarTab
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($type);
     }
@@ -82,12 +82,12 @@ class SugarTab
             $selected_group = $key_all;
         }
 
-        $moreTabs = array_slice($mainTabs, $max_tabs);
+        $moreTabs = \array_slice($mainTabs, $max_tabs);
         /* If the current tab is in the 'More' menu, move it into the visible menu. */
         if (!empty($moreTabs[$selected_group])) {
             $temp = array($selected_group => $mainTabs[$selected_group]);
             unset($mainTabs[$selected_group]);
-            array_splice($mainTabs, $max_tabs-1, 0, $temp);
+            \array_splice($mainTabs, $max_tabs-1, 0, $temp);
         }
 
         $subpanelTitles = array();
@@ -99,15 +99,15 @@ class SugarTab
         }
 
         $this->ss->assign('showLinks', 'false');
-        $this->ss->assign('sugartabs', array_slice($mainTabs, 0, $max_tabs));
-        $this->ss->assign('moreMenu', array_slice($mainTabs, $max_tabs));
+        $this->ss->assign('sugartabs', \array_slice($mainTabs, 0, $max_tabs));
+        $this->ss->assign('moreMenu', \array_slice($mainTabs, $max_tabs));
         $this->ss->assign('othertabs', $otherTabs);
-        $this->ss->assign('subpanelTitlesJSON', json_encode($subpanelTitles));
+        $this->ss->assign('subpanelTitlesJSON', \json_encode($subpanelTitles));
         $this->ss->assign('startSubPanel', $selected_group);
         $this->ss->assign('sugarVersionJsStr', "?s=$sugar_version&c={$sugar_config['js_custom_version']}");
         if (!empty($mainTabs)) {
-            $mtak = array_keys($mainTabs);
-            $this->ss->assign('moreTab', $mainTabs[$mtak[min(count($mtak)-1, $max_tabs-1)]]['label']);
+            $mtak = \array_keys($mainTabs);
+            $this->ss->assign('moreTab', $mainTabs[$mtak[\min(\count($mtak)-1, $max_tabs-1)]]['label']);
         }
     }
 

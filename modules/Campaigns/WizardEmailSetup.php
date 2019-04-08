@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
        die('Not A Valid Entry Point');
 }
 
@@ -135,8 +135,8 @@ $mbox_msg = ' ';
 $need_mbox = '';
 
 $mboxTable = "<table class='list view' width='100%' border='0' cellspacing='1' cellpadding='1'>";
-if (isset($mbox) && count($mbox)>0) {
-    $mboxTable .= "<tr><td colspan='5'><b>" .count($mbox) ." ". $mod_strings['LBL_MAILBOX_CHECK_WIZ_GOOD']." </b>.</td></tr>";
+if (isset($mbox) && \count($mbox)>0) {
+    $mboxTable .= "<tr><td colspan='5'><b>" .\count($mbox) ." ". $mod_strings['LBL_MAILBOX_CHECK_WIZ_GOOD']." </b>.</td></tr>";
     $mboxTable .= "<tr class='listViewHRS1'><td width='20%'><b>".$mod_strings['LBL_MAILBOX_NAME']."</b></td>"
                    .  " <td width='20%'><b>".$mod_strings['LBL_LOGIN']."</b></td>"
                    .  " <td width='20%'><b>".$mod_strings['LBL_MAILBOX']."</b></td>"

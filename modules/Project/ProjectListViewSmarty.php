@@ -22,7 +22,7 @@ class ProjectListViewSmarty extends ListViewSmarty
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -33,7 +33,7 @@ class ProjectListViewSmarty extends ListViewSmarty
         global $app_strings;
         global $sugar_config;
 
-        if (preg_match('/^6\.[2-4]/', $sugar_config['sugar_version'])) { // Older v6.2-6.4
+        if (\preg_match('/^6\.[2-4]/', $sugar_config['sugar_version'])) { // Older v6.2-6.4
 
             $script = "<a href='#' style='width: 150px' class='menuItem' onmouseover='hiliteItem(this,\"yes\");' " .
                 "onmouseout='unhiliteItem(this);' onclick=\"return sListView.send_form(true, '{$_REQUEST['module']}', " .

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -83,7 +83,7 @@ class SugarWidgetFieldCurrency extends SugarWidgetFieldInt
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($layout_manager);
     }
@@ -116,8 +116,8 @@ class SugarWidgetFieldCurrency extends SugarWidgetFieldInt
         $record = '';
         if ($layout_def['table_key'] == 'self' && isset($layout_def['fields']['PRIMARYID'])) {
             $record = $layout_def['fields']['PRIMARYID'];
-        } elseif (isset($layout_def['fields'][strtoupper($layout_def['table_alias']."_id")])) {
-            $record = $layout_def['fields'][strtoupper($layout_def['table_alias']."_id")];
+        } elseif (isset($layout_def['fields'][\strtoupper($layout_def['table_alias']."_id")])) {
+            $record = $layout_def['fields'][\strtoupper($layout_def['table_alias']."_id")];
         }
         if (!empty($record)) {
             $field_name = $layout_def['name'];
@@ -140,7 +140,7 @@ class SugarWidgetFieldCurrency extends SugarWidgetFieldInt
     {
         $value = currency_format_number(
             parent::displayListPlain($layout_def),
-            array_merge(
+            \array_merge(
                 array(
                     'convert' => false,
                 ),
@@ -176,7 +176,7 @@ class SugarWidgetFieldCurrency extends SugarWidgetFieldInt
 
     public function isSystemCurrency(&$layout_def)
     {
-        if (strpos($layout_def['name'], '_usdoll') === false) {
+        if (\strpos($layout_def['name'], '_usdoll') === false) {
             return false;
         }
         return true;
@@ -222,8 +222,8 @@ class SugarWidgetFieldCurrency extends SugarWidgetFieldInt
                 $cols = DBManagerFactory::getInstance()->getHelper()->get_columns($real_table);
                 $add_currency_id = isset($cols['currency_id']) ? true : false;
 
-                if (!$add_currency_id && preg_match('/.*?_cstm$/i', $real_table)) {
-                    $table = str_replace('_cstm', '', $table);
+                if (!$add_currency_id && \preg_match('/.*?_cstm$/i', $real_table)) {
+                    $table = \str_replace('_cstm', '', $table);
                     $cols = DBManagerFactory::getInstance()->getHelper()->get_columns($table);
                     $add_currency_id = isset($cols['currency_id']) ? true : false;
                 }
@@ -248,7 +248,7 @@ class SugarWidgetFieldCurrency extends SugarWidgetFieldInt
             $currency_symbol = $layout_def['currency_symbol'];
             $currency_id = $layout_def['currency_id'];
         } else {
-            $key = strtoupper(isset($layout_def['varname']) ? $layout_def['varname'] : $this->_get_column_alias($layout_def));
+            $key = \strtoupper(isset($layout_def['varname']) ? $layout_def['varname'] : $this->_get_column_alias($layout_def));
             if ($this->isSystemCurrency($layout_def)) {
                 $currency_id = '-99';
             } elseif (isset($layout_def['fields'][$key.'_CURRENCY'])) {

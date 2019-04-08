@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -60,7 +60,7 @@ if (!isset($prefix)) {
 global $timedate;
 $time_format = $timedate->get_user_time_format();
 $time_separator = ":";
-if (preg_match('/\d+([^\d])\d+([^\d]*)/s', $time_format, $match)) {
+if (\preg_match('/\d+([^\d])\d+([^\d]*)/s', $time_format, $match)) {
     $time_separator = $match[1];
 }
 
@@ -103,14 +103,14 @@ if ($focus->date_due_flag != 'off' && $focus->date_due_flag != 1) {
 }
 
 //if only the time is passed in, without a date, then string length will be 7
-if (isset($_REQUEST['date_due']) && strlen(trim($_REQUEST['date_due']))<8) {
+if (isset($_REQUEST['date_due']) && \strlen(\trim($_REQUEST['date_due']))<8) {
     //no date set, so clear out field, and set the rest flag to true
     $focus->date_due_flag = 1;
     $focus->date_due = '';
 }
 
 //if only the time is passed in, without a date, then string length will be 7
-if (isset($_REQUEST['date_start']) && strlen(trim($_REQUEST['date_start']))<8) {
+if (isset($_REQUEST['date_start']) && \strlen(\trim($_REQUEST['date_start']))<8) {
     //no date set, so clear out field, and set the rest flag to true
     $focus->date_start_flag = 1;
     $focus->date_start = '';
@@ -135,7 +135,7 @@ if (isset($_REQUEST['inbound_email_id']) && !empty($_REQUEST['inbound_email_id']
     $email->load_relationship('tasks');
     $email->tasks->add($focus->id);
     
-    header("Location: index.php?&module=Emails&action=EditView&type=out&inbound_email_id=".$_REQUEST['inbound_email_id']."&parent_id=".$email->parent_id."&parent_type=".$email->parent_type.'&start='.$_REQUEST['start'].'&assigned_user_id='.$current_user->id);
+    \header("Location: index.php?&module=Emails&action=EditView&type=out&inbound_email_id=".$_REQUEST['inbound_email_id']."&parent_id=".$email->parent_id."&parent_type=".$email->parent_type.'&start='.$_REQUEST['start'].'&assigned_user_id='.$current_user->id);
     exit();
 }
 ////	END INBOUND EMAIL HANDLING

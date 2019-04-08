@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -88,8 +88,8 @@ class ViewSearchProperties extends ViewList
                 $disabled = array();
                 $enabled = array();
             
-                $enabled_fields = array_flip($fields);
-                $field_keys = array_keys($field_defs);
+                $enabled_fields = \array_flip($fields);
+                $field_keys = \array_keys($field_defs);
     
                 foreach ($field_keys as $index=>$key) {
                     if (!empty($field_defs[$key]['hidden']) || empty($field_defs[$key]['search'])) {
@@ -103,9 +103,9 @@ class ViewSearchProperties extends ViewList
                     }
                 }
     
-                $modules_sources[$module] = array_merge($enabled, $disabled);
+                $modules_sources[$module] = \array_merge($enabled, $disabled);
 
-                asort($disabled);
+                \asort($disabled);
                 $display_data[$module] = array('enabled' => $enabled, 'disabled' => $disabled,
                                                'module_name' => isset($GLOBALS['app_list_strings']['moduleList'][$module]) ? $GLOBALS['app_list_strings']['moduleList'][$module] : $module);
             }

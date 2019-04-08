@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,7 +71,7 @@ class TemplateTextArea extends TemplateText
     public function get_xtpl_detail()
     {
         $name = $this->name;
-        return nl2br($this->bean->$name);
+        return \nl2br($this->bean->$name);
     }
 
     public function get_field_def()

@@ -61,7 +61,7 @@ class DropDownBrowser
         
         $my_list_strings = $app_list_strings;
         foreach ($my_list_strings as $key=>$value) {
-            if (!is_array($value)) {
+            if (!\is_array($value)) {
                 unset($my_list_strings[$key]);
             }
         }
@@ -70,8 +70,8 @@ class DropDownBrowser
             unset($my_list_strings[$restrictedDropdown]);
         }
 
-        $dropdowns = array_keys($my_list_strings);
-        asort($dropdowns);
+        $dropdowns = \array_keys($my_list_strings);
+        \asort($dropdowns);
         foreach ($dropdowns as $dd) {
             if (!empty($dd)) {
                 $nodes[$dd] = array( 'name'=>$dd, 'action'=>"module=ModuleBuilder&action=dropdown&view_package=studio&dropdown_name=$dd",'imageTitle' => 'SPSync', 'help' => 'editDropDownBtn');

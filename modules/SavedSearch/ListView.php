@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -84,7 +84,7 @@ echo '<br />' .get_form_header($mod_strings['LBL_LIST_FORM_TITLE'], '', false);
 
 $savedSearch = new SavedSearch();
 $lv = new ListViewSmarty();
-if (file_exists('custom/modules/SavedSearch/metadata/listviewdefs.php')) {
+if (\file_exists('custom/modules/SavedSearch/metadata/listviewdefs.php')) {
     require_once('custom/modules/SavedSearch/metadata/listviewdefs.php');
 } else {
     require_once('modules/SavedSearch/metadata/listviewdefs.php');

@@ -31,10 +31,10 @@ function smarty_function_eval($params, &$smarty)
 
     $smarty->_compile_source('evaluated template', $params['var'], $_var_compiled);
 
-    ob_start();
+    \ob_start();
     $smarty->_eval('?>' . $_var_compiled);
-    $_contents = ob_get_contents();
-    ob_end_clean();
+    $_contents = \ob_get_contents();
+    \ob_end_clean();
 
     if (!empty($params['assign'])) {
         $smarty->assign($params['assign'], $_contents);

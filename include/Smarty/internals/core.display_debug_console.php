@@ -22,8 +22,8 @@ function smarty_core_display_debug_console($params, &$smarty)
     if (empty($smarty->debug_tpl)) {
         // set path to debug template from SMARTY_DIR
         $smarty->debug_tpl = SMARTY_DIR . 'debug.tpl';
-        if ($smarty->security && is_file($smarty->debug_tpl)) {
-            $smarty->secure_dir[] = realpath($smarty->debug_tpl);
+        if ($smarty->security && \is_file($smarty->debug_tpl)) {
+            $smarty->secure_dir[] = \realpath($smarty->debug_tpl);
         }
         $smarty->debug_tpl = 'file:' . SMARTY_DIR . 'debug.tpl';
     }
@@ -39,10 +39,10 @@ function smarty_core_display_debug_console($params, &$smarty)
 
     $_compile_path = $smarty->_get_compile_path($smarty->debug_tpl);
     if ($smarty->_compile_resource($smarty->debug_tpl, $_compile_path)) {
-        ob_start();
+        \ob_start();
         $smarty->_include($_compile_path);
-        $_results = ob_get_contents();
-        ob_end_clean();
+        $_results = \ob_get_contents();
+        \ob_end_clean();
     } else {
         $_results = '';
     }

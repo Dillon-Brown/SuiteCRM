@@ -26,7 +26,7 @@ function smarty_core_get_php_resource(&$params, &$smarty)
 
     if ($params['resource_type'] == 'file') {
         $_readable = false;
-        if (file_exists($params['resource_name']) && is_readable($params['resource_name'])) {
+        if (\file_exists($params['resource_name']) && \is_readable($params['resource_name'])) {
             $_readable = true;
         } else {
             // test for file in include_path
@@ -39,8 +39,8 @@ function smarty_core_get_php_resource(&$params, &$smarty)
         }
     } elseif ($params['resource_type'] != 'file') {
         $_template_source = null;
-        $_readable = is_callable($smarty->_plugins['resource'][$params['resource_type']][0][0])
-            && call_user_func_array(
+        $_readable = \is_callable($smarty->_plugins['resource'][$params['resource_type']][0][0])
+            && \call_user_func_array(
                 $smarty->_plugins['resource'][$params['resource_type']][0][0],
                                     array($params['resource_name'], &$_template_source, &$smarty)
             );
@@ -49,7 +49,7 @@ function smarty_core_get_php_resource(&$params, &$smarty)
     /*
      * Set the error function, depending on which class calls us.
      */
-    if (method_exists($smarty, '_syntax_error')) {
+    if (\method_exists($smarty, '_syntax_error')) {
         $_error_funcc = '_syntax_error';
     } else {
         $_error_funcc = 'trigger_error';

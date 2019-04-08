@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -85,12 +85,12 @@ class MyPipelineBySalesStageDashlet extends DashletGenericChart
         global $app_list_strings;
 
         $selected_datax = array();
-        if (count($this->mypbss_sales_stages) > 0) {
+        if (\count($this->mypbss_sales_stages) > 0) {
             foreach ($this->mypbss_sales_stages as $key) {
                 $selected_datax[] = $key;
             }
         } else {
-            $selected_datax = array_keys($app_list_strings['sales_stage_dom']);
+            $selected_datax = \array_keys($app_list_strings['sales_stage_dom']);
         }
 
         $this->_searchFields['mypbss_sales_stages']['options'] = $app_list_strings['sales_stage_dom'];
@@ -131,29 +131,29 @@ class MyPipelineBySalesStageDashlet extends DashletGenericChart
 
         $chartReadyData = $this->prepareChartData($data, $currency_symbol, $thousands_symbol);
 
-        $canvasId = 'rGraphOppByLeadSourceByOutcome'.uniqid();
+        $canvasId = 'rGraphOppByLeadSourceByOutcome'.\uniqid();
         $chartWidth     = 900;
         $chartHeight    = 500;
         $autoRefresh = $this->processAutoRefresh();
 
         //$chartReadyData['data'] = [[1.1,2.2],[3.3,4.4]];
-        $jsonData = json_encode($chartReadyData['data']);
-        $jsonLabels = json_encode($chartReadyData['labels']);
-        $jsonLabelsAndValues = json_encode($chartReadyData['labelsAndValues']);
-        $jsonTooltips = json_encode($chartReadyData['tooltips']);
+        $jsonData = \json_encode($chartReadyData['data']);
+        $jsonLabels = \json_encode($chartReadyData['labels']);
+        $jsonLabelsAndValues = \json_encode($chartReadyData['labelsAndValues']);
+        $jsonTooltips = \json_encode($chartReadyData['tooltips']);
 
         $total = $chartReadyData['total'];
 
 
-        $jsonKey = json_encode($chartReadyData['key']);
-        $jsonTooltips = json_encode($chartReadyData['tooltips']);
+        $jsonKey = \json_encode($chartReadyData['key']);
+        $jsonTooltips = \json_encode($chartReadyData['tooltips']);
 
         $colours = "['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928']";
 
         $startDate = $timedate->to_display_date($this->mypbss_date_start, false);
         $endDate = $timedate->to_display_date($this->mypbss_date_end, false);
 
-        if (!is_array($chartReadyData['data'])||count($chartReadyData['data']) < 1) {
+        if (!\is_array($chartReadyData['data'])||\count($chartReadyData['data']) < 1) {
             return "<h3 class='noGraphDataPoints'>$this->noDataMessage</h3>";
         }
 
@@ -316,14 +316,14 @@ EOD;
         $tempx = $user_sales_stage;
 
         //set $datax using selected sales stage keys
-        if (count($tempx) > 0) {
+        if (\count($tempx) > 0) {
             foreach ($tempx as $key) {
                 $datax[$key] = $app_list_strings['sales_stage_dom'][$key];
-                array_push($selected_datax, $key);
+                \array_push($selected_datax, $key);
             }
         } else {
             $datax = $app_list_strings['sales_stage_dom'];
-            $selected_datax = array_keys($app_list_strings['sales_stage_dom']);
+            $selected_datax = \array_keys($app_list_strings['sales_stage_dom']);
         }
 
         $result = $db->query($query);
@@ -379,8 +379,8 @@ EOD;
             " AND opportunities.date_closed >= ". db_convert("'".$this->mypbss_date_start."'", 'date').
             " AND opportunities.date_closed <= ".db_convert("'".$this->mypbss_date_end."'", 'date') .
             " AND opportunities.assigned_user_id = users.id  AND opportunities.deleted=0 ";
-        if (count($this->mypbss_sales_stages) > 0) {
-            $query .= " AND opportunities.sales_stage IN ('" . implode("','", $this->mypbss_sales_stages) . "') ";
+        if (\count($this->mypbss_sales_stages) > 0) {
+            $query .= " AND opportunities.sales_stage IN ('" . \implode("','", $this->mypbss_sales_stages) . "') ";
         }
         $query .= " GROUP BY opportunities.sales_stage ,users.user_name,opportunities.assigned_user_id";
 
@@ -394,7 +394,7 @@ EOD;
     {
         $groupBy = array('sales_stage');
 
-        array_push($groupBy, 'user_name');
+        \array_push($groupBy, 'user_name');
         return $groupBy;
     }
 
@@ -409,7 +409,7 @@ EOD;
         $chart['total'] = 0;
 
         foreach ($dataset as $data) {
-            $formattedFloat = (float)number_format((float)$data['total'], 2, '.', '');
+            $formattedFloat = (float)\number_format((float)$data['total'], 2, '.', '');
             $chart['labels'][] = $data['sales_stage'];
             $chart['key'][] = $data['key'];
             $chart['data'][] = $formattedFloat;

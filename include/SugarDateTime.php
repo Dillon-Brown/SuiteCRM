@@ -113,7 +113,7 @@ class SugarDateTime extends DateTime
         if (empty($time) || empty($format)) {
             return false;
         }
-        if (self::$use_php_parser && is_callable(array("DateTime", "createFromFormat"))) {
+        if (self::$use_php_parser && \is_callable(array("DateTime", "createFromFormat"))) {
             // 5.3, hurray!
             if (!empty($timezone)) {
                 $d = parent::createFromFormat($format, $time, $timezone);
@@ -147,14 +147,14 @@ class SugarDateTime extends DateTime
         if (!empty($timezone)) {
             $res->setTimezone($timezone);
         }
-        if (self::$use_strptime && function_exists("strptime")) {
-            $str_format = str_replace(array_keys(TimeDate::$format_to_str), array_values(TimeDate::$format_to_str), $format);
+        if (self::$use_strptime && \function_exists("strptime")) {
+            $str_format = \str_replace(\array_keys(TimeDate::$format_to_str), \array_values(TimeDate::$format_to_str), $format);
             // for a reason unknown to modern science, %P doesn't work in strptime
-            $str_format = str_replace("%P", "%p", $str_format);
+            $str_format = \str_replace("%P", "%p", $str_format);
             // strip spaces before am/pm as our formats don't have them
-            $time = preg_replace('/\s+(AM|PM)/i', '\1', $time);
+            $time = \preg_replace('/\s+(AM|PM)/i', '\1', $time);
             // TODO: better way to not risk locale stuff problems?
-            $data = strptime($time, $str_format);
+            $data = \strptime($time, $str_format);
             if (empty($data)) {
                 $GLOBALS['log']->error("Cannot parse $time for format $format");
                 return null;
@@ -259,8 +259,8 @@ class SugarDateTime extends DateTime
         }
 
         // getters
-        if (substr($name, 0, 4) == "get_") {
-            $var = substr($name, 4);
+        if (\substr($name, 0, 4) == "get_") {
+            $var = \substr($name, 4);
 
             if (isset($this->var_gets[$var])) {
                 return $this->__get($this->var_gets[$var]);
@@ -509,7 +509,7 @@ class SugarDateTime extends DateTime
      */
     public function get_date_str()
     {
-        return sprintf("&year=%d&month=%d&day=%d&hour=%d", $this->year, $this->month, $this->day, $this->hour);
+        return \sprintf("&year=%d&month=%d&day=%d&hour=%d", $this->year, $this->month, $this->day, $this->hour);
     }
 
     /**
@@ -558,16 +558,16 @@ class SugarDateTime extends DateTime
     {
         $data = self::$data_init;
         if (empty(self::$strptime_short_mon)) {
-            self::$strptime_short_mon = array_flip($this->_getStrings('dom_cal_month'));
+            self::$strptime_short_mon = \array_flip($this->_getStrings('dom_cal_month'));
             unset(self::$strptime_short_mon[""]);
         }
         if (empty(self::$strptime_long_mon)) {
-            self::$strptime_long_mon = array_flip($this->_getStrings('dom_cal_month_long'));
+            self::$strptime_long_mon = \array_flip($this->_getStrings('dom_cal_month_long'));
             unset(self::$strptime_long_mon[""]);
         }
 
         $regexp = TimeDate::get_regular_expression($format);
-        if (!preg_match('@'.$regexp['format'].'@', $time, $dateparts)) {
+        if (!\preg_match('@'.$regexp['format'].'@', $time, $dateparts)) {
             return false;
         }
 
@@ -596,7 +596,7 @@ class SugarDateTime extends DateTime
             }
         }
         if (isset($regexp['positions']['a']) && !empty($dateparts[$regexp['positions']['a']])) {
-            $ampm = trim($dateparts[$regexp['positions']['a']]);
+            $ampm = \trim($dateparts[$regexp['positions']['a']]);
             if ($ampm == 'pm') {
                 if ($data["tm_hour"] != 12) {
                     $data["tm_hour"] += 12;
@@ -612,7 +612,7 @@ class SugarDateTime extends DateTime
         }
 
         if (isset($regexp['positions']['A']) && !empty($dateparts[$regexp['positions']['A']])) {
-            $ampm = trim($dateparts[$regexp['positions']['A']]);
+            $ampm = \trim($dateparts[$regexp['positions']['A']]);
             if ($ampm == 'PM') {
                 if ($data["tm_hour"] != 12) {
                     $data["tm_hour"] += 12;

@@ -94,8 +94,8 @@ class CronExpression
      */
     public function setExpression($value)
     {
-        $this->cronParts = preg_split('/\s/', $value, -1, PREG_SPLIT_NO_EMPTY);
-        if (count($this->cronParts) < 5) {
+        $this->cronParts = \preg_split('/\s/', $value, -1, PREG_SPLIT_NO_EMPTY);
+        if (\count($this->cronParts) < 5) {
             throw new \InvalidArgumentException(
                 $value . ' is not a valid CRON expression'
             );
@@ -182,7 +182,7 @@ class CronExpression
     public function getMultipleRunDates($total, $currentTime = 'now', $invert = false, $allowCurrentDate = false)
     {
         $matches = array();
-        for ($i = 0; $i < max(0, $total); $i++) {
+        for ($i = 0; $i < \max(0, $total); $i++) {
             $matches[] = $this->getRunDate($currentTime, $i, $invert, $allowCurrentDate);
         }
 
@@ -201,8 +201,8 @@ class CronExpression
     public function getExpression($part = null)
     {
         if (null === $part) {
-            return implode(' ', $this->cronParts);
-        } elseif (array_key_exists($part, $this->cronParts)) {
+            return \implode(' ', $this->cronParts);
+        } elseif (\array_key_exists($part, $this->cronParts)) {
             return $this->cronParts[$part];
         }
 
@@ -231,14 +231,14 @@ class CronExpression
     public function isDue($currentTime = 'now')
     {
         if ('now' === $currentTime) {
-            $currentDate = date('Y-m-d H:i');
-            $currentTime = strtotime($currentDate);
+            $currentDate = \date('Y-m-d H:i');
+            $currentTime = \strtotime($currentDate);
         } elseif ($currentTime instanceof \DateTime) {
             $currentDate = clone $currentTime;
             // Ensure time in 'current' timezone is used
-            $currentDate->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+            $currentDate->setTimezone(new \DateTimeZone(\date_default_timezone_get()));
             $currentDate = $currentDate->format('Y-m-d H:i');
-            $currentTime = strtotime($currentDate);
+            $currentTime = \strtotime($currentDate);
         } else {
             $currentTime = new \DateTime($currentTime);
             $currentTime->setTime($currentTime->format('H'), $currentTime->format('i'), 0);
@@ -271,7 +271,7 @@ class CronExpression
             $currentDate = clone $currentTime;
         } else {
             $currentDate = new \DateTime($currentTime ?: 'now');
-            $currentDate->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+            $currentDate->setTimezone(new \DateTimeZone(\date_default_timezone_get()));
         }
 
         $currentDate->setTime($currentDate->format('H'), $currentDate->format('i'), 0);
@@ -297,10 +297,10 @@ class CronExpression
                 // Get the field object used to validate this part
                 $field = $fields[$position];
                 // Check if this is singular or a list
-                if (strpos($part, ',') === false) {
+                if (\strpos($part, ',') === false) {
                     $satisfied = $field->isSatisfiedBy($nextRun, $part);
                 } else {
-                    foreach (array_map('trim', explode(',', $part)) as $listPart) {
+                    foreach (\array_map('trim', \explode(',', $part)) as $listPart) {
                         if ($field->isSatisfiedBy($nextRun, $listPart)) {
                             $satisfied = true;
                             break;

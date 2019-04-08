@@ -68,10 +68,10 @@ class templateParser
                     foreach ($mVals as $mVal) {
                         $translatedVals[] = translate($field_def['options'], $focus->module_dir, $mVal);
                     }
-                    $repl_arr[$key . "_" . $fieldName] = implode(", ", $translatedVals);
+                    $repl_arr[$key . "_" . $fieldName] = \implode(", ", $translatedVals);
                 } //Fix for Windows Server as it needed to be converted to a string.
                 elseif ($field_def['type'] == 'int') {
-                    $repl_arr[$key . "_" . $fieldName] = strval($focus->$fieldName);
+                    $repl_arr[$key . "_" . $fieldName] = \strval($focus->$fieldName);
                 } elseif ($field_def['type'] == 'bool') {
                     if ($focus->$fieldName == "1") {
                         $repl_arr[$key . "_" . $fieldName] = "true";
@@ -82,10 +82,10 @@ class templateParser
                     $secureLink = $sugar_config['site_url'] . '/' . "public/". $focus->id .  '_' . $fieldName;
                     $file_location = $sugar_config['upload_dir'] . '/'  . $focus->id .  '_' . $fieldName;
                     // create a copy with correct extension by mime type
-                    if (!file_exists('public')) {
+                    if (!\file_exists('public')) {
                         sugar_mkdir('public', 0777);
                     }
-                    if (!copy($file_location, "public/{$focus->id}".  '_' . "$fieldName")) {
+                    if (!\copy($file_location, "public/{$focus->id}".  '_' . "$fieldName")) {
                         $secureLink = $sugar_config['site_url'] . '/'. $file_location;
                     }
 
@@ -101,16 +101,16 @@ class templateParser
             }
         } // end foreach()
 
-        krsort($repl_arr);
-        reset($repl_arr);
+        \krsort($repl_arr);
+        \reset($repl_arr);
 
         foreach ($repl_arr as $name => $value) {
-            if (strpos($name, 'product_discount') !== false || strpos($name, 'quotes_discount') !== false) {
+            if (\strpos($name, 'product_discount') !== false || \strpos($name, 'quotes_discount') !== false) {
                 if ($value !== '') {
                     if ($isValidator->isPercentageField($repl_arr['aos_products_quotes_discount'])) {
                         $sep = get_number_seperators();
-                        $value = rtrim(
-                            rtrim(format_number($value), '0'),
+                        $value = \rtrim(
+                            \rtrim(format_number($value), '0'),
                                 $sep[1]
                         ) . $app_strings['LBL_PERCENTAGE_SYMBOL'];
                     }
@@ -123,33 +123,33 @@ class templateParser
             }
             if ($name === 'aos_products_quotes_product_qty') {
                 $sep = get_number_seperators();
-                $value = rtrim(rtrim(format_number($value), '0'), $sep[1]);
+                $value = \rtrim(\rtrim(format_number($value), '0'), $sep[1]);
             }
 
             if ($isValidator->isPercentageField($name)) {
                 $sep = get_number_seperators();
-                $value = rtrim(rtrim(format_number($value), '0'), $sep[1]) . $app_strings['LBL_PERCENTAGE_SYMBOL'];
+                $value = \rtrim(\rtrim(format_number($value), '0'), $sep[1]) . $app_strings['LBL_PERCENTAGE_SYMBOL'];
             }
             if ($focus->field_defs[$name]['dbType'] == 'datetime' &&
-                (strpos($name, 'date') > 0 || strpos($name, 'expiration') > 0)) {
+                (\strpos($name, 'date') > 0 || \strpos($name, 'expiration') > 0)) {
                 if ($value != '') {
-                    $dt = explode(' ', $value);
+                    $dt = \explode(' ', $value);
                     $value = $dt[0];
                     if (isset($dt[1]) && $dt[1]!='') {
-                        if (strpos($dt[1], 'am') > 0 || strpos($dt[1], 'pm') > 0) {
+                        if (\strpos($dt[1], 'am') > 0 || \strpos($dt[1], 'pm') > 0) {
                             $value = $dt[0].' '.$dt[1];
                         }
                     }
                 }
             }
-            if ($value != '' && is_string($value)) {
-                $string = str_replace("\$$name", $value, $string);
-            } elseif (strpos($name, 'address') > 0) {
-                $string = str_replace("\$$name<br />", '', $string);
-                $string = str_replace("\$$name <br />", '', $string);
-                $string = str_replace("\$$name", '', $string);
+            if ($value != '' && \is_string($value)) {
+                $string = \str_replace("\$$name", $value, $string);
+            } elseif (\strpos($name, 'address') > 0) {
+                $string = \str_replace("\$$name<br />", '', $string);
+                $string = \str_replace("\$$name <br />", '', $string);
+                $string = \str_replace("\$$name", '', $string);
             } else {
-                $string = str_replace("\$$name", '&nbsp;', $string);
+                $string = \str_replace("\$$name", '&nbsp;', $string);
             }
         }
 

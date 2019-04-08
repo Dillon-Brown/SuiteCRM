@@ -182,8 +182,8 @@ class ViewResetmodule extends SugarView
         foreach ($sources as $view) {
             $deployedMetaDataImplementation = new DeployedMetaDataImplementation($view, $this->module);
             $file = $deployedMetaDataImplementation->getFileName($view['type'], $this->module, null);
-            if (file_exists($file)) {
-                unlink($file);
+            if (\file_exists($file)) {
+                \unlink($file);
                 $out .= "Removed layout {$view['type']}.php<br/>";
             }
         }
@@ -225,14 +225,14 @@ class ViewResetmodule extends SugarView
     {
         $out = "";
         $languageDir = "custom/modules/{$this->module}/language";
-        if (is_dir($languageDir)) {
-            $files = scandir($languageDir);
+        if (\is_dir($languageDir)) {
+            $files = \scandir($languageDir);
             foreach ($files as $langFile) {
-                if (substr($langFile, 0, 1) == '.') {
+                if (\substr($langFile, 0, 1) == '.') {
                     continue;
                 }
-                $language = substr($langFile, 0, strlen($langFile) - 9);
-                unlink($languageDir . "/" . $langFile);
+                $language = \substr($langFile, 0, \strlen($langFile) - 9);
+                \unlink($languageDir . "/" . $langFile);
                 
                 LanguageManager::clearLanguageCache($this->module, $language) ;
                 $out .= "Removed language file $langFile<br/>";
@@ -246,7 +246,7 @@ class ViewResetmodule extends SugarView
     {
         $out = "";
         $extDir = "custom/Extension/modules/{$this->module}";
-        if (is_dir($extDir)) {
+        if (\is_dir($extDir)) {
             rmdir_recursive($extDir);
             require_once('modules/Administration/QuickRepairAndRebuild.php') ;
             $rac = new RepairAndClear() ;

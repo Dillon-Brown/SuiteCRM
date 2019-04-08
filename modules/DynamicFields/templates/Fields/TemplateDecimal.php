@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -62,7 +62,7 @@ class TemplateDecimal extends TemplateFloat
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -74,6 +74,6 @@ class TemplateDecimal extends TemplateFloat
             return parent::get_db_type();
         }
         $precision = (!empty($this->precision)) ? $this->precision : 6;
-        return " ".sprintf(DBManagerFactory::getInstance()->getColumnType("decimal_tpl"), $this->len, $precision);
+        return " ".\sprintf(DBManagerFactory::getInstance()->getColumnType("decimal_tpl"), $this->len, $precision);
     }
 }

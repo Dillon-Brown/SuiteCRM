@@ -76,7 +76,7 @@ class HTMLPurifier_ConfigSchema_Validator
         $this->with($id, 'key')
             ->assertNotEmpty()
             ->assertIsString(); // implicit assertIsString handled by InterchangeBuilder
-        array_pop($this->context);
+        \array_pop($this->context);
     }
 
     /**
@@ -105,7 +105,7 @@ class HTMLPurifier_ConfigSchema_Validator
         }
         // END - handled by InterchangeBuilder
 
-        if (!is_null($d->allowed) || !empty($d->valueAliases)) {
+        if (!\is_null($d->allowed) || !empty($d->valueAliases)) {
             // allowed and valueAliases require that we be dealing with
             // strings, so check for that early.
             $d_int = HTMLPurifier_VarParser::$types[$d->type];
@@ -118,7 +118,7 @@ class HTMLPurifier_ConfigSchema_Validator
         $this->validateDirectiveValueAliases($d);
         $this->validateDirectiveAliases($d);
 
-        array_pop($this->context);
+        \array_pop($this->context);
     }
 
     /**
@@ -128,22 +128,22 @@ class HTMLPurifier_ConfigSchema_Validator
      */
     public function validateDirectiveAllowed($d)
     {
-        if (is_null($d->allowed)) {
+        if (\is_null($d->allowed)) {
             return;
         }
         $this->with($d, 'allowed')
             ->assertNotEmpty()
             ->assertIsLookup(); // handled by InterchangeBuilder
-        if (is_string($d->default) && !isset($d->allowed[$d->default])) {
+        if (\is_string($d->default) && !isset($d->allowed[$d->default])) {
             $this->error('default', 'must be an allowed value');
         }
         $this->context[] = 'allowed';
         foreach ($d->allowed as $val => $x) {
-            if (!is_string($val)) {
+            if (!\is_string($val)) {
                 $this->error("value $val", 'must be a string');
             }
         }
-        array_pop($this->context);
+        \array_pop($this->context);
     }
 
     /**
@@ -153,24 +153,24 @@ class HTMLPurifier_ConfigSchema_Validator
      */
     public function validateDirectiveValueAliases($d)
     {
-        if (is_null($d->valueAliases)) {
+        if (\is_null($d->valueAliases)) {
             return;
         }
         $this->with($d, 'valueAliases')
             ->assertIsArray(); // handled by InterchangeBuilder
         $this->context[] = 'valueAliases';
         foreach ($d->valueAliases as $alias => $real) {
-            if (!is_string($alias)) {
+            if (!\is_string($alias)) {
                 $this->error("alias $alias", 'must be a string');
             }
-            if (!is_string($real)) {
+            if (!\is_string($real)) {
                 $this->error("alias target $real from alias '$alias'", 'must be a string');
             }
             if ($alias === $real) {
                 $this->error("alias '$alias'", "must not be an alias to itself");
             }
         }
-        if (!is_null($d->allowed)) {
+        if (!\is_null($d->allowed)) {
             foreach ($d->valueAliases as $alias => $real) {
                 if (isset($d->allowed[$alias])) {
                     $this->error("alias '$alias'", 'must not be an allowed value');
@@ -179,7 +179,7 @@ class HTMLPurifier_ConfigSchema_Validator
                 }
             }
         }
-        array_pop($this->context);
+        \array_pop($this->context);
     }
 
     /**
@@ -204,7 +204,7 @@ class HTMLPurifier_ConfigSchema_Validator
             }
             $this->aliases[$s] = $d->id->toString();
         }
-        array_pop($this->context);
+        \array_pop($this->context);
     }
 
     // protected helper functions
@@ -228,11 +228,11 @@ class HTMLPurifier_ConfigSchema_Validator
     protected function error($target, $msg)
     {
         if ($target !== false) {
-            $prefix = ucfirst($target) . ' in ' . $this->getFormattedContext();
+            $prefix = \ucfirst($target) . ' in ' . $this->getFormattedContext();
         } else {
-            $prefix = ucfirst($this->getFormattedContext());
+            $prefix = \ucfirst($this->getFormattedContext());
         }
-        throw new HTMLPurifier_ConfigSchema_Exception(trim($prefix . ' ' . $msg));
+        throw new HTMLPurifier_ConfigSchema_Exception(\trim($prefix . ' ' . $msg));
     }
 
     /**
@@ -241,7 +241,7 @@ class HTMLPurifier_ConfigSchema_Validator
      */
     protected function getFormattedContext()
     {
-        return implode(' in ', array_reverse($this->context));
+        return \implode(' in ', \array_reverse($this->context));
     }
 }
 

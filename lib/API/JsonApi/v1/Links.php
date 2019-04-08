@@ -211,7 +211,7 @@ class Links implements LoggerAwareInterface, JsonApiResponseInterface
         if ($this->meta === null) {
             $this->meta = $meta;
         } else {
-            $this->meta = array_merge($this->meta, $meta);
+            $this->meta = \array_merge($this->meta, $meta);
         }
 
         return clone $this;
@@ -329,7 +329,7 @@ class Links implements LoggerAwareInterface, JsonApiResponseInterface
      */
     private function validateUrl($url)
     {
-        $isValid = filter_var(
+        $isValid = \filter_var(
             $url,
             FILTER_VALIDATE_URL
         );

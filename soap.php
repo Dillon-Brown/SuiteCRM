@@ -38,13 +38,13 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry')) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry')) {
+    \define('sugarEntry', true);
 }
 
 require_once('include/entryPoint.php');
 require_once('include/utils/file_utils.php');
-ob_start();
+\ob_start();
 
 require_once('soap/SoapError.php');
 require_once('include/nusoap/nusoap.php');
@@ -79,10 +79,10 @@ require_once('soap/SoapDeprecated.php');
 
 
 /* Begin the HTTP listener service and exit. */
-ob_clean();
+\ob_clean();
 
 if (!isset($HTTP_RAW_POST_DATA)) {
-    $HTTP_RAW_POST_DATA = file_get_contents('php://input');
+    $HTTP_RAW_POST_DATA = \file_get_contents('php://input');
 }
 
 require_once('include/resource/ResourceManager.php');
@@ -91,7 +91,7 @@ $resourceManager->setup('Soap');
 $observers = $resourceManager->getObservers();
 //Call set_soap_server for SoapResourceObserver instance(s)
 foreach ($observers as $observer) {
-    if (method_exists($observer, 'set_soap_server')) {
+    if (\method_exists($observer, 'set_soap_server')) {
         $observer->set_soap_server($server);
     }
 }
@@ -100,7 +100,7 @@ $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 global $soap_server_object;
 $soap_server_object = $server;
 $server->service($HTTP_RAW_POST_DATA);
-ob_end_flush();
-flush();
+\ob_end_flush();
+\flush();
 sugar_cleanup();
 exit();

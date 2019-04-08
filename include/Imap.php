@@ -40,7 +40,7 @@
 
 namespace SuiteCRM;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -76,7 +76,7 @@ class Imap implements ImapInterface
     {
         $state = new StateSaver();
         $state->pushErrorLevel();
-        error_reporting(0);
+        \error_reporting(0);
         $this->resource = imap_open($mailbox, $username, $password, $options, $n_retries, $params);
         $state->popErrorLevel();
         return $this->resource;

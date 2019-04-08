@@ -76,9 +76,9 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'secret' => self::SECRET,
     ));
         $data['algorithm'] = 'foo';
-        $json = json_encode($data);
+        $json = \json_encode($data);
         $b64 = $facebook->publicBase64UrlEncode($json);
-        $raw_sig = hash_hmac('sha256', $b64, self::SECRET, $raw = true);
+        $raw_sig = \hash_hmac('sha256', $b64, self::SECRET, $raw = true);
         $sig = $facebook->publicBase64UrlEncode($raw_sig);
         return $sig.'.'.$b64;
     }
@@ -263,7 +263,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         // fake the HPHP $_SERVER globals
         $_SERVER['HTTP_HOST'] = 'www.test.com';
         $_SERVER['REQUEST_URI'] = '/unit-tests.php';
-        $login_url = parse_url($facebook->getLoginUrl());
+        $login_url = \parse_url($facebook->getLoginUrl());
         $this->assertEquals($login_url['scheme'], 'https');
         $this->assertEquals($login_url['host'], 'www.facebook.com');
         $this->assertEquals($login_url['path'], '/dialog/oauth');
@@ -272,11 +272,11 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
             'redirect_uri' => 'http://www.test.com/unit-tests.php');
 
         $query_map = array();
-        parse_str($login_url['query'], $query_map);
+        \parse_str($login_url['query'], $query_map);
         $this->assertIsSubset($expected_login_params, $query_map);
         // we don't know what the state is, but we know it's an md5 and should
         // be 32 characters long.
-        $this->assertEquals(strlen($query_map['state']), $num_characters = 32);
+        $this->assertEquals(\strlen($query_map['state']), $num_characters = 32);
     }
 
     public function testGetLoginURLWithExtraParams()
@@ -291,22 +291,22 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         $_SERVER['REQUEST_URI'] = '/unit-tests.php';
         $extra_params = array('scope' => 'email, sms',
                           'nonsense' => 'nonsense');
-        $login_url = parse_url($facebook->getLoginUrl($extra_params));
+        $login_url = \parse_url($facebook->getLoginUrl($extra_params));
         $this->assertEquals($login_url['scheme'], 'https');
         $this->assertEquals($login_url['host'], 'www.facebook.com');
         $this->assertEquals($login_url['path'], '/dialog/oauth');
         $expected_login_params =
-      array_merge(
+      \array_merge(
         array('client_id' => self::APP_ID,
               'redirect_uri' => 'http://www.test.com/unit-tests.php'),
         $extra_params
       );
         $query_map = array();
-        parse_str($login_url['query'], $query_map);
+        \parse_str($login_url['query'], $query_map);
         $this->assertIsSubset($expected_login_params, $query_map);
         // we don't know what the state is, but we know it's an md5 and should
         // be 32 characters long.
-        $this->assertEquals(strlen($query_map['state']), $num_characters = 32);
+        $this->assertEquals(\strlen($query_map['state']), $num_characters = 32);
     }
 
     public function testGetLoginURLWithScopeParamsAsArray()
@@ -322,26 +322,26 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         $scope_params_as_array = array('email','sms','read_stream');
         $extra_params = array('scope' => $scope_params_as_array,
                           'nonsense' => 'nonsense');
-        $login_url = parse_url($facebook->getLoginUrl($extra_params));
+        $login_url = \parse_url($facebook->getLoginUrl($extra_params));
         $this->assertEquals($login_url['scheme'], 'https');
         $this->assertEquals($login_url['host'], 'www.facebook.com');
         $this->assertEquals($login_url['path'], '/dialog/oauth');
         // expect api to flatten array params to comma separated list
         // should do the same here before asserting to make sure API is behaving
         // correctly;
-        $extra_params['scope'] = implode(',', $scope_params_as_array);
+        $extra_params['scope'] = \implode(',', $scope_params_as_array);
         $expected_login_params =
-      array_merge(
+      \array_merge(
         array('client_id' => self::APP_ID,
               'redirect_uri' => 'http://www.test.com/unit-tests.php'),
         $extra_params
       );
         $query_map = array();
-        parse_str($login_url['query'], $query_map);
+        \parse_str($login_url['query'], $query_map);
         $this->assertIsSubset($expected_login_params, $query_map);
         // we don't know what the state is, but we know it's an md5 and should
         // be 32 characters long.
-        $this->assertEquals(strlen($query_map['state']), $num_characters = 32);
+        $this->assertEquals(\strlen($query_map['state']), $num_characters = 32);
     }
 
     public function testGetCodeWithValidCSRFState()
@@ -609,7 +609,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'query' => 'SELECT name FROM user WHERE uid=4',
     ));
         $this->assertEquals(
-            count($response),
+            \count($response),
             1,
                         'Expect one row back.'
         );
@@ -643,7 +643,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
             $this->fail('Should not get here.');
         } catch (FacebookApiException $e) {
             $result = $e->getResult();
-            $this->assertTrue(is_array($result), 'expect a result object');
+            $this->assertTrue(\is_array($result), 'expect a result object');
             $this->assertEquals('190', $result['error_code'], 'expect code');
         }
     }
@@ -700,7 +700,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
             // means the server got the access token and didn't like it
             $error_msg_start = 'OAuthException: Error validating access token:';
             $this->assertTrue(
-                strpos((string) $e, $error_msg_start) === 0,
+                \strpos((string) $e, $error_msg_start) === 0,
                         'Expect the token validation error message.'
             );
         }
@@ -742,7 +742,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         'client_id' => self::MIGRATED_APP_ID));
             $this->fail('Should not get here.');
         } catch (FacebookApiException $e) {
-            $this->assertEquals(strpos($e, 'invalid_request'), 0);
+            $this->assertEquals(\strpos($e, 'invalid_request'), 0);
         }
     }
 
@@ -753,7 +753,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'secret' => self::SECRET,
     ));
 
-        if (!defined('CURLOPT_TIMEOUT_MS')) {
+        if (!\defined('CURLOPT_TIMEOUT_MS')) {
             // can't test it if we don't have millisecond timeouts
             return;
         }
@@ -827,9 +827,9 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'appId'  => self::APP_ID,
       'secret' => self::SECRET,
     ));
-        $encodedUrl = rawurlencode('http://fbrell.com/examples');
+        $encodedUrl = \rawurlencode('http://fbrell.com/examples');
         $this->assertNotNull(
-            strpos($facebook->getLoginUrl(), $encodedUrl),
+            \strpos($facebook->getLoginUrl(), $encodedUrl),
                          'Expect the current url to exist.'
         );
     }
@@ -842,13 +842,13 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'appId'  => self::APP_ID,
       'secret' => self::SECRET,
     ));
-        $expectEncodedUrl = rawurlencode('http://fbrell.com/examples');
+        $expectEncodedUrl = \rawurlencode('http://fbrell.com/examples');
         $this->assertTrue(
-            strpos($facebook->getLoginUrl(), $expectEncodedUrl) > -1,
+            \strpos($facebook->getLoginUrl(), $expectEncodedUrl) > -1,
                       'Expect the current url to exist.'
         );
         $this->assertFalse(
-            strpos($facebook->getLoginUrl(), 'xx42xx'),
+            \strpos($facebook->getLoginUrl(), 'xx42xx'),
                        'Expect the session param to be dropped.'
         );
     }
@@ -861,13 +861,13 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'appId'  => self::APP_ID,
       'secret' => self::SECRET,
     ));
-        $expectEncodedUrl = rawurlencode('http://fbrell.com/examples');
+        $expectEncodedUrl = \rawurlencode('http://fbrell.com/examples');
         $this->assertTrue(
-            strpos($facebook->getLoginUrl(), $expectEncodedUrl) > -1,
+            \strpos($facebook->getLoginUrl(), $expectEncodedUrl) > -1,
                       'Expect the current url to exist.'
         );
         $this->assertFalse(
-            strpos($facebook->getLoginUrl(), 'xx42xx'),
+            \strpos($facebook->getLoginUrl(), 'xx42xx'),
                        'Expect the session param to be dropped.'
         );
     }
@@ -881,13 +881,13 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'appId'  => self::APP_ID,
       'secret' => self::SECRET,
     ));
-        $expectEncodedUrl = rawurlencode('http://fbrell.com/examples');
+        $expectEncodedUrl = \rawurlencode('http://fbrell.com/examples');
         $this->assertFalse(
-            strpos($facebook->getLoginUrl(), 'xx42xx'),
+            \strpos($facebook->getLoginUrl(), 'xx42xx'),
                        'Expect the session param to be dropped.'
         );
         $this->assertTrue(
-            strpos($facebook->getLoginUrl(), 'xx43xx') > -1,
+            \strpos($facebook->getLoginUrl(), 'xx43xx') > -1,
                       'Expect the do_not_drop param to exist.'
         );
     }
@@ -905,14 +905,14 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'redirect_uri' => $next,
       'cancel_url' => $next
     ));
-        $currentEncodedUrl = rawurlencode('http://fbrell.com/examples');
-        $expectedEncodedUrl = rawurlencode($next);
+        $currentEncodedUrl = \rawurlencode('http://fbrell.com/examples');
+        $expectedEncodedUrl = \rawurlencode($next);
         $this->assertNotNull(
-            strpos($loginUrl, $expectedEncodedUrl),
+            \strpos($loginUrl, $expectedEncodedUrl),
                          'Expect the custom url to exist.'
         );
         $this->assertFalse(
-            strpos($loginUrl, $currentEncodedUrl),
+            \strpos($loginUrl, $currentEncodedUrl),
                       'Expect the current url to not exist.'
         );
     }
@@ -925,12 +925,12 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'appId'  => self::APP_ID,
       'secret' => self::SECRET,
     ));
-        $encodedUrl = rawurlencode('http://fbrell.com/examples');
+        $encodedUrl = \rawurlencode('http://fbrell.com/examples');
         $this->assertNotNull(
-            strpos($facebook->getLogoutUrl(), $encodedUrl),
+            \strpos($facebook->getLogoutUrl(), $encodedUrl),
                          'Expect the current url to exist.'
         );
-        $this->assertFalse(strpos($facebook->getLogoutUrl(), self::SECRET));
+        $this->assertFalse(\strpos($facebook->getLogoutUrl(), self::SECRET));
     }
 
     public function testLoginStatusURLDefaults()
@@ -941,9 +941,9 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'appId'  => self::APP_ID,
       'secret' => self::SECRET,
     ));
-        $encodedUrl = rawurlencode('http://fbrell.com/examples');
+        $encodedUrl = \rawurlencode('http://fbrell.com/examples');
         $this->assertNotNull(
-            strpos($facebook->getLoginStatusUrl(), $encodedUrl),
+            \strpos($facebook->getLoginStatusUrl(), $encodedUrl),
                          'Expect the current url to exist.'
         );
     }
@@ -956,18 +956,18 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'appId'  => self::APP_ID,
       'secret' => self::SECRET,
     ));
-        $encodedUrl1 = rawurlencode('http://fbrell.com/examples');
+        $encodedUrl1 = \rawurlencode('http://fbrell.com/examples');
         $okUrl = 'http://fbrell.com/here1';
-        $encodedUrl2 = rawurlencode($okUrl);
+        $encodedUrl2 = \rawurlencode($okUrl);
         $loginStatusUrl = $facebook->getLoginStatusUrl(array(
       'ok_session' => $okUrl,
     ));
         $this->assertNotNull(
-            strpos($loginStatusUrl, $encodedUrl1),
+            \strpos($loginStatusUrl, $encodedUrl1),
                          'Expect the current url to exist.'
         );
         $this->assertNotNull(
-            strpos($loginStatusUrl, $encodedUrl2),
+            \strpos($loginStatusUrl, $encodedUrl2),
                          'Expect the custom url to exist.'
         );
     }
@@ -980,9 +980,9 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'appId'  => self::APP_ID,
       'secret' => self::SECRET,
     ));
-        $encodedUrl = rawurlencode('http://fbrell.com:8080/examples');
+        $encodedUrl = \rawurlencode('http://fbrell.com:8080/examples');
         $this->assertNotNull(
-            strpos($facebook->getLoginUrl(), $encodedUrl),
+            \strpos($facebook->getLoginUrl(), $encodedUrl),
                          'Expect the current url to exist.'
         );
     }
@@ -996,9 +996,9 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'appId'  => self::APP_ID,
       'secret' => self::SECRET,
     ));
-        $encodedUrl = rawurlencode('https://fbrell.com/examples');
+        $encodedUrl = \rawurlencode('https://fbrell.com/examples');
         $this->assertNotNull(
-            strpos($facebook->getLoginUrl(), $encodedUrl),
+            \strpos($facebook->getLoginUrl(), $encodedUrl),
                          'Expect the current url to exist.'
         );
     }
@@ -1012,9 +1012,9 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
       'appId'  => self::APP_ID,
       'secret' => self::SECRET,
     ));
-        $encodedUrl = rawurlencode('https://fbrell.com:8080/examples');
+        $encodedUrl = \rawurlencode('https://fbrell.com:8080/examples');
         $this->assertNotNull(
-            strpos($facebook->getLoginUrl(), $encodedUrl),
+            \strpos($facebook->getLoginUrl(), $encodedUrl),
                          'Expect the current url to exist.'
         );
     }
@@ -1115,7 +1115,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
 
         // use the bundled cert from the start
         Facebook::$CURL_OPTS[CURLOPT_CAINFO] =
-      dirname(__FILE__) . '/../src/fb_ca_chain_bundle.crt';
+      \dirname(__FILE__) . '/../src/fb_ca_chain_bundle.crt';
         $response = $facebook->api('/naitik');
 
         unset(Facebook::$CURL_OPTS[CURLOPT_CAINFO]);
@@ -1756,7 +1756,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST'] = 'fbrell.com';
         $fb->destroySession();
         $this->assertFalse(
-      array_key_exists($fb->publicGetSignedRequestCookieName(), $_COOKIE)
+      \array_key_exists($fb->publicGetSignedRequestCookieName(), $_COOKIE)
         );
     }
 
@@ -1857,7 +1857,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
     ));
         $fb->api('/naitik', $params);
         $requests = $fb->publicGetRequests();
-        $this->assertEquals(json_encode($foo), $requests[0]['params']['foo']);
+        $this->assertEquals(\json_encode($foo), $requests[0]['params']['foo']);
     }
 
     public function testSessionBackedFacebook()
@@ -1871,7 +1871,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         $fb->publicSetPersistentData($key, $val);
         $this->assertEquals(
       $val,
-      $_SESSION[sprintf('fb_%s_%s', self::APP_ID, $key)]
+      $_SESSION[\sprintf('fb_%s_%s', self::APP_ID, $key)]
     );
         $this->assertEquals(
       $val,
@@ -1889,8 +1889,8 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         $val = 'foo';
         $fb->publicSetPersistentData($key, $val);
         $this->assertFalse(
-      array_key_exists(
-        sprintf('fb_%s_%s', self::APP_ID, $key),
+      \array_key_exists(
+        \sprintf('fb_%s_%s', self::APP_ID, $key),
         $_SESSION
       )
     );
@@ -1908,7 +1908,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         $fb->publicSetPersistentData($key, $val);
         $this->assertEquals(
       $val,
-      $_SESSION[sprintf('fb_%s_%s', self::APP_ID, $key)]
+      $_SESSION[\sprintf('fb_%s_%s', self::APP_ID, $key)]
     );
         $this->assertEquals(
       $val,
@@ -1916,8 +1916,8 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
     );
         $fb->publicClearPersistentData($key);
         $this->assertFalse(
-      array_key_exists(
-        sprintf('fb_%s_%s', self::APP_ID, $key),
+      \array_key_exists(
+        \sprintf('fb_%s_%s', self::APP_ID, $key),
         $_SESSION
       )
     );
@@ -1932,10 +1932,10 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
     ));
         $key = '--invalid--';
         $val = 'foo';
-        $session_var_name = sprintf('fb_%s_%s', self::APP_ID, $key);
+        $session_var_name = \sprintf('fb_%s_%s', self::APP_ID, $key);
         $_SESSION[$session_var_name] = $val;
         $fb->publicClearPersistentData($key);
-        $this->assertTrue(array_key_exists($session_var_name, $_SESSION));
+        $this->assertTrue(\array_key_exists($session_var_name, $_SESSION));
         $this->assertFalse($fb->publicGetPersistentData($key));
     }
 
@@ -1947,12 +1947,12 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
     ));
         $key = 'state';
         $val = 'foo';
-        $session_var_name = sprintf('fb_%s_%s', self::APP_ID, $key);
+        $session_var_name = \sprintf('fb_%s_%s', self::APP_ID, $key);
         $fb->publicSetPersistentData($key, $val);
         $this->assertEquals($val, $_SESSION[$session_var_name]);
         $this->assertEquals($val, $fb->publicGetPersistentData($key));
         $fb->publicClearAllPersistentData();
-        $this->assertFalse(array_key_exists($session_var_name, $_SESSION));
+        $this->assertFalse(\array_key_exists($session_var_name, $_SESSION));
         $this->assertFalse($fb->publicGetPersistentData($key));
     }
 
@@ -1966,7 +1966,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
     ));
         $key = 'state';
         $val = 'foo';
-        $session_var_name = sprintf(
+        $session_var_name = \sprintf(
       '%s_fb_%s_%s',
       $fb->publicGetSharedSessionID(),
       self::APP_ID,
@@ -1987,14 +1987,14 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
     ));
         $key = '--invalid--';
         $val = 'foo';
-        $session_var_name = sprintf(
+        $session_var_name = \sprintf(
       '%s_fb_%s_%s',
       $fb->publicGetSharedSessionID(),
       self::APP_ID,
       $key
     );
         $fb->publicSetPersistentData($key, $val);
-        $this->assertFalse(array_key_exists($session_var_name, $_SESSION));
+        $this->assertFalse(\array_key_exists($session_var_name, $_SESSION));
         $this->assertFalse($fb->publicGetPersistentData($key));
     }
 
@@ -2008,7 +2008,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
     ));
         $key = 'state';
         $val = 'foo';
-        $session_var_name = sprintf(
+        $session_var_name = \sprintf(
       '%s_fb_%s_%s',
       $fb->publicGetSharedSessionID(),
       self::APP_ID,
@@ -2018,7 +2018,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         $this->assertEquals($val, $_SESSION[$session_var_name]);
         $this->assertEquals($val, $fb->publicGetPersistentData($key));
         $fb->publicClearPersistentData($key);
-        $this->assertFalse(array_key_exists($session_var_name, $_SESSION));
+        $this->assertFalse(\array_key_exists($session_var_name, $_SESSION));
         $this->assertFalse($fb->publicGetPersistentData($key));
     }
 
@@ -2032,7 +2032,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
     ));
         $key = '--invalid--';
         $val = 'foo';
-        $session_var_name = sprintf(
+        $session_var_name = \sprintf(
       '%s_fb_%s_%s',
       $fb->publicGetSharedSessionID(),
       self::APP_ID,
@@ -2040,7 +2040,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
     );
         $_SESSION[$session_var_name] = $val;
         $fb->publicClearPersistentData($key);
-        $this->assertTrue(array_key_exists($session_var_name, $_SESSION));
+        $this->assertTrue(\array_key_exists($session_var_name, $_SESSION));
         $this->assertFalse($fb->publicGetPersistentData($key));
     }
 
@@ -2054,7 +2054,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
     ));
         $key = 'state';
         $val = 'foo';
-        $session_var_name = sprintf(
+        $session_var_name = \sprintf(
       '%s_fb_%s_%s',
       $fb->publicGetSharedSessionID(),
       self::APP_ID,
@@ -2064,7 +2064,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         $this->assertEquals($val, $_SESSION[$session_var_name]);
         $this->assertEquals($val, $fb->publicGetPersistentData($key));
         $fb->publicClearAllPersistentData();
-        $this->assertFalse(array_key_exists($session_var_name, $_SESSION));
+        $this->assertFalse(\array_key_exists($session_var_name, $_SESSION));
         $this->assertFalse($fb->publicGetPersistentData($key));
     }
 
@@ -2079,7 +2079,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         $key = 'state';
         $val = 'foo';
         $shared_session_id = $fb->publicGetSharedSessionID();
-        $session_var_name = sprintf(
+        $session_var_name = \sprintf(
       '%s_fb_%s_%s',
       $shared_session_id,
       self::APP_ID,
@@ -2113,7 +2113,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         $key = 'state';
         $val = 'foo';
         $shared_session_id = $fb->publicGetSharedSessionID();
-        $session_var_name = sprintf(
+        $session_var_name = \sprintf(
       '%s_fb_%s_%s',
       $shared_session_id,
       self::APP_ID,
@@ -2125,7 +2125,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
 
         // break the cookie
         $cookie_name = $fb->publicGetSharedSessionCookieName();
-        $_COOKIE[$cookie_name] = substr($_COOKIE[$cookie_name], 1);
+        $_COOKIE[$cookie_name] = \substr($_COOKIE[$cookie_name], 1);
 
         // check the new instance does not have the data
         $fb = new PersistentFBPublic(array(
@@ -2249,7 +2249,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
 
     protected function generateMD5HashOfRandomValue()
     {
-        return md5(uniqid(mt_rand(), true));
+        return \md5(\uniqid(\mt_rand(), true));
     }
 
     protected function setUp()
@@ -2273,8 +2273,8 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
         $_REQUEST = array();
         $_POST = array();
         $_GET = array();
-        if (session_id()) {
-            session_destroy();
+        if (\session_id()) {
+            \session_destroy();
         }
     }
 
@@ -2288,7 +2288,7 @@ class PHPSDKTestCase extends PHPUnit_Framework_TestCase
     {
         foreach ($correct as $key => $value) {
             $actual_value = $actual[$key];
-            $newMsg = (strlen($msg) ? ($msg.' ') : '').'Key: '.$key;
+            $newMsg = (\strlen($msg) ? ($msg.' ') : '').'Key: '.$key;
             $this->assertEquals($value, $actual_value, $newMsg);
         }
     }

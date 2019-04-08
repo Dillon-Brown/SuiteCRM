@@ -105,7 +105,7 @@ class Zend_Gdata_HttpAdapterStreamingProxy extends Zend_Http_Client_Adapter_Prox
 
         // Add all headers to the request string
         foreach ($headers as $k => $v) {
-            if (is_string($k)) {
+            if (\is_string($k)) {
                 $v = "$k: $v";
             }
             $request .= "$v\r\n";
@@ -114,7 +114,7 @@ class Zend_Gdata_HttpAdapterStreamingProxy extends Zend_Http_Client_Adapter_Prox
         $request .= "\r\n";
 
         // Send the request headers
-        if (! @fwrite($this->socket, $request)) {
+        if (! @\fwrite($this->socket, $request)) {
             require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception(
                 'Error writing request to proxy server'
@@ -123,7 +123,7 @@ class Zend_Gdata_HttpAdapterStreamingProxy extends Zend_Http_Client_Adapter_Prox
 
         //read from $body, write to socket
         while ($body->hasData()) {
-            if (! @fwrite($this->socket, $body->read(self::CHUNK_SIZE))) {
+            if (! @\fwrite($this->socket, $body->read(self::CHUNK_SIZE))) {
                 require_once 'Zend/Http/Client/Adapter/Exception.php';
                 throw new Zend_Http_Client_Adapter_Exception(
                     'Error writing request to server'

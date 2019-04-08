@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -59,7 +59,7 @@ class QuotesParseRule extends BaseRule
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -102,13 +102,13 @@ class QuotesParseRule extends BaseRule
                     foreach ($billToPanel as $subpanel) {
                         $col = array();
                         foreach ($subpanel as $rowCount=>$row) {
-                            if (!is_array($row)) {
+                            if (!\is_array($row)) {
                                 if (!$this->matches($row, '/^(shipping|billing)_address_(street|city|state|country|postalcode)$/si')) {
                                     $col[] = $row;
                                 }
                             } else {
                                 foreach ($row as $key=>$column) {
-                                    if (is_array($column)) {
+                                    if (\is_array($column)) {
                                         continue;
                                     }
 

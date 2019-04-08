@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -70,14 +70,14 @@ class FormatterFactory
             }
 
             //split the wrapper name to find the path to the file.
-            $dir = str_replace('_', '/', $formatter_name);
-            $parts = explode("/", $dir);
-            $file = $parts[count($parts)-1];
+            $dir = \str_replace('_', '/', $formatter_name);
+            $parts = \explode("/", $dir);
+            $file = $parts[\count($parts)-1];
 
             //check if this override wrapper file exists.
             require_once('include/connectors/ConnectorFactory.php');
-            if (file_exists("modules/Connectors/connectors/formatters/{$dir}/{$file}.php") ||
-               file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/{$file}.php")) {
+            if (\file_exists("modules/Connectors/connectors/formatters/{$dir}/{$file}.php") ||
+               \file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/{$file}.php")) {
                 ConnectorFactory::load($formatter_name, 'formatters');
                 try {
                     $formatter_name .= '_formatter';
@@ -92,7 +92,7 @@ class FormatterFactory
             $component = ConnectorFactory::getInstance($source_name);
             $formatter = new $formatter_name();
             $formatter->setComponent($component);
-            if (file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/{$file}.tpl")) {
+            if (\file_exists("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/{$file}.tpl")) {
                 $formatter->setTplFileName("custom/modules/Connectors/connectors/formatters/{$dir}/tpls/{$file}.tpl");
             } elseif ("modules/Connectors/connectors/formatters/{$dir}/tpls/{$file}.tpl") {
                 $formatter->setTplFileName("modules/Connectors/connectors/formatters/{$dir}/tpls/{$file}.tpl");

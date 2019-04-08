@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -58,11 +58,11 @@ $vardefs = array(
             'required' => true,
             'importable' => 'required',
         ),
-        strtolower($object_name) . '_type' => array(
-            'name' => strtolower($object_name) . '_type',
+        \strtolower($object_name) . '_type' => array(
+            'name' => \strtolower($object_name) . '_type',
             'vname' => 'LBL_TYPE',
             'type' => 'enum',
-            'options' => strtolower($object_name) . '_type_dom',
+            'options' => \strtolower($object_name) . '_type_dom',
             'len' => 100,
             'comment' => 'The Sale is of this type',
         ),

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -85,11 +85,11 @@ class ModuleBuilderController extends SugarController
 
     public function process()
     {
-        $GLOBALS [ 'log' ]->info(get_class($this).":") ;
+        $GLOBALS [ 'log' ]->info(\get_class($this).":") ;
         global $current_user;
         $access = $current_user->getDeveloperModules();
         if ($current_user->isAdmin() || ($current_user->isDeveloperForAnyModule() && !isset($_REQUEST['view_module']) && (isset($_REQUEST['action']) && $_REQUEST['action'] != 'package'))||
-          (isset($_REQUEST['view_module']) && (in_array($_REQUEST['view_module'], $access)|| empty($_REQUEST['view_module']))) ||
+          (isset($_REQUEST['view_module']) && (\in_array($_REQUEST['view_module'], $access)|| empty($_REQUEST['view_module']))) ||
                (isset($_REQUEST['type']) && (($_REQUEST['type']=='dropdowns' && $current_user->isDeveloperForAnyModule())||
           ($_REQUEST['type']=='studio' && displayStudioForCurrentUser() == true)))) {
             $this->hasAccess = true;
@@ -102,7 +102,7 @@ class ModuleBuilderController extends SugarController
 
     public function action_editLayout()
     {
-        $view = strtolower($_REQUEST [ 'view' ]);
+        $view = \strtolower($_REQUEST [ 'view' ]);
         $found = false;
         //Check the StudioModule first for mapping overrides
         if (empty($_REQUEST [ 'view_package' ])|| $_REQUEST [ 'view_package' ] == "studio") {
@@ -201,7 +201,7 @@ class ModuleBuilderController extends SugarController
     {
         global $current_user;
         
-        if (defined('TEMPLATE_URL')) {
+        if (\defined('TEMPLATE_URL')) {
             sugar_cache_reset();
             SugarTemplateUtilities::disableCache();
         }
@@ -219,8 +219,8 @@ class ModuleBuilderController extends SugarController
             $info = $mb->packages [ $load ]->build(false) ;
             $uploadDir = $pm->upload_dir.'/upgrades/module/';
             mkdir_recursive($uploadDir) ;
-            rename($info [ 'zip' ], $uploadDir . $info [ 'name' ] . '.zip') ;
-            copy($info [ 'manifest' ], $uploadDir . $info [ 'name' ] . '-manifest.php') ;
+            \rename($info [ 'zip' ], $uploadDir . $info [ 'name' ] . '.zip') ;
+            \copy($info [ 'manifest' ], $uploadDir . $info [ 'name' ] . '-manifest.php') ;
             $_REQUEST [ 'install_file' ] = $uploadDir. $info [ 'name' ] . '.zip' ;
             $GLOBALS [ 'mi_remove_tables' ] = false ;
             $pm->performUninstall($load) ;
@@ -351,7 +351,7 @@ class ModuleBuilderController extends SugarController
         $name = $_REQUEST [ 'name' ] ;
         $author = $_REQUEST [ 'author' ] ;
         $description = $_REQUEST [ 'description' ] ;
-        ob_clean() ;
+        \ob_clean() ;
         if (! empty($modules) && ! empty($name)) {
             require_once('modules/ModuleBuilder/MB/ModuleBuilder.php') ;
             $mb = new MBPackage($name) ;
@@ -365,7 +365,7 @@ class ModuleBuilderController extends SugarController
     {
         require_once('modules/DynamicFields/FieldCases.php') ;
         $field = get_widget($_REQUEST [ 'type' ]) ;
-        $_REQUEST [ 'name' ] = trim($_REQUEST [ 'name' ]) ;
+        $_REQUEST [ 'name' ] = \trim($_REQUEST [ 'name' ]) ;
 
         $field->populateFromPost() ;
 
@@ -433,7 +433,7 @@ class ModuleBuilderController extends SugarController
         require_once('modules/DynamicFields/FieldCases.php') ;
                 
         $field = get_widget($_REQUEST [ 'type' ]) ;
-        $_REQUEST [ 'name' ] = trim($_POST [ 'name' ]) ;
+        $_REQUEST [ 'name' ] = \trim($_POST [ 'name' ]) ;
 
         $field->populateFromPost() ;
         require_once('modules/ModuleBuilder/parsers/StandardField.php') ;
@@ -491,12 +491,12 @@ class ModuleBuilderController extends SugarController
 
     public function action_saveVisibility()
     {
-        $packageName = (isset($_REQUEST [ 'view_package' ]) && (strtolower($_REQUEST['view_package']) != 'studio')) ? $_REQUEST [ 'view_package' ] : null ;
+        $packageName = (isset($_REQUEST [ 'view_package' ]) && (\strtolower($_REQUEST['view_package']) != 'studio')) ? $_REQUEST [ 'view_package' ] : null ;
         require_once 'modules/ModuleBuilder/parsers/ParserFactory.php' ;
         $parser = ParserFactory::getParser(MB_VISIBILITY, $_REQUEST [ 'view_module' ], $packageName) ;
 
         $json = getJSONobj();
-        $visibility_grid = $json->decode(html_entity_decode(rawurldecode($_REQUEST [ 'visibility_grid' ]), ENT_QUOTES));
+        $visibility_grid = $json->decode(\html_entity_decode(\rawurldecode($_REQUEST [ 'visibility_grid' ]), ENT_QUOTES));
         $parser->saveVisibility($_REQUEST [ 'fieldname' ], $_REQUEST [ 'trigger' ], $visibility_grid) ;
 
         echo $json->encode(array( "visibility_editor_{$_REQUEST['fieldname']}" => array("action" => "deactivate")));
@@ -703,7 +703,7 @@ class ModuleBuilderController extends SugarController
         $parser->writeWorkingFile() ;
 
         if (!empty($_REQUEST [ 'sync_detail_and_edit' ]) && $_REQUEST['sync_detail_and_edit'] != false && $_REQUEST['sync_detail_and_edit'] != "false") {
-            if (strtolower($parser->_view) == MB_EDITVIEW) {
+            if (\strtolower($parser->_view) == MB_EDITVIEW) {
                 $parser2 = ParserFactory::getParser(MB_DETAILVIEW, $_REQUEST [ 'view_module' ], isset($_REQUEST [ 'view_package' ]) ? $_REQUEST [ 'view_package' ] : null) ;
                 $parser2->setUseTabs($parser->getUseTabs());
                 $parser2->writeWorkingFile() ;
@@ -717,7 +717,7 @@ class ModuleBuilderController extends SugarController
         $parser->handleSave() ;
 
         if (!empty($_REQUEST [ 'sync_detail_and_edit' ]) && $_REQUEST['sync_detail_and_edit'] != false && $_REQUEST['sync_detail_and_edit'] != "false") {
-            if (strtolower($parser->_view) == MB_EDITVIEW) {
+            if (\strtolower($parser->_view) == MB_EDITVIEW) {
                 $parser2 = ParserFactory::getParser(MB_DETAILVIEW, $_REQUEST [ 'view_module' ], isset($_REQUEST [ 'view_package' ]) ? $_REQUEST [ 'view_package' ] : null) ;
                 $parser2->setUseTabs($parser->getUseTabs());
                 $parser2->handleSave() ;
@@ -739,7 +739,7 @@ class ModuleBuilderController extends SugarController
     {
         $GLOBALS [ 'log' ]->info("action_listViewSave") ;
 
-        $packageName = (isset($_REQUEST [ 'view_package' ]) && (strtolower($_REQUEST['view_package']) != 'studio')) ? $_REQUEST [ 'view_package' ] : null ;
+        $packageName = (isset($_REQUEST [ 'view_package' ]) && (\strtolower($_REQUEST['view_package']) != 'studio')) ? $_REQUEST [ 'view_package' ] : null ;
         $subpanelName = (! empty($_REQUEST [ 'subpanel' ])) ? $_REQUEST [ 'subpanel' ] : null ;
         require_once 'modules/ModuleBuilder/parsers/ParserFactory.php' ;
         $parser = ParserFactory::getParser($_REQUEST [ 'view' ], $_REQUEST [ 'view_module' ], $packageName, $subpanelName) ;
@@ -750,7 +750,7 @@ class ModuleBuilderController extends SugarController
     public function action_dashletSave()
     {
         $this->view = 'dashlet' ;
-        $packageName = (isset($_REQUEST [ 'view_package' ]) && (strtolower($_REQUEST['view_package']) != 'studio')) ? $_REQUEST [ 'view_package' ] : null ;
+        $packageName = (isset($_REQUEST [ 'view_package' ]) && (\strtolower($_REQUEST['view_package']) != 'studio')) ? $_REQUEST [ 'view_package' ] : null ;
         require_once 'modules/ModuleBuilder/parsers/ParserFactory.php' ;
         $parser = ParserFactory::getParser($_REQUEST [ 'view' ], $_REQUEST [ 'view_module' ], $packageName) ;
         $parser->handleSave() ;
@@ -758,7 +758,7 @@ class ModuleBuilderController extends SugarController
 
     public function action_popupSave()
     {
-        $packageName = (isset($_REQUEST [ 'view_package' ]) && (strtolower($_REQUEST['view_package']) != 'studio')) ? $_REQUEST [ 'view_package' ] : null ;
+        $packageName = (isset($_REQUEST [ 'view_package' ]) && (\strtolower($_REQUEST['view_package']) != 'studio')) ? $_REQUEST [ 'view_package' ] : null ;
         require_once 'modules/ModuleBuilder/parsers/ParserFactory.php' ;
         $parser = ParserFactory::getParser($_REQUEST [ 'view' ], $_REQUEST [ 'view_module' ], $packageName) ;
         $parser->handleSave() ;
@@ -828,7 +828,7 @@ class ModuleBuilderController extends SugarController
                     $lang = $GLOBALS [ 'current_language' ] ;
                     $module->mblanguage->generateAppStrings(false) ;
                     $package_strings = $module->mblanguage->appListStrings [ $lang . '.lang.php' ] ;
-                    if (isset($package_strings [ $key ]) && is_array($package_strings [ $key ])) {
+                    if (isset($package_strings [ $key ]) && \is_array($package_strings [ $key ])) {
                         $value = $package_strings [ $key ] ;
                     }
                 }
@@ -862,7 +862,7 @@ class ModuleBuilderController extends SugarController
         if (!empty($current_user) && isset($_REQUEST['column']) && isset($_REQUEST['direction'])) {
             $direction = ($_REQUEST['direction'] == 'yui-dt-asc') ? 'ASC' : 'DESC';
             $valid_columns = array('name', 'label', 'type', 'required', 'unified_search', 'custom');
-            $key = in_array($_REQUEST['column'], $valid_columns) ? $_REQUEST['column'] : 'name';
+            $key = \in_array($_REQUEST['column'], $valid_columns) ? $_REQUEST['column'] : 'name';
             $val = array('key'=>$key, 'direction'=>$direction);
             $current_user->setPreference('fieldsTableColumn', getJSONobj()->encode($val), 0, 'ModuleBuilder');
         }

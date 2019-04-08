@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -56,7 +56,7 @@ global $cal_strings, $current_language;
 $cal_strings = return_module_language($current_language, 'Calendar');
 
 if (empty($_REQUEST['view'])) {
-    if (isset($_SESSION['CALENDAR_VIEW']) && in_array($_SESSION['CALENDAR_VIEW'], $views)) {
+    if (isset($_SESSION['CALENDAR_VIEW']) && \in_array($_SESSION['CALENDAR_VIEW'], $views)) {
         $_REQUEST['view'] = $_SESSION['CALENDAR_VIEW'];
     } else {
         $_REQUEST['view'] = SugarConfig::getInstance()->get('calendar.default_view', 'agendaWeek');
@@ -77,12 +77,12 @@ if ($cal->view == "sharedMonth" || $cal->view == "sharedWeek") {
         $cal->add_activities($shared_user);
     }
 } else {
-    if (array_key_exists($cal->view, $views)) {
+    if (\array_key_exists($cal->view, $views)) {
         $cal->add_activities($GLOBALS['current_user']);
     }
 }
 
-if (array_key_exists($cal->view, $views)) {
+if (\array_key_exists($cal->view, $views)) {
     $cal->load_activities();
 }
 

@@ -27,22 +27,22 @@ class Fields extends BaseOption
                 ]),
             ], true))
             ->setNormalizer('fields', function (Options $options, $values) {
-                $bean = $this->beanManager->newBeanSafe(key($values));
+                $bean = $this->beanManager->newBeanSafe(\key($values));
                 $attributes = $bean->toArray();
-                $fields = explode(',', array_shift($values));
+                $fields = \explode(',', \array_shift($values));
 
-                $invalidFields = array_filter($fields, function ($field) use ($attributes) {
-                    return !array_key_exists($field, $attributes);
+                $invalidFields = \array_filter($fields, function ($field) use ($attributes) {
+                    return !\array_key_exists($field, $attributes);
                 });
 
                 if ($invalidFields) {
                     throw new \InvalidArgumentException(
-                        sprintf(
+                        \sprintf(
                             'The following field%s in %s module %s not found: %s',
-                            count($invalidFields) > 1 ? 's' : '',
+                            \count($invalidFields) > 1 ? 's' : '',
                             $bean->getObjectName(),
-                            count($invalidFields) > 1 ? 'are' : 'is',
-                            implode(', ', $invalidFields)
+                            \count($invalidFields) > 1 ? 'are' : 'is',
+                            \implode(', ', $invalidFields)
                         )
                     );
                 }

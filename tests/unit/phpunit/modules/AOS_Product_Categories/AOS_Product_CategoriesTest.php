@@ -47,7 +47,7 @@ class AOS_Product_CategoriesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbs
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($aosProductCategories->id));
-        $this->assertEquals(36, strlen($aosProductCategories->id));
+        $this->assertEquals(36, \strlen($aosProductCategories->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $aosProductCategories->mark_deleted($aosProductCategories->id);

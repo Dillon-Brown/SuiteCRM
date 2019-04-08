@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -76,11 +76,11 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
      */
     public function __construct($view, $moduleName, $packageName = '')
     {
-        $GLOBALS ['log']->debug(get_class($this) . ": __construct()");
+        $GLOBALS ['log']->debug(\get_class($this) . ": __construct()");
 
         // BEGIN ASSERTIONS
         $views = array(MB_LISTVIEW, MB_DASHLET, MB_DASHLETSEARCH, MB_POPUPLIST, MB_POPUPSEARCH);
-        if (!in_array($view, $views)) {
+        if (!\in_array($view, $views)) {
             sugar_die("ListLayoutMetaDataParser: View $view is not supported");
         }
         // END ASSERTIONS
@@ -96,7 +96,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
 
         $this->_fielddefs = $this->implementation->getFielddefs();
         $this->_standardizeFieldLabels($this->_fielddefs);
-        $this->_viewdefs = array_change_key_case($this->implementation->getViewdefs()); // force to lower case so don't have problems with case mismatches later
+        $this->_viewdefs = \array_change_key_case($this->implementation->getViewdefs()); // force to lower case so don't have problems with case mismatches later
     }
 
     /**
@@ -127,7 +127,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
         if ($populate) {
             $this->_populateFromRequest();
         }
-        $this->implementation->deploy(array_change_key_case(
+        $this->implementation->deploy(\array_change_key_case(
             $this->_viewdefs,
             CASE_UPPER
         )); // force the field names back to upper case so the list view will work correctly
@@ -176,7 +176,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
         $additionalFields = array();
         foreach ($this->_viewdefs as $key => $def) {
             //#25322
-            if (strtolower($key) == 'email_opt_out') {
+            if (\strtolower($key) == 'email_opt_out') {
                 continue;
             }
 
@@ -225,7 +225,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
     public function isValidField($key, $def)
     {
         if (isset($def['studio'])) {
-            if (is_array($def['studio'])) {
+            if (\is_array($def['studio'])) {
                 $view = !empty($_REQUEST['view']) ? $_REQUEST['view'] : $this->view;
 
                 // fix for removing email1 field from studio popup searchview - bug 42902
@@ -245,10 +245,10 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
                     return $def['studio']['visible'];
                 }
             } else {
-                if (is_string($def['studio'])) {
+                if (\is_string($def['studio'])) {
                     return $def['studio'] != 'false' && $def['studio'] != 'hidden';
                 }
-                if (is_bool($def['studio'])) {
+                if (\is_bool($def['studio'])) {
                     return $def['studio'];
                 }
             }
@@ -274,7 +274,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
         }
 
         //hide currency_id, deleted, and _name fields by key-name
-        if (strcmp($key, 'deleted') == 0) {
+        if (\strcmp($key, 'deleted') == 0) {
             return false;
         }
 
@@ -289,7 +289,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
      */
     protected function _populateFromRequest()
     {
-        $GLOBALS ['log']->debug(get_class($this) . "->populateFromRequest() - fielddefs = " . print_r(
+        $GLOBALS ['log']->debug(\get_class($this) . "->populateFromRequest() - fielddefs = " . \print_r(
             $this->_fielddefs,
                 true
         ));
@@ -307,12 +307,12 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
              */
             if (isset($def['studio']) && (
                     (
-                        is_array($def['studio']) && isset($def['studio']['listview']) &&
-                        ($def['studio']['listview'] === false || strtolower($def['studio']['listview']) == 'false'
-                            || strtolower($def['studio']['listview']) == 'required')
+                        \is_array($def['studio']) && isset($def['studio']['listview']) &&
+                        ($def['studio']['listview'] === false || \strtolower($def['studio']['listview']) == 'false'
+                            || \strtolower($def['studio']['listview']) == 'required')
                     )
-                    || (!is_array($def['studio']) &&
-                        ($def ['studio'] === false || strtolower($def['studio']) == 'false' || strtolower($def['studio']) == 'required'))
+                    || (!\is_array($def['studio']) &&
+                        ($def ['studio'] === false || \strtolower($def['studio']) == 'false' || \strtolower($def['studio']) == 'required'))
                 )
             ) {
                 $newViewdefs [$key] = $def;
@@ -326,7 +326,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
 
         for ($i = 0; isset($_POST ['group_' . $i]) && $i < $lastGroup; $i++) {
             foreach ($_POST ['group_' . $i] as $fieldname) {
-                $fieldname = strtolower($fieldname);
+                $fieldname = \strtolower($fieldname);
                 //Check if the field was previously on the layout
                 if (isset($this->_viewdefs[$fieldname])) {
                     $newViewdefs [$fieldname] = $this->_viewdefs[$fieldname];
@@ -344,7 +344,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
 
                         $newViewdefs[$fieldname] = self::createViewDefsByFieldDefs(
                             $this->_fielddefs[$fieldname],
-                            get_class($this)
+                            \get_class($this)
                         );
                     }
                 }
@@ -352,10 +352,10 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
                     $newViewdefs [$fieldname]['enabled'] = true;
                 }
 
-                if (isset($_REQUEST [strtolower($fieldname) . 'width'])) {
-                    $width = substr($_REQUEST [$fieldname . 'width'], 6, 3);
-                    if (strpos($width, "%") != false) {
-                        $width = substr($width, 0, 2);
+                if (isset($_REQUEST [\strtolower($fieldname) . 'width'])) {
+                    $width = \substr($_REQUEST [$fieldname . 'width'], 6, 3);
+                    if (\strpos($width, "%") != false) {
+                        $width = \substr($width, 0, 2);
                     }
                     if (!($width < 101 && $width > 0)) {
                         $width = 10;
@@ -395,7 +395,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
             'text' => 'text',
             'encrypt' => 'encrypt'
         );
-        $viewDefs = call_user_func(array(
+        $viewDefs = \call_user_func(array(
             $class,
             '_trimFieldDefs'
         ), $fieldDefs);
@@ -403,7 +403,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
         // fixing bug #25640: Value of "Relate" custom field is not displayed as a link in list view
         // we should set additional params such as 'link' and 'id' to be stored in custom listviewdefs.php
         if (isset($fieldDefs['type']) && $fieldDefs['type'] == 'relate') {
-            $viewDefs['id'] = strtoupper($fieldDefs['id_name']);
+            $viewDefs['id'] = \strtoupper($fieldDefs['id_name']);
             $viewDefs['link'] = true;
         }
 
@@ -421,8 +421,8 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
             $viewDefs['link'] = true;
             $viewDefs['sortable'] = false;
             $viewDefs['ACLTag'] = 'PARENT';
-            $viewDefs['dynamic_module'] = strtoupper($fieldDefs['type_name']);
-            $viewDefs['id'] = strtoupper($fieldDefs['id_name']);
+            $viewDefs['dynamic_module'] = \strtoupper($fieldDefs['type_name']);
+            $viewDefs['id'] = \strtoupper($fieldDefs['id_name']);
             $viewDefs['related_fields'] = array('parent_id', 'parent_type');
         }
 
@@ -453,7 +453,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
         $defs = $this->implementation->getOriginalViewdefs();
         $out = array();
         foreach ($defs as $field => $def) {
-            $out[strtolower($field)] = $def;
+            $out[\strtolower($field)] = $def;
         }
 
         return $out;
@@ -469,7 +469,7 @@ class ListLayoutMetaDataParser extends AbstractMetaDataParser implements MetaDat
             $fieldDefinitions ['label'] = $fieldDefinitions ['vname'];
         }
 
-        return array_intersect_key($fieldDefinitions, array(
+        return \array_intersect_key($fieldDefinitions, array(
             'type' => true,
             'studio' => true,
             'label' => true,

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -49,4 +49,4 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-header("Location: index.php");
+\header("Location: index.php");

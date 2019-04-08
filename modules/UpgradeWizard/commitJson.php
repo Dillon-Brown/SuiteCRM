@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -48,12 +48,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Reserved. Contributor(s): ______________________________________..
  * *******************************************************************************/
 
-if (ob_get_level() < 1) {
-    ob_start();
+if (\ob_get_level() < 1) {
+    \ob_start();
 }
-ob_implicit_flush(1);
+\ob_implicit_flush(1);
 
-if (!function_exists('getFilesForPermsCheck')) {
+if (!\function_exists('getFilesForPermsCheck')) {
     require_once('modules/UpgradeWizard/uw_utils.php');
 }
 if (!isset($sugar_config) || empty($sugar_config)) {
@@ -63,7 +63,7 @@ $persistence = getPersistence();
 
 switch ($_REQUEST['commitStep']) {
     case 'run_sql':
-        ob_end_flush();
+        \ob_end_flush();
         logThis('commitJson->runSql() called.');
         $persistence = commitAjaxRunSql($persistence);
     break;

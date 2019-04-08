@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -154,7 +154,7 @@ class Call extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -168,7 +168,7 @@ class Call extends SugarBean
     {
         // don't check if call is being synced from Outlook
         if ($this->syncing == false) {
-            $view = strtolower($view);
+            $view = \strtolower($view);
             switch ($view) {
                 case 'edit':
                 case 'save':
@@ -245,8 +245,8 @@ class Call extends SugarBean
         }
 
         if (isset($_REQUEST['reminders_data'])) {
-            $reminderData = json_encode(
-                $this->removeUnInvitedFromReminders(json_decode(html_entity_decode($_REQUEST['reminders_data']), true))
+            $reminderData = \json_encode(
+                $this->removeUnInvitedFromReminders(\json_decode(\html_entity_decode($_REQUEST['reminders_data']), true))
             );
             Reminder::saveRemindersDataJson('Calls', $return_id, $reminderData);
         }
@@ -266,7 +266,7 @@ class Call extends SugarBean
             foreach ($reminder['invitees'] as $i => $invitee) {
                 switch ($invitee['module']) {
                     case "Users":
-                        if (in_array($invitee['module_id'], $this->users_arr) === false) {
+                        if (\in_array($invitee['module_id'], $this->users_arr) === false) {
                             // add to uninvited
                             $uninvited[] = $reminderData[$r]['invitees'][$i];
                             // remove user
@@ -274,7 +274,7 @@ class Call extends SugarBean
                         }
                         break;
                     case "Contacts":
-                        if (in_array($invitee['module_id'], $this->contacts_arr) === false) {
+                        if (\in_array($invitee['module_id'], $this->contacts_arr) === false) {
                             // add to uninvited
                             $uninvited[] = $reminderData[$r]['invitees'][$i];
                             // remove contact
@@ -282,7 +282,7 @@ class Call extends SugarBean
                         }
                         break;
                     case "Leads":
-                        if (in_array($invitee['module_id'], $this->leads_arr) === false) {
+                        if (\in_array($invitee['module_id'], $this->leads_arr) === false) {
                             // add to uninvited
                             $uninvited[] = $reminderData[$r]['invitees'][$i];
                             // remove lead
@@ -321,7 +321,7 @@ class Call extends SugarBean
         $query = "SELECT ";
         $query .= "
 			calls.*,";
-        if (preg_match("/calls_users\.user_id/", $where)) {
+        if (\preg_match("/calls_users\.user_id/", $where)) {
             $query .= "calls_users.required,
 				calls_users.accept_status,";
         }
@@ -332,19 +332,19 @@ class Call extends SugarBean
 
         // this line will help generate a GMT-metric to compare to a locale's timezone
 
-        if (preg_match("/contacts/", $where)) {
+        if (\preg_match("/contacts/", $where)) {
             $query .= ", contacts.first_name, contacts.last_name";
             $query .= ", contacts.assigned_user_id contact_name_owner";
         }
         $query .= " FROM calls ";
 
-        if (preg_match("/contacts/", $where)) {
+        if (\preg_match("/contacts/", $where)) {
             $query .=	"LEFT JOIN calls_contacts
 	                    ON calls.id=calls_contacts.call_id
 	                    LEFT JOIN contacts
 	                    ON calls_contacts.contact_id=contacts.id ";
         }
-        if (preg_match('/calls_users\.user_id/', $where)) {
+        if (\preg_match('/calls_users\.user_id/', $where)) {
             $query .= "LEFT JOIN calls_users
 			ON calls.id=calls_users.call_id and calls_users.deleted=0 ";
         }
@@ -380,7 +380,7 @@ class Call extends SugarBean
     {
         $custom_join = $this->getCustomJoin(true, true, $where);
         $custom_join['join'] .= $relate_link_join;
-        $contact_required = stristr($where, "contacts");
+        $contact_required = \stristr($where, "contacts");
         if ($contact_required) {
             $query = "SELECT calls.*, contacts.first_name, contacts.last_name, users.user_name as assigned_user_name ";
             $query .= $custom_join['select'];
@@ -441,14 +441,14 @@ class Call extends SugarBean
 
         global $timedate;
         //setting default date and time
-        if (is_null($this->date_start)) {
+        if (\is_null($this->date_start)) {
             $this->date_start = $timedate->now();
         }
 
-        if (is_null($this->duration_hours)) {
+        if (\is_null($this->duration_hours)) {
             $this->duration_hours = "0";
         }
-        if (is_null($this->duration_minutes)) {
+        if (\is_null($this->duration_minutes)) {
             $this->duration_minutes = "1";
         }
 
@@ -490,7 +490,7 @@ class Call extends SugarBean
 
         if (isset($_REQUEST['parent_type']) && empty($this->parent_type)) {
             $this->parent_type = $_REQUEST['parent_type'];
-        } elseif (is_null($this->parent_type)) {
+        } elseif (\is_null($this->parent_type)) {
             $this->parent_type = $app_list_strings['record_type_default_key'];
         }
     }
@@ -583,10 +583,10 @@ class Call extends SugarBean
         $calldate = $timedate->fromDb($call->date_start);
         $xOffset = $timedate->asUser($calldate, $notifyUser).' '.$timedate->userTimezoneSuffix($calldate, $notifyUser);
 
-        if (strtolower(get_class($call->current_notify_user)) == 'contact') {
+        if (\strtolower(\get_class($call->current_notify_user)) == 'contact') {
             $xtpl->assign("ACCEPT_URL", $sugar_config['site_url'].
                   '/index.php?entryPoint=acceptDecline&module=Calls&contact_id='.$call->current_notify_user->id.'&record='.$call->id);
-        } elseif (strtolower(get_class($call->current_notify_user)) == 'lead') {
+        } elseif (\strtolower(\get_class($call->current_notify_user)) == 'lead') {
             $xtpl->assign("ACCEPT_URL", $sugar_config['site_url'].
                   '/index.php?entryPoint=acceptDecline&module=Calls&lead_id='.$call->current_notify_user->id.'&record='.$call->id);
         } else {
@@ -691,15 +691,15 @@ class Call extends SugarBean
 
         //		$GLOBALS['log']->debug('Call.php->get_notification_recipients():'.print_r($this,true));
         $list = array();
-        if (!is_array($this->contacts_arr)) {
+        if (!\is_array($this->contacts_arr)) {
             $this->contacts_arr =	array();
         }
 
-        if (!is_array($this->users_arr)) {
+        if (!\is_array($this->users_arr)) {
             $this->users_arr =	array();
         }
 
-        if (!is_array($this->leads_arr)) {
+        if (!\is_array($this->leads_arr)) {
             $this->leads_arr =	array();
         }
 
@@ -839,7 +839,7 @@ class Call extends SugarBean
         }
         $app = return_app_list_strings_language($GLOBALS['current_language']);
         if (isset($def['options']) && isset($app[$def['options']])) {
-            $keys = array_keys($app[$def['options']]);
+            $keys = \array_keys($app[$def['options']]);
             return $keys[0];
         }
 

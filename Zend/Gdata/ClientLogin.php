@@ -141,21 +141,21 @@ class Zend_Gdata_ClientLogin
         // Send the authentication request
         // For some reason Google's server causes an SSL error. We use the
         // output buffer to supress an error from being shown. Ugly - but works!
-        ob_start();
+        \ob_start();
         try {
             $response = $client->request('POST');
         } catch (Zend_Http_Client_Exception $e) {
             require_once 'Zend/Gdata/App/HttpException.php';
             throw new Zend_Gdata_App_HttpException($e->getMessage(), $e);
         }
-        ob_end_clean();
+        \ob_end_clean();
 
         // Parse Google's response
         $goog_resp = array();
-        foreach (explode("\n", $response->getBody()) as $l) {
-            $l = chop($l);
+        foreach (\explode("\n", $response->getBody()) as $l) {
+            $l = \chop($l);
             if ($l) {
-                list($key, $val) = explode('=', chop($l), 2);
+                list($key, $val) = \explode('=', \chop($l), 2);
                 $goog_resp[$key] = $val;
             }
         }
@@ -172,7 +172,7 @@ class Zend_Gdata_ClientLogin
             return $client;
         } elseif ($response->getStatus() == 403) {
             // Check if the server asked for a CAPTCHA
-            if (array_key_exists('Error', $goog_resp) &&
+            if (\array_key_exists('Error', $goog_resp) &&
                 $goog_resp['Error'] == 'CaptchaRequired') {
                 require_once 'Zend/Gdata/App/CaptchaRequiredException.php';
                 throw new Zend_Gdata_App_CaptchaRequiredException(

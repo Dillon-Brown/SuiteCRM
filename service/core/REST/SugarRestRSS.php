@@ -1,6 +1,6 @@
 <?php
-if (!defined('sugarEntry')) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry')) {
+    \define('sugarEntry', true);
 }
 /**
  *
@@ -61,8 +61,8 @@ class SugarRestRSS extends SugarRest
         if (!isset($input['entry_list'])) {
             $this->fault($app_strings['ERR_RSS_INVALID_RESPONSE']);
         }
-        ob_clean();
-        $this->generateResponseHeader(count($input['entry_list']));
+        \ob_clean();
+        $this->generateResponseHeader(\count($input['entry_list']));
         $this->generateItems($input);
         $this->generateResponseFooter();
     } // fn
@@ -99,12 +99,12 @@ EORSS;
 
     protected function generateItem($item)
     {
-        $name = !empty($item['name_value_list']['name']['value'])?htmlentities($item['name_value_list']['name']['value']): '';
-        $url = $GLOBALS['sugar_config']['site_url']  . htmlentities('/index.php?module=' . $item['module_name']. '&action=DetailView&record=' . $item['id']);
+        $name = !empty($item['name_value_list']['name']['value'])?\htmlentities($item['name_value_list']['name']['value']): '';
+        $url = $GLOBALS['sugar_config']['site_url']  . \htmlentities('/index.php?module=' . $item['module_name']. '&action=DetailView&record=' . $item['id']);
         $date = TimeDate::httpTime(TimeDate::getInstance()->fromDb($item['name_value_list']['date_modified']['value'])->getTimestamp());
         $description = '';
         $displayFieldNames = true;
-        if (count($item['name_value_list']) == 2 &&isset($item['name_value_list']['name'])) {
+        if (\count($item['name_value_list']) == 2 &&isset($item['name_value_list']['name'])) {
             $displayFieldNames = false;
         }
         foreach ($item['name_value_list'] as $k=>$v) {
@@ -112,9 +112,9 @@ EORSS;
                 continue;
             }
             if ($displayFieldNames) {
-                $description .= '<b>' .htmlentities($k) . ':<b>&nbsp;';
+                $description .= '<b>' .\htmlentities($k) . ':<b>&nbsp;';
             }
-            $description .= htmlentities($v['value']) . "<br>";
+            $description .= \htmlentities($v['value']) . "<br>";
         }
 
         echo <<<EORSS
@@ -154,15 +154,15 @@ EORSS;
      */
     public function fault($errorObject)
     {
-        ob_clean();
+        \ob_clean();
         $this->generateResponseHeader();
         echo '<item><name>';
-        if (is_object($errorObject)) {
+        if (\is_object($errorObject)) {
             $error = $errorObject->number . ': ' . $errorObject->name . '<br>' . $errorObject->description;
             $GLOBALS['log']->error($error);
         } else {
-            $GLOBALS['log']->error(var_export($errorObject, true));
-            $error = var_export($errorObject, true);
+            $GLOBALS['log']->error(\var_export($errorObject, true));
+            $error = \var_export($errorObject, true);
         } // else
         echo $error;
         echo '</name></item>';

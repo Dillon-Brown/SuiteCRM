@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,10 +71,10 @@ abstract class ext_soap extends source
 
         foreach ($obj as $key => $val) {
             switch (true) {
-          case is_object($val):
+          case \is_object($val):
              $out[$key] = $this->obj2array($val);
              break;
-          case is_array($val):
+          case \is_array($val):
              $out[$key] = $this->obj2array($val);
              break;
           default:

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -80,13 +80,13 @@ $document->retrieve($document_id);
 $_SESSION["MAILMERGE_TEMPLATE"] = $document->document_name;
 
 if (!empty($_POST['selected_objects'])) {
-    $selObjs = urldecode($_POST['selected_objects']);
+    $selObjs = \urldecode($_POST['selected_objects']);
     $_SESSION['SELECTED_OBJECTS_DEF'] = $selObjs;
 } else {
     $selObjs = $_SESSION['SELECTED_OBJECTS_DEF'];
 }
 $sel_obj = array();
-parse_str(html_entity_decode($selObjs, ENT_QUOTES), $sel_obj);
+\parse_str(\html_entity_decode($selObjs, ENT_QUOTES), $sel_obj);
 $step_num = 3;
 $xtpl->assign("PREV_STEP", '2');
 $xtpl->assign("STEP_NUM", "Step 3:");
@@ -96,7 +96,7 @@ $popup_request_data = array('call_back_function' => 'set_return', 'form_name' =>
     // must urlencode to put into the filter request string
     // because IE gets an out of memory error when it is passed
     // as the usual object literal
-$encoded_popup_request_data = urlencode($json->encode($popup_request_data));
+$encoded_popup_request_data = \urlencode($json->encode($popup_request_data));
 
 $modules = $modules_array;
 
@@ -126,11 +126,11 @@ $oddRow = true;
 
 
 foreach ($sel_obj as $key => $value) {
-    $value = str_replace("##", "&", $value);
-    $value = stripslashes($value);
-    $code = md5($key);
+    $value = \str_replace("##", "&", $value);
+    $value = \stripslashes($value);
+    $code = \md5($key);
     $popup_request_data = array('call_back_function' => 'set_return', 'form_name' => 'EditView', 'field_to_name_array' => array('id' => 'rel_id_'.$code, 'name' => 'rel_name_'.$code,),);
-    $encoded_popup_request_data = urlencode($json->encode($popup_request_data));
+    $encoded_popup_request_data = \urlencode($json->encode($popup_request_data));
 
     $fullQuery = get_merge_query($seed, $_SESSION['MAILMERGE_MODULE'], $key);
     $result = $seed->db->limitQuery($fullQuery, 0, 1, true, "Error performing limit query");
@@ -145,8 +145,8 @@ foreach ($sel_obj as $key => $value) {
         }
         $contact_id = $row['id'];
     }
-    $umodule =urlencode($_SESSION['MAILMERGE_MODULE']);
-    $ukey = urlencode($key);
+    $umodule =\urlencode($_SESSION['MAILMERGE_MODULE']);
+    $ukey = \urlencode($key);
     $change_parent_button = "<input title='{$app_strings['LBL_SELECT_BUTTON_TITLE']}' tabindex='2'  type='button' class='button' value='{$app_strings['LBL_SELECT_BUTTON_LABEL']}'
 		name='button' onclick='open_popup(document.EditView.rel_type_{$code}.value, 600, 400,
 			\"&html=mail_merge&rel_module=$umodule&id=$ukey&request_data=$encoded_popup_request_data\", true, false, {});' $disabled/>";
@@ -184,7 +184,7 @@ $xtpl->out("main");
 
 function generateSelect($seed, $relModule)
 {
-    $lowerRelModule = strtolower($relModule);
+    $lowerRelModule = \strtolower($relModule);
     if ($seed->load_relationship($lowerRelModule)) {
         $params = array();
         $params['join_table_alias'] = 'r1';

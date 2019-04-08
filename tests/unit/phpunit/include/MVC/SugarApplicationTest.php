@@ -223,7 +223,7 @@ class SugarApplicationTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $this->assertTrue(isset($GLOBALS['current_language']));
 
             //check that method call got the app_strings global variable set.
-            $this->assertTrue(is_array($GLOBALS['app_strings']) && count($GLOBALS['app_strings']) > 0);
+            $this->assertTrue(\is_array($GLOBALS['app_strings']) && \count($GLOBALS['app_strings']) > 0);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
@@ -249,13 +249,13 @@ class SugarApplicationTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $this->assertTrue(isset($GLOBALS['current_language']));
 
             //check that method call got the app_strings global variable set.
-            $this->assertTrue(is_array($GLOBALS['app_strings']) && count($GLOBALS['app_strings']) > 0);
+            $this->assertTrue(\is_array($GLOBALS['app_strings']) && \count($GLOBALS['app_strings']) > 0);
 
             //check that method call got the app_list_strings global variable set.
-            $this->assertTrue(is_array($GLOBALS['app_list_strings']) && count($GLOBALS['app_list_strings']) > 0);
+            $this->assertTrue(\is_array($GLOBALS['app_list_strings']) && \count($GLOBALS['app_list_strings']) > 0);
 
             //check that method call got the mod_strings global variable set.
-            $this->assertTrue(is_array($GLOBALS['mod_strings']) && count($GLOBALS['mod_strings']) > 0);
+            $this->assertTrue(\is_array($GLOBALS['mod_strings']) && \count($GLOBALS['mod_strings']) > 0);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
@@ -382,13 +382,13 @@ class SugarApplicationTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method and test if it works and does not throws an exception.
         try {
-            if (!headers_sent()) {
+            if (!\headers_sent()) {
                 $SugarApplication->startSession();
                 $this->sessionStartedOk = true;
             }
         } catch (Exception $e) {
             $err = $e->getMessage() . ' ' . $e->getCode() . ' ' . $e->getFile() . ' ' . $e->getLine() . ' ' . $e->getTraceAsString();
-            var_dump($err);
+            \var_dump($err);
             $this->fail($err);
         }
 
@@ -415,7 +415,7 @@ class SugarApplicationTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             }
         } catch (Exception $e) {
             $err = $e->getMessage() . ' ' . $e->getCode() . ' ' . $e->getFile() . ' ' . $e->getLine() . ' ' . $e->getTraceAsString();
-            var_dump($err);
+            \var_dump($err);
             $this->fail($err);
         }
 
@@ -454,9 +454,9 @@ class SugarApplicationTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //execute the method and check that the method adds the message to user_error_message array.
         //there should be one more array element after method execution.
         $_SESSION['user_error_message'] = [];
-        $user_error_message_count = count($_SESSION['user_error_message']);
+        $user_error_message_count = \count($_SESSION['user_error_message']);
         SugarApplication::appendErrorMessage('some error');
-        $this->assertGreaterThan($user_error_message_count, count($_SESSION['user_error_message']));
+        $this->assertGreaterThan($user_error_message_count, \count($_SESSION['user_error_message']));
         
         // cleanup
         
@@ -471,7 +471,7 @@ class SugarApplicationTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         //execute the method and check if it returns a array.
         $errorMessages = SugarApplication::getErrorMessages();
-        $this->assertTrue(is_array($errorMessages));
+        $this->assertTrue(\is_array($errorMessages));
     }
 
     public function testsetCookie()
@@ -520,7 +520,7 @@ class SugarApplicationTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method and test that it returns a array.
         $vars = $SugarApplication->getLoginVars();
-        $this->assertTrue(is_array($vars));
+        $this->assertTrue(\is_array($vars));
     }
 
     public function testgetLoginRedirect()
@@ -529,6 +529,6 @@ class SugarApplicationTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method and test that it returns a plus length string
         $redirect = $SugarApplication->getLoginRedirect();
-        $this->assertGreaterThan(0, strlen($redirect));
+        $this->assertGreaterThan(0, \strlen($redirect));
     }
 }

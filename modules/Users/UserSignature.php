@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -68,7 +68,7 @@ class UserSignature extends SugarBean
     {
         //Ensure the vardefs get loaded.
         global $dictionary;
-        if (file_exists('custom/metadata/users_signaturesMetaData.php')) {
+        if (\file_exists('custom/metadata/users_signaturesMetaData.php')) {
             require_once('custom/metadata/users_signaturesMetaData.php');
         } else {
             require_once('metadata/users_signaturesMetaData.php');
@@ -87,7 +87,7 @@ class UserSignature extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }

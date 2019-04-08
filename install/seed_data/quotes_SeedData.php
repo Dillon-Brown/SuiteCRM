@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -82,7 +82,7 @@ if (!empty($sugar_demodata['quotes_seed_data']['quotes'])) {
         $result = DBManagerFactory::getInstance()->limitQuery($sql, 0, 10, true, "Error retrieving Accounts");
         while ($row = DBManagerFactory::getInstance()->fetchByAssoc($result)) {
             $focus->billing_account_id = $row['id'];
-            $focus->name = str_replace('[account name]', $row['name'], $focus->name);
+            $focus->name = \str_replace('[account name]', $row['name'], $focus->name);
             $focus->billing_address_street = $row['billing_address_street'];
             $focus->billing_address_city = $row['billing_address_city'];
             $focus->billing_address_state = $row['billing_address_state'];

@@ -68,11 +68,11 @@ class ViewClassicTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $view->module = 'Home';
         $view->action = 'index';
 
-        ob_start();
+        \ob_start();
         $ret = $view->display();
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
-        $this->assertGreaterThan(0, strlen($renderedContent));
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
+        $this->assertGreaterThan(0, \strlen($renderedContent));
         $this->assertTrue($ret);
         
         

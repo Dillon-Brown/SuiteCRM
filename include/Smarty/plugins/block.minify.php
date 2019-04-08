@@ -4,25 +4,25 @@ function smarty_block_minify($params, $content, &$smarty, &$repeat)
     if (!$repeat && isset($content)) {
         // HTML Minifier
         $input = $content;
-        if (trim($input) === "") {
+        if (\trim($input) === "") {
             return $input;
         }
         // Remove extra white-space(s) between HTML attribute(s)
-        $input = preg_replace_callback('#<([^\/\s<>!]+)(?:\s+([^<>]*?)\s*|\s*)(\/?)>#s', function ($matches) {
-            return '<' . $matches[1] . preg_replace(
+        $input = \preg_replace_callback('#<([^\/\s<>!]+)(?:\s+([^<>]*?)\s*|\s*)(\/?)>#s', function ($matches) {
+            return '<' . $matches[1] . \preg_replace(
                 '#([^\s=]+)(\=([\'"]?)(.*?)\3)?(\s+|$)#s',
                 ' $1$2',
                         $matches[2]
             ) . $matches[3] . '>';
-        }, str_replace("\r", "", $input));
+        }, \str_replace("\r", "", $input));
         // Minify inline CSS declaration(s)
-        if (strpos($input, ' style=') !== false) {
-            $input = preg_replace_callback('#<([^<]+?)\s+style=([\'"])(.*?)\2(?=[\/\s>])#s', function ($matches) {
+        if (\strpos($input, ' style=') !== false) {
+            $input = \preg_replace_callback('#<([^<]+?)\s+style=([\'"])(.*?)\2(?=[\/\s>])#s', function ($matches) {
                 return '<' . $matches[1] . ' style=' . $matches[2] . minify_css($matches[3]) . $matches[2];
             }, $input);
         }
 
-        return preg_replace(
+        return \preg_replace(
                 array(
                     // t = text
                     // o = tag open
@@ -73,14 +73,14 @@ function smarty_block_minify($params, $content, &$smarty, &$repeat)
 function fn_minify_css($input)
 {
     // Keep important white-space(s) in `calc()`
-    if (stripos($input, 'calc(') !== false) {
-        $input = preg_replace_callback('#\b(calc\()\s*(.*?)\s*\)#i', function ($m) {
-            return $m[1] . preg_replace('#\s+#', X . '\s', $m[2]) . ')';
+    if (\stripos($input, 'calc(') !== false) {
+        $input = \preg_replace_callback('#\b(calc\()\s*(.*?)\s*\)#i', function ($m) {
+            return $m[1] . \preg_replace('#\s+#', X . '\s', $m[2]) . ')';
         }, $input);
     }
 
     // Minify ...
-    return preg_replace(
+    return \preg_replace(
         array(
             // Fix case for `#foo [bar="baz"]` and `#foo :first-child` [^1]
             '#(?<![,\{\}])\s+(\[|:\w)#',
@@ -141,26 +141,26 @@ function fn_minify_css($input)
 
 function minify_css($input)
 {
-    if (!$input = trim($input)) {
+    if (!$input = \trim($input)) {
         return $input;
     }
     global $SS, $CC;
     // Keep important white-space(s) between comment(s)
-    $input = preg_replace('#(' . $CC . ')\s+(' . $CC . ')#', '$1' . X . '\s$2', $input);
+    $input = \preg_replace('#(' . $CC . ')\s+(' . $CC . ')#', '$1' . X . '\s$2', $input);
     // Create chunk(s) of string(s), comment(s) and text
-    $input = preg_split('#(' . $SS . '|' . $CC . ')#', $input, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+    $input = \preg_split('#(' . $SS . '|' . $CC . ')#', $input, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
     $output = "";
     foreach ($input as $v) {
-        if (trim($v) === "") {
+        if (\trim($v) === "") {
             continue;
         }
         if (
-            ($v[0] === '"' && substr($v, -1) === '"') ||
-            ($v[0] === "'" && substr($v, -1) === "'") ||
-            (substr($v, 0, 2) === '/*' && substr($v, -2) === '*/')
+            ($v[0] === '"' && \substr($v, -1) === '"') ||
+            ($v[0] === "'" && \substr($v, -1) === "'") ||
+            (\substr($v, 0, 2) === '/*' && \substr($v, -2) === '*/')
         ) {
             // Remove if not detected as important comment ...
-            if ($v[0] === '/' && substr($v, 0, 3) !== '/*!') {
+            if ($v[0] === '/' && \substr($v, 0, 3) !== '/*!') {
                 continue;
             }
             $output .= $v; // String or comment ...
@@ -169,7 +169,7 @@ function minify_css($input)
         }
     }
     // Remove quote(s) where possible ...
-    $output = preg_replace(
+    $output = \preg_replace(
         array(
             '#(' . $CC . ')|(?<!\bcontent\:)([\'"])([a-z_][-\w]*?)\2#i',
             '#(' . $CC . ')|\b(url\()([\'"])([^\s]+?)\3(\))#i'
@@ -186,5 +186,5 @@ function minify_css($input)
 
 function __minify_v($input)
 {
-    return str_replace(array(X . '\n', X . '\t', X . '\s'), array("\n", "\t", ' '), $input);
+    return \str_replace(array(X . '\n', X . '\t', X . '\s'), array("\n", "\t", ' '), $input);
 }

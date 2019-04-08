@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -79,7 +79,7 @@ class Popup_Picker
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -121,7 +121,7 @@ class Popup_Picker
         foreach ($focus->get_linked_fields() as $field => $def) {
             if ($focus->load_relationship($field)) {
                 $relTable = BeanFactory::getBean($focus->$field->getRelatedModuleName())->table_name;
-                if (array_key_exists($relTable, $activitiesRels)) {
+                if (\array_key_exists($relTable, $activitiesRels)) {
                     $varname = 'focus_' . $relTable . '_list';
                     $$varname =
                         sugarArrayMerge($$varname, $focus->get_linked_beans($field, $activitiesRels[$relTable]));
@@ -328,7 +328,7 @@ class Popup_Picker
         } //end Emails
 
         // Bug 46439 'No email archived when clicking on View Summary' (All condition)
-        if (method_exists($focus, 'get_unlinked_email_query')) {
+        if (\method_exists($focus, 'get_unlinked_email_query')) {
             $queryArray = $focus->get_unlinked_email_query(array('return_as_array' => 'true'));
             $query = $queryArray['select'];
             $query .= $queryArray['from'];
@@ -362,7 +362,7 @@ class Popup_Picker
                     'date_modified' => $email->date_sent_received . ' ' . $email->time_start,
                     'description' => $this->getEmailDetails($email),
                     'date_type' => $mod_strings['LBL_DATA_TYPE_SENT'],
-                    'sort_value' => strtotime($email->fetched_row['date_sent_received'] . ' GMT'),
+                    'sort_value' => \strtotime($email->fetched_row['date_sent_received'] . ' GMT'),
                     'image' => SugarThemeRegistry::current()->getImageURL('Emails.svg')
                 );
             }
@@ -388,11 +388,11 @@ class Popup_Picker
                     'date_modified' => $note->date_modified,
                     'description' => $this->formatDescription($note->description),
                     'date_type' => $mod_strings['LBL_DATA_TYPE_MODIFIED'],
-                    'sort_value' => strtotime($note->fetched_row['date_modified'] . ' GMT'),
+                    'sort_value' => \strtotime($note->fetched_row['date_modified'] . ' GMT'),
                     'image' => SugarThemeRegistry::current()->getImageURL('Notes.svg')
                 );
                 if (!empty($note->filename)) {
-                    $count = count($summary_list);
+                    $count = \count($summary_list);
                     $count--;
                     $summary_list[$count]['filename'] = $note->filename;
                     $summary_list[$count]['fileurl'] = UploadFile::get_url($note->filename, $note->id);
@@ -401,8 +401,8 @@ class Popup_Picker
         } // end Notes
 
 
-        if (count($summary_list) > 0) {
-            array_multisort(array_column($summary_list, 'sort_value'), SORT_DESC, $summary_list);
+        if (\count($summary_list) > 0) {
+            \array_multisort(\array_column($summary_list, 'sort_value'), SORT_DESC, $summary_list);
 
             foreach ($summary_list as $list) {
                 if ($list['module'] === 'Tasks') {
@@ -478,7 +478,7 @@ class Popup_Picker
 
         // cn: bug 8433 - history does not distinguish b/t text/html emails
         $details .= empty($email->description_html) ? $this->formatDescription($email->description) :
-            $this->formatDescription(strip_tags(br2nl(from_html($email->description_html))));
+            $this->formatDescription(\strip_tags(br2nl(from_html($email->description_html))));
 
         return $details;
     }
@@ -509,6 +509,6 @@ class Popup_Picker
      */
     public function formatDescription($description)
     {
-        return nl2br($description);
+        return \nl2br($description);
     }
 } // end of class Popup_Picker

@@ -165,7 +165,7 @@ $vardefs = array(
         'created_by_link' => array(
             'name' => 'created_by_link',
             'type' => 'link',
-            'relationship' => strtolower($module) . '_created_by',
+            'relationship' => \strtolower($module) . '_created_by',
             'vname' => 'LBL_CREATED_USER',
             'link_type' => 'one',
             'module' => 'Users',
@@ -175,7 +175,7 @@ $vardefs = array(
         'modified_user_link' => array(
             'name' => 'modified_user_link',
             'type' => 'link',
-            'relationship' => strtolower($module) . '_modified_user',
+            'relationship' => \strtolower($module) . '_modified_user',
             'vname' => 'LBL_MODIFIED_USER',
             'link_type' => 'one',
             'module' => 'Users',
@@ -185,10 +185,10 @@ $vardefs = array(
 
     ),
     'indices' => array(
-        'id' => array('name' => strtolower($module) . 'pk', 'type' => 'primary', 'fields' => array('id')),
+        'id' => array('name' => \strtolower($module) . 'pk', 'type' => 'primary', 'fields' => array('id')),
     ),
     'relationships' => array(
-        strtolower($module) . '_modified_user' => array(
+        \strtolower($module) . '_modified_user' => array(
             'lhs_module' => 'Users',
             'lhs_table' => 'users',
             'lhs_key' => 'id',
@@ -197,7 +197,7 @@ $vardefs = array(
             'rhs_key' => 'modified_user_id',
             'relationship_type' => 'one-to-many'
         ),
-        strtolower($module) . '_created_by' => array(
+        \strtolower($module) . '_created_by' => array(
             'lhs_module' => 'Users',
             'lhs_table' => 'users',
             'lhs_key' => 'id',

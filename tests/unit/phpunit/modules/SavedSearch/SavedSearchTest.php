@@ -42,7 +42,7 @@ class SavedSearchTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $savedSearch = new SavedSearch(array('id', 'name'), 'id', 'ASC');
         $result = $savedSearch->getForm('Leads');
 
-        $this->assertGreaterThan(0, strlen($result));
+        $this->assertGreaterThan(0, \strlen($result));
         
         // clean up
     }
@@ -52,7 +52,7 @@ class SavedSearchTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $savedSearch = new SavedSearch(array('id', 'name'), 'id', 'ASC');
         $result = $savedSearch->getSelect('Leads');
 
-        $this->assertGreaterThan(0, strlen($result));
+        $this->assertGreaterThan(0, \strlen($result));
     }
 
 //    public function testMain()

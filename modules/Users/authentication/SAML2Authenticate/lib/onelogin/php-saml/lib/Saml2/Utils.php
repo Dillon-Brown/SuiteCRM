@@ -48,18 +48,18 @@ class OneLogin_Saml2_Utils
      */
     public static function t($msg, $args = array())
     {
-        assert('is_string($msg)');
-        if (extension_loaded('gettext')) {
-            bindtextdomain("phptoolkit", dirname(dirname(dirname(__FILE__))).'/locale');
-            textdomain('phptoolkit');
+        \assert('is_string($msg)');
+        if (\extension_loaded('gettext')) {
+            \bindtextdomain("phptoolkit", \dirname(\dirname(\dirname(__FILE__))).'/locale');
+            \textdomain('phptoolkit');
 
-            $translatedMsg = gettext($msg);
+            $translatedMsg = \gettext($msg);
         } else {
             $translatedMsg = $msg;
         }
         if (!empty($args)) {
-            $params = array_merge(array($translatedMsg), $args);
-            $translatedMsg = call_user_func_array('sprintf', $params);
+            $params = \array_merge(array($translatedMsg), $args);
+            $translatedMsg = \call_user_func_array('sprintf', $params);
         }
         return $translatedMsg;
     }
@@ -77,16 +77,16 @@ class OneLogin_Saml2_Utils
      */
     public static function loadXML($dom, $xml)
     {
-        assert('$dom instanceof DOMDocument');
-        assert('is_string($xml)');
+        \assert('$dom instanceof DOMDocument');
+        \assert('is_string($xml)');
 
-        if (strpos($xml, '<!ENTITY') !== false) {
+        if (\strpos($xml, '<!ENTITY') !== false) {
             throw new Exception('Detected use of ENTITY in XML, disabled to prevent XXE/XEE attacks');
         }
 
-        $oldEntityLoader = libxml_disable_entity_loader(true);
+        $oldEntityLoader = \libxml_disable_entity_loader(true);
         $res = $dom->loadXML($xml);
-        libxml_disable_entity_loader($oldEntityLoader);
+        \libxml_disable_entity_loader($oldEntityLoader);
 
         if (!$res) {
             return false;
@@ -107,11 +107,11 @@ class OneLogin_Saml2_Utils
      */
     public static function validateXML($xml, $schema, $debug = false)
     {
-        assert('is_string($xml) || $xml instanceof DOMDocument');
-        assert('is_string($schema)');
+        \assert('is_string($xml) || $xml instanceof DOMDocument');
+        \assert('is_string($schema)');
 
-        libxml_clear_errors();
-        libxml_use_internal_errors(true);
+        \libxml_clear_errors();
+        \libxml_use_internal_errors(true);
 
         if ($xml instanceof DOMDocument) {
             $dom = $xml;
@@ -123,13 +123,13 @@ class OneLogin_Saml2_Utils
             }
         }
 
-        $schemaFile = dirname(__FILE__).'/schemas/' . $schema;
-        $oldEntityLoader = libxml_disable_entity_loader(false);
+        $schemaFile = \dirname(__FILE__).'/schemas/' . $schema;
+        $oldEntityLoader = \libxml_disable_entity_loader(false);
         $res = $dom->schemaValidate($schemaFile);
-        libxml_disable_entity_loader($oldEntityLoader);
+        \libxml_disable_entity_loader($oldEntityLoader);
         if (!$res) {
-            $xmlErrors = libxml_get_errors();
-            syslog(LOG_INFO, 'Error validating the metadata: '.var_export($xmlErrors, true));
+            $xmlErrors = \libxml_get_errors();
+            \syslog(LOG_INFO, 'Error validating the metadata: '.\var_export($xmlErrors, true));
 
             if ($debug) {
                 foreach ($xmlErrors as $error) {
@@ -155,14 +155,14 @@ class OneLogin_Saml2_Utils
 
     public static function formatCert($cert, $heads = true)
     {
-        $x509cert = str_replace(array("\x0D", "\r", "\n"), "", $cert);
+        $x509cert = \str_replace(array("\x0D", "\r", "\n"), "", $cert);
         if (!empty($x509cert)) {
-            $x509cert = str_replace('-----BEGIN CERTIFICATE-----', "", $x509cert);
-            $x509cert = str_replace('-----END CERTIFICATE-----', "", $x509cert);
-            $x509cert = str_replace(' ', '', $x509cert);
+            $x509cert = \str_replace('-----BEGIN CERTIFICATE-----', "", $x509cert);
+            $x509cert = \str_replace('-----END CERTIFICATE-----', "", $x509cert);
+            $x509cert = \str_replace(' ', '', $x509cert);
 
             if ($heads) {
-                $x509cert = "-----BEGIN CERTIFICATE-----\n".chunk_split($x509cert, 64, "\n")."-----END CERTIFICATE-----\n";
+                $x509cert = "-----BEGIN CERTIFICATE-----\n".\chunk_split($x509cert, 64, "\n")."-----END CERTIFICATE-----\n";
             }
         }
         return $x509cert;
@@ -179,27 +179,27 @@ class OneLogin_Saml2_Utils
 
     public static function formatPrivateKey($key, $heads = true)
     {
-        $key = str_replace(array("\x0D", "\r", "\n"), "", $key);
+        $key = \str_replace(array("\x0D", "\r", "\n"), "", $key);
         if (!empty($key)) {
-            if (strpos($key, '-----BEGIN PRIVATE KEY-----') !== false) {
+            if (\strpos($key, '-----BEGIN PRIVATE KEY-----') !== false) {
                 $key = OneLogin_Saml2_Utils::getStringBetween($key, '-----BEGIN PRIVATE KEY-----', '-----END PRIVATE KEY-----');
-                $key = str_replace(' ', '', $key);
+                $key = \str_replace(' ', '', $key);
 
                 if ($heads) {
-                    $key = "-----BEGIN PRIVATE KEY-----\n".chunk_split($key, 64, "\n")."-----END PRIVATE KEY-----\n";
+                    $key = "-----BEGIN PRIVATE KEY-----\n".\chunk_split($key, 64, "\n")."-----END PRIVATE KEY-----\n";
                 }
-            } elseif (strpos($key, '-----BEGIN RSA PRIVATE KEY-----') !== false) {
+            } elseif (\strpos($key, '-----BEGIN RSA PRIVATE KEY-----') !== false) {
                 $key = OneLogin_Saml2_Utils::getStringBetween($key, '-----BEGIN RSA PRIVATE KEY-----', '-----END RSA PRIVATE KEY-----');
-                $key = str_replace(' ', '', $key);
+                $key = \str_replace(' ', '', $key);
 
                 if ($heads) {
-                    $key = "-----BEGIN RSA PRIVATE KEY-----\n".chunk_split($key, 64, "\n")."-----END RSA PRIVATE KEY-----\n";
+                    $key = "-----BEGIN RSA PRIVATE KEY-----\n".\chunk_split($key, 64, "\n")."-----END RSA PRIVATE KEY-----\n";
                 }
             } else {
-                $key = str_replace(' ', '', $key);
+                $key = \str_replace(' ', '', $key);
 
                 if ($heads) {
-                    $key = "-----BEGIN RSA PRIVATE KEY-----\n".chunk_split($key, 64, "\n")."-----END RSA PRIVATE KEY-----\n";
+                    $key = "-----BEGIN RSA PRIVATE KEY-----\n".\chunk_split($key, 64, "\n")."-----END RSA PRIVATE KEY-----\n";
                 }
             }
         }
@@ -219,15 +219,15 @@ class OneLogin_Saml2_Utils
     public static function getStringBetween($str, $start, $end)
     {
         $str = ' ' . $str;
-        $ini = strpos($str, $start);
+        $ini = \strpos($str, $start);
 
         if ($ini == 0) {
             return '';
         }
 
-        $ini += strlen($start);
-        $len = strpos($str, $end, $ini) - $ini;
-        return substr($str, $ini, $len);
+        $ini += \strlen($start);
+        $len = \strpos($str, $end, $ini) - $ini;
+        return \substr($str, $ini, $len);
     }
 
     /**
@@ -243,15 +243,15 @@ class OneLogin_Saml2_Utils
      */
     public static function redirect($url, $parameters = array(), $stay = false)
     {
-        assert('is_string($url)');
-        assert('is_array($parameters)');
+        \assert('is_string($url)');
+        \assert('is_array($parameters)');
 
-        if (substr($url, 0, 1) === '/') {
+        if (\substr($url, 0, 1) === '/') {
             $url = self::getSelfURLhost() . $url;
         }
 
         /* Verify that the URL is to a http or https site. */
-        if (!preg_match('@^https?:\/\/@i', $url)) {
+        if (!\preg_match('@^https?:\/\/@i', $url)) {
             throw new OneLogin_Saml2_Error(
                 'Redirect to invalid URL: ' . $url,
                 OneLogin_Saml2_Error::REDIRECT_INVALID_URL
@@ -260,7 +260,7 @@ class OneLogin_Saml2_Utils
 
         
         /* Add encoded parameters */
-        if (strpos($url, '?') === false) {
+        if (\strpos($url, '?') === false) {
             $paramPrefix = '?';
         } else {
             $paramPrefix = '&';
@@ -268,17 +268,17 @@ class OneLogin_Saml2_Utils
 
         foreach ($parameters as $name => $value) {
             if ($value === null) {
-                $param = urlencode($name);
-            } elseif (is_array($value)) {
+                $param = \urlencode($name);
+            } elseif (\is_array($value)) {
                 $param = "";
                 foreach ($value as $val) {
-                    $param .= urlencode($name) . "[]=" . urlencode($val). '&';
+                    $param .= \urlencode($name) . "[]=" . \urlencode($val). '&';
                 }
                 if (!empty($param)) {
-                    $param = substr($param, 0, -1);
+                    $param = \substr($param, 0, -1);
                 }
             } else {
-                $param = urlencode($name) . '=' . urlencode($value);
+                $param = \urlencode($name) . '=' . \urlencode($value);
             }
 
             if (!empty($param)) {
@@ -291,9 +291,9 @@ class OneLogin_Saml2_Utils
             return $url;
         }
 
-        header('Pragma: no-cache');
-        header('Cache-Control: no-cache, must-revalidate');
-        header('Location: ' . $url);
+        \header('Pragma: no-cache');
+        \header('Cache-Control: no-cache, must-revalidate');
+        \header('Location: ' . $url);
         exit();
     }
 
@@ -304,8 +304,8 @@ class OneLogin_Saml2_Utils
     {
         if (!empty($baseurl)) {
             $baseurlpath = '/';
-            if (preg_match('#^https?:\/\/([^\/]*)\/?(.*)#i', $baseurl, $matches)) {
-                if (strpos($baseurl, 'https://') === false) {
+            if (\preg_match('#^https?:\/\/([^\/]*)\/?(.*)#i', $baseurl, $matches)) {
+                if (\strpos($baseurl, 'https://') === false) {
                     self::setSelfProtocol('http');
                     $port = '80';
                 } else {
@@ -314,9 +314,9 @@ class OneLogin_Saml2_Utils
                 }
 
                 $currentHost = $matches[1];
-                if (false !== strpos($currentHost, ':')) {
-                    list($currentHost, $possiblePort) = explode(':', $matches[1], 2);
-                    if (is_numeric($possiblePort)) {
+                if (false !== \strpos($currentHost, ':')) {
+                    list($currentHost, $possiblePort) = \explode(':', $matches[1], 2);
+                    if (\is_numeric($possiblePort)) {
                         $port = $possiblePort;
                     }
                 }
@@ -398,7 +398,7 @@ class OneLogin_Saml2_Utils
         } elseif ($baseurlpath == '/') {
             self::$_baseurlpath = '/';
         } else {
-            self::$_baseurlpath = '/' . trim($baseurlpath, '/') . '/';
+            self::$_baseurlpath = '/' . \trim($baseurlpath, '/') . '/';
         }
     }
 
@@ -417,17 +417,17 @@ class OneLogin_Saml2_Utils
     {
         if (self::$_host) {
             $currentHost = self::$_host;
-        } elseif (self::getProxyVars() && array_key_exists('HTTP_X_FORWARDED_HOST', $_SERVER)) {
+        } elseif (self::getProxyVars() && \array_key_exists('HTTP_X_FORWARDED_HOST', $_SERVER)) {
             $currentHost = $_SERVER['HTTP_X_FORWARDED_HOST'];
-        } elseif (array_key_exists('HTTP_HOST', $_SERVER)) {
+        } elseif (\array_key_exists('HTTP_HOST', $_SERVER)) {
             $currentHost = $_SERVER['HTTP_HOST'];
-        } elseif (array_key_exists('SERVER_NAME', $_SERVER)) {
+        } elseif (\array_key_exists('SERVER_NAME', $_SERVER)) {
             $currentHost = $_SERVER['SERVER_NAME'];
         } else {
-            if (function_exists('gethostname')) {
-                $currentHost = gethostname();
+            if (\function_exists('gethostname')) {
+                $currentHost = \gethostname();
             } else {
-                $currentHost = php_uname("n");
+                $currentHost = \php_uname("n");
             }
         }
         return $currentHost;
@@ -477,8 +477,8 @@ class OneLogin_Saml2_Utils
         $currentHost = self::getRawHost();
 
         // strip the port
-        if (false !== strpos($currentHost, ':')) {
-            list($currentHost, $port) = explode(':', $currentHost, 2);
+        if (false !== \strpos($currentHost, ':')) {
+            list($currentHost, $port) = \explode(':', $currentHost, 2);
         }
 
         return $currentHost;
@@ -500,9 +500,9 @@ class OneLogin_Saml2_Utils
             $currentHost = self::getRawHost();
 
             // strip the port
-            if (false !== strpos($currentHost, ':')) {
-                list($currentHost, $port) = explode(':', $currentHost, 2);
-                if (is_numeric($port)) {
+            if (false !== \strpos($currentHost, ':')) {
+                list($currentHost, $port) = \explode(':', $currentHost, 2);
+                if (\is_numeric($port)) {
                     $portnumber = $port;
                 }
             }
@@ -556,9 +556,9 @@ class OneLogin_Saml2_Utils
         if (!empty($_SERVER['REQUEST_URI'])) {
             $route = $_SERVER['REQUEST_URI'];
             if (!empty($_SERVER['QUERY_STRING'])) {
-                $route = str_replace($_SERVER['QUERY_STRING'], '', $route);
-                if (substr($route, -1) == '?') {
-                    $route = substr($route, 0, -1);
+                $route = \str_replace($_SERVER['QUERY_STRING'], '', $route);
+                if (\substr($route, -1) == '?') {
+                    $route = \substr($route, 0, -1);
                 }
             }
         }
@@ -585,7 +585,7 @@ class OneLogin_Saml2_Utils
         if (!empty($_SERVER['REQUEST_URI'])) {
             $requestURI = $_SERVER['REQUEST_URI'];
             if ($requestURI[0] !== '/') {
-                if (preg_match('#^https?:\/\/[^\/]*(\/.*)#i', $requestURI, $matches)) {
+                if (\preg_match('#^https?:\/\/[^\/]*(\/.*)#i', $requestURI, $matches)) {
                     $requestURI = $matches[1];
                 }
             }
@@ -611,8 +611,8 @@ class OneLogin_Saml2_Utils
         if (!empty($baseURLPath)) {
             $result = $baseURLPath;
             if (!empty($info)) {
-                $path = explode('/', $info);
-                $extractedInfo = array_pop($path);
+                $path = \explode('/', $info);
+                $extractedInfo = \array_pop($path);
                 if (!empty($extractedInfo)) {
                     $result .= $extractedInfo;
                 }
@@ -630,10 +630,10 @@ class OneLogin_Saml2_Utils
      */
     public static function extractOriginalQueryParam($name)
     {
-        $index = strpos($_SERVER['QUERY_STRING'], $name.'=');
-        $substring = substr($_SERVER['QUERY_STRING'], $index + strlen($name) + 1);
-        $end = strpos($substring, '&');
-        return $end ? substr($substring, 0, strpos($substring, '&')) : $substring;
+        $index = \strpos($_SERVER['QUERY_STRING'], $name.'=');
+        $substring = \substr($_SERVER['QUERY_STRING'], $index + \strlen($name) + 1);
+        $end = \strpos($substring, '&');
+        return $end ? \substr($substring, 0, \strpos($substring, '&')) : $substring;
     }
 
     /**
@@ -643,7 +643,7 @@ class OneLogin_Saml2_Utils
      */
     public static function generateUniqueID()
     {
-        return 'ONELOGIN_' . sha1(uniqid(mt_rand(), true));
+        return 'ONELOGIN_' . \sha1(\uniqid(\mt_rand(), true));
     }
 
     /**
@@ -656,10 +656,10 @@ class OneLogin_Saml2_Utils
      */
     public static function parseTime2SAML($time)
     {
-        $defaultTimezone = date_default_timezone_get();
-        date_default_timezone_set('UTC');
-        $timestamp = strftime("%Y-%m-%dT%H:%M:%SZ", $time);
-        date_default_timezone_set($defaultTimezone);
+        $defaultTimezone = \date_default_timezone_get();
+        \date_default_timezone_set('UTC');
+        $timestamp = \strftime("%Y-%m-%dT%H:%M:%SZ", $time);
+        \date_default_timezone_set($defaultTimezone);
         return $timestamp;
     }
 
@@ -680,7 +680,7 @@ class OneLogin_Saml2_Utils
         /* We use a very strict regex to parse the timestamp. */
         $exp1 = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)';
         $exp2 = 'T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d+)?Z$/D';
-        if (preg_match($exp1 . $exp2, $time, $matches) == 0) {
+        if (\preg_match($exp1 . $exp2, $time, $matches) == 0) {
             throw new Exception(
                 'Invalid SAML2 timestamp passed to' .
                 ' parseSAML2Time: ' . $time
@@ -691,17 +691,17 @@ class OneLogin_Saml2_Utils
          * matches in the regex. intval will ignore leading zeroes
          * in the string.
          */
-        $year = intval($matches[1]);
-        $month = intval($matches[2]);
-        $day = intval($matches[3]);
-        $hour = intval($matches[4]);
-        $minute = intval($matches[5]);
-        $second = intval($matches[6]);
+        $year = \intval($matches[1]);
+        $month = \intval($matches[2]);
+        $day = \intval($matches[3]);
+        $hour = \intval($matches[4]);
+        $minute = \intval($matches[5]);
+        $second = \intval($matches[6]);
 
         /* We use gmmktime because the timestamp will always be given
          * in UTC.
          */
-        $ts = gmmktime($hour, $minute, $second, $month, $day, $year);
+        $ts = \gmmktime($hour, $minute, $second, $month, $day, $year);
 
         return $ts;
     }
@@ -721,12 +721,12 @@ class OneLogin_Saml2_Utils
      */
     public static function parseDuration($duration, $timestamp = null)
     {
-        assert('is_string($duration)');
-        assert('is_null($timestamp) || is_int($timestamp)');
+        \assert('is_string($duration)');
+        \assert('is_null($timestamp) || is_int($timestamp)');
 
         /* Parse the duration. We use a very strict pattern. */
         $durationRegEx = '#^(-?)P(?:(?:(?:(\\d+)Y)?(?:(\\d+)M)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?)|(?:(\\d+)W))$#D';
-        if (!preg_match($durationRegEx, $duration, $matches)) {
+        if (!\preg_match($durationRegEx, $duration, $matches)) {
             throw new Exception('Invalid ISO 8601 duration: ' . $duration);
         }
 
@@ -750,7 +750,7 @@ class OneLogin_Saml2_Utils
         }
 
         if ($timestamp === null) {
-            $timestamp = time();
+            $timestamp = \time();
         }
 
         if ($durYears !== 0 || $durMonths !== 0) {
@@ -761,12 +761,12 @@ class OneLogin_Saml2_Utils
             /* We need the year and month from the timestamp. Unfortunately, PHP doesn't have the
              * gmtime function. Instead we use the gmdate function, and split the result.
              */
-            $yearmonth = explode(':', gmdate('Y:n', $timestamp));
+            $yearmonth = \explode(':', \gmdate('Y:n', $timestamp));
             $year = (int)($yearmonth[0]);
             $month = (int)($yearmonth[1]);
 
             /* Remove the year and month from the timestamp. */
-            $timestamp -= gmmktime(0, 0, 0, $month, 1, $year);
+            $timestamp -= \gmmktime(0, 0, 0, $month, 1, $year);
 
             /* Add years and months, and normalize the numbers afterwards. */
             $year += $durYears;
@@ -781,7 +781,7 @@ class OneLogin_Saml2_Utils
             }
 
             /* Add year and month back into timestamp. */
-            $timestamp += gmmktime(0, 0, 0, $month, 1, $year);
+            $timestamp += \gmmktime(0, 0, 0, $month, 1, $year);
         }
 
         /* Add the other elements. */
@@ -807,11 +807,11 @@ class OneLogin_Saml2_Utils
         $expireTime = null;
 
         if ($cacheDuration !== null) {
-            $expireTime = self::parseDuration($cacheDuration, time());
+            $expireTime = self::parseDuration($cacheDuration, \time());
         }
 
         if ($validUntil !== null) {
-            if (is_int($validUntil)) {
+            if (\is_int($validUntil)) {
                 $validUntilTime = $validUntil;
             } else {
                 $validUntilTime = self::parseSAML2Time($validUntil);
@@ -860,10 +860,10 @@ class OneLogin_Saml2_Utils
      */
     public static function isSessionStarted()
     {
-        if (version_compare(phpversion(), '5.4.0', '>=')) {
-            return session_status() === PHP_SESSION_ACTIVE ? true : false;
+        if (\version_compare(\phpversion(), '5.4.0', '>=')) {
+            return \session_status() === PHP_SESSION_ACTIVE ? true : false;
         }
-        return session_id() === '' ? false : true;
+        return \session_id() === '' ? false : true;
     }
 
     /**
@@ -872,7 +872,7 @@ class OneLogin_Saml2_Utils
     public static function deleteLocalSession()
     {
         if (OneLogin_Saml2_Utils::isSessionStarted()) {
-            session_destroy();
+            \session_destroy();
         }
 
         unset($_SESSION);
@@ -887,15 +887,15 @@ class OneLogin_Saml2_Utils
      */
     public static function calculateX509Fingerprint($x509cert, $alg = 'sha1')
     {
-        assert('is_string($x509cert)');
+        \assert('is_string($x509cert)');
 
-        $lines = explode("\n", $x509cert);
+        $lines = \explode("\n", $x509cert);
 
         $data = '';
 
         foreach ($lines as $line) {
             /* Remove '\r' from end of line if present. */
-            $line = rtrim($line);
+            $line = \rtrim($line);
             if ($line === '-----BEGIN CERTIFICATE-----') {
                 /* Delete junk from before the certificate. */
                 $data = '';
@@ -910,17 +910,17 @@ class OneLogin_Saml2_Utils
                 $data .= $line;
             }
         }
-        $decodedData = base64_decode($data);
+        $decodedData = \base64_decode($data);
 
         switch ($alg) {
             case 'sha512':
             case 'sha384':
             case 'sha256':
-                $fingerprint = hash($alg, $decodedData, false);
+                $fingerprint = \hash($alg, $decodedData, false);
                 break;
             case 'sha1':
             default:
-                $fingerprint = strtolower(sha1($decodedData));
+                $fingerprint = \strtolower(\sha1($decodedData));
                 break;
         }
         return $fingerprint;
@@ -935,8 +935,8 @@ class OneLogin_Saml2_Utils
      */
     public static function formatFingerPrint($fingerprint)
     {
-        $formatedFingerprint = str_replace(':', '', $fingerprint);
-        $formatedFingerprint = strtolower($formatedFingerprint);
+        $formatedFingerprint = \str_replace(':', '', $fingerprint);
+        $formatedFingerprint = \strtolower($formatedFingerprint);
         return $formatedFingerprint;
     }
 
@@ -1086,8 +1086,8 @@ class OneLogin_Saml2_Utils
                 throw new OneLogin_Saml2_ValidationError(
                     'Algorithm mismatch between input key and key used to encrypt ' .
                     ' the symmetric key for the message. Key was: ' .
-                    var_export($inputKeyAlgo, true) . '; message was: ' .
-                    var_export($symKeyInfoAlgo, true),
+                    \var_export($inputKeyAlgo, true) . '; message was: ' .
+                    \var_export($symKeyInfoAlgo, true),
                     OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR
                 );
             }
@@ -1098,23 +1098,23 @@ class OneLogin_Saml2_Utils
             if ($keySize === null) {
                 // To protect against "key oracle" attacks
                 throw new OneLogin_Saml2_ValidationError(
-                    'Unknown key size for encryption algorithm: ' . var_export($symmetricKey->type, true),
+                    'Unknown key size for encryption algorithm: ' . \var_export($symmetricKey->type, true),
                     OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR
                 );
             }
 
             $key = $encKey->decryptKey($symmetricKeyInfo);
-            if (strlen($key) != $keySize) {
+            if (\strlen($key) != $keySize) {
                 $encryptedKey = $encKey->getCipherValue();
-                $pkey = openssl_pkey_get_details($symmetricKeyInfo->key);
-                $pkey = sha1(serialize($pkey), true);
-                $key = sha1($encryptedKey . $pkey, true);
+                $pkey = \openssl_pkey_get_details($symmetricKeyInfo->key);
+                $pkey = \sha1(\serialize($pkey), true);
+                $key = \sha1($encryptedKey . $pkey, true);
 
                 /* Make sure that the key has the correct length. */
-                if (strlen($key) > $keySize) {
-                    $key = substr($key, 0, $keySize);
-                } elseif (strlen($key) < $keySize) {
-                    $key = str_pad($key, $keySize);
+                if (\strlen($key) > $keySize) {
+                    $key = \substr($key, 0, $keySize);
+                } elseif (\strlen($key) < $keySize) {
+                    $key = \str_pad($key, $keySize);
                 }
             }
             $symmetricKey->loadkey($key);
@@ -1123,8 +1123,8 @@ class OneLogin_Saml2_Utils
             if ($inputKeyAlgo !== $symKeyAlgo) {
                 throw new OneLogin_Saml2_ValidationError(
                     'Algorithm mismatch between input key and key in message. ' .
-                    'Key was: ' . var_export($inputKeyAlgo, true) . '; message was: ' .
-                    var_export($symKeyAlgo, true),
+                    'Key was: ' . \var_export($inputKeyAlgo, true) . '; message was: ' .
+                    \var_export($symKeyAlgo, true),
                     OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR
                 );
             }
@@ -1169,13 +1169,13 @@ class OneLogin_Saml2_Utils
      */
     public static function castKey(XMLSecurityKey $key, $algorithm, $type = 'public')
     {
-        assert('is_string($algorithm)');
-        assert('$type === "public" || $type === "private"');
+        \assert('is_string($algorithm)');
+        \assert('$type === "public" || $type === "private"');
         // do nothing if algorithm is already the type of the key
         if ($key->type === $algorithm) {
             return $key;
         }
-        $keyInfo = openssl_pkey_get_details($key->key);
+        $keyInfo = \openssl_pkey_get_details($key->key);
         if ($keyInfo === false) {
             throw new Exception('Unable to get key details from XMLSecurityKey.');
         }
@@ -1237,7 +1237,7 @@ class OneLogin_Saml2_Utils
 
         $insertBefore = $rootNode->firstChild;
         $messageTypes = array('AuthnRequest', 'Response', 'LogoutRequest','LogoutResponse');
-        if (in_array($rootNode->localName, $messageTypes)) {
+        if (\in_array($rootNode->localName, $messageTypes)) {
             $issuerNodes = self::query($dom, '/'.$rootNode->tagName.'/saml:Issuer');
             if ($issuerNodes->length == 1) {
                 $insertBefore = $issuerNodes->item(0)->nextSibling;
@@ -1360,11 +1360,11 @@ class OneLogin_Saml2_Utils
             }
             $signedQuery .= '&SigAlg='.OneLogin_Saml2_Utils::extractOriginalQueryParam('SigAlg');
         } else {
-            $signedQuery = $messageType.'='.urlencode($getData[$messageType]);
+            $signedQuery = $messageType.'='.\urlencode($getData[$messageType]);
             if (isset($getData['RelayState'])) {
-                $signedQuery .= '&RelayState='.urlencode($getData['RelayState']);
+                $signedQuery .= '&RelayState='.\urlencode($getData['RelayState']);
             }
-            $signedQuery .= '&SigAlg='.urlencode($signAlg);
+            $signedQuery .= '&SigAlg='.\urlencode($signAlg);
         }
 
         if ($messageType == "SAMLRequest") {
@@ -1399,13 +1399,13 @@ class OneLogin_Saml2_Utils
                         "Invalid signAlg in the recieved ".$strMessageType,
                         OneLogin_Saml2_ValidationError::INVALID_SIGNATURE
                     );
-                    if (count($multiCerts) == 1) {
+                    if (\count($multiCerts) == 1) {
                         throw $ex;
                     }
                 }
             }
 
-            if ($objKey->verifySignature($signedQuery, base64_decode($_GET['Signature'])) === 1) {
+            if ($objKey->verifySignature($signedQuery, \base64_decode($_GET['Signature'])) === 1) {
                 $signatureValid = true;
                 break;
             }

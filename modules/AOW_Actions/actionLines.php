@@ -29,7 +29,7 @@ function display_action_lines(SugarBean $focus, $field, $value, $view)
 
     $html = '';
 
-    if (!is_file('cache/jsLanguage/AOW_Actions/' . $GLOBALS['current_language'] . '.js')) {
+    if (!\is_file('cache/jsLanguage/AOW_Actions/' . $GLOBALS['current_language'] . '.js')) {
         require_once('include/language/jsLanguage.php');
         jsLanguage::createModuleStringsCache('AOW_Actions', $GLOBALS['current_language']);
     }
@@ -46,9 +46,9 @@ function display_action_lines(SugarBean $focus, $field, $value, $view)
         foreach ($aow_actions_list as $action_value) {
             $action_name = 'action'.$action_value;
 
-            if (file_exists('custom/modules/AOW_Actions/actions/'.$action_name.'.php')) {
+            if (\file_exists('custom/modules/AOW_Actions/actions/'.$action_name.'.php')) {
                 require_once('custom/modules/AOW_Actions/actions/'.$action_name.'.php');
-            } elseif (file_exists('modules/AOW_Actions/actions/'.$action_name.'.php')) {
+            } elseif (\file_exists('modules/AOW_Actions/actions/'.$action_name.'.php')) {
                 require_once('modules/AOW_Actions/actions/'.$action_name.'.php');
             } else {
                 continue;
@@ -59,7 +59,7 @@ function display_action_lines(SugarBean $focus, $field, $value, $view)
                 $html .= '<script src="'.$js_file.'"></script>';
             }
 
-            $app_list_actions[$action_value] = translate('LBL_'.strtoupper($action_value), 'AOW_Actions');
+            $app_list_actions[$action_value] = translate('LBL_'.\strtoupper($action_value), 'AOW_Actions');
         }
 
         $html .= '<input type="hidden" name="app_list_actions" id="app_list_actions" value="'.get_select_options_with_id($app_list_actions, '').'">';
@@ -79,7 +79,7 @@ function display_action_lines(SugarBean $focus, $field, $value, $view)
                 while ($row = $focus->db->fetchByAssoc($result)) {
                     $action_name = new AOW_Action();
                     $action_name->retrieve($row['id']);
-                    $action_item = json_encode($action_name->toArray());
+                    $action_item = \json_encode($action_name->toArray());
 
                     $html .= "<script>
                             loadActionLine(".$action_item.");
@@ -96,7 +96,7 @@ function display_action_lines(SugarBean $focus, $field, $value, $view)
             $action_name = new AOW_Action();
             $action_name->retrieve($row['id']);
 
-            $html .= "<tr><td>". $action_name->action_order ."</td><td>".$action_name->name."</td><td>". translate('LBL_'.strtoupper($action_name->action), 'AOW_Actions')."</td></tr>";
+            $html .= "<tr><td>". $action_name->action_order ."</td><td>".$action_name->name."</td><td>". translate('LBL_'.\strtoupper($action_name->action), 'AOW_Actions')."</td></tr>";
         }
         $html .= "</table>";
     }

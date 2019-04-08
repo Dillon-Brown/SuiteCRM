@@ -59,7 +59,7 @@ class VardefManager
         include_once('modules/TableDictionary.php');
 
         //reverse the sort order so priority goes highest to lowest;
-        $templates = array_reverse($templates);
+        $templates = \array_reverse($templates);
         foreach ($templates as $template) {
             VardefManager::addTemplate($module, $object, $template, $object_name);
         }
@@ -73,7 +73,7 @@ class VardefManager
 
             //search a predefined set of locations for the vardef files
             foreach ($vardef_paths as $path) {
-                if (file_exists($path)) {
+                if (\file_exists($path)) {
                     require($path);
                 }
             }
@@ -105,21 +105,21 @@ class VardefManager
         if (empty($object_name)) {
             $object_name = $object;
         }
-        $_object_name = strtolower($object_name);
+        $_object_name = \strtolower($object_name);
         if (!empty($GLOBALS['dictionary'][$object]['table'])) {
             $table_name = $GLOBALS['dictionary'][$object]['table'];
         } else {
-            $table_name = strtolower($module);
+            $table_name = \strtolower($module);
         }
 
         if (empty($templates[$template])) {
             $path = 'include/SugarObjects/templates/' . $template . '/vardefs.php';
-            if (file_exists($path)) {
+            if (\file_exists($path)) {
                 require($path);
                 $templates[$template] = $vardefs;
             } else {
                 $path = 'include/SugarObjects/implements/' . $template . '/vardefs.php';
-                if (file_exists($path)) {
+                if (\file_exists($path)) {
                     require($path);
                     $templates[$template] = $vardefs;
                 }
@@ -136,12 +136,12 @@ class VardefManager
             if (empty($GLOBALS['dictionary'][$object]['indices'])) {
                 $GLOBALS['dictionary'][$object]['indices'] = array();
             }
-            $GLOBALS['dictionary'][$object]['fields'] = array_merge($templates[$template]['fields'], $GLOBALS['dictionary'][$object]['fields']);
+            $GLOBALS['dictionary'][$object]['fields'] = \array_merge($templates[$template]['fields'], $GLOBALS['dictionary'][$object]['fields']);
             if (!empty($templates[$template]['relationships'])) {
-                $GLOBALS['dictionary'][$object]['relationships'] = array_merge($templates[$template]['relationships'], $GLOBALS['dictionary'][$object]['relationships']);
+                $GLOBALS['dictionary'][$object]['relationships'] = \array_merge($templates[$template]['relationships'], $GLOBALS['dictionary'][$object]['relationships']);
             }
             if (!empty($templates[$template]['indices'])) {
-                $GLOBALS['dictionary'][$object]['indices'] = array_merge($templates[$template]['indices'], $GLOBALS['dictionary'][$object]['indices']);
+                $GLOBALS['dictionary'][$object]['indices'] = \array_merge($templates[$template]['indices'], $GLOBALS['dictionary'][$object]['indices']);
             }
             // maintain a record of this objects inheritance from the SugarObject templates...
             $GLOBALS['dictionary'][$object]['templates'][ $template ] = $template ;
@@ -184,9 +184,9 @@ class VardefManager
 
         $file = create_cache_directory('modules/' . $module . '/' . $object . 'vardefs.php');
 
-        $out="<?php \n \$GLOBALS[\"dictionary\"][\"". $object . "\"]=" . var_export($data, true) .";";
+        $out="<?php \n \$GLOBALS[\"dictionary\"][\"". $object . "\"]=" . \var_export($data, true) .";";
         sugar_file_put_contents_atomic($file, $out);
-        if (is_file($file) && is_readable($file)) {
+        if (\is_file($file) && \is_readable($file)) {
             include($file);
         }
 
@@ -233,8 +233,8 @@ class VardefManager
 
             $file = sugar_cached('modules/').$module_dir.'/' . $object_name . 'vardefs.php';
 
-            if (file_exists($file)) {
-                unlink($file);
+            if (\file_exists($file)) {
+                \unlink($file);
                 $key = "VardefManager.$module_dir.$object_name";
                 sugar_cache_clear($key);
             }
@@ -260,13 +260,13 @@ class VardefManager
                  );
 
         // Add in additional search paths if they were provided.
-        if (!empty($additional_search_paths) && is_array($additional_search_paths)) {
-            $vardef_paths = array_merge($vardef_paths, $additional_search_paths);
+        if (!empty($additional_search_paths) && \is_array($additional_search_paths)) {
+            $vardef_paths = \array_merge($vardef_paths, $additional_search_paths);
         }
         $found = false;
         //search a predefined set of locations for the vardef files
         foreach ($vardef_paths as $path) {
-            if (file_exists($path)) {
+            if (\file_exists($path)) {
                 require($path);
                 $found = true;
             }
@@ -368,7 +368,7 @@ class VardefManager
         if (empty($matches)) {
             return false;
         }
-        if (sizeof($matches) == 1) {
+        if (\sizeof($matches) == 1) {
             $results = $matches[0];
         } else {
             //For relationships where both sides are the same module, more than one link will be returned
@@ -440,14 +440,14 @@ class VardefManager
             //does not exist, then we should do out and try to reload things
 
             $cachedfile = sugar_cached('modules/'). $module . '/' . $object . 'vardefs.php';
-            if ($refresh || !file_exists($cachedfile)) {
+            if ($refresh || !\file_exists($cachedfile)) {
                 VardefManager::refreshVardefs($module, $object, null, true, $params);
             }
 
             //at this point we should have the cache/modules/... file
             //which was created from the refreshVardefs so let's try to load it.
-            if (file_exists($cachedfile)) {
-                if (is_readable($cachedfile)) {
+            if (\file_exists($cachedfile)) {
+                if (\is_readable($cachedfile)) {
                     include($cachedfile);
                 }
                 // now that we hae loaded the data from disk, put it in the cache.

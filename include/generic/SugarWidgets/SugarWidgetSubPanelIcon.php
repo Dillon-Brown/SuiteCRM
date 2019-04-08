@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -60,16 +60,16 @@ class SugarWidgetSubPanelIcon extends SugarWidgetField
         global $current_user;
 
         if (isset($layout_def['varname'])) {
-            $key = strtoupper($layout_def['varname']);
+            $key = \strtoupper($layout_def['varname']);
         } else {
             $key = $this->_get_column_alias($layout_def);
-            $key = strtoupper($key);
+            $key = \strtoupper($key);
         }
         //add module image
         //add module image
         if (!empty($layout_def['target_module_key'])) {
-            if (!empty($layout_def['fields'][strtoupper($layout_def['target_module_key'])])) {
-                $module=$layout_def['fields'][strtoupper($layout_def['target_module_key'])];
+            if (!empty($layout_def['fields'][\strtoupper($layout_def['target_module_key'])])) {
+                $module=$layout_def['fields'][\strtoupper($layout_def['target_module_key'])];
             }
         }
 
@@ -84,7 +84,7 @@ class SugarWidgetSubPanelIcon extends SugarWidgetField
         if (empty($layout_def['target_record_key'])) {
             $record = $layout_def['fields']['ID'];
         } else {
-            $record_key = strtoupper($layout_def['target_record_key']);
+            $record_key = \strtoupper($layout_def['target_record_key']);
             $record = $layout_def['fields'][$record_key];
         }
         $action_access = false;
@@ -94,7 +94,7 @@ class SugarWidgetSubPanelIcon extends SugarWidgetField
             || ACLController::checkAccess($layout_def['owner_module'], 'view', $layout_def['owner_id'] == $current_user->id))) {
             $action_access = true;
         }
-        $icon_img_html = '<span class="suitepicon suitepicon-module-'.strtolower(str_replace('_', '-', $module)).'"></span>';
+        $icon_img_html = '<span class="suitepicon suitepicon-module-'.\strtolower(\str_replace('_', '-', $module)).'"></span>';
         if (!empty($layout_def['attachment_image_only']) && $layout_def['attachment_image_only'] == true) {
             $ret="";
         } else {
@@ -106,8 +106,8 @@ class SugarWidgetSubPanelIcon extends SugarWidgetField
         }
 
         if (!empty($layout_def['image2']) &&  !empty($layout_def['image2_ext_url_field'])) {
-            if (!empty($layout_def['fields'][strtoupper($layout_def['image2_ext_url_field'])])) {
-                $link_url  = $layout_def['fields'][strtoupper($layout_def['image2_ext_url_field'])];
+            if (!empty($layout_def['fields'][\strtoupper($layout_def['image2_ext_url_field'])])) {
+                $link_url  = $layout_def['fields'][\strtoupper($layout_def['image2_ext_url_field'])];
             }
 
             $imagePath = '';
@@ -126,16 +126,16 @@ class SugarWidgetSubPanelIcon extends SugarWidgetField
         }
         //if requested, add attachment icon.
         if (!empty($layout_def['image2']) && !empty($layout_def['image2_url_field'])) {
-            if (is_array($layout_def['image2_url_field'])) {
+            if (\is_array($layout_def['image2_url_field'])) {
                 //Generate file url.
-                if (!empty($layout_def['fields'][strtoupper($layout_def['image2_url_field']['id_field'])])
-                and !empty($layout_def['fields'][strtoupper($layout_def['image2_url_field']['filename_field'])])) {
-                    $key=$layout_def['fields'][strtoupper($layout_def['image2_url_field']['id_field'])];
-                    $file=$layout_def['fields'][strtoupper($layout_def['image2_url_field']['filename_field'])];
+                if (!empty($layout_def['fields'][\strtoupper($layout_def['image2_url_field']['id_field'])])
+                and !empty($layout_def['fields'][\strtoupper($layout_def['image2_url_field']['filename_field'])])) {
+                    $key=$layout_def['fields'][\strtoupper($layout_def['image2_url_field']['id_field'])];
+                    $file=$layout_def['fields'][\strtoupper($layout_def['image2_url_field']['filename_field'])];
                     $filepath="index.php?entryPoint=download&id=".$key."&type=".$layout_def['module'];
                 }
             } else {
-                if (!empty($layout_def['fields'][strtoupper($layout_def['image2_url_field'])])) {
+                if (!empty($layout_def['fields'][\strtoupper($layout_def['image2_url_field'])])) {
                     $filepath="index.php?entryPoint=download&id=".$layout_def['fields']['ID']."&type=".$layout_def['module'];
                 }
             }

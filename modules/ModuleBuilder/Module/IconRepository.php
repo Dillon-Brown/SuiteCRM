@@ -35,6 +35,6 @@ class IconRepository
     {
         return isset(static::$iconNames[$module])
             ? static::$iconNames[$module]
-            : strtolower(str_replace('_', '-', $module));
+            : \strtolower(\str_replace('_', '-', $module));
     }
 }

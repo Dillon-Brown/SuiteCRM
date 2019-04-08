@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -209,7 +209,7 @@ foreach ($focus_notes_list as $note) {
                                      'date_modified' => $note->date_modified
                                      );
     if (!empty($note->filename)) {
-        $count = count($history_list);
+        $count = \count($history_list);
         $count--;
         $history_list[$count]['filename'] = $note->filename;
         $history_list[$count]['fileurl'] = UploadFile::get_upload_url($note);
@@ -270,7 +270,7 @@ echo get_form_header($current_module_strings['LBL_OPEN_ACTIVITIES'], $button, fa
 $xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=$focus->id");
 
 $oddRow = true;
-if (count($open_activity_list) > 0) {
+if (\count($open_activity_list) > 0) {
     $open_activity_list = array_csort($open_activity_list, 'date_due', SORT_DESC);
 }
 foreach ($open_activity_list as $activity) {
@@ -380,7 +380,7 @@ echo get_form_header($current_module_strings['LBL_HISTORY'], $button, false);
 $xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=$focus->id");
 
 $oddRow = true;
-if (count($history_list) > 0) {
+if (\count($history_list) > 0) {
     $history_list = array_csort($history_list, 'date_modified', SORT_DESC);
 }
 foreach ($history_list as $activity) {

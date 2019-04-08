@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -98,7 +98,7 @@ class FreeTDSManager extends MssqlManager
     public function query($sql, $dieOnError = false, $msg = '', $suppress = false, $keepResult = false)
     {
         global $app_strings;
-        if (is_array($sql)) {
+        if (\is_array($sql)) {
             return $this->queryArray($sql, $dieOnError, $msg, $suppress);
         }
 
@@ -112,6 +112,6 @@ class FreeTDSManager extends MssqlManager
      */
     public function valid()
     {
-        return function_exists("mssql_connect") && DBManagerFactory::isFreeTDS();
+        return \function_exists("mssql_connect") && DBManagerFactory::isFreeTDS();
     }
 }

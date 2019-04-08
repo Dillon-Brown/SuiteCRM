@@ -23,7 +23,7 @@ class DotListWizardMenu
     private function getWizardMenuItemHTML($i, $label, $link = false)
     {
         if ($i >= 4) {
-            parse_str($link, $args);
+            \parse_str($link, $args);
             if (empty($args['marketing_id'])) {
                 $link = false;
             }
@@ -39,7 +39,7 @@ class DotListWizardMenu
 
     private function getWizardMenuHTML($innerHTML)
     {
-        $html = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'tpls'.DIRECTORY_SEPARATOR.'progressStepsStyle.html');
+        $html = \file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'tpls'.DIRECTORY_SEPARATOR.'progressStepsStyle.html');
         $html .=
 '<div class="progression-container">
     <ul class="progression">

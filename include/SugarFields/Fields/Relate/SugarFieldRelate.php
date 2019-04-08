@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -57,7 +57,7 @@ class SugarFieldRelate extends SugarFieldBase
     public function getDetailViewSmarty($parentFieldArray, $vardef, $displayParams, $tabindex)
     {
         $nolink = array('Users', 'Teams');
-        if (in_array($vardef['module'], $nolink)) {
+        if (\in_array($vardef['module'], $nolink)) {
             $this->ss->assign('nolink', true);
         } else {
             $this->ss->assign('nolink', false);
@@ -91,29 +91,29 @@ class SugarFieldRelate extends SugarFieldBase
         }
 
         if (isset($displayParams['idName'])) {
-            $rpos = strrpos($displayParams['idName'], $vardef['name']);
-            $displayParams['idNameHidden'] = substr($displayParams['idName'], 0, $rpos);
+            $rpos = \strrpos($displayParams['idName'], $vardef['name']);
+            $displayParams['idNameHidden'] = \substr($displayParams['idName'], 0, $rpos);
         }
         //Special Case for accounts; use the displayParams array and retrieve
         //the key and copy indexes.  'key' is the suffix of the field we are searching
         //the Account's address with.  'copy' is the suffix we are copying the addresses
         //form fields into.
-        if (isset($vardef['module']) && preg_match('/Accounts/si', $vardef['module'])
+        if (isset($vardef['module']) && \preg_match('/Accounts/si', $vardef['module'])
             && isset($displayParams['key']) && isset($displayParams['copy'])
         ) {
-            if (isset($displayParams['key']) && is_array($displayParams['key'])) {
+            if (isset($displayParams['key']) && \is_array($displayParams['key'])) {
                 $database_key = $displayParams['key'];
             } else {
                 $database_key[] = $displayParams['key'];
             }
 
-            if (isset($displayParams['copy']) && is_array($displayParams['copy'])) {
+            if (isset($displayParams['copy']) && \is_array($displayParams['copy'])) {
                 $form = $displayParams['copy'];
             } else {
                 $form[] = $displayParams['copy'];
             }
 
-            if (count($database_key) != count($form)) {
+            if (\count($database_key) != \count($form)) {
                 global $app_list_strings;
                 $this->ss->trigger_error($app_list_strings['ERR_SMARTY_UNEQUAL_RELATED_FIELD_PARAMETERS']);
             } //if
@@ -225,22 +225,22 @@ class SugarFieldRelate extends SugarFieldBase
         //the key and copy indexes.  'key' is the suffix of the field we are searching
         //the Account's address with.  'copy' is the suffix we are copying the addresses
         //form fields into.
-        if (isset($vardef['module']) && preg_match('/Accounts/si', $vardef['module'])
+        if (isset($vardef['module']) && \preg_match('/Accounts/si', $vardef['module'])
             && isset($displayParams['key']) && isset($displayParams['copy'])
         ) {
-            if (isset($displayParams['key']) && is_array($displayParams['key'])) {
+            if (isset($displayParams['key']) && \is_array($displayParams['key'])) {
                 $database_key = $displayParams['key'];
             } else {
                 $database_key[] = $displayParams['key'];
             }
 
-            if (isset($displayParams['copy']) && is_array($displayParams['copy'])) {
+            if (isset($displayParams['copy']) && \is_array($displayParams['copy'])) {
                 $form = $displayParams['copy'];
             } else {
                 $form[] = $displayParams['copy'];
             }
 
-            if (count($database_key) != count($form)) {
+            if (\count($database_key) != \count($form)) {
                 global $app_list_strings;
                 $this->ss->trigger_error($app_list_strings['ERR_SMARTY_UNEQUAL_RELATED_FIELD_PARAMETERS']);
             } //if
@@ -311,10 +311,10 @@ class SugarFieldRelate extends SugarFieldBase
     {
         if ('contact_name' == $vardef['name']) {
             $default_locale_name_format = $GLOBALS['current_user']->getPreference('default_locale_name_format');
-            $default_locale_name_format = trim(preg_replace('/s/i', '', $default_locale_name_format));
+            $default_locale_name_format = \trim(\preg_replace('/s/i', '', $default_locale_name_format));
             $new_field = '';
             $names = array();
-            $temp = explode(' ', $rawField);
+            $temp = \explode(' ', $rawField);
             if (!isset($temp[1])) {
                 $names['f'] = '';
                 $names['l'] = $temp[0];
@@ -322,8 +322,8 @@ class SugarFieldRelate extends SugarFieldBase
                 $names['f'] = $temp[0];
                 $names['l'] = $temp[1];
             }
-            for ($i = 0; $i < strlen($default_locale_name_format); $i++) {
-                $new_field .= array_key_exists(
+            for ($i = 0; $i < \strlen($default_locale_name_format); $i++) {
+                $new_field .= \array_key_exists(
                     $default_locale_name_format{$i},
                     $names
                 ) ? $names[$default_locale_name_format{$i}] : $default_locale_name_format{$i};
@@ -359,7 +359,7 @@ class SugarFieldRelate extends SugarFieldBase
         // let's try to lookup the field the relationship is expecting to use (user_name).
         if ($vardef['module'] == 'Users' && isset($vardef['rname']) && $vardef['rname'] == 'user_name') {
             $userFocus = new User;
-            $query = sprintf(
+            $query = \sprintf(
                 "SELECT user_name FROM {$userFocus->table_name} WHERE %s=%s AND deleted=0",
                 $userFocus->db->concat('users', array('first_name', 'last_name')),
                 $userFocus->db->quoted($value)
@@ -378,7 +378,7 @@ class SugarFieldRelate extends SugarFieldBase
         // Bug 27046 - Validate field against type as it is in the related field
         $rvardef = $newbean->getFieldDefinition($vardef['rname']);
         if (isset($rvardef['type'])
-            && method_exists($this, $rvardef['type'])
+            && \method_exists($this, $rvardef['type'])
         ) {
             $fieldtype = $rvardef['type'];
             $returnValue = $settings->$fieldtype($value, $rvardef);
@@ -394,7 +394,7 @@ class SugarFieldRelate extends SugarFieldBase
             // Bug 24075 - clear out id field value if it is invalid
             if (isset($focus->$idField)) {
                 $checkfocus = loadBean($vardef['module']);
-                if ($checkfocus && is_null($checkfocus->retrieve($focus->$idField))) {
+                if ($checkfocus && \is_null($checkfocus->retrieve($focus->$idField))) {
                     $focus->$idField = '';
                 }
             }
@@ -413,7 +413,7 @@ class SugarFieldRelate extends SugarFieldBase
                 // Bug 27562 - Check db_concat_fields first to see if the field name is a concatenation.
                 $relatedFieldDef = $newbean->getFieldDefinition($vardef['rname']);
                 if (isset($relatedFieldDef['db_concat_fields'])
-                    && is_array($relatedFieldDef['db_concat_fields'])
+                    && \is_array($relatedFieldDef['db_concat_fields'])
                 ) {
                     $fieldName = $focus->db->concat($vardef['table'], $relatedFieldDef['db_concat_fields']);
                 } else {
@@ -431,13 +431,13 @@ class SugarFieldRelate extends SugarFieldBase
                         $focus->$idField = $relaterow['id'];
                     } elseif (!$settings->addRelatedBean
                         || ($newbean->bean_implements('ACL') && !$newbean->ACLAccess('save'))
-                        || (in_array($newbean->module_dir, array('Teams', 'Users')))
+                        || (\in_array($newbean->module_dir, array('Teams', 'Users')))
                     ) {
                         return false;
                     } else {
                         // add this as a new record in that bean, then relate
                         if (isset($relatedFieldDef['db_concat_fields'])
-                            && is_array($relatedFieldDef['db_concat_fields'])
+                            && \is_array($relatedFieldDef['db_concat_fields'])
                         ) {
                             assignConcatenatedValue($newbean, $relatedFieldDef, $value);
                         } else {

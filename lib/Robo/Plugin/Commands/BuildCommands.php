@@ -63,7 +63,7 @@ class BuildCommands extends \Robo\Tasks
             $this->buildSuitePColorScheme('Day');
             $this->buildSuitePColorScheme('Dusk');
             $this->buildSuitePColorScheme('Night');
-        } elseif (is_array($this->opts['color_scheme'])) {
+        } elseif (\is_array($this->opts['color_scheme'])) {
             foreach ($this->opts['color_scheme'] as $colorScheme) {
                 $this->buildSuitePColorScheme($colorScheme);
             }

@@ -70,7 +70,7 @@ class Zend_Registry extends ArrayObject
             throw new Zend_Exception('Registry is already initialized');
         }
 
-        self::setClassName(get_class($registry));
+        self::setClassName(\get_class($registry));
         self::$_registry = $registry;
     }
 
@@ -101,7 +101,7 @@ class Zend_Registry extends ArrayObject
             throw new Zend_Exception('Registry is already initialized');
         }
 
-        if (!is_string($registryClassName)) {
+        if (!\is_string($registryClassName)) {
             require_once 'Zend/Exception.php';
             throw new Zend_Exception("Argument is not a class name");
         }
@@ -109,7 +109,7 @@ class Zend_Registry extends ArrayObject
         /**
          * @see Zend_Loader
          */
-        if (!class_exists($registryClassName)) {
+        if (!\class_exists($registryClassName)) {
             require_once 'Zend/Loader.php';
             Zend_Loader::loadClass($registryClassName);
         }
@@ -203,6 +203,6 @@ class Zend_Registry extends ArrayObject
      */
     public function offsetExists($index)
     {
-        return array_key_exists($index, $this);
+        return \array_key_exists($index, $this);
     }
 }

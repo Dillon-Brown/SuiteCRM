@@ -88,7 +88,7 @@ class ByIdFilter implements ByIdFilterInterpreter
             $idFilter[] = '"'. $databaseManager->quote($id) .'"';
         }
 
-        $filter = 'id IN ('. implode(',', $idFilter) .')';
+        $filter = 'id IN ('. \implode(',', $idFilter) .')';
 
         return $filter;
     }

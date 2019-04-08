@@ -114,10 +114,10 @@ class Zend_Search_Lucene_Index_SegmentMerger
             throw new Zend_Search_Lucene_Exception('Merge is already done.');
         }
 
-        if (count($this->_segmentInfos) < 1) {
+        if (\count($this->_segmentInfos) < 1) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('Wrong number of segments to be merged ('
-                                                 . count($this->_segmentInfos)
+                                                 . \count($this->_segmentInfos)
                                                  . ').');
         }
 
@@ -253,10 +253,10 @@ class Zend_Search_Lucene_Index_SegmentMerger
                 $segmentInfoQueue->top()->currentTerm()->key() !=
                             $segmentInfo->currentTerm()->key()) {
                 // We got new term
-                ksort($termDocs, SORT_NUMERIC);
+                \ksort($termDocs, SORT_NUMERIC);
 
                 // Add term if it's contained in any document
-                if (count($termDocs) > 0) {
+                if (\count($termDocs) > 0) {
                     $this->_writer->addTerm($segmentInfo->currentTerm(), $termDocs);
                 }
                 $termDocs = array();

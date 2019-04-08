@@ -68,7 +68,7 @@ class OneLogin_Saml2_Response
             OneLogin_Saml2_Utils::setBaseURL($baseURL);
         }
 
-        $this->response = base64_decode($response);
+        $this->response = \base64_decode($response);
 
         $this->document = new DOMDocument();
         $this->document = OneLogin_Saml2_Utils::loadXML($this->document, $this->response);
@@ -136,8 +136,8 @@ class OneLogin_Saml2_Response
             $responseTag = '{'.OneLogin_Saml2_Constants::NS_SAMLP.'}Response';
             $assertionTag = '{'.OneLogin_Saml2_Constants::NS_SAML.'}Assertion';
 
-            $hasSignedResponse = in_array($responseTag, $signedElements);
-            $hasSignedAssertion = in_array($assertionTag, $signedElements);
+            $hasSignedResponse = \in_array($responseTag, $signedElements);
+            $hasSignedAssertion = \in_array($assertionTag, $signedElements);
 
             if ($this->_settings->isStrict()) {
                 $security = $this->_settings->getSecurityData();
@@ -227,7 +227,7 @@ class OneLogin_Saml2_Response
 
                 // Check destination
                 if ($this->document->documentElement->hasAttribute('Destination')) {
-                    $destination = trim($this->document->documentElement->getAttribute('Destination'));
+                    $destination = \trim($this->document->documentElement->getAttribute('Destination'));
                     if (empty($destination)) {
                         if (!$security['relaxDestinationValidation']) {
                             throw new OneLogin_Saml2_ValidationError(
@@ -236,10 +236,10 @@ class OneLogin_Saml2_Response
                             );
                         }
                     } else {
-                        if (strpos($destination, $currentURL) !== 0) {
+                        if (\strpos($destination, $currentURL) !== 0) {
                             $currentURLNoRouted = OneLogin_Saml2_Utils::getSelfURLNoQuery();
 
-                            if (strpos($destination, $currentURLNoRouted) !== 0) {
+                            if (\strpos($destination, $currentURLNoRouted) !== 0) {
                                 throw new OneLogin_Saml2_ValidationError(
                                     "The response was received at $currentURL instead of $destination",
                                     OneLogin_Saml2_ValidationError::WRONG_DESTINATION
@@ -251,12 +251,12 @@ class OneLogin_Saml2_Response
 
                 // Check audience
                 $validAudiences = $this->getAudiences();
-                if (!empty($validAudiences) && !in_array($spEntityId, $validAudiences, true)) {
+                if (!empty($validAudiences) && !\in_array($spEntityId, $validAudiences, true)) {
                     throw new OneLogin_Saml2_ValidationError(
-                        sprintf(
+                        \sprintf(
                             "Invalid audience for this Response (expected '%s', got '%s')",
                             $spEntityId,
-                            implode(',', $validAudiences)
+                            \implode(',', $validAudiences)
                         ),
                         OneLogin_Saml2_ValidationError::WRONG_AUDIENCE
                     );
@@ -265,7 +265,7 @@ class OneLogin_Saml2_Response
                 // Check the issuers
                 $issuers = $this->getIssuers();
                 foreach ($issuers as $issuer) {
-                    $trimmedIssuer = trim($issuer);
+                    $trimmedIssuer = \trim($issuer);
                     if (empty($trimmedIssuer) || $trimmedIssuer !== $idPEntityId) {
                         throw new OneLogin_Saml2_ValidationError(
                             "Invalid issuer in the Assertion/Response (expected '$idPEntityId', got '$trimmedIssuer')",
@@ -276,7 +276,7 @@ class OneLogin_Saml2_Response
 
                 // Check the session Expiration
                 $sessionExpiration = $this->getSessionNotOnOrAfter();
-                if (!empty($sessionExpiration) && $sessionExpiration + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT <= time()) {
+                if (!empty($sessionExpiration) && $sessionExpiration + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT <= \time()) {
                     throw new OneLogin_Saml2_ValidationError(
                         "The attributes have expired, based on the SessionNotOnOrAfter of the AttributeStatement of this Response",
                         OneLogin_Saml2_ValidationError::SESSION_EXPIRED
@@ -303,19 +303,19 @@ class OneLogin_Saml2_Response
                     }
                     if ($scnData->hasAttribute('Recipient')) {
                         $recipient = $scnData->getAttribute('Recipient');
-                        if (!empty($recipient) && strpos($recipient, $currentURL) === false) {
+                        if (!empty($recipient) && \strpos($recipient, $currentURL) === false) {
                             continue;
                         }
                     }
                     if ($scnData->hasAttribute('NotOnOrAfter')) {
                         $noa = OneLogin_Saml2_Utils::parseSAML2Time($scnData->getAttribute('NotOnOrAfter'));
-                        if ($noa + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT <= time()) {
+                        if ($noa + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT <= \time()) {
                             continue;
                         }
                     }
                     if ($scnData->hasAttribute('NotBefore')) {
                         $nb = OneLogin_Saml2_Utils::parseSAML2Time($scnData->getAttribute('NotBefore'));
-                        if ($nb > time() + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT) {
+                        if ($nb > \time() + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT) {
                             continue;
                         }
                     }
@@ -454,8 +454,8 @@ class OneLogin_Saml2_Response
         $status = OneLogin_Saml2_Utils::getStatus($this->document);
 
         if (isset($status['code']) && $status['code'] !== OneLogin_Saml2_Constants::STATUS_SUCCESS) {
-            $explodedCode = explode(':', $status['code']);
-            $printableCode = array_pop($explodedCode);
+            $explodedCode = \explode(':', $status['code']);
+            $printableCode = \array_pop($explodedCode);
 
             $statusExceptionMsg = 'The status code of the Response was not Success, was '.$printableCode;
             if (!empty($status['msg'])) {
@@ -507,13 +507,13 @@ class OneLogin_Saml2_Response
 
         $entries = $this->_queryAssertion('/saml:Conditions/saml:AudienceRestriction/saml:Audience');
         foreach ($entries as $entry) {
-            $value = trim($entry->textContent);
+            $value = \trim($entry->textContent);
             if (!empty($value)) {
                 $audiences[] = $value;
             }
         }
 
-        return array_unique($audiences);
+        return \array_unique($audiences);
     }
 
     /**
@@ -547,7 +547,7 @@ class OneLogin_Saml2_Response
             );
         }
 
-        return array_unique($issuers);
+        return \array_unique($issuers);
     }
 
     /**
@@ -722,7 +722,7 @@ class OneLogin_Saml2_Response
         foreach ($entries as $entry) {
             $attributeName = $entry->attributes->getNamedItem('Name')->nodeValue;
 
-            if (in_array($attributeName, array_keys($attributes))) {
+            if (\in_array($attributeName, \array_keys($attributes))) {
                 throw new OneLogin_Saml2_ValidationError(
                     "Found an Attribute element with duplicated Name",
                     OneLogin_Saml2_ValidationError::DUPLICATED_ATTRIBUTE_NAME_FOUND
@@ -802,7 +802,7 @@ class OneLogin_Saml2_Response
                 );
             }
 
-            if (in_array($idValue, $verifiedIds)) {
+            if (\in_array($idValue, $verifiedIds)) {
                 throw new OneLogin_Saml2_ValidationError(
                     'Duplicated ID. SAML Response rejected',
                     OneLogin_Saml2_ValidationError::DUPLICATED_ID_IN_SIGNED_ELEMENTS
@@ -815,7 +815,7 @@ class OneLogin_Saml2_Response
                 $ref = $ref->item(0);
                 $sei = $ref->getAttribute('URI');
                 if (!empty($sei)) {
-                    $sei = substr($sei, 1);
+                    $sei = \substr($sei, 1);
 
                     if ($sei != $idValue) {
                         throw new OneLogin_Saml2_ValidationError(
@@ -824,7 +824,7 @@ class OneLogin_Saml2_Response
                         );
                     }
 
-                    if (in_array($sei, $verifiedSeis)) {
+                    if (\in_array($sei, $verifiedSeis)) {
                         throw new OneLogin_Saml2_ValidationError(
                             'Duplicated Reference URI. SAML Response rejected',
                             OneLogin_Saml2_ValidationError::DUPLICATED_REFERENCE_IN_SIGNED_ELEMENTS
@@ -870,13 +870,13 @@ class OneLogin_Saml2_Response
         for ($i = 0; $i < $timestampNodes->length; $i++) {
             $nbAttribute = $timestampNodes->item($i)->attributes->getNamedItem("NotBefore");
             $naAttribute = $timestampNodes->item($i)->attributes->getNamedItem("NotOnOrAfter");
-            if ($nbAttribute && OneLogin_SAML2_Utils::parseSAML2Time($nbAttribute->textContent) > time() + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT) {
+            if ($nbAttribute && OneLogin_SAML2_Utils::parseSAML2Time($nbAttribute->textContent) > \time() + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT) {
                 throw new OneLogin_Saml2_ValidationError(
                     'Could not validate timestamp: not yet valid. Check system clock.',
                     OneLogin_Saml2_ValidationError::ASSERTION_TOO_EARLY
                 );
             }
-            if ($naAttribute && OneLogin_SAML2_Utils::parseSAML2Time($naAttribute->textContent) + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT <= time()) {
+            if ($naAttribute && OneLogin_SAML2_Utils::parseSAML2Time($naAttribute->textContent) + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT <= \time()) {
                 throw new OneLogin_Saml2_ValidationError(
                     'Could not validate timestamp: expired. Check system clock.',
                     OneLogin_Saml2_ValidationError::ASSERTION_EXPIRED
@@ -893,24 +893,24 @@ class OneLogin_Saml2_Response
      */
     public function validateSignedElements($signedElements)
     {
-        if (count($signedElements) > 2) {
+        if (\count($signedElements) > 2) {
             return false;
         }
 
         $responseTag = '{'.OneLogin_Saml2_Constants::NS_SAMLP.'}Response';
         $assertionTag = '{'.OneLogin_Saml2_Constants::NS_SAML.'}Assertion';
 
-        $ocurrence = array_count_values($signedElements);
-        if ((in_array($responseTag, $signedElements) && $ocurrence[$responseTag] > 1) ||
-            (in_array($assertionTag, $signedElements) && $ocurrence[$assertionTag] > 1) ||
-            !in_array($responseTag, $signedElements) && !in_array($assertionTag, $signedElements)
+        $ocurrence = \array_count_values($signedElements);
+        if ((\in_array($responseTag, $signedElements) && $ocurrence[$responseTag] > 1) ||
+            (\in_array($assertionTag, $signedElements) && $ocurrence[$assertionTag] > 1) ||
+            !\in_array($responseTag, $signedElements) && !\in_array($assertionTag, $signedElements)
         ) {
             return false;
         }
 
         // Check that the signed elements found here, are the ones that will be verified
         // by OneLogin_Saml2_Utils->validateSign()
-        if (in_array($responseTag, $signedElements)) {
+        if (\in_array($responseTag, $signedElements)) {
             $expectedSignatureNodes = OneLogin_Saml2_Utils::query($this->document, OneLogin_Saml2_Utils::RESPONSE_SIGNATURE_XPATH);
             if ($expectedSignatureNodes->length != 1) {
                 throw new OneLogin_Saml2_ValidationError(
@@ -920,7 +920,7 @@ class OneLogin_Saml2_Response
             }
         }
 
-        if (in_array($assertionTag, $signedElements)) {
+        if (\in_array($assertionTag, $signedElements)) {
             $expectedSignatureNodes = $this->_query(OneLogin_Saml2_Utils::ASSERTION_SIGNATURE_XPATH);
             if ($expectedSignatureNodes->length != 1) {
                 throw new OneLogin_Saml2_ValidationError(
@@ -967,7 +967,7 @@ class OneLogin_Saml2_Response
                 if (empty($uri)) {
                     $id = $responseReferenceNode->parentNode->parentNode->parentNode->attributes->getNamedItem('ID')->nodeValue;
                 } else {
-                    $id = substr($responseReferenceNode->attributes->getNamedItem('URI')->nodeValue, 1);
+                    $id = \substr($responseReferenceNode->attributes->getNamedItem('URI')->nodeValue, 1);
                 }
                 $nameQuery = "/samlp:Response[@ID='$id']/saml:Assertion" . $assertionXpath;
             } else {
@@ -978,7 +978,7 @@ class OneLogin_Saml2_Response
             if (empty($uri)) {
                 $id = $assertionReferenceNode->parentNode->parentNode->parentNode->attributes->getNamedItem('ID')->nodeValue;
             } else {
-                $id = substr($assertionReferenceNode->attributes->getNamedItem('URI')->nodeValue, 1);
+                $id = \substr($assertionReferenceNode->attributes->getNamedItem('URI')->nodeValue, 1);
             }
             $nameQuery = $assertionNode."[@ID='$id']" . $assertionXpath;
         }
@@ -1070,9 +1070,9 @@ class OneLogin_Saml2_Response
               !$container->hasAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:saml') &&
               !$container->hasAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:saml2')
               ) {
-            if (strpos($encryptedAssertion->tagName, 'saml2:') !== false) {
+            if (\strpos($encryptedAssertion->tagName, 'saml2:') !== false) {
                 $ns = 'xmlns:saml2';
-            } elseif (strpos($encryptedAssertion->tagName, 'saml:') !== false) {
+            } elseif (\strpos($encryptedAssertion->tagName, 'saml:') !== false) {
                 $ns = 'xmlns:saml';
             } else {
                 $ns = 'xmlns';

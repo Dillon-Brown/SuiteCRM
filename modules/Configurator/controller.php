@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -72,10 +72,10 @@ class ConfiguratorController extends SugarController
             $fontManager = new FontManager();
             $fontManager->filename = $_REQUEST['filename'];
             if (!$fontManager->deleteFont()) {
-                $urlSTR .='&error='.urlencode(implode("<br>", $fontManager->errors));
+                $urlSTR .='&error='.\urlencode(\implode("<br>", $fontManager->errors));
             }
         }
-        header("Location: $urlSTR");
+        \header("Location: $urlSTR");
     }
 
     public function action_listview()
@@ -116,8 +116,8 @@ class ConfiguratorController extends SugarController
             $this->view = 'addFontView';
             return;
         }
-        $path_info = pathinfo($_FILES['pdf_font_file']['name']);
-        $path_info_metric = pathinfo($_FILES['pdf_metric_file']['name']);
+        $path_info = \pathinfo($_FILES['pdf_font_file']['name']);
+        $path_info_metric = \pathinfo($_FILES['pdf_metric_file']['name']);
         if (($path_info_metric['extension']!="afm" && $path_info_metric['extension']!="ufm") ||
         ($path_info['extension']!="ttf" && $path_info['extension']!="otf" && $path_info['extension']!="pfb")) {
             $this->errors[]=translate("JS_ALERT_PDF_WRONG_EXTENSION", "Configurator");
@@ -176,20 +176,20 @@ class ConfiguratorController extends SugarController
             require_once 'install/suite_install/enabledTabs.php';
             //We need to load the tabs so that we can remove those which are scenario based and un-selected
             //Remove the custom tabConfig as this overwrites the complete list containined in the include/tabConfig.php
-            if (file_exists('custom/include/tabConfig.php')) {
-                unlink('custom/include/tabConfig.php');
+            if (\file_exists('custom/include/tabConfig.php')) {
+                \unlink('custom/include/tabConfig.php');
             }
             require_once('include/tabConfig.php');
             //Remove the custom dashlet so that we can use the complete list of defaults to filter by category
-            if (file_exists('custom/modules/Home/dashlets.php')) {
-                unlink('custom/modules/Home/dashlets.php');
+            if (\file_exists('custom/modules/Home/dashlets.php')) {
+                \unlink('custom/modules/Home/dashlets.php');
             }
             //Check if the folder is in place
-            if (!file_exists('custom/modules/Home')) {
+            if (!\file_exists('custom/modules/Home')) {
                 sugar_mkdir('custom/modules/Home', 0775);
             }
             //Check if the folder is in place
-            if (!file_exists('custom/include')) {
+            if (!\file_exists('custom/include')) {
                 sugar_mkdir('custom/include', 0775);
             }
             require_once 'modules/Home/dashlets.php';
@@ -198,9 +198,9 @@ class ConfiguratorController extends SugarController
 
             foreach ($installation_scenarios as $scenario) {
                 //If the item is not in $_SESSION['scenarios'], then unset them as they are not required
-                if (!in_array($scenario['key'], $_REQUEST['scenarios'])) {
+                if (!\in_array($scenario['key'], $_REQUEST['scenarios'])) {
                     foreach ($scenario['modules'] as $module) {
-                        if (($removeKey = array_search($module, $enabled_tabs)) !== false) {
+                        if (($removeKey = \array_search($module, $enabled_tabs)) !== false) {
                             unset($enabled_tabs[$removeKey]);
                         }
                     }
@@ -220,19 +220,19 @@ class ConfiguratorController extends SugarController
                 }
             }
             //Have a 'core' options, with accounts / contacts if no other scenario is selected
-            if (!is_null($_SESSION['scenarios'])) {
+            if (!\is_null($_SESSION['scenarios'])) {
                 unset($GLOBALS['tabStructure']['LBL_TABGROUP_DEFAULT']);
             }
             //Write the tabstructure to custom so that the grouping are not shown for the un-selected scenarios
             $fp = sugar_fopen('custom/include/tabConfig.php', 'w');
-            $fileContents = "<?php \n" .'$GLOBALS["tabStructure"] ='.var_export($GLOBALS['tabStructure'], true).';';
-            fwrite($fp, $fileContents);
-            fclose($fp);
+            $fileContents = "<?php \n" .'$GLOBALS["tabStructure"] ='.\var_export($GLOBALS['tabStructure'], true).';';
+            \fwrite($fp, $fileContents);
+            \fclose($fp);
             //Write the dashlets to custom so that the dashlets are not shown for the un-selected scenarios
             $fp = sugar_fopen('custom/modules/Home/dashlets.php', 'w');
-            $fileContents = "<?php \n" .'$defaultDashlets ='.var_export($defaultDashlets, true).';';
-            fwrite($fp, $fileContents);
-            fclose($fp);
+            $fileContents = "<?php \n" .'$defaultDashlets ='.\var_export($defaultDashlets, true).';';
+            \fwrite($fp, $fileContents);
+            \fclose($fp);
             // End of the scenario implementations
         }
 
@@ -289,7 +289,7 @@ class ConfiguratorController extends SugarController
      */
     public function action_historyContactsEmailsSave()
     {
-        if (!empty($_POST['modules']) && is_array($_POST['modules'])) {
+        if (!empty($_POST['modules']) && \is_array($_POST['modules'])) {
             require_once('include/SubPanel/SubPanelDefinitions.php');
 
             $modules = array();

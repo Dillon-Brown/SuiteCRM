@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -55,12 +55,12 @@ if (!empty($_REQUEST['cron'])) {
     echo '<form name="redirect" action="index.php" method="POST">'."\n";
     echo '<input type="hidden" name="module" value="jjwg_Maps">'."\n";
     echo '<input type="hidden" name="action" value="map_display">'."\n";
-    foreach (array_keys($_REQUEST) as $key) {
-        if (!in_array($key, array('action','module','entryPoint','display_module', 'quick_address'))) {
-            echo '<input type="hidden" name="'.htmlspecialchars($key).'" value="'.htmlspecialchars($_REQUEST[$key]).'">'."\n";
+    foreach (\array_keys($_REQUEST) as $key) {
+        if (!\in_array($key, array('action','module','entryPoint','display_module', 'quick_address'))) {
+            echo '<input type="hidden" name="'.\htmlspecialchars($key).'" value="'.\htmlspecialchars($_REQUEST[$key]).'">'."\n";
         }
     }
-    echo '<input type="hidden" name="display_module" value="'.htmlspecialchars($_REQUEST['display_module']).'">'."\n";
+    echo '<input type="hidden" name="display_module" value="'.\htmlspecialchars($_REQUEST['display_module']).'">'."\n";
     echo '</form>'."\n";
     echo '<script language="javascript" type="text/javascript">document.redirect.submit();</script>'."\n";
     echo '</body></html>';

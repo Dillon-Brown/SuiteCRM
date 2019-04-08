@@ -35,8 +35,8 @@
 /**
  * DIR_SEP isn't used anymore, but third party apps might
  */
-if (!defined('DIR_SEP')) {
-    define('DIR_SEP', DIRECTORY_SEPARATOR);
+if (!\defined('DIR_SEP')) {
+    \define('DIR_SEP', DIRECTORY_SEPARATOR);
 }
 
 /**
@@ -45,18 +45,18 @@ if (!defined('DIR_SEP')) {
  * application has not already defined it.
  */
 
-if (!defined('SMARTY_DIR')) {
-    define('SMARTY_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+if (!\defined('SMARTY_DIR')) {
+    \define('SMARTY_DIR', \dirname(__FILE__) . DIRECTORY_SEPARATOR);
 }
 
-if (!defined('SMARTY_CORE_DIR')) {
-    define('SMARTY_CORE_DIR', SMARTY_DIR . 'internals' . DIRECTORY_SEPARATOR);
+if (!\defined('SMARTY_CORE_DIR')) {
+    \define('SMARTY_CORE_DIR', SMARTY_DIR . 'internals' . DIRECTORY_SEPARATOR);
 }
 
-define('SMARTY_PHP_PASSTHRU', 0);
-define('SMARTY_PHP_QUOTE', 1);
-define('SMARTY_PHP_REMOVE', 2);
-define('SMARTY_PHP_ALLOW', 3);
+\define('SMARTY_PHP_PASSTHRU', 0);
+\define('SMARTY_PHP_QUOTE', 1);
+\define('SMARTY_PHP_REMOVE', 2);
+\define('SMARTY_PHP_ALLOW', 3);
 
 /**
  * @package Smarty
@@ -586,7 +586,7 @@ class Smarty
      */
     public function assign($tpl_var, $value = null)
     {
-        if (is_array($tpl_var)) {
+        if (\is_array($tpl_var)) {
             foreach ($tpl_var as $key => $val) {
                 if ($key != '') {
                     $this->_tpl_vars[$key] = $val;
@@ -620,14 +620,14 @@ class Smarty
      */
     public function append($tpl_var, $value=null, $merge=false)
     {
-        if (is_array($tpl_var)) {
+        if (\is_array($tpl_var)) {
             // $tpl_var is an array, ignore $value
             foreach ($tpl_var as $_key => $_val) {
                 if ($_key != '') {
-                    if (!@is_array($this->_tpl_vars[$_key])) {
-                        settype($this->_tpl_vars[$_key], 'array');
+                    if (!@\is_array($this->_tpl_vars[$_key])) {
+                        \settype($this->_tpl_vars[$_key], 'array');
                     }
-                    if ($merge && is_array($_val)) {
+                    if ($merge && \is_array($_val)) {
                         foreach ($_val as $_mkey => $_mval) {
                             $this->_tpl_vars[$_key][$_mkey] = $_mval;
                         }
@@ -638,10 +638,10 @@ class Smarty
             }
         } else {
             if ($tpl_var != '' && isset($value)) {
-                if (!@is_array($this->_tpl_vars[$tpl_var])) {
-                    settype($this->_tpl_vars[$tpl_var], 'array');
+                if (!@\is_array($this->_tpl_vars[$tpl_var])) {
+                    \settype($this->_tpl_vars[$tpl_var], 'array');
                 }
-                if ($merge && is_array($value)) {
+                if ($merge && \is_array($value)) {
                     foreach ($value as $_mkey => $_mval) {
                         $this->_tpl_vars[$tpl_var][$_mkey] = $_mval;
                     }
@@ -661,10 +661,10 @@ class Smarty
     public function append_by_ref($tpl_var, &$value, $merge=false)
     {
         if ($tpl_var != '' && isset($value)) {
-            if (!@is_array($this->_tpl_vars[$tpl_var])) {
-                settype($this->_tpl_vars[$tpl_var], 'array');
+            if (!@\is_array($this->_tpl_vars[$tpl_var])) {
+                \settype($this->_tpl_vars[$tpl_var], 'array');
             }
-            if ($merge && is_array($value)) {
+            if ($merge && \is_array($value)) {
                 foreach ($value as $_key => $_val) {
                     $this->_tpl_vars[$tpl_var][$_key] = &$value[$_key];
                 }
@@ -682,7 +682,7 @@ class Smarty
      */
     public function clear_assign($tpl_var)
     {
-        if (is_array($tpl_var)) {
+        if (\is_array($tpl_var)) {
             foreach ($tpl_var as $curr_var) {
                 unset($this->_tpl_vars[$curr_var]);
             }
@@ -725,8 +725,8 @@ class Smarty
      */
     public function register_object($object, &$object_impl, $allowed = array(), $smarty_args = true, $block_methods = array())
     {
-        settype($allowed, 'array');
-        settype($smarty_args, 'boolean');
+        \settype($allowed, 'array');
+        \settype($smarty_args, 'boolean');
         $this->_reg_objects[$object] =
             array(&$object_impl, $allowed, $smarty_args, $block_methods);
     }
@@ -816,10 +816,10 @@ class Smarty
      */
     public function register_resource($type, $functions)
     {
-        if (count($functions)==4) {
+        if (\count($functions)==4) {
             $this->_plugins['resource'][$type] =
                 array($functions, false);
-        } elseif (count($functions)==5) {
+        } elseif (\count($functions)==5) {
             $this->_plugins['resource'][$type] =
                 array(array(array(&$functions[0], $functions[1])
                             ,array(&$functions[0], $functions[2])
@@ -953,7 +953,7 @@ class Smarty
         $_auto_id = $this->_get_auto_id($cache_id, $compile_id);
 
         if (!empty($this->cache_handler_func)) {
-            return call_user_func_array(
+            return \call_user_func_array(
                 $this->cache_handler_func,
                                   array('clear', &$this, &$dummy, $tpl_file, $cache_id, $compile_id, $exp_time)
             );
@@ -1080,7 +1080,7 @@ class Smarty
      */
     public function &get_config_vars($name=null)
     {
-        if (!isset($name) && is_array($this->_config[0])) {
+        if (!isset($name) && \is_array($this->_config[0])) {
             return $this->_config[0]['vars'];
         } elseif (isset($this->_config[0]['vars'][$name])) {
             return $this->_config[0]['vars'][$name];
@@ -1098,8 +1098,8 @@ class Smarty
      */
     public function trigger_error($error_msg, $error_type = E_USER_WARNING)
     {
-        $msg = htmlentities($error_msg);
-        trigger_error("Smarty error: $msg", $error_type);
+        $msg = \htmlentities($error_msg);
+        \trigger_error("Smarty error: $msg", $error_type);
     }
 
 
@@ -1127,19 +1127,19 @@ class Smarty
     {
         static $_cache_info = array();
 
-        $_smarty_old_error_level = $this->debugging ? error_reporting() : error_reporting(isset($this->error_reporting)
-               ? $this->error_reporting : error_reporting() & ~E_NOTICE);
+        $_smarty_old_error_level = $this->debugging ? \error_reporting() : \error_reporting(isset($this->error_reporting)
+               ? $this->error_reporting : \error_reporting() & ~E_NOTICE);
 
         if (!$this->debugging && $this->debugging_ctrl == 'URL') {
             $_query_string = $this->request_use_auto_globals ? $_SERVER['QUERY_STRING'] : $GLOBALS['HTTP_SERVER_VARS']['QUERY_STRING'];
-            if (@strstr($_query_string, $this->_smarty_debug_id)) {
-                if (@strstr($_query_string, $this->_smarty_debug_id . '=on')) {
+            if (@\strstr($_query_string, $this->_smarty_debug_id)) {
+                if (@\strstr($_query_string, $this->_smarty_debug_id . '=on')) {
                     // enable debugging for this browser session
-                    @setcookie('SMARTY_DEBUG', true);
+                    @\setcookie('SMARTY_DEBUG', true);
                     $this->debugging = true;
-                } elseif (@strstr($_query_string, $this->_smarty_debug_id . '=off')) {
+                } elseif (@\strstr($_query_string, $this->_smarty_debug_id . '=off')) {
                     // disable debugging for this browser session
-                    @setcookie('SMARTY_DEBUG', false);
+                    @\setcookie('SMARTY_DEBUG', false);
                     $this->debugging = false;
                 } else {
                     // enable debugging for this page
@@ -1158,7 +1158,7 @@ class Smarty
             $this->_smarty_debug_info[] = array('type'      => 'template',
                                                 'filename'  => $resource_name,
                                                 'depth'     => 0);
-            $_included_tpls_idx = count($this->_smarty_debug_info) - 1;
+            $_included_tpls_idx = \count($this->_smarty_debug_info) - 1;
         }
 
         if (!isset($compile_id)) {
@@ -1170,7 +1170,7 @@ class Smarty
 
         if ($this->caching) {
             // save old cache_info, initialize cache_info
-            array_push($_cache_info, $this->_cache_info);
+            \array_push($_cache_info, $this->_cache_info);
             $this->_cache_info = array();
             $_params = array(
                 'tpl_file' => $resource_name,
@@ -1207,41 +1207,41 @@ class Smarty
                     }
                     if ($this->cache_modified_check) {
                         $_server_vars = ($this->request_use_auto_globals) ? $_SERVER : $GLOBALS['HTTP_SERVER_VARS'];
-                        $_last_modified_date = @substr($_server_vars['HTTP_IF_MODIFIED_SINCE'], 0, strpos($_server_vars['HTTP_IF_MODIFIED_SINCE'], 'GMT') + 3);
-                        $_gmt_mtime = gmdate('D, d M Y H:i:s', $this->_cache_info['timestamp']).' GMT';
-                        if (@count($this->_cache_info['insert_tags']) == 0
+                        $_last_modified_date = @\substr($_server_vars['HTTP_IF_MODIFIED_SINCE'], 0, \strpos($_server_vars['HTTP_IF_MODIFIED_SINCE'], 'GMT') + 3);
+                        $_gmt_mtime = \gmdate('D, d M Y H:i:s', $this->_cache_info['timestamp']).' GMT';
+                        if (@\count($this->_cache_info['insert_tags']) == 0
                             && !$this->_cache_serials
                             && $_gmt_mtime == $_last_modified_date) {
-                            if (php_sapi_name()=='cgi') {
-                                header('Status: 304 Not Modified');
+                            if (\php_sapi_name()=='cgi') {
+                                \header('Status: 304 Not Modified');
                             } else {
-                                header('HTTP/1.1 304 Not Modified');
+                                \header('HTTP/1.1 304 Not Modified');
                             }
                         } else {
-                            header('Last-Modified: '.$_gmt_mtime);
+                            \header('Last-Modified: '.$_gmt_mtime);
                             echo $_smarty_results;
                         }
                     } else {
                         echo $_smarty_results;
                     }
-                    error_reporting($_smarty_old_error_level);
+                    \error_reporting($_smarty_old_error_level);
                     // restore initial cache_info
-                    $this->_cache_info = array_pop($_cache_info);
+                    $this->_cache_info = \array_pop($_cache_info);
                     return true;
                 }
-                error_reporting($_smarty_old_error_level);
+                \error_reporting($_smarty_old_error_level);
                 // restore initial cache_info
-                $this->_cache_info = array_pop($_cache_info);
+                $this->_cache_info = \array_pop($_cache_info);
                 return $_smarty_results;
             }
             $this->_cache_info['template'][$resource_name] = true;
             if ($this->cache_modified_check && $display) {
-                header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()).' GMT');
+                \header('Last-Modified: '.\gmdate('D, d M Y H:i:s', \time()).' GMT');
             }
         }
 
         // load filters that are marked as autoload
-        if (count($this->autoload_filters)) {
+        if (\count($this->autoload_filters)) {
             foreach ($this->autoload_filters as $_filter_type => $_filters) {
                 foreach ($_filters as $_filter) {
                     $this->load_filter($_filter_type, $_filter);
@@ -1255,22 +1255,22 @@ class Smarty
         // buffering - for speed
         $_cache_including = $this->_cache_including;
         $this->_cache_including = false;
-        if ($display && !$this->caching && count($this->_plugins['outputfilter']) == 0) {
+        if ($display && !$this->caching && \count($this->_plugins['outputfilter']) == 0) {
             if ($this->_is_compiled($resource_name, $_smarty_compile_path)
                     || $this->_compile_resource($resource_name, $_smarty_compile_path)) {
                 include($_smarty_compile_path);
             }
         } else {
-            ob_start();
+            \ob_start();
             if ($this->_is_compiled($resource_name, $_smarty_compile_path)
                     || $this->_compile_resource($resource_name, $_smarty_compile_path)) {
                 include($_smarty_compile_path);
             }
-            $_smarty_results = ob_get_contents();
-            ob_end_clean();
+            $_smarty_results = \ob_get_contents();
+            \ob_end_clean();
 
             foreach ((array)$this->_plugins['outputfilter'] as $_output_filter) {
-                $_smarty_results = call_user_func_array($_output_filter[0], array($_smarty_results, &$this));
+                $_smarty_results = \call_user_func_array($_output_filter[0], array($_smarty_results, &$this));
             }
         }
 
@@ -1286,10 +1286,10 @@ class Smarty
 
             if ($this->_cache_serials) {
                 // strip nocache-tags from output
-                $_smarty_results = preg_replace('!(\{/?nocache\:[0-9a-f]{32}#\d+\})!s', '', $_smarty_results);
+                $_smarty_results = \preg_replace('!(\{/?nocache\:[0-9a-f]{32}#\d+\})!s', '', $_smarty_results);
             }
             // restore initial cache_info
-            $this->_cache_info = array_pop($_cache_info);
+            $this->_cache_info = \array_pop($_cache_info);
         }
         $this->_cache_including = $_cache_including;
 
@@ -1305,10 +1305,10 @@ class Smarty
                 require_once(SMARTY_CORE_DIR . 'core.display_debug_console.php');
                 echo smarty_core_display_debug_console($_params, $this);
             }
-            error_reporting($_smarty_old_error_level);
+            \error_reporting($_smarty_old_error_level);
             return;
         }
-        error_reporting($_smarty_old_error_level);
+        \error_reporting($_smarty_old_error_level);
         if (isset($_smarty_results)) {
             return $_smarty_results;
         }
@@ -1339,7 +1339,7 @@ class Smarty
             $this->_trigger_fatal_error("'$name' is not a registered object");
         }
 
-        if (!is_object($this->_reg_objects[$name][0])) {
+        if (!\is_object($this->_reg_objects[$name][0])) {
             $this->_trigger_fatal_error("registered '$name' is not an object");
         }
 
@@ -1385,7 +1385,7 @@ class Smarty
       */
     public function _is_compiled($resource_name, $compile_path)
     {
-        if (!$this->force_compile && file_exists($compile_path)) {
+        if (!$this->force_compile && \file_exists($compile_path)) {
             if (!$this->compile_check) {
                 // no need to check compiled file
                 return true;
@@ -1395,7 +1395,7 @@ class Smarty
             if (!$this->_fetch_resource_info($_params)) {
                 return false;
             }
-            if ($_params['resource_timestamp'] <= filemtime($compile_path)) {
+            if ($_params['resource_timestamp'] <= \filemtime($compile_path)) {
                 // template not expired, no recompile
                 return true;
             }
@@ -1421,13 +1421,13 @@ class Smarty
         }
 
         $_source_content = $_params['source_content'];
-        $_cache_include    = substr($compile_path, 0, -4).'.inc';
+        $_cache_include    = \substr($compile_path, 0, -4).'.inc';
 
         if ($this->_compile_source($resource_name, $_source_content, $_compiled_content, $_cache_include)) {
             // if a _cache_serial was set, we also have to write an include-file:
             if ($this->_cache_include_info) {
                 require_once(SMARTY_CORE_DIR . 'core.write_compiled_include.php');
-                smarty_core_write_compiled_include(array_merge($this->_cache_include_info, array('compiled_content'=>$_compiled_content, 'resource_name'=>$resource_name)), $this);
+                smarty_core_write_compiled_include(\array_merge($this->_cache_include_info, array('compiled_content'=>$_compiled_content, 'resource_name'=>$resource_name)), $this);
             }
 
             $_params = array('compile_path'=>$compile_path, 'compiled_content' => $_compiled_content);
@@ -1449,7 +1449,7 @@ class Smarty
       */
     public function _compile_source($resource_name, &$source_content, &$compiled_content, $cache_include_path=null)
     {
-        if (file_exists(SMARTY_DIR . $this->compiler_file)) {
+        if (\file_exists(SMARTY_DIR . $this->compiler_file)) {
             require_once(SMARTY_DIR . $this->compiler_file);
         } else {
             // use include_path
@@ -1556,15 +1556,15 @@ class Smarty
                     if ($params['get_source']) {
                         $params['source_content'] = $this->_read_file($_resource_name);
                     }
-                    $params['resource_timestamp'] = filemtime($_resource_name);
-                    $_return = is_file($_resource_name) && is_readable($_resource_name);
+                    $params['resource_timestamp'] = \filemtime($_resource_name);
+                    $_return = \is_file($_resource_name) && \is_readable($_resource_name);
                     break;
 
                 default:
                     // call resource functions to fetch the template source and timestamp
                     if ($params['get_source']) {
                         $_source_return = isset($this->_plugins['resource'][$_resource_type]) &&
-                            call_user_func_array(
+                            \call_user_func_array(
                                 $this->_plugins['resource'][$_resource_type][0][0],
                                                  array($_resource_name, &$params['source_content'], &$this)
                             );
@@ -1573,7 +1573,7 @@ class Smarty
                     }
 
                     $_timestamp_return = isset($this->_plugins['resource'][$_resource_type]) &&
-                        call_user_func_array(
+                        \call_user_func_array(
                             $this->_plugins['resource'][$_resource_type][0][1],
                                              array($_resource_name, &$params['resource_timestamp'], &$this)
                         );
@@ -1586,10 +1586,10 @@ class Smarty
         if (!$_return) {
             // see if we can get a template with the default template handler
             if (!empty($this->default_template_handler_func)) {
-                if (!is_callable($this->default_template_handler_func)) {
+                if (!\is_callable($this->default_template_handler_func)) {
                     $this->trigger_error("default template handler function \"$this->default_template_handler_func\" doesn't exist.");
                 } else {
-                    $_return = call_user_func_array(
+                    $_return = \call_user_func_array(
                         $this->default_template_handler_func,
                         array($_params['resource_type'], $_params['resource_name'], &$params['source_content'], &$params['resource_timestamp'], &$this)
                     );
@@ -1630,14 +1630,14 @@ class Smarty
     {
 
         // split tpl_path by the first colon
-        $_resource_name_parts = explode(':', $params['resource_name'], 2);
+        $_resource_name_parts = \explode(':', $params['resource_name'], 2);
 
-        if (count($_resource_name_parts) == 1) {
+        if (\count($_resource_name_parts) == 1) {
             // no resource type given
             $params['resource_type'] = $this->default_resource_type;
             $params['resource_name'] = $_resource_name_parts[0];
         } else {
-            if (strlen($_resource_name_parts[0]) == 1) {
+            if (\strlen($_resource_name_parts[0]) == 1) {
                 // 1 char is not resource type, but part of filepath
                 $params['resource_type'] = $this->default_resource_type;
                 $params['resource_name'] = $params['resource_name'];
@@ -1648,12 +1648,12 @@ class Smarty
         }
 
         if ($params['resource_type'] == 'file') {
-            if (!preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $params['resource_name'])) {
+            if (!\preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $params['resource_name'])) {
                 // relative pathname to $params['resource_base_path']
                 // use the first directory where the file is found
                 foreach ((array)$params['resource_base_path'] as $_curr_path) {
                     $_fullpath = $_curr_path . DIRECTORY_SEPARATOR . $params['resource_name'];
-                    if (file_exists($_fullpath) && is_file($_fullpath)) {
+                    if (\file_exists($_fullpath) && \is_file($_fullpath)) {
                         $params['resource_name'] = $_fullpath;
                         return true;
                     }
@@ -1668,7 +1668,7 @@ class Smarty
                 return false;
             }
             /* absolute path */
-            return file_exists($params['resource_name']);
+            return \file_exists($params['resource_name']);
         } elseif (empty($this->_plugins['resource'][$params['resource_type']])) {
             $_params = array('type' => $params['resource_type']);
             require_once(SMARTY_CORE_DIR . 'core.load_resource_plugin.php');
@@ -1688,15 +1688,15 @@ class Smarty
      */
     public function _run_mod_handler()
     {
-        $_args = func_get_args();
-        list($_modifier_name, $_map_array) = array_splice($_args, 0, 2);
+        $_args = \func_get_args();
+        list($_modifier_name, $_map_array) = \array_splice($_args, 0, 2);
         list($_func_name, $_tpl_file, $_tpl_line) =
             $this->_plugins['modifier'][$_modifier_name];
 
         $_var = $_args[0];
         foreach ($_var as $_key => $_val) {
             $_args[0] = $_val;
-            $_var[$_key] = call_user_func_array($_func_name, $_args);
+            $_var[$_key] = \call_user_func_array($_func_name, $_args);
         }
         return $_var;
     }
@@ -1709,9 +1709,9 @@ class Smarty
      */
     public function _dequote($string)
     {
-        if ((substr($string, 0, 1) == "'" || substr($string, 0, 1) == '"') &&
-            substr($string, -1) == substr($string, 0, 1)) {
-            return substr($string, 1, -1);
+        if ((\substr($string, 0, 1) == "'" || \substr($string, 0, 1) == '"') &&
+            \substr($string, -1) == \substr($string, 0, 1)) {
+            return \substr($string, 1, -1);
         }
         return $string;
     }
@@ -1725,12 +1725,12 @@ class Smarty
      */
     public function _read_file($filename)
     {
-        if (file_exists($filename) && is_readable($filename) && ($fd = @fopen($filename, 'rb'))) {
+        if (\file_exists($filename) && \is_readable($filename) && ($fd = @\fopen($filename, 'rb'))) {
             $contents = '';
-            while (!feof($fd)) {
-                $contents .= fread($fd, 8192);
+            while (!\feof($fd)) {
+                $contents .= \fread($fd, 8192);
             }
-            fclose($fd);
+            \fclose($fd);
             return $contents;
         }
         return false;
@@ -1753,19 +1753,19 @@ class Smarty
 
         if (isset($auto_id)) {
             // make auto_id safe for directory names
-            $auto_id = str_replace('%7C', $_compile_dir_sep, (urlencode($auto_id)));
+            $auto_id = \str_replace('%7C', $_compile_dir_sep, (\urlencode($auto_id)));
             // split into separate directories
             $_return .= $auto_id . $_compile_dir_sep;
         }
 
         if (isset($auto_source)) {
             // make source name safe for filename
-            $_filename = urlencode(basename($auto_source));
-            $_crc32 = sprintf('%08X', crc32($auto_source));
+            $_filename = \urlencode(\basename($auto_source));
+            $_crc32 = \sprintf('%08X', \crc32($auto_source));
             // prepend %% to avoid name conflicts with
             // with $params['auto_id'] names
-            $_crc32 = substr($_crc32, 0, 2) . $_compile_dir_sep .
-                      substr($_crc32, 0, 3) . $_compile_dir_sep . $_crc32;
+            $_crc32 = \substr($_crc32, 0, 2) . $_compile_dir_sep .
+                      \substr($_crc32, 0, 3) . $_compile_dir_sep . $_crc32;
             $_return .= '%%' . $_crc32 . '%%' . $_filename;
         }
 
@@ -1781,11 +1781,11 @@ class Smarty
     public function _unlink($resource, $exp_time = null)
     {
         if (isset($exp_time)) {
-            if (time() - @filemtime($resource) >= $exp_time) {
-                return @unlink($resource);
+            if (\time() - @\filemtime($resource) >= $exp_time) {
+                return @\unlink($resource);
             }
         } else {
-            return @unlink($resource);
+            return @\unlink($resource);
         }
     }
 
@@ -1825,7 +1825,7 @@ class Smarty
         $error_type = E_USER_ERROR
     ) {
         if (isset($file) && isset($line)) {
-            $info = ' ('.basename($file).", line $line)";
+            $info = ' ('.\basename($file).", line $line)";
         } else {
             $info = '';
         }
@@ -1844,10 +1844,10 @@ class Smarty
     public function _process_compiled_include_callback($match)
     {
         $_func = '_smarty_tplfunc_'.$match[2].'_'.$match[3];
-        ob_start();
+        \ob_start();
         $_func($this);
-        $_ret = ob_get_contents();
-        ob_end_clean();
+        $_ret = \ob_get_contents();
+        \ob_end_clean();
         return $_ret;
     }
 
@@ -1870,14 +1870,14 @@ class Smarty
             $this->_smarty_debug_info[] = array('type'      => 'template',
                                                   'filename'  => $params['smarty_include_tpl_file'],
                                                   'depth'     => ++$this->_inclusion_depth);
-            $included_tpls_idx = count($this->_smarty_debug_info) - 1;
+            $included_tpls_idx = \count($this->_smarty_debug_info) - 1;
         }
 
-        $this->_tpl_vars = array_merge($this->_tpl_vars, $params['smarty_include_vars']);
+        $this->_tpl_vars = \array_merge($this->_tpl_vars, $params['smarty_include_vars']);
 
         // config vars are treated as local, so push a copy of the
         // current ones onto the front of the stack
-        array_unshift($this->_config, $this->_config[0]);
+        \array_unshift($this->_config, $this->_config[0]);
 
         $_smarty_compile_path = $this->_get_compile_path($params['smarty_include_tpl_file']);
 
@@ -1888,7 +1888,7 @@ class Smarty
         }
 
         // pop the local vars off the front of the stack
-        array_shift($this->_config);
+        \array_shift($this->_config);
 
         $this->_inclusion_depth--;
 
@@ -1916,13 +1916,13 @@ class Smarty
 
         if ($this->_cache_including) {
             /* return next set of cache_attrs */
-            $_return = current($_cache_attrs);
-            next($_cache_attrs);
+            $_return = \current($_cache_attrs);
+            \next($_cache_attrs);
             return $_return;
         }
         /* add a reference to a new set of cache_attrs */
         $_cache_attrs[] = array();
-        return $_cache_attrs[count($_cache_attrs)-1];
+        return $_cache_attrs[\count($_cache_attrs)-1];
     }
 
 
@@ -1956,9 +1956,9 @@ class Smarty
      */
     public function _get_filter_name($function)
     {
-        if (is_array($function)) {
-            $_class_name = (is_object($function[0]) ?
-                get_class($function[0]) : $function[0]);
+        if (\is_array($function)) {
+            $_class_name = (\is_object($function[0]) ?
+                \get_class($function[0]) : $function[0]);
             return $_class_name . '_' . $function[1];
         }
         return $function;

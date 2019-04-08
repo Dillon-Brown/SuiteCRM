@@ -45,7 +45,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -155,7 +155,7 @@ class aCase extends Basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -255,7 +255,7 @@ class aCase extends Basic
 
         //update the select clause in the returned query.
 
-        if (!is_array($query_array)) {
+        if (!\is_array($query_array)) {
             LoggerManager::getLogger()->fatal('Building database selection for contacts but the query information format is not an array.');
             return false;
         }
@@ -323,7 +323,7 @@ class aCase extends Basic
         $where_clauses[] = "cases.name like '$the_query_string%'";
         $where_clauses[] = "accounts.name like '$the_query_string%'";
 
-        if (is_numeric($the_query_string)) {
+        if (\is_numeric($the_query_string)) {
             $where_clauses[] = "cases.case_number like '$the_query_string%'";
         }
 
@@ -415,7 +415,7 @@ class aCase extends Basic
         $row = $this->db->fetchByAssoc($result);
 
         if ($row !== null) {
-            $ret_array['account_name'] = stripslashes($row['name']);
+            $ret_array['account_name'] = \stripslashes($row['name']);
             $ret_array['account_id'] = $row['id'];
         } else {
             $ret_array['account_name'] = '';

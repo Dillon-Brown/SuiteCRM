@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -88,7 +88,7 @@ class EmailsControllerActionGetFromFields
         $ie->email = $email;
         $ieAccounts = $ie->retrieveAllByGroupIdWithGroupAccounts($this->currentUser->id);
         $accountSignatures = $this->currentUser->getPreference('account_signatures', 'Emails');
-        $showFolders = unserialize(base64_decode($this->currentUser->getPreference('showFolders', 'Emails')));
+        $showFolders = \unserialize(\base64_decode($this->currentUser->getPreference('showFolders', 'Emails')));
         $emailSignatures = $this->getEmailSignatures($accountSignatures);
         $defaultEmailSignature = $this->getDefaultSignatures();
         $prependSignature = $this->currentUser->getPreference('signature_prepend');
@@ -100,8 +100,8 @@ class EmailsControllerActionGetFromFields
             $defaultEmailSignature
         );
 
-        $dataEncoded = json_encode(array('data' => $dataAddresses), JSON_UNESCAPED_UNICODE);
-        $results = utf8_decode($dataEncoded);
+        $dataEncoded = \json_encode(array('data' => $dataAddresses), JSON_UNESCAPED_UNICODE);
+        $results = \utf8_decode($dataEncoded);
         return $results;
     }
 
@@ -113,7 +113,7 @@ class EmailsControllerActionGetFromFields
     protected function getEmailSignatures($accountSignatures = null)
     {
         if ($accountSignatures != null) {
-            $emailSignatures = unserialize(base64_decode($accountSignatures));
+            $emailSignatures = \unserialize(\base64_decode($accountSignatures));
         } else {
             $GLOBALS['log']->warn('User ' . $this->currentUser->name . ' does not have a signature');
             $emailSignatures = null;

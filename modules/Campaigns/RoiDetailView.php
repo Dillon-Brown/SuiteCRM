@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -110,15 +110,15 @@ if(!$focus->campaign_type == "NewsLetter"){
     $smarty->assign("EXPECTED_REVENUE", $focus->expected_revenue);
     
     
-    $smarty->assign("OBJECTIVE", nl2br($focus->objective));
-    $smarty->assign("CONTENT", nl2br($focus->content));
+    $smarty->assign("OBJECTIVE", \nl2br($focus->objective));
+    $smarty->assign("CONTENT", \nl2br($focus->content));
     $smarty->assign("DATE_MODIFIED", $focus->date_modified);
     $smarty->assign("DATE_ENTERED", $focus->date_entered);
     
     $smarty->assign("CREATED_BY", $focus->created_by_name);
     $smarty->assign("MODIFIED_BY", $focus->modified_by_name);
     $smarty->assign("TRACKER_URL", $sugar_config['site_url'] . '/campaign_tracker.php?track=' . $focus->tracker_key);
-    $smarty->assign("TRACKER_COUNT", intval($focus->tracker_count));
+    $smarty->assign("TRACKER_COUNT", \intval($focus->tracker_count));
     $smarty->assign("TRACKER_TEXT", $focus->tracker_text);
     $smarty->assign("REFER_URL", $focus->refer_url);
     $smarty->assign("IMPRESSIONS", $focus->impressions);
@@ -201,8 +201,8 @@ $campaign_id = $focus->id;
     
     //add chart
     $seps				= array("-", "/");
-    $dates				= array(date($GLOBALS['timedate']->dbDayFormat), $GLOBALS['timedate']->dbDayFormat);
-    $dateFileNameSafe	= str_replace($seps, "_", $dates);
+    $dates				= array(\date($GLOBALS['timedate']->dbDayFormat), $GLOBALS['timedate']->dbDayFormat);
+    $dateFileNameSafe	= \str_replace($seps, "_", $dates);
     //$cache_file_name	= $current_user->getUserPrivGuid()."_campaign_response_by_activity_type_".$dateFileNameSafe[0]."_".$dateFileNameSafe[1].".xml";
     $cache_file_name_roi	= $current_user->getUserPrivGuid()."_campaign_response_by_roi_".$dateFileNameSafe[0]."_".$dateFileNameSafe[1].".xml";
     $chart= new campaign_charts();

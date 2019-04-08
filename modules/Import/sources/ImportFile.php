@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -115,7 +115,7 @@ class ImportFile extends ImportDataSource
      */
     public function __construct($filename, $delimiter  = ',', $enclosure  = '', $deleteFile = true, $checkUploadPath = true)
     {
-        if (!is_file($filename) || !is_readable($filename)) {
+        if (!\is_file($filename) || !\is_readable($filename)) {
             return false;
         }
 
@@ -125,7 +125,7 @@ class ImportFile extends ImportDataSource
         }
 
         // turn on auto-detection of line endings to fix bug #10770
-        ini_set('auto_detect_line_endings', '1');
+        \ini_set('auto_detect_line_endings', '1');
 
         $this->_fp         = sugar_fopen($filename, 'r');
         $this->_sourcename   = $filename;
@@ -134,7 +134,7 @@ class ImportFile extends ImportDataSource
         if ($this->_delimiter == '\t') {
             $this->_delimiter = "\t";
         }
-        $this->_enclosure  = (empty($enclosure) ? '' : trim($enclosure));
+        $this->_enclosure  = (empty($enclosure) ? '' : \trim($enclosure));
 
         // Autodetect does setFpAfterBOM()
         $this->_encoding = $this->autoDetectCharacterSet();
@@ -150,10 +150,10 @@ class ImportFile extends ImportDataSource
             return;
         }
 
-        rewind($this->_fp);
-        $bomCheck = fread($this->_fp, 3);
-        if ($bomCheck != pack("CCC", 0xef, 0xbb, 0xbf)) {
-            rewind($this->_fp);
+        \rewind($this->_fp);
+        $bomCheck = \fread($this->_fp, 3);
+        if ($bomCheck != \pack("CCC", 0xef, 0xbb, 0xbf)) {
+            \rewind($this->_fp);
         }
     }
     /**
@@ -164,14 +164,14 @@ class ImportFile extends ImportDataSource
     public function __destruct()
     {
         if ($this->_deleteFile && $this->fileExists()) {
-            fclose($this->_fp);
+            \fclose($this->_fp);
             //Make sure the file exists before unlinking
-            if (file_exists($this->_sourcename)) {
-                unlink($this->_sourcename);
+            if (\file_exists($this->_sourcename)) {
+                \unlink($this->_sourcename);
             }
         }
 
-        ini_restore('auto_detect_line_endings');
+        \ini_restore('auto_detect_line_endings');
     }
 
     /**
@@ -180,7 +180,7 @@ class ImportFile extends ImportDataSource
     public function __wakeup()
     {
         // clean all properties
-        foreach (get_object_vars($this) as $k => $v) {
+        foreach (\get_object_vars($this) as $k => $v) {
             $this->$k = null;
         }
         throw new Exception("Not a serializable object");
@@ -211,14 +211,14 @@ class ImportFile extends ImportDataSource
 
         // explode on delimiter instead if enclosure is an empty string
         if (empty($this->_enclosure)) {
-            $row = explode($this->_delimiter, rtrim(fgets($this->_fp, 8192), "\r\n"));
-            if ($row !== false && !(count($row) == 1 && trim($row[0]) == '')) {
+            $row = \explode($this->_delimiter, \rtrim(\fgets($this->_fp, 8192), "\r\n"));
+            if ($row !== false && !(\count($row) == 1 && \trim($row[0]) == '')) {
                 $this->_currentRow = $row;
             } else {
                 return false;
             }
         } else {
-            $row = fgetcsv($this->_fp, 8192, $this->_delimiter, $this->_enclosure);
+            $row = \fgetcsv($this->_fp, 8192, $this->_delimiter, $this->_enclosure);
             if ($row !== false && $row != array(null)) {
                 $this->_currentRow = $row;
             } else {
@@ -236,7 +236,7 @@ class ImportFile extends ImportDataSource
             
             // Convert all line endings to the same style as PHP_EOL
             // Use preg_replace instead of str_replace as str_replace may cause extra lines on Windows
-            $this->_currentRow[$key] = preg_replace("[\r\n|\n|\r]", PHP_EOL, $this->_currentRow[$key]);
+            $this->_currentRow[$key] = \preg_replace("[\r\n|\n|\r]", PHP_EOL, $this->_currentRow[$key]);
         }
         
         $this->_rowsCount++;
@@ -251,7 +251,7 @@ class ImportFile extends ImportDataSource
      */
     public function getFieldCount()
     {
-        return count($this->_currentRow);
+        return \count($this->_currentRow);
     }
 
     /**
@@ -264,9 +264,9 @@ class ImportFile extends ImportDataSource
         $lineCount = 0;
 
         if ($this->_fp) {
-            rewind($this->_fp);
-            while (!feof($this->_fp)) {
-                if (fgets($this->_fp) !== false) {
+            \rewind($this->_fp);
+            while (!\feof($this->_fp)) {
+                if (\fgets($this->_fp) !== false) {
                     $lineCount++;
                 }
             }
@@ -324,23 +324,23 @@ class ImportFile extends ImportDataSource
         $detectable_charsets = "UTF-8, {$user_charset}, {$system_charset}, {$other_charsets}";
 
         // Bug 26824 - mb_detect_encoding() thinks CP1252 is IS0-8859-1, so use that instead in the encoding list passed to the function
-        $detectable_charsets = str_replace('CP1252', 'ISO-8859-1', $detectable_charsets);
+        $detectable_charsets = \str_replace('CP1252', 'ISO-8859-1', $detectable_charsets);
         
         // If we are able to detect encoding
-        if (function_exists('mb_detect_encoding')) {
+        if (\function_exists('mb_detect_encoding')) {
             // Retrieve a sample of data set
             $text = '';
             
             // Read 10 lines from the file and put them all together in a variable
             $i = 0;
-            while ($i < 10 && $temp = fgets($this->_fp, 8192)) {
+            while ($i < 10 && $temp = \fgets($this->_fp, 8192)) {
                 $text .= $temp;
                 $i++;
             }
             
             // If we picked any text, try to detect charset
-            if (strlen($text) > 0) {
-                $charset_for_import = mb_detect_encoding($text, $detectable_charsets);
+            if (\strlen($text) > 0) {
+                $charset_for_import = \mb_detect_encoding($text, $detectable_charsets);
             }
         }
         
@@ -458,7 +458,7 @@ class ImportFile extends ImportDataSource
             $this->next();
         }
 
-        while ($this->valid() &&  $totalItems > count($this->_dataSet)) {
+        while ($this->valid() &&  $totalItems > \count($this->_dataSet)) {
             if ($currentLine >= $this->_offset) {
                 $this->_dataSet[] = $this->_currentRow;
             }

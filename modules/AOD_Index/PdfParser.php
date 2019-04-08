@@ -22,7 +22,7 @@ class PdfParser
      */
     public static function parseFile($filename)
     {
-        $content = file_get_contents($filename);
+        $content = \file_get_contents($filename);
 
         return self::extractText($content);
     }
@@ -62,12 +62,12 @@ class PdfParser
         foreach ($a_obj as $obj) {
             $a_filter = self::getDataArray($obj, '<<', '>>');
 
-            if (is_array($a_filter) && isset($a_filter[0])) {
+            if (\is_array($a_filter) && isset($a_filter[0])) {
                 $a_chunks[$j]['filter'] = $a_filter[0];
                 $a_data = self::getDataArray($obj, 'stream', 'endstream');
 
-                if (is_array($a_data) && isset($a_data[0])) {
-                    $a_chunks[$j]['data'] = trim(substr($a_data[0], strlen('stream'), strlen($a_data[0]) - strlen('stream') - strlen('endstream')));
+                if (\is_array($a_data) && isset($a_data[0])) {
+                    $a_chunks[$j]['data'] = \trim(\substr($a_data[0], \strlen('stream'), \strlen($a_data[0]) - \strlen('stream') - \strlen('endstream')));
                 }
 
                 $j++;
@@ -82,14 +82,14 @@ class PdfParser
             if (isset($chunk['data'])) {
 
         // look at the filter to find out which encoding has been used
-                if (strpos($chunk['filter'], 'FlateDecode') !== false) {
+                if (\strpos($chunk['filter'], 'FlateDecode') !== false) {
                     // Use gzuncompress but suppress error messages.
-                    $data =@ gzuncompress($chunk['data']);
+                    $data =@ \gzuncompress($chunk['data']);
                 } else {
                     $data = $chunk['data'];
                 }
 
-                if (trim($data) != '') {
+                if (\trim($data) != '') {
                     // If we got data then attempt to extract it.
                     $result_data .= ' ' . self::extractTextElements($data);
                 }
@@ -101,59 +101,59 @@ class PdfParser
          * our string. Also extract alphanumerical information to reduce
          * redundant data.
          */
-        if (trim($result_data) == '') {
+        if (\trim($result_data) == '') {
             return null;
         }
         // Optimize hyphened words
-        $result_data = preg_replace('/\s*-[\r\n]+\s*/', '', $result_data);
-        $result_data = preg_replace('/\s+/', ' ', $result_data);
+        $result_data = \preg_replace('/\s*-[\r\n]+\s*/', '', $result_data);
+        $result_data = \preg_replace('/\s+/', ' ', $result_data);
 
         return $result_data;
     }
 
     protected static function extractTextElements($content)
     {
-        if (strpos($content, '/CIDInit') === 0) {
+        if (\strpos($content, '/CIDInit') === 0) {
             return '';
         }
 
         $text  = '';
-        $lines = explode("\n", $content);
+        $lines = \explode("\n", $content);
 
         foreach ($lines as $line) {
-            $line = trim($line);
+            $line = \trim($line);
             $matches = array();
 
             // Parse each lines to extract command and operator values
-            if (preg_match('/^(?<command>.*[\)\] ])(?<operator>[a-z]+[\*]?)$/i', $line, $matches)) {
-                $command = trim($matches['command']);
+            if (\preg_match('/^(?<command>.*[\)\] ])(?<operator>[a-z]+[\*]?)$/i', $line, $matches)) {
+                $command = \trim($matches['command']);
 
                 // Convert octal encoding
                 $found_octal_values = array();
-                preg_match_all('/\\\\([0-9]{3})/', $command, $found_octal_values);
+                \preg_match_all('/\\\\([0-9]{3})/', $command, $found_octal_values);
 
                 foreach ($found_octal_values[0] as $value) {
-                    $octal = substr($value, 1);
+                    $octal = \substr($value, 1);
 
-                    if (intval($octal) < 40) {
+                    if (\intval($octal) < 40) {
                         // Skips non printable chars
-                        $command = str_replace($value, '', $command);
+                        $command = \str_replace($value, '', $command);
                     } else {
-                        $command = str_replace($value, chr(octdec($octal)), $command);
+                        $command = \str_replace($value, \chr(\octdec($octal)), $command);
                     }
                 }
                 // Removes encoded new lines, tabs, ...
-                $command = preg_replace('/\\\\[\r\n]/', '', $command);
-                $command = preg_replace('/\\\\[rnftb ]/', ' ', $command);
+                $command = \preg_replace('/\\\\[\r\n]/', '', $command);
+                $command = \preg_replace('/\\\\[rnftb ]/', ' ', $command);
                 // Force UTF-8 charset
-                $encoding = mb_detect_encoding($command, array('ASCII', 'UTF-8', 'Windows-1252', 'ISO-8859-1'));
-                if (strtoupper($encoding) != 'UTF-8') {
-                    if ($decoded = @iconv('CP1252', 'UTF-8//TRANSLIT//IGNORE', $command)) {
+                $encoding = \mb_detect_encoding($command, array('ASCII', 'UTF-8', 'Windows-1252', 'ISO-8859-1'));
+                if (\strtoupper($encoding) != 'UTF-8') {
+                    if ($decoded = @\iconv('CP1252', 'UTF-8//TRANSLIT//IGNORE', $command)) {
                         $command = $decoded;
                     }
                 }
                 // Removes leading spaces
-                $operator = trim($matches['operator']);
+                $operator = \trim($matches['operator']);
             } else {
                 $command = $line;
                 $operator = '';
@@ -167,9 +167,9 @@ class PdfParser
 
         // Move text current point.
         case 'Td':
-          $values = explode(' ', $command);
-          $y = array_pop($values);
-          $x = array_pop($values);
+          $values = \explode(' ', $command);
+          $y = \array_pop($values);
+          $x = \array_pop($values);
           if ($x > 0) {
               $text .= ' ';
           }
@@ -180,8 +180,8 @@ class PdfParser
 
         // Move text current point and set leading.
         case 'TD':
-          $values = explode(' ', $command);
-          $y = array_pop($values);
+          $values = \explode(' ', $command);
+          $y = \array_pop($values);
           if ($y < 0) {
               $text .= "\n";
           }
@@ -194,16 +194,16 @@ class PdfParser
 
         // Display text, allowing individual character positioning
         case 'TJ':
-          $start = mb_strpos($command, '[', null, 'UTF-8') + 1;
-          $end   = mb_strrpos($command, ']', null, 'UTF-8');
-          $text.= self::parseTextCommand(mb_substr($command, $start, $end - $start, 'UTF-8'));
+          $start = \mb_strpos($command, '[', null, 'UTF-8') + 1;
+          $end   = \mb_strrpos($command, ']', null, 'UTF-8');
+          $text.= self::parseTextCommand(\mb_substr($command, $start, $end - $start, 'UTF-8'));
           break;
 
         // Display text.
         case 'Tj':
-          $start = mb_strpos($command, '(', null, 'UTF-8') + 1;
-          $end   = mb_strrpos($command, ')', null, 'UTF-8');
-          $text.= mb_substr($command, $start, $end - $start, 'UTF-8'); // Removes round brackets
+          $start = \mb_strpos($command, '(', null, 'UTF-8') + 1;
+          $end   = \mb_strrpos($command, ')', null, 'UTF-8');
+          $text.= \mb_substr($command, $start, $end - $start, 'UTF-8'); // Removes round brackets
           break;
 
         // Set leading.
@@ -253,7 +253,7 @@ class PdfParser
       }
         }
 
-        $text = str_replace(array('\\(', '\\)'), array('(', ')'), $text);
+        $text = \str_replace(array('\\(', '\\)'), array('(', ')'), $text);
 
         return $text;
     }
@@ -271,12 +271,12 @@ class PdfParser
         $result = '';
         $cur_start_pos = 0;
 
-        while (($cur_start_text = mb_strpos($text, '(', $cur_start_pos, 'UTF-8')) !== false) {
+        while (($cur_start_text = \mb_strpos($text, '(', $cur_start_pos, 'UTF-8')) !== false) {
             // New text element found
             if ($cur_start_text - $cur_start_pos > 8) {
                 $spacing = ' ';
             } else {
-                $spacing_size = mb_substr($text, $cur_start_pos, $cur_start_text - $cur_start_pos, 'UTF-8');
+                $spacing_size = \mb_substr($text, $cur_start_pos, $cur_start_text - $cur_start_pos, 'UTF-8');
 
                 if ($spacing_size < -50) {
                     $spacing = ' ';
@@ -287,8 +287,8 @@ class PdfParser
             $cur_start_text++;
 
             $start_search_end = $cur_start_text;
-            while (($cur_start_pos = mb_strpos($text, ')', $start_search_end, 'UTF-8')) !== false) {
-                if (mb_substr($text, $cur_start_pos - 1, 1, 'UTF-8') != '\\') {
+            while (($cur_start_pos = \mb_strpos($text, ')', $start_search_end, 'UTF-8')) !== false) {
+                if (\mb_substr($text, $cur_start_pos - 1, 1, 'UTF-8') != '\\') {
                     break;
                 }
                 $start_search_end = $cur_start_pos + 1;
@@ -300,7 +300,7 @@ class PdfParser
             }
 
             // Add to result
-            $result .= $spacing . mb_substr($text, $cur_start_text, $cur_start_pos - $cur_start_text, 'UTF-8');
+            $result .= $spacing . \mb_substr($text, $cur_start_text, $cur_start_pos - $cur_start_text, 'UTF-8');
             $cur_start_pos++;
         }
 
@@ -322,12 +322,12 @@ class PdfParser
         $a_results = array();
 
         while ($start !== false && $end !== false) {
-            $start = strpos($data, $start_word, $end);
-            $end   = strpos($data, $end_word, $start);
+            $start = \strpos($data, $start_word, $end);
+            $end   = \strpos($data, $end_word, $start);
 
             if ($end !== false && $start !== false) {
                 // data is between start and end
-                $a_results[] = substr($data, $start, $end - $start + strlen($end_word));
+                $a_results[] = \substr($data, $start, $end - $start + \strlen($end_word));
             }
         }
 

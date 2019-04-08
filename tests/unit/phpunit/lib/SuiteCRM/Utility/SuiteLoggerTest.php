@@ -45,7 +45,7 @@ class SuiteLoggerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         self::markTestIncomplete();
         self::$logger->emergency('test');
         $lastLine = $this->getLastLogMessage();
-        preg_match('/\[EMERGENCY\] test/', $lastLine, $matches);
+        \preg_match('/\[EMERGENCY\] test/', $lastLine, $matches);
         $this->assertNotEmpty($matches);
     }
 
@@ -54,7 +54,7 @@ class SuiteLoggerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         self::markTestIncomplete('need to fix: Failed asserting that an array is not empty.');
         self::$logger->alert('test');
         $lastLine = $this->getLastLogMessage();
-        preg_match('/\[ALERT\] test/', $lastLine, $matches);
+        \preg_match('/\[ALERT\] test/', $lastLine, $matches);
         $this->assertNotEmpty($matches);
     }
 
@@ -62,7 +62,7 @@ class SuiteLoggerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         self::$logger->critical('test');
         $lastLine = $this->getLastLogMessage();
-        preg_match('/\[CRITICAL\] test/', $lastLine, $matches);
+        \preg_match('/\[CRITICAL\] test/', $lastLine, $matches);
         $this->assertNotEmpty($matches);
     }
 
@@ -70,7 +70,7 @@ class SuiteLoggerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         self::$logger->error('test');
         $lastLine = $this->getLastLogMessage();
-        preg_match('/\[ERROR\] test/', $lastLine, $matches);
+        \preg_match('/\[ERROR\] test/', $lastLine, $matches);
         $this->assertNotEmpty($matches);
     }
 
@@ -78,7 +78,7 @@ class SuiteLoggerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         self::$logger->warning('test');
         $lastLine = $this->getLastLogMessage();
-        preg_match('/\[WARNING\] test/', $lastLine, $matches);
+        \preg_match('/\[WARNING\] test/', $lastLine, $matches);
         $this->assertNotEmpty($matches);
     }
 
@@ -86,7 +86,7 @@ class SuiteLoggerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         self::$logger->notice('test');
         $lastLine = $this->getLastLogMessage();
-        preg_match('/\[NOTICE\] test/', $lastLine, $matches);
+        \preg_match('/\[NOTICE\] test/', $lastLine, $matches);
         $this->assertNotEmpty($matches);
     }
 
@@ -94,7 +94,7 @@ class SuiteLoggerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         self::$logger->info('test');
         $lastLine = $this->getLastLogMessage();
-        preg_match('/\[INFO\] test/', $lastLine, $matches);
+        \preg_match('/\[INFO\] test/', $lastLine, $matches);
         $this->assertNotEmpty($matches);
     }
 
@@ -102,7 +102,7 @@ class SuiteLoggerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         self::$logger->debug('test');
         $lastLine = $this->getLastLogMessage();
-        preg_match('/\[DEBUG\] test/', $lastLine, $matches);
+        \preg_match('/\[DEBUG\] test/', $lastLine, $matches);
         $this->assertNotEmpty($matches);
     }
 
@@ -110,7 +110,7 @@ class SuiteLoggerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         self::$logger->error('test {a}', array('a' => 'apple'));
         $lastLine = $this->getLastLogMessage();
-        preg_match('/\[ERROR\] test apple/', $lastLine, $matches);
+        \preg_match('/\[ERROR\] test apple/', $lastLine, $matches);
         $this->assertNotEmpty($matches);
     }
 
@@ -118,12 +118,12 @@ class SuiteLoggerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         $paths = new \SuiteCRM\Utility\Paths();
         $loggerPath = $paths->getProjectPath().'/suitecrm.log';
-        $data = file($loggerPath);
+        $data = \file($loggerPath);
 
         if (empty($data)) {
             $line = '';
         } else {
-            $line = $data[count($data)-1];
+            $line = $data[\count($data)-1];
         }
 
         return $line;

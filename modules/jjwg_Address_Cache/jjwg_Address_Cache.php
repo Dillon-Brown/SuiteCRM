@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -37,7 +37,7 @@ class jjwg_Address_Cache extends jjwg_Address_Cache_sugar
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($init);
     }
@@ -61,7 +61,7 @@ class jjwg_Address_Cache extends jjwg_Address_Cache_sugar
      */
     public function getAddressCacheInfo($aInfo = array())
     {
-        if (is_array($aInfo)) {
+        if (\is_array($aInfo)) {
             if (!isset($aInfo['address'])) {
                 LoggerManager::getLogger()->warn('address info not found');
                 $aInfoAddress = null;
@@ -159,7 +159,7 @@ class jjwg_Address_Cache extends jjwg_Address_Cache_sugar
      */
     public function is_valid_lng($lng)
     {
-        return (is_numeric($lng) && $lng >= -180 && $lng <= 180);
+        return (\is_numeric($lng) && $lng >= -180 && $lng <= 180);
     }
 
     /**
@@ -169,6 +169,6 @@ class jjwg_Address_Cache extends jjwg_Address_Cache_sugar
      */
     public function is_valid_lat($lat)
     {
-        return (is_numeric($lat) && $lat >= -90 && $lat <= 90);
+        return (\is_numeric($lat) && $lat >= -90 && $lat <= 90);
     }
 }

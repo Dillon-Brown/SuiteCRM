@@ -16,7 +16,7 @@ class FP_eventsController extends SugarController
         $event_id = $_POST['event_id'];
 
         if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
+            $contacts = \explode(',', $ids);
 
             foreach ($contacts as $contact) {
                 //update contacts query
@@ -52,7 +52,7 @@ class FP_eventsController extends SugarController
         $event_id = $_POST['event_id'];
 
         if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
+            $contacts = \explode(',', $ids);
 
             foreach ($contacts as $contact) {
                 $query = 'UPDATE fp_events_contacts_c SET invite_status="Attended" WHERE fp_events_contactsfp_events_ida="'.$event_id.'" AND fp_events_contactscontacts_idb="'.$contact.'"';
@@ -87,7 +87,7 @@ class FP_eventsController extends SugarController
         $event_id = $_POST['event_id'];
 
         if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
+            $contacts = \explode(',', $ids);
 
             foreach ($contacts as $contact) {
                 $query = 'UPDATE fp_events_contacts_c SET invite_status="Not Attended" WHERE fp_events_contactsfp_events_ida="'.$event_id.'" AND fp_events_contactscontacts_idb="'.$contact.'"';
@@ -122,7 +122,7 @@ class FP_eventsController extends SugarController
         $event_id = $_POST['event_id'];
 
         if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
+            $contacts = \explode(',', $ids);
 
             foreach ($contacts as $contact) {
                 $query = 'UPDATE fp_events_contacts_c SET invite_status="Not Invited", email_responded="0" WHERE fp_events_contactsfp_events_ida="'.$event_id.'" AND fp_events_contactscontacts_idb="'.$contact.'"';
@@ -157,7 +157,7 @@ class FP_eventsController extends SugarController
         $event_id = $_POST['event_id'];
 
         if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
+            $contacts = \explode(',', $ids);
 
             foreach ($contacts as $contact) {
                 $query = 'UPDATE fp_events_contacts_c SET accept_status="Accepted" WHERE fp_events_contactsfp_events_ida="'.$event_id.'" AND fp_events_contactscontacts_idb="'.$contact.'"';
@@ -191,7 +191,7 @@ class FP_eventsController extends SugarController
         $event_id = $_POST['event_id'];
 
         if ($entire_list != '1') {
-            $contacts = explode(',', $ids);
+            $contacts = \explode(',', $ids);
 
             foreach ($contacts as $contact) {
                 $query = 'UPDATE fp_events_contacts_c SET accept_status="Declined" WHERE fp_events_contactsfp_events_ida="'.$event_id.'" AND fp_events_contactscontacts_idb="'.$contact.'"';
@@ -225,7 +225,7 @@ class FP_eventsController extends SugarController
         $type = $_POST['pop_up_type'];
 
 
-        if (!is_array($ids)) {
+        if (!\is_array($ids)) {
             $ids = array($ids);
         }
         //Target lists. Can incliude contacts, leads and targets as part of the target list
@@ -247,7 +247,7 @@ class FP_eventsController extends SugarController
                 foreach ($target_list->prospects->getBeans() as $contact) {
                     $contact_id_list = $event->fp_events_prospects_1->get();
 
-                    if (!in_array($contact->id, $contact_id_list)) { //check if its already related
+                    if (!\in_array($contact->id, $contact_id_list)) { //check if its already related
 
                         $event->fp_events_prospects_1->add($contact->id);
                     }
@@ -256,7 +256,7 @@ class FP_eventsController extends SugarController
                 foreach ($target_list->contacts->getBeans() as $contact) {
                     $contact_id_list = $event->fp_events_contacts->get();
 
-                    if (!in_array($contact->id, $contact_id_list)) {
+                    if (!\in_array($contact->id, $contact_id_list)) {
                         $event->fp_events_contacts->add($contact->id);
                     }
                 }
@@ -264,7 +264,7 @@ class FP_eventsController extends SugarController
                 foreach ($target_list->leads->getBeans() as $contact) {
                     $contact_id_list = $event->fp_events_leads_1->get();
 
-                    if (!in_array($contact->id, $contact_id_list)) {
+                    if (!\in_array($contact->id, $contact_id_list)) {
                         $event->fp_events_leads_1->add($contact->id);
                     }
                 }
@@ -279,7 +279,7 @@ class FP_eventsController extends SugarController
 
                 $contact_id_list = $event->fp_events_prospects_1->get();//get array of currently linked targets
 
-                if (!in_array($target, $contact_id_list)) { //check if its already in the array
+                if (!\in_array($target, $contact_id_list)) { //check if its already in the array
 
                     $event->fp_events_prospects_1->add($target);//if not add relationship
                 }
@@ -294,7 +294,7 @@ class FP_eventsController extends SugarController
 
                 $contact_id_list = $event->fp_events_leads_1->get();//get array of currently linked leads
 
-                if (!in_array($lead, $contact_id_list)) { //check if its already in the array
+                if (!\in_array($lead, $contact_id_list)) { //check if its already in the array
 
                     $event->fp_events_leads_1->add($lead);//if not add relationship
                 }
@@ -309,7 +309,7 @@ class FP_eventsController extends SugarController
 
                 $contact_id_list = $event->fp_events_contacts->get(); //get array of currently linked contacts
 
-                if (!in_array($contact, $contact_id_list)) {
+                if (!\in_array($contact, $contact_id_list)) {
                     $event->fp_events_contacts->add($contact);
                 }
             }
@@ -384,7 +384,7 @@ class FP_eventsController extends SugarController
 
                 $email_subject = $emailTemp->parse_template_bean($emailTemp->subject, 'FP_events', $event);
                 $email_body = from_html($emailTemp->parse_template_bean($firstpass, 'FP_events', $event));
-                $alt_emailbody = wordwrap($emailTemp->parse_template_bean($firstpass, 'FP_events', $event), 900);
+                $alt_emailbody = \wordwrap($emailTemp->parse_template_bean($firstpass, 'FP_events', $event), 900);
 
                 //get attachments
                 $attachmentBean = new Note();
@@ -441,7 +441,7 @@ class FP_eventsController extends SugarController
 
                 $email_subject = $emailTemp->parse_template_bean($emailTemp->subject, 'FP_events', $event);
                 $email_body = from_html($emailTemp->parse_template_bean($firstpass, 'FP_events', $event));
-                $alt_emailbody = wordwrap($emailTemp->parse_template_bean($firstpass, 'FP_events', $event), 900);
+                $alt_emailbody = \wordwrap($emailTemp->parse_template_bean($firstpass, 'FP_events', $event), 900);
 
                 //get attachments
                 $attachmentBean = new Note();
@@ -497,7 +497,7 @@ class FP_eventsController extends SugarController
 
                 $email_subject = $emailTemp->parse_template_bean($emailTemp->subject, 'FP_events', $event);
                 $email_body = from_html($emailTemp->parse_template_bean($firstpass, 'FP_events', $event));
-                $alt_emailbody = wordwrap($emailTemp->parse_template_bean($firstpass, 'FP_events', $event), 900);
+                $alt_emailbody = \wordwrap($emailTemp->parse_template_bean($firstpass, 'FP_events', $event), 900);
 
                 //get attachments
                 $attachmentBean = new Note();

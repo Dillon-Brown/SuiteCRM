@@ -49,7 +49,7 @@ class DocumentRevisionTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($documentRevision->id));
-        $this->assertEquals(36, strlen($documentRevision->id));
+        $this->assertEquals(36, \strlen($documentRevision->id));
 
         //test document retrieve method
         $docRev = $documentRevision->retrieve($documentRevision->id);
@@ -315,7 +315,7 @@ class DocumentRevisionTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         
         $documentRevision = new DocumentRevision();
         $results = $documentRevision->get_document_revisions(1);
-        $this->assertTrue(is_array($results));
+        $this->assertTrue(\is_array($results));
         
         // clean up
         

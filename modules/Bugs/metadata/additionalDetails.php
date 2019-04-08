@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -69,16 +69,16 @@ function additionalDetailsBug($fields)
     }
                 
     if (!empty($fields['DESCRIPTION'])) {
-        $overlib_string .= '<b>'. $mod_strings['LBL_DESCRIPTION'] . '</b> ' . substr($fields['DESCRIPTION'], 0, 300);
-        if (strlen($fields['DESCRIPTION']) > 300) {
+        $overlib_string .= '<b>'. $mod_strings['LBL_DESCRIPTION'] . '</b> ' . \substr($fields['DESCRIPTION'], 0, 300);
+        if (\strlen($fields['DESCRIPTION']) > 300) {
             $overlib_string .= '...';
         }
         $overlib_string .= '<br>';
     }
         
     if (!empty($fields['WORK_LOG'])) {
-        $overlib_string .= '<b>'. $mod_strings['LBL_WORK_LOG'] . '</b> ' . substr($fields['WORK_LOG'], 0, 300);
-        if (strlen($fields['WORK_LOG']) > 300) {
+        $overlib_string .= '<b>'. $mod_strings['LBL_WORK_LOG'] . '</b> ' . \substr($fields['WORK_LOG'], 0, 300);
+        if (\strlen($fields['WORK_LOG']) > 300) {
             $overlib_string .= '...';
         }
     }

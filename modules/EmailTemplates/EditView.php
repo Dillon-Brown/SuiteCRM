@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -73,25 +73,25 @@ if (!isset($focus->id)) {
 }
 
 //needed when creating a new case with default values passed in
-if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) {
-    $focus->contact_name = htmlspecialchars($_REQUEST['contact_name'], ENT_QUOTES);
+if (isset($_REQUEST['contact_name']) && \is_null($focus->contact_name)) {
+    $focus->contact_name = \htmlspecialchars($_REQUEST['contact_name'], ENT_QUOTES);
 }
-if (isset($_REQUEST['contact_id']) && is_null($focus->contact_id)) {
-    $focus->contact_id = htmlspecialchars($_REQUEST['contact_id'], ENT_QUOTES);
+if (isset($_REQUEST['contact_id']) && \is_null($focus->contact_id)) {
+    $focus->contact_id = \htmlspecialchars($_REQUEST['contact_id'], ENT_QUOTES);
 }
-if (isset($_REQUEST['parent_name']) && is_null($focus->parent_name)) {
-    $focus->parent_name = htmlspecialchars($_REQUEST['parent_name'], ENT_QUOTES);
+if (isset($_REQUEST['parent_name']) && \is_null($focus->parent_name)) {
+    $focus->parent_name = \htmlspecialchars($_REQUEST['parent_name'], ENT_QUOTES);
 }
-if (isset($_REQUEST['parent_id']) && is_null($focus->parent_id)) {
-    $focus->parent_id = htmlspecialchars($_REQUEST['parent_id'], ENT_QUOTES);
+if (isset($_REQUEST['parent_id']) && \is_null($focus->parent_id)) {
+    $focus->parent_id = \htmlspecialchars($_REQUEST['parent_id'], ENT_QUOTES);
 }
 if (isset($_REQUEST['parent_type'])) {
-    $focus->parent_type = htmlspecialchars($_REQUEST['parent_type'], ENT_QUOTES);
+    $focus->parent_type = \htmlspecialchars($_REQUEST['parent_type'], ENT_QUOTES);
 } elseif (!isset($focus->parent_type)) {
     $focus->parent_type = $app_list_strings['record_type_default_key'];
 }
 if (isset($_REQUEST['filename']) && $_REQUEST['isDuplicate'] != 'true') {
-    $focus->filename = htmlspecialchars($_REQUEST['filename'], ENT_QUOTES);
+    $focus->filename = \htmlspecialchars($_REQUEST['filename'], ENT_QUOTES);
 }
 
 if ($has_campaign || $inboundEmail) {
@@ -183,7 +183,7 @@ $xtpl->assign("CANCEL_SCRIPT", $cancel_script);
 $xtpl->assign("PRINT_URL", "index.php?" . $GLOBALS['request_string']);
 $xtpl->assign("JAVASCRIPT", get_set_focus_js() . $quicksearch_js);
 
-if (!is_file(sugar_cached('jsLanguage/') . $GLOBALS['current_language'] . '.js')) {
+if (!\is_file(sugar_cached('jsLanguage/') . $GLOBALS['current_language'] . '.js')) {
     require_once('include/language/jsLanguage.php');
     jsLanguage::createAppStringsCache($GLOBALS['current_language']);
 }
@@ -255,7 +255,7 @@ window.open(\"index.php?module=\"+ document.EditView.parent_type.value +
     $xtpl->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
 }
 if ($focus->parent_type == "Account") {
-    $xtpl->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=" . urlencode($focus->parent_name));
+    $xtpl->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=" . \urlencode($focus->parent_name));
 }
 
 $xtpl->assign("DESCRIPTION", $focus->description);
@@ -282,7 +282,7 @@ if (isset($focus->body_html)) {
 require_once 'include/SuiteEditor/SuiteEditorConnector.php';
 $templateWidth = 600;
 $xtpl->assign('template_width', $templateWidth);
-$xtpl->assign('BODY_EDITOR', SuiteEditorConnector::getHtml(SuiteEditorConnector::getSuiteSettings(isset($focus->body_html) ? html_entity_decode($focus->body_html) : '', $templateWidth)));
+$xtpl->assign('BODY_EDITOR', SuiteEditorConnector::getHtml(SuiteEditorConnector::getSuiteSettings(isset($focus->body_html) ? \html_entity_decode($focus->body_html) : '', $templateWidth)));
 $xtpl->assign('width_style', 'style="display:'.($current_user->getEditorType() != 'mozaik' ? 'none' : 'table-row').';"');
 
 // ---------------------------------
@@ -316,7 +316,7 @@ if (true) {
             $campaign_urls = get_campaign_urls($_REQUEST['campaign_id']);
         }
         if (!empty($campaign_urls)) {
-            $xtpl->assign("DEFAULT_URL_TEXT", key($campaign_urls));
+            $xtpl->assign("DEFAULT_URL_TEXT", \key($campaign_urls));
         }
         if ($has_campaign) {
             $xtpl->assign("TRACKER_KEY_OPTIONS", get_select_options_with_id($campaign_urls, null));
@@ -326,7 +326,7 @@ if (true) {
 
     // create option of "Contact/Lead/Task" from corresponding module
     // translations
-    $lblContactAndOthers = implode('/', array(
+    $lblContactAndOthers = \implode('/', array(
         isset($app_list_strings['moduleListSingular']['Contacts']) ? $app_list_strings['moduleListSingular']['Contacts'] : 'Contact',
         isset($app_list_strings['moduleListSingular']['Leads']) ? $app_list_strings['moduleListSingular']['Leads'] : 'Lead',
         isset($app_list_strings['moduleListSingular']['Prospects']) ? $app_list_strings['moduleListSingular']['Prospects'] : 'Target',
@@ -365,7 +365,7 @@ if (true) {
         if (!isset($notes_list)) {
             $notes_list = array();
         }
-        for ($i = 0; $i < count($notes_list); $i++) {
+        for ($i = 0; $i < \count($notes_list); $i++) {
             $the_note = $notes_list[$i];
             if (empty($the_note->filename)) {
                 continue;

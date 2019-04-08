@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -64,7 +64,7 @@ if ($_REQUEST['from'] == 'DetailView') {
     echo 'false';
 } elseif ($_REQUEST['from'] == 'ListView') {
     $returnString = '';
-    $idArray = explode(',', $_REQUEST['records']);
+    $idArray = \explode(',', $_REQUEST['records']);
     foreach ($idArray as $key => $value) {
         if ($focus->retrieve($value)) {
             if (check_email_template_in_use($focus)) {
@@ -72,7 +72,7 @@ if ($_REQUEST['from'] == 'DetailView') {
             }
         }
     }
-    $returnString = substr($returnString, 0, -1);
+    $returnString = \substr($returnString, 0, -1);
     echo $returnString;
 } else {
     echo '';

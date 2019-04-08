@@ -39,9 +39,9 @@
  */
 
 
-define("CREDENTIAL_CATEGORY", "ml");
-define("CREDENTIAL_USERNAME", "username");
-define("CREDENTIAL_PASSWORD", "password");
+\define("CREDENTIAL_CATEGORY", "ml");
+\define("CREDENTIAL_USERNAME", "username");
+\define("CREDENTIAL_PASSWORD", "password");
 
 require_once('include/nusoap/nusoap.php');
 require_once('include/utils/zip_utils.php');
@@ -60,7 +60,7 @@ class PackageManager
     public function __construct()
     {
         $this->db = DBManagerFactory::getInstance();
-        $this->upload_dir = empty($GLOBALS['sugar_config']['upload_dir']) ? 'upload' : rtrim($GLOBALS['sugar_config']['upload_dir'], '/\\');
+        $this->upload_dir = empty($GLOBALS['sugar_config']['upload_dir']) ? 'upload' : \rtrim($GLOBALS['sugar_config']['upload_dir'], '/\\');
     }
 
     /**
@@ -72,7 +72,7 @@ class PackageManager
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -139,7 +139,7 @@ class PackageManager
                         //check to see if we already this one installed
                         $result = $uh->determineIfUpgrade($myrelease['id_name'], $myrelease['version']);
                         $enable = false;
-                        if ($result == true || is_array($result)) {
+                        if ($result == true || \is_array($result)) {
                             $enable = true;
                         }
                         $nodes[$mypack['category_id']]['packages'][$mypack['id']]['releases'][$myrelease['id']] = array('id' => $myrelease['id'], 'version' => $myrelease['version'], 'label' => $myrelease['description'], 'category_id' => $mypack['category_id'], 'package_id' => $mypack['id'], 'type' => 'release', 'enable' => $enable);
@@ -148,7 +148,7 @@ class PackageManager
                 //array_push($nodes[$mypack['category_id']]['packages'], $package_arr);
             }
         }
-        $GLOBALS['log']->debug("NODES". var_export($nodes, true));
+        $GLOBALS['log']->debug("NODES". \var_export($nodes, true));
         return $nodes;
     }
 
@@ -241,7 +241,7 @@ class PackageManager
         PackageManager::setCredentials($username, $password, $systemname);
         PackageManagerComm::clearSession();
         $result = PackageManagerComm::login($terms_checked);
-        if (is_array($result)) {
+        if (\is_array($result)) {
             return $result;
         }
         return true;
@@ -389,7 +389,7 @@ class PackageManager
     private function addToCleanup($dir)
     {
         if (empty($this->cleanUpDirs)) {
-            register_shutdown_function(array($this, "cleanUpTempDir"));
+            \register_shutdown_function(array($this, "cleanUpTempDir"));
         }
         $this->cleanUpDirs[] = $dir;
     }
@@ -451,7 +451,7 @@ class PackageManager
             if (!$version_ok && isset($manifest['acceptable_sugar_versions']['regex_matches'])) {
                 $matches_empty = false;
                 foreach ($manifest['acceptable_sugar_versions']['regex_matches'] as $match) {
-                    if (preg_match("/$match/", $sugar_version)) {
+                    if (\preg_match("/$match/", $sugar_version)) {
                         $version_ok = true;
                     }
                 }
@@ -471,7 +471,7 @@ class PackageManager
 
 
         foreach ($subdirs as $subdir) {
-            if (preg_match("#/$subdir/#", $type_string)) {
+            if (\preg_match("#/$subdir/#", $type_string)) {
                 return($subdir);
             }
         }
@@ -482,7 +482,7 @@ class PackageManager
     public function performSetup($tempFile, $view = 'module', $display_messages = true)
     {
         global $sugar_config,$mod_strings;
-        $base_filename = urldecode($tempFile);
+        $base_filename = \urldecode($tempFile);
         $GLOBALS['log']->debug("BaseFileName: ".$base_filename);
         $base_upgrade_dir       = $this->upload_dir.'/upgrades';
         $base_tmp_upgrade_dir   = "$base_upgrade_dir/temp";
@@ -491,7 +491,7 @@ class PackageManager
         if ($view == 'module') {
             $license_file = $this->extractFile($base_filename, 'LICENSE.txt', $base_tmp_upgrade_dir);
         }
-        if (is_file($manifest_file)) {
+        if (\is_file($manifest_file)) {
             $GLOBALS['log']->debug("VALIDATING MANIFEST". $manifest_file);
             require_once($manifest_file);
             $this->validate_manifest($manifest);
@@ -514,20 +514,20 @@ class PackageManager
                 }
             }
 
-            $base_filename = preg_replace("#\\\\#", "/", $base_filename);
-            $base_filename = basename($base_filename);
+            $base_filename = \preg_replace("#\\\\#", "/", $base_filename);
+            $base_filename = \basename($base_filename);
             mkdir_recursive("$base_upgrade_dir/$upgrade_zip_type");
             $target_path = "$base_upgrade_dir/$upgrade_zip_type/$base_filename";
             $target_manifest = remove_file_extension($target_path) . "-manifest.php";
 
             if (isset($manifest['icon']) && $manifest['icon'] != "") {
                 $icon_location = $this->extractFile($tempFile, $manifest['icon'], $base_tmp_upgrade_dir);
-                $path_parts = pathinfo($icon_location);
-                copy($icon_location, remove_file_extension($target_path) . "-icon." . $path_parts['extension']);
+                $path_parts = \pathinfo($icon_location);
+                \copy($icon_location, remove_file_extension($target_path) . "-icon." . $path_parts['extension']);
             }
 
-            if (copy($tempFile, $target_path)) {
-                copy($manifest_file, $target_manifest);
+            if (\copy($tempFile, $target_path)) {
+                \copy($manifest_file, $target_manifest);
                 if ($display_messages) {
                     $messages = '<script>ajaxStatus.flashStatus("' .$base_filename.$mod_strings['LBL_UW_UPLOAD_SUCCESS'] . ', 5000");</script>';
                 }
@@ -551,8 +551,8 @@ class PackageManager
     public function unlinkTempFiles()
     {
         global $sugar_config;
-        @unlink($_FILES['upgrade_zip']['tmp_name']);
-        @unlink("upload://".$_FILES['upgrade_zip']['name']);
+        @\unlink($_FILES['upgrade_zip']['tmp_name']);
+        @\unlink("upload://".$_FILES['upgrade_zip']['name']);
     }
 
     public function performInstall($file, $silent=true)
@@ -562,7 +562,7 @@ class PackageManager
         global $current_language;
         $base_upgrade_dir       = $this->upload_dir.'/upgrades';
         $base_tmp_upgrade_dir   = "$base_upgrade_dir/temp";
-        if (!file_exists($base_tmp_upgrade_dir)) {
+        if (!\file_exists($base_tmp_upgrade_dir)) {
             mkdir_recursive($base_tmp_upgrade_dir, true);
         }
 
@@ -571,7 +571,7 @@ class PackageManager
         $mi->silent = $silent;
         $mod_strings = return_module_language($current_language, "Administration");
         $GLOBALS['log']->debug("ABOUT TO INSTALL: ".$file);
-        if (preg_match("#.*\.zip\$#", $file)) {
+        if (\preg_match("#.*\.zip\$#", $file)) {
             $GLOBALS['log']->debug("1: ".$file);
             // handle manifest.php
             $target_manifest = remove_file_extension($file) . '-manifest.php';
@@ -599,7 +599,7 @@ class PackageManager
             $GLOBALS['log']->debug("INSTALLED: ".$file);
             $new_upgrade = new UpgradeHistory();
             $new_upgrade->filename      = $file;
-            $new_upgrade->md5sum        = md5_file($file);
+            $new_upgrade->md5sum        = \md5_file($file);
             $new_upgrade->type          = $manifest['type'];
             $new_upgrade->version       = $manifest['version'];
             $new_upgrade->status        = "installed";
@@ -611,7 +611,7 @@ class PackageManager
             $serial_manifest['manifest'] = (isset($manifest) ? $manifest : '');
             $serial_manifest['installdefs'] = (isset($installdefs) ? $installdefs : '');
             $serial_manifest['upgrade_manifest'] = (isset($upgrade_manifest) ? $upgrade_manifest : '');
-            $new_upgrade->manifest		= base64_encode(serialize($serial_manifest));
+            $new_upgrade->manifest		= \base64_encode(\serialize($serial_manifest));
             //$new_upgrade->unique_key    = (isset($manifest['unique_key'])) ? $manifest['unique_key'] : '';
             $new_upgrade->save();
             //unlink($file);
@@ -630,7 +630,7 @@ class PackageManager
             global $current_language;
             $base_upgrade_dir       = $this->upload_dir.'/upgrades';
             $base_tmp_upgrade_dir   = "$base_upgrade_dir/temp";
-            if (is_file($found->filename)) {
+            if (\is_file($found->filename)) {
                 if (!isset($GLOBALS['mi_remove_tables'])) {
                     $GLOBALS['mi_remove_tables'] = true;
                 }
@@ -640,8 +640,8 @@ class PackageManager
                 $mi->silent = true;
                 $mi->uninstall("$unzip_dir");
                 $found->delete();
-                unlink(remove_file_extension($found->filename) . '-manifest.php');
-                unlink($found->filename);
+                \unlink(remove_file_extension($found->filename) . '-manifest.php');
+                \unlink($found->filename);
             } else {
                 //file(s_ have been deleted or are not found in the directory, allow database delete to happen but no need to change filesystem
                 $found->delete();
@@ -706,7 +706,7 @@ class PackageManager
         $base_upgrade_dir       = "upload://upgrades";
         $uContent = findAllFiles($base_upgrade_dir, array(), false, 'zip');
         $upgrade_contents = array();
-        $content_values = array_values($uContent);
+        $content_values = \array_values($uContent);
         $alreadyProcessed = array();
         foreach ($content_values as $val) {
             if (empty($alreadyProcessed[$val])) {
@@ -719,17 +719,17 @@ class PackageManager
         $packages = array();
         $mod_strings = return_module_language($current_language, "Administration");
         foreach ($upgrade_contents as $upgrade_content) {
-            if (!preg_match('#.*\.zip$#', strtolower($upgrade_content)) || preg_match("#.*./zips/.*#", strtolower($upgrade_content))) {
+            if (!\preg_match('#.*\.zip$#', \strtolower($upgrade_content)) || \preg_match("#.*./zips/.*#", \strtolower($upgrade_content))) {
                 continue;
             }
 
-            $the_base = basename($upgrade_content);
-            $the_md5 = md5_file($upgrade_content);
+            $the_base = \basename($upgrade_content);
+            $the_md5 = \md5_file($upgrade_content);
             $md5_matches = $uh->findByMd5($the_md5);
             $file_install = $upgrade_content;
             if (empty($md5_matches)) {
                 $target_manifest = remove_file_extension($upgrade_content) . '-manifest.php';
-                if (file_exists($target_manifest)) {
+                if (\file_exists($target_manifest)) {
                     require_once($target_manifest);
 
                     $name = empty($manifest['name']) ? $upgrade_content : $manifest['name'];
@@ -750,8 +750,8 @@ class PackageManager
                 if (!empty($dependencies)) {
                     $uh = new UpgradeHistory();
                     $not_found = $uh->checkDependencies($dependencies);
-                    if (!empty($not_found) && count($not_found) > 0) {
-                        $file_install = 'errors_'.$mod_strings['ERR_UW_NO_DEPENDENCY']."[".implode(',', $not_found)."]";
+                    if (!empty($not_found) && \count($not_found) > 0) {
+                        $file_install = 'errors_'.$mod_strings['ERR_UW_NO_DEPENDENCY']."[".\implode(',', $not_found)."]";
                     }
                 }
 
@@ -767,7 +767,7 @@ class PackageManager
                 if (empty($manifest['icon'])) {
                     $icon = $this->getImageForType($manifest['type']);
                 } else {
-                    $path_parts = pathinfo($manifest['icon']);
+                    $path_parts = \pathinfo($manifest['icon']);
                     $icon = "<img src=\"" . remove_file_extension($upgrade_content) . "-icon." . $path_parts['extension'] . "\">";
                 }
 
@@ -787,8 +787,8 @@ class PackageManager
         $base_upgrade_dir       = $this->upload_dir.'/upgrades';
         $base_tmp_upgrade_dir   = "$base_upgrade_dir/temp";
         $license_file = $this->extractFile($file, 'LICENSE.txt', $base_tmp_upgrade_dir);
-        if (is_file($license_file)) {
-            $contents = file_get_contents($license_file);
+        if (\is_file($license_file)) {
+            $contents = \file_get_contents($license_file);
             return $contents;
         }
         return null;
@@ -806,9 +806,9 @@ class PackageManager
     {
         $uh = new UpgradeHistory();
         $in = "";
-        for ($i = 0; $i < count($types); $i++) {
+        for ($i = 0; $i < \count($types); $i++) {
             $in .= "'".$types[$i]."'";
-            if (($i+1) < count($types)) {
+            if (($i+1) < \count($types)) {
                 $in .= ",";
             }
         }
@@ -869,14 +869,14 @@ class PackageManager
                         $serial_manifest['manifest'] = (isset($manifest) ? $manifest : '');
                         $serial_manifest['installdefs'] = (isset($installdefs) ? $installdefs : '');
                         $serial_manifest['upgrade_manifest'] = (isset($upgrade_manifest) ? $upgrade_manifest : '');
-                        $installed->manifest = base64_encode(serialize($serial_manifest));
+                        $installed->manifest = \base64_encode(\serialize($serial_manifest));
                         $installed->save();
                     } else {
-                        $serial_manifest = unserialize(base64_decode($installed->manifest));
+                        $serial_manifest = \unserialize(\base64_decode($installed->manifest));
                         $manifest = $serial_manifest['manifest'];
                     }
                     if (($upgrades_installed==0 || $uh->UninstallAvailable($installeds, $installed))
-                        && is_file($filename) && !empty($manifest['is_uninstallable'])) {
+                        && \is_file($filename) && !empty($manifest['is_uninstallable'])) {
                         $uninstallable = true;
                     }
                     $enabled = $installed->enabled;

@@ -39,7 +39,7 @@
  */
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -80,7 +80,7 @@ class VarDefHandler
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($module, $meta_array_name);
     }
@@ -154,9 +154,9 @@ class VarDefHandler
                     $index = $key;
                 }
 
-                $value = trim($label_name, ':');
+                $value = \trim($label_name, ':');
                 if ($remove_dups) {
-                    if (!in_array($value, $this->options_array)) {
+                    if (!\in_array($value, $this->options_array)) {
                         $this->options_array[$index] = $value;
                     }
                 } else {
@@ -182,7 +182,7 @@ class VarDefHandler
     {
 
         //Filter nothing?
-        if (!is_array($this->target_meta_array)) {
+        if (!\is_array($this->target_meta_array)) {
             return true;
         }
 

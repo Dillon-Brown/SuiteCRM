@@ -53,14 +53,14 @@ class SugarViewTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //execute the method and check if it works and doesn't throws an exception
         //secondly check if it outputs any content to browser
         try {
-            ob_start();
+            \ob_start();
 
             $SugarView->process();
 
-            $renderedContent = ob_get_contents();
-            ob_end_clean();
+            $renderedContent = \ob_get_contents();
+            \ob_end_clean();
 
-            $this->assertGreaterThan(0, strlen($renderedContent));
+            $this->assertGreaterThan(0, \strlen($renderedContent));
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
@@ -85,7 +85,7 @@ class SugarViewTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //execute the method and check if it works and doesn't throws an exception
         try {
             $errors = $SugarView->displayErrors();
-            $this->assertEmpty($errors, print_r($SugarView, true));
+            $this->assertEmpty($errors, \print_r($SugarView, true));
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
@@ -154,14 +154,14 @@ class SugarViewTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //execute the method and check if it works and doesn't throws an exception
         //secondly check if it outputs any content to browser
         try {
-            ob_start();
+            \ob_start();
 
             $SugarView->displayHeader();
 
-            $renderedContent = ob_get_contents();
-            ob_end_clean();
+            $renderedContent = \ob_get_contents();
+            \ob_end_clean();
 
-            $this->assertGreaterThan(0, strlen($renderedContent));
+            $this->assertGreaterThan(0, \strlen($renderedContent));
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
@@ -218,7 +218,7 @@ class SugarViewTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         //check if it returns any text i-e JS code
         $js = SugarView::getJavascriptValidation();
-        $this->assertGreaterThan(0, strlen($js));
+        $this->assertGreaterThan(0, \strlen($js));
     }
 
     public function testdisplayFooter()
@@ -233,14 +233,14 @@ class SugarViewTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //execute the method and check if it works and doesn't throws an exception
         //secondly check if it outputs any content to browser
         try {
-            ob_start();
+            \ob_start();
 
             $SugarView->displayFooter();
 
-            $renderedContent = ob_get_contents();
-            ob_end_clean();
+            $renderedContent = \ob_get_contents();
+            \ob_end_clean();
 
-            $this->assertGreaterThan(0, strlen($renderedContent));
+            $this->assertGreaterThan(0, \strlen($renderedContent));
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
@@ -261,14 +261,14 @@ class SugarViewTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //execute the method and check if it works and doesn't throws an exception
         //secondly check if it outputs any content to browser
         try {
-            ob_start();
+            \ob_start();
 
             $SugarView->renderJavascript();
 
-            $renderedContent = ob_get_contents();
-            ob_end_clean();
+            $renderedContent = \ob_get_contents();
+            \ob_end_clean();
 
-            $this->assertGreaterThan(0, strlen($renderedContent));
+            $this->assertGreaterThan(0, \strlen($renderedContent));
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
@@ -298,7 +298,7 @@ class SugarViewTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //check with valid value and check if it returns an array.
         $menu = $SugarView->getMenu('Users');
-        $this->assertTrue(is_array($menu));
+        $this->assertTrue(\is_array($menu));
     }
 
     public function testgetModuleTitle()
@@ -307,15 +307,15 @@ class SugarViewTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //first execute the method with default value
         $moduleTitle = $SugarView->getModuleTitle();
-        $this->assertGreaterThan(0, strlen($moduleTitle));
+        $this->assertGreaterThan(0, \strlen($moduleTitle));
 
         //second execute the method with true value
         $moduleTitle = $SugarView->getModuleTitle(true);
-        $this->assertGreaterThan(0, strlen($moduleTitle));
+        $this->assertGreaterThan(0, \strlen($moduleTitle));
 
         //third execute the method with false value
         $moduleTitle = $SugarView->getModuleTitle(false);
-        $this->assertGreaterThan(0, strlen($moduleTitle));
+        $this->assertGreaterThan(0, \strlen($moduleTitle));
     }
 
     public function testgetMetaDataFile()
@@ -331,7 +331,7 @@ class SugarViewTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $SugarView->module = 'Users';
 
         $metaDataFile = $SugarView->getMetaDataFile();
-        $this->assertGreaterThan(0, strlen($metaDataFile));
+        $this->assertGreaterThan(0, \strlen($metaDataFile));
     }
 
     public function testgetBrowserTitle()
@@ -340,7 +340,7 @@ class SugarViewTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method. it should return a title string.
         $browserTitle = $SugarView->getBrowserTitle();
-        $this->assertGreaterThan(0, strlen($browserTitle));
+        $this->assertGreaterThan(0, \strlen($browserTitle));
     }
 
     public function testgetBreadCrumbSymbol()
@@ -349,7 +349,7 @@ class SugarViewTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method. it should return a string.
         $breadCrumbSymbol = $SugarView->getBreadCrumbSymbol();
-        $this->assertGreaterThan(0, strlen($breadCrumbSymbol));
+        $this->assertGreaterThan(0, \strlen($breadCrumbSymbol));
     }
 
     public function testcheckPostMaxSizeError()

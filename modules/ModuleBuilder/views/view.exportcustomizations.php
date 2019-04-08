@@ -64,7 +64,7 @@ class ViewExportcustomizations extends SugarView
             $modules[]=$key;
             $custom[]=$value;
         }
-        $nb_mod = count($modules);
+        $nb_mod = \count($modules);
         $smarty->assign('mod_strings', $mod_strings);
         $smarty->assign('modules', $mod);
         $smarty->assign('custom', $custom);

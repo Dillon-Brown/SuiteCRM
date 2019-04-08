@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -92,13 +92,13 @@ class FontManager
 
     private function setFontPath()
     {
-        if (file_exists(K_PATH_CUSTOM_FONTS.$this->filename)) {
+        if (\file_exists(K_PATH_CUSTOM_FONTS.$this->filename)) {
             $this->fontPath = K_PATH_CUSTOM_FONTS;
-        } elseif (file_exists(K_PATH_FONTS.$this->filename)) {
+        } elseif (\file_exists(K_PATH_FONTS.$this->filename)) {
             $this->fontPath = K_PATH_FONTS;
         } else {
             $this->fontPath = "";
-            array_push($this->errors, "Unable to find the font!");
+            \array_push($this->errors, "Unable to find the font!");
         }
     }
     /**
@@ -110,7 +110,7 @@ class FontManager
     {
         if (empty($this->fontList[$this->getFilenameShort()]['type'])) {
             if (!$this->loadFontFile()) {
-                array_push($this->errors, translate('ERR_LOADFONTFILE', 'Configurator'));
+                \array_push($this->errors, translate('ERR_LOADFONTFILE', 'Configurator'));
                 return false;
             }
         }
@@ -128,16 +128,16 @@ class FontManager
     private function getStyle()
     {
         if (empty($this->filename)) {
-            array_push($this->errors, translate("ERR_FONT_EMPTYFILE", "Configurator"));
+            \array_push($this->errors, translate("ERR_FONT_EMPTYFILE", "Configurator"));
             return array();
         }
-        if (preg_match("/bi.php$/i", $this->filename)) {
+        if (\preg_match("/bi.php$/i", $this->filename)) {
             return array("bold","italic");
-        } elseif (preg_match("/ib.php$/i", $this->filename)) {
+        } elseif (\preg_match("/ib.php$/i", $this->filename)) {
             return array("bold","italic");
-        } elseif (preg_match("/b.php$/i", $this->filename)) {
+        } elseif (\preg_match("/b.php$/i", $this->filename)) {
             return array("bold");
-        } elseif (preg_match("/i.php$/i", $this->filename)) {
+        } elseif (\preg_match("/i.php$/i", $this->filename)) {
             return array("italic");
         }
         return array("regular");
@@ -149,15 +149,15 @@ class FontManager
      */
     private function getFontSize()
     {
-        $fileSize=filesize($this->fontPath.$this->filename);
-        $name = substr($this->filename, 0, strrpos($this->filename, '.'));
-        if (file_exists($this->fontPath.$name.".z")) {
-            $fileSize+=filesize($this->fontPath.$name.".z");
+        $fileSize=\filesize($this->fontPath.$this->filename);
+        $name = \substr($this->filename, 0, \strrpos($this->filename, '.'));
+        if (\file_exists($this->fontPath.$name.".z")) {
+            $fileSize+=\filesize($this->fontPath.$name.".z");
         }
-        if (file_exists($this->fontPath.$name.".ctg.z")) {
-            $fileSize+=filesize($this->fontPath.$name.".ctg.z");
+        if (\file_exists($this->fontPath.$name.".ctg.z")) {
+            $fileSize+=\filesize($this->fontPath.$name.".ctg.z");
         }
-        return round($fileSize/1024);
+        return \round($fileSize/1024);
     }
     /**
      * Fill the fontList attribute with the data contains in the font file.
@@ -182,7 +182,7 @@ class FontManager
                 if ($this->font_type == 'cidfont0' || $this->font_type == 'core' || $this->font_type == 'TrueType' || $this->font_type == 'Type1' || $this->font_type == 'TrueTypeUnicode') {
                     $this->fontList[$this->getFilenameShort()]['type'] = $this->font_type;
                 } else {
-                    array_push($this->errors, translate("ERR_FONT_UNKNOW_TYPE", "Configurator") . " " . $this->font_type);
+                    \array_push($this->errors, translate("ERR_FONT_UNKNOW_TYPE", "Configurator") . " " . $this->font_type);
                 }
             }
             $this->fontList[$this->getFilenameShort()]['style'] = $this->getStyle();
@@ -202,7 +202,7 @@ class FontManager
             return false;
         }
         $this->setFontPath();
-        if (!file_exists($this->fontPath.$this->filename)) {
+        if (!\file_exists($this->fontPath.$this->filename)) {
             return false;
         }
         @include($this->fontPath.$this->filename);
@@ -237,24 +237,24 @@ class FontManager
      */
     private function parseFolder()
     {
-        if (!file_exists(K_PATH_FONTS) || !is_dir(K_PATH_FONTS)) {
-            array_push($this->errors, translate("ERR_NO_FONT_PATH", "Configurator"));
+        if (!\file_exists(K_PATH_FONTS) || !\is_dir(K_PATH_FONTS)) {
+            \array_push($this->errors, translate("ERR_NO_FONT_PATH", "Configurator"));
             return false;
         }
-        $result[0] = scandir(K_PATH_FONTS);
-        if (file_exists(K_PATH_CUSTOM_FONTS) && is_dir(K_PATH_CUSTOM_FONTS)) {
-            $result[1] = scandir(K_PATH_CUSTOM_FONTS);
+        $result[0] = \scandir(K_PATH_FONTS);
+        if (\file_exists(K_PATH_CUSTOM_FONTS) && \is_dir(K_PATH_CUSTOM_FONTS)) {
+            $result[1] = \scandir(K_PATH_CUSTOM_FONTS);
         }
         foreach ($result as $v) {
             foreach ($v as $vv) {
-                if (preg_match("/.php$/i", $vv)) {
+                if (\preg_match("/.php$/i", $vv)) {
                     $this->filename = $vv;
                     $this->getDetail();
                 }
             }
         }
-        ksort($this->fontList);
-        if (count($this->fontList)>0) {
+        \ksort($this->fontList);
+        if (\count($this->fontList)>0) {
             return true;
         }
         return false;
@@ -265,7 +265,7 @@ class FontManager
     public function listFontFiles()
     {
         $this->fontList=array();
-        if (file_exists($cachedfile = sugar_cached("Sugarpdf/cachedFontList.php"))) {
+        if (\file_exists($cachedfile = sugar_cached("Sugarpdf/cachedFontList.php"))) {
             require $cachedfile;
             $this->fontList=$cachedFontList;
             return true;
@@ -302,7 +302,7 @@ class FontManager
      */
     private function getFilenameShort()
     {
-        return preg_replace("/.php$/i", "", $this->filename);
+        return \preg_replace("/.php$/i", "", $this->filename);
     }
     /**
      * This method delete all the files related to the font define in the filename attribute.
@@ -316,24 +316,24 @@ class FontManager
         }
         $this->loadFontFile();
         if ($this->font_type == "core" || $this->fontPath == K_PATH_FONTS) {
-            array_push($this->errors, translate("ERR_DELETE_CORE_FILE", "Configurator"));
+            \array_push($this->errors, translate("ERR_DELETE_CORE_FILE", "Configurator"));
             return false;
         }
-        if (file_exists($this->fontPath.$this->filename)) {
-            if (is_writable($this->fontPath.$this->filename)) {
-                unlink($this->fontPath.$this->filename);
-                if (file_exists($this->fontPath.$this->getFilenameShort().".ctg.z") && is_writable($this->fontPath.$this->getFilenameShort().".ctg.z")) {
-                    unlink($this->fontPath.$this->getFilenameShort()."ctg.z");
+        if (\file_exists($this->fontPath.$this->filename)) {
+            if (\is_writable($this->fontPath.$this->filename)) {
+                \unlink($this->fontPath.$this->filename);
+                if (\file_exists($this->fontPath.$this->getFilenameShort().".ctg.z") && \is_writable($this->fontPath.$this->getFilenameShort().".ctg.z")) {
+                    \unlink($this->fontPath.$this->getFilenameShort()."ctg.z");
                 }
-                if (file_exists($this->fontPath.$this->getFilenameShort().".z") && is_writable($this->fontPath.$this->getFilenameShort().".z")) {
-                    unlink($this->fontPath.$this->getFilenameShort().".z");
+                if (\file_exists($this->fontPath.$this->getFilenameShort().".z") && \is_writable($this->fontPath.$this->getFilenameShort().".z")) {
+                    \unlink($this->fontPath.$this->getFilenameShort().".z");
                 }
                 $this->clearCachedFile();
                 return true;
             }
-            array_push($this->errors, $this->fontPath.$this->filename . " " . translate("ERR_FONT_NOT_WRITABLE", "Configurator"));
+            \array_push($this->errors, $this->fontPath.$this->filename . " " . translate("ERR_FONT_NOT_WRITABLE", "Configurator"));
         } else {
-            array_push($this->errors, $this->fontPath . " " . translate("ERR_FONT_FILE_DO_NOT_EXIST", "Configurator"));
+            \array_push($this->errors, $this->fontPath . " " . translate("ERR_FONT_FILE_DO_NOT_EXIST", "Configurator"));
         }
         return false;
     }
@@ -357,28 +357,28 @@ class FontManager
         }
         $error=false;
 
-        $oldStr=ob_get_contents();
-        ob_clean();
+        $oldStr=\ob_get_contents();
+        \ob_clean();
         require_once("include/tcpdf/fonts/utils/makefont.php");
         $filename = MakeFont($font_file, $metric_file, $embedded, $encoding_table, $patch, $cid_info);
 
-        unlink($font_file);
-        unlink($metric_file);
+        \unlink($font_file);
+        \unlink($metric_file);
 
-        $this->log=ob_get_contents();
-        ob_clean();
+        $this->log=\ob_get_contents();
+        \ob_clean();
 
         echo $oldStr;
 
         if (empty($filename)) {
-            array_push($this->errors, translate("ERR_FONT_MAKEFONT", "Configurator"));
+            \array_push($this->errors, translate("ERR_FONT_MAKEFONT", "Configurator"));
             $error=true;
         } else {
             require_once("include/utils/file_utils.php");
-            $this->filename = basename($filename.".php");
+            $this->filename = \basename($filename.".php");
             if (!$this->loadFontFile()) {
                 if (!mkdir_recursive(K_PATH_CUSTOM_FONTS)) {
-                    array_push($this->errors, "Error : Impossible to create the custom font directory.");
+                    \array_push($this->errors, "Error : Impossible to create the custom font directory.");
                     $error=true;
                 } else {
                     $styleLetter="";
@@ -392,30 +392,30 @@ class FontManager
                         default:
                             $styleLetter="";
                     }
-                    sugar_rename($filename.".php", K_PATH_CUSTOM_FONTS.basename($filename.$styleLetter.".php"));
-                    $this->log .= "\n" . translate("LBL_FONT_MOVE_DEFFILE", "Configurator") . K_PATH_CUSTOM_FONTS.basename($filename.$styleLetter.".php");
-                    if (file_exists($filename.".z")) {
-                        sugar_rename($filename.".z", K_PATH_CUSTOM_FONTS.basename($filename.$styleLetter.".z"));
-                        $this->log .= "\n" . translate("LBL_FONT_MOVE_FILE", "Configurator") . K_PATH_CUSTOM_FONTS.basename($filename.$styleLetter.".z");
+                    sugar_rename($filename.".php", K_PATH_CUSTOM_FONTS.\basename($filename.$styleLetter.".php"));
+                    $this->log .= "\n" . translate("LBL_FONT_MOVE_DEFFILE", "Configurator") . K_PATH_CUSTOM_FONTS.\basename($filename.$styleLetter.".php");
+                    if (\file_exists($filename.".z")) {
+                        sugar_rename($filename.".z", K_PATH_CUSTOM_FONTS.\basename($filename.$styleLetter.".z"));
+                        $this->log .= "\n" . translate("LBL_FONT_MOVE_FILE", "Configurator") . K_PATH_CUSTOM_FONTS.\basename($filename.$styleLetter.".z");
                     }
-                    if (file_exists($filename.".ctg.z")) {
-                        sugar_rename($filename.".ctg.z", K_PATH_CUSTOM_FONTS.basename($filename.$styleLetter.".ctg.z"));
-                        $this->log .= "\n" . translate("LBL_FONT_MOVE_FILE", "Configurator") . K_PATH_CUSTOM_FONTS.basename($filename.$styleLetter.".ctg.z");
+                    if (\file_exists($filename.".ctg.z")) {
+                        sugar_rename($filename.".ctg.z", K_PATH_CUSTOM_FONTS.\basename($filename.$styleLetter.".ctg.z"));
+                        $this->log .= "\n" . translate("LBL_FONT_MOVE_FILE", "Configurator") . K_PATH_CUSTOM_FONTS.\basename($filename.$styleLetter.".ctg.z");
                     }
                 }
             } else {
-                array_push($this->errors, "\n".translate("ERR_FONT_ALREADY_EXIST", "Configurator"));
+                \array_push($this->errors, "\n".translate("ERR_FONT_ALREADY_EXIST", "Configurator"));
                 $error=true;
             }
             if ($error) {
-                if (file_exists($filename.".php")) {
-                    unlink($filename.".php");
+                if (\file_exists($filename.".php")) {
+                    \unlink($filename.".php");
                 }
-                if (file_exists($filename.".ctg.z")) {
-                    unlink($filename.".ctg.z");
+                if (\file_exists($filename.".ctg.z")) {
+                    \unlink($filename.".ctg.z");
                 }
-                if (file_exists($filename.".z")) {
-                    unlink($filename.".z");
+                if (\file_exists($filename.".z")) {
+                    \unlink($filename.".z");
                 }
             }
         }
@@ -432,8 +432,8 @@ class FontManager
         if (!is_admin($current_user)) {
             sugar_die($GLOBALS['app_strings']['ERR_NOT_ADMIN']);
         }
-        if (file_exists($cachedfile = sugar_cached("Sugarpdf/cachedFontList.php"))) {
-            return unlink($cachedfile);
+        if (\file_exists($cachedfile = sugar_cached("Sugarpdf/cachedFontList.php"))) {
+            return \unlink($cachedfile);
         }
         return true;
     }

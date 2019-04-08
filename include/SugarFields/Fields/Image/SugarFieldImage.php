@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -130,9 +130,9 @@ class SugarFieldImage extends SugarFieldFile
 
         $valid_ext = isset($sugar_config['image_ext']) ? $sugar_config['image_ext'] : array("image/jpeg","image/png");
 
-        $img_size = getimagesize($upload_file->temp_file_location);
+        $img_size = \getimagesize($upload_file->temp_file_location);
         $filetype = $img_size['mime'];
-        if (in_array($filetype, array_values($valid_ext))) {
+        if (\in_array($filetype, \array_values($valid_ext))) {
             return true;
         }
     }

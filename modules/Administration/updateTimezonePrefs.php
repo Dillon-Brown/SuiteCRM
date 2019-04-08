@@ -45,7 +45,7 @@
 
 <table>
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 $prompt_users = 'checked';
@@ -78,7 +78,7 @@ while ($row = $db->fetchByAssoc($result)) {
     $prefs = array();
     $newprefs = array();
     
-    $prefs = unserialize(base64_decode($row['user_preferences']));
+    $prefs = \unserialize(\base64_decode($row['user_preferences']));
     $setTo = '';
     $alreadySet = '';
     if (!empty($prefs)) {
@@ -121,7 +121,7 @@ while ($row = $db->fetchByAssoc($result)) {
             }
         }
         if ($execute) {
-            $newstr = mysql_real_escape_string(base64_encode(serialize($newprefs)));
+            $newstr = mysql_real_escape_string(\base64_encode(\serialize($newprefs)));
             $db->query("UPDATE users SET user_preferences = '{$newstr}' WHERE id = '{$row['id']}'");
         }
     }

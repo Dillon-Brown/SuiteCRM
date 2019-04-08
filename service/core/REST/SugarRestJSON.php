@@ -1,6 +1,6 @@
 <?php
-if (!defined('sugarEntry')) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry')) {
+    \define('sugarEntry', true);
 }
 /**
  *
@@ -60,8 +60,8 @@ class SugarRestJSON extends SugarRest
     public function generateResponse($input)
     {
         $json = getJSONObj();
-        ob_clean();
-        header('Content-Type: application/json; charset=UTF-8');
+        \ob_clean();
+        \header('Content-Type: application/json; charset=UTF-8');
         if (isset($this->faultObject)) {
             $this->generateFaultResponse($this->faultObject);
         } else {
@@ -85,7 +85,7 @@ class SugarRestJSON extends SugarRest
     {
         $GLOBALS['log']->info('Begin: SugarRestJSON->serve');
         $json_data = !empty($_REQUEST['rest_data'])? $GLOBALS['RAW_REQUEST']['rest_data']: '';
-        if (empty($_REQUEST['method']) || !method_exists($this->implementation, $_REQUEST['method'])) {
+        if (empty($_REQUEST['method']) || !\method_exists($this->implementation, $_REQUEST['method'])) {
             $er = new SoapError();
             $er->set_error('invalid_call');
             $this->fault($er);
@@ -93,10 +93,10 @@ class SugarRestJSON extends SugarRest
             $method = $_REQUEST['method'];
             $json = getJSONObj();
             $data = $json->decode($json_data);
-            if (!is_array($data)) {
+            if (!\is_array($data)) {
                 $data = array($data);
             }
-            $res = call_user_func_array(array( $this->implementation, $method), $data);
+            $res = \call_user_func_array(array( $this->implementation, $method), $data);
             $GLOBALS['log']->info('End: SugarRestJSON->serve');
             return $res;
         } // else
@@ -118,7 +118,7 @@ class SugarRestJSON extends SugarRest
         $error = $errorObject->number . ': ' . $errorObject->name . '<br>' . $errorObject->description;
         $GLOBALS['log']->error($error);
         $json = getJSONObj();
-        ob_clean();
+        \ob_clean();
         // JSONP support
         if (isset($_GET["jsoncallback"])) {
             echo $_GET["jsoncallback"] . "(";

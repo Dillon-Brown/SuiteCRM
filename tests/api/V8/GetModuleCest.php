@@ -28,7 +28,7 @@ class GetModuleCest
         /** @var \ArrayIterator $iterator */
         $iterator = $example->getIterator();
         $id = $I->createAccount();
-        $endpoint = str_replace('{id}', $id, $iterator->offsetGet('endPoint'));
+        $endpoint = \str_replace('{id}', $id, $iterator->offsetGet('endPoint'));
 
         $I->sendGET($I->getInstanceURL() . $endpoint);
         $I->seeResponseCodeIs(200);
@@ -40,7 +40,7 @@ class GetModuleCest
 
         $I->seeResponseJsonMatchesJsonPath('$.data.attributes');
         $assert = $iterator->current() === 'withFields' ? 'assertEquals' : 'assertGreaterThan';
-        $I->{$assert}(2, count($I->grabDataFromResponseByJsonPath('$.data.attributes')[0]));
+        $I->{$assert}(2, \count($I->grabDataFromResponseByJsonPath('$.data.attributes')[0]));
 
         $I->deleteBean('accounts', $id);
     }
@@ -59,10 +59,10 @@ class GetModuleCest
         $endpoint = $I->getInstanceURL() . $iterator->offsetGet('endPoint');
         $detail = $iterator->offsetGet('detail');
 
-        if (in_array($iterator->current(), ['withInvalidField', 'withInvalidFieldKey'], true)) {
+        if (\in_array($iterator->current(), ['withInvalidField', 'withInvalidFieldKey'], true)) {
             $id = $I->createAccount();
-            $endpoint = str_replace('{id}', $id, $endpoint);
-            $detail = str_replace('{id}', $id, $detail);
+            $endpoint = \str_replace('{id}', $id, $endpoint);
+            $detail = \str_replace('{id}', $id, $detail);
         }
 
         $expectedResult = [
@@ -76,9 +76,9 @@ class GetModuleCest
         $I->sendGET($endpoint);
         $I->seeResponseCodeIs(400);
         $I->seeResponseIsJson();
-        $I->seeResponseEquals(json_encode($expectedResult, JSON_PRETTY_PRINT));
+        $I->seeResponseEquals(\json_encode($expectedResult, JSON_PRETTY_PRINT));
 
-        if (in_array($iterator->current(), ['withInvalidField', 'withInvalidFieldKey'], true)) {
+        if (\in_array($iterator->current(), ['withInvalidField', 'withInvalidFieldKey'], true)) {
             $I->deleteBean('accounts', $id);
         }
     }

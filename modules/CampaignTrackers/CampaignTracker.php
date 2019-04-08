@@ -119,7 +119,7 @@ class CampaignTracker extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -129,8 +129,8 @@ class CampaignTracker extends SugarBean
     {
         //make sure that the url has a scheme, if not then add http:// scheme
         if ($this->is_optout!=1) {
-            $url = strtolower(trim($this->tracker_url));
-            if (!preg_match('/^(http|https|ftp):\/\//i', $url)) {
+            $url = \strtolower(\trim($this->tracker_url));
+            if (!\preg_match('/^(http|https|ftp):\/\//i', $url)) {
                 $this->tracker_url = 'http://'.$url;
             }
         }
@@ -165,7 +165,7 @@ class CampaignTracker extends SugarBean
             $this->campaign_name=$row['name'];
         }
 
-        if (!class_exists('Administration')) {
+        if (!\class_exists('Administration')) {
         }
         $admin=new Administration();
         $admin->retrieveSettings('massemailer'); //retrieve all admin settings.

@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -20,7 +20,7 @@ class Jjwg_MapsViewMap_Display extends SugarView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -31,9 +31,9 @@ class Jjwg_MapsViewMap_Display extends SugarView
         // Limit URI query string parameters. Used to avoid URL length errors.
         $valid_names = array('action', 'module', 'entryPoint', 'submit', 'cron', 'geocoding_process', 'process_trigger', 'distance', 'unit_type', 'record', 'related_id', 'related_module', 'quick_address', 'display_module', 'list_id', 'uid', 'current_post');
         $url = $GLOBALS['sugar_config']['site_url'] . '/index.php?module=' . $GLOBALS['currentModule'] . '&action=map_markers';
-        foreach (array_keys($_REQUEST) as $key) {
-            if (in_array($key, $valid_names) && !in_array($key, array('action', 'module', 'entryPoint'))) {
-                $url .= '&'.$key.'='.urlencode($_REQUEST[$key]);
+        foreach (\array_keys($_REQUEST) as $key) {
+            if (\in_array($key, $valid_names) && !\in_array($key, array('action', 'module', 'entryPoint'))) {
+                $url .= '&'.$key.'='.\urlencode($_REQUEST[$key]);
             }
         } ?>
 <script type="text/javascript" src="modules/jjwg_Maps/javascript/jquery.iframe-auto-height.plugin.1.9.3.min.js"></script>
@@ -83,7 +83,7 @@ class Jjwg_MapsViewMap_Display extends SugarView
     if (empty($_REQUEST['uid']) && empty($_REQUEST['current_post'])) {
         ?>
 <p>IFrame:
-    <a href="<?php echo htmlspecialchars($url); ?>"><?php echo $GLOBALS['mod_strings']['LBL_MAP']; ?> URL</a>
+    <a href="<?php echo \htmlspecialchars($url); ?>"><?php echo $GLOBALS['mod_strings']['LBL_MAP']; ?> URL</a>
     <a href="#" id="resizeMapDisplayIframe" style="display: none;">.</a>
 </p>
 <?php

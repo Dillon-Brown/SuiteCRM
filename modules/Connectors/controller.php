@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -55,7 +55,7 @@ class ConnectorsController extends SugarController
 
     public function process()
     {
-        if (!is_admin($GLOBALS['current_user']) && in_array($this->action, $this->admin_actions)) {
+        if (!is_admin($GLOBALS['current_user']) && \in_array($this->action, $this->admin_actions)) {
             $this->hasAccess = false;
         }
         parent::process();
@@ -97,7 +97,7 @@ class ConnectorsController extends SugarController
             foreach ($searchDefs as $source => $modules) {
                 if (empty($sMap[$source])) {
                     $instance = ConnectorFactory::getInstance($source);
-                    $sMap[$source] = array_flip($instance->getModuleMapping($merge_module));
+                    $sMap[$source] = \array_flip($instance->getModuleMapping($merge_module));
                 }
 
                 if (!empty($sMap[$source][$search_term])) {
@@ -141,8 +141,8 @@ class ConnectorsController extends SugarController
 
             $val = $result->$field;
             if (!empty($val)) {
-                if (strlen($val) > 50) {
-                    $val = substr($val, 0, 47) . '...';
+                if (\strlen($val) > 50) {
+                    $val = \substr($val, 0, 47) . '...';
                 }
                 $str .= $label . ': ' .  $val.'<br/>';
             }
@@ -151,7 +151,7 @@ class ConnectorsController extends SugarController
         $json = getJSONobj();
         $retArray = array();
 
-        $retArray['body'] = !empty($str) ? str_replace(array("\rn", "\r", "\n"), array('','','<br />'), $str) : $GLOBALS['mod_strings']['ERROR_NO_ADDITIONAL_DETAIL'];
+        $retArray['body'] = !empty($str) ? \str_replace(array("\rn", "\r", "\n"), array('','','<br />'), $str) : $GLOBALS['mod_strings']['ERROR_NO_ADDITIONAL_DETAIL'];
         $retArray['caption'] = "<div style='float:left'>{$GLOBALS['app_strings']['LBL_ADDITIONAL_DETAILS']}</div>";
         $retArray['width'] = (empty($results['width']) ? '300' : $results['width']);
         $retArray['theme'] = $theme;
@@ -226,10 +226,10 @@ class ConnectorsController extends SugarController
             $source = SourceFactory::getSource($source_id);
 
             $method = 'ext_'.$_REQUEST['source_func'];
-            if (method_exists($source, $method)) {
+            if (\method_exists($source, $method)) {
                 echo $json->encode($source->$method($_REQUEST));
             } else {
-                echo $json->encode(array('error'=>true,'errorMessage'=>'Could Not Find Function: '.$method.' in class: '.get_class($source)));
+                echo $json->encode(array('error'=>true,'errorMessage'=>'Could Not Find Function: '.$method.' in class: '.\get_class($source)));
             }
         } else {
             echo $json->encode(array('error'=>true,'errorMessage'=>'Source Id is not specified.'));
@@ -238,13 +238,13 @@ class ConnectorsController extends SugarController
 
     private function remoteFileExists($url)
     {
-        $curl = curl_init($url);
+        $curl = \curl_init($url);
 
         //don't fetch the actual page, you only want to check the connection is ok
-        curl_setopt($curl, CURLOPT_NOBODY, true);
+        \curl_setopt($curl, CURLOPT_NOBODY, true);
 
         //do request
-        $result = curl_exec($curl);
+        $result = \curl_exec($curl);
 
 
         $ret = false;
@@ -252,14 +252,14 @@ class ConnectorsController extends SugarController
         //if request did not fail
         if ($result !== false) {
             //if request was ok, check response code
-            $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            $statusCode = \curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
             if ($statusCode == 200) {
                 $ret = true;
             }
         }
 
-        curl_close($curl);
+        \curl_close($curl);
 
         return $ret;
     }
@@ -270,7 +270,7 @@ class ConnectorsController extends SugarController
 
         $url = $_REQUEST['url'];
 
-        if (!preg_match('/^http[s]{0,1}\:\/\//', $url)) {
+        if (!\preg_match('/^http[s]{0,1}\:\/\//', $url)) {
             throw new RuntimeException('Illegal request');
         }
 
@@ -279,14 +279,14 @@ class ConnectorsController extends SugarController
         }
 
 
-        if (false === ($result = @file_get_contents($_REQUEST['url']))) {
+        if (false === ($result = @\file_get_contents($_REQUEST['url']))) {
             echo '';
         } else {
             if (!empty($_REQUEST['xml'])) {
                 $values = array();
-                $p = xml_parser_create();
-                xml_parse_into_struct($p, $result, $values);
-                xml_parser_free($p);
+                $p = \xml_parser_create();
+                \xml_parse_into_struct($p, $result, $values);
+                \xml_parser_free($p);
                 $json = getJSONobj();
                 echo $json->encode($values);
             } else {
@@ -300,7 +300,7 @@ class ConnectorsController extends SugarController
         $this->view = 'ajax';
         $source_id = $_REQUEST['source_id'];
         $module = $_REQUEST['module_id'];
-        $return_params = explode(',', $_REQUEST['fields']);
+        $return_params = \explode(',', $_REQUEST['fields']);
         require_once('include/connectors/ConnectorFactory.php');
         $component = ConnectorFactory::getInstance($source_id);
         $beans = $component->fillBeans($_REQUEST, $module);
@@ -329,7 +329,7 @@ class ConnectorsController extends SugarController
         $id = $_REQUEST['record_id'];
         $mapping = $_REQUEST['mapping'];
 
-        $mapping = explode(',', $mapping);
+        $mapping = \explode(',', $mapping);
         //Error checking
 
         //Load bean
@@ -371,11 +371,11 @@ class ConnectorsController extends SugarController
         $sources = array();
         $properties = array();
         foreach ($_REQUEST as $name=>$value) {
-            if (preg_match("/^source[0-9]+$/", $name, $matches)) {
+            if (\preg_match("/^source[0-9]+$/", $name, $matches)) {
                 $source_id = $value;
                 $properties = array();
                 foreach ($_REQUEST as $arg=>$val) {
-                    if (preg_match("/^{$source_id}_(.*?)$/", $arg, $matches2)) {
+                    if (\preg_match("/^{$source_id}_(.*?)$/", $arg, $matches2)) {
                         $properties[$matches2[1]] = $val;
                     }
                 }
@@ -392,7 +392,7 @@ class ConnectorsController extends SugarController
         // BEGIN SUGAR INT
         if (empty($_REQUEST['from_unit_test'])) {
             // END SUGAR INT
-            header("Location: index.php?action=ConnectorSettings&module=Connectors");
+            \header("Location: index.php?action=ConnectorSettings&module=Connectors");
             // BEGIN SUGAR INT
         }
         // END SUGAR INT
@@ -408,10 +408,10 @@ class ConnectorsController extends SugarController
         require_once('include/connectors/sources/SourceFactory.php');
 
         $connectors = ConnectorUtils::getConnectors();
-        $connector_keys = array_keys($connectors);
+        $connector_keys = \array_keys($connectors);
 
         $modules_sources = ConnectorUtils::getDisplayConfig();
-        if (!is_array($modules_sources)) {
+        if (!\is_array($modules_sources)) {
             $modules_sources = (array)$modules_sources;
         }
 
@@ -420,9 +420,9 @@ class ConnectorsController extends SugarController
         $new_modules_sources = array();
 
         if (!empty($_REQUEST['display_values'])) {
-            $display_values = explode(',', $_REQUEST['display_values']);
+            $display_values = \explode(',', $_REQUEST['display_values']);
             foreach ($display_values as $value) {
-                $entry = explode(':', $value);
+                $entry = \explode(':', $value);
                 $mod = get_module_from_singular($entry[1]); // get the internal module name
                 $new_modules_sources[$mod][$entry[0]] = $entry[0];
             }
@@ -430,7 +430,7 @@ class ConnectorsController extends SugarController
 
         //These are the sources that were modified.
         //We only update entries for these sources that have been changed
-        $display_sources = explode(',', $_REQUEST['display_sources']);
+        $display_sources = \explode(',', $_REQUEST['display_sources']);
         foreach ($display_sources as $source) {
             $sources[$source] = $source;
         } //foreach
@@ -446,7 +446,7 @@ class ConnectorsController extends SugarController
                 }
             }
         }
-        $removedModules = array_keys($removedModules);
+        $removedModules = \array_keys($removedModules);
         foreach ($removedModules as $key) {
             if (empty($new_modules_sources[$key])) {
                 ConnectorUtils::cleanMetaDataFile($key);
@@ -520,11 +520,11 @@ class ConnectorsController extends SugarController
             if (empty($sources_modules[$source])) {
                 //Now write the new mapping entry to the custom folder
                 $dir = $connectors[$id]['directory'];
-                if (!preg_match('/^custom\//', $dir)) {
+                if (!\preg_match('/^custom\//', $dir)) {
                     $dir = 'custom/' . $dir;
                 }
 
-                if (!file_exists("{$dir}")) {
+                if (!\file_exists("{$dir}")) {
                     mkdir_recursive("{$dir}");
                 }
 
@@ -542,7 +542,7 @@ class ConnectorsController extends SugarController
         foreach ($sources_modules as $id => $modules) {
             $source = SourceFactory::getSource($id);
             $mapping = $source->getMapping();
-            $mapped_modules = array_keys($mapping['beans']);
+            $mapped_modules = \array_keys($mapping['beans']);
 
             foreach ($mapped_modules as $module) {
                 if (empty($sources_modules[$id][$module])) {
@@ -557,7 +557,7 @@ class ConnectorsController extends SugarController
                     $originalMapping = $source->getOriginalMapping();
                     if (empty($originalMapping['beans'][$module])) {
                         $defs = $source->getFieldDefs();
-                        $keys = array_keys($defs);
+                        $keys = \array_keys($defs);
                         $new_mapping_entry = array();
                         foreach ($keys as $key) {
                             $new_mapping_entry[$key] = '';
@@ -570,13 +570,13 @@ class ConnectorsController extends SugarController
             } //foreach
 
             if ($id == 'ext_rest_twitter' || $id == 'ext_rest_facebook') {
-                $full_list = array_keys($mapping['beans']);
+                $full_list = \array_keys($mapping['beans']);
 
-                $new_modules = array_diff($full_list, $mapped_modules);
+                $new_modules = \array_diff($full_list, $mapped_modules);
 
-                if (count($new_modules) > 0) {
+                if (\count($new_modules) > 0) {
                     foreach ($new_modules as $module) {
-                        $field_name = substr($id, 9) . '_user_c';
+                        $field_name = \substr($id, 9) . '_user_c';
 
                         $bean = BeanFactory::newBean($module);
 
@@ -591,11 +591,11 @@ class ConnectorsController extends SugarController
 
             //Now write the new mapping entry to the custom folder
             $dir = $connectors[$id]['directory'];
-            if (!preg_match('/^custom\//', $dir)) {
+            if (!\preg_match('/^custom\//', $dir)) {
                 $dir = 'custom/' . $dir;
             }
 
-            if (!file_exists("{$dir}")) {
+            if (!\file_exists("{$dir}")) {
                 mkdir_recursive("{$dir}");
             }
 
@@ -618,7 +618,7 @@ class ConnectorsController extends SugarController
         // BEGIN SUGAR INT
         if (empty($_REQUEST['from_unit_test'])) {
             // END SUGAR INT
-            header("Location: index.php?action=ConnectorSettings&module=Connectors");
+            \header("Location: index.php?action=ConnectorSettings&module=Connectors");
             // BEGIN SUGAR INT
         }
         // END SUGAR INT
@@ -632,16 +632,16 @@ class ConnectorsController extends SugarController
      */
     public function action_SaveModifyMapping()
     {
-        $mapping_sources = !empty($_REQUEST['mapping_sources']) ? explode(',', $_REQUEST['mapping_sources']) : array();
-        $mapping_values = !empty($_REQUEST['mapping_values']) ? explode(',', $_REQUEST['mapping_values']) : array();
+        $mapping_sources = !empty($_REQUEST['mapping_sources']) ? \explode(',', $_REQUEST['mapping_sources']) : array();
+        $mapping_values = !empty($_REQUEST['mapping_values']) ? \explode(',', $_REQUEST['mapping_values']) : array();
 
         //Build the source->module->fields mapping
         $source_modules_fields = array();
         foreach ($mapping_values as $id) {
-            $parts = explode(':', $id);
-            $key_vals = explode('=', $parts[2]);
+            $parts = \explode(':', $id);
+            $key_vals = \explode('=', $parts[2]);
             //Note the strtolwer call... we are lowercasing the key values
-            $source_modules_fields[$parts[0]][$parts[1]][strtolower($key_vals[0])] = $key_vals[1];
+            $source_modules_fields[$parts[0]][$parts[1]][\strtolower($key_vals[0])] = $key_vals[1];
         } //foreach
 
         foreach ($mapping_sources as $source_id) {
@@ -673,11 +673,11 @@ class ConnectorsController extends SugarController
 
             //Now write the new mapping entry to the custom folder
             $dir = $source_entries[$id]['directory'];
-            if (!preg_match('/^custom\//', $dir)) {
+            if (!\preg_match('/^custom\//', $dir)) {
                 $dir = 'custom/' . $dir;
             }
 
-            if (!file_exists("{$dir}")) {
+            if (!\file_exists("{$dir}")) {
                 mkdir_recursive("{$dir}");
             }
 
@@ -693,7 +693,7 @@ class ConnectorsController extends SugarController
         // BEGIN SUGAR INT
         if (empty($_REQUEST['from_unit_test'])) {
             // END SUGAR INT
-            header("Location: index.php?action=ConnectorSettings&module=Connectors");
+            \header("Location: index.php?action=ConnectorSettings&module=Connectors");
             // BEGIN SUGAR INT
         }
         // END SUGAR INT
@@ -707,7 +707,7 @@ class ConnectorsController extends SugarController
         $source = SourceFactory::getSource($source_id);
         $properties = array();
         foreach ($_REQUEST as $name=>$value) {
-            if (preg_match("/^{$source_id}_(.*?)$/", $name, $matches)) {
+            if (\preg_match("/^{$source_id}_(.*?)$/", $name, $matches)) {
                 $properties[$matches[1]] = $value;
             }
         }
@@ -756,7 +756,7 @@ class ConnectorsController extends SugarController
         $field = array(
                 array(
                         'name' => $field_name,
-                        'label' => 'LBL_' . strtoupper($field_name),
+                        'label' => 'LBL_' . \strtoupper($field_name),
                         'type' => 'varchar',
                         'module' => $module,
                         'ext1' => 'LIST',
@@ -789,12 +789,12 @@ class ConnectorsController extends SugarController
         require_once('modules/ModuleBuilder/parsers/ParserFactory.php');
         $parser = ParserFactory::getParser($view, $module);
 
-        if (!array_key_exists($field['0']['name'], $parser->_fielddefs)) {
+        if (!\array_key_exists($field['0']['name'], $parser->_fielddefs)) {
             //add newly created fields to fielddefs as they wont be there.
             $parser->_fielddefs[ $field['0']['name'] ] = $field['0'];
         }
 
-        if (!array_key_exists($panel_name, $parser->_viewdefs['panels'])) {
+        if (!\array_key_exists($panel_name, $parser->_viewdefs['panels'])) {
             //create the layout for the row.
             $field_defs = array(0 => $field['0']['name']);
 

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -44,7 +44,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 global $current_user;
 
 if (is_admin($current_user)) {
-    if (count($_POST)) {
+    if (\count($_POST)) {
         if (!empty($_POST['activate'])) {
             $status = '';
             if ($_POST['activate'] == 'false') {

@@ -63,7 +63,7 @@ class AOW_WorkFlowTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($aowWorkFlow->id));
-        $this->assertEquals(36, strlen($aowWorkFlow->id));
+        $this->assertEquals(36, \strlen($aowWorkFlow->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $aowWorkFlow->mark_deleted($aowWorkFlow->id);
@@ -158,7 +158,7 @@ class AOW_WorkFlowTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test for AOS_Quotes. it will return null as no test data is available
         $aowWorkFlow->flow_module = 'AOS_Quotes';
         $result = $aowWorkFlow->get_flow_beans();
-        $this->assertGreaterThanOrEqual(0, count((array)$result));
+        $this->assertGreaterThanOrEqual(0, \count((array)$result));
     }
 
     public function testbuild_flow_query_join()
@@ -218,7 +218,7 @@ class AOW_WorkFlowTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $call = new Call();
         $aowCondition = new AOW_Condition();
         $aowCondition->name = 'test';
-        $aowCondition->module_path = base64_encode(serialize(array('')));
+        $aowCondition->module_path = \base64_encode(\serialize(array('')));
         $aowCondition->field = 'name';
         $aowCondition->value = 'testval';
 
@@ -351,7 +351,7 @@ class AOW_WorkFlowTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($processed->id));
-        $this->assertEquals(36, strlen($processed->id));
+        $this->assertEquals(36, \strlen($processed->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $processed->mark_deleted($processed->id);

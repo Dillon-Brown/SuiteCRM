@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -92,7 +92,7 @@ class CalendarDashlet extends Dashlet
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id, $def);
     }
@@ -102,7 +102,7 @@ class CalendarDashlet extends Dashlet
      */
     public function display()
     {
-        ob_start();
+        \ob_start();
 
         if (isset($GLOBALS['cal_strings'])) {
             return parent::display() . "Only one Calendar dashlet is allowed.";
@@ -129,8 +129,8 @@ class CalendarDashlet extends Dashlet
 
         $display->display();
 
-        $str = ob_get_contents();
-        ob_end_clean();
+        $str = \ob_get_contents();
+        \ob_end_clean();
 
         return parent::display() . $str;
     }

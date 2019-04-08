@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -89,7 +89,7 @@ class Release extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -115,7 +115,7 @@ class Release extends SugarBean
         }
         $query .= " order by list_order asc";
         $result = $this->db->query($query, false);
-        $GLOBALS['log']->debug("get_releases: result is ".var_export($result, true));
+        $GLOBALS['log']->debug("get_releases: result is ".\var_export($result, true));
 
         $list = array();
         if ($add_blank) {
@@ -167,7 +167,7 @@ class Release extends SugarBean
     {
         $where_clauses = array();
         $the_query_string = DBManagerFactory::getInstance()->quote($the_query_string);
-        array_push($where_clauses, "name like '$the_query_string%'");
+        \array_push($where_clauses, "name like '$the_query_string%'");
 
         $the_where = "";
         foreach ($where_clauses as $clause) {

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -81,10 +81,10 @@ class ImportFileSplitter
         $recordThreshold = 1000
         ) {
         // sanitize crazy values to the default value
-        if (!is_int($recordThreshold) || $recordThreshold < 1) {
+        if (!\is_int($recordThreshold) || $recordThreshold < 1) {
             //if this is not an int but is still a
             //string representation of a number, then cast to an int
-            if (!is_int($recordThreshold) && is_numeric($recordThreshold)) {
+            if (!\is_int($recordThreshold) && \is_numeric($recordThreshold)) {
                 //cast the string to an int
                 $recordThreshold = (int)$recordThreshold;
             } else {
@@ -103,7 +103,7 @@ class ImportFileSplitter
      */
     public function fileExists()
     {
-        if (!is_file($this->_sourceFile) || !is_readable($this->_sourceFile)) {
+        if (!\is_file($this->_sourceFile) || !\is_readable($this->_sourceFile)) {
             return false;
         }
 
@@ -139,25 +139,25 @@ class ImportFileSplitter
         while ($row = $importFile->getNextRow()) {
             // after $this->_recordThreshold rows, close this import file and goto the next one
             if ($count >= $this->_recordThreshold) {
-                fclose($fw);
+                \fclose($fw);
                 $filecount++;
                 $fw = sugar_fopen("{$this->_sourceFile}-{$filecount}", "w");
                 $count = 0;
             }
             // Bug 25119: Trim the enclosure string to remove any blank spaces that may have been added.
-            $enclosure = trim($enclosure);
+            $enclosure = \trim($enclosure);
             if (!empty($enclosure)) {
                 foreach ($row as $key => $v) {
-                    $row[$key] = str_replace($enclosure, $enclosure.$enclosure, $v);
+                    $row[$key] = \str_replace($enclosure, $enclosure.$enclosure, $v);
                 }
             }
-            $line = $enclosure.implode($enclosure.$delimiter.$enclosure, $row).$enclosure.PHP_EOL;
+            $line = $enclosure.\implode($enclosure.$delimiter.$enclosure, $row).$enclosure.PHP_EOL;
             //Would normally use fputcsv() here. But when enclosure character is used and the field value doesn't include delimiter, enclosure, escape character, "\n", "\r", "\t", or " ", php default function 'fputcsv' will not use enclosure for this string.
-            fputs($fw, $line);
+            \fputs($fw, $line);
             $count++;
         }
 
-        fclose($fw);
+        \fclose($fw);
         $this->_fileCount   = $filecount;
         $this->_recordCount = ($filecount * $this->_recordThreshold) + $count;
         // increment by one to get true count of files created

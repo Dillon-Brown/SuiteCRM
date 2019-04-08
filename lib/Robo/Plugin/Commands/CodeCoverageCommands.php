@@ -75,7 +75,7 @@ class CodeCoverageCommands extends \Robo\Tasks
      */
     private function isEnvironmentTravisCI()
     {
-        return !empty(getenv('TRAVIS'));
+        return !empty(\getenv('TRAVIS'));
     }
 
     /**
@@ -84,7 +84,7 @@ class CodeCoverageCommands extends \Robo\Tasks
      */
     private function getCommitRangeForTravisCi()
     {
-        return getenv('TRAVIS_COMMIT_RANGE');
+        return \getenv('TRAVIS_COMMIT_RANGE');
     }
 
     /**

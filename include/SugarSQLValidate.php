@@ -73,11 +73,11 @@ class SugarSQLValidate
         $parsed = $parser->parse($testquery);
         //$GLOBALS['log']->debug("PARSE: ".var_export($parsed, true));
 
-        if (count($parsed) != $clauses) {
+        if (\count($parsed) != $clauses) {
             // we assume: SELECT, FROM, WHERE, maybe ORDER
             return false;
         }
-        $parts = array_keys($parsed);
+        $parts = \array_keys($parsed);
         if ($parts[0] != "SELECT" || $parts[1] != "FROM" || $parts[2] != "WHERE") {
             // check the keys to be SELECT, FROM, WHERE
             return false;
@@ -87,12 +87,12 @@ class SugarSQLValidate
             return false;
         }
         // verify SELECT didn't change
-        if (count($parsed["SELECT"]) != 1 || $parsed["SELECT"][0] !== array('expr_type' => 'colref','alias' => '`dummy`', 'base_expr' => 'dummy', 'sub_tree' => false)) {
+        if (\count($parsed["SELECT"]) != 1 || $parsed["SELECT"][0] !== array('expr_type' => 'colref','alias' => '`dummy`', 'base_expr' => 'dummy', 'sub_tree' => false)) {
             $GLOBALS['log']->debug("validation failed SELECT");
             return false;
         }
         // verify FROM didn't change
-        if (count($parsed["FROM"]) != 1 || $parsed["FROM"][0] !== array('table' => 'dummytable', 'alias' => 'dummytable', 'join_type' => 'JOIN', 'ref_type' => '', 'ref_clause' => '', 'base_expr' => false, 'sub_tree' => false)) {
+        if (\count($parsed["FROM"]) != 1 || $parsed["FROM"][0] !== array('table' => 'dummytable', 'alias' => 'dummytable', 'join_type' => 'JOIN', 'ref_type' => '', 'ref_clause' => '', 'base_expr' => false, 'sub_tree' => false)) {
             $GLOBALS['log']->debug("validation failed FROM");
             return false;
         }
@@ -125,7 +125,7 @@ class SugarSQLValidate
     protected function validateExpression($expr, $allow_some_subqueries = false)
     {
         foreach ($expr as $term) {
-            if (!is_array($term)) {
+            if (!\is_array($term)) {
                 continue;
             }
             // check subtrees
@@ -149,7 +149,7 @@ class SugarSQLValidate
             }
             if ($term['expr_type'] == 'function') {
                 // prohibit some functions
-                if (in_array(strtolower($term['base_expr']), $this->bad_functions)) {
+                if (\in_array(\strtolower($term['base_expr']), $this->bad_functions)) {
                     $GLOBALS['log']->debug("validation failed function");
                     return false;
                 }
@@ -160,7 +160,7 @@ class SugarSQLValidate
                 return false;
             }
             if (!empty($term['alias']) && $term['alias'] != $term['base_expr'] && $term['alias'] != "`".$term['base_expr']."`") {
-                $GLOBALS['log']->debug("validation failed alias: ".var_export($term, true));
+                $GLOBALS['log']->debug("validation failed alias: ".\var_export($term, true));
                 return false;
             }
         }
@@ -239,10 +239,10 @@ class SugarSQLValidate
         if ($name == ",") {
             return true;
         } // sometimes , gets as column name
-        $name = strtolower($name); // case does not matter
+        $name = \strtolower($name); // case does not matter
 
-        $parts = explode(".", $name);
-        if (count($parts) > 2) {
+        $parts = \explode(".", $name);
+        if (\count($parts) > 2) {
             // too many dots
             return false;
         }
@@ -254,13 +254,13 @@ class SugarSQLValidate
             }
 
             //Remove leading and trailing ` characters for the part
-            if (preg_match('/^[\`](.+?)[\`]$/', $part, $matches)) {
+            if (\preg_match('/^[\`](.+?)[\`]$/', $part, $matches)) {
                 $part = $matches[1];
             }
 
             //We added an exception for # symbol (see Bug 50324)
             //This should be removed when Bug 50360 is resolved
-            if (preg_match('/[^a-z0-9._#]/', $part)) {
+            if (\preg_match('/[^a-z0-9._#]/', $part)) {
                 // bad chars in name
                 return false;
             }

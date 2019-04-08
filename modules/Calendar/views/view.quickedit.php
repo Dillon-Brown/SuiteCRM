@@ -68,11 +68,11 @@ class CalendarViewQuickEdit extends SugarView
                 
         $base = 'modules/' . $module . '/metadata/';
         $source = 'custom/'.$base.'quickcreatedefs.php';
-        if (!file_exists($source)) {
+        if (!\file_exists($source)) {
             $source = $base . 'quickcreatedefs.php';
-            if (!file_exists($source)) {
+            if (!\file_exists($source)) {
                 $source = 'custom/' . $base . 'editviewdefs.php';
-                if (!file_exists($source)) {
+                if (!\file_exists($source)) {
                     $source = $base . 'editviewdefs.php';
                 }
             }
@@ -110,10 +110,10 @@ class CalendarViewQuickEdit extends SugarView
         );
         
         if ($repeat_arr = CalendarUtils::get_sendback_repeat_data($this->bean)) {
-            $json_arr = array_merge($json_arr, array("repeat" => $repeat_arr));
+            $json_arr = \array_merge($json_arr, array("repeat" => $repeat_arr));
         }
             
-        ob_clean();
-        echo json_encode($json_arr);
+        \ob_clean();
+        echo \json_encode($json_arr);
     }
 }

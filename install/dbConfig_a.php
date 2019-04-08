@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -145,7 +145,7 @@ foreach ($config_params as $group => $gdata) {
 FORM;
             //if the type is password, set a hidden field to capture the value.  This is so that we can properly encode special characters, which is a limitation with password fields
             if ($type=='password') {
-                $form .= "<input type='$type' name='{$name}_entry' id='{$name}_entry' value='".urldecode($sessval)."'><input type='hidden' name='$name' id='$name' value='".urldecode($sessval)."'>";
+                $form .= "<input type='$type' name='{$name}_entry' id='{$name}_entry' value='".\urldecode($sessval)."'><input type='hidden' name='$name' id='$name' value='".\urldecode($sessval)."'>";
             } else {
                 $form .= "<input type='$type' name='$name' id='$name' value='$sessval'>";
             }
@@ -175,7 +175,7 @@ if ($db->supports("create_user")) {
         if ($_SESSION['dbUSRData']=='provide') {
             $provide_select ='selected';
         }
-        if (isset($_SESSION['install_type'])  && !empty($_SESSION['install_type'])  && strtolower($_SESSION['install_type'])=='custom') {
+        if (isset($_SESSION['install_type'])  && !empty($_SESSION['install_type'])  && \strtolower($_SESSION['install_type'])=='custom') {
             if ($_SESSION['dbUSRData']=='create') {
                 $create_select ='selected';
             }
@@ -194,9 +194,9 @@ if ($db->supports("create_user")) {
 
 
 
-    $setup_db_sugarsales_password = urldecode($_SESSION['setup_db_sugarsales_password']);
-    $setup_db_sugarsales_user = urldecode($_SESSION['setup_db_sugarsales_user']);
-    $setup_db_sugarsales_password_retype = urldecode($_SESSION['setup_db_sugarsales_password_retype']);
+    $setup_db_sugarsales_password = \urldecode($_SESSION['setup_db_sugarsales_password']);
+    $setup_db_sugarsales_user = \urldecode($_SESSION['setup_db_sugarsales_user']);
+    $setup_db_sugarsales_password_retype = \urldecode($_SESSION['setup_db_sugarsales_password_retype']);
 
     $out2 .=<<<EOQ2
 <br>

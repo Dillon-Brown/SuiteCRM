@@ -116,11 +116,11 @@ class FilterInterpreter
      */
     public function isFilterByPreMadeName(array $filterStructure)
     {
-        if (is_array($filterStructure) === false) {
+        if (\is_array($filterStructure) === false) {
             throw new InvalidArgumentException('[JsonApi][v1][Filters][Interpreters][isFilterByPreMadeName][expected type to be array]');
         }
 
-        return count($filterStructure) === 1 && is_array(current($filterStructure)) === false;
+        return \count($filterStructure) === 1 && \is_array(\current($filterStructure)) === false;
     }
 
     /**
@@ -130,13 +130,13 @@ class FilterInterpreter
      */
     public function isFilterById(array $filterStructure)
     {
-        if (is_array($filterStructure) === false) {
+        if (\is_array($filterStructure) === false) {
             throw new InvalidArgumentException('[JsonApi][v1][Filters][Interpreters][isFilterById][expected type to be array]');
         }
 
-        return count($filterStructure) === 1 &&
-            array_keys($filterStructure)[0] === '[id]' &&
-            is_array(current($filterStructure)) === true;
+        return \count($filterStructure) === 1 &&
+            \array_keys($filterStructure)[0] === '[id]' &&
+            \is_array(\current($filterStructure)) === true;
     }
 
     /**
@@ -146,15 +146,15 @@ class FilterInterpreter
      */
     public function isFilterByAttributes(array $filterStructure)
     {
-        if (is_array($filterStructure) === false) {
+        if (\is_array($filterStructure) === false) {
             throw new Exception('[JsonApi][v1][Filters][Interpreters][isFilterByAttributes][expected type to be array]');
         }
 
         $fieldValidator = new FieldValidator($this->containers);
-        return count($filterStructure) >= 1 &&
-            is_array(current($filterStructure)) === true &&
-            array_keys($filterStructure)[0] !== '[id]' &&
-        $fieldValidator->isValid(array_keys($filterStructure)[0]);
+        return \count($filterStructure) >= 1 &&
+            \is_array(\current($filterStructure)) === true &&
+            \array_keys($filterStructure)[0] !== '[id]' &&
+        $fieldValidator->isValid(\array_keys($filterStructure)[0]);
     }
 
     /**
@@ -166,7 +166,7 @@ class FilterInterpreter
     public function getFilterByPreMadeName(array $filterStructure)
     {
         $filter = '';
-        $filterName = current($filterStructure);
+        $filterName = \current($filterStructure);
         $interpreters = $this->containers->get('ByPreMadeFilterInterpreters');
 
         /** @var  \SuiteCRM\API\JsonApi\v1\Filters\Interfaces\ByPreMadeFilterInterpreter $interpreter */
@@ -197,7 +197,7 @@ class FilterInterpreter
         $filter = $interpreter->getByIdFilter($filterStructure);
 
         if (empty($filter)) {
-            if (is_array($filterStructure) === false) {
+            if (\is_array($filterStructure) === false) {
                 throw new Exception('[JsonApi][v1][Filters][Interpreters][getFilterById][cannot find filter]');
             }
         }
@@ -238,28 +238,28 @@ class FilterInterpreter
                     throw new BadRequestException('[getFilterByAttributes][field does not exist] "'.$fieldName.'"');
                 }
 
-                if (is_array($fieldOperations) === false) {
+                if (\is_array($fieldOperations) === false) {
                     throw new BadRequestException('[getFilterByAttributes][operations does not exist]');
                 }
 
                 // Build the SQL Query for each operation [operator, [operand, ...] ...] in this filter
                 // By iterating through $fieldOperations array
                 $index = 0;
-                $end = count($fieldOperations);
+                $end = \count($fieldOperations);
                 $lastOperator = null;
                 $operands = array();
                 while ($index < $end) {
                     // Lets play: Is this element an operator or an operand?
-                    if ($operator->hasOperator(current($fieldOperations))) {
+                    if ($operator->hasOperator(\current($fieldOperations))) {
                         // It's an operator
                         if ($lastOperator === null) {
                             // So this is the first operator
-                            $lastOperator = $this->getOperator(current($fieldOperations));
+                            $lastOperator = $this->getOperator(\current($fieldOperations));
                             // So lets keep going ...
                             // Meanwhile lets collect the operands
                             // Until we see an other operator or the end of the array
                             $index++;
-                            next($fieldOperations);
+                            \next($fieldOperations);
                             // Next Operator or Operand
                             continue;
                         }
@@ -280,15 +280,15 @@ class FilterInterpreter
                         // We need to start again.
                         // So lets keep going ...
                         // Until we see an other operator or the end of the array
-                        $lastOperator = $this->getOperator(current($fieldOperations));
+                        $lastOperator = $this->getOperator(\current($fieldOperations));
                     } else {
                         // It's an Operand, let's keep looking for more operands
                         // Until we see an other operator or the end of the array
-                        $operands[] = current($fieldOperations);
+                        $operands[] = \current($fieldOperations);
                     }
 
                     $index++;
-                    next($fieldOperations);
+                    \next($fieldOperations);
                     // Next Operator or Operand
                 }
 
@@ -325,12 +325,12 @@ class FilterInterpreter
         }
 
         // Lets build the last operation into a SQL Query
-        $sqlField = implode('.', array($tableName, $filterOperator->stripFilterTag($field)));
+        $sqlField = \implode('.', array($tableName, $filterOperator->stripFilterTag($field)));
         $sqlOperator = $lastOperator->toSqlOperator();
         $sqlOperands = $lastOperator->toSqlOperands($operands);
 
         // Here's where the real magic happens
-        return implode(' ', array($sqlField, $sqlOperator, $sqlOperands));
+        return \implode(' ', array($sqlField, $sqlOperator, $sqlOperands));
     }
 
 
@@ -380,7 +380,7 @@ class FilterInterpreter
      */
     protected function isCustomField($field, array $args)
     {
-        if (!is_string($field)) {
+        if (!\is_string($field)) {
             throw new \InvalidArgumentException('isCustomField requires $field to be a string');
         }
 
@@ -401,7 +401,7 @@ class FilterInterpreter
      */
     protected function toCustomTable($table)
     {
-        if (!is_string($table)) {
+        if (!\is_string($table)) {
             throw new \InvalidArgumentException('toCustom requires $table to be a string');
         }
 

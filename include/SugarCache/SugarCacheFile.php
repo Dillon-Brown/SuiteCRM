@@ -99,7 +99,7 @@ class SugarCacheFile extends SugarCacheAbstract
         parent::__destruct();
 
         if ($this->_cacheChanged) {
-            sugar_file_put_contents(sugar_cached($this->_cacheFileName), serialize($this->_localStore));
+            sugar_file_put_contents(sugar_cached($this->_cacheFileName), \serialize($this->_localStore));
         }
     }
 
@@ -109,7 +109,7 @@ class SugarCacheFile extends SugarCacheAbstract
     public function __wakeup()
     {
         // clean all properties
-        foreach (get_object_vars($this) as $k => $v) {
+        foreach (\get_object_vars($this) as $k => $v) {
             $this->$k = null;
         }
         throw new Exception("Not a serializable object");
@@ -134,8 +134,8 @@ class SugarCacheFile extends SugarCacheAbstract
         $key
         ) {
         // load up the external cache file
-        if (is_file($cachedfile = sugar_cached($this->_cacheFileName))) {
-            $this->localCache = unserialize(file_get_contents($cachedfile));
+        if (\is_file($cachedfile = sugar_cached($this->_cacheFileName))) {
+            $this->localCache = \unserialize(\file_get_contents($cachedfile));
         }
 
         if (isset($this->_localStore[$key])) {

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -122,7 +122,7 @@ if (!isset($_REQUEST['copy_count']) || ($_REQUEST['copy_count'] == "")) {
 if (empty($_REQUEST['unzip_dir']) || $_REQUEST['unzip_dir'] == "." || $_REQUEST['unzip_dir'] == "..") {
     die($mod_strings['ERR_UW_NO_TEMP_DIR']);
 }
-$unzip_dir = $base_tmp_upgrade_dir. "/". basename($_REQUEST['unzip_dir']);
+$unzip_dir = $base_tmp_upgrade_dir. "/". \basename($_REQUEST['unzip_dir']);
 
 if (empty($_REQUEST['install_file'])) {
     die($mod_strings['ERR_UW_NO_INSTALL_FILE']);
@@ -133,12 +133,12 @@ $install_type   = getInstallType($install_file);
 
 //from here on out, the install_file is used as the file path to copy or rename the physical file, so let's remove the stream wrapper if it's set
 //and replace it with the proper upload location
-if (strpos($install_file, 'upload://') === 0) {
+if (\strpos($install_file, 'upload://') === 0) {
     //get the upload location if it's set, or default to 'upload'
-    $upload_dir = empty($GLOBALS['sugar_config']['upload_dir']) ? 'upload' : rtrim($GLOBALS['sugar_config']['upload_dir'], '/\\');
+    $upload_dir = empty($GLOBALS['sugar_config']['upload_dir']) ? 'upload' : \rtrim($GLOBALS['sugar_config']['upload_dir'], '/\\');
 
     //replace the wrapper in the file name with the directory
-    $install_file = str_replace('upload:/', $upload_dir, $install_file);
+    $install_file = \str_replace('upload:/', $upload_dir, $install_file);
     $_REQUEST['install_file'] = $install_file;
 }
 
@@ -198,9 +198,9 @@ $uh_status      = "";
 $rest_dir = remove_file_extension($install_file)."-restore";
 
 $files_to_handle  = array();
-register_shutdown_function("rmdir_recursive", $unzip_dir);
+\register_shutdown_function("rmdir_recursive", $unzip_dir);
 
-if (((defined('MODULE_INSTALLER_PACKAGE_SCAN') && MODULE_INSTALLER_PACKAGE_SCAN)
+if (((\defined('MODULE_INSTALLER_PACKAGE_SCAN') && MODULE_INSTALLER_PACKAGE_SCAN)
     || !empty($GLOBALS['sugar_config']['moduleInstaller']['packageScan'])) && $install_type != 'patch') {
     require_once('ModuleInstall/ModuleScanner.php');
     $ms = new ModuleScanner();
@@ -217,16 +217,16 @@ if (((defined('MODULE_INSTALLER_PACKAGE_SCAN') && MODULE_INSTALLER_PACKAGE_SCAN)
 if ($install_type == 'patch' || $install_type == 'module') {
     switch ($mode) {
         case 'Install':
-            $file = "$unzip_dir/" . constant('SUGARCRM_PRE_INSTALL_FILE');
-            if (is_file($file)) {
+            $file = "$unzip_dir/" . \constant('SUGARCRM_PRE_INSTALL_FILE');
+            if (\is_file($file)) {
                 print("{$mod_strings['LBL_UW_INCLUDING']}: $file <br>\n");
                 include($file);
                 pre_install();
             }
             break;
         case 'Uninstall':
-            $file = "$unzip_dir/" . constant('SUGARCRM_PRE_UNINSTALL_FILE');
-            if (is_file($file)) {
+            $file = "$unzip_dir/" . \constant('SUGARCRM_PRE_UNINSTALL_FILE');
+            if (\is_file($file)) {
                 print("{$mod_strings['LBL_UW_INCLUDING']}: $file <br>\n");
                 include($file);
                 pre_uninstall();
@@ -246,7 +246,7 @@ for ($iii = 0; $iii < $_REQUEST['copy_count']; $iii++) {
         $file_to_copy = $_REQUEST["copy_" . $iii];
         $src_file   = clean_path("$unzip_dir/$zip_from_dir/$file_to_copy");
 
-        $sugar_home_dir = getCwd();
+        $sugar_home_dir = \getCwd();
         $dest_file  = clean_path("$sugar_home_dir/$zip_to_dir/$file_to_copy");
         if ($zip_to_dir != '.') {
             $rest_file  = clean_path("$rest_dir/$zip_to_dir/$file_to_copy");
@@ -256,27 +256,27 @@ for ($iii = 0; $iii < $_REQUEST['copy_count']; $iii++) {
 
         switch ($mode) {
             case "Install":
-                mkdir_recursive(dirname($dest_file));
+                mkdir_recursive(\dirname($dest_file));
 
-                if ($install_type=="patch" && is_file($dest_file)) {
-                    if (!is_dir(dirname($rest_file))) {
-                        mkdir_recursive(dirname($rest_file));
+                if ($install_type=="patch" && \is_file($dest_file)) {
+                    if (!\is_dir(\dirname($rest_file))) {
+                        mkdir_recursive(\dirname($rest_file));
                     }
 
-                    copy($dest_file, $rest_file);
-                    sugar_touch($rest_file, filemtime($dest_file));
+                    \copy($dest_file, $rest_file);
+                    sugar_touch($rest_file, \filemtime($dest_file));
                 }
 
-                if (!copy($src_file, $dest_file)) {
+                if (!\copy($src_file, $dest_file)) {
                     die($mod_strings['ERR_UW_COPY_FAILED'].$src_file.$mod_strings['LBL_TO'].$dest_file);
                 }
                 $uh_status = "installed";
                 break;
             case "Uninstall":
-                if ($install_type=="patch" && is_file($rest_file)) {
-                    copy($rest_file, $dest_file);
-                    sugar_touch($dest_file, filemtime($rest_file));
-                } elseif (file_exists($dest_file) && !unlink($dest_file)) {
+                if ($install_type=="patch" && \is_file($rest_file)) {
+                    \copy($rest_file, $dest_file);
+                    sugar_touch($dest_file, \filemtime($rest_file));
+                } elseif (\file_exists($dest_file) && !\unlink($dest_file)) {
                     die($mod_strings['ERR_UW_REMOVE_FAILED'].$dest_file);
                 }
                 $uh_status = "uninstalled";
@@ -323,7 +323,7 @@ switch ($install_type) {
                 $lang_changed_string .= $mod_strings['LBL_DEFAULT_LANGUAGE_CHANGE'].$sugar_config['languages'][$default_sugar_instance_lang].'<br/>';
             }
         }
-        ksort($sugar_config);
+        \ksort($sugar_config);
         if (!write_array_to_file("sugar_config", $sugar_config, "config.php")) {
             die($mod_strings['ERR_UW_CONFIG_FAILED']);
         }
@@ -340,8 +340,8 @@ switch ($install_type) {
                     $mi->install("$unzip_dir");
                 }
 
-                $file = "$unzip_dir/" . constant('SUGARCRM_POST_INSTALL_FILE');
-                if (is_file($file)) {
+                $file = "$unzip_dir/" . \constant('SUGARCRM_POST_INSTALL_FILE');
+                if (\is_file($file)) {
                     print("{$mod_strings['LBL_UW_INCLUDING']}: $file <br>\n");
                     include($file);
                     post_install();
@@ -381,8 +381,8 @@ switch ($install_type) {
     case "patch":
         switch ($mode) {
             case 'Install':
-                $file = "$unzip_dir/" . constant('SUGARCRM_POST_INSTALL_FILE');
-                if (is_file($file)) {
+                $file = "$unzip_dir/" . \constant('SUGARCRM_POST_INSTALL_FILE');
+                if (\is_file($file)) {
                     print("{$mod_strings['LBL_UW_INCLUDING']}: $file <br>\n");
                     include($file);
                     post_install();
@@ -391,14 +391,14 @@ switch ($install_type) {
                 UWrebuild();
                 break;
             case 'Uninstall':
-                $file = "$unzip_dir/" . constant('SUGARCRM_POST_UNINSTALL_FILE');
-                if (is_file($file)) {
+                $file = "$unzip_dir/" . \constant('SUGARCRM_POST_UNINSTALL_FILE');
+                if (\is_file($file)) {
                     print("{$mod_strings['LBL_UW_INCLUDING']}: $file <br>\n");
                     include($file);
                     post_uninstall();
                 }
 
-                if (is_dir($rest_dir)) {
+                if (\is_dir($rest_dir)) {
                     rmdir_recursive($rest_dir);
                 }
 
@@ -410,7 +410,7 @@ switch ($install_type) {
 
         require("sugar_version.php");
         $sugar_config['sugar_version'] = $sugar_version;
-        ksort($sugar_config);
+        \ksort($sugar_config);
 
         if (!write_array_to_file("sugar_config", $sugar_config, "config.php")) {
             die($mod_strings['ERR_UW_UPDATE_CONFIG']);
@@ -432,12 +432,12 @@ switch ($mode) {
                $new_upgrade->id = $previous_id;
                $uh = new UpgradeHistory();
                $uh->retrieve($previous_id);
-               if (is_file($uh->filename)) {
-                   unlink($uh->filename);
+               if (\is_file($uh->filename)) {
+                   \unlink($uh->filename);
                }
            }
         $new_upgrade->filename      = $install_file;
-        $new_upgrade->md5sum        = md5_file($install_file);
+        $new_upgrade->md5sum        = \md5_file($install_file);
         $new_upgrade->type          = $install_type;
         $new_upgrade->version       = $version;
         $new_upgrade->status        = "installed";
@@ -448,11 +448,11 @@ switch ($mode) {
         $new_upgrade->save();
 
         //Check if we need to show a page for the user to finalize their install with.
-        if (is_file("$unzip_dir/manifest.php")) {
+        if (\is_file("$unzip_dir/manifest.php")) {
             include("$unzip_dir/manifest.php");
             if (!empty($manifest['post_install_url'])) {
                 $url_conf = $manifest['post_install_url'];
-                if (is_string($url_conf)) {
+                if (\is_string($url_conf)) {
                     $url_conf = array('url' => $url_conf);
                 }
                 if (isset($url_conf['type']) && $url_conf['type'] == 'popup') {
@@ -471,9 +471,9 @@ switch ($mode) {
     case "Uninstall":
         $file_action = "removed";
         $uh = new UpgradeHistory();
-        $the_md5 = md5_file($install_file);
+        $the_md5 = \md5_file($install_file);
         $md5_matches = $uh->findByMd5($the_md5);
-        if (sizeof($md5_matches) == 0) {
+        if (\sizeof($md5_matches) == 0) {
             die("{$mod_strings['ERR_UW_NO_UPDATE_RECORD']} $install_file.");
         }
         foreach ($md5_matches as $md5_match) {
@@ -483,9 +483,9 @@ switch ($mode) {
     case "Disable":
         $file_action = "disabled";
         $uh = new UpgradeHistory();
-        $the_md5 = md5_file($install_file);
+        $the_md5 = \md5_file($install_file);
         $md5_matches = $uh->findByMd5($the_md5);
-        if (sizeof($md5_matches) == 0) {
+        if (\sizeof($md5_matches) == 0) {
             die("{$mod_strings['ERR_UW_NO_UPDATE_RECORD']} $install_file.");
         }
         foreach ($md5_matches as $md5_match) {
@@ -496,9 +496,9 @@ switch ($mode) {
     case "Enable":
         $file_action = "enabled";
         $uh = new UpgradeHistory();
-        $the_md5 = md5_file($install_file);
+        $the_md5 = \md5_file($install_file);
         $md5_matches = $uh->findByMd5($the_md5);
-        if (sizeof($md5_matches) == 0) {
+        if (\sizeof($md5_matches) == 0) {
             die("{$mod_strings['ERR_UW_NO_UPDATE_RECORD']} $install_file.");
         }
         foreach ($md5_matches as $md5_match) {
@@ -525,7 +525,7 @@ if (isset($lang_changed_string)) {
     print($lang_changed_string);
 }
 if ($install_type != "module" && $install_type != "langpack") {
-    if (sizeof($files_to_handle) > 0) {
+    if (\sizeof($files_to_handle) > 0) {
         echo '<div style="text-align: left; cursor: hand; cursor: pointer; text-decoration: underline;" onclick=\'this.style.display="none"; toggleDisplay("more");\' id="all_text">' . SugarThemeRegistry::current()->getImage('advanced_search', '', null, null, ".gif", $mod_strings['LBL_ADVANCED_SEARCH']) . ' '.$mod_strings['LBL_UW_SHOW_DETAILS'].'</div><div id=\'more\' style=\'display: none\'>
             <div style="text-align: left; cursor: hand; cursor: pointer; text-decoration: underline;" onclick=\'document.getElementById("all_text").style.display=""; toggleDisplay("more");\'>' . SugarThemeRegistry::current()->getImage('basic_search', '', null, null, ".gif", $mod_strings['LBL_BASIC_SEARCH']) .' '.$mod_strings['LBL_UW_HIDE_DETAILS'].'</div><br>';
         print("{$mod_strings['LBL_UW_FOLLOWING_FILES']} $file_action:<br>\n");

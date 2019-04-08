@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -121,7 +121,7 @@ class EmailTemplateParser
         $templateData = [];
 
         foreach (static::$allowedAttributes as $key) {
-            if (property_exists($this->template, $key)) {
+            if (\property_exists($this->template, $key)) {
                 $templateData[$key] = $this->getParsedValue($this->template->$key);
             }
         }
@@ -136,11 +136,11 @@ class EmailTemplateParser
      */
     private function getParsedValue($attributeValue)
     {
-        $matches = preg_match_all(static::PATTERN, $attributeValue, $variables);
+        $matches = \preg_match_all(static::PATTERN, $attributeValue, $variables);
 
         if ($matches !== 0) {
             foreach ($variables[0] as $variable) {
-                $attributeValue = str_replace($variable, $this->getValueFromBean($variable), $attributeValue);
+                $attributeValue = \str_replace($variable, $this->getValueFromBean($variable), $attributeValue);
             }
         }
 
@@ -159,11 +159,11 @@ class EmailTemplateParser
     {
         global $app_list_strings;
 
-        $charVariable = chr(36);
-        $charUnderscore = chr(95);
+        $charVariable = \chr(36);
+        $charUnderscore = \chr(95);
 
-        if (strpos($variable, $charVariable) === false || strpos($variable, $charUnderscore) === false) {
-            $GLOBALS['log']->warn(sprintf(
+        if (\strpos($variable, $charVariable) === false || \strpos($variable, $charUnderscore) === false) {
+            $GLOBALS['log']->warn(\sprintf(
                 'Variable %s parsed to an empty string, because attribute has no %s or %s character',
                 $variable,
                 $charVariable,
@@ -172,13 +172,13 @@ class EmailTemplateParser
             return '';
         }
 
-        $parts = explode($charUnderscore, ltrim($variable, $charVariable));
-        list($moduleName, $attribute) = [array_shift($parts), join($charUnderscore, $parts)];
-        if (in_array($attribute, static::$allowedVariables, true)) {
+        $parts = \explode($charUnderscore, \ltrim($variable, $charVariable));
+        list($moduleName, $attribute) = [\array_shift($parts), \join($charUnderscore, $parts)];
+        if (\in_array($attribute, static::$allowedVariables, true)) {
             return $this->getNonDBVariableValue($attribute);
         }
 
-        if ($this->module instanceof $moduleName && property_exists($this->module, $attribute)) {
+        if ($this->module instanceof $moduleName && \property_exists($this->module, $attribute)) {
             if (isset($this->module->field_name_map[$attribute]['type']) && ($this->module->field_name_map[$attribute]['type']) === 'enum') {
                 $enum = $this->module->field_name_map[$attribute]['options'];
                 if (isset($app_list_strings[$enum][$this->module->$attribute])) {
@@ -188,11 +188,11 @@ class EmailTemplateParser
             return $this->module->$attribute;
         }
 
-        $GLOBALS['log']->warn(sprintf(
+        $GLOBALS['log']->warn(\sprintf(
             'Variable %s parsed to an empty string, because attribute %s is not set in %s bean',
             $variable,
             $attribute,
-            get_class($this->module)
+            \get_class($this->module)
         ));
         return '';
     }
@@ -222,7 +222,7 @@ class EmailTemplateParser
         if ($attribute === 'survey_url_display' && $this->module instanceof Person) {
             /** @var Contact $contact */
             $contact = $this->module;
-            $value = sprintf(
+            $value = \sprintf(
                 '%s/index.php?entryPoint=survey&id=%s&contact=%s&tracker=%s',
                 $this->siteUrl,
                 $this->getSurvey()->id,

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -108,30 +108,30 @@ class HTTP_WebDAV_Server_iCal extends HTTP_WebDAV_Server
         }
 
         if (!empty($sugar_config['session_dir'])) {
-            session_save_path($sugar_config['session_dir']);
+            \session_save_path($sugar_config['session_dir']);
         }
 
-        session_start();
+        \session_start();
 
         $query_arr = array();
         // set path
         if (empty($_SERVER["PATH_INFO"])) {
             $this->path = "/";
-            if (strtolower($_SERVER["REQUEST_METHOD"]) == 'get') {
+            if (\strtolower($_SERVER["REQUEST_METHOD"]) == 'get') {
                 $query_arr = $_REQUEST;
             } else {
-                parse_str($_REQUEST['parms'], $query_arr);
+                \parse_str($_REQUEST['parms'], $query_arr);
             }
         } else {
             $this->path = $this->_urldecode($_SERVER["PATH_INFO"]);
 
-            if (ini_get("magic_quotes_gpc")) {
-                $this->path = stripslashes($this->path);
+            if (\ini_get("magic_quotes_gpc")) {
+                $this->path = \stripslashes($this->path);
             }
 
-            $query_str = preg_replace('/^\//', '', $this->path);
+            $query_str = \preg_replace('/^\//', '', $this->path);
             $query_arr = array();
-            parse_str($query_str, $query_arr);
+            \parse_str($query_str, $query_arr);
         }
 
 
@@ -161,7 +161,7 @@ class HTTP_WebDAV_Server_iCal extends HTTP_WebDAV_Server
                 $user = $this->user_focus;
                 $user->retrieve_by_string_fields(['user_name' => $query_arr['user_name']]);
                 if ($user->id === null
-                    && !$user::findUserPassword($user->user_name, md5($query_arr['password']))
+                    && !$user::findUserPassword($user->user_name, \md5($query_arr['password']))
                 ) {
                     $this->http_status("401 not authorized");
                     echo 'Invalid username or password';
@@ -209,7 +209,7 @@ class HTTP_WebDAV_Server_iCal extends HTTP_WebDAV_Server
     {
         if ($this->vcal_type == 'vfb') {
             $this->http_status("200 OK");
-            ob_end_clean();
+            \ob_end_clean();
             echo $this->vcal_focus->get_vcal_freebusy($this->user_focus);
         } else {
             if ($this->vcal_type == 'ics') {
@@ -219,23 +219,23 @@ class HTTP_WebDAV_Server_iCal extends HTTP_WebDAV_Server
                     || $this->user_focus->is_authenticated()
                 ) {
                     $this->http_status("200 OK");
-                    header('Content-Type: text/calendar; charset="' . $this->cal_charset . '"');
-                    $result = mb_convert_encoding(html_entity_decode($this->vcal_focus->getVcalIcal(
+                    \header('Content-Type: text/calendar; charset="' . $this->cal_charset . '"');
+                    $result = \mb_convert_encoding(\html_entity_decode($this->vcal_focus->getVcalIcal(
                         $this->user_focus,
                         $_REQUEST['num_months']
                     ), ENT_QUOTES, $this->cal_charset), $this->cal_encoding);
-                    ob_end_clean();
+                    \ob_end_clean();
                     echo $result;
 
                     return;
                 }
 
                 $this->http_status("401 not authorized");
-                header('WWW-Authenticate: Basic realm="SugarCRM iCal"');
+                \header('WWW-Authenticate: Basic realm="SugarCRM iCal"');
                 echo 'Authorization required';
             } else {
                 $this->http_status("404 Not Found");
-                ob_end_clean();
+                \ob_end_clean();
             }
         }
     }
@@ -257,7 +257,7 @@ class HTTP_WebDAV_Server_iCal extends HTTP_WebDAV_Server
         $this->_http_status = $status;
 
         // generate HTTP status response
-        header("HTTP/$this->http_spec $status");
-        header("X-WebDAV-Status: $status", true);
+        \header("HTTP/$this->http_spec $status");
+        \header("X-WebDAV-Status: $status", true);
     }
 }

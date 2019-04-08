@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -213,7 +213,7 @@ HTML;
         $html = '';
         foreach ($appListStringsFieldOptions as $field_option_key => $field_option) {
             if ($field_option != null) {
-                if (!empty($lead->$fieldName) && in_array($field_option_key, unencodeMultienum($lead->$fieldName))) {
+                if (!empty($lead->$fieldName) && \in_array($field_option_key, unencodeMultienum($lead->$fieldName))) {
                     $_checked = ' checked';
                 } else {
                     $_checked = '';
@@ -348,16 +348,16 @@ HTML;
         $colsFirst = isset($request[$formCols[0]]) ? $request[$formCols[0]] : null;
         $colsSecond = isset($request[$formCols[1]]) ? $request[$formCols[1]] : null;
         if (!empty($colsFirst) && !empty($colsSecond)) {
-            if (count($colsFirst) < count($colsSecond)) {
-                $columns= count($colsSecond);
+            if (\count($colsFirst) < \count($colsSecond)) {
+                $columns= \count($colsSecond);
             }
-            if (count($colsFirst) > count($colsSecond) || count($colsFirst) == count($colsSecond)) {
-                $columns= count($colsFirst);
+            if (\count($colsFirst) > \count($colsSecond) || \count($colsFirst) == \count($colsSecond)) {
+                $columns= \count($colsFirst);
             }
         } elseif (!empty($colsFirst)) {
-            $columns= count($colsFirst);
+            $columns= \count($colsFirst);
         } elseif (!empty($colsSecond)) {
-            $columns= count($colsSecond);
+            $columns= \count($colsSecond);
         }
         return $columns;
     }
@@ -375,7 +375,7 @@ HTML;
 
     private static function getArrayOfFieldInfo($lead, $colsField, &$requiredFields)
     {
-        $field_vname= preg_replace('/:$/', '', translate($lead->field_defs[$colsField]['vname'], $lead->module_dir));
+        $field_vname= \preg_replace('/:$/', '', translate($lead->field_defs[$colsField]['vname'], $lead->module_dir));
         $field_name= $colsField;
         $field_label = $field_vname .": ";
         if (isset($lead->field_defs[$colsField]['custom_type']) && $lead->field_defs[$colsField]['custom_type'] != null) {
@@ -393,13 +393,13 @@ HTML;
         if (isset($lead->field_defs[$colsField]['required']) && $lead->field_defs[$colsField]['required'] != null
             && $lead->field_defs[$colsField]['required'] != 0) {
             $field_required = $lead->field_defs[$colsField]['required'];
-            if (! in_array($lead->field_defs[$colsField]['name'], $requiredFields)) {
-                array_push($requiredFields, $lead->field_defs[$colsField]['name']);
+            if (! \in_array($lead->field_defs[$colsField]['name'], $requiredFields)) {
+                \array_push($requiredFields, $lead->field_defs[$colsField]['name']);
             }
         }
         if ($lead->field_defs[$colsField]['name']=='last_name') {
-            if (! in_array($lead->field_defs[$colsField]['name'], $requiredFields)) {
-                array_push($requiredFields, $lead->field_defs[$colsField]['name']);
+            if (! \in_array($lead->field_defs[$colsField]['name'], $requiredFields)) {
+                \array_push($requiredFields, $lead->field_defs[$colsField]['name']);
             }
         }
         $field_options = null;
@@ -449,7 +449,7 @@ HTML;
                 $colsFields[$k] = !empty($request[$formCol][$i]) ? $request[$formCol][$i] : null;
             }
 
-            if ($colsFieldCount = count($formCols)) {
+            if ($colsFieldCount = \count($formCols)) {
                 $colHtml = '';
                 $foundField = false;
                 for ($j = 0; $j < $colsFieldCount; $j++) {
@@ -464,8 +464,8 @@ HTML;
                         } elseif ($field_type == 'bool') {
                             $colHtml .= self::getFieldBoolHTML($field_name, $field_required, $field_label, $webRequiredSymbol);
                             $foundField = true;
-                            if (!in_array($lead->field_defs[$colsFields[$j]]['name'], $bool_fields)) {
-                                array_push($bool_fields, $lead->field_defs[$colsFields[$j]]['name']);
+                            if (!\in_array($lead->field_defs[$colsFields[$j]]['name'], $bool_fields)) {
+                                \array_push($bool_fields, $lead->field_defs[$colsFields[$j]]['name']);
                             }
                         } elseif ($field_type == 'date') {
                             $colHtml .= self::getFieldDateHTML($field_name, $field_required, $field_label, $webRequiredSymbol);

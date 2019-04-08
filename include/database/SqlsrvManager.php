@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -157,13 +157,13 @@ class SqlsrvManager extends MssqlManager
     {
         global $sugar_config;
 
-        if (is_null($configOptions)) {
+        if (\is_null($configOptions)) {
             $configOptions = $sugar_config['dbconfig'];
         }
 
         //set the connections parameters
         $connect_param = '';
-        $configOptions['db_host_instance'] = trim($configOptions['db_host_instance']);
+        $configOptions['db_host_instance'] = \trim($configOptions['db_host_instance']);
         if (empty($configOptions['db_host_instance'])) {
             $connect_param = $configOptions['db_host_name'];
         } else {
@@ -216,7 +216,7 @@ class SqlsrvManager extends MssqlManager
      */
     public function query($sql, $dieOnError = false, $msg = '', $suppress = false, $keepResult = false)
     {
-        if (is_array($sql)) {
+        if (\is_array($sql)) {
             return $this->queryArray($sql, $dieOnError, $msg, $suppress);
         }
         $sql = $this->_appendN($sql);
@@ -224,11 +224,11 @@ class SqlsrvManager extends MssqlManager
         $this->countQuery($sql);
         LoggerManager::getLogger()->info('Query:' . $this->removeLineBreaks($sql));
         $this->checkConnection();
-        $this->query_time = microtime(true);
+        $this->query_time = \microtime(true);
 
         $result = $suppress ? @sqlsrv_query($this->database, $sql) : sqlsrv_query($this->database, $sql);
 
-        $this->query_time = microtime(true) - $this->query_time;
+        $this->query_time = \microtime(true) - $this->query_time;
         $GLOBALS['log']->info('Query Execution Time:' . $this->query_time);
 
 
@@ -254,7 +254,7 @@ class SqlsrvManager extends MssqlManager
         foreach (sqlsrv_field_metadata($result) as $fieldMetadata) {
             $key = $fieldMetadata['Name'];
             if ($make_lower_case == true) {
-                $key = strtolower($key);
+                $key = \strtolower($key);
             }
 
             $field_array[] = $key;
@@ -312,7 +312,7 @@ class SqlsrvManager extends MssqlManager
      */
     public function compareVarDefs($fielddef1, $fielddef2, $ignoreName = false)
     {
-        if ((isset($fielddef2['dbType']) && $fielddef2['dbType'] == 'id') || preg_match(
+        if ((isset($fielddef2['dbType']) && $fielddef2['dbType'] == 'id') || \preg_match(
             '/(_id$|^id$)/',
                 $fielddef2['name']
         )
@@ -387,43 +387,43 @@ class SqlsrvManager extends MssqlManager
 
         $columns = array();
         while (($row = $this->fetchByAssoc($result)) != null) {
-            $column_name = strtolower($row['COLUMN_NAME']);
+            $column_name = \strtolower($row['COLUMN_NAME']);
             $columns[$column_name]['name'] = $column_name;
-            $columns[$column_name]['type'] = strtolower($row['TYPE_NAME']);
+            $columns[$column_name]['type'] = \strtolower($row['TYPE_NAME']);
             if ($row['TYPE_NAME'] == 'decimal') {
-                $columns[$column_name]['len'] = strtolower($row['PRECISION']);
-                $columns[$column_name]['len'] .= ',' . strtolower($row['SCALE']);
-            } elseif (in_array($row['TYPE_NAME'], array('nchar', 'nvarchar'))) {
-                $columns[$column_name]['len'] = strtolower($row['PRECISION']);
+                $columns[$column_name]['len'] = \strtolower($row['PRECISION']);
+                $columns[$column_name]['len'] .= ',' . \strtolower($row['SCALE']);
+            } elseif (\in_array($row['TYPE_NAME'], array('nchar', 'nvarchar'))) {
+                $columns[$column_name]['len'] = \strtolower($row['PRECISION']);
                 if ($row['TYPE_NAME'] == 'nvarchar' && $row['PRECISION'] == '0') {
                     $columns[$column_name]['len'] = 'max';
                 }
-            } elseif (!in_array($row['TYPE_NAME'], array('datetime', 'text'))) {
-                $columns[$column_name]['len'] = strtolower($row['LENGTH']);
+            } elseif (!\in_array($row['TYPE_NAME'], array('datetime', 'text'))) {
+                $columns[$column_name]['len'] = \strtolower($row['LENGTH']);
             }
-            if (stristr($row['TYPE_NAME'], 'identity')) {
+            if (\stristr($row['TYPE_NAME'], 'identity')) {
                 $columns[$column_name]['auto_increment'] = '1';
-                $columns[$column_name]['type'] = str_replace(' identity', '', strtolower($row['TYPE_NAME']));
+                $columns[$column_name]['type'] = \str_replace(' identity', '', \strtolower($row['TYPE_NAME']));
             }
 
-            if (!empty($row['IS_NULLABLE']) && $row['IS_NULLABLE'] == 'NO' && (empty($row['KEY']) || !stristr(
+            if (!empty($row['IS_NULLABLE']) && $row['IS_NULLABLE'] == 'NO' && (empty($row['KEY']) || !\stristr(
                 $row['KEY'],
                         'PRI'
             ))
             ) {
-                $columns[strtolower($row['COLUMN_NAME'])]['required'] = 'true';
+                $columns[\strtolower($row['COLUMN_NAME'])]['required'] = 'true';
             }
 
             $column_def = 1;
-            if (strtolower($tablename) == 'relationships') {
+            if (\strtolower($tablename) == 'relationships') {
                 $column_def = $this->getOne("select cdefault from syscolumns where id = object_id('relationships') and name = '$column_name'");
             }
             if ($column_def != 0 && ($row['COLUMN_DEF'] != null)) {    // NOTE Not using !empty as an empty string may be a viable default value.
                 $matches = array();
-                $row['COLUMN_DEF'] = html_entity_decode($row['COLUMN_DEF'], ENT_QUOTES);
-                if (preg_match('/\([\(|\'](.*)[\)|\']\)/i', $row['COLUMN_DEF'], $matches)) {
+                $row['COLUMN_DEF'] = \html_entity_decode($row['COLUMN_DEF'], ENT_QUOTES);
+                if (\preg_match('/\([\(|\'](.*)[\)|\']\)/i', $row['COLUMN_DEF'], $matches)) {
                     $columns[$column_name]['default'] = $matches[1];
-                } elseif (preg_match('/\(N\'(.*)\'\)/i', $row['COLUMN_DEF'], $matches)) {
+                } elseif (\preg_match('/\(N\'(.*)\'\)/i', $row['COLUMN_DEF'], $matches)) {
                     $columns[$column_name]['default'] = $matches[1];
                 } else {
                     $columns[$column_name]['default'] = $row['COLUMN_DEF'];
@@ -531,14 +531,14 @@ EOSQL;
         $messages = array();
         foreach ($errors as $error) {
             $sqlmsg = $error['message'];
-            $sqlpos = strpos($sqlmsg, 'Changed database context to');
-            $sqlpos2 = strpos($sqlmsg, 'Warning:');
-            $sqlpos3 = strpos($sqlmsg, 'Checking identity information:');
+            $sqlpos = \strpos($sqlmsg, 'Changed database context to');
+            $sqlpos2 = \strpos($sqlmsg, 'Warning:');
+            $sqlpos3 = \strpos($sqlmsg, 'Checking identity information:');
             if ($sqlpos !== false || $sqlpos2 !== false || $sqlpos3 !== false) {
                 continue;
             }
-            $sqlpos = strpos($sqlmsg, $app_strings['ERR_MSSQL_DB_CONTEXT']);
-            $sqlpos2 = strpos($sqlmsg, $app_strings['ERR_MSSQL_WARNING']);
+            $sqlpos = \strpos($sqlmsg, $app_strings['ERR_MSSQL_DB_CONTEXT']);
+            $sqlpos2 = \strpos($sqlmsg, $app_strings['ERR_MSSQL_WARNING']);
             if ($sqlpos !== false || $sqlpos2 !== false) {
                 continue;
             }
@@ -546,7 +546,7 @@ EOSQL;
         }
 
         if (!empty($messages)) {
-            return join("\n", $messages);
+            return \join("\n", $messages);
         }
 
         return false;
@@ -559,7 +559,7 @@ EOSQL;
      */
     public function getDbInfo()
     {
-        $info = array_merge(sqlsrv_client_info(), sqlsrv_server_info());
+        $info = \array_merge(sqlsrv_client_info(), sqlsrv_server_info());
 
         return $info;
     }
@@ -632,6 +632,6 @@ EOSQL;
      */
     public function valid()
     {
-        return function_exists("sqlsrv_connect");
+        return \function_exists("sqlsrv_connect");
     }
 }

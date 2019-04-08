@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -57,21 +57,21 @@ function checkDBSettings($silent=false)
     installLog("testing with {$db->dbType}:{$db->variant}");
 
 
-    if (trim($_SESSION['setup_db_database_name']) == '') {
+    if (\trim($_SESSION['setup_db_database_name']) == '') {
         $errors['ERR_DB_NAME'] = $mod_strings['ERR_DB_NAME'];
         installLog("ERROR::  {$errors['ERR_DB_NAME']}");
     }
 
 
     if (!$db->isDatabaseNameValid($_SESSION['setup_db_database_name'])) {
-        $errIdx = 'ERR_DB_' . strtoupper($_SESSION['setup_db_type']) . '_DB_NAME_INVALID';
+        $errIdx = 'ERR_DB_' . \strtoupper($_SESSION['setup_db_type']) . '_DB_NAME_INVALID';
         $errors[$errIdx] = $mod_strings[$errIdx];
         installLog("ERROR::  {$errors[$errIdx]}");
     }
 
     if ($_SESSION['setup_db_type'] != 'oci8') {
         // Oracle doesn't need host name, others do
-        if (trim($_SESSION['setup_db_host_name']) == '') {
+        if (\trim($_SESSION['setup_db_host_name']) == '') {
             $errors['ERR_DB_HOSTNAME'] = $mod_strings['ERR_DB_HOSTNAME'];
             installLog("ERROR::  {$errors['ERR_DB_HOSTNAME']}");
         }
@@ -86,7 +86,7 @@ function checkDBSettings($silent=false)
     }
 
     // bail if the basic info isn't valid
-    if (count($errors) > 0) {
+    if (\count($errors) > 0) {
         installLog("Basic form info is INVALID, exit Process.");
         return printErrors($errors);
     }
@@ -111,10 +111,10 @@ function checkDBSettings($silent=false)
     }
 
     // check database name validation in different database types (default is mssql)
-    switch (strtolower($db->dbType)) {
+    switch (\strtolower($db->dbType)) {
 
             case 'mysql':
-                if (preg_match("![/\\.]+!i", $_SESSION['setup_db_database_name'])) {
+                if (\preg_match("![/\\.]+!i", $_SESSION['setup_db_database_name'])) {
                     $errors['ERR_DB_MYSQL_DB_NAME'] = $mod_strings['ERR_DB_MYSQL_DB_NAME_INVALID'];
                     installLog("ERROR::  {$errors['ERR_DB_MYSQL_DB_NAME']}");
                 }
@@ -123,7 +123,7 @@ function checkDBSettings($silent=false)
             case 'mssql':
             default:
                 // Bug 29855 - Check to see if given db name is valid
-                if (preg_match("![\"'*/\\?:<>-]+!i", $_SESSION['setup_db_database_name'])) {
+                if (\preg_match("![\"'*/\\?:<>-]+!i", $_SESSION['setup_db_database_name'])) {
                     $errors['ERR_DB_MSSQL_DB_NAME'] = $mod_strings['ERR_DB_MSSQL_DB_NAME_INVALID'];
                     installLog("ERROR::  {$errors['ERR_DB_MSSQL_DB_NAME']}");
                 }
@@ -196,9 +196,9 @@ function checkDBSettings($silent=false)
             // DB SPECIFIC
             $check = $db->canInstall();
             if ($check !== true) {
-                $error = array_shift($check);
-                array_unshift($check, $mod_strings[$error]);
-                $errors[$error] = call_user_func_array('sprintf', $check);
+                $error = \array_shift($check);
+                \array_unshift($check, $mod_strings[$error]);
+                $errors[$error] = \call_user_func_array('sprintf', $check);
                 installLog("ERROR:: {$errors[$error]}");
             } else {
                 installLog("Passed DB install check");
@@ -220,11 +220,11 @@ function checkDBSettings($silent=false)
 function printErrors($errors)
 {
     global $mod_strings;
-    if (count($errors) == 0) {
+    if (\count($errors) == 0) {
         echo 'dbCheckPassed';
         installLog("SUCCESS:: no errors detected!");
-    } elseif ((count($errors) == 1 && (isset($errors["ERR_DB_EXISTS_PROCEED"])||isset($errors["ERR_DB_EXISTS_WITH_CONFIG"])))  ||
-    (count($errors) == 2 && isset($errors["ERR_DB_EXISTS_PROCEED"]) && isset($errors["ERR_DB_EXISTS_WITH_CONFIG"]))) {
+    } elseif ((\count($errors) == 1 && (isset($errors["ERR_DB_EXISTS_PROCEED"])||isset($errors["ERR_DB_EXISTS_WITH_CONFIG"])))  ||
+    (\count($errors) == 2 && isset($errors["ERR_DB_EXISTS_PROCEED"]) && isset($errors["ERR_DB_EXISTS_WITH_CONFIG"]))) {
         ///throw alert asking to overwwrite db
         echo 'preexeest';
         installLog("WARNING:: no errors detected, but DB tables will be dropped!, issuing warning to user");

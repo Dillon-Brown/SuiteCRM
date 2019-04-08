@@ -83,46 +83,46 @@ class _parse_proppatch
         $this->props = array();
         $had_input = false;
 
-        $f_in = fopen($path, "r");
+        $f_in = \fopen($path, "r");
         if (!$f_in) {
             $this->success = false;
             return;
         }
 
-        $xml_parser = xml_parser_create_ns("UTF-8", " ");
+        $xml_parser = \xml_parser_create_ns("UTF-8", " ");
 
-        xml_set_element_handler(
+        \xml_set_element_handler(
             $xml_parser,
                                 array(&$this, "_startElement"),
                                 array(&$this, "_endElement")
         );
 
-        xml_set_character_data_handler(
+        \xml_set_character_data_handler(
             $xml_parser,
                                        array(&$this, "_data")
         );
 
-        xml_parser_set_option(
+        \xml_parser_set_option(
             $xml_parser,
                               XML_OPTION_CASE_FOLDING,
             false
         );
 
-        while ($this->success && !feof($f_in)) {
-            $line = fgets($f_in);
-            if (is_string($line)) {
+        while ($this->success && !\feof($f_in)) {
+            $line = \fgets($f_in);
+            if (\is_string($line)) {
                 $had_input = true;
-                $this->success &= xml_parse($xml_parser, $line, false);
+                $this->success &= \xml_parse($xml_parser, $line, false);
             }
         }
 
         if ($had_input) {
-            $this->success &= xml_parse($xml_parser, "", true);
+            $this->success &= \xml_parse($xml_parser, "", true);
         }
 
-        xml_parser_free($xml_parser);
+        \xml_parser_free($xml_parser);
 
-        fclose($f_in);
+        \fclose($f_in);
     }
 
     /**
@@ -136,8 +136,8 @@ class _parse_proppatch
      */
     public function _startElement($parser, $name, $attrs)
     {
-        if (strstr($name, " ")) {
-            list($ns, $tag) = explode(" ", $name);
+        if (\strstr($name, " ")) {
+            list($ns, $tag) = \explode(" ", $name);
             if ($ns == "") {
                 $this->success = false;
             }
@@ -161,7 +161,7 @@ class _parse_proppatch
         if ($this->depth >= 4) {
             $this->current["val"] .= "<$tag";
             foreach ($attr as $key => $val) {
-                $this->current["val"] .= ' '.$key.'="'.str_replace('"', '&quot;', $val).'"';
+                $this->current["val"] .= ' '.$key.'="'.\str_replace('"', '&quot;', $val).'"';
             }
             $this->current["val"] .= ">";
         }
@@ -181,8 +181,8 @@ class _parse_proppatch
      */
     public function _endElement($parser, $name)
     {
-        if (strstr($name, " ")) {
-            list($ns, $tag) = explode(" ", $name);
+        if (\strstr($name, " ")) {
+            list($ns, $tag) = \explode(" ", $name);
             if ($ns == "") {
                 $this->success = false;
             }

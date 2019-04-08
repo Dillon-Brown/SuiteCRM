@@ -71,7 +71,7 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
      */
     public static function getCSS()
     {
-        return file_get_contents(HTMLPURIFIER_PREFIX . '/HTMLPurifier/Printer/ConfigForm.css');
+        return \file_get_contents(HTMLPURIFIER_PREFIX . '/HTMLPurifier/Printer/ConfigForm.css');
     }
 
     /**
@@ -79,7 +79,7 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
      */
     public static function getJavaScript()
     {
-        return file_get_contents(HTMLPURIFIER_PREFIX . '/HTMLPurifier/Printer/ConfigForm.js');
+        return \file_get_contents(HTMLPURIFIER_PREFIX . '/HTMLPurifier/Printer/ConfigForm.js');
     }
 
     /**
@@ -92,7 +92,7 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
      */
     public function render($config, $allowed = true, $render_controls = true)
     {
-        if (is_array($config) && isset($config[0])) {
+        if (\is_array($config) && isset($config[0])) {
             $gen_config = $config[0];
             $config = $config[1];
         } else {
@@ -154,16 +154,16 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
             $ret .= $this->start('tr');
             $ret .= $this->start('th');
             if ($this->docURL) {
-                $url = str_replace('%s', urlencode("$ns.$directive"), $this->docURL);
+                $url = \str_replace('%s', \urlencode("$ns.$directive"), $this->docURL);
                 $ret .= $this->start('a', array('href' => $url));
             }
             $attr = array('for' => "{$this->name}:$ns.$directive");
 
             // crop directive name if it's too long
-            if (!$this->compress || (strlen($directive) < $this->compress)) {
+            if (!$this->compress || (\strlen($directive) < $this->compress)) {
                 $directive_disp = $directive;
             } else {
-                $directive_disp = substr($directive, 0, $this->compress - 2) . '...';
+                $directive_disp = \substr($directive, 0, $this->compress - 2) . '...';
                 $attr['title'] = $directive;
             }
 
@@ -180,9 +180,9 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
 
             $ret .= $this->start('td');
             $def = $this->config->def->info["$ns.$directive"];
-            if (is_int($def)) {
+            if (\is_int($def)) {
                 $allow_null = $def < 0;
-                $type = abs($def);
+                $type = \abs($def);
             } else {
                 $type = $def->type;
                 $allow_null = isset($def->allow_null);
@@ -233,7 +233,7 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
      */
     public function render($ns, $directive, $value, $name, $config)
     {
-        if (is_array($config) && isset($config[0])) {
+        if (\is_array($config) && isset($config[0])) {
             $gen_config = $config[0];
             $config = $config[1];
         } else {
@@ -296,7 +296,7 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer
      */
     public function render($ns, $directive, $value, $name, $config)
     {
-        if (is_array($config) && isset($config[0])) {
+        if (\is_array($config) && isset($config[0])) {
             $gen_config = $config[0];
             $config = $config[1];
         } else {
@@ -306,12 +306,12 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer
         // this should probably be split up a little
         $ret = '';
         $def = $config->def->info["$ns.$directive"];
-        if (is_int($def)) {
-            $type = abs($def);
+        if (\is_int($def)) {
+            $type = \abs($def);
         } else {
             $type = $def->type;
         }
-        if (is_array($value)) {
+        if (\is_array($value)) {
             switch ($type) {
                 case HTMLPurifier_VarParser::LOOKUP:
                     $array = $value;
@@ -322,7 +322,7 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer
                     //TODO does this need a break?
                     // no break
                 case HTMLPurifier_VarParser::ALIST:
-                    $value = implode(PHP_EOL, $value);
+                    $value = \implode(PHP_EOL, $value);
                     break;
                 case HTMLPurifier_VarParser::HASH:
                     $nvalue = '';
@@ -337,7 +337,7 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer
         }
         if ($type === HTMLPurifier_VarParser::MIXED) {
             return 'Not supported';
-            $value = serialize($value);
+            $value = \serialize($value);
         }
         $attr = array(
             'name' => "$name" . "[$ns.$directive]",
@@ -390,7 +390,7 @@ class HTMLPurifier_Printer_ConfigForm_bool extends HTMLPurifier_Printer
      */
     public function render($ns, $directive, $value, $name, $config)
     {
-        if (is_array($config) && isset($config[0])) {
+        if (\is_array($config) && isset($config[0])) {
             $gen_config = $config[0];
             $config = $config[1];
         } else {

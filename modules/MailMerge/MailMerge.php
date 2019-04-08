@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -72,7 +72,7 @@ class MailMerge
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($list, $fieldList, $data_dir);
     }
@@ -81,7 +81,7 @@ class MailMerge
     public function Execute()
     {
         $this->Initialize();
-        if (count($this->list) > 0) {
+        if (\count($this->list) > 0) {
             if (isset($this->template)) {
                 $this->CreateHeaderFile();
                 $this->CreateDataSource();
@@ -95,7 +95,7 @@ class MailMerge
 
     public function Template($template = null)
     {
-        if (is_array($template)) {
+        if (\is_array($template)) {
             $this->template = $template;
         }
     }
@@ -103,10 +103,10 @@ class MailMerge
     public function CleanUp()
     {
         //remove the temp files
-        unlink($this->mm_data_dir.'/Temp/'.$this->datasource_file);
-        unlink($this->mm_data_dir.'/Temp/'.$this->header_file);
-        rmdir($this->mm_data_dir);
-        rmdir($this->mm_data_dir.'/Temp/');
+        \unlink($this->mm_data_dir.'/Temp/'.$this->datasource_file);
+        \unlink($this->mm_data_dir.'/Temp/'.$this->header_file);
+        \rmdir($this->mm_data_dir);
+        \rmdir($this->mm_data_dir.'/Temp/');
         $this->Quit();
     }
 
@@ -158,8 +158,8 @@ class MailMerge
 
     public function Initialize()
     {
-        $this->rowcnt = count($this->list);
-        $this->fieldcnt = count($this->fieldList);
+        $this->rowcnt = \count($this->list);
+        $this->fieldcnt = \count($this->fieldList);
         $this->obj = new COM("word.application") or die("Unable to instanciate Word");
         $this->obj->Visible = $this->visible;
 
@@ -175,14 +175,14 @@ class MailMerge
 
     public function SetDataList($list = null)
     {
-        if (is_array($list)) {
+        if (\is_array($list)) {
             $this->list = $list;
         }
     }
 
     public function SetFieldList($list = null)
     {
-        if (is_array($list)) {
+        if (\is_array($list)) {
             $this->fieldList = $list;
         }
     }

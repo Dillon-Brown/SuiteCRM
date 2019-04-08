@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -76,7 +76,7 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
         $_REQUEST['subpanel_field_name'] //link attribute name
     );
 } elseif (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'addtoprospectlist') {
-    $GLOBALS['log']->debug(print_r($_REQUEST, true));
+    $GLOBALS['log']->debug(\print_r($_REQUEST, true));
     if (!empty($_REQUEST['prospect_list_id']) and !empty($_REQUEST['prospect_ids'])) {
         add_prospects_to_prospect_list(
             $_REQUEST['prospect_list_id'],
@@ -85,7 +85,7 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
     } else {
         $parent = BeanFactory::getBean($_REQUEST['module'], $_REQUEST['record']);
         add_to_prospect_list(
-            urldecode($_REQUEST['subpanel_module_name']),
+            \urldecode($_REQUEST['subpanel_module_name']),
             $_REQUEST['parent_module'],
             $_REQUEST['parent_type'],
             $_REQUEST['subpanel_id'],
@@ -132,7 +132,7 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
     if (!empty($_REQUEST['select_entire_list']) &&  $_REQUEST['select_entire_list'] != 'undefined' && isset($_REQUEST['current_query_by_page'])) {
         $order_by = '';
         $current_query_by_page = $_REQUEST['current_query_by_page'];
-        $current_query_by_page_array = json_decode(html_entity_decode($current_query_by_page), true);
+        $current_query_by_page_array = \json_decode(\html_entity_decode($current_query_by_page), true);
 
         $module = $current_query_by_page_array['module'];
         $seed = BeanFactory::getBean($module);
@@ -142,23 +142,23 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
         $where_clauses = '';
         require_once('include/SearchForm/SearchForm2.php');
 
-        if (file_exists('custom/modules/'.$module.'/metadata/metafiles.php')) {
+        if (\file_exists('custom/modules/'.$module.'/metadata/metafiles.php')) {
             require('custom/modules/'.$module.'/metadata/metafiles.php');
-        } elseif (file_exists('modules/'.$module.'/metadata/metafiles.php')) {
+        } elseif (\file_exists('modules/'.$module.'/metadata/metafiles.php')) {
             require('modules/'.$module.'/metadata/metafiles.php');
         }
 
-        if (file_exists('custom/modules/'.$module.'/metadata/searchdefs.php')) {
+        if (\file_exists('custom/modules/'.$module.'/metadata/searchdefs.php')) {
             require_once('custom/modules/'.$module.'/metadata/searchdefs.php');
         } elseif (!empty($metafiles[$module]['searchdefs'])) {
             require_once($metafiles[$module]['searchdefs']);
-        } elseif (file_exists('modules/'.$module.'/metadata/searchdefs.php')) {
+        } elseif (\file_exists('modules/'.$module.'/metadata/searchdefs.php')) {
             require_once('modules/'.$module.'/metadata/searchdefs.php');
         }
 
         if (!empty($metafiles[$module]['searchfields'])) {
             require_once($metafiles[$module]['searchfields']);
-        } elseif (file_exists('modules/'.$module.'/metadata/SearchFields.php')) {
+        } elseif (\file_exists('modules/'.$module.'/metadata/SearchFields.php')) {
             require_once('modules/'.$module.'/metadata/SearchFields.php');
         }
         if (!empty($searchdefs) && !empty($searchFields)) {
@@ -166,8 +166,8 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
             $searchForm->setup($searchdefs, $searchFields, 'SearchFormGeneric.tpl');
             $searchForm->populateFromArray($current_query_by_page_array, 'advanced');
             $where_clauses_arr = $searchForm->generateSearchWhere(true, $module);
-            if (count($where_clauses_arr) > 0) {
-                $where_clauses = '('. implode(' ) AND ( ', $where_clauses_arr) . ')';
+            if (\count($where_clauses_arr) > 0) {
+                $where_clauses = '('. \implode(' ) AND ( ', $where_clauses_arr) . ')';
             }
         }
         
@@ -175,14 +175,14 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
         $result = DBManagerFactory::getInstance()->query($query, true);
         $uids = array();
         while ($val = DBManagerFactory::getInstance()->fetchByAssoc($result, false)) {
-            array_push($uids, $val['id']);
+            \array_push($uids, $val['id']);
         }
         $_REQUEST['subpanel_id'] = $uids;
     }
 
     if ($bean_name == 'Team') {
         $subpanel_id = $_REQUEST['subpanel_id'];
-        if (is_array($subpanel_id)) {
+        if (\is_array($subpanel_id)) {
             foreach ($subpanel_id as $id) {
                 $focus->add_user_to_team($id);
             }
@@ -195,8 +195,8 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
         //parameters to the add metod.
         $add_values =array();
         foreach ($_REQUEST as $key=>$value) {
-            if (strpos($key, "REL_ATTRIBUTE_") !== false) {
-                $add_values[substr($key, 14)]=$value;
+            if (\strpos($key, "REL_ATTRIBUTE_") !== false) {
+                $add_values[\substr($key, 14)]=$value;
             }
         }
         $relName = $_REQUEST['subpanel_field_name'];
@@ -214,7 +214,7 @@ if ($refreshsubpanel) {
     $GLOBALS['log']->debug("Location: index.php?sugar_body_only=1&module=".$_REQUEST['module']."&subpanel=".$_REQUEST['subpanel_module_name']."&action=SubPanelViewer&inline=1&record=".$_REQUEST['record']);
     if (empty($_REQUEST['refresh_page']) || $_REQUEST['refresh_page'] != 1) {
         $inline = isset($_REQUEST['inline'])?$_REQUEST['inline']: $inline;
-        header("Location: index.php?sugar_body_only=1&module=".$_REQUEST['module']."&subpanel=".$_REQUEST['subpanel_module_name']."&action=SubPanelViewer&inline=$inline&record=".$_REQUEST['record']);
+        \header("Location: index.php?sugar_body_only=1&module=".$_REQUEST['module']."&subpanel=".$_REQUEST['subpanel_module_name']."&action=SubPanelViewer&inline=$inline&record=".$_REQUEST['record']);
     }
     exit;
 }

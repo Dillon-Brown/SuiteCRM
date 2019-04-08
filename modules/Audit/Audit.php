@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -75,7 +75,7 @@ class Audit extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -138,7 +138,7 @@ class Audit extends SugarBean
                 foreach ($fieldDefs as $field) {
                     if (isset($row[$field['name']])) {
                         if (($field['name'] == 'before_value_string' || $field['name'] == 'after_value_string') &&
-                                    (array_key_exists($row['field_name'], $genericAssocFieldsArray) || (!empty($moduleAssocFieldsArray[$focus->object_name]) && array_key_exists($row['field_name'], $moduleAssocFieldsArray[$focus->object_name])))
+                                    (\array_key_exists($row['field_name'], $genericAssocFieldsArray) || (!empty($moduleAssocFieldsArray[$focus->object_name]) && \array_key_exists($row['field_name'], $moduleAssocFieldsArray[$focus->object_name])))
                                    ) {
                             $temp_list[$field['name']] = Audit::getAssociatedFieldName($row['field_name'], $row[$field['name']]);
                         } else {
@@ -166,7 +166,7 @@ class Audit extends SugarBean
                                 }
                             }
                             if (!empty($enum_values)) {
-                                $temp_list[$field['name']] = implode(', ', $enum_values);
+                                $temp_list[$field['name']] = \implode(', ', $enum_values);
                             }
                             if ($temp_list['data_type']==='date') {
                                 $temp_list[$field['name']]=$timedate->to_display_date($temp_list[$field['name']], false);
@@ -198,9 +198,9 @@ class Audit extends SugarBean
     {
         global $focus,  $genericAssocFieldsArray, $moduleAssocFieldsArray;
 
-        if (!empty($moduleAssocFieldsArray[$focus->object_name]) && array_key_exists($fieldName, $moduleAssocFieldsArray[$focus->object_name])) {
+        if (!empty($moduleAssocFieldsArray[$focus->object_name]) && \array_key_exists($fieldName, $moduleAssocFieldsArray[$focus->object_name])) {
             $assocFieldsArray =  $moduleAssocFieldsArray[$focus->object_name];
-        } elseif (array_key_exists($fieldName, $genericAssocFieldsArray)) {
+        } elseif (\array_key_exists($fieldName, $genericAssocFieldsArray)) {
             $assocFieldsArray =  $genericAssocFieldsArray;
         } else {
             return $fieldValue;
@@ -208,8 +208,8 @@ class Audit extends SugarBean
         $query = "";
         $field_arr = $assocFieldsArray[$fieldName];
         $query = "SELECT ";
-        if (is_array($field_arr['select_field_name'])) {
-            $count = count($field_arr['select_field_name']);
+        if (\is_array($field_arr['select_field_name'])) {
+            $count = \count($field_arr['select_field_name']);
             $index = 1;
             foreach ($field_arr['select_field_name'] as $col) {
                 $query .= $col;
@@ -227,7 +227,7 @@ class Audit extends SugarBean
         $result = $focus->db->query($query);
         if (!empty($result)) {
             if ($row = $focus->db->fetchByAssoc($result)) {
-                if (is_array($field_arr['select_field_name'])) {
+                if (\is_array($field_arr['select_field_name'])) {
                     $returnVal = "";
                     foreach ($field_arr['select_field_name'] as $col) {
                         $returnVal .= $row[$col]." ";

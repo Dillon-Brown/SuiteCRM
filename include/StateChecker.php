@@ -47,7 +47,7 @@ use MysqliManager;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -121,8 +121,8 @@ class StateChecker
         $this->resetTraces();
         
         if (StateCheckerConfig::get('redefineMemoryLimit')) {
-            $this->memoryLimit = ini_get('memory_limit');
-            ini_set('memory_limit', -1);
+            $this->memoryLimit = \ini_get('memory_limit');
+            \ini_set('memory_limit', -1);
         }
                 
         if (StateCheckerConfig::get('autoRun')) {
@@ -149,7 +149,7 @@ class StateChecker
     public function __destruct()
     {
         if (StateCheckerConfig::get('redefineMemoryLimit')) {
-            ini_set('memory_limit', $this->memoryLimit);
+            \ini_set('memory_limit', $this->memoryLimit);
         }
     }
     
@@ -176,7 +176,7 @@ class StateChecker
      */
     protected function isDetailedKey($key)
     {
-        $detailedKey = preg_match('/\w+\:\:/', $key);
+        $detailedKey = \preg_match('/\w+\:\:/', $key);
         return $detailedKey;
     }
     
@@ -213,14 +213,14 @@ class StateChecker
      */
     protected function getHash($data, $key)
     {
-        $serialized = serialize($data);
+        $serialized = \serialize($data);
         if (!$serialized) {
             throw new StateCheckerException('Serialize object failure');
         }
         
         $hash = null;
-        if (!in_array($key, StateCheckerConfig::get('testsFailureExcludeKeys'))) {
-            $hash = md5($serialized);
+        if (!\in_array($key, StateCheckerConfig::get('testsFailureExcludeKeys'))) {
+            $hash = \md5($serialized);
         }
         $this->lastHash = $hash;
 
@@ -229,7 +229,7 @@ class StateChecker
         }
         
         if (StateCheckerConfig::get('saveTraces')) {
-            $this->traces[$key][] = debug_backtrace();
+            $this->traces[$key][] = \debug_backtrace();
         }
         
         return $hash;
@@ -283,7 +283,7 @@ class StateChecker
         $tables = $this->getDatabaseTables();
         $hashes = [];
         foreach ($tables as $table) {
-            if (!in_array($table, $this->excludedTables)) {
+            if (!\in_array($table, $this->excludedTables)) {
                 $rows = $this->getMysqliResults($this->db->query('SELECT * FROM ' . $table));
                 $hashes[] = $this->getHash($rows, 'database::' . $table);
             }
@@ -302,7 +302,7 @@ class StateChecker
     protected function isExcludedFile($name)
     {
         foreach (StateCheckerConfig::get('fileExludeRegexes') as $regex) {
-            if (preg_match($regex, $name)) {
+            if (\preg_match($regex, $name)) {
                 return true;
             }
         }
@@ -317,8 +317,8 @@ class StateChecker
      */
     protected function getFiles($path = '.')
     {
-        clearstatcache(true);
-        $realpath = realpath($path);
+        \clearstatcache(true);
+        $realpath = \realpath($path);
         if (!$realpath) {
             throw new StateCheckerException('Real path can not resolved for: ' . $path);
         }
@@ -329,7 +329,7 @@ class StateChecker
             if (!$object->isDir() && !$this->isExcludedFile($name)) {
                 $fileObject = $object;
 //                $fileObject->modifyTime = filemtime($name);
-                $fileObject->fileSize = filesize($name);
+                $fileObject->fileSize = \filesize($name);
                 $fileObject->hash = $this->getHash((array)$fileObject, 'filesys::' . $fileObject);
                 $files[] = $name;
             }
@@ -373,7 +373,7 @@ class StateChecker
      */
     protected function getErrorLevelHash()
     {
-        $level = error_reporting();
+        $level = \error_reporting();
         $hash = $this->getHash($level, 'errlevel');
         return $hash;
     }

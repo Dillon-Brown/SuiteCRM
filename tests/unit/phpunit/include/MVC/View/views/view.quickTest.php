@@ -21,7 +21,7 @@ class ViewQuickTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $this->assertInstanceOf('ViewQuick', $view);
         $this->assertInstanceOf('ViewDetail', $view);
         $this->assertAttributeEquals('detail', 'type', $view);
-        $this->assertTrue(is_array($view->options));
+        $this->assertTrue(\is_array($view->options));
     }
 
     public function testdisplay()

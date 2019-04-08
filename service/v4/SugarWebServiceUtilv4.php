@@ -51,8 +51,8 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
             return $results;
         }
 
-        $view = strtolower($view);
-        switch (strtolower($type)) {
+        $view = \strtolower($view);
+        switch (\strtolower($type)) {
             case 'default':
             default:
                 if ($view == 'subpanel') {
@@ -61,7 +61,7 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
                     $v = new SugarView(null, array());
                     $v->module = $moduleName;
                     $v->type = $view;
-                    $fullView = ucfirst($view) . 'View';
+                    $fullView = \ucfirst($view) . 'View';
                     $metadataFile = $v->getMetaDataFile();
                     require_once($metadataFile);
                     if ($view == 'list') {
@@ -130,7 +130,7 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
     {
         global $app_list_strings;
         $enabled_modules = array();
-        $availModulesKey = array_flip($availModules);
+        $availModulesKey = \array_flip($availModules);
         foreach ($list as $key=>$value) {
             if (isset($availModulesKey[$key])) {
                 $label = !empty($app_list_strings['moduleList'][$key]) ? $app_list_strings['moduleList'][$key] : '';
@@ -179,12 +179,12 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
 
     public function get_field_list($value, $fields, $translate=true)
     {
-        $GLOBALS['log']->info('Begin: SoapHelperWebServices->get_field_list(too large a struct, '.print_r($fields, true).", $translate");
+        $GLOBALS['log']->info('Begin: SoapHelperWebServices->get_field_list(too large a struct, '.\print_r($fields, true).", $translate");
         $module_fields = array();
         $link_fields = array();
         if (!empty($value->field_defs)) {
             foreach ($value->field_defs as $var) {
-                if (!empty($fields) && !in_array($var['name'], $fields)) {
+                if (!empty($fields) && !\in_array($var['name'], $fields)) {
                     continue;
                 }
                 if (isset($var['source']) && ($var['source'] != 'db' && $var['source'] != 'non-db' &&$var['source'] != 'custom_fields') && $var['name'] != 'email1' && $var['name'] != 'email2' && (!isset($var['type'])|| $var['type'] != 'relate')) {
@@ -208,7 +208,7 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
 
                 if (isset($var['options'])) {
                     $options_dom = translate($var['options'], $value->module_dir);
-                    if (!is_array($options_dom)) {
+                    if (!\is_array($options_dom)) {
                         $options_dom = array();
                     }
                     foreach ($options_dom as $key=>$oneOption) {
@@ -329,13 +329,13 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
         require_once($beanFiles[$class_name]);
         $ids = array();
         $count = 1;
-        $total = sizeof($name_value_lists);
+        $total = \sizeof($name_value_lists);
         foreach ($name_value_lists as $name_value_list) {
             $seed = new $class_name();
 
             $seed->update_vcal = false;
             foreach ($name_value_list as $name => $value) {
-                if (is_array($value) &&  $value['name'] == 'id') {
+                if (\is_array($value) &&  $value['name'] == 'id') {
                     $seed->retrieve($value['value']);
                     break;
                 } elseif ($name === 'id') {
@@ -345,7 +345,7 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
 
             foreach ($name_value_list as $name => $value) {
                 //Normalize the input
-                if (!is_array($value)) {
+                if (!\is_array($value)) {
                     $field_name = $name;
                     $val = $value;
                 } else {
@@ -356,8 +356,8 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
                 if ($seed->field_name_map[$field_name]['type'] == 'enum') {
                     $vardef = $seed->field_name_map[$field_name];
                     if (isset($app_list_strings[$vardef['options']]) && !isset($app_list_strings[$vardef['options']][$val])) {
-                        if (in_array($val, $app_list_strings[$vardef['options']])) {
-                            $val = array_search($val, $app_list_strings[$vardef['options']]);
+                        if (\in_array($val, $app_list_strings[$vardef['options']])) {
+                            $val = \array_search($val, $app_list_strings[$vardef['options']]);
                         }
                     }
                 }
@@ -414,7 +414,7 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
                             $query = $seed->table_name.".outlook_id = '".$seed->outlook_id."'";
                             $response = $seed->get_list($order_by, $query, 0, -1, -1, 0);
                             $list = $response['list'];
-                            if (count($list) > 0) {
+                            if (\count($list) > 0) {
                                 foreach ($list as $value) {
                                     $seed->id = $value->id;
                                     break;
@@ -505,9 +505,9 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
         }
         global $current_user;
         $current_user = $user;
-        ini_set("session.use_cookies", 0); // disable cookies to prevent session ID from going out
-        session_start();
-        session_regenerate_id();
+        \ini_set("session.use_cookies", 0); // disable cookies to prevent session ID from going out
+        \session_start();
+        \session_regenerate_id();
         $_SESSION['oauth'] = $oauth->authorization();
         $_SESSION['avail_modules'] = $this->get_user_module_list($user);
         // TODO: handle role
@@ -517,7 +517,7 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
         $_SESSION['user_id'] = $current_user->id;
         $_SESSION['type'] = 'user';
         $_SESSION['authenticated_user_id'] = $current_user->id;
-        return session_id();
+        return \session_id();
     }
 
 
@@ -535,24 +535,24 @@ class SugarWebServiceUtilv4 extends SugarWebServiceUtilv3_1
         switch ($type) {
             case 'wireless':
 
-                if (file_exists('custom/modules/'.$module.'/metadata/wireless.subpaneldefs.php')) {
+                if (\file_exists('custom/modules/'.$module.'/metadata/wireless.subpaneldefs.php')) {
                     require_once('custom/modules/'.$module.'/metadata/wireless.subpaneldefs.php');
-                } elseif (file_exists('modules/'.$module.'/metadata/wireless.subpaneldefs.php')) {
+                } elseif (\file_exists('modules/'.$module.'/metadata/wireless.subpaneldefs.php')) {
                     require_once('modules/'.$module.'/metadata/wireless.subpaneldefs.php');
                 }
 
                 //If an Ext/WirelessLayoutdefs/wireless.subpaneldefs.ext.php file exists, then also load it as well
-                if (file_exists('custom/modules/'.$module.'/Ext/WirelessLayoutdefs/wireless.subpaneldefs.ext.php')) {
+                if (\file_exists('custom/modules/'.$module.'/Ext/WirelessLayoutdefs/wireless.subpaneldefs.ext.php')) {
                     require_once('custom/modules/'.$module.'/Ext/WirelessLayoutdefs/wireless.subpaneldefs.ext.php');
                 }
                 break;
 
             case 'default':
             default:
-                if (file_exists('modules/'.$module.'/metadata/subpaneldefs.php')) {
+                if (\file_exists('modules/'.$module.'/metadata/subpaneldefs.php')) {
                     require('modules/'.$module.'/metadata/subpaneldefs.php');
                 }
-                if (file_exists('custom/modules/'.$module.'/Ext/Layoutdefs/layoutdefs.ext.php')) {
+                if (\file_exists('custom/modules/'.$module.'/Ext/Layoutdefs/layoutdefs.ext.php')) {
                     require('custom/modules/'.$module.'/Ext/Layoutdefs/layoutdefs.ext.php');
                 }
         }

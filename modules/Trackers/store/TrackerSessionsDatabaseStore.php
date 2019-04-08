@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -56,8 +56,8 @@ class TrackerSessionsDatabaseStore implements Store
         $db = DBManagerFactory::getInstance();
         $metrics = $monitor->getMetrics();
 
-        if (isset($monitor->client_ip) && strlen($monitor->client_ip) > 45) {
-            $monitor->client_ip = substr($monitor->client_ip, 0, 45);
+        if (isset($monitor->client_ip) && \strlen($monitor->client_ip) > 45) {
+            $monitor->client_ip = \substr($monitor->client_ip, 0, 45);
         }
 
         $columns = array();
@@ -89,7 +89,7 @@ class TrackerSessionsDatabaseStore implements Store
         }
 
         if ($monitor->round_trips == 1) {
-            $query = "INSERT INTO $monitor->table_name (" .implode(",", $columns). " ) VALUES ( ". implode(",", $values). ')';
+            $query = "INSERT INTO $monitor->table_name (" .\implode(",", $columns). " ) VALUES ( ". \implode(",", $values). ')';
             $db->query($query);
         } else {
             if (!empty($monitor->date_end)) {

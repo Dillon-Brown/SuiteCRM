@@ -30,8 +30,8 @@ return CustomLoader::mergeCustomArray([
                 $container->get(BeanManager::class)
             ),
             new ScopeRepository(),
-            sprintf('file://%s/%s', $baseDir, ApiConfig::OAUTH2_PRIVATE_KEY),
-            sprintf('file://%s/%s', $baseDir, ApiConfig::OAUTH2_PUBLIC_KEY)
+            \sprintf('file://%s/%s', $baseDir, ApiConfig::OAUTH2_PRIVATE_KEY),
+            \sprintf('file://%s/%s', $baseDir, ApiConfig::OAUTH2_PUBLIC_KEY)
         );
         $server->setEncryptionKey(ApiConfig::OAUTH2_ENCRYPTION_KEY);
 
@@ -60,7 +60,7 @@ return CustomLoader::mergeCustomArray([
                 new AccessTokenEntity(),
                 $container->get(BeanManager::class)
             ),
-            sprintf('file://%s/%s', $baseDir, ApiConfig::OAUTH2_PUBLIC_KEY)
+            \sprintf('file://%s/%s', $baseDir, ApiConfig::OAUTH2_PUBLIC_KEY)
         );
     },
-], basename(__FILE__));
+], \basename(__FILE__));

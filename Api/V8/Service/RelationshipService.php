@@ -48,7 +48,7 @@ class RelationshipService
         if (!$relatedBeans) {
             $response->setMeta(new MetaResponse(
                 [
-                    'message' => sprintf(
+                    'message' => \sprintf(
                         'There is no relationship set in %s module with %s link field',
                         $sourceBean->getObjectName(),
                         $linkFieldName
@@ -60,7 +60,7 @@ class RelationshipService
             /** @var \SugarBean $relatedBean */
             foreach ($relatedBeans as $relatedBean) {
                 $linkResponse = new LinksResponse();
-                $linkResponse->setSelf(sprintf('/V8/module/%s/%s', $relatedBean->getObjectName(), $relatedBean->id));
+                $linkResponse->setSelf(\sprintf('/V8/module/%s/%s', $relatedBean->getObjectName(), $relatedBean->id));
 
                 $dataResponse = new DataResponse($relatedBean->getObjectName(), $relatedBean->id);
                 $dataResponse->setLinks($linkResponse);
@@ -89,7 +89,7 @@ class RelationshipService
         $response = new DocumentResponse();
         $response->setMeta(new MetaResponse(
             [
-                'message' => sprintf(
+                'message' => \sprintf(
                     '%s with id %s has been added to %s with id %s',
                     $relatedBean->getObjectName(),
                     $relatedBean->id,
@@ -115,13 +115,13 @@ class RelationshipService
         $relatedBeans = $sourceBean->get_linked_beans($linkFieldName);
         $relatedBeanId = $params->getRelatedBeanId();
 
-        $relatedBean = array_filter($relatedBeans, function ($bean) use ($relatedBeanId) {
+        $relatedBean = \array_filter($relatedBeans, function ($bean) use ($relatedBeanId) {
             return $bean->id === $relatedBeanId;
         });
 
         if (!$relatedBean) {
             throw new \DomainException(
-                sprintf(
+                \sprintf(
                     'Module with %s id is not related to %s',
                     $relatedBeanId,
                     $sourceBean->getObjectName()
@@ -129,13 +129,13 @@ class RelationshipService
             );
         }
 
-        $relatedBean = array_shift($relatedBean);
+        $relatedBean = \array_shift($relatedBean);
         $this->beanManager->deleteRelationshipSafe($sourceBean, $relatedBean, $linkFieldName);
 
         $response = new DocumentResponse();
         $response->setMeta(new MetaResponse(
             [
-                'message' => sprintf(
+                'message' => \sprintf(
                     'Relationship has been deleted between %s with id %s and %s with id %s',
                     $sourceBean->getObjectName(),
                     $sourceBean->id,

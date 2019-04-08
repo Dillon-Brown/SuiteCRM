@@ -83,7 +83,7 @@ class AOR_Condition extends Basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -113,10 +113,10 @@ class AOR_Condition extends Basic
                 foreach ($this->field_defs as $field_def) {
                     $field_name = $field_def['name'];
                     if (isset($post_data[$key . $field_name][$i])) {
-                        if (is_array($post_data[$key . $field_name][$i])) {
+                        if (\is_array($post_data[$key . $field_name][$i])) {
                             switch ($condition->value_type) {
                                 case 'Date':
-                                    $post_data[$key . $field_name][$i] = base64_encode(serialize($post_data[$key . $field_name][$i]));
+                                    $post_data[$key . $field_name][$i] = \base64_encode(\serialize($post_data[$key . $field_name][$i]));
                                     break;
                                 default:
                                     $post_data[$key . $field_name][$i] = encodeMultienumValue($post_data[$key . $field_name][$i]);
@@ -126,7 +126,7 @@ class AOR_Condition extends Basic
                         } elseif ($field_name == 'parameter') {
                             $post_data[$key . $field_name][$i] = isset($post_data[$key . $field_name][$i]);
                         } elseif ($field_name == 'module_path') {
-                            $post_data[$key . $field_name][$i] = base64_encode(serialize(explode(":", $post_data[$key . $field_name][$i])));
+                            $post_data[$key . $field_name][$i] = \base64_encode(\serialize(\explode(":", $post_data[$key . $field_name][$i])));
                         }
                         if ($field_name == 'parenthesis' && $post_data[$key . $field_name][$i] == 'END') {
                             if (!isset($lastParenthesisStartConditionId)) {
@@ -143,9 +143,9 @@ class AOR_Condition extends Basic
                 // Period must be saved as a string instead of a base64 encoded datetime.
                 // Overwriting value
                 if ((!isset($condition->parenthesis) || !$condition->parenthesis) && isset($condition->value_type) && $condition->value_type == 'Period') {
-                    $condition->value = base64_encode($_POST['aor_conditions_value'][$i]);
+                    $condition->value = \base64_encode($_POST['aor_conditions_value'][$i]);
                 }
-                if (trim($condition->field) != '' || $condition->parenthesis) {
+                if (\trim($condition->field) != '' || $condition->parenthesis) {
                     if (isset($_POST['aor_conditions_order'][$i])) {
                         $condition->condition_order = (int)$_POST['aor_conditions_order'][$i];
                     } else {

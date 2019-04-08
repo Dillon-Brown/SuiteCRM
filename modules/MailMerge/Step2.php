@@ -1,5 +1,5 @@
  <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -85,11 +85,11 @@ $step_txt = "Step 2: ";
 if (!empty($_SESSION['SELECTED_OBJECTS_DEF'])) {
     $selObjs = $_SESSION['SELECTED_OBJECTS_DEF'];
     $sel_obj = array();
-    parse_str($selObjs, $sel_obj);
+    \parse_str($selObjs, $sel_obj);
     $idArray = array();
     $_SESSION['MAILMERGE_WHERE'] = "";
     foreach ($sel_obj as $key => $value) {
-        $value = str_replace("##", "&", $value);
+        $value = \str_replace("##", "&", $value);
         $idArray[$key] = $value;
         if ($_SESSION['MAILMERGE_MODULE'] == 'CampaignProspects') {
             if (isset($_POST['mailmerge_module']) && $_POST['mailmerge_module'] == 'Campaigns') {

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -60,7 +60,7 @@ class CalendarActivity
         // and does not have a sugarbean associated to it
         global $timedate;
 
-        if (is_array($args)) {
+        if (\is_array($args)) {
             $this->start_time = clone $args[0];
             $this->end_time = clone $args[1];
             $this->sugar_bean = null;
@@ -176,10 +176,10 @@ class CalendarActivity
         $vcal_focus = new vCal();
         $vcal_str = $vcal_focus->get_vcal_freebusy($user_focus);
 
-        $lines = explode("\n", $vcal_str);
+        $lines = \explode("\n", $vcal_str);
         $utc = new DateTimeZone('UTC');
         foreach ($lines as $line) {
-            if (preg_match('/^FREEBUSY.*?:([^\/]+)\/([^\/]+)/i', $line, $matches)) {
+            if (\preg_match('/^FREEBUSY.*?:([^\/]+)\/([^\/]+)/i', $line, $matches)) {
                 $dates_arr = array(
                     SugarDateTime::createFromFormat(vCal::UTC_FORMAT, $matches[1], $utc),
                     SugarDateTime::createFromFormat(vCal::UTC_FORMAT, $matches[2], $utc)
@@ -313,7 +313,7 @@ class CalendarActivity
         $end_day = DBManagerFactory::getInstance()->convert("'{$end->asDb()}'", 'datetime');
 
         $where = '(';
-        $where .= call_user_func($callback, $field_date, $field_end_date, $start_day, $end_day);
+        $where .= \call_user_func($callback, $field_date, $field_end_date, $start_day, $end_day);
 
         if (!empty($rel_table)) {
             $where .= " AND $rel_table.accept_status != 'decline'";

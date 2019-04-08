@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -47,7 +47,7 @@ $type = 'Home';
 $pages = $current_user->getPreference('pages', $type);
 
 
-if (count($pages) > 1) {
+if (\count($pages) > 1) {
     if (!isset($_POST['dashName'])) {
         $html = "<form method='post' name='removepageform'/>";
         $html .= "<table>";
@@ -70,7 +70,7 @@ if (count($pages) > 1) {
             'page_id' => $_POST['page_id'],
         );
 
-        $return_params = json_encode($return_params, true);
+        $return_params = \json_encode($return_params, true);
 
         echo $return_params;
     }

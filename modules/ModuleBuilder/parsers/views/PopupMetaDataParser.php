@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -125,7 +125,7 @@ class PopupMetaDataParser extends ListLayoutMetaDataParser
      */
     public function mergeFieldDefinitions($viewdefs, $fielddefs)
     {
-        $viewdefs = $this->_viewdefs = array_change_key_case($viewdefs);
+        $viewdefs = $this->_viewdefs = \array_change_key_case($viewdefs);
         $viewdefs = $this->_viewdefs = $this->convertSearchToListDefs($viewdefs);
 
         return $viewdefs;
@@ -139,7 +139,7 @@ class PopupMetaDataParser extends ListLayoutMetaDataParser
     {
         $temp = array();
         foreach ($defs as $key => $value) {
-            if (!is_array($value)) {
+            if (!\is_array($value)) {
                 $temp[$value] = array('name' => $value);
             } else {
                 $temp[$key] = $value;
@@ -195,13 +195,13 @@ class PopupMetaDataParser extends ListLayoutMetaDataParser
         if (empty($this->_packageName)) {
             foreach (array(MB_CUSTOMMETADATALOCATION, MB_BASEMETADATALOCATION) as $value) {
                 $file = $this->implementation->getFileName(MB_POPUPLIST, $this->_moduleName, null, $value);
-                if (file_exists($file)) {
+                if (\file_exists($file)) {
                     break;
                 }
             }
             $writeFile = $this->implementation->getFileName(MB_POPUPLIST, $this->_moduleName, null);
-            if (!file_exists($writeFile)) {
-                mkdir_recursive(dirname($writeFile));
+            if (!\file_exists($writeFile)) {
+                mkdir_recursive(\dirname($writeFile));
             }
         } else {
             $writeFile = $file = $this->implementation->getFileName(
@@ -236,15 +236,15 @@ class PopupMetaDataParser extends ListLayoutMetaDataParser
             $popupMeta['searchdefs'] = $this->_viewdefs;
             $this->addNewSearchDef($this->_viewdefs, $popupMeta);
         } else {
-            $popupMeta['listviewdefs'] = array_change_key_case($this->_viewdefs, CASE_UPPER);
+            $popupMeta['listviewdefs'] = \array_change_key_case($this->_viewdefs, CASE_UPPER);
         }
 
         //provide a way for users to add to the reserve properties list via the 'addToReserve' element
         $totalReserveProps = self::$reserveProperties;
         if (!empty($popupMeta['addToReserve'])) {
-            $totalReserveProps = array_merge(self::$reserveProperties, $popupMeta['addToReserve']);
+            $totalReserveProps = \array_merge(self::$reserveProperties, $popupMeta['addToReserve']);
         }
-        $allProperties = array_merge($totalReserveProps, array('searchdefs', 'listviewdefs'));
+        $allProperties = \array_merge($totalReserveProps, array('searchdefs', 'listviewdefs'));
 
         $out .= "\$popupMeta = array (\n";
         foreach ($allProperties as $p) {
@@ -253,7 +253,7 @@ class PopupMetaDataParser extends ListLayoutMetaDataParser
             }
         }
         $out .= ");\n";
-        file_put_contents($writeFile, $out);
+        \file_put_contents($writeFile, $out);
 
         //return back mod strings
         $GLOBALS['mod_strings'] = $oldModStrings;
@@ -278,21 +278,21 @@ class PopupMetaDataParser extends ListLayoutMetaDataParser
      */
     private function __diffAndUpdate($newDefs, &$targetDefs, $forWhere = false)
     {
-        if (!is_array($targetDefs)) {
+        if (!\is_array($targetDefs)) {
             $targetDefs = array();
         }
         foreach ($newDefs as $key => $def) {
             if (!isset($targetDefs[$key]) && $forWhere) {
                 $targetDefs[$key] = $this->__getTargetModuleName($def) . '.' . $key;
             } else {
-                if (!in_array($key, $targetDefs) && !$forWhere) {
-                    array_push($targetDefs, $key);
+                if (!\in_array($key, $targetDefs) && !$forWhere) {
+                    \array_push($targetDefs, $key);
                 }
             }
         }
 
         if ($forWhere) {
-            foreach (array_diff(array_keys($targetDefs), array_keys($newDefs)) as $key) {
+            foreach (\array_diff(\array_keys($targetDefs), \array_keys($newDefs)) as $key) {
                 unset($targetDefs[$key]);
             }
         } else {
@@ -310,7 +310,7 @@ class PopupMetaDataParser extends ListLayoutMetaDataParser
      */
     private function __getTargetModuleName($def)
     {
-        $dir = strtolower($this->implementation->getModuleDir());
+        $dir = \strtolower($this->implementation->getModuleDir());
         if (isset($this->_fielddefs[$def['name']]) && isset($this->_fielddefs[$def['name']]['source']) && $this->_fielddefs[$def['name']]['source'] == 'custom_fields') {
             return $dir . '_cstm';
         }

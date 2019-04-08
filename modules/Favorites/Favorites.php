@@ -136,7 +136,7 @@ class Favorites extends Basic
 
                 // Change since 7.7 side bar icons can exist in images/sidebar.
                 $sidebarPath = 'themes/' . SugarThemeRegistry::current() . '/images/sidebar/modules/';
-                if (file_exists($sidebarPath)) {
+                if (\file_exists($sidebarPath)) {
                     $return_array[$i]['image'] = SugarThemeRegistry::current()->getImage('sidebar/modules/' . $row['parent_type'], 'border="0" align="absmiddle"', null, null, '.gif', $bean->name);
                 } else {
                     $return_array[$i]['image'] = SugarThemeRegistry::current()->getImage($row['parent_type'], 'border="0" align="absmiddle"', null, null, '.gif', $bean->name);
@@ -166,7 +166,7 @@ class Favorites extends Basic
             );
         }
 
-        if (in_array($module, $moduleList) === false) {
+        if (\in_array($module, $moduleList) === false) {
             throw new \SuiteCRM\Exception\Exception(
                 '[Favorites] [module not found] ' . $module,
                 \SuiteCRM\Enumerator\ExceptionCode::APPLICTAION_MODULE_NOT_FOUND

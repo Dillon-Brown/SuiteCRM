@@ -60,7 +60,7 @@ function smarty_function_html_image($params, &$smarty)
                 break;
 
             case 'alt':
-                if (!is_array($_val)) {
+                if (!\is_array($_val)) {
                     $$_key = smarty_function_escape_special_chars($_val);
                 } else {
                     $smarty->trigger_error("html_image: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
@@ -74,7 +74,7 @@ function smarty_function_html_image($params, &$smarty)
                 break;
 
             default:
-                if (!is_array($_val)) {
+                if (!\is_array($_val)) {
                     $extra .= ' '.$_key.'="'.smarty_function_escape_special_chars($_val).'"';
                 } else {
                     $smarty->trigger_error("html_image: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
@@ -88,18 +88,18 @@ function smarty_function_html_image($params, &$smarty)
         return;
     }
 
-    if (substr($file, 0, 1) == '/') {
+    if (\substr($file, 0, 1) == '/') {
         $_image_path = $basedir . $file;
     } else {
         $_image_path = $file;
     }
     
     if (!isset($params['width']) || !isset($params['height'])) {
-        if (!$_image_data = @getimagesize($_image_path)) {
-            if (!file_exists($_image_path)) {
+        if (!$_image_data = @\getimagesize($_image_path)) {
+            if (!\file_exists($_image_path)) {
                 $smarty->trigger_error("html_image: unable to find '$_image_path'", E_USER_NOTICE);
                 return;
-            } elseif (!is_readable($_image_path)) {
+            } elseif (!\is_readable($_image_path)) {
                 $smarty->trigger_error("html_image: unable to read '$_image_path'", E_USER_NOTICE);
                 return;
             }
@@ -122,14 +122,14 @@ function smarty_function_html_image($params, &$smarty)
     }
 
     if (isset($params['dpi'])) {
-        if (strstr($server_vars['HTTP_USER_AGENT'], 'Mac')) {
+        if (\strstr($server_vars['HTTP_USER_AGENT'], 'Mac')) {
             $dpi_default = 72;
         } else {
             $dpi_default = 96;
         }
         $_resize = $dpi_default/$params['dpi'];
-        $width = round($width * $_resize);
-        $height = round($height * $_resize);
+        $width = \round($width * $_resize);
+        $height = \round($height * $_resize);
     }
 
     return $prefix . '<img src="'.$path_prefix.$file.'" alt="'.$alt.'" width="'.$width.'" height="'.$height.'"'.$extra.' />' . $suffix;

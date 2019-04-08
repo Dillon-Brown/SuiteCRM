@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -70,7 +70,7 @@ class ACLRole extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -245,7 +245,7 @@ class ACLRole extends SugarBean
         }
 
         // Sort by translated categories
-        uksort($role_actions, "ACLRole::langCompare");
+        \uksort($role_actions, "ACLRole::langCompare");
         return $role_actions;
     }
 

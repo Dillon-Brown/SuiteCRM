@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -67,7 +67,7 @@ if (!empty($_POST['assigned_user_id']) && ($focus->assigned_user_id != $_POST['a
     $check_notify = true;
 }
 //populate the fields of this Email
-$allfields = array_merge($focus->column_fields, $focus->additional_column_fields);
+$allfields = \array_merge($focus->column_fields, $focus->additional_column_fields);
 foreach ($allfields as $field) {
     if (isset($_POST[$field])) {
         $value = $_POST[$field];
@@ -135,7 +135,7 @@ if (empty($object_arr)) {
 }
 
 // do not parse email templates if the email is being saved as draft....
-if ($focus->type != 'draft' && count($object_arr) > 0) {
+if ($focus->type != 'draft' && \count($object_arr) > 0) {
     require_once($beanFiles['EmailTemplate']);
     $focus->name = EmailTemplate::parse_template($focus->name, $object_arr);
     $focus->description = EmailTemplate::parse_template($focus->description, $object_arr);
@@ -169,15 +169,15 @@ if ($focus->type == 'archived') {
     $new = array('<','>');
 
     if ($_REQUEST['from_addr'] != $_REQUEST['from_addr_name'].' &lt;'.$_REQUEST['from_addr_email'].'&gt;') {
-        if (false === strpos($_REQUEST['from_addr'], '&lt;')) { // we have an email only?
+        if (false === \strpos($_REQUEST['from_addr'], '&lt;')) { // we have an email only?
             $focus->from_addr = $_REQUEST['from_addr'];
             isValidEmailAddress($focus->from_addr);
             $focus->from_name = '';
         } else { // we have a compound string
-            $newFromAddr =  str_replace($old, $new, $_REQUEST['from_addr']);
-            $focus->from_addr = substr($newFromAddr, (1 + strpos($newFromAddr, '<')), (strpos($newFromAddr, '>') - strpos($newFromAddr, '<')) -1);
+            $newFromAddr =  \str_replace($old, $new, $_REQUEST['from_addr']);
+            $focus->from_addr = \substr($newFromAddr, (1 + \strpos($newFromAddr, '<')), (\strpos($newFromAddr, '>') - \strpos($newFromAddr, '<')) -1);
             isValidEmailAddress($focus->from_addr);
-            $focus->from_name = substr($newFromAddr, 0, (strpos($newFromAddr, '<') -1));
+            $focus->from_name = \substr($newFromAddr, 0, (\strpos($newFromAddr, '<') -1));
         }
     } elseif (!empty($_REQUEST['from_addr_email']) && isset($_REQUEST['from_addr_email'])) {
         $focus->from_addr = $_REQUEST['from_addr_email'];
@@ -209,7 +209,7 @@ $focus->db->query($query);
 //$query = "update emails_beans set deleted = 1, bean_id = '', bean_module = '' WHERE email_id = '{$focus->id}'";
 //$focus->db->query($query);
 if (!empty($_REQUEST['to_addrs_ids'])) {
-    $exContactIds = explode(';', $_REQUEST['to_addrs_ids']);
+    $exContactIds = \explode(';', $_REQUEST['to_addrs_ids']);
 } else {
     $exContactIds = array();
 }
@@ -217,8 +217,8 @@ if (!empty($_REQUEST['to_addrs_ids'])) {
 if (isset($_REQUEST['object_type']) && !empty($_REQUEST['object_type']) && isset($_REQUEST['object_id']) && !empty($_REQUEST['object_id'])) {
     //run linking code only if the object_id has not been linked as part of the contacts above and it is an OOB relationship
     $GLOBALS['log']->debug("CESELY".$_REQUEST['object_type']);
-    if (!in_array($_REQUEST['object_id'], $exContactIds)) {
-        $rel = strtolower($_REQUEST['object_type']);
+    if (!\in_array($_REQUEST['object_id'], $exContactIds)) {
+        $rel = \strtolower($_REQUEST['object_type']);
         if ($focus->load_relationship($rel)) {
             $focus->$rel->add($_REQUEST['object_id']);
             $GLOBALS['log']->debug("CESELY LOADED".$_REQUEST['object_type']);
@@ -258,7 +258,7 @@ $focus->users->add($current_user->id);
 if (!empty($exContactIds)) {
     $focus->load_relationship('contacts');
     foreach ($exContactIds as $contactId) {
-        $contactId = trim($contactId);
+        $contactId = \trim($contactId);
         $focus->contacts->add($contactId);
     }
 }
@@ -282,19 +282,19 @@ $GLOBALS['log']->debug("Saved record with id of ".$return_id);
 
 if ($focus->type == 'draft') {
     if ($return_module == 'Emails') {
-        header("Location: index.php?module=$return_module&action=ListViewDrafts");
+        \header("Location: index.php?module=$return_module&action=ListViewDrafts");
     } else {
         handleRedirect($return_id, 'Emails');
     }
 } elseif ($focus->type == 'out') {
     if ($return_module == 'Home') {
-        header('Location: index.php?module='.$return_module.'&action=index');
+        \header('Location: index.php?module='.$return_module.'&action=index');
     }
     if (!empty($_REQUEST['return_id'])) {
         $return_id = $_REQUEST['return_id'];
     }
-    header('Location: index.php?action='.$return_action.'&module='.$return_module.'&record='.$return_id.'&assigned_user_id='.$current_user->id.'&type=inbound');
+    \header('Location: index.php?action='.$return_action.'&module='.$return_module.'&record='.$return_id.'&assigned_user_id='.$current_user->id.'&type=inbound');
 } elseif (isset($_POST['return_id']) && $_POST['return_id'] != "") {
     $return_id = $_POST['return_id'];
 }
-    header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+    \header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");

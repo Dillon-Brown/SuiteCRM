@@ -43,7 +43,7 @@ namespace SuiteCRM;
 
 use LoggerManager;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 

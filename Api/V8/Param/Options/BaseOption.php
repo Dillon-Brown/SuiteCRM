@@ -42,6 +42,6 @@ abstract class BaseOption
      */
     protected function getOptionName($class)
     {
-        return lcfirst(basename(str_replace('\\', '/', $class)));
+        return \lcfirst(\basename(\str_replace('\\', '/', $class)));
     }
 }

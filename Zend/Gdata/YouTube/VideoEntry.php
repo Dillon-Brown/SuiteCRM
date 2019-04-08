@@ -588,14 +588,14 @@ class Zend_Gdata_YouTube_VideoEntry extends Zend_Gdata_YouTube_MediaEntry
             $videoId = $this->getMediaGroup()->getVideoId()->text;
         } else {
             $fullId = $this->getId()->getText();
-            $position = strrpos($fullId, '/');
+            $position = \strrpos($fullId, '/');
             if ($position === false) {
                 require_once 'Zend/Gdata/App/Exception.php';
                 throw new Zend_Gdata_App_Exception(
                     'Slash not found in atom:id of ' . $fullId
                 );
             } else {
-                $videoId = substr($fullId, $position + 1);
+                $videoId = \substr($fullId, $position + 1);
             }
         }
         return $videoId;
@@ -725,7 +725,7 @@ class Zend_Gdata_YouTube_VideoEntry extends Zend_Gdata_YouTube_MediaEntry
     {
         $this->ensureMediaGroupIsNotNull();
         if ($this->getMediaGroup()->getPlayer() != null &&
-             array_key_exists(0, $this->getMediaGroup()->getPlayer())) {
+             \array_key_exists(0, $this->getMediaGroup()->getPlayer())) {
             $players = $this->getMediaGroup()->getPlayer();
             return $players[0]->getUrl();
         } else {
@@ -847,8 +847,8 @@ class Zend_Gdata_YouTube_VideoEntry extends Zend_Gdata_YouTube_MediaEntry
         if ($this->getMediaGroup()->getKeywords() != null) {
             $keywords = $this->getMediaGroup()->getKeywords();
             $keywordsString = $keywords->getText();
-            if (strlen(trim($keywordsString)) > 0) {
-                return preg_split('/(, *)|,/', $keywordsString);
+            if (\strlen(\trim($keywordsString)) > 0) {
+                return \preg_split('/(, *)|,/', $keywordsString);
             }
         }
         return array();
@@ -865,8 +865,8 @@ class Zend_Gdata_YouTube_VideoEntry extends Zend_Gdata_YouTube_MediaEntry
     {
         $this->ensureMediaGroupIsNotNull();
         $keywords = new Zend_Gdata_Media_Extension_MediaKeywords();
-        if (is_array($tags)) {
-            $tags = implode(', ', $tags);
+        if (\is_array($tags)) {
+            $tags = \implode(', ', $tags);
         }
         $keywords->setText($tags);
         $this->getMediaGroup()->setKeywords($keywords);
@@ -902,9 +902,9 @@ class Zend_Gdata_YouTube_VideoEntry extends Zend_Gdata_YouTube_MediaEntry
             ($position = $this->getWhere()->getPoint()->getPos()) != null) {
             $positionString = $position->__toString();
 
-            if (strlen(trim($positionString)) > 0) {
-                $positionArray = explode(' ', trim($positionString));
-                if (count($positionArray) == 2) {
+            if (\strlen(\trim($positionString)) > 0) {
+                $positionArray = \explode(' ', \trim($positionString));
+                if (\count($positionArray) == 2) {
                     $returnArray = array();
                     $returnArray['latitude'] = $positionArray[0];
                     $returnArray['longitude'] = $positionArray[1];

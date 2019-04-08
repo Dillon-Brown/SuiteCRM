@@ -106,7 +106,7 @@ class actionCreateRecord extends actionBase
         if (isset($params['record_type']) && $params['record_type'] != '') {
             require_once 'modules/AOW_WorkFlow/aow_utils.php';
             $html .= "<script id ='aow_script".$line."'>";
-            $html .= 'cr_fields[' . $line . '] = "' . trim(preg_replace(
+            $html .= 'cr_fields[' . $line . '] = "' . \trim(\preg_replace(
                 '/\s+/',
                 ' ',
                     getModuleFields(
@@ -117,7 +117,7 @@ class actionCreateRecord extends actionBase
                         array('email1', 'email2')
                     )
             )) . '";';
-            $html .= 'cr_relationships[' . $line . '] = "' . trim(preg_replace(
+            $html .= 'cr_relationships[' . $line . '] = "' . \trim(\preg_replace(
                 '/\s+/',
                 ' ',
                     getModuleRelationships($params['record_type'])
@@ -125,17 +125,17 @@ class actionCreateRecord extends actionBase
             $html .= 'cr_module[' .$line. '] = "' .$params['record_type']. '";';
             if (isset($params['field'])) {
                 foreach ($params['field'] as $key => $field) {
-                    if (is_array($params['value'][$key])) {
-                        $params['value'][$key] = json_encode($params['value'][$key]);
+                    if (\is_array($params['value'][$key])) {
+                        $params['value'][$key] = \json_encode($params['value'][$key]);
                     }
 
-                    $html .= "load_crline('".$line."','".$field."','".str_replace(array("\r\n","\r","\n"), ' ', $params['value'][$key])."','".$params['value_type'][$key]."');";
+                    $html .= "load_crline('".$line."','".$field."','".\str_replace(array("\r\n","\r","\n"), ' ', $params['value'][$key])."','".$params['value_type'][$key]."');";
                 }
             }
             if (isset($params['rel'])) {
                 foreach ($params['rel'] as $key => $field) {
-                    if (is_array($params['rel_value'][$key])) {
-                        $params['rel_value'][$key] = json_encode($params['rel_value'][$key]);
+                    if (\is_array($params['rel_value'][$key])) {
+                        $params['rel_value'][$key] = \json_encode($params['rel_value'][$key]);
                     }
 
                     $html .= "load_crrelline('".$line."','".$field."','".$params['rel_value'][$key]."','".$params['rel_value_type'][$key]."');";
@@ -263,7 +263,7 @@ class actionCreateRecord extends actionBase
                                 break;
                             default:
                                 if ($params['value'][$key][0] === 'now') {
-                                    $date = gmdate($dformat);
+                                    $date = \gmdate($dformat);
                                 } elseif ($params['value'][$key][0] === 'field') {
                                     $dateToUse = $params['field'][$key];
                                     $date = $record->$dateToUse;
@@ -275,9 +275,9 @@ class actionCreateRecord extends actionBase
                                 }
 
                                 if ($params['value'][$key][1] !== 'now') {
-                                    $value = date($dformat, strtotime($date . ' '.$app_list_strings['aow_date_operator'][$params['value'][$key][1]].$params['value'][$key][2].' '.$params['value'][$key][3]));
+                                    $value = \date($dformat, \strtotime($date . ' '.$app_list_strings['aow_date_operator'][$params['value'][$key][1]].$params['value'][$key][2].' '.$params['value'][$key][3]));
                                 } else {
-                                    $value = date($dformat, strtotime($date));
+                                    $value = \date($dformat, \strtotime($date));
                                 }
                                 break;
                         }
@@ -326,11 +326,11 @@ class actionCreateRecord extends actionBase
                         }
 
                         // format the users array
-                        $users = array_values(array_flip($users));
+                        $users = \array_values(\array_flip($users));
 
                         if (empty($users)) {
                             $value = '';
-                        } elseif (count($users) == 1) {
+                        } elseif (\count($users) == 1) {
                             $value = $users[0];
                         } else {
                             switch ($params['value_type'][$key]) {
@@ -346,7 +346,7 @@ class actionCreateRecord extends actionBase
                                     break;
                                 case 'Random':
                                 default:
-                                    shuffle($users);
+                                    \shuffle($users);
                                     $value = $users[0];
                                     break;
                             }

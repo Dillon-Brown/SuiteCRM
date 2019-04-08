@@ -1,6 +1,6 @@
 <?php
-if (!defined('sugarEntry')) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry')) {
+    \define('sugarEntry', true);
 }
 /**
  *
@@ -66,7 +66,7 @@ if (!defined('sugarEntry')) {
       */
      public function generateResponse($input)
      {
-         print_r($input);
+         \print_r($input);
      } // fn
 
      /**
@@ -76,12 +76,12 @@ if (!defined('sugarEntry')) {
       */
      public function serve()
      {
-         if (empty($_REQUEST['method']) || !method_exists($this->implementation, $_REQUEST['method'])) {
+         if (empty($_REQUEST['method']) || !\method_exists($this->implementation, $_REQUEST['method'])) {
              if (empty($_REQUEST['method'])) {
                  echo '<pre>';
-                 $reflect = new ReflectionClass(get_class($this->implementation));
+                 $reflect = new ReflectionClass(\get_class($this->implementation));
                  $restWSDL = $reflect->__toString();
-                 $restWSDL = preg_replace('/@@.*/', "", $restWSDL);
+                 $restWSDL = \preg_replace('/@@.*/', "", $restWSDL);
                  echo $restWSDL;
              } else {
                  $er = new SoapError();
@@ -109,16 +109,16 @@ if (!defined('sugarEntry')) {
      {
          //ob_clean();
          $GLOBALS['log']->info('In SugarRest->fault. Setting fault object on response');
-         header('HTTP/1.1 500 Internal Server Error');
-         header('Content-Type: text/html; charset="ISO-8859-1"');
+         \header('HTTP/1.1 500 Internal Server Error');
+         \header('Content-Type: text/html; charset="ISO-8859-1"');
          echo '<br>500 Internal Server Error <br>';
-         if (is_object($errorObject)) {
+         if (\is_object($errorObject)) {
              $error = $errorObject->number . ': ' . $errorObject->name . '<br>' . $errorObject->description;
              $GLOBALS['log']->error($error);
              echo  $error;
          } else {
-             $GLOBALS['log']->error(var_export($errorObject, true));
-             print_r($errorObject);
+             $GLOBALS['log']->error(\var_export($errorObject, true));
+             \print_r($errorObject);
          } // else
      }
  } // clazz

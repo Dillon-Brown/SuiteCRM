@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -320,8 +320,8 @@ $focus->load_relationship('tracked_urls');
 
 $trkr_lists = $focus->tracked_urls->get();
 $trkr_html ='';
-$ss->assign('TRACKER_COUNT', count($trkr_lists));
-if (count($trkr_lists)>0) {
+$ss->assign('TRACKER_COUNT', \count($trkr_lists));
+if (\count($trkr_lists)>0) {
     global $odd_bg, $even_bg, $hilite_bg;
     
     $trkr_count = 0;
@@ -457,7 +457,7 @@ if ($targetList) {
 
 $ss->assign('targetListData', $targetListDataArray);
 
-$targetListDataJSON = json_encode($targetListDataAssoc);
+$targetListDataJSON = \json_encode($targetListDataAssoc);
 $ss->assign('targetListDataJSON', $targetListDataJSON);
 
 // -----
@@ -474,7 +474,7 @@ if ((isset($_REQUEST['wizardtype']) && $_REQUEST['wizardtype'] ==1) || ($focus->
     //this is a newsletter type campaign, fill in subscription values
 
     //if prospect lists are returned, then iterate through and populate form values
-    if (count($prospect_lists)>0) {
+    if (\count($prospect_lists)>0) {
         foreach ($prospect_lists as $pl_id) {
             //retrieve prospect list
             $pl = new ProspectList();
@@ -502,12 +502,12 @@ if ((isset($_REQUEST['wizardtype']) && $_REQUEST['wizardtype'] ==1) || ($focus->
     //create array for javascript, this will help to display the option text, not the value
     $dom_txt =' ';
     foreach ($app_list_strings['prospect_list_type_dom'] as $key=>$val) {
-        $dom_txt .="if(trgt_type_text =='$key'){trgt_type_text='".addslashes($val)."';}";
+        $dom_txt .="if(trgt_type_text =='$key'){trgt_type_text='".\addslashes($val)."';}";
     }
     $ss->assign("PL_DOM_STMT", $dom_txt);
     $trgt_count = 0;
     $trgt_html = ' ';
-    if (count($prospect_lists)>0) {
+    if (\count($prospect_lists)>0) {
         foreach ($prospect_lists as $pl_id) {
             //retrieve prospect list
             $pl = new ProspectList();
@@ -638,7 +638,7 @@ if ($campaign_type == 'general') {
     $ss->assign('HIDE_CONTINUE', 'submit');
 }
 
-$ss->assign('TOTAL_STEPS', count($steps));
+$ss->assign('TOTAL_STEPS', \count($steps));
 $sshtml = create_wiz_step_divs($steps, $ss);
 $ss->assign('STEPS', $sshtml);
              
@@ -662,7 +662,7 @@ if (isset($_REQUEST['wizardtype'])) {
     }
 }
 
-$ss->display(file_exists('custom/modules/Campaigns/tpls/WizardNewsletter.tpl') ? 'custom/modules/Campaigns/tpls/WizardNewsletter.tpl' : 'modules/Campaigns/tpls/WizardNewsletter.tpl');
+$ss->display(\file_exists('custom/modules/Campaigns/tpls/WizardNewsletter.tpl') ? 'custom/modules/Campaigns/tpls/WizardNewsletter.tpl' : 'modules/Campaigns/tpls/WizardNewsletter.tpl');
 
 /**
  * Marketing dropdown on summary page stores the last selected value in session
@@ -676,29 +676,29 @@ if (!$focus->id && isset($campaign_id) && $campaign_id) {
 function create_newsletter_steps()
 {
     global $mod_strings;
-    $steps[$mod_strings['LBL_NAVIGATION_MENU_GEN1']]          = file_exists('custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl' : 'modules/Campaigns/tpls/WizardCampaignHeader.tpl';
+    $steps[$mod_strings['LBL_NAVIGATION_MENU_GEN1']]          = \file_exists('custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl' : 'modules/Campaigns/tpls/WizardCampaignHeader.tpl';
     //$steps[$mod_strings['LBL_NAVIGATION_MENU_GEN2']]          = file_exists('custom/modules/Campaigns/tpls/WizardCampaignBudget.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignBudget.tpl' : 'modules/Campaigns/tpls/WizardCampaignBudget.tpl';
     //$steps[$mod_strings['LBL_NAVIGATION_MENU_TRACKERS']]      = file_exists('custom/modules/Campaigns/tpls/WizardCampaignTracker.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignTracker.tpl' : 'modules/Campaigns/tpls/WizardCampaignTracker.tpl';
-    $steps[$mod_strings['LBL_NAVIGATION_MENU_SUBSCRIPTIONS']] = file_exists('custom/modules/Campaigns/tpls/WizardCampaignTargetList.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignTargetList.tpl' : 'modules/Campaigns/tpls/WizardCampaignTargetList.tpl';
+    $steps[$mod_strings['LBL_NAVIGATION_MENU_SUBSCRIPTIONS']] = \file_exists('custom/modules/Campaigns/tpls/WizardCampaignTargetList.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignTargetList.tpl' : 'modules/Campaigns/tpls/WizardCampaignTargetList.tpl';
     return  $steps;
 }
 
 function create_campaign_steps()
 {
     global $mod_strings;
-    $steps[$mod_strings['LBL_NAVIGATION_MENU_GEN1']]          = file_exists('custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl' : 'modules/Campaigns/tpls/WizardCampaignHeader.tpl';
-    $steps[$mod_strings['LBL_NAVIGATION_MENU_GEN2']]          = file_exists('custom/modules/Campaigns/tpls/WizardCampaignBudget.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignBudget.tpl' : 'modules/Campaigns/tpls/WizardCampaignBudget.tpl';
-    $steps[$mod_strings['LBL_TARGET_LISTS']]                   = file_exists('custom/modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl' : 'modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl';
+    $steps[$mod_strings['LBL_NAVIGATION_MENU_GEN1']]          = \file_exists('custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl' : 'modules/Campaigns/tpls/WizardCampaignHeader.tpl';
+    $steps[$mod_strings['LBL_NAVIGATION_MENU_GEN2']]          = \file_exists('custom/modules/Campaigns/tpls/WizardCampaignBudget.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignBudget.tpl' : 'modules/Campaigns/tpls/WizardCampaignBudget.tpl';
+    $steps[$mod_strings['LBL_TARGET_LISTS']]                   = \file_exists('custom/modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl' : 'modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl';
     return  $steps;
 }
 
 function create_email_steps()
 {
     global $mod_strings;
-    $steps[$mod_strings['LBL_NAVIGATION_MENU_GEN1']]          = file_exists('custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl' : 'modules/Campaigns/tpls/WizardCampaignHeader.tpl';
+    $steps[$mod_strings['LBL_NAVIGATION_MENU_GEN1']]          = \file_exists('custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignHeader.tpl' : 'modules/Campaigns/tpls/WizardCampaignHeader.tpl';
     //$steps[$mod_strings['LBL_NAVIGATION_MENU_GEN2']]          = file_exists('custom/modules/Campaigns/tpls/WizardCampaignBudget.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignBudget.tpl' : 'modules/Campaigns/tpls/WizardCampaignBudget.tpl';
     //$steps[$mod_strings['LBL_NAVIGATION_MENU_TRACKERS']]      = file_exists('custom/modules/Campaigns/tpls/WizardCampaignTracker.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignTracker.tpl' : 'modules/Campaigns/tpls/WizardCampaignTracker.tpl';
-    $steps[$mod_strings['LBL_TARGET_LISTS']]                   = file_exists('custom/modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl' : 'modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl';
+    $steps[$mod_strings['LBL_TARGET_LISTS']]                   = \file_exists('custom/modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl') ? 'custom/modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl' : 'modules/Campaigns/tpls/WizardCampaignTargetListForNonNewsLetter.tpl';
     return  $steps;
 }
 
@@ -732,7 +732,7 @@ function create_wiz_menu_items($steps, $type, $mrkt_string, $summ_url, $view = n
                 $templateURLForProgressBar = "index.php?action=WizardMarketing&module=Campaigns&return_module=Campaigns&return_action=WizardHome&return_id={$campaign_id}&campaign_id={$campaign_id}&jump=2&marketing_id={$marketing_id}&record={$marketing_id}&campaign_type=Email&template_id={$template_id}";
             }
 
-            if (preg_match('/\bhref=\'([^\']*)/', $mrkt_string, $matches)) {
+            if (\preg_match('/\bhref=\'([^\']*)/', $mrkt_string, $matches)) {
                 $templateURLForProgressBar = $matches[1];
             }
 
@@ -740,7 +740,7 @@ function create_wiz_menu_items($steps, $type, $mrkt_string, $summ_url, $view = n
         }
 
         if ($type == 'newsletter' || $type == 'email') {
-            preg_match('/\bhref=\'([^\']*)/', $mrkt_string, $matches);
+            \preg_match('/\bhref=\'([^\']*)/', $mrkt_string, $matches);
             if (isset($matches[1])) {
                 $marketingLink = $matches[1] . ($matches[1] ? '&jump=2' : false);
             } else {

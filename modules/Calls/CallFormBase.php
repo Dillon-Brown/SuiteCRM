@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -213,12 +213,12 @@ EOQ;
 
         //BUG 17418 MFH
         if (isset($_POST[$prefix.'duration_hours'])) {
-            $_POST[$prefix.'duration_hours'] = trim($_POST[$prefix.'duration_hours']);
+            $_POST[$prefix.'duration_hours'] = \trim($_POST[$prefix.'duration_hours']);
         }
 
         $focus = new Call();
 
-        if ($useRequired && !checkRequired($prefix, array_keys($focus->required_fields))) {
+        if ($useRequired && !checkRequired($prefix, \array_keys($focus->required_fields))) {
             return null;
         }
         if (!isset($_POST[$prefix.'reminder_checked']) or ($_POST[$prefix.'reminder_checked'] == 0)) {
@@ -244,7 +244,7 @@ EOQ;
 
         $time_format = $timedate->get_user_time_format();
         $time_separator = ":";
-        if (preg_match('/\d+([^\d])\d+([^\d]*)/s', $time_format, $match)) {
+        if (\preg_match('/\d+([^\d])\d+([^\d]*)/s', $time_format, $match)) {
             $time_separator = $match[1];
         }
 
@@ -256,7 +256,7 @@ EOQ;
             $_POST[$prefix.'time_start'] = $timedate->merge_time_meridiem($_POST[$prefix.'time_start'], $timedate->get_time_format(), $_POST[$prefix.'meridiem']);
         }
 
-        if (isset($_POST[$prefix.'time_start']) && strlen($_POST[$prefix.'date_start']) == 10) {
+        if (isset($_POST[$prefix.'time_start']) && \strlen($_POST[$prefix.'date_start']) == 10) {
             $_POST[$prefix.'date_start'] = $_POST[$prefix.'date_start'] . ' ' . $_POST[$prefix.'time_start'];
         }
 
@@ -278,7 +278,7 @@ EOQ;
             //The current user is already added to UI and we want to give the current user the option of opting out of meeting.
             if ($current_user->id != $_POST['assigned_user_id']) {
                 $_POST['user_invitees'] .= ','.$_POST['assigned_user_id'].', ';
-                $_POST['user_invitees'] = str_replace(',,', ',', $_POST['user_invitees']);
+                $_POST['user_invitees'] = \str_replace(',,', ',', $_POST['user_invitees']);
             }
         } else {
             //this is not from long form so add assigned and current user automatically as there is no invitee list UI.
@@ -291,7 +291,7 @@ EOQ;
             }
 
             //remove any double commas introduced during appending
-            $_POST['user_invitees'] = str_replace(',,', ',', $_POST['user_invitees']);
+            $_POST['user_invitees'] = \str_replace(',,', ',', $_POST['user_invitees']);
         }
 
         if ((isset($_POST['isSaveFromDetailView']) && $_POST['isSaveFromDetailView'] == 'true') ||
@@ -310,7 +310,7 @@ EOQ;
                 ///////////////////////////////////////////////////////////////////////////
                 ////	REMOVE INVITEE RELATIONSHIPS
                 if (!empty($_POST['user_invitees'])) {
-                    $userInvitees = explode(',', trim($_POST['user_invitees'], ','));
+                    $userInvitees = \explode(',', \trim($_POST['user_invitees'], ','));
                 } else {
                     $userInvitees = array();
                 }
@@ -323,20 +323,20 @@ EOQ;
                 $r = $focus->db->query($q);
                 $acceptStatusUsers = array();
                 while ($a = $focus->db->fetchByAssoc($r)) {
-                    if (!in_array($a['user_id'], $userInvitees)) {
+                    if (!\in_array($a['user_id'], $userInvitees)) {
                         $deleteUsers[$a['user_id']] = $a['user_id'];
                     } else {
                         $acceptStatusUsers[$a['user_id']] = $a['accept_status'];
                     }
                 }
 
-                if (count($deleteUsers) > 0) {
+                if (\count($deleteUsers) > 0) {
                     $sql = '';
                     foreach ($deleteUsers as $u) {
                         $sql .= ",'" . $u . "'";
                     }
 
-                    $sql = substr($sql, 1);
+                    $sql = \substr($sql, 1);
                     // We could run a delete SQL statement here, but will just mark as deleted instead
                     $sql = "UPDATE calls_users set deleted = 1 where user_id in ($sql) AND call_id = '". $focus->id . "'";
                     $focus->db->query($sql);
@@ -344,7 +344,7 @@ EOQ;
 
                 // Get all contacts for the call
                 if (!empty($_POST['contact_invitees'])) {
-                    $contactInvitees = explode(',', trim($_POST['contact_invitees'], ','));
+                    $contactInvitees = \explode(',', \trim($_POST['contact_invitees'], ','));
                 } else {
                     $contactInvitees = array();
                 }
@@ -355,25 +355,25 @@ EOQ;
                 $r = $focus->db->query($q);
                 $acceptStatusContacts = array();
                 while ($a = $focus->db->fetchByAssoc($r)) {
-                    if (!in_array($a['contact_id'], $contactInvitees)) {
+                    if (!\in_array($a['contact_id'], $contactInvitees)) {
                         $deleteContacts[$a['contact_id']] = $a['contact_id'];
                     } else {
                         $acceptStatusContacts[$a['contact_id']] = $a['accept_status'];
                     }
                 }
 
-                if (count($deleteContacts) > 0) {
+                if (\count($deleteContacts) > 0) {
                     $sql = '';
                     foreach ($deleteContacts as $u) {
                         $sql .= ",'" . $u . "'";
                     }
-                    $sql = substr($sql, 1);
+                    $sql = \substr($sql, 1);
                     // We could run a delete SQL statement here, but will just mark as deleted instead
                     $sql = "UPDATE calls_contacts set deleted = 1 where contact_id in ($sql) AND call_id = '". $focus->id . "'";
                     $focus->db->query($sql);
                 }
                 if (!empty($_POST['lead_invitees'])) {
-                    $leadInvitees = explode(',', trim($_POST['lead_invitees'], ','));
+                    $leadInvitees = \explode(',', \trim($_POST['lead_invitees'], ','));
                 } else {
                     $leadInvitees = array();
                 }
@@ -386,14 +386,14 @@ EOQ;
                 $r = $focus->db->query($q);
                 $acceptStatusLeads = array();
                 while ($a = $focus->db->fetchByAssoc($r)) {
-                    if (!in_array($a['lead_id'], $leadInvitees)) {
+                    if (!\in_array($a['lead_id'], $leadInvitees)) {
                         $deleteLeads[$a['lead_id']] = $a['lead_id'];
                     } else {
                         $acceptStatusLeads[$a['user_id']] = $a['accept_status'];
                     }
                 }
 
-                if (count($deleteLeads) > 0) {
+                if (\count($deleteLeads) > 0) {
                     $sql = '';
                     foreach ($deleteLeads as $u) {
                         // make sure we don't delete the assigned user
@@ -401,7 +401,7 @@ EOQ;
                             $sql .= ",'" . $u . "'";
                         }
                     }
-                    $sql = substr($sql, 1);
+                    $sql = \substr($sql, 1);
                     // We could run a delete SQL statement here, but will just mark as deleted instead
                     $sql = "UPDATE calls_leads set deleted = 1 where lead_id in ($sql) AND call_id = '". $focus->id . "'";
                     $focus->db->query($sql);
@@ -433,7 +433,7 @@ EOQ;
                 // Process users
                 $existing_users = array();
                 if (!empty($_POST['existing_invitees'])) {
-                    $existing_users =  explode(",", trim($_POST['existing_invitees'], ','));
+                    $existing_users =  \explode(",", \trim($_POST['existing_invitees'], ','));
                 }
 
                 foreach ($focus->users_arr as $user_id) {
@@ -456,7 +456,7 @@ EOQ;
                 // Process contacts
                 $existing_contacts =  array();
                 if (!empty($_POST['existing_contact_invitees'])) {
-                    $existing_contacts =  explode(",", trim($_POST['existing_contact_invitees'], ','));
+                    $existing_contacts =  \explode(",", \trim($_POST['existing_contact_invitees'], ','));
                 }
 
                 foreach ($focus->contacts_arr as $contact_id) {
@@ -478,7 +478,7 @@ EOQ;
                 // Process leads
                 $existing_leads =  array();
                 if (!empty($_POST['existing_lead_invitees'])) {
-                    $existing_leads =  explode(",", trim($_POST['existing_lead_invitees'], ','));
+                    $existing_leads =  \explode(",", \trim($_POST['existing_lead_invitees'], ','));
                 }
 
                 foreach ($focus->leads_arr as $lead_id) {

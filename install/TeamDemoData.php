@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -85,7 +85,7 @@ class TeamDemoData
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($seed_team, $large_scale_test);
     }
@@ -134,8 +134,8 @@ class TeamDemoData
     public function get_random_team()
     {
         $team_list = $this->_seed_data_get_team_list();
-        $team_list_size = count($team_list);
-        $random_index = mt_rand(0, $team_list_size-1);
+        $team_list_size = \count($team_list);
+        $random_index = \mt_rand(0, $team_list_size-1);
 
         return $team_list[$random_index];
     }
@@ -146,8 +146,8 @@ class TeamDemoData
     public function get_random_teamset()
     {
         $team_list = $this->_seed_data_get_teamset_list();
-        $team_list_size = count($team_list);
-        $random_index = mt_rand(0, $team_list_size-1);
+        $team_list_size = \count($team_list);
+        $random_index = \mt_rand(0, $team_list_size-1);
 
         return $team_list[$random_index];
     }

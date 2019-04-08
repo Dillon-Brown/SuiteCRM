@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -68,7 +68,7 @@ class QuickCreateMetaParser extends MetaParser
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -87,7 +87,7 @@ class QuickCreateMetaParser extends MetaParser
     public function parse($filePath, $vardefs = array(), $moduleDir = '', $merge=false, $masterCopy=null)
     {
         global $app_strings;
-        $contents = file_get_contents($filePath);
+        $contents = \file_get_contents($filePath);
 
         // The contents are not well formed so we add this section to make it easier to parse
         $contents = $this->trimHTML($contents) . '</td></tr></table>';
@@ -96,7 +96,7 @@ class QuickCreateMetaParser extends MetaParser
         $forms = $this->getElementsByType("form", $contents);
         $tables = $this->getElementsByType("table", $forms[0] . "</td></tr></table>");
         $mainrow = $this->getElementsByType("tr", $tables[1]);
-        $rows = substr($mainrow[0], strpos($mainrow[0], "</tr>"));
+        $rows = \substr($mainrow[0], \strpos($mainrow[0], "</tr>"));
         $tablerows = $this->getElementsByType("tr", $rows);
 
         foreach ($tablerows as $trow) {
@@ -110,18 +110,18 @@ class QuickCreateMetaParser extends MetaParser
                 $sugarAttrValue = $this->getTagAttribute("sugar", $tcols, "'slot[0-9]+b$'");
 
                 // If there wasn't any slot numbering/lettering then just default to expect label->vallue pairs
-                $sugarAttrLabel = count($sugarAttrLabel) != 0 ? $sugarAttrLabel : ($slot % 2 == 0) ? true : false;
-                $sugarAttrValue = count($sugarAttrValue) != 0 ? $sugarAttrValue : ($slot % 2 == 1) ? true : false;
+                $sugarAttrLabel = \count($sugarAttrLabel) != 0 ? $sugarAttrLabel : ($slot % 2 == 0) ? true : false;
+                $sugarAttrValue = \count($sugarAttrValue) != 0 ? $sugarAttrValue : ($slot % 2 == 1) ? true : false;
 
                 $slot++;
 
                 if ($sugarAttrValue) {
-                    $spanValue = strtolower($this->getElementValue("span", $tcols));
+                    $spanValue = \strtolower($this->getElementValue("span", $tcols));
                     if (empty($spanValue)) {
-                        $spanValue = strtolower($this->getElementValue("slot", $tcols));
+                        $spanValue = \strtolower($this->getElementValue("slot", $tcols));
                     }
                     if (empty($spanValue)) {
-                        $spanValue = strtolower($this->getElementValue("td", $tcols));
+                        $spanValue = \strtolower($this->getElementValue("td", $tcols));
                     }
 
                     //Get all the editable form elements' names
@@ -136,38 +136,38 @@ class QuickCreateMetaParser extends MetaParser
                     if (!empty($customField)) {
                         // If it's a custom field we just set the name
                         $name = $customField;
-                    } elseif (empty($formElementNames) && preg_match_all('/[\{]([^\}]*?)[\}]/s', $spanValue, $matches, PREG_SET_ORDER)) {
+                    } elseif (empty($formElementNames) && \preg_match_all('/[\{]([^\}]*?)[\}]/s', $spanValue, $matches, PREG_SET_ORDER)) {
                         // We are here if the $spanValue did not contain a form element for editing.
                         // We will assume that it is read only (since there were no edit form elements)
 
 
                         // If there is more than one matching {} value then try to find the right one to key off
                         // based on vardefs.php file.  Also, use the entire spanValue as customCode
-                        if (count($matches) > 1) {
+                        if (\count($matches) > 1) {
                             $name = $matches[0][1];
                             $customCode = $spanValue;
                             foreach ($matches as $pair) {
-                                if (preg_match("/^(mod[\.]|app[\.]).*?/s", $pair[1])) {
-                                    $customCode = str_replace($pair[1], '$'.strtoupper($pair[1]), $customCode);
+                                if (\preg_match("/^(mod[\.]|app[\.]).*?/s", $pair[1])) {
+                                    $customCode = \str_replace($pair[1], '$'.\strtoupper($pair[1]), $customCode);
                                 } elseif (!empty($vardefs[$pair[1]])) {
                                     $name = $pair[1];
-                                    $customCode = str_replace($pair[1], '$fields.'.$pair[1].'.value', $customCode);
+                                    $customCode = \str_replace($pair[1], '$fields.'.$pair[1].'.value', $customCode);
                                 }
                             } //foreach
                         } else {
                             //If it is only a label, skip
-                            if (preg_match("/^(mod[\.]|app[\.]).*?/s", $matches[0][1])) {
+                            if (\preg_match("/^(mod[\.]|app[\.]).*?/s", $matches[0][1])) {
                                 continue;
-                            } elseif (preg_match("/^[\$].*?/s", $matches[0][1])) {
-                                $name = '{' . strtoupper($matches[0][1]) . '}';
+                            } elseif (\preg_match("/^[\$].*?/s", $matches[0][1])) {
+                                $name = '{' . \strtoupper($matches[0][1]) . '}';
                             } else {
                                 $name = $matches[0][1];
                             }
                         }
 
                         $readOnly = true;
-                    } elseif (is_array($formElementNames)) {
-                        if (count($formElementNames) == 1) {
+                    } elseif (\is_array($formElementNames)) {
+                        if (\count($formElementNames) == 1) {
                             if (!empty($vardefs[$formElementNames[0]])) {
                                 $name = $formElementNames[0];
                             }
@@ -194,7 +194,7 @@ class QuickCreateMetaParser extends MetaParser
                     }
 
                     // Build the entry
-                    if (preg_match("/<textarea/si", $spanValue)) {
+                    if (\preg_match("/<textarea/si", $spanValue)) {
                         //special case for textarea form elements (add the displayParams)
                         $displayParams = array();
                         $displayParams['rows'] = $this->getTagAttribute("rows", $spanValue);
@@ -237,7 +237,7 @@ class QuickCreateMetaParser extends MetaParser
             } //foreach
 
        // One last final check.  If $emptyCount does not equal Array $col count, don't add
-            if ($emptyCount != count($col)) {
+            if ($emptyCount != \count($col)) {
                 $metarow[] = $col;
             } //if
         } //foreach
@@ -245,7 +245,7 @@ class QuickCreateMetaParser extends MetaParser
    $templateMeta = array();
         $templateMeta['form']['buttons'] = 'button';
 
-        preg_match_all("/(<input[^>]*?)>/si", $tables[0], $matches);
+        \preg_match_all("/(<input[^>]*?)>/si", $tables[0], $matches);
         $buttons = array();
         foreach ($matches[0] as $button) {
             $buttons[] = array('customCode'=>$button);
@@ -256,11 +256,11 @@ class QuickCreateMetaParser extends MetaParser
         $hiddenInputs = array();
         foreach ($formElements as $elem) {
             $type = $this->getTagAttribute("type", $elem);
-            if (preg_match('/hidden/si', $type, $matches)) {
+            if (\preg_match('/hidden/si', $type, $matches)) {
                 $name = $this->getTagAttribute("name", $elem);
                 $value = $this->getTagAttribute("value", $elem);
-                $index = stripos($value, '$REQUEST');
-                $value =  !empty($index) ? '$smarty.request.' . substr($value, 10) : $value;
+                $index = \stripos($value, '$REQUEST');
+                $value =  !empty($index) ? '$smarty.request.' . \substr($value, 10) : $value;
                 $hiddenInputs[] = '<input id="' . $name . '" name="' . $name . '" value="' . $value . '">';
             }
         } //foreach

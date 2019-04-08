@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -63,16 +63,16 @@ class RelationshipFactory
             return new ActivitiesRelationship($definition);
         }
         
-        switch (strtolower($definition [ 'relationship_type' ])) {
-            case strtolower(MB_ONETOONE):
+        switch (\strtolower($definition [ 'relationship_type' ])) {
+            case \strtolower(MB_ONETOONE):
                 require_once 'modules/ModuleBuilder/parsers/relationships/OneToOneRelationship.php' ;
                 return new OneToOneRelationship($definition) ;
             
-            case strtolower(MB_ONETOMANY):
+            case \strtolower(MB_ONETOMANY):
                 require_once 'modules/ModuleBuilder/parsers/relationships/OneToManyRelationship.php' ;
                 return new OneToManyRelationship($definition) ;
                 
-            case strtolower(MB_MANYTOONE):
+            case \strtolower(MB_MANYTOONE):
                 require_once 'modules/ModuleBuilder/parsers/relationships/ManyToOneRelationship.php' ;
                 return new ManyToOneRelationship($definition) ;
             

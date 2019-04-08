@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -113,7 +113,7 @@ $marketing->campaign_id = $_REQUEST['campaign_id'];
 
 if (isset($_REQUEST['func']) && $_REQUEST['func'] == 'wizardUpdate') {
     foreach ($_POST as $key => $value) {
-        if (preg_match('/^wiz_step3_(.*)$/', $key, $match)) {
+        if (\preg_match('/^wiz_step3_(.*)$/', $key, $match)) {
             $field = $match[1];
             $marketing->$field = $value;
             if ($field=='time_start') {
@@ -134,16 +134,16 @@ if ($marketing->all_prospect_lists==1) {
         $marketing->prospectlists->delete($marketing->id);
     }
 } else {
-    if (is_array($_REQUEST['message_for'])) {
+    if (\is_array($_REQUEST['message_for'])) {
         foreach ($_REQUEST['message_for'] as $prospect_list_id) {
-            $key=array_search($prospect_list_id, $prospectlists);
+            $key=\array_search($prospect_list_id, $prospectlists);
             if ($key === null or $key === false) {
                 $marketing->prospectlists->add($prospect_list_id);
             } else {
                 unset($prospectlists[$key]);
             }
         }
-        if (count($prospectlists) != 0) {
+        if (\count($prospectlists) != 0) {
             foreach ($prospectlists as $key=>$list_id) {
                 $marketing->prospectlists->delete($marketing->id, $list_id);
             }
@@ -153,13 +153,13 @@ if ($marketing->all_prospect_lists==1) {
 if ($_REQUEST['action'] != 'WizardMarketingSave' && (!isset($_REQUEST['func']) || $_REQUEST['func'] != 'wizardUpdate')) {
     $header_URL = "Location: index.php?action=DetailView&module=Campaigns&record={$_REQUEST['campaign_id']}";
     $GLOBALS['log']->debug("about to post header URL of: $header_URL");
-    header($header_URL);
+    \header($header_URL);
 }
 
 if (isset($_REQUEST['func']) && $_REQUEST['func'] == 'wizardUpdate') {
     $resp = array();
     $resp['error'] = false;
-    $resp['data'] = json_encode(array('id' => $marketing->id));
-    $resp = json_encode($resp);
+    $resp['data'] = \json_encode(array('id' => $marketing->id));
+    $resp = \json_encode($resp);
     echo $resp;
 }

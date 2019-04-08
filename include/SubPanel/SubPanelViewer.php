@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -68,7 +68,7 @@ $module = $_REQUEST['module'];
 $collection = array();
 
 if (isset($_REQUEST['collection_basic']) && $_REQUEST['collection_basic'][0] !== 'null') {
-    $_REQUEST['collection_basic'] = explode(',', $_REQUEST['collection_basic'][0]);
+    $_REQUEST['collection_basic'] = \explode(',', $_REQUEST['collection_basic'][0]);
     $collection = $_REQUEST['collection_basic'];
 }
 

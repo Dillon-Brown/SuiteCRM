@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -63,11 +63,11 @@ foreach ($sugar_grp1_yui as $jsFile => $grp) {
 
 ////	START OUTPUT
 
-$msg = sprintf(
+$msg = \sprintf(
     $mod_strings['LBL_OLD_PHP_MSG'],
-    constant('SUITECRM_PHP_REC_VERSION'),
-    constant('SUITECRM_PHP_MIN_VERSION'),
-    constant('PHP_VERSION')
+    \constant('SUITECRM_PHP_REC_VERSION'),
+    \constant('SUITECRM_PHP_MIN_VERSION'),
+    \constant('PHP_VERSION')
 );
 
 $out = <<<EOQ

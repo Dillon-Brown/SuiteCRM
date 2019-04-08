@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -54,20 +54,20 @@ function getDisplayForField($modulePath, $field, $reportModule)
     $modulePathDisplay = array();
     $currentBean = BeanFactory::getBean($reportModule);
     $modulePathDisplay[] = $currentBean->module_name;
-    if (is_array($modulePath)) {
+    if (\is_array($modulePath)) {
         $split = $modulePath;
     } else {
-        $split = explode(':', $modulePath);
+        $split = \explode(':', $modulePath);
     }
     if ($split && $split[0] == $currentBean->module_dir) {
-        array_shift($split);
+        \array_shift($split);
     }
     foreach ($split as $relName) {
         if (empty($relName)) {
             continue;
         }
         if (!empty($currentBean->field_name_map[$relName]['vname'])) {
-            $moduleLabel = trim(
+            $moduleLabel = \trim(
                 translate($currentBean->field_name_map[$relName]['vname'], $currentBean->module_dir),
                 ':'
             );
@@ -84,13 +84,13 @@ function getDisplayForField($modulePath, $field, $reportModule)
     $fieldType = $currentBean->field_name_map[$field]['type'];
     $fieldDisplay = $currentBean->field_name_map[$field]['vname'];
     $fieldDisplay = translate($fieldDisplay, $currentBean->module_dir);
-    $fieldDisplay = trim($fieldDisplay, ':');
+    $fieldDisplay = \trim($fieldDisplay, ':');
     foreach ($modulePathDisplay as &$module) {
         $module = isset($app_list_strings['aor_moduleList'][$module]) ? $app_list_strings['aor_moduleList'][$module] : (
         isset($app_list_strings['moduleList'][$module]) ? $app_list_strings['moduleList'][$module] : $module
         );
     }
-    return array('field' => $fieldDisplay, 'type'=>$fieldType, 'module' => str_replace(' ', '&nbsp;', implode(' : ', $modulePathDisplay)));
+    return array('field' => $fieldDisplay, 'type'=>$fieldType, 'module' => \str_replace(' ', '&nbsp;', \implode(' : ', $modulePathDisplay)));
 }
 
 function requestToUserParameters($reportBean = null)
@@ -101,7 +101,7 @@ function requestToUserParameters($reportBean = null)
         $dateCount = 0;
         foreach ($_REQUEST['parameter_id'] as $key => $parameterId) {
             if ($_REQUEST['parameter_type'][$key] === 'Multi') {
-                $_REQUEST['parameter_value'][$key] = encodeMultienumValue(explode(
+                $_REQUEST['parameter_value'][$key] = encodeMultienumValue(\explode(
                     ',',
                     $_REQUEST['parameter_value'][$key]
                 ));
@@ -109,7 +109,7 @@ function requestToUserParameters($reportBean = null)
 
             $condition = BeanFactory::getBean('AOR_Conditions', $_REQUEST['parameter_id'][$key]);
             $value = $_REQUEST['parameter_value'][$key];
-            if ($reportBean && $condition && !array_key_exists($value,$app_list_strings['date_time_period_list'])){
+            if ($reportBean && $condition && !\array_key_exists($value,$app_list_strings['date_time_period_list'])){
                 $value = fixUpFormatting($reportBean->report_module, $condition->field, $value);
             }
 
@@ -139,24 +139,24 @@ function requestToUserParameters($reportBean = null)
 
             // determine if parameter is a date
             if ($_REQUEST['parameter_type'][$key] === 'Value') {
-                $paramLength = strlen($_REQUEST['parameter_value'][$key]);
+                $paramLength = \strlen($_REQUEST['parameter_value'][$key]);
                 $paramValue = $_REQUEST['parameter_value'][$key];
                 if ($paramLength === 10) {
-                    if (strpos($paramValue, '/') === 2 || strpos($paramValue, '/') === 4) {
+                    if (\strpos($paramValue, '/') === 2 || \strpos($paramValue, '/') === 4) {
                         $params[$parameterId] = array(
                             'id' => $parameterId,
                             'operator' => $_REQUEST['parameter_operator'][$key],
                             'type' => $_REQUEST['parameter_type'][$key],
                             'value' => convertToDateTime($_REQUEST['parameter_value'][$key])->format('Y-m-d H:i:s'),
                         );
-                    } elseif (strpos($paramValue, '-') === 2 || strpos($paramValue, '-') === 4) {
+                    } elseif (\strpos($paramValue, '-') === 2 || \strpos($paramValue, '-') === 4) {
                         $params[$parameterId] = array(
                             'id' => $parameterId,
                             'operator' => $_REQUEST['parameter_operator'][$key],
                             'type' => $_REQUEST['parameter_type'][$key],
                             'value' => convertToDateTime($_REQUEST['parameter_value'][$key])->format('Y-m-d H:i:s'),
                         );
-                    } elseif (strpos($paramValue, '.') === 2 || strpos($paramValue, '.') === 4) {
+                    } elseif (\strpos($paramValue, '.') === 2 || \strpos($paramValue, '.') === 4) {
                         $params[$parameterId] = array(
                             'id' => $parameterId,
                             'operator' => $_REQUEST['parameter_operator'][$key],
@@ -185,7 +185,7 @@ function getConditionsAsParameters($report, $override = array())
             continue;
         }
 
-        $path = unserialize(base64_decode($condition->module_path));
+        $path = \unserialize(\base64_decode($condition->module_path));
         $field_module = $report->report_module;
         if ($path[0] != $report->report_module) {
             foreach ($path as $rel) {
@@ -196,7 +196,7 @@ function getConditionsAsParameters($report, $override = array())
             }
         }
 
-        $additionalConditions = unserialize(base64_decode($condition->value));
+        $additionalConditions = \unserialize(\base64_decode($condition->value));
 
 
         $value = isset($override[$condition->id]['value']) ? $override[$condition->id]['value'] : $value = $condition->value;
@@ -243,9 +243,9 @@ function getPeriodDate($date_time_period_list_selected)
     } elseif ($date_time_period_list_selected == 'yesterday') {
         $datetime_period = $datetime_period->sub(new DateInterval("P1D"));
     } elseif ($date_time_period_list_selected == 'this_week') {
-        $datetime_period = $datetime_period->setTimestamp(strtotime('this week'));
+        $datetime_period = $datetime_period->setTimestamp(\strtotime('this week'));
     } elseif ($date_time_period_list_selected == 'last_week') {
-        $datetime_period = $datetime_period->setTimestamp(strtotime('last week'));
+        $datetime_period = $datetime_period->setTimestamp(\strtotime('last week'));
     } elseif ($date_time_period_list_selected == 'this_month') {
         $datetime_period = $datetime_period->setDate(
             $datetime_period->format('Y'),
@@ -485,73 +485,73 @@ function convertToDateTime($value)
 
     switch ($user_dateformat) {
         case 'Y-m-d':
-            $formattedValue = date('Y-m-d', strtotime($value));
+            $formattedValue = \date('Y-m-d', \strtotime($value));
             break;
         case 'm-d-Y':
             $formattedValue = $value;
-            $day = substr($formattedValue, 3, 2);
-            $month = substr($formattedValue, 0, 2);
-            $year = substr($formattedValue, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $day, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $month, 3, 2);
-            $formattedValue = substr_replace($formattedValue, $year, 0, 2);
-            $formattedValue = date('Y-m-d', strtotime($formattedValue));
+            $day = \substr($formattedValue, 3, 2);
+            $month = \substr($formattedValue, 0, 2);
+            $year = \substr($formattedValue, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $day, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $month, 3, 2);
+            $formattedValue = \substr_replace($formattedValue, $year, 0, 2);
+            $formattedValue = \date('Y-m-d', \strtotime($formattedValue));
             break;
         case 'd-m-Y':
             $formattedValue = $value;
-            $day = substr($formattedValue, 0, 2);
-            $month = substr($formattedValue, 3, 2);
-            $year = substr($formattedValue, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $day, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $month, 3, 2);
-            $formattedValue = substr_replace($formattedValue, $year, 0, 2);
-            $formattedValue = date('Y-m-d', strtotime($formattedValue));
+            $day = \substr($formattedValue, 0, 2);
+            $month = \substr($formattedValue, 3, 2);
+            $year = \substr($formattedValue, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $day, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $month, 3, 2);
+            $formattedValue = \substr_replace($formattedValue, $year, 0, 2);
+            $formattedValue = \date('Y-m-d', \strtotime($formattedValue));
             break;
         case 'Y/m/d':
-            $formattedValue = str_replace('/', '-', $value);
+            $formattedValue = \str_replace('/', '-', $value);
             break;
         case 'm/d/Y':
-            $formattedValue = str_replace('/', '-', $value);
-            $day = substr($formattedValue, 3, 2);
-            $month = substr($formattedValue, 0, 2);
-            $year = substr($formattedValue, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $day, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $month, 3, 2);
-            $formattedValue = substr_replace($formattedValue, $year, 0, 2);
-            $formattedValue = date('Y-m-d', strtotime($formattedValue));
+            $formattedValue = \str_replace('/', '-', $value);
+            $day = \substr($formattedValue, 3, 2);
+            $month = \substr($formattedValue, 0, 2);
+            $year = \substr($formattedValue, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $day, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $month, 3, 2);
+            $formattedValue = \substr_replace($formattedValue, $year, 0, 2);
+            $formattedValue = \date('Y-m-d', \strtotime($formattedValue));
             break;
         case 'd/m/Y':
-            $formattedValue = str_replace('/', '-', $value);
-            $day = substr($formattedValue, 0, 2);
-            $month = substr($formattedValue, 3, 2);
-            $year = substr($formattedValue, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $day, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $month, 3, 2);
-            $formattedValue = substr_replace($formattedValue, $year, 0, 2);
-            $formattedValue = date('Y-m-d', strtotime($formattedValue));
+            $formattedValue = \str_replace('/', '-', $value);
+            $day = \substr($formattedValue, 0, 2);
+            $month = \substr($formattedValue, 3, 2);
+            $year = \substr($formattedValue, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $day, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $month, 3, 2);
+            $formattedValue = \substr_replace($formattedValue, $year, 0, 2);
+            $formattedValue = \date('Y-m-d', \strtotime($formattedValue));
             break;
         case 'Y.m.d':
-            $formattedValue = str_replace('.', '-', $value);
+            $formattedValue = \str_replace('.', '-', $value);
             break;
         case 'd.m.Y':
-            $formattedValue = str_replace('.', '-', $value);
-            $day = substr($formattedValue, 0, 2);
-            $month = substr($formattedValue, 3, 2);
-            $year = substr($formattedValue, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $day, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $month, 3, 2);
-            $formattedValue = substr_replace($formattedValue, $year, 0, 2);
-            $formattedValue = date('Y-m-d', strtotime($formattedValue));
+            $formattedValue = \str_replace('.', '-', $value);
+            $day = \substr($formattedValue, 0, 2);
+            $month = \substr($formattedValue, 3, 2);
+            $year = \substr($formattedValue, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $day, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $month, 3, 2);
+            $formattedValue = \substr_replace($formattedValue, $year, 0, 2);
+            $formattedValue = \date('Y-m-d', \strtotime($formattedValue));
             break;
         case 'm.d.Y':
-            $formattedValue = str_replace('.', '-', $value);
-            $day = substr($formattedValue, 3, 2);
-            $month = substr($formattedValue, 0, 2);
-            $year = substr($formattedValue, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $day, 6, 4);
-            $formattedValue = substr_replace($formattedValue, $month, 3, 2);
-            $formattedValue = substr_replace($formattedValue, $year, 0, 2);
-            $formattedValue = date('Y-m-d', strtotime($formattedValue));
+            $formattedValue = \str_replace('.', '-', $value);
+            $day = \substr($formattedValue, 3, 2);
+            $month = \substr($formattedValue, 0, 2);
+            $year = \substr($formattedValue, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $day, 6, 4);
+            $formattedValue = \substr_replace($formattedValue, $month, 3, 2);
+            $formattedValue = \substr_replace($formattedValue, $year, 0, 2);
+            $formattedValue = \date('Y-m-d', \strtotime($formattedValue));
             break;
     }
 

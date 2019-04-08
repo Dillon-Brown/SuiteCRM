@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -85,8 +85,8 @@ class SubPanelTilesTabs extends SubPanelTiles
              * which occur in $tabs in unchanged order.
              * Then append elements of $tabs which are
              * not included in the layout. */
-            $diff = array_diff($tabs, $usersCustomLayout);
-            $tabs = array_intersect($usersCustomLayout, $tabs);
+            $diff = \array_diff($tabs, $usersCustomLayout);
+            $tabs = \array_intersect($usersCustomLayout, $tabs);
             foreach ($diff as $subpanel) {
                 $tabs []= $subpanel;
             }
@@ -103,8 +103,8 @@ class SubPanelTilesTabs extends SubPanelTiles
      */
     public function getTabs($showTabs = true, $selectedGroup='')
     {
-        $args = func_get_args();
-        return call_user_func_array(array($this, '_getTabs'), $args);
+        $args = \func_get_args();
+        return \call_user_func_array(array($this, '_getTabs'), $args);
     }
     public function _getTabs($tabs, $showTabs = true, $selectedGroup='All')
     {
@@ -136,7 +136,7 @@ class SubPanelTilesTabs extends SubPanelTiles
         foreach ($GLOBALS['tabStructure'] as $mainTab => $subModules) {
             foreach ($subModules['modules'] as $key => $subModule) {
                 foreach ($tabs as $subpanelID) {
-                    if (isset($moduleNames[ $subpanelID ]) && strcasecmp($subModule, $moduleNames[ $subpanelID ]) === 0) {
+                    if (isset($moduleNames[ $subpanelID ]) && \strcasecmp($subModule, $moduleNames[ $subpanelID ]) === 0) {
                         // Bug #44344 : Custom relationships under same module only show once in subpanel tabs
                         $groups [ translate($mainTab) ] [ 'modules' ] [] = $subpanelID ;
                         $found [ $subpanelID ] = true ;
@@ -154,14 +154,14 @@ class SubPanelTilesTabs extends SubPanelTiles
         }
 
         /* Move history to same tab as activities */
-        if (in_array('history', $tabs) && in_array('activities', $tabs)) {
+        if (\in_array('history', $tabs) && \in_array('activities', $tabs)) {
             foreach ($groups as $mainTab => $group) {
-                if (in_array('activities', array_map('strtolower', $group['modules']))) {
-                    if (!in_array('history', array_map('strtolower', $group['modules']))) {
+                if (\in_array('activities', \array_map('strtolower', $group['modules']))) {
+                    if (!\in_array('history', \array_map('strtolower', $group['modules']))) {
                         /* Move hist from there to here */
                         $groups[$mainTab]['modules'] []= 'history';
                     }
-                } elseif (false !== ($i = array_search('history', array_map('strtolower', $group['modules'])))) {
+                } elseif (false !== ($i = \array_search('history', \array_map('strtolower', $group['modules'])))) {
                     unset($groups[$mainTab]['modules'][$i]);
                     if (empty($groups[$mainTab]['modules'])) {
                         unset($groups[$mainTab]);
@@ -174,7 +174,7 @@ class SubPanelTilesTabs extends SubPanelTiles
          * Note that if a tab group already exists with the name 'All',
          * it will be overwritten in this union operation.
          */
-        if (count($groups) <= 1) {
+        if (\count($groups) <= 1) {
             $groups = array(translate('LBL_TABGROUP_ALL') => array('label' => translate('LBL_TABGROUP_ALL'), 'modules' => $tabs));
         } else {
             $groups = array(translate('LBL_TABGROUP_ALL') => array('label' => translate('LBL_TABGROUP_ALL'), 'modules' => $tabs)) + $groups;
@@ -196,7 +196,7 @@ class SubPanelTilesTabs extends SubPanelTiles
             foreach ($groups as $key => $tab) {
                 $display = false;
                 foreach ($tab['modules'] as $subkey=>$subtab) {
-                    if (in_array(strtolower($subtab), $tabs)) {
+                    if (\in_array(\strtolower($subtab), $tabs)) {
                         $display = true;
                         break;
                     }
@@ -218,7 +218,7 @@ class SubPanelTilesTabs extends SubPanelTiles
 
                     $otherTabs[$key] = array('key'=>$key, 'tabs'=>array());
 
-                    $orderedTabs = array_intersect($relevantTabs, array_map('strtolower', $groups[$key]['modules']));
+                    $orderedTabs = \array_intersect($relevantTabs, \array_map('strtolower', $groups[$key]['modules']));
 
                     foreach ($orderedTabs as $subkey => $subtab) {
                         $otherTabs[$key]['tabs'][$subkey] = array('key'=>$subtab, 'label'=>translate($this->subpanel_definitions->layout_defs['subpanel_setup'][$subtab]['title_key']));
@@ -236,7 +236,7 @@ class SubPanelTilesTabs extends SubPanelTiles
                 $selectedGroup = translate('LBL_TABGROUP_ALL');
                 $displayTabs = $otherTabs[$selectedGroup]['tabs'];
                 $sugarTabs[$selectedGroup]['type'] = 'current';
-                $retTabs = array_intersect($tabs, array_map('strtolower', $groups[$selectedGroup]['modules']));
+                $retTabs = \array_intersect($tabs, \array_map('strtolower', $groups[$selectedGroup]['modules']));
             }
 
             if (!empty($sugarTabs) || !empty($otherTabs)) {
@@ -246,7 +246,7 @@ class SubPanelTilesTabs extends SubPanelTiles
         } else {
             $tabs = SubPanelTilesTabs::applyUserCustomLayoutToTabs($tabs, $selectedGroup);
 
-            $retTabs = array_intersect($tabs, array_map('strtolower', $groups[$selectedGroup]['modules']));
+            $retTabs = \array_intersect($tabs, \array_map('strtolower', $groups[$selectedGroup]['modules']));
         }
 
         // Use javascript to filter tabs.

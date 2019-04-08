@@ -20,7 +20,7 @@ class ViewQuickcreateTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //check without setting any values, it should execute without any issues.
         $view = new ViewQuickcreate();
         $view->preDisplay();
-        $this->assertEquals(0, count($_REQUEST));
+        $this->assertEquals(0, \count($_REQUEST));
 
         //check with values preset but without a valid bean id, it sould not change Request parameters
         $_REQUEST['source_module'] = 'Users';
@@ -68,15 +68,15 @@ class ViewQuickcreateTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $_REQUEST['module'] = 'Accounts';
         $view->bean = new Account();
 
-        ob_start();
+        \ob_start();
 
         $view->display();
 
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
 
-        $this->assertGreaterThan(0, strlen($renderedContent));
-        $this->assertEquals(false, json_decode($renderedContent)); //check that it doesn't return json.
+        $this->assertGreaterThan(0, \strlen($renderedContent));
+        $this->assertEquals(false, \json_decode($renderedContent)); //check that it doesn't return json.
         
         // clean up
         

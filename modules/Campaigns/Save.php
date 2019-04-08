@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -85,7 +85,7 @@ if (!empty($_REQUEST['duplicateSave']) &&  !empty($_REQUEST['duplicateId'])) {
 
     $focus->load_relationship('prospectlists');
     $target_lists = $copyFromCompaign->prospectlists->get();
-    if (count($target_lists)>0) {
+    if (\count($target_lists)>0) {
         foreach ($target_lists as $prospect_list_id) {
             $focus->prospectlists->add($prospect_list_id);
         }
@@ -112,7 +112,7 @@ if ($focus->campaign_type =='NewsLetter') {
 
     $focus->load_relationship('prospectlists');
     $target_lists = $focus->prospectlists->get();
-    if (count($target_lists)<1) {
+    if (\count($target_lists)<1) {
         global $current_user;
         global $mod_strings;
         //if no prospect lists are attached, then lets create a subscription and unsubscription

@@ -1,6 +1,6 @@
 <?php
 //FILE SUGARCRM flav=pro || flav=sales
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -79,7 +79,7 @@ class ViewQuickcreate extends ViewAjax
         if (!empty($_REQUEST['source_module']) && $_REQUEST['source_module'] != 'undefined' && !empty($_REQUEST['record'])) {
             $this->bean = loadBean($_REQUEST['source_module']);
             if ($this->bean instanceof SugarBean
-                    && !in_array($this->bean->object_name, array('EmailMan'))) {
+                    && !\in_array($this->bean->object_name, array('EmailMan'))) {
                 $this->bean->retrieve($_REQUEST['record']);
                 if (!empty($this->bean->id)) {
                     $_REQUEST['parent_id'] = $this->bean->id;
@@ -127,14 +127,14 @@ class ViewQuickcreate extends ViewAjax
         
         // locate the best viewdefs to use: 1. custom/module/quickcreatedefs.php 2. module/quickcreatedefs.php 3. custom/module/editviewdefs.php 4. module/editviewdefs.php
         $base = 'modules/' . $module . '/metadata/';
-        $source = 'custom/' . $base . strtolower($view) . 'defs.php';
-        if (!file_exists($source)) {
-            $source = $base . strtolower($view) . 'defs.php';
-            if (!file_exists($source)) {
+        $source = 'custom/' . $base . \strtolower($view) . 'defs.php';
+        if (!\file_exists($source)) {
+            $source = $base . \strtolower($view) . 'defs.php';
+            if (!\file_exists($source)) {
                 //if our view does not exist default to EditView
                 $view = 'EditView';
                 $source = 'custom/' . $base . 'editviewdefs.php';
-                if (!file_exists($source)) {
+                if (!\file_exists($source)) {
                     $source = $base . 'editviewdefs.php';
                 }
             }
@@ -159,18 +159,18 @@ class ViewQuickcreate extends ViewAjax
         //Load the parent view class if it exists.  Check for custom file first
         loadParentView('edit');
 
-        if (file_exists('modules/'.$module.'/views/view.edit.php')) {
+        if (\file_exists('modules/'.$module.'/views/view.edit.php')) {
             include('modules/'.$module.'/views/view.edit.php');
 
             $c = $module . 'ViewEdit';
             
-            if (class_exists($c)) {
+            if (\class_exists($c)) {
                 $view = new $c;
                 if ($view->useForSubpanel) {
                     $defaultProcess = false;
                     
                     //Check if we shold use the module's QuickCreate.tpl file
-                    if ($view->useModuleQuickCreateTemplate && file_exists('modules/'.$module.'/tpls/QuickCreate.tpl')) {
+                    if ($view->useModuleQuickCreateTemplate && \file_exists('modules/'.$module.'/tpls/QuickCreate.tpl')) {
                         $this->ev->defs['templateMeta']['form']['headerTpl'] = 'modules/'.$module.'/tpls/QuickCreate.tpl';
                     }
                     

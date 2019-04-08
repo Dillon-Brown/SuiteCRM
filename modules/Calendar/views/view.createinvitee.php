@@ -50,7 +50,7 @@ class CalendarViewCreateInvitee extends SugarView
 
         $module = empty($_REQUEST['inviteeModule']) ? '' : $_REQUEST['inviteeModule'];
 
-        if (!in_array($module, array('Leads', 'Contacts')) || empty($beanList[$module])) {
+        if (!\in_array($module, array('Leads', 'Contacts')) || empty($beanList[$module])) {
             $this->returnNoAccess($module);
         }
 
@@ -76,8 +76,8 @@ class CalendarViewCreateInvitee extends SugarView
             $sendbackArr['fields'][$field] = $this->bean->$field;
         }
             
-        ob_clean();
-        echo json_encode($sendbackArr);
+        \ob_clean();
+        echo \json_encode($sendbackArr);
     }
 
     /**
@@ -86,7 +86,7 @@ class CalendarViewCreateInvitee extends SugarView
      */
     protected function returnNoAccess($module)
     {
-        echo json_encode(array(
+        echo \json_encode(array(
             'noAccess' => true,
             'module' => $module,
         ));

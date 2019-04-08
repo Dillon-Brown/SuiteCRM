@@ -179,6 +179,6 @@ class ProjectTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $project->id = 1;
         $result = $project->getAllProjectTasks();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 }

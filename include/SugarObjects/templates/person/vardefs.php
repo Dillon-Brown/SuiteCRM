@@ -436,7 +436,7 @@ $vardefs = array(
         'email_addresses_primary' => array(
             'name' => 'email_addresses_primary',
             'type' => 'link',
-            'relationship' => strtolower($object_name) . '_email_addresses_primary',
+            'relationship' => \strtolower($object_name) . '_email_addresses_primary',
             'source' => 'non-db',
             'vname' => 'LBL_EMAIL_ADDRESS_PRIMARY',
             'duplicate_merge' => 'disabled',
@@ -444,7 +444,7 @@ $vardefs = array(
         'email_addresses' => array(
             'name' => 'email_addresses',
             'type' => 'link',
-            'relationship' => strtolower($object_name) . '_email_addresses',
+            'relationship' => \strtolower($object_name) . '_email_addresses',
             'source' => 'non-db',
             'vname' => 'LBL_EMAIL_ADDRESSES',
             'reportable' => false,
@@ -463,7 +463,7 @@ $vardefs = array(
         ),
     ),
     'relationships' => array(
-        strtolower($module) . '_email_addresses' => array(
+        \strtolower($module) . '_email_addresses' => array(
             'lhs_module' => $module,
             'lhs_table' => $table_name,
             'lhs_key' => 'id',
@@ -477,7 +477,7 @@ $vardefs = array(
             'relationship_role_column' => 'bean_module',
             'relationship_role_column_value' => $module
         ),
-        strtolower($module) . '_email_addresses_primary' => array(
+        \strtolower($module) . '_email_addresses_primary' => array(
             'lhs_module' => $module,
             'lhs_table' => $table_name,
             'lhs_key' => 'id',

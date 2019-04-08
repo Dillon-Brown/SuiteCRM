@@ -25,7 +25,7 @@ function question_responses_display(SurveyResponses $focus, $field, $value, $vie
         $data['answer'] = convertQuestionResponseForDisplay($questionResponseArr, $question->type);
         $questionResponses[] = $data;
     }
-    usort(
+    \usort(
         $questionResponses,
         function ($a, $b) {
             return $a['sort_order'] - $b['sort_order'];
@@ -62,7 +62,7 @@ function convertQuestionResponseForDisplay($responseArr, $type)
                 }
             }
 
-            return implode(',', $bits);
+            return \implode(',', $bits);
         case "Matrix":
             $str = '<dl>';
             $strArr = array();
@@ -84,7 +84,7 @@ function convertQuestionResponseForDisplay($responseArr, $type)
                 }
                 $strArr[] = array('str' => $tmpStr, 'sort_order' => $sortOrder);
             }
-            usort(
+            \usort(
                 $strArr,
                 function ($a, $b) {
                     return $a['sort_order'] - $b['sort_order'];
@@ -108,7 +108,7 @@ function convertQuestionResponseForDisplay($responseArr, $type)
                 return $timedate->asUserDate($date);
             
         case "Rating":
-            return str_repeat('<img width=20 src="modules/Surveys/imgs/star.png"/>', $responseArr[0]->answer);
+            return \str_repeat('<img width=20 src="modules/Surveys/imgs/star.png"/>', $responseArr[0]->answer);
         case "Scale":
             return $responseArr[0]->answer . '/10';
         case "Textbox":

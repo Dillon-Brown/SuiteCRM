@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -91,7 +91,7 @@ class ImportViewConfirm extends ImportView
             $uploadFile->final_move('IMPORT_'.$this->bean->object_name.'_'.$current_user->id);
             $uploadFileName = $uploadFile->get_upload_path('IMPORT_'.$this->bean->object_name.'_'.$current_user->id);
         } elseif (!empty($_REQUEST['tmp_file'])) {
-            $uploadFileName = "upload://".basename($_REQUEST['tmp_file']);
+            $uploadFileName = "upload://".\basename($_REQUEST['tmp_file']);
         } else {
             $this->_showImportError($mod_strings['LBL_IMPORT_MODULE_ERROR_NO_UPLOAD'], $_REQUEST['import_module'], 'Step2', true, null, true);
             return;
@@ -107,8 +107,8 @@ class ImportViewConfirm extends ImportView
         $mimeTypeOk = true;
 
         //check to see if the file mime type is not a form of text or application octed streramand fire error if not
-        if (isset($_FILES['userfile']['type']) && strpos($_FILES['userfile']['type'], 'octet-stream') === false && strpos($_FILES['userfile']['type'], 'text') === false
-            && strpos($_FILES['userfile']['type'], 'application/vnd.ms-excel') === false) {
+        if (isset($_FILES['userfile']['type']) && \strpos($_FILES['userfile']['type'], 'octet-stream') === false && \strpos($_FILES['userfile']['type'], 'text') === false
+            && \strpos($_FILES['userfile']['type'], 'application/vnd.ms-excel') === false) {
             //this file does not have a known text or application type of mime type, issue the warning
             $error_msgs[] = $mod_strings['LBL_MIME_TYPE_ERROR_1'];
             $error_msgs[] = $mod_strings['LBL_MIME_TYPE_ERROR_2'];
@@ -119,7 +119,7 @@ class ImportViewConfirm extends ImportView
         $this->ss->assign("FILE_NAME", $uploadFileName);
 
         // Now parse the file and look for errors
-        $importFile = new ImportFile($uploadFileName, $_REQUEST['custom_delimiter'], html_entity_decode($_REQUEST['custom_enclosure'], ENT_QUOTES), false);
+        $importFile = new ImportFile($uploadFileName, $_REQUEST['custom_delimiter'], \html_entity_decode($_REQUEST['custom_enclosure'], ENT_QUOTES), false);
 
         if ($this->shouldAutoDetectProperties($importSource)) {
             $GLOBALS['log']->debug("Auto detecing csv properties...");
@@ -158,7 +158,7 @@ class ImportViewConfirm extends ImportView
             $importFileMap = $this->overloadImportFileMapFromRequest($importFileMap);
             $delimeter = !empty($_REQUEST['custom_delimiter']) ? $_REQUEST['custom_delimiter'] : $delimeter;
             $enclosure = isset($_REQUEST['custom_enclosure']) ? $_REQUEST['custom_enclosure'] : $enclosure;
-            $enclosure = html_entity_decode($enclosure, ENT_QUOTES);
+            $enclosure = \html_entity_decode($enclosure, ENT_QUOTES);
             $hasHeader = !empty($_REQUEST['has_header']) ? $_REQUEST['has_header'] : $hasHeader;
             if ($hasHeader == 'on') {
                 $hasHeader = true;
@@ -170,7 +170,7 @@ class ImportViewConfirm extends ImportView
         $this->ss->assign("IMPORT_ENCLOSURE_OPTIONS", $this->getEnclosureOptions($enclosure));
         $this->ss->assign("IMPORT_DELIMETER_OPTIONS", $this->getDelimeterOptions($delimeter));
         $this->ss->assign("CUSTOM_DELIMITER", $delimeter);
-        $this->ss->assign("CUSTOM_ENCLOSURE", htmlentities($enclosure, ENT_QUOTES));
+        $this->ss->assign("CUSTOM_ENCLOSURE", \htmlentities($enclosure, ENT_QUOTES));
         $hasHeaderFlag = $hasHeader ? " CHECKED" : "";
         $this->ss->assign("HAS_HEADER_CHECKED", $hasHeaderFlag);
 
@@ -220,10 +220,10 @@ class ImportViewConfirm extends ImportView
     {
         $results = array();
         foreach ($GLOBALS['app_list_strings']['import_enclosure_options'] as $k => $v) {
-            $results[htmlentities($k, ENT_QUOTES)] = $v;
+            $results[\htmlentities($k, ENT_QUOTES)] = $v;
         }
 
-        return get_select_options_with_id($results, htmlentities($enclosure, ENT_QUOTES));
+        return get_select_options_with_id($results, \htmlentities($enclosure, ENT_QUOTES));
     }
 
     private function overloadImportFileMapFromRequest($importFileMap)
@@ -252,8 +252,8 @@ class ImportViewConfirm extends ImportView
 
     private function getImportMap($importSource)
     {
-        if (strncasecmp("custom:", $importSource, 7) == 0) {
-            $id = substr($importSource, 7);
+        if (\strncasecmp("custom:", $importSource, 7) == 0) {
+            $id = \substr($importSource, 7);
             $import_map_seed = new ImportMap();
             $import_map_seed->retrieve($id, false);
 
@@ -261,17 +261,17 @@ class ImportViewConfirm extends ImportView
             $this->ss->assign("SOURCE_NAME", $import_map_seed->name);
             $this->ss->assign("SOURCE", $import_map_seed->source);
         } else {
-            $classname = 'ImportMap' . ucfirst($importSource);
-            if (file_exists("modules/Import/maps/{$classname}.php")) {
+            $classname = 'ImportMap' . \ucfirst($importSource);
+            if (\file_exists("modules/Import/maps/{$classname}.php")) {
                 require_once("modules/Import/maps/{$classname}.php");
-            } elseif (file_exists("custom/modules/Import/maps/{$classname}.php")) {
+            } elseif (\file_exists("custom/modules/Import/maps/{$classname}.php")) {
                 require_once("custom/modules/Import/maps/{$classname}.php");
             } else {
                 require_once("custom/modules/Import/maps/ImportMapOther.php");
                 $classname = 'ImportMapOther';
                 $importSource = 'other';
             }
-            if (class_exists($classname)) {
+            if (\class_exists($classname)) {
                 $import_map_seed = new $classname;
                 $this->ss->assign("SOURCE", $importSource);
             }
@@ -385,7 +385,7 @@ eoq;
         $importMappings = array('ImportMapSalesforce', 'ImportMapOutlook');
         foreach ($importMappings as $importMap) {
             $tmpFile = "modules/Import/maps/$importMap.php";
-            if (file_exists($tmpFile)) {
+            if (\file_exists($tmpFile)) {
                 require_once($tmpFile);
                 $t = new $importMap();
                 $results[$t->name] = array('delim' => $t->delimiter, 'enclos' => $t->enclosure, 'has_header' => $t->has_header);
@@ -398,8 +398,8 @@ eoq;
     {
         $maxColumns = 0;
         foreach ($sampleSet as $v) {
-            if (count($v) > $maxColumns) {
-                $maxColumns = count($v);
+            if (\count($v) > $maxColumns) {
+                $maxColumns = \count($v);
             } else {
                 continue;
             }
@@ -416,13 +416,13 @@ eoq;
         }
 
         if (! $importFile->hasHeaderRow(false)) {
-            array_unshift($rows, array_fill(0, 1, ''));
+            \array_unshift($rows, \array_fill(0, 1, ''));
         }
         
         foreach ($rows as &$row) {
-            if (is_array($row)) {
+            if (\is_array($row)) {
                 foreach ($row as &$val) {
-                    $val = strip_tags($val);
+                    $val = \strip_tags($val);
                 }
             }
         }
@@ -436,7 +436,7 @@ eoq;
     {
         global $mod_strings, $locale;
         $maxRecordsExceededJS = $maxRecordsExceeded?"true":"false";
-        $importMappingJS = json_encode($importMappingJS);
+        $importMappingJS = \json_encode($importMappingJS);
         
         $currencySymbolJs = $this->setCurrencyOptions($importFileMap);
         $getNumberJs = $locale->getNumberJs();
@@ -593,13 +593,13 @@ EOJAVASCRIPT;
      */
     protected function _showImportError($message, $module, $action = 'Step1', $showCancel = false, $cancelLabel = null, $display = false)
     {
-        if (!is_array($message)) {
+        if (!\is_array($message)) {
             $message = array($message);
         }
         $ss = new Sugar_Smarty();
         $display_msg = '';
         foreach ($message as $m) {
-            $display_msg .= '<p>'.htmlentities($m, ENT_QUOTES).'</p><br>';
+            $display_msg .= '<p>'.\htmlentities($m, ENT_QUOTES).'</p><br>';
         }
         global $mod_strings;
 

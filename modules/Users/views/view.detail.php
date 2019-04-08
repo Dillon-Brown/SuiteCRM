@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -60,7 +60,7 @@ class UsersViewDetail extends ViewDetail
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -158,13 +158,13 @@ class UsersViewDetail extends ViewDetail
             ($this->bean->is_group == '1' || $this->bean->portal_only == '1') ? true : false
         );
         if ($show_roles) {
-            ob_start();
+            \ob_start();
 
             require_once('modules/ACLRoles/DetailUserAccess.php');
 
 
-            $role_html = ob_get_contents();
-            ob_end_clean();
+            $role_html = \ob_get_contents();
+            \ob_end_clean();
             $this->ss->assign('ROLE_HTML', $role_html);
         }
     }
@@ -202,7 +202,7 @@ class UsersViewDetail extends ViewDetail
             global $current_user;
             if ($this->bean->id == $current_user->id) {
                 $_COOKIE[$current_user->id . '_activePage'] = '0';
-                setcookie($current_user->id . '_activePage', '0', 3000, null, null, isSSL(), true);
+                \setcookie($current_user->id . '_activePage', '0', 3000, null, null, isSSL(), true);
             }
         }
 

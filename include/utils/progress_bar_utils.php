@@ -40,17 +40,17 @@
 
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
 function progress_bar_flush($flush=true)
 {
     if ($flush) {
-        if (ob_get_level()) {
-            @ob_flush();
+        if (\ob_get_level()) {
+            @\ob_flush();
         } else {
-            @flush();
+            @\flush();
         }
     }
 }
@@ -60,7 +60,7 @@ function display_flow_bar($name, $delay, $size=200, $flush=true)
     $chunk = $size/5;
     echo "<div id='{$name}_flow_bar'><table  class='list view' cellpading=0 cellspacing=0><tr><td id='{$name}_flow_bar0' width='{$chunk}px' bgcolor='#cccccc' align='center'>&nbsp;</td><td id='{$name}_flow_bar1' width='{$chunk}px' bgcolor='#ffffff' align='center'>&nbsp;</td><td id='{$name}_flow_bar2' width='{$chunk}px' bgcolor='#ffffff' align='center'>&nbsp;</td><td id='{$name}_flow_bar3' width='{$chunk}px' bgcolor='#ffffff' align='center'>&nbsp;</td><td id='{$name}_flow_bar4' width='{$chunk}px' bgcolor='#ffffff' align='center'>&nbsp;</td></tr></table></div><br>";
 
-    echo str_repeat(' ', 256);
+    echo \str_repeat(' ', 256);
 
     progress_bar_flush($flush);
 
@@ -84,7 +84,7 @@ function start_flow_bar($name, $delay, $flush=true)
 
 	</script>
 ";
-    echo str_repeat(' ', 256);
+    echo \str_repeat(' ', 256);
 
     progress_bar_flush($flush);
 }
@@ -93,7 +93,7 @@ function destroy_flow_bar($name, $flush=true)
 {
     $timer_id = $name . '_id';
     echo "<script>clearTimeout($timer_id);document.getElementById('{$name}_flow_bar').innerHTML = '';</script>";
-    echo str_repeat(' ', 256);
+    echo \str_repeat(' ', 256);
 
     progress_bar_flush($flush);
 }
@@ -102,7 +102,7 @@ function display_progress_bar($name, $current, $total, $flush=true)
 {
     $percent = $current/$total * 100;
     $remain = 100 - $percent;
-    $status = floor($percent);
+    $status = \floor($percent);
     //scale to a larger size
     $percent *= 2;
     $remain *= 2;
@@ -116,7 +116,7 @@ function display_progress_bar($name, $current, $total, $flush=true)
     if ($status == 0) {
         echo "<script>document.getElementById('{$name}_complete_bar').style.backgroundColor='#ffffff';</script>";
     }
-    echo str_repeat(' ', 256);
+    echo \str_repeat(' ', 256);
 
     progress_bar_flush($flush);
 }
@@ -125,7 +125,7 @@ function update_progress_bar($name, $current, $total, $flush=true)
 {
     $percent = $current/$total * 100;
     $remain = 100 - $percent;
-    $status = floor($percent);
+    $status = \floor($percent);
     //scale to a larger size
     $percent *= 2;
     $remain *= 2;

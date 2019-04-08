@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -67,6 +67,6 @@ class SugarLogStore implements Store
         }
        
         $GLOBALS['log']->info("---- metrics for $monitor->name ----");
-        $GLOBALS['log']->info(var_export($values, true));
+        $GLOBALS['log']->info(\var_export($values, true));
     }
 }

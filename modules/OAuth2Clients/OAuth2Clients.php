@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -94,7 +94,7 @@ class OAuth2Clients extends SugarBean
     public function save($check_notify = false)
     {
         if (!empty($_REQUEST['new_secret'])) {
-            $this->secret = hash('sha256', $_REQUEST['new_secret']);
+            $this->secret = \hash('sha256', $_REQUEST['new_secret']);
         }
         $this->setDurationValue();
         return parent::save();

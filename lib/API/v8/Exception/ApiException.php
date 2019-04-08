@@ -45,7 +45,7 @@ use SuiteCRM\API\v8\Controller\ApiController;
 use SuiteCRM\LangException;
 use SuiteCRM\LangText;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -107,7 +107,7 @@ class ApiException extends LangException
      */
     public function setSource($source)
     {
-        if (is_string($source)) {
+        if (\is_string($source)) {
             $source = ['pointer' => $source];
         }
         $this->source = $source;

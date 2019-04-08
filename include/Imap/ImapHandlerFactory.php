@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -79,7 +79,7 @@ class ImapHandlerFactory
      */
     protected function setInterfaceObject(ImapHandlerInterface $interfaceObject)
     {
-        $class = get_class($interfaceObject);
+        $class = \get_class($interfaceObject);
         LoggerManager::getLogger()->debug('ImapHandlerFactory will using a ' . $class);
         $this->interfaceObject = $interfaceObject;
     }
@@ -89,7 +89,7 @@ class ImapHandlerFactory
      */
     protected function includeFakeInterface()
     {
-        if (!class_exists($this->imapHandlerTestInterface['class'])) {
+        if (!\class_exists($this->imapHandlerTestInterface['class'])) {
             require_once $this->imapHandlerTestInterface['file'];
         }
     }
@@ -110,9 +110,9 @@ class ImapHandlerFactory
         $interfaceCallsSettings = include $this->imapHandlerTestInterface['calls'];
 
         if (!isset($interfaceCallsSettings[$testSettings])) {
-            $info = "[debug testSettings] " . var_dump($testSettings, true);
-            $info .= "\n[debug info this] " . var_dump($this, true);
-            $info .= "\n[debug info callset] " . var_dump($interfaceCallsSettings, true);
+            $info = "[debug testSettings] " . \var_dump($testSettings, true);
+            $info .= "\n[debug info this] " . \var_dump($this, true);
+            $info .= "\n[debug info callset] " . \var_dump($interfaceCallsSettings, true);
             LoggerManager::getLogger()->debug('Imap test setting failure: ' . $info);
             throw new ImapHandlerException(
                 "Test settings does not exists: $testSettings",
@@ -133,8 +133,8 @@ class ImapHandlerFactory
     protected function getTestSettings()
     {
         $testSettings = null;
-        if (file_exists(__DIR__ . self::SETTINGS_KEY_FILE)) {
-            $testSettings = file_get_contents(__DIR__ . self::SETTINGS_KEY_FILE);
+        if (\file_exists(__DIR__ . self::SETTINGS_KEY_FILE)) {
+            $testSettings = \file_get_contents(__DIR__ . self::SETTINGS_KEY_FILE);
         }
         if (!$testSettings) {
             LoggerManager::getLogger()->warn("Test settings not set, create one with default key");
@@ -153,8 +153,8 @@ class ImapHandlerFactory
      */
     public function saveTestSettingsKey($key)
     {
-        if (!is_string($key) || !$key) {
-            $type = gettype($key);
+        if (!\is_string($key) || !$key) {
+            $type = \gettype($key);
             throw new InvalidArgumentException('Key should be a non-empty string, ' . ($type == 'string' ? 'empty string' : $type) . ' given.');
         }
         
@@ -166,7 +166,7 @@ class ImapHandlerFactory
                 ImapHandlerException::ERR_KEY_NOT_FOUND
             );
         } else {
-            if (!file_put_contents(__DIR__ . self::SETTINGS_KEY_FILE, $key)) {
+            if (!\file_put_contents(__DIR__ . self::SETTINGS_KEY_FILE, $key)) {
                 throw new ImapHandlerException('Key saving error', ImapHandlerException::ERR_KEY_SAVE_ERROR);
             } else {
                 return true;

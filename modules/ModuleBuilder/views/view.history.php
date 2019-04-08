@@ -62,20 +62,20 @@ class ViewHistory extends SugarView
 
     public function display()
     {
-        $this->layout = strtolower($_REQUEST [ 'view' ]) ;
+        $this->layout = \strtolower($_REQUEST [ 'view' ]) ;
         
         $subpanelName = null ;
-        if ((strtolower($this->layout) == 'listview') && (!empty($_REQUEST [ 'subpanel' ]))) {
+        if ((\strtolower($this->layout) == 'listview') && (!empty($_REQUEST [ 'subpanel' ]))) {
             $subpanelName = $_REQUEST [ 'subpanel' ] ;
         }
         
-        $packageName = (isset($_REQUEST [ 'view_package' ]) && (strtolower($_REQUEST [ 'view_package' ]) != 'studio')) ? $_REQUEST [ 'view_package' ] : null ;
+        $packageName = (isset($_REQUEST [ 'view_package' ]) && (\strtolower($_REQUEST [ 'view_package' ]) != 'studio')) ? $_REQUEST [ 'view_package' ] : null ;
         $this->module = $_REQUEST [ 'view_module' ] ;
         
         $this->parser = ParserFactory::getParser($this->layout, $this->module, $packageName, $subpanelName) ;
         $this->history = $this->parser->getHistory() ;
         $action = ! empty($_REQUEST [ 'histAction' ]) ? $_REQUEST [ 'histAction' ] : 'browse' ;
-        $GLOBALS['log']->debug(get_class($this)."->display(): performing History action {$action}") ;
+        $GLOBALS['log']->debug(\get_class($this)."->display(): performing History action {$action}") ;
         $this->$action() ;
     }
 
@@ -106,10 +106,10 @@ class ViewHistory extends SugarView
             $snapshots [ $ts ] = $displayTS ;
             $ts = $this->history->getNext() ;
         }
-        if (count($snapshots) > $this->pageSize) {
+        if (\count($snapshots) > $this->pageSize) {
             $smarty->assign('nextPage', true) ;
         }
-        $snapshots = array_slice($snapshots, 0, $this->pageSize, true) ;
+        $snapshots = \array_slice($snapshots, 0, $this->pageSize, true) ;
         $smarty->assign('currentPage', $page) ;
         $smarty->assign('snapshots', $snapshots) ;
         

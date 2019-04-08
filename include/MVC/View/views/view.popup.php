@@ -68,7 +68,7 @@ class ViewPopup extends SugarView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -85,23 +85,23 @@ class ViewPopup extends SugarView
             sugar_cleanup(true);
         }
 
-        if (isset($_REQUEST['metadata']) && strpos($_REQUEST['metadata'], "..") !== false) {
+        if (isset($_REQUEST['metadata']) && \strpos($_REQUEST['metadata'], "..") !== false) {
             die("Directory navigation attack denied.");
         }
         if (!empty($_REQUEST['metadata']) && $_REQUEST['metadata'] != 'undefined'
-            && file_exists('custom/modules/' . $this->module . '/metadata/' . $_REQUEST['metadata'] . '.php')) {
+            && \file_exists('custom/modules/' . $this->module . '/metadata/' . $_REQUEST['metadata'] . '.php')) {
             require 'custom/modules/' . $this->module . '/metadata/' . $_REQUEST['metadata'] . '.php';
         } elseif (!empty($_REQUEST['metadata']) && $_REQUEST['metadata'] != 'undefined'
-            && file_exists('modules/' . $this->module . '/metadata/' . $_REQUEST['metadata'] . '.php')) {
+            && \file_exists('modules/' . $this->module . '/metadata/' . $_REQUEST['metadata'] . '.php')) {
             require 'modules/' . $this->module . '/metadata/' . $_REQUEST['metadata'] . '.php';
-        } elseif (file_exists('custom/modules/' . $this->module . '/metadata/popupdefs.php')) {
+        } elseif (\file_exists('custom/modules/' . $this->module . '/metadata/popupdefs.php')) {
             require 'custom/modules/' . $this->module . '/metadata/popupdefs.php';
-        } elseif (file_exists('modules/' . $this->module . '/metadata/popupdefs.php')) {
+        } elseif (\file_exists('modules/' . $this->module . '/metadata/popupdefs.php')) {
             require 'modules/' . $this->module . '/metadata/popupdefs.php';
         }
 
         if (!empty($popupMeta) && !empty($popupMeta['listviewdefs'])) {
-            if (is_array($popupMeta['listviewdefs'])) {
+            if (\is_array($popupMeta['listviewdefs'])) {
                 //if we have an array, then we are not going to include a file, but rather the
                 //listviewdefs will be defined directly in the popupdefs file
                 $listViewDefs[$this->module] = $popupMeta['listviewdefs'];
@@ -109,15 +109,15 @@ class ViewPopup extends SugarView
                 //otherwise include the file
                 require_once($popupMeta['listviewdefs']);
             }
-        } elseif (file_exists('custom/modules/' . $this->module . '/metadata/listviewdefs.php')) {
+        } elseif (\file_exists('custom/modules/' . $this->module . '/metadata/listviewdefs.php')) {
             require_once('custom/modules/' . $this->module . '/metadata/listviewdefs.php');
-        } elseif (file_exists('modules/' . $this->module . '/metadata/listviewdefs.php')) {
+        } elseif (\file_exists('modules/' . $this->module . '/metadata/listviewdefs.php')) {
             require_once('modules/' . $this->module . '/metadata/listviewdefs.php');
         }
 
         //check for searchdefs as well
         if (!empty($popupMeta) && !empty($popupMeta['searchdefs'])) {
-            if (is_array($popupMeta['searchdefs'])) {
+            if (\is_array($popupMeta['searchdefs'])) {
                 //if we have an array, then we are not going to include a file, but rather the
                 //searchdefs will be defined directly in the popupdefs file
                 $searchdefs[$this->module]['layout']['advanced_search'] = $popupMeta['searchdefs'];
@@ -125,22 +125,22 @@ class ViewPopup extends SugarView
                 //otherwise include the file
                 require_once($popupMeta['searchdefs']);
             }
-        } elseif (empty($searchdefs) && file_exists('custom/modules/'.$this->module.'/metadata/searchdefs.php')) {
+        } elseif (empty($searchdefs) && \file_exists('custom/modules/'.$this->module.'/metadata/searchdefs.php')) {
             require_once('custom/modules/'.$this->module.'/metadata/searchdefs.php');
-        } elseif (empty($searchdefs) && file_exists('modules/'.$this->module.'/metadata/searchdefs.php')) {
+        } elseif (empty($searchdefs) && \file_exists('modules/'.$this->module.'/metadata/searchdefs.php')) {
             require_once('modules/'.$this->module.'/metadata/searchdefs.php');
         }
 
         //if you click the pagination button, it will populate the search criteria here
-        if (!empty($this->bean) && isset($_REQUEST[$this->module.'2_'.strtoupper($this->bean->object_name).'_offset'])) {
+        if (!empty($this->bean) && isset($_REQUEST[$this->module.'2_'.\strtoupper($this->bean->object_name).'_offset'])) {
             if (!empty($_REQUEST['current_query_by_page'])) {
                 $blockVariables = array('mass', 'uid', 'massupdate', 'delete', 'merge', 'selectCount',
                     'sortOrder', 'orderBy', 'request_data', 'current_query_by_page');
-                $current_query_by_page = json_decode(html_entity_decode($_REQUEST['current_query_by_page']), true);
+                $current_query_by_page = \json_decode(\html_entity_decode($_REQUEST['current_query_by_page']), true);
                 foreach ($current_query_by_page as $search_key=>$search_value) {
-                    if ($search_key != $this->module.'2_'.strtoupper($this->bean->object_name).'_offset'
-                        && !in_array($search_key, $blockVariables)) {
-                        if (!is_array($search_value)) {
+                    if ($search_key != $this->module.'2_'.\strtoupper($this->bean->object_name).'_offset'
+                        && !\in_array($search_key, $blockVariables)) {
+                        if (!\is_array($search_value)) {
                             $_REQUEST[$search_key] = securexss($search_value);
                         } else {
                             foreach ($search_value as $key=>&$val) {
@@ -159,7 +159,7 @@ class ViewPopup extends SugarView
             $filter_fields = array();
             $popup = new PopupSmarty($this->bean, $this->module);
             foreach ($listViewDefs[$this->module] as $col => $params) {
-                $filter_fields[strtolower($col)] = true;
+                $filter_fields[\strtolower($col)] = true;
                 if (!empty($params['related_fields'])) {
                     foreach ($params['related_fields'] as $field) {
                         //id column is added by query construction function. This addition creates duplicates
@@ -187,22 +187,22 @@ class ViewPopup extends SugarView
 
             $massUpdateData = '';
             if (isset($_REQUEST['mass'])) {
-                foreach (array_unique($_REQUEST['mass']) as $record) {
+                foreach (\array_unique($_REQUEST['mass']) as $record) {
                     $massUpdateData .= "<input style='display: none' checked type='checkbox' name='mass[]' value='$record'>\n";
                 }
             }
             $popup->massUpdateData = $massUpdateData;
 
             $tpl = 'include/Popups/tpls/PopupGeneric.tpl';
-            if (file_exists($this->getCustomFilePathIfExists("modules/{$this->module}/tpls/popupGeneric.tpl"))) {
+            if (\file_exists($this->getCustomFilePathIfExists("modules/{$this->module}/tpls/popupGeneric.tpl"))) {
                 $tpl = $this->getCustomFilePathIfExists("modules/{$this->module}/tpls/popupGeneric.tpl");
             }
 
-            if (file_exists($this->getCustomFilePathIfExists("modules/{$this->module}/tpls/popupHeader.tpl"))) {
+            if (\file_exists($this->getCustomFilePathIfExists("modules/{$this->module}/tpls/popupHeader.tpl"))) {
                 $popup->headerTpl = $this->getCustomFilePathIfExists("modules/{$this->module}/tpls/popupHeader.tpl");
             }
 
-            if (file_exists($this->getCustomFilePathIfExists("modules/{$this->module}/tpls/popupFooter.tpl"))) {
+            if (\file_exists($this->getCustomFilePathIfExists("modules/{$this->module}/tpls/popupFooter.tpl"))) {
                 $popup->footerTpl = $this->getCustomFilePathIfExists("modules/{$this->module}/tpls/popupFooter.tpl");
             }
 
@@ -217,12 +217,12 @@ class ViewPopup extends SugarView
                 $this->_displayJavascript();
             }
             insert_popup_header(null, false);
-            if (isset($this->override_popup['template_data']) && is_array($this->override_popup['template_data'])) {
+            if (isset($this->override_popup['template_data']) && \is_array($this->override_popup['template_data'])) {
                 $popup->th->ss->assign($this->override_popup['template_data']);
             }
             echo $popup->display();
         } else {
-            if (file_exists('modules/' . $this->module . '/Popup_picker.php')) {
+            if (\file_exists('modules/' . $this->module . '/Popup_picker.php')) {
                 require_once(get_custom_file_if_exists('modules/' . $this->module . '/Popup_picker.php'));
             } else {
                 require_once(get_custom_file_if_exists('include/Popups/Popup_picker.php'));

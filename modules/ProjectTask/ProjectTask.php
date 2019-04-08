@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -132,7 +132,7 @@ class ProjectTask extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($init);
     }
@@ -262,7 +262,7 @@ class ProjectTask extends SugarBean
     {
         $where_clauses = array();
         $the_query_string = DBManagerFactory::getInstance()->quote($the_query_string);
-        array_push($where_clauses, "project_task.name like '$the_query_string%'");
+        \array_push($where_clauses, "project_task.name like '$the_query_string%'");
 
         $the_where = "";
         foreach ($where_clauses as $clause) {
@@ -278,7 +278,7 @@ class ProjectTask extends SugarBean
     public function get_list_view_data()
     {
         global $action, $currentModule, $focus, $current_module_strings, $app_list_strings, $timedate, $locale;
-        $today = $timedate->handle_offset(date($GLOBALS['timedate']->get_db_date_time_format(), time()), $timedate->dbDayFormat, true);
+        $today = $timedate->handle_offset(\date($GLOBALS['timedate']->get_db_date_time_format(), \time()), $timedate->dbDayFormat, true);
         $task_fields =$this->get_list_view_array();
         //$date_due = $timedate->to_db_date($task_fields['DATE_DUE'],false);
         if (isset($this->parent_type)) {
@@ -395,7 +395,7 @@ class ProjectTask extends SugarBean
 
         if (!empty($order_by)) {
             //check to see if order by variable already has table name by looking for dot "."
-            $table_defined_already = strpos($order_by, ".");
+            $table_defined_already = \strpos($order_by, ".");
 
             if ($table_defined_already === false) {
                 //table not defined yet, define accounts to avoid "ambigous column" SQL error
@@ -427,7 +427,7 @@ class ProjectTask extends SugarBean
                 $subProjectTasks = $parentProjectTask->getAllSubProjectTasks();
                 $tasks = array();
                 foreach ($subProjectTasks as &$task) {
-                    array_push($tasks, $task->toArray(true));
+                    \array_push($tasks, $task->toArray(true));
                 }
                 $parentProjectTask->percent_complete = $this->_calculateCompletePercent($tasks);
                 unset($tasks);
@@ -466,7 +466,7 @@ class ProjectTask extends SugarBean
 
         $cumulativePercentage = 0;
         if ($totalHours != 0) {
-            $cumulativePercentage = round(($cumulativeDone/$totalHours) * 100);
+            $cumulativePercentage = \round(($cumulativeDone/$totalHours) * 100);
         }
         return $cumulativePercentage;
     }
@@ -524,7 +524,7 @@ class ProjectTask extends SugarBean
                 $count=0;
 
                 foreach ($projectTasks as $id=>$values) {
-                    if (in_array($values['parent_task_id'], $potentialParentTaskIds)) {
+                    if (\in_array($values['parent_task_id'], $potentialParentTaskIds)) {
                         $potentialParentTaskIds[$values['project_task_id']] = $values['project_task_id'];
                         $actualParentTaskIds[$values['parent_task_id']] = $values['parent_task_id'];
 
@@ -533,7 +533,7 @@ class ProjectTask extends SugarBean
                     }
                 }
 
-                $endProjectTasksCount = count($subProjectTasks);
+                $endProjectTasksCount = \count($subProjectTasks);
 
                 if ($startProjectTasksCount == $endProjectTasksCount) {
                     $run = false;
@@ -544,9 +544,9 @@ class ProjectTask extends SugarBean
 
             foreach ($subProjectTasks as $id=>$values) {
                 //ignore tasks that are parents
-                if (!in_array($values['project_task_id'], $actualParentTaskIds)) {
+                if (!\in_array($values['project_task_id'], $actualParentTaskIds)) {
                     $projectTaskBean = BeanFactory::getBean('ProjectTask', $id);
-                    array_push($projectTasksBeans, $projectTaskBean);
+                    \array_push($projectTasksBeans, $projectTaskBean);
                 }
             }
         }
@@ -608,7 +608,7 @@ class ProjectTask extends SugarBean
         $this->disable_row_level_security = false;
         $res = $db->query($query);
         while ($row = $db->fetchByAssoc($res)) {
-            array_push($list, $row);
+            \array_push($list, $row);
         }
         // fill in $tree
         foreach ($list as $k => &$v) {
@@ -635,7 +635,7 @@ class ProjectTask extends SugarBean
                 }
             }
         }
-        arsort($nodes);
+        \arsort($nodes);
         unset($v);
         // calculating of percentages and comparing calculated value with database one
         foreach ($nodes as $k => &$v) {
@@ -650,24 +650,24 @@ class ProjectTask extends SugarBean
                         $currRow = $id;
                     }
                     if ($taskRow['parent_task_id'] == $i) {
-                        if (!in_array($taskRow['project_task_id'], array_keys($nodes))) {
-                            array_push($currChildren, $taskRow);
+                        if (!\in_array($taskRow['project_task_id'], \array_keys($nodes))) {
+                            \array_push($currChildren, $taskRow);
                         } else {
-                            array_push($tmp, $taskRow['project_task_id']);
+                            \array_push($tmp, $taskRow['project_task_id']);
                         }
                     }
                 }
                 unset($taskRow);
-                if (count($tmp) == 0) {
+                if (\count($tmp) == 0) {
                     $run = false;
                 } else {
-                    $i = array_shift($tmp);
+                    $i = \array_shift($tmp);
                 }
             }
             $subres = $this->_calculateCompletePercent($currChildren);
             if ($subres != $list[$currRow]['percent_complete']) {
                 $list[$currRow]['percent_complete'] = $subres;
-                array_push($changed, $currRow);
+                \array_push($changed, $currRow);
             }
         }
         unset($v);

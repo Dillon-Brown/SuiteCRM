@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -194,7 +194,7 @@ class CalendarUtils
 
         $arr = array(
                 'access' => 'yes',
-                'type' => strtolower($bean->object_name),
+                'type' => \strtolower($bean->object_name),
                 'module_name' => $bean->module_dir,
                 'user_id' => $bean->assigned_user_id,
                 'detail' => 1,
@@ -206,8 +206,8 @@ class CalendarUtils
         if (!empty($bean->repeat_parent_id)) {
             $arr['repeat_parent_id'] = $bean->repeat_parent_id;
         }
-        $arr = array_merge($arr, $field_arr);
-        $arr = array_merge($arr, CalendarUtils::get_time_data($bean));
+        $arr = \array_merge($arr, $field_arr);
+        $arr = \array_merge($arr, CalendarUtils::get_time_data($bean));
 
         return $arr;
     }
@@ -248,7 +248,7 @@ class CalendarUtils
             }
 
             $date = SugarDateTime::createFromFormat($GLOBALS['timedate']->get_date_time_format(), $date_start);
-            $arr = array_merge($arr, array(
+            $arr = \array_merge($arr, array(
                 'current_dow' => $date->format("w"),
                 'default_repeat_until' => $date->get("+1 Month")->format($GLOBALS['timedate']->get_date_format()),
             ));
@@ -269,7 +269,7 @@ class CalendarUtils
         $arr = array();
 
         $type = $params['type'];
-        $interval = intval($params['interval']);
+        $interval = \intval($params['interval']);
         if ($interval < 1) {
             $interval = 1;
         }
@@ -329,7 +329,7 @@ class CalendarUtils
                     $day_index = $last_dow;
                     for ($d = $last_dow + 1; $d <= $last_dow + 7; $d++) {
                         $day_index = $d % 7;
-                        if (strpos($dow, (string)($day_index)) !== false) {
+                        if (\strpos($dow, (string)($day_index)) !== false) {
                             break;
                         }
                     }
@@ -387,7 +387,7 @@ class CalendarUtils
         $db = DBManagerFactory::getInstance();
         $id = $bean->id;
         $date_modified = $GLOBALS['timedate']->nowDb();
-        $lower_name = strtolower($bean->object_name);
+        $lower_name = \strtolower($bean->object_name);
 
         $qu = "SELECT * FROM {$bean->rel_users_table} WHERE deleted = 0 AND {$lower_name}_id = '{$id}'";
         $re = $db->query($qu);
@@ -469,7 +469,7 @@ class CalendarUtils
                 if ($i < 44) {
                     $clone->date_start = $date_start;
                     $clone->date_end = $date_end;
-                    $arr[] = array_merge(array('id' => $clone->id), CalendarUtils::get_time_data($clone));
+                    $arr[] = \array_merge(array('id' => $clone->id), CalendarUtils::get_time_data($clone));
                 }
                 $i++;
             }
@@ -503,7 +503,7 @@ class CalendarUtils
         } else {
             $modified_user_id = 1;
         }
-        $lower_name = strtolower($bean->object_name);
+        $lower_name = \strtolower($bean->object_name);
 
         $qu = "SELECT id FROM {$bean->table_name} WHERE repeat_parent_id = '{$bean->id}' AND deleted = 0";
         $re = $db->query($qu);

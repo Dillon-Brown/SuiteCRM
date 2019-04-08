@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -48,7 +48,7 @@ class CasesController extends SugarController
     {
         global $mod_strings;
         global $app_list_strings;
-        $search = trim($_POST['search']);
+        $search = \trim($_POST['search']);
 
         $relevanceCalculation = "CASE WHEN name LIKE '$search' THEN 10 
                                 ELSE 0 END + CASE WHEN name LIKE '%$search%' THEN 5 
@@ -93,7 +93,7 @@ class CasesController extends SugarController
         $article->retrieve($article_id);
 
         echo '<span class="tool-tip-title"><strong>' . $mod_strings['LBL_TOOL_TIP_TITLE'] . '</strong>' . $article->name . '</span><br />';
-        echo '<span class="tool-tip-title"><strong>' . $mod_strings['LBL_TOOL_TIP_BODY'] . '</strong></span>' . html_entity_decode($article->description);
+        echo '<span class="tool-tip-title"><strong>' . $mod_strings['LBL_TOOL_TIP_BODY'] . '</strong></span>' . \html_entity_decode($article->description);
 
         if (!$this->IsNullOrEmptyString($article->additional_info)) {
             echo '<hr id="tool-tip-separator">';
@@ -112,6 +112,6 @@ class CasesController extends SugarController
      */
     private function IsNullOrEmptyString($question)
     {
-        return (!isset($question) || trim($question) === '');
+        return (!isset($question) || \trim($question) === '');
     }
 }

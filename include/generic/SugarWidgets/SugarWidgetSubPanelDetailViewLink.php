@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -56,10 +56,10 @@ class SugarWidgetSubPanelDetailViewLink extends SugarWidgetField
         $record = '';
 
         if (isset($layout_def['varname'])) {
-            $key = strtoupper($layout_def['varname']);
+            $key = \strtoupper($layout_def['varname']);
         } else {
             $key = $this->_get_column_alias($layout_def);
-            $key = strtoupper($key);
+            $key = \strtoupper($key);
         }
         if (empty($layout_def['fields'][$key])) {
             return "";
@@ -71,13 +71,13 @@ class SugarWidgetSubPanelDetailViewLink extends SugarWidgetField
         if (empty($layout_def['target_record_key'])) {
             $record = $layout_def['fields']['ID'];
         } else {
-            $record_key = strtoupper($layout_def['target_record_key']);
+            $record_key = \strtoupper($layout_def['target_record_key']);
             $record = $layout_def['fields'][$record_key];
         }
 
         if (!empty($layout_def['target_module_key'])) {
-            if (!empty($layout_def['fields'][strtoupper($layout_def['target_module_key'])])) {
-                $module=$layout_def['fields'][strtoupper($layout_def['target_module_key'])];
+            if (!empty($layout_def['fields'][\strtoupper($layout_def['target_module_key'])])) {
+                $module=$layout_def['fields'][\strtoupper($layout_def['target_module_key'])];
             }
         }
 
@@ -100,13 +100,13 @@ class SugarWidgetSubPanelDetailViewLink extends SugarWidgetField
             }
         } else {
             if (!empty($layout_def['parent_id'])) {
-                if (isset($layout_def['fields'][strtoupper($layout_def['parent_id'])])) {
-                    $parent.="&parent_id=".$layout_def['fields'][strtoupper($layout_def['parent_id'])];
+                if (isset($layout_def['fields'][\strtoupper($layout_def['parent_id'])])) {
+                    $parent.="&parent_id=".$layout_def['fields'][\strtoupper($layout_def['parent_id'])];
                 }
             }
             if (!empty($layout_def['parent_module'])) {
-                if (isset($layout_def['fields'][strtoupper($layout_def['parent_module'])])) {
-                    $parent.="&parent_module=".$layout_def['fields'][strtoupper($layout_def['parent_module'])];
+                if (isset($layout_def['fields'][\strtoupper($layout_def['parent_module'])])) {
+                    $parent.="&parent_module=".$layout_def['fields'][\strtoupper($layout_def['parent_module'])];
                 }
             }
         }

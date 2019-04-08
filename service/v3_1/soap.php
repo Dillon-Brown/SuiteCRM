@@ -1,6 +1,6 @@
 <?php
- if (!defined('sugarEntry')) {
-     define('sugarEntry', true);
+ if (!\defined('sugarEntry')) {
+     \define('sugarEntry', true);
  }
 /**
  *
@@ -45,7 +45,7 @@
 /**
  * This is a soap entry point for soap version 3.1
  */
-chdir('../..');
+\chdir('../..');
 require_once('SugarWebServiceImplv3_1.php');
 $webservice_class = 'SugarSoapService2';
 $webservice_path = 'service/v2/SugarSoapService2.php';

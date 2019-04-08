@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -62,7 +62,7 @@ class UsersViewEdit extends ViewEdit
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -232,7 +232,7 @@ EOD
                               type="button" name="button" value="{$APP['LBL_CANCEL_BUTTON_LABEL']}">
 EOD
         ;
-        $action_button_header = array_merge($action_button_header, $this->ss->get_template_vars('BUTTONS_HEADER'));
+        $action_button_header = \array_merge($action_button_header, $this->ss->get_template_vars('BUTTONS_HEADER'));
         $this->ss->assign('ACTION_BUTTON_HEADER', $action_button_header);
 
         $action_button_footer[] = <<<EOD
@@ -247,7 +247,7 @@ EOD
                               type="button" name="button" value="{$APP['LBL_CANCEL_BUTTON_LABEL']}">
 EOD
         ;
-        $action_button_footer = array_merge($action_button_footer, $this->ss->get_template_vars('BUTTONS_FOOTER'));
+        $action_button_footer = \array_merge($action_button_footer, $this->ss->get_template_vars('BUTTONS_FOOTER'));
         $this->ss->assign('ACTION_BUTTON_FOOTER', $action_button_footer);
 
         //if the request object has 'scrolltocal' set, then we are coming here from the tour window box and need to set flag to true

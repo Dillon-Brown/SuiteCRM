@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -48,8 +48,8 @@ if (is_admin($current_user)) {
     if (!$silent) {
         echo $mod_strings['LBL_REBUILD_DASHLETS_DESC'];
     }
-    if (is_file($cachedfile = sugar_cached('dashlets/dashlets.php'))) {
-        unlink($cachedfile);
+    if (\is_file($cachedfile = sugar_cached('dashlets/dashlets.php'))) {
+        \unlink($cachedfile);
     }
     require_once('include/Dashlets/DashletCacheBuilder.php');
 

@@ -47,7 +47,7 @@ use Api\V8\JsonApi\Response\DocumentResponse;
 use Api\V8\Param\GetUserPreferencesParams;
 use DBManagerFactory;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -89,7 +89,7 @@ class UserPreferencesService
         $preferences = [];
         while ($row = $db->fetchByAssoc($result)) {
             $category = $row['category'];
-            $preferences[$category] = unserialize(base64_decode($row['contents']));
+            $preferences[$category] = \unserialize(\base64_decode($row['contents']));
         }
         
         $dataResponse = new DataResponse('UserPreference', $params->getUserId());

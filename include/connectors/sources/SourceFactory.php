@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -57,10 +57,10 @@ class SourceFactory
      */
     public static function getSource($class, $call_init = true)
     {
-        $dir = str_replace('_', '/', $class);
-        $parts = explode("/", $dir);
-        $file = $parts[count($parts)-1];
-        $pos = strrpos($file, '/');
+        $dir = \str_replace('_', '/', $class);
+        $parts = \explode("/", $dir);
+        $file = $parts[\count($parts)-1];
+        $pos = \strrpos($file, '/');
         //if(file_exists("connectors/sources/{$dir}/{$file}.php") || file_exists("custom/connectors/sources/{$dir}/{$file}.php")){
         require_once('include/connectors/sources/default/source.php');
         require_once('include/connectors/ConnectorFactory.php');

@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -20,7 +20,7 @@ class Jjwg_AreasViewArea_Detail_Map extends SugarView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -68,9 +68,9 @@ class Jjwg_AreasViewArea_Detail_Map extends SugarView
   <script type="text/javascript">
 
 // Define Map Data for Javascript
-var jjwg_config_defaults = <?php echo (!empty($GLOBALS['jjwg_config_defaults'])) ? json_encode($GLOBALS['jjwg_config_defaults']) : '[]'; ?>;
-var jjwg_config = <?php echo (!empty($GLOBALS['jjwg_config'])) ? json_encode($GLOBALS['jjwg_config']) : '[]'; ?>;
-var polygonPoints = <?php echo (!empty($GLOBALS['polygon'])) ? json_encode($GLOBALS['polygon']) : '[]'; ?>;
+var jjwg_config_defaults = <?php echo (!empty($GLOBALS['jjwg_config_defaults'])) ? \json_encode($GLOBALS['jjwg_config_defaults']) : '[]'; ?>;
+var jjwg_config = <?php echo (!empty($GLOBALS['jjwg_config'])) ? \json_encode($GLOBALS['jjwg_config']) : '[]'; ?>;
+var polygonPoints = <?php echo (!empty($GLOBALS['polygon'])) ? \json_encode($GLOBALS['polygon']) : '[]'; ?>;
 
 function initialize() {
 

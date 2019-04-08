@@ -37,8 +37,8 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry') || !sugarEntry) {
+    \define('sugarEntry', true);
 }
 
 require_once __DIR__ . '/include/entryPoint.php';

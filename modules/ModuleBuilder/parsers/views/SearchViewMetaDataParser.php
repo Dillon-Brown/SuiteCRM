@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -78,11 +78,11 @@ class SearchViewMetaDataParser extends ListLayoutMetaDataParser
      */
     public function __construct($searchLayout, $moduleName, $packageName = '')
     {
-        $GLOBALS [ 'log' ]->debug(get_class($this) . ": __construct( $searchLayout , $moduleName , $packageName )") ;
+        $GLOBALS [ 'log' ]->debug(\get_class($this) . ": __construct( $searchLayout , $moduleName , $packageName )") ;
 
         // BEGIN ASSERTIONS
         if (! isset(self::$variableMap [ $searchLayout ])) {
-            sugar_die(get_class($this) . ": View $searchLayout is not supported") ;
+            sugar_die(\get_class($this) . ": View $searchLayout is not supported") ;
         }
         // END ASSERTIONS
 
@@ -101,7 +101,7 @@ class SearchViewMetaDataParser extends ListLayoutMetaDataParser
             throw $e ;
         }
 
-        $this->_saved = array_change_key_case($this->implementation->getViewdefs()) ; // force to lower case so don't have problems with case mismatches later
+        $this->_saved = \array_change_key_case($this->implementation->getViewdefs()) ; // force to lower case so don't have problems with case mismatches later
         if (isset($this->_saved['templatemeta'])) {
             $this->_saved['templateMeta'] = $this->_saved['templatemeta'];
             unset($this->_saved['templatemeta']);
@@ -111,7 +111,7 @@ class SearchViewMetaDataParser extends ListLayoutMetaDataParser
             // attempt to fallback on a basic_search layout...
 
             if (! isset($this->_saved [ 'layout' ] [ self::$variableMap [ MB_BASICSEARCH ] ])) {
-                throw new Exception(get_class($this) . ": {$this->_searchLayout} does not exist for module $moduleName") ;
+                throw new Exception(\get_class($this) . ": {$this->_searchLayout} does not exist for module $moduleName") ;
             }
 
             $this->_saved [ 'layout'] [ MB_ADVANCEDSEARCH ] = $this->_saved [ 'layout' ] [ MB_BASICSEARCH ] ;
@@ -136,12 +136,12 @@ class SearchViewMetaDataParser extends ListLayoutMetaDataParser
             if (isset($def['group']) && isset($origDefs[$def['group']])) {
                 return false;
             }
-            if (!isset($def [ 'studio' ]) || (is_array($def [ 'studio' ]) && !isset($def [ 'studio' ]['searchview']))) {
+            if (!isset($def [ 'studio' ]) || (\is_array($def [ 'studio' ]) && !isset($def [ 'studio' ]['searchview']))) {
                 return true;
             }
         }
         
-        if (isset($def [ 'studio' ]) && is_array($def [ 'studio' ]) && isset($def [ 'studio' ]['searchview'])) {
+        if (isset($def [ 'studio' ]) && \is_array($def [ 'studio' ]) && isset($def [ 'studio' ]['searchview'])) {
             return $def [ 'studio' ]['searchview'] !== false &&
                   ($def [ 'studio' ]['searchview'] === true || $def [ 'studio' ]['searchview'] != 'false');
         }
@@ -157,7 +157,7 @@ class SearchViewMetaDataParser extends ListLayoutMetaDataParser
                 return false;
             }
         }
-        if (substr($key, -8) == "_by_name" &&  isset($def['rname']) && $def['rname'] == "user_name") {
+        if (\substr($key, -8) == "_by_name" &&  isset($def['rname']) && $def['rname'] == "user_name") {
             return false;
         }
 
@@ -190,7 +190,7 @@ class SearchViewMetaDataParser extends ListLayoutMetaDataParser
     {
         $temp = array( ) ;
         foreach ($viewdefs as $key => $value) {
-            if (! is_array($value)) {
+            if (! \is_array($value)) {
                 $key = $value ;
                 $def = array( ) ;
                 $def[ 'name' ] = $key;
@@ -204,7 +204,7 @@ class SearchViewMetaDataParser extends ListLayoutMetaDataParser
             }
             // now add in the standard listview default=>true
             $value [ 'default' ] = true ;
-            $temp [ strtolower($key) ] = $value ;
+            $temp [ \strtolower($key) ] = $value ;
         }
         return $temp ;
     }
@@ -218,8 +218,8 @@ class SearchViewMetaDataParser extends ListLayoutMetaDataParser
     {
         $out = array();
         foreach ($defs as $def) {
-            if (is_array($def) && isset($def['name'])) {
-                $out[strtolower($def['name'])] = $def;
+            if (\is_array($def) && isset($def['name'])) {
+                $out[\strtolower($def['name'])] = $def;
             }
         }
         return $out;
@@ -236,7 +236,7 @@ class SearchViewMetaDataParser extends ListLayoutMetaDataParser
             if ($this->_searchLayout == "basic_search" &&  !empty($defs['layout']["advanced_search"])) {
                 $out = $this->normalizeDefs($defs['layout']["advanced_search"]);
             }
-            $out = array_merge($out, $this->normalizeDefs($defs['layout'][$this->_searchLayout]));
+            $out = \array_merge($out, $this->normalizeDefs($defs['layout'][$this->_searchLayout]));
         }
 
         return $out;

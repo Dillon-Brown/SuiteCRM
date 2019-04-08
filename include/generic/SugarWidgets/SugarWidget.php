@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,7 +71,7 @@ class SugarWidget
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($layout_manager);
     }
@@ -123,9 +123,9 @@ class SugarWidget
      */
     protected function getTruncatedColumnAlias($column_name)
     {
-        if (empty($column_name) || !is_string($column_name) || strlen($column_name) < 28) {
+        if (empty($column_name) || !\is_string($column_name) || \strlen($column_name) < 28) {
             return $column_name;
         }
-        return strtoupper(substr($column_name, 0, 22) . substr(md5(strtolower($column_name)), 0, 6));
+        return \strtoupper(\substr($column_name, 0, 22) . \substr(\md5(\strtolower($column_name)), 0, 6));
     }
 }

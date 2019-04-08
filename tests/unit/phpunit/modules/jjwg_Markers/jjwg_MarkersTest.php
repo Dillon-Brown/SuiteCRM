@@ -34,8 +34,8 @@ class jjwg_MarkersTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $jjwgMarkers->configuration();
 
         $this->assertInstanceOf('jjwg_Maps', $jjwgMarkers->jjwg_Maps);
-        $this->assertTrue(is_array($jjwgMarkers->settings));
-        $this->assertGreaterThan(0, count($jjwgMarkers->settings));
+        $this->assertTrue(\is_array($jjwgMarkers->settings));
+        $this->assertGreaterThan(0, \count($jjwgMarkers->settings));
         
         // clean up
     }
@@ -47,8 +47,8 @@ class jjwg_MarkersTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test without pre settting attributes
         $result = $jjwgMarkers->define_loc(array());
         $this->assertEquals('N/A', $result['name']);
-        $this->assertTrue(is_numeric($result['lat']));
-        $this->assertTrue(is_numeric($result['lng']));
+        $this->assertTrue(\is_numeric($result['lat']));
+        $this->assertTrue(\is_numeric($result['lng']));
         $this->assertEquals('company', $result['image']);
 
         //test with required attributes preset

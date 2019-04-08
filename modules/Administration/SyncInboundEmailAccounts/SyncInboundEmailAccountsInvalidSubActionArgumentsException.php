@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -91,7 +91,7 @@ class SyncInboundEmailAccountsInvalidSubActionArgumentsException extends Excepti
      */
     protected function getCallerMethod($step = 2)
     {
-        $trace = debug_backtrace();
+        $trace = \debug_backtrace();
         $function = $trace[$step ? $step : $this->callerMethodDistance]['function'];
 
         return $function;

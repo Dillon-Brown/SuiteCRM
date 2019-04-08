@@ -70,7 +70,7 @@ class Zend_Oauth_Http_AccessToken extends Zend_Oauth_Http
         );
 
         if (!empty($this->_parameters)) {
-            $params = array_merge($params, $this->_parameters);
+            $params = \array_merge($params, $this->_parameters);
         }
 
         $params['oauth_signature'] = $this->_httpUtility->sign(
@@ -182,7 +182,7 @@ class Zend_Oauth_Http_AccessToken extends Zend_Oauth_Http
     protected function _cleanParamsOfIllegalCustomParameters(array $params)
     {
         foreach ($params as $key=>$value) {
-            if (!preg_match("/^oauth_/", $key)) {
+            if (!\preg_match("/^oauth_/", $key)) {
                 unset($params[$key]);
             }
         }

@@ -66,13 +66,13 @@ class SchemaController extends ApiController
     {
         try {
             $jsonApi = new JsonApi();
-            if (file_exists($jsonApi->getSchemaPath()) === false) {
+            if (\file_exists($jsonApi->getSchemaPath()) === false) {
                 throw new NotFoundException(
                     '[SchemaController] unable to find JSON Api Schema file:  '. $jsonApi->getSchemaPath()
                 );
             }
 
-            $schemaFile = file_get_contents($jsonApi->getSchemaPath());
+            $schemaFile = \file_get_contents($jsonApi->getSchemaPath());
 
             if ($schemaFile === false) {
                 throw new ApiException(
@@ -100,14 +100,14 @@ class SchemaController extends ApiController
     public function getSwaggerSchema(ServerRequestInterface $request, ResponseInterface $response)
     {
         try {
-            $path = dirname(__DIR__).'/swagger.json';
-            if (file_exists($path) === false) {
+            $path = \dirname(__DIR__).'/swagger.json';
+            if (\file_exists($path) === false) {
                 throw new NotFoundException(
                     '[SchemaController] unable to find JSON Api Schema file:  '. $path
                 );
             }
 
-            $schemaFile = file_get_contents($path);
+            $schemaFile = \file_get_contents($path);
 
             if ($schemaFile === false) {
                 throw new ApiException(

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -68,13 +68,13 @@ if (empty($_REQUEST['file']) || empty($_REQUEST['guid'])) {
 
     //Making sure someone doesn't pass a variable name as a false reference
     //  to delete a file
-    if (strcmp(substr($_REQUEST['file'], 0, 10), "diagnostic") != 0) {
+    if (\strcmp(\substr($_REQUEST['file'], 0, 10), "diagnostic") != 0) {
         die($mod_strings['LBL_DIAGNOSTIC_DELETE_DIE']);
     }
 
-    if (file_exists($cachedfile = sugar_cached("diagnostic/".$_REQUEST['guid']."/".$_REQUEST['file'].".zip"))) {
-        unlink($cachedfile);
-        rmdir(dirname($cachedfile));
+    if (\file_exists($cachedfile = sugar_cached("diagnostic/".$_REQUEST['guid']."/".$_REQUEST['file'].".zip"))) {
+        \unlink($cachedfile);
+        \rmdir(\dirname($cachedfile));
         echo $mod_strings['LBL_DIAGNOSTIC_DELETED']."<br><br>";
     } else {
         echo $mod_strings['LBL_DIAGNOSTIC_FILE'] . $_REQUEST['file'].$mod_strings['LBL_DIAGNOSTIC_ZIP'];

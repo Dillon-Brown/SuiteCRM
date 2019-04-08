@@ -19,10 +19,10 @@ class AttributeResponse extends MetaResponse
     {
         parent::__construct($properties);
 
-        $invalidKeys = array_intersect_key($properties, array_flip(self::$forbiddenKeys));
+        $invalidKeys = \array_intersect_key($properties, \array_flip(self::$forbiddenKeys));
         if ($invalidKeys) {
             throw new \InvalidArgumentException(
-                'Attribute object must not contain these keys: ' . implode(', ', array_keys($invalidKeys))
+                'Attribute object must not contain these keys: ' . \implode(', ', \array_keys($invalidKeys))
             );
         }
     }

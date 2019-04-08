@@ -23,7 +23,7 @@ class HomeCest
             $this->fakeData = Faker\Factory::create();
         }
 
-        $this->fakeDataSeed = rand(0, 2048);
+        $this->fakeDataSeed = \rand(0, 2048);
         $this->fakeData->seed($this->fakeDataSeed);
     }
 
@@ -60,7 +60,7 @@ class HomeCest
         $I->see('All Opportunities By Lead Source By Outcome');
         $dashboardID = $I->grabAttributeFrom('descendant-or-self::div[@class="dashletPanel"]', 'id');
         if ($dashboardID != "") {
-            $dashboardID = str_replace("dashlet_entire_", "", $dashboardID);
+            $dashboardID = \str_replace("dashlet_entire_", "", $dashboardID);
         }
         $I->comment("The All Opportunities By Lead Source By Outcome dashboard ID is: ".$dashboardID);
         $I->click('//*[@id="dashlet_header_'.$dashboardID.'"]/div[2]/table/tbody/tr/td[2]/div/a[3]/span');

@@ -60,7 +60,7 @@ class SchedulersJobTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test with default params
         $result = $schedulersJob->handleDateFormat();
-        $this->assertGreaterThan(0, strlen($result));
+        $this->assertGreaterThan(0, \strlen($result));
 
         //test with a valid date param
         $result = $schedulersJob->handleDateFormat('2015-01-01');
@@ -140,7 +140,7 @@ class SchedulersJobTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($schedulersJob->id));
-        $this->assertEquals(36, strlen($schedulersJob->id));
+        $this->assertEquals(36, \strlen($schedulersJob->id));
 
         $this->assertEquals(SchedulersJob::JOB_STATUS_DONE, $schedulersJob->status);
         $this->assertEquals(SchedulersJob::JOB_FAILURE, $schedulersJob->resolution);
@@ -170,7 +170,7 @@ class SchedulersJobTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($schedulersJob->id));
-        $this->assertEquals(36, strlen($schedulersJob->id));
+        $this->assertEquals(36, \strlen($schedulersJob->id));
 
         $this->assertEquals(SchedulersJob::JOB_STATUS_DONE, $schedulersJob->status);
         $this->assertEquals(SchedulersJob::JOB_SUCCESS, $schedulersJob->resolution);
@@ -249,7 +249,7 @@ class SchedulersJobTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($schedulersJob->id));
-        $this->assertEquals(36, strlen($schedulersJob->id));
+        $this->assertEquals(36, \strlen($schedulersJob->id));
 
         $this->assertEquals(SchedulersJob::JOB_STATUS_DONE, $schedulersJob->status);
         $this->assertEquals(SchedulersJob::JOB_FAILURE, $schedulersJob->resolution);
@@ -286,7 +286,7 @@ class SchedulersJobTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($schedulersJob->id));
-        $this->assertEquals(36, strlen($schedulersJob->id));
+        $this->assertEquals(36, \strlen($schedulersJob->id));
 
         //verify the related attributes
         $this->assertEquals(SchedulersJob::JOB_STATUS_QUEUED, $schedulersJob->status);

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -41,7 +41,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-define('CONNECTOR_DISPLAY_CONFIG_FILE', 'custom/modules/Connectors/metadata/display_config.php');
+\define('CONNECTOR_DISPLAY_CONFIG_FILE', 'custom/modules/Connectors/metadata/display_config.php');
 require_once('include/connectors/ConnectorFactory.php');
 
 /**
@@ -114,10 +114,10 @@ class ConnectorUtils
     public static function getSearchDefs(
         $refresh = false
         ) {
-        if ($refresh || !file_exists('custom/modules/Connectors/metadata/searchdefs.php')) {
+        if ($refresh || !\file_exists('custom/modules/Connectors/metadata/searchdefs.php')) {
             require('modules/Connectors/metadata/searchdefs.php');
 
-            if (!file_exists('custom/modules/Connectors/metadata')) {
+            if (!\file_exists('custom/modules/Connectors/metadata')) {
                 mkdir_recursive('custom/modules/Connectors/metadata');
             }
 
@@ -152,9 +152,9 @@ class ConnectorUtils
                 continue;
             }
 
-            if (file_exists('custom/' . $ds['directory'] . '/mapping.php')) {
+            if (\file_exists('custom/' . $ds['directory'] . '/mapping.php')) {
                 require('custom/' . $ds['directory'] . '/mapping.php');
-            } elseif (file_exists($ds['directory'] . '/mapping.php')) {
+            } elseif (\file_exists($ds['directory'] . '/mapping.php')) {
                 require($ds['directory'] . '/mapping.php');
             }
 
@@ -162,9 +162,9 @@ class ConnectorUtils
                 foreach ($mapping['beans'] as $module=>$map) {
                     if (!empty($modules_sources[$module][$id])) {
                         if (!empty($view_defs['Connector']['MergeView'][$module])) {
-                            $view_defs['Connector']['MergeView'][$module] = array_merge($view_defs['Connector']['MergeView'][$module], array_flip($map));
+                            $view_defs['Connector']['MergeView'][$module] = \array_merge($view_defs['Connector']['MergeView'][$module], \array_flip($map));
                         } else {
-                            $view_defs['Connector']['MergeView'][$module] = array_flip($map);
+                            $view_defs['Connector']['MergeView'][$module] = \array_flip($map);
                         }
                     }
                 }
@@ -173,7 +173,7 @@ class ConnectorUtils
 
         if (!empty($view_defs['Connector']['MergeView'])) {
             foreach ($view_defs['Connector']['MergeView'] as $module=>$map) {
-                $view_defs['Connector']['MergeView'][$module] = array_keys($view_defs['Connector']['MergeView'][$module]);
+                $view_defs['Connector']['MergeView'][$module] = \array_keys($view_defs['Connector']['MergeView'][$module]);
             }
         }
 
@@ -193,16 +193,16 @@ class ConnectorUtils
     public static function getMergeViewDefs(
         $refresh = false
         ) {
-        if ($refresh || !file_exists('custom/modules/Connectors/metadata/mergeviewdefs.php')) {
+        if ($refresh || !\file_exists('custom/modules/Connectors/metadata/mergeviewdefs.php')) {
 
             //Go through all connectors and get their mapping keys and merge them across each module
             $connectors = self::getConnectors($refresh);
             $modules_sources = self::getDisplayConfig();
             $view_defs = array();
             foreach ($connectors as $id=>$ds) {
-                if (file_exists('custom/' . $ds['directory'] . '/mapping.php')) {
+                if (\file_exists('custom/' . $ds['directory'] . '/mapping.php')) {
                     require('custom/' . $ds['directory'] . '/mapping.php');
-                } elseif (file_exists($ds['directory'] . '/mapping.php')) {
+                } elseif (\file_exists($ds['directory'] . '/mapping.php')) {
                     require($ds['directory'] . '/mapping.php');
                 }
 
@@ -210,9 +210,9 @@ class ConnectorUtils
                     foreach ($mapping['beans'] as $module=>$map) {
                         if (!empty($modules_sources[$module][$id])) {
                             if (!empty($view_defs['Connector']['MergeView'][$module])) {
-                                $view_defs['Connector']['MergeView'][$module] = array_merge($view_defs['Connector']['MergeView'][$module], array_flip($map));
+                                $view_defs['Connector']['MergeView'][$module] = \array_merge($view_defs['Connector']['MergeView'][$module], \array_flip($map));
                             } else {
-                                $view_defs['Connector']['MergeView'][$module] = array_flip($map);
+                                $view_defs['Connector']['MergeView'][$module] = \array_flip($map);
                             }
                         }
                     }
@@ -221,11 +221,11 @@ class ConnectorUtils
 
             if (!empty($view_defs['Connector']['MergeView'])) {
                 foreach ($view_defs['Connector']['MergeView'] as $module=>$map) {
-                    $view_defs['Connector']['MergeView'][$module] = array_keys($view_defs['Connector']['MergeView'][$module]);
+                    $view_defs['Connector']['MergeView'][$module] = \array_keys($view_defs['Connector']['MergeView'][$module]);
                 }
             }
 
-            if (!file_exists('custom/modules/Connectors/metadata')) {
+            if (!\file_exists('custom/modules/Connectors/metadata')) {
                 mkdir_recursive('custom/modules/Connectors/metadata');
             }
 
@@ -265,29 +265,29 @@ class ConnectorUtils
         $src4 = 'custom/modules/Connectors/metadata/connectors.php';
 
         //if this is a templated environment, then use utilities to get the proper paths
-        if (defined('TEMPLATE_URL')) {
+        if (\defined('TEMPLATE_URL')) {
             $src1 = SugarTemplateUtilities::getFilePath($src1);
             $src2 = SugarTemplateUtilities::getFilePath($src2);
             $src3 = SugarTemplateUtilities::getFilePath($src3);
             $src4 = SugarTemplateUtilities::getFilePath($src4);
         }
 
-        if ($refresh || !file_exists($src4)) {
-            $sources = array_merge(self::getSources($src1), self::getSources($src2));
-            if (!file_exists($src3)) {
+        if ($refresh || !\file_exists($src4)) {
+            $sources = \array_merge(self::getSources($src1), self::getSources($src2));
+            if (!\file_exists($src3)) {
                 mkdir_recursive($src3);
             }
-            if (file_exists($src4)) {
+            if (\file_exists($src4)) {
                 require($src4);
 
                 //define connectors if it doesn't exist or is not an array
-                if (!isset($connectors) || !is_array($connectors)) {
+                if (!isset($connectors) || !\is_array($connectors)) {
                     $connectors = array();
                     $err_str = string_format($GLOBALS['app_strings']['ERR_CONNECTOR_NOT_ARRAY'], array($src4));
                     $GLOBALS['log']->error($err_str);
                 }
 
-                $sources = array_merge($sources, $connectors);
+                $sources = \array_merge($sources, $connectors);
             }
 
             if (!self::saveConnectors($sources, $src4)) {
@@ -310,12 +310,12 @@ class ConnectorUtils
     {
         if (empty($toFile)) {
             $toFile = 'custom/modules/Connectors/metadata/connectors.php';
-            if (defined('TEMPLATE_URL')) {
+            if (\defined('TEMPLATE_URL')) {
                 $toFile = SugarTemplateUtilities::getFilePath($toFile);
             }
         }
 
-        if (!is_array($connectors)) {
+        if (!\is_array($connectors)) {
             $connectors = array();
         }
 
@@ -337,20 +337,20 @@ class ConnectorUtils
     private static function getSources(
         $directory = 'modules/Connectors/connectors/sources'
         ) {
-        if (file_exists($directory)) {
+        if (\file_exists($directory)) {
             $files = array();
             $files = findAllFiles($directory, $files, false, 'config\.php');
-            $start = strrpos($directory, '/') == strlen($directory)-1 ? strlen($directory) : strlen($directory) + 1;
+            $start = \strrpos($directory, '/') == \strlen($directory)-1 ? \strlen($directory) : \strlen($directory) + 1;
             $sources = array();
             $sources_ordering = array();
             foreach ($files as $file) {
                 require($file);
-                $end = strrpos($file, '/') - $start;
+                $end = \strrpos($file, '/') - $start;
                 $source = array();
-                $source['id'] = str_replace('/', '_', substr($file, $start, $end));
+                $source['id'] = \str_replace('/', '_', \substr($file, $start, $end));
                 $source['name'] = !empty($config['name']) ? $config['name'] : $source['id'];
                 $source['enabled'] = true;
-                $source['directory'] = $directory . '/' . str_replace('_', '/', $source['id']);
+                $source['directory'] = $directory . '/' . \str_replace('_', '/', $source['id']);
                 $order = isset($config['order']) ? $config['order'] : 99; //default to end using 99 if no order set
 
                 $instance = ConnectorFactory::getInstance($source['id']);
@@ -366,7 +366,7 @@ class ConnectorUtils
                 $sources_ordering[$source['id']] = array('order'=>$order, 'source'=>$source);
             }
 
-            usort($sources_ordering, 'sources_sort_function');
+            \usort($sources_ordering, 'sources_sort_function');
             foreach ($sources_ordering as $entry) {
                 $sources[$entry['source']['id']] = $entry['source'];
             }
@@ -383,12 +383,12 @@ class ConnectorUtils
     public static function getDisplayConfig(
         $refresh = false
         ) {
-        if (!file_exists(CONNECTOR_DISPLAY_CONFIG_FILE) || $refresh) {
+        if (!\file_exists(CONNECTOR_DISPLAY_CONFIG_FILE) || $refresh) {
             $sources = self::getConnectors();
             $modules_sources = array();
 
             //Make the directory for the config file
-            if (!file_exists('custom/modules/Connectors/metadata')) {
+            if (!\file_exists('custom/modules/Connectors/metadata')) {
                 mkdir_recursive('custom/modules/Connectors/metadata');
             }
 
@@ -467,7 +467,7 @@ class ConnectorUtils
     public static function cleanMetaDataFile(
         $module
         ) {
-        $metadata_file = file_exists("custom/modules/{$module}/metadata/detailviewdefs.php") ? "custom/modules/{$module}/metadata/detailviewdefs.php" : "modules/{$module}/metadata/detailviewdefs.php";
+        $metadata_file = \file_exists("custom/modules/{$module}/metadata/detailviewdefs.php") ? "custom/modules/{$module}/metadata/detailviewdefs.php" : "modules/{$module}/metadata/detailviewdefs.php";
         require($metadata_file);
 
         $insertConnectorButton = true;
@@ -478,7 +478,7 @@ class ConnectorUtils
         self::removeHoverField($viewdefs, $module);
 
         //Make the directory for the metadata file
-        if (!file_exists("custom/modules/{$module}/metadata")) {
+        if (!\file_exists("custom/modules/{$module}/metadata")) {
             mkdir_recursive("custom/modules/{$module}/metadata");
         }
 
@@ -487,7 +487,7 @@ class ConnectorUtils
             return false;
         }
 
-        if (file_exists($cachedfile = sugar_cached("modules/{$module}/DetailView.tpl")) && !unlink($cachedfile)) {
+        if (\file_exists($cachedfile = sugar_cached("modules/{$module}/DetailView.tpl")) && !\unlink($cachedfile)) {
             $GLOBALS['log']->fatal("Cannot delete file $cachedfile");
             return false;
         }
@@ -501,19 +501,19 @@ class ConnectorUtils
      */
     public static function updateMetaDataFiles()
     {
-        if (file_exists(CONNECTOR_DISPLAY_CONFIG_FILE)) {
+        if (\file_exists(CONNECTOR_DISPLAY_CONFIG_FILE)) {
             $modules_sources = array();
 
             require(CONNECTOR_DISPLAY_CONFIG_FILE);
 
-            $GLOBALS['log']->debug(var_export($modules_sources, true));
+            $GLOBALS['log']->debug(\var_export($modules_sources, true));
             if (!empty($modules_sources)) {
                 foreach ($modules_sources as $module=>$mapping) {
-                    $metadata_file = file_exists("custom/modules/{$module}/metadata/detailviewdefs.php") ? "custom/modules/{$module}/metadata/detailviewdefs.php" : "modules/{$module}/metadata/detailviewdefs.php";
+                    $metadata_file = \file_exists("custom/modules/{$module}/metadata/detailviewdefs.php") ? "custom/modules/{$module}/metadata/detailviewdefs.php" : "modules/{$module}/metadata/detailviewdefs.php";
 
 
                     $viewdefs = array();
-                    if (!file_exists($metadata_file)) {
+                    if (!\file_exists($metadata_file)) {
                         $GLOBALS['log']->info("Unable to update metadata file for module: {$module}");
                         continue;
                     }
@@ -578,7 +578,7 @@ class ConnectorUtils
 
 
                     //Make the directory for the metadata file
-                    if (!file_exists("custom/modules/{$module}/metadata")) {
+                    if (!\file_exists("custom/modules/{$module}/metadata")) {
                         mkdir_recursive("custom/modules/{$module}/metadata");
                     }
 
@@ -587,7 +587,7 @@ class ConnectorUtils
                         return false;
                     }
 
-                    if (file_exists($cachedfile = sugar_cached("modules/{$module}/DetailView.tpl")) && !unlink($cachedfile)) {
+                    if (\file_exists($cachedfile = sugar_cached("modules/{$module}/DetailView.tpl")) && !\unlink($cachedfile)) {
                         $GLOBALS['log']->fatal("Cannot delete file $cachedfile");
                         return false;
                     }
@@ -604,8 +604,8 @@ class ConnectorUtils
         require_once('include/SugarFields/Parsers/MetaParser.php');
         $metaParser = new MetaParser();
         if (!$metaParser->hasMultiplePanels($viewdefs[$module]['DetailView']['panels'])) {
-            $keys = array_keys($viewdefs[$module]['DetailView']['panels']);
-            if (!empty($keys) && count($keys) != 1) {
+            $keys = \array_keys($viewdefs[$module]['DetailView']['panels']);
+            if (!empty($keys) && \count($keys) != 1) {
                 $viewdefs[$module]['DetailView']['panels'] = array('default'=>$viewdefs[$module]['DetailView']['panels']);
             }
         }
@@ -613,7 +613,7 @@ class ConnectorUtils
         foreach ($viewdefs[$module]['DetailView']['panels'] as $panel_id=>$panel) {
             foreach ($panel as $row_id=>$row) {
                 foreach ($row as $field_id=>$field) {
-                    if (is_array($field) && !empty($field['displayParams']['enableConnectors'])) {
+                    if (\is_array($field) && !empty($field['displayParams']['enableConnectors'])) {
                         unset($field['displayParams']['enableConnectors']);
                         unset($field['displayParams']['module']);
                         unset($field['displayParams']['connectors']);
@@ -635,8 +635,8 @@ class ConnectorUtils
         require_once('include/SugarFields/Parsers/MetaParser.php');
         $metaParser = new MetaParser();
         if (!$metaParser->hasMultiplePanels($viewdefs[$module]['DetailView']['panels'])) {
-            $keys = array_keys($viewdefs[$module]['DetailView']['panels']);
-            if (!empty($keys) && count($keys) != 1) {
+            $keys = \array_keys($viewdefs[$module]['DetailView']['panels']);
+            if (!empty($keys) && \count($keys) != 1) {
                 $viewdefs[$module]['DetailView']['panels'] = array('default'=>$viewdefs[$module]['DetailView']['panels']);
             }
         }
@@ -644,14 +644,14 @@ class ConnectorUtils
         foreach ($viewdefs[$module]['DetailView']['panels'] as $panel_id=>$panel) {
             foreach ($panel as $row_id=>$row) {
                 foreach ($row as $field_id=>$field) {
-                    $name = is_array($field) ? $field['name'] : $field;
+                    $name = \is_array($field) ? $field['name'] : $field;
                     if ($name == $hover_field) {
-                        if (is_array($field)) {
+                        if (\is_array($field)) {
                             if (!empty($viewdefs[$module]['DetailView']['panels'][$panel_id][$row_id][$field_id]['displayParams'])) {
                                 $newDisplayParam = $viewdefs[$module]['DetailView']['panels'][$panel_id][$row_id][$field_id]['displayParams'];
                                 $newDisplayParam['module'] = $module;
                                 $newDisplayParam['enableConnectors'] = true;
-                                if (!is_null($source_id) && !in_array($source_id, $newDisplayParam['connectors'])) {
+                                if (!\is_null($source_id) && !\in_array($source_id, $newDisplayParam['connectors'])) {
                                     $newDisplayParam['connectors'][] = $source_id;
                                 }
                                 $viewdefs[$module]['DetailView']['panels'][$panel_id][$row_id][$field_id]['displayParams'] = $newDisplayParam;
@@ -686,11 +686,11 @@ class ConnectorUtils
         foreach ($viewdefs[$module]['DetailView']['panels'] as $panel_id=>$panel) {
             foreach ($panel as $row_id=>$row) {
                 foreach ($row as $field_id=>$field) {
-                    if (is_array($field)) {
+                    if (\is_array($field)) {
                         if (!empty($viewdefs[$module]['DetailView']['panels'][$panel_id][$row_id][$field_id]['displayParams'])) {
                             $viewdefs[$module]['DetailView']['panels'][$panel_id][$row_id][$field_id]['displayParams']['enableConnectors'] = true;
                             $viewdefs[$module]['DetailView']['panels'][$panel_id][$row_id][$field_id]['displayParams']['module'] = $module;
-                            if (!is_null($source_id) && !in_array($source_id, $viewdefs[$module]['DetailView']['panels'][$panel_id][$row_id][$field_id]['displayParams']['connectors'])) {
+                            if (!\is_null($source_id) && !\in_array($source_id, $viewdefs[$module]['DetailView']['panels'][$panel_id][$row_id][$field_id]['displayParams']['connectors'])) {
                                 $viewdefs[$module]['DetailView']['panels'][$panel_id][$row_id][$field_id]['displayParams']['connectors'][] = $source_id;
                             }
                         } else {
@@ -726,7 +726,7 @@ class ConnectorUtils
         $shown_sources = array();
         if (!empty($module) && !empty($displayParams['connectors'])) {
             foreach ($displayParams['connectors'] as $id) {
-                if (!empty($modules_sources[$module]) && in_array($id, $modules_sources[$module])) {
+                if (!empty($modules_sources[$module]) && \in_array($id, $modules_sources[$module])) {
                     $shown_sources[] = $id;
                 }
             }
@@ -756,11 +756,11 @@ class ConnectorUtils
         ) {
         $lang = empty($language) ? $GLOBALS['current_language'] : $language;
         $lang .= '.lang.php';
-        $dir = str_replace('_', '/', $source_id);
-        if (file_exists("custom/modules/Connectors/connectors/sources/{$dir}/language/{$lang}")) {
+        $dir = \str_replace('_', '/', $source_id);
+        if (\file_exists("custom/modules/Connectors/connectors/sources/{$dir}/language/{$lang}")) {
             require("custom/modules/Connectors/connectors/sources/{$dir}/language/{$lang}");
             return !empty($connector_strings) ? $connector_strings : array();
-        } elseif (file_exists("modules/Connectors/connectors/sources/{$dir}/language/{$lang}")) {
+        } elseif (\file_exists("modules/Connectors/connectors/sources/{$dir}/language/{$lang}")) {
             require("modules/Connectors/connectors/sources/{$dir}/language/{$lang}");
             return !empty($connector_strings) ? $connector_strings : array();
         }
@@ -783,7 +783,7 @@ class ConnectorUtils
         ) {
         $lang = empty($language) ? $GLOBALS['current_language'] : $language;
         $lang .= '.lang.php';
-        $dir = str_replace('_', '/', $source_id);
+        $dir = \str_replace('_', '/', $source_id);
 
         if (!write_array_to_file("connector_strings", $connector_strings, "custom/modules/Connectors/connectors/sources/{$dir}/language/{$lang}")) {
             //Log error and return empty array
@@ -824,7 +824,7 @@ class ConnectorUtils
         }
 
         //Make the directory for the config file
-        if (!file_exists('custom/modules/Connectors/metadata')) {
+        if (!\file_exists('custom/modules/Connectors/metadata')) {
             mkdir_recursive('custom/modules/Connectors/metadata');
         }
 
@@ -864,7 +864,7 @@ class ConnectorUtils
         }
 
         //Make the directory for the config file
-        if (!file_exists('custom/modules/Connectors/metadata')) {
+        if (!\file_exists('custom/modules/Connectors/metadata')) {
             mkdir_recursive('custom/modules/Connectors/metadata');
         }
 
@@ -892,13 +892,13 @@ class ConnectorUtils
     private static function hasWizardSourceEnabledForModule(
         $module = ''
         ) {
-        if (file_exists(CONNECTOR_DISPLAY_CONFIG_FILE)) {
+        if (\file_exists(CONNECTOR_DISPLAY_CONFIG_FILE)) {
             require_once('include/connectors/sources/SourceFactory.php');
             require(CONNECTOR_DISPLAY_CONFIG_FILE);
             if (!empty($modules_sources) && !empty($modules_sources[$module])) {
                 foreach ($modules_sources[$module] as $id) {
                     $source = SourceFactory::getSource($id, false);
-                    if (!is_null($source) && $source->isEnabledInWizard() && $source->isRequiredConfigFieldsForButtonSet()) {
+                    if (!\is_null($source) && $source->isEnabledInWizard() && $source->isRequiredConfigFieldsForButtonSet()) {
                         return true;
                     }
                 }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -103,7 +103,7 @@ class Task extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -128,7 +128,7 @@ class Task extends SugarBean
     {
         $custom_join = $this->getCustomJoin(true, true, $where);
         $custom_join['join'] .= $relate_link_join;
-        $contact_required = stristr($where, "contacts");
+        $contact_required = \stristr($where, "contacts");
         if ($contact_required) {
             $query = "SELECT tasks.*, contacts.first_name, contacts.last_name, users.user_name as assigned_user_name ";
             $query .= $custom_join['select'];
@@ -200,9 +200,9 @@ class Task extends SugarBean
         require_once($beanFiles[$beanType]);
         $parent = new $beanType();
 
-        if (is_subclass_of($parent, 'Person')) {
+        if (\is_subclass_of($parent, 'Person')) {
             $query = "SELECT first_name, last_name, assigned_user_id parent_name_owner from $parent->table_name where id = '$this->parent_id'";
-        } elseif (is_subclass_of($parent, 'File')) {
+        } elseif (\is_subclass_of($parent, 'File')) {
             $query = "SELECT document_name, assigned_user_id parent_name_owner from $parent->table_name where id = '$this->parent_id'";
         } else {
             $query = "SELECT name ";
@@ -222,12 +222,12 @@ class Task extends SugarBean
             $this->parent_name_owner = $row['parent_name_owner'];
             $this->parent_name_mod = $this->parent_type;
         }
-        if (is_subclass_of($parent, 'Person') and $row != null) {
-            $this->parent_name = $locale->getLocaleFormattedName(stripslashes($row['first_name']), stripslashes($row['last_name']));
-        } elseif (is_subclass_of($parent, 'File') && $row != null) {
+        if (\is_subclass_of($parent, 'Person') and $row != null) {
+            $this->parent_name = $locale->getLocaleFormattedName(\stripslashes($row['first_name']), \stripslashes($row['last_name']));
+        } elseif (\is_subclass_of($parent, 'File') && $row != null) {
             $this->parent_name = $row['document_name'];
         } elseif ($row != null) {
-            $this->parent_name = stripslashes($row['name']);
+            $this->parent_name = \stripslashes($row['name']);
         } else {
             $this->parent_name = '';
         }
@@ -440,7 +440,7 @@ class Task extends SugarBean
         }
         $app = return_app_list_strings_language($GLOBALS['current_language']);
         if (isset($def['options']) && isset($app[$def['options']])) {
-            $keys = array_keys($app[$def['options']]);
+            $keys = \array_keys($app[$def['options']]);
             return $keys[0];
         }
 

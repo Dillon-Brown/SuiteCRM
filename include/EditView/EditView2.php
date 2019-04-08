@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -244,12 +244,12 @@ class EditView
             $this->showVCRControl = !$GLOBALS['sugar_config']['disable_vcr'];
         }
 
-        if (!empty($this->metadataFile) && file_exists($this->metadataFile)) {
+        if (!empty($this->metadataFile) && \file_exists($this->metadataFile)) {
             include($this->metadataFile);
         } else {
             //If file doesn't exist we create a best guess
-            if (!file_exists("modules/$this->module/metadata/$metadataFileName.php")
-                && file_exists("modules/$this->module/EditView.html")
+            if (!\file_exists("modules/$this->module/metadata/$metadataFileName.php")
+                && \file_exists("modules/$this->module/EditView.html")
             ) {
                 require_once('include/SugarFields/Parsers/EditViewMetaParser.php');
 
@@ -257,20 +257,20 @@ class EditView
 
                 $htmlFile = "modules/" . $this->module . "/EditView.html";
                 $parser = new EditViewMetaParser();
-                if (!file_exists('modules/' . $this->module . '/metadata')) {
+                if (!\file_exists('modules/' . $this->module . '/metadata')) {
                     sugar_mkdir('modules/' . $this->module . '/metadata');
                 }
 
                 $fp = sugar_fopen('modules/' . $this->module . '/metadata/' . $metadataFileName . '.php', 'w');
-                fwrite($fp, $parser->parse($htmlFile, $dictionary[$focus->object_name]['fields'], $this->module));
-                fclose($fp);
+                \fwrite($fp, $parser->parse($htmlFile, $dictionary[$focus->object_name]['fields'], $this->module));
+                \fclose($fp);
             }
 
             // Flag an error... we couldn't create the best guess meta-data file
-            if (!file_exists("modules/$this->module/metadata/$metadataFileName.php")) {
+            if (!\file_exists("modules/$this->module/metadata/$metadataFileName.php")) {
                 global $app_strings;
 
-                $error = str_replace(
+                $error = \str_replace(
                     '[file]',
                     "modules/$this->module/metadata/$metadataFileName.php",
                     $app_strings['ERR_CANNOT_CREATE_METADATA_FILE']
@@ -362,7 +362,7 @@ class EditView
         foreach ($this->defs['panels'] as $key => $p) {
             foreach ($p as $row => $rowDef) {
                 foreach ($rowDef as $col => $colDef) {
-                    $field = is_array($p[$row][$col]) ? $p[$row][$col]['name'] : $p[$row][$col];
+                    $field = \is_array($p[$row][$col]) ? $p[$row][$col]['name'] : $p[$row][$col];
                     if ((!empty($this->focus->field_defs[$field])
                             && !empty($this->focus->field_defs[$field]['required']))
                         || (!empty($p[$row][$col]['displayParams']['required']))
@@ -396,15 +396,15 @@ class EditView
         // calculate widths
         foreach ($this->defs['templateMeta']['widths'] as $col => $def) {
             foreach ($def as $k => $value) {
-                $this->defs['templateMeta']['widths'][$col][$k] = round($value / ($totalWidth / 100), 2);
+                $this->defs['templateMeta']['widths'][$col][$k] = \round($value / ($totalWidth / 100), 2);
             }
         }
 
         $this->sectionPanels = array();
         $this->sectionLabels = array();
-        if (!empty($this->defs['panels']) && count($this->defs['panels']) > 0) {
-            $keys = array_keys($this->defs['panels']);
-            if (is_numeric($keys[0])) {
+        if (!empty($this->defs['panels']) && \count($this->defs['panels']) > 0) {
+            $keys = \array_keys($this->defs['panels']);
+            if (\is_numeric($keys[0])) {
                 $defaultPanel = $this->defs['panels'];
                 unset($this->defs['panels']); //blow away current value
                 $this->defs['panels'][''] = $defaultPanel;
@@ -423,19 +423,19 @@ class EditView
         foreach ($this->defs['panels'] as $key => $p) {
             $panel = array();
 
-            if (!is_array($this->defs['panels'][$key])) {
-                $this->sectionPanels[strtoupper($key)] = $p;
+            if (!\is_array($this->defs['panels'][$key])) {
+                $this->sectionPanels[\strtoupper($key)] = $p;
             } else {
                 foreach ($p as $row => $rowDef) {
-                    $columnsInRows = count($rowDef);
+                    $columnsInRows = \count($rowDef);
                     $columnsUsed = 0;
                     foreach ($rowDef as $col => $colDef) {
-                        $panel[$row][$col] = is_array($p[$row][$col])
+                        $panel[$row][$col] = \is_array($p[$row][$col])
                             ? array('field' => $p[$row][$col])
                             : array('field' => array('name' => $p[$row][$col]));
 
                         $panel[$row][$col]['field']['tabindex'] =
-                            (isset($p[$row][$col]['tabindex']) && is_numeric($p[$row][$col]['tabindex']))
+                            (isset($p[$row][$col]['tabindex']) && \is_numeric($p[$row][$col]['tabindex']))
                                 ? $p[$row][$col]['tabindex']
                                 : '0';
 
@@ -443,13 +443,13 @@ class EditView
                             if ($col == $columnsInRows - 1) {
                                 $panel[$row][$col]['colspan'] = 2 * $maxColumns - ($columnsUsed + 1);
                             } else {
-                                $panel[$row][$col]['colspan'] = floor(($maxColumns * 2 - $columnsInRows) / $columnsInRows);
+                                $panel[$row][$col]['colspan'] = \floor(($maxColumns * 2 - $columnsInRows) / $columnsInRows);
                                 $columnsUsed = $panel[$row][$col]['colspan'];
                             }
                         }
 
                         //Set address types to have colspan value of 2 if colspan is not already defined
-                        if (is_array($colDef) && !empty($colDef['hideLabel']) && !isset($panel[$row][$col]['colspan'])) {
+                        if (\is_array($colDef) && !empty($colDef['hideLabel']) && !isset($panel[$row][$col]['colspan'])) {
                             $panel[$row][$col]['colspan'] = 2;
                         }
 
@@ -459,7 +459,7 @@ class EditView
 
                 $panel = $this->getPanelWithFillers($panel);
 
-                $this->sectionPanels[strtoupper($key)] = $panel;
+                $this->sectionPanels[\strtoupper($key)] = $panel;
             }
 
 
@@ -480,8 +480,8 @@ class EditView
     {
         $addFiller = true;
         foreach ($panel as $row) {
-            if (count($row) == $this->defs['templateMeta']['maxColumns']
-                || 1 == count($panel)
+            if (\count($row) == $this->defs['templateMeta']['maxColumns']
+                || 1 == \count($panel)
             ) {
                 $addFiller = false;
                 break;
@@ -489,8 +489,8 @@ class EditView
         }
 
         if ($addFiller) {
-            $rowCount = count($panel);
-            $filler = count($panel[$rowCount - 1]);
+            $rowCount = \count($panel);
+            $filler = \count($panel[$rowCount - 1]);
             while ($filler < $this->defs['templateMeta']['maxColumns']) {
                 $panel[$rowCount - 1][$filler++] = array('field' => array('name' => ''));
             }
@@ -582,12 +582,12 @@ class EditView
                 $valueFormatted = false;
 
                 $this->fieldDefs[$name] = (!empty($this->fieldDefs[$name]) && !empty($this->fieldDefs[$name]['value']))
-                    ? array_merge($this->focus->field_defs[$name], $this->fieldDefs[$name])
+                    ? \array_merge($this->focus->field_defs[$name], $this->fieldDefs[$name])
                     : $this->focus->field_defs[$name];
 
                 foreach (array("formula", "default", "comments", "help") as $toEscape) {
                     if (!empty($this->fieldDefs[$name][$toEscape])) {
-                        $this->fieldDefs[$name][$toEscape] = htmlentities(
+                        $this->fieldDefs[$name][$toEscape] = \htmlentities(
                             $this->fieldDefs[$name][$toEscape],
                             ENT_QUOTES,
                             'UTF-8'
@@ -617,11 +617,11 @@ class EditView
 
                 if (
                     isset($this->fieldDefs[$name]['options']) &&
-                    is_array($this->fieldDefs[$name]['options']) &&
+                    \is_array($this->fieldDefs[$name]['options']) &&
                     isset($this->fieldDefs[$name]['default_empty']) &&
                     !isset($this->fieldDefs[$name]['options'][$this->fieldDefs[$name]['default_empty']])
                 ) {
-                    $this->fieldDefs[$name]['options'] = array_merge(
+                    $this->fieldDefs[$name]['options'] = \array_merge(
                         array(
                             $this->fieldDefs[$name]['default_empty'] => $this->fieldDefs[$name]['default_empty']
                         ),
@@ -631,7 +631,7 @@ class EditView
 
                 if (isset($this->fieldDefs[$name]['function'])) {
                     $function = $this->fieldDefs[$name]['function'];
-                    if (is_array($function) && isset($function['name'])) {
+                    if (\is_array($function) && isset($function['name'])) {
                         $function = $this->fieldDefs[$name]['function']['name'];
                     } else {
                         $function = $this->fieldDefs[$name]['function'];
@@ -639,7 +639,7 @@ class EditView
 
                     if (
                         isset($this->fieldDefs[$name]['function']['include']) &&
-                        file_exists($this->fieldDefs[$name]['function']['include'])
+                        \file_exists($this->fieldDefs[$name]['function']['include'])
                     ) {
                         require_once($this->fieldDefs[$name]['function']['include']);
                     }
@@ -651,10 +651,10 @@ class EditView
                         if (!empty($this->fieldDefs[$name]['function']['include'])) {
                             require_once($this->fieldDefs[$name]['function']['include']);
                         }
-                        $value = call_user_func($function, $this->focus, $name, $value, $this->view);
+                        $value = \call_user_func($function, $this->focus, $name, $value, $this->view);
                         $valueFormatted = true;
                     } else {
-                        $this->fieldDefs[$name]['options'] = call_user_func(
+                        $this->fieldDefs[$name]['options'] = \call_user_func(
                             $function,
                             $this->focus,
                             $name,
@@ -736,7 +736,7 @@ class EditView
         }
 
         if (isset($this->focus->additional_meta_fields)) {
-            $this->fieldDefs = array_merge($this->fieldDefs, $this->focus->additional_meta_fields);
+            $this->fieldDefs = \array_merge($this->fieldDefs, $this->focus->additional_meta_fields);
         }
 
         if ($this->isDuplicate) {
@@ -762,7 +762,7 @@ class EditView
         global $mod_strings, $sugar_config, $app_strings, $current_user;
 
         if (isset($this->defs['templateMeta']['javascript'])) {
-            if (is_array($this->defs['templateMeta']['javascript'])) {
+            if (\is_array($this->defs['templateMeta']['javascript'])) {
                 $this->th->ss->assign('externalJSFile', $this->defs['templateMeta']['javascript']);
             } else {
                 $this->th->ss->assign('scriptBlocks', $this->defs['templateMeta']['javascript']);
@@ -885,12 +885,12 @@ class EditView
 
         $date_format = $timedate->get_cal_date_format();
         $time_separator = ':';
-        if (preg_match('/\d+([^\d])\d+([^\d]*)/s', $time_format, $match)) {
+        if (\preg_match('/\d+([^\d])\d+([^\d]*)/s', $time_format, $match)) {
             $time_separator = $match[1];
         }
 
         // Create Smarty variables for the Calendar picker widget
-        $t23 = strpos($time_format, '23') !== false ? '%H' : '%I';
+        $t23 = \strpos($time_format, '23') !== false ? '%H' : '%I';
         if (!isset($match[2]) || empty($match[2])) {
             $this->th->ss->assign('CALENDAR_FORMAT', $date_format . ' ' . $t23 . $time_separator . '%M');
         } else {
@@ -954,7 +954,7 @@ class EditView
             require_once('modules/SecurityGroups/SecurityGroup.php');
             $groupFocus = new SecurityGroup();
             $security_modules = $groupFocus->getSecurityModules();
-            if (array_key_exists($this->focus->module_dir, $security_modules)) {
+            if (\array_key_exists($this->focus->module_dir, $security_modules)) {
                 global $current_user;
 
                 $group_count = $groupFocus->getMembershipCount($current_user->id);
@@ -990,7 +990,7 @@ class EditView
     </tbody></table>
 </div>
 EOQ;
-                    $group_panel = preg_replace("/[\r\n]+/", "", $group_panel);
+                    $group_panel = \preg_replace("/[\r\n]+/", "", $group_panel);
 
                     $group_panel_append = <<<EOQ
 <script>
@@ -1057,7 +1057,7 @@ EOQ;
                 require_once($vardef['function_require']);
             }
 
-            $value = call_user_func_array($execute_function, $execute_params);
+            $value = \call_user_func_array($execute_function, $execute_params);
         }
 
         return $value;
@@ -1077,7 +1077,7 @@ EOQ;
     public function getValueFromRequest($request, $name)
     {
         //Special processing for date values (combine to one field)
-        if (preg_match('/^date_(.*)$/s', $name, $matches)) {
+        if (\preg_match('/^date_(.*)$/s', $name, $matches)) {
             $d = $request[$name];
 
             $key = $matches[1];
@@ -1096,7 +1096,7 @@ EOQ;
                 if (isset($request[$timeHourKey])
                     && isset($request[$timeMinuteKey])
                 ) {
-                    $d .= sprintf(
+                    $d .= \sprintf(
                         ' %s:%s',
                         $request[$timeHourKey],
                         $request[$timeMinuteKey]

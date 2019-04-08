@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -95,7 +95,7 @@ function get_message_scope_dom($campaign_id, $campaign_name, $db=null, $mod_stri
  */
 function get_campaign_mailboxes(&$emails, $get_name=true)
 {
-    if (!class_exists('InboundEmail')) {
+    if (!\class_exists('InboundEmail')) {
         require('modules/InboundEmail/InboundEmail.php');
     }
     $query =  "select id,name,stored_options from inbound_email where mailbox_type='bounce' and status='Active' and deleted='0'";
@@ -120,7 +120,7 @@ function get_campaign_mailboxes_with_stored_options()
 {
     $ret = array();
 
-    if (!class_exists('InboundEmail')) {
+    if (!\class_exists('InboundEmail')) {
         require('modules/InboundEmail/InboundEmail.php');
     }
 
@@ -131,7 +131,7 @@ function get_campaign_mailboxes_with_stored_options()
     $r = $db->query($q);
 
     while ($a = $db->fetchByAssoc($r)) {
-        $ret[$a['id']] = unserialize(base64_decode($a['stored_options']));
+        $ret[$a['id']] = \unserialize(\base64_decode($a['stored_options']));
     }
     return $ret;
 }
@@ -140,7 +140,7 @@ function get_campaign_mailboxes_with_stored_options_outbound()
 {
     $ret = array();
 
-    if (!class_exists('OutboundEmail')) {
+    if (!\class_exists('OutboundEmail')) {
         require('modules/OutboundEmail/OutboundEmail.php');
     }
 
@@ -165,7 +165,7 @@ function log_campaign_activity($identifier, $activity, $update = true, $clicked_
     //check to see if the identifier has been replaced with Banner string
     if ($identifier == 'BANNER' && isset($clicked_url_key) && !empty($clicked_url_key)) {
         // create md5 encrypted string using the client ip, this will be used for tracker id purposes
-        $enc_id = 'BNR' . md5($_SERVER['REMOTE_ADDR']);
+        $enc_id = 'BNR' . \md5($_SERVER['REMOTE_ADDR']);
 
         //default the identifier to ip address
         $identifier = $enc_id;
@@ -220,16 +220,16 @@ function log_campaign_activity($identifier, $activity, $update = true, $clicked_
 
             //create insert query for new campaign log
             // quote variable first
-            $dataArrayKeys = array_keys($data);
+            $dataArrayKeys = \array_keys($data);
             $dataArrayKeysQuoted = array();
             foreach ($dataArrayKeys as $dataArrayKey) {
                 $dataArrayKeysQuoted[] = $db->quote($dataArrayKey);
             }
-            $dataArrayKeysQuotedImplode = implode(', ', $dataArrayKeysQuoted);
+            $dataArrayKeysQuotedImplode = \implode(', ', $dataArrayKeysQuoted);
 
             $insert_query = "INSERT into campaign_log (" . $dataArrayKeysQuotedImplode . ")";
 
-            $dataArrayValuesQuotedImplode = implode(', ', array_values($data));
+            $dataArrayValuesQuotedImplode = \implode(', ', \array_values($data));
 
             $insert_query .= " VALUES  (" . $dataArrayValuesQuotedImplode . ")";
 
@@ -274,7 +274,7 @@ function log_campaign_activity($identifier, $activity, $update = true, $clicked_
 
         //if activity is removed and target type is users, then a user is trying to opt out
         //of emails.  This is not possible as Users Table does not have opt out column.
-        if ($row && (strtolower($row['target_type']) == 'users' && $activity == 'removed')) {
+        if ($row && (\strtolower($row['target_type']) == 'users' && $activity == 'removed')) {
             $return_array['target_id'] = $row['target_id'];
             $return_array['target_type'] = $row['target_type'];
             return $return_array;
@@ -299,16 +299,16 @@ function log_campaign_activity($identifier, $activity, $update = true, $clicked_
             $return_array['target_type'] = $row['target_type'];
             
             // quote variable first
-            $dataArrayKeys = array_keys($data);
+            $dataArrayKeys = \array_keys($data);
             $dataArrayKeysQuoted = array();
             foreach ($dataArrayKeys as $dataArrayKey) {
                 $dataArrayKeysQuoted[] = $db->quote($dataArrayKey);
             }
-            $dataArrayKeysQuotedImplode = implode(', ', $dataArrayKeysQuoted);
+            $dataArrayKeysQuotedImplode = \implode(', ', $dataArrayKeysQuoted);
             
             $insert_query = "INSERT into campaign_log (" . $dataArrayKeysQuotedImplode . ")";
             
-            $dataArrayValuesQuotedImplode = implode(', ', array_values($data));
+            $dataArrayValuesQuotedImplode = \implode(', ', \array_values($data));
             
             $insert_query .= " VALUES  (" . $dataArrayValuesQuotedImplode . ")";
             
@@ -402,8 +402,8 @@ function get_subscription_lists_query($focus, $additional_fields = null)
 {
     //get all prospect lists belonging to Campaigns of type newsletter
     $all_news_type_pl_query = "select c.name, pl.list_type, plc.campaign_id, plc.prospect_list_id";
-    if (is_array($additional_fields) && !empty($additional_fields)) {
-        $all_news_type_pl_query .= ', ' . implode(', ', $additional_fields);
+    if (\is_array($additional_fields) && !empty($additional_fields)) {
+        $all_news_type_pl_query .= ', ' . \implode(', ', $additional_fields);
     }
     $all_news_type_pl_query .= " from prospect_list_campaigns plc , prospect_lists pl, campaigns c ";
 
@@ -472,9 +472,9 @@ function get_subscription_lists($focus, $descriptions = false)
             //compare current user list id against newsletter id
             if ($news_list['prospect_list_id'] == $current_list['prospect_list_id']) {
                 //if id's match, user is subscribed to this list, check to see if this is an exempt list,
-                if (strpos($news_list['list_type'], 'exempt')!== false) {
+                if (\strpos($news_list['list_type'], 'exempt')!== false) {
                     //this is an exempt list, so process
-                    if (array_key_exists($news_list['name'], $subs_arr)) {
+                    if (\array_key_exists($news_list['name'], $subs_arr)) {
                         //first, add to unsubscribed array
                         $unsubs_arr[$news_list['name']] = $subs_arr[$news_list['name']];
                         //now remove from exempt subscription list
@@ -489,7 +489,7 @@ function get_subscription_lists($focus, $descriptions = false)
                 } else {
                     //this list is not exempt, and user is subscribed, so add to subscribed array, and unset from the unsubs_arr
                     //as long as this list is not in exempt array
-                    if (!array_key_exists($news_list['name'], $unsubs_arr)) {
+                    if (!\array_key_exists($news_list['name'], $unsubs_arr)) {
                         $subs_arr[$news_list['name']] = "prospect_list@".$news_list['prospect_list_id']."@campaign@".$news_list['campaign_id'];
                         $match = 'true';
                         unset($unsubs_arr[$news_list['name']]);
@@ -500,7 +500,7 @@ function get_subscription_lists($focus, $descriptions = false)
         }
         //if this newsletter id never matched a user subscription..
         //..then add to available(unsubscribed) NewsLetters if list is not of type exempt
-        if (($match == 'false') && (strpos($news_list['list_type'], 'exempt') === false) && (!array_key_exists($news_list['name'], $subs_arr))) {
+        if (($match == 'false') && (\strpos($news_list['list_type'], 'exempt') === false) && (!\array_key_exists($news_list['name'], $subs_arr))) {
             $unsubs_arr[$news_list['name']] = "prospect_list@".$news_list['prospect_list_id']."@campaign@".$news_list['campaign_id'];
         }
     }
@@ -539,7 +539,7 @@ function get_subscription_lists_keyed($focus)
 
                 if ($news_list['list_type'] == 'exempt') {
                     //this is an exempt list, so process
-                    if (array_key_exists($news_list['name'], $subs_arr)) {
+                    if (\array_key_exists($news_list['name'], $subs_arr)) {
                         //first, add to unsubscribed array
                         $unsubs_arr[$news_list['name']] = $subs_arr[$news_list['name']];
                         //now remove from exempt subscription list
@@ -554,7 +554,7 @@ function get_subscription_lists_keyed($focus)
                 } else {
                     //this list is not exempt, and user is subscribed, so add to subscribed array
                     //as long as this list is not in exempt array
-                    if (!array_key_exists($news_list['name'], $unsubs_arr)) {
+                    if (!\array_key_exists($news_list['name'], $unsubs_arr)) {
                         $subs_arr[$news_list['name']] = $news_list_data;
                         $match = 'true';
                     }
@@ -595,9 +595,9 @@ function process_subscriptions($subscription_string_to_parse)
     //the prospect_list id from the selected subscriptions
     $i = 0;
     foreach ($subscription_string_to_parse as $subs_changes) {
-        $subs_changes = trim($subs_changes);
+        $subs_changes = \trim($subs_changes);
         if (!empty($subs_changes)) {
-            $ids_arr = explode("@", $subs_changes);
+            $ids_arr = \explode("@", $subs_changes);
             $subs_change[$ids_arr[0].$i] = $ids_arr[1];
             $subs_change[$ids_arr[2].$i] = $ids_arr[3];
             $i = $i+1;
@@ -614,7 +614,7 @@ function process_subscriptions($subscription_string_to_parse)
      * */
     function subscribe($campaign, $prospect_list, $focus, $default_list = false)
     {
-        $relationship = strtolower($focus->getObjectName()).'s';
+        $relationship = \strtolower($focus->getObjectName()).'s';
 
         //--grab all the lists for the passed in campaign id
         $pl_qry ="select id, list_type from prospect_lists where id in (select prospect_list_id from prospect_list_campaigns ";
@@ -643,7 +643,7 @@ function process_subscriptions($subscription_string_to_parse)
         //search through prospect lists for this campaign and identifiy the "unsubscription list"
         $exempt_id = '';
         foreach ($pl_arr as $subscription_list) {
-            if (strpos($subscription_list['list_type'], 'exempt')!== false) {
+            if (\strpos($subscription_list['list_type'], 'exempt')!== false) {
                 $exempt_id = $subscription_list['id'];
             }
 
@@ -679,7 +679,7 @@ function process_subscriptions($subscription_string_to_parse)
         $already_here = 'false';
         //for each list user is subscribed to, compare id's with current list id'
         foreach ($curr_pl_arr as $user_list) {
-            if (in_array($prospect_list, $user_list)) {
+            if (\in_array($prospect_list, $user_list)) {
                 //if user already exists, then set flag to true
                 $already_here = 'true';
             }
@@ -707,7 +707,7 @@ function process_subscriptions($subscription_string_to_parse)
      * */
     function unsubscribe($campaign, $focus)
     {
-        $relationship = strtolower($focus->getObjectName()).'s';
+        $relationship = \strtolower($focus->getObjectName()).'s';
         //--grab all the list for this campaign id
         $pl_qry ="select id, list_type from prospect_lists where id in (select prospect_list_id from prospect_list_campaigns ";
         $pl_qry .= "where campaign_id = " . $focus->db->quoted($campaign) . ") and deleted = 0 ";
@@ -741,7 +741,7 @@ function process_subscriptions($subscription_string_to_parse)
                     //save the exempt list id for later use
                     $exempt_id = $v['id'];
                     //check to see if user is already in this exempt list
-                    if (in_array($v['id'], $user_list)) {
+                    if (\in_array($v['id'], $user_list)) {
                         $already_here = 'true';
                     }
 
@@ -824,7 +824,7 @@ function process_subscriptions($subscription_string_to_parse)
             $mbox[] = $mbox_row;
         }
         //if the array is not empty, then set "good" message
-        if (isset($mbox) && count($mbox)>0) {
+        if (isset($mbox) && \count($mbox)>0) {
             //everything is ok, do nothing
         } else {
             //if array is empty, then increment health counter
@@ -834,7 +834,7 @@ function process_subscriptions($subscription_string_to_parse)
         }
 
 
-        if (strstr($focus->settings['notify_fromaddress'], 'example.com')) {
+        if (\strstr($focus->settings['notify_fromaddress'], 'example.com')) {
             //if "from_address" is the default, then set "bad" message and increment health counter
             $email_health =$email_health +1;
             $msg .= "<tr><td ><font color='red'><b> ".$mod_strings['LBL_MAILBOX_CHECK2_BAD']." </b></font></td></tr>";
@@ -975,8 +975,8 @@ function write_mail_merge_log_entry($campaign_id, $pl_row)
         $data['list_id']="'" .  DBManagerFactory::getInstance()->quote($pl_row['prospect_list_id']) . "'";
         $data['hits']=1;
         $data['deleted']=0;
-        $insert_query="INSERT into campaign_log (" . implode(",", array_keys($data)) . ")";
-        $insert_query.=" VALUES  (" . implode(",", array_values($data)) . ")";
+        $insert_query="INSERT into campaign_log (" . \implode(",", \array_keys($data)) . ")";
+        $insert_query.=" VALUES  (" . \implode(",", \array_values($data)) . ")";
         DBManagerFactory::getInstance()->query($insert_query);
     }
 }
@@ -1020,7 +1020,7 @@ function write_mail_merge_log_entry($campaign_id, $pl_row)
             $focus->load_relationship($rel_name);
             $target_ids = $focus->$rel_name->get();
         }
-        if (count($target_ids)>0) {
+        if (\count($target_ids)>0) {
 
 
             //retrieve the target beans and create campaign log entry
@@ -1125,7 +1125,7 @@ function filterFieldsFromBeans($beans)
             }
 
 
-            $field_def['vname'] = preg_replace('/:$/', '', translate($field_def['vname'], $b->module_dir));
+            $field_def['vname'] = \preg_replace('/:$/', '', translate($field_def['vname'], $b->module_dir));
 
             //$cols_name = "{'".$field_def['vname']."'}";
             $col_arr = array();
@@ -1141,8 +1141,8 @@ function filterFieldsFromBeans($beans)
                 $col_arr[0]=$cols_name;
                 $col_arr[1]=$field_def['name'];
             }
-            if (! in_array($cols_name, $formattedFields)) {
-                array_push($formattedFields, $col_arr);
+            if (! \in_array($cols_name, $formattedFields)) {
+                \array_push($formattedFields, $col_arr);
             }
         }
 

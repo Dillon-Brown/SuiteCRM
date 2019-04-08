@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -89,7 +89,7 @@ class One2MBeanRelationship extends One2MRelationship
         }
 
         //Make sure we load the current relationship state to the LHS link
-        if ((isset($lhs->$lhsLinkName) && is_a($lhs->$lhsLinkName, "Link2")) || $lhs->load_relationship($lhsLinkName)) {
+        if ((isset($lhs->$lhsLinkName) && \is_a($lhs->$lhsLinkName, "Link2")) || $lhs->load_relationship($lhsLinkName)) {
             $lhs->$lhsLinkName->load();
         }
 
@@ -192,7 +192,7 @@ class One2MBeanRelationship extends One2MRelationship
             if (isset($link->getFocus()->$rhsID)) {
                 $id = $link->getFocus()->$rhsID;
             } else {
-                LoggerManager::getLogger()->warn('Incorrect linked relationship rhs ID: ' . get_class($link->getFocus()) . '::$' . $rhsID . ' is undefined');
+                LoggerManager::getLogger()->warn('Incorrect linked relationship rhs ID: ' . \get_class($link->getFocus()) . '::$' . $rhsID . ' is undefined');
             }
 
             if (!empty($id)) {
@@ -250,7 +250,7 @@ class One2MBeanRelationship extends One2MRelationship
 
         //Add any optional where clause
         if (!empty($params['where'])) {
-            $add_where = is_string($params['where']) ? $params['where'] : "$rhsTable." . $this->getOptionalWhereClause($params['where']);
+            $add_where = \is_string($params['where']) ? $params['where'] : "$rhsTable." . $this->getOptionalWhereClause($params['where']);
             if (!empty($add_where)) {
                 $where .= " AND $add_where";
             }
@@ -353,7 +353,7 @@ class One2MBeanRelationship extends One2MRelationship
                 || $targetTable == "tasks"
                 || $targetTable == "calls"
             )
-            && substr($alias, 0, 12 + strlen($targetTable)) == $targetTable . "_activities_"
+            && \substr($alias, 0, 12 + \strlen($targetTable)) == $targetTable . "_activities_"
         ) {
             $tableInRoleFilter = $linkIsLHS ? $alias : $startingTable;
         }

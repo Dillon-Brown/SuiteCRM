@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 if (!is_admin($current_user)) {
@@ -80,15 +80,15 @@ $configurator->parseLoggerSettings();
 $valid_public_key = true;
 if (!empty($_POST['saveConfig'])) {
     if ($_POST['captcha_on'] == '1') {
-        $handle = @fopen("http://www.google.com/recaptcha/api/challenge?k=" . $_POST['captcha_public_key'] . "&cachestop=35235354", "r");
+        $handle = @\fopen("http://www.google.com/recaptcha/api/challenge?k=" . $_POST['captcha_public_key'] . "&cachestop=35235354", "r");
         $buffer = '';
         if ($handle) {
-            while (!feof($handle)) {
-                $buffer .= fgets($handle, 4096);
+            while (!\feof($handle)) {
+                $buffer .= \fgets($handle, 4096);
             }
-            fclose($handle);
+            \fclose($handle);
         }
-        $valid_public_key = substr($buffer, 1, 4) == 'var ' ? true : false;
+        $valid_public_key = \substr($buffer, 1, 4) == 'var ' ? true : false;
     }
     if ($valid_public_key) {
         if (isset($_REQUEST['system_ldap_enabled']) && $_REQUEST['system_ldap_enabled'] == 'on') {
@@ -124,7 +124,7 @@ if (!empty($_POST['saveConfig'])) {
             $_POST['ldap_authentication'] = 0;
         }
 
-        if (isset($_REQUEST['passwordsetting_lockoutexpirationtime']) && is_numeric($_REQUEST['passwordsetting_lockoutexpirationtime'])) {
+        if (isset($_REQUEST['passwordsetting_lockoutexpirationtime']) && \is_numeric($_REQUEST['passwordsetting_lockoutexpirationtime'])) {
             $_POST['passwordsetting_lockoutexpiration'] = 2;
         }
 
@@ -137,7 +137,7 @@ if (!empty($_POST['saveConfig'])) {
 
         $focus->saveConfig();
 
-        header('Location: index.php?module=Administration&action=index');
+        \header('Location: index.php?module=Administration&action=index');
     }
 }
 
@@ -166,7 +166,7 @@ $sugar_smarty->assign("settings", $focus->settings);
 
 $sugar_smarty->assign('saml_enabled_checked', false);
 
-if (!function_exists('openssl_encrypt')) {
+if (!\function_exists('openssl_encrypt')) {
     $sugar_smarty->assign("LDAP_ENC_KEY_READONLY", 'readonly');
     $sugar_smarty->assign("LDAP_ENC_KEY_DESC", $config_strings['LDAP_ENC_KEY_NO_FUNC_OPENSSL_DESC']);
 } else {
@@ -202,7 +202,7 @@ if ($mail->Mailer == 'smtp' && $mail->Host == '') {
 
 $focus = new InboundEmail();
 $focus->checkImap();
-$storedOptions = unserialize(base64_decode($focus->stored_options));
+$storedOptions = \unserialize(\base64_decode($focus->stored_options));
 $email_templates_arr = get_bean_select_array(true, 'EmailTemplate', 'name', '', 'name', true);
 $create_case_email_template = (isset($storedOptions['create_case_email_template'])) ? $storedOptions['create_case_email_template'] : "";
 $TMPL_DRPDWN_LOST = get_select_options_with_id($email_templates_arr, $res['lostpasswordtmpl']);

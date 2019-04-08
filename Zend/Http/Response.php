@@ -159,25 +159,25 @@ class Zend_Http_Response
         $this->code = $code;
 
         foreach ($headers as $name => $value) {
-            if (is_int($name)) {
-                $header = explode(":", $value, 2);
-                if (count($header) != 2) {
+            if (\is_int($name)) {
+                $header = \explode(":", $value, 2);
+                if (\count($header) != 2) {
                     require_once 'Zend/Http/Exception.php';
                     throw new Zend_Http_Exception("'{$value}' is not a valid HTTP header");
                 }
                 
-                $name  = trim($header[0]);
-                $value = trim($header[1]);
+                $name  = \trim($header[0]);
+                $value = \trim($header[1]);
             }
 
-            $this->headers[ucwords(strtolower($name))] = $value;
+            $this->headers[\ucwords(\strtolower($name))] = $value;
         }
 
         // Set the body
         $this->body = $body;
 
         // Set the HTTP version
-        if (! preg_match('|^\d\.\d$|', $version)) {
+        if (! \preg_match('|^\d\.\d$|', $version)) {
             require_once 'Zend/Http/Exception.php';
             throw new Zend_Http_Exception("Invalid HTTP response version: $version");
         }
@@ -186,7 +186,7 @@ class Zend_Http_Response
 
         // If we got the response message, set it. Else, set it according to
         // the response code
-        if (is_string($message)) {
+        if (\is_string($message)) {
             $this->message = $message;
         } else {
             $this->message = self::responseCodeAsText($code);
@@ -200,7 +200,7 @@ class Zend_Http_Response
      */
     public function isError()
     {
-        $restype = floor($this->code / 100);
+        $restype = \floor($this->code / 100);
         if ($restype == 4 || $restype == 5) {
             return true;
         }
@@ -215,7 +215,7 @@ class Zend_Http_Response
      */
     public function isSuccessful()
     {
-        $restype = floor($this->code / 100);
+        $restype = \floor($this->code / 100);
         if ($restype == 2 || $restype == 1) { // Shouldn't 3xx count as success as well ???
             return true;
         }
@@ -230,7 +230,7 @@ class Zend_Http_Response
      */
     public function isRedirect()
     {
-        $restype = floor($this->code / 100);
+        $restype = \floor($this->code / 100);
         if ($restype == 3) {
             return true;
         }
@@ -255,7 +255,7 @@ class Zend_Http_Response
         $body = '';
 
         // Decode the body if it was transfer-encoded
-        switch (strtolower($this->getHeader('transfer-encoding'))) {
+        switch (\strtolower($this->getHeader('transfer-encoding'))) {
 
             // Handle chunked body
             case 'chunked':
@@ -270,7 +270,7 @@ class Zend_Http_Response
         }
 
         // Decode any content-encoding (gzip or deflate) if needed
-        switch (strtolower($this->getHeader('content-encoding'))) {
+        switch (\strtolower($this->getHeader('content-encoding'))) {
 
             // Handle gzip encoding
             case 'gzip':
@@ -351,8 +351,8 @@ class Zend_Http_Response
      */
     public function getHeader($header)
     {
-        $header = ucwords(strtolower($header));
-        if (! is_string($header) || ! isset($this->headers[$header])) {
+        $header = \ucwords(\strtolower($header));
+        if (! \is_string($header) || ! isset($this->headers[$header])) {
             return null;
         }
 
@@ -376,9 +376,9 @@ class Zend_Http_Response
 
         // Iterate over the headers and stringify them
         foreach ($this->headers as $name => $value) {
-            if (is_string($value)) {
+            if (\is_string($value)) {
                 $str .= "{$name}: {$value}{$br}";
-            } elseif (is_array($value)) {
+            } elseif (\is_array($value)) {
                 foreach ($value as $subval) {
                     $str .= "{$name}: {$subval}{$br}";
                 }
@@ -445,7 +445,7 @@ class Zend_Http_Response
      */
     public static function extractCode($response_str)
     {
-        preg_match("|^HTTP/[\d\.x]+ (\d+)|", $response_str, $m);
+        \preg_match("|^HTTP/[\d\.x]+ (\d+)|", $response_str, $m);
 
         if (isset($m[1])) {
             return (int) $m[1];
@@ -462,7 +462,7 @@ class Zend_Http_Response
      */
     public static function extractMessage($response_str)
     {
-        preg_match("|^HTTP/[\d\.x]+ \d+ ([^\r\n]+)|", $response_str, $m);
+        \preg_match("|^HTTP/[\d\.x]+ \d+ ([^\r\n]+)|", $response_str, $m);
 
         if (isset($m[1])) {
             return $m[1];
@@ -479,7 +479,7 @@ class Zend_Http_Response
      */
     public static function extractVersion($response_str)
     {
-        preg_match("|^HTTP/([\d\.x]+) \d+|", $response_str, $m);
+        \preg_match("|^HTTP/([\d\.x]+) \d+|", $response_str, $m);
 
         if (isset($m[1])) {
             return $m[1];
@@ -499,30 +499,30 @@ class Zend_Http_Response
         $headers = array();
 
         // First, split body and headers
-        $parts = preg_split('|(?:\r?\n){2}|m', $response_str, 2);
+        $parts = \preg_split('|(?:\r?\n){2}|m', $response_str, 2);
         if (! $parts[0]) {
             return $headers;
         }
 
         // Split headers part to lines
-        $lines = explode("\n", $parts[0]);
+        $lines = \explode("\n", $parts[0]);
         unset($parts);
         $last_header = null;
 
         foreach ($lines as $line) {
-            $line = trim($line, "\r\n");
+            $line = \trim($line, "\r\n");
             if ($line == "") {
                 break;
             }
 
             // Locate headers like 'Location: ...' and 'Location:...' (note the missing space)
-            if (preg_match("|^([\w-]+):\s*(.+)|", $line, $m)) {
+            if (\preg_match("|^([\w-]+):\s*(.+)|", $line, $m)) {
                 unset($last_header);
-                $h_name = strtolower($m[1]);
+                $h_name = \strtolower($m[1]);
                 $h_value = $m[2];
 
                 if (isset($headers[$h_name])) {
-                    if (! is_array($headers[$h_name])) {
+                    if (! \is_array($headers[$h_name])) {
                         $headers[$h_name] = array($headers[$h_name]);
                     }
 
@@ -531,10 +531,10 @@ class Zend_Http_Response
                     $headers[$h_name] = $h_value;
                 }
                 $last_header = $h_name;
-            } elseif (preg_match("|^\s+(.+)$|", $line, $m) && $last_header !== null) {
-                if (is_array($headers[$last_header])) {
-                    end($headers[$last_header]);
-                    $last_header_key = key($headers[$last_header]);
+            } elseif (\preg_match("|^\s+(.+)$|", $line, $m) && $last_header !== null) {
+                if (\is_array($headers[$last_header])) {
+                    \end($headers[$last_header]);
+                    $last_header_key = \key($headers[$last_header]);
                     $headers[$last_header][$last_header_key] .= $m[1];
                 } else {
                     $headers[$last_header] .= $m[1];
@@ -553,7 +553,7 @@ class Zend_Http_Response
      */
     public static function extractBody($response_str)
     {
-        $parts = preg_split('|(?:\r?\n){2}|m', $response_str, 2);
+        $parts = \preg_split('|(?:\r?\n){2}|m', $response_str, 2);
         if (isset($parts[1])) {
             return $parts[1];
         }
@@ -572,26 +572,26 @@ class Zend_Http_Response
 
         // If mbstring overloads substr and strlen functions, we have to
         // override it's internal encoding
-        if (function_exists('mb_internal_encoding') &&
-           ((int) ini_get('mbstring.func_overload')) & 2) {
-            $mbIntEnc = mb_internal_encoding();
-            mb_internal_encoding('ASCII');
+        if (\function_exists('mb_internal_encoding') &&
+           ((int) \ini_get('mbstring.func_overload')) & 2) {
+            $mbIntEnc = \mb_internal_encoding();
+            \mb_internal_encoding('ASCII');
         }
 
-        while (trim($body)) {
-            if (! preg_match("/^([\da-fA-F]+)[^\r\n]*\r\n/sm", $body, $m)) {
+        while (\trim($body)) {
+            if (! \preg_match("/^([\da-fA-F]+)[^\r\n]*\r\n/sm", $body, $m)) {
                 require_once 'Zend/Http/Exception.php';
                 throw new Zend_Http_Exception("Error parsing body - doesn't seem to be a chunked message");
             }
 
-            $length = hexdec(trim($m[1]));
-            $cut = strlen($m[0]);
-            $decBody .= substr($body, $cut, $length);
-            $body = substr($body, $cut + $length + 2);
+            $length = \hexdec(\trim($m[1]));
+            $cut = \strlen($m[0]);
+            $decBody .= \substr($body, $cut, $length);
+            $body = \substr($body, $cut + $length + 2);
         }
 
         if (isset($mbIntEnc)) {
-            mb_internal_encoding($mbIntEnc);
+            \mb_internal_encoding($mbIntEnc);
         }
 
         return $decBody;
@@ -607,14 +607,14 @@ class Zend_Http_Response
      */
     public static function decodeGzip($body)
     {
-        if (! function_exists('gzinflate')) {
+        if (! \function_exists('gzinflate')) {
             require_once 'Zend/Http/Exception.php';
             throw new Zend_Http_Exception(
                 'zlib extension is required in order to decode "gzip" encoding'
             );
         }
 
-        return gzinflate(substr($body, 10));
+        return \gzinflate(\substr($body, 10));
     }
 
     /**
@@ -627,7 +627,7 @@ class Zend_Http_Response
      */
     public static function decodeDeflate($body)
     {
-        if (! function_exists('gzuncompress')) {
+        if (! \function_exists('gzuncompress')) {
             require_once 'Zend/Http/Exception.php';
             throw new Zend_Http_Exception(
                 'zlib extension is required in order to decode "deflate" encoding'
@@ -645,11 +645,11 @@ class Zend_Http_Response
          *
          * @link http://framework.zend.com/issues/browse/ZF-6040
          */
-        $zlibHeader = unpack('n', substr($body, 0, 2));
+        $zlibHeader = \unpack('n', \substr($body, 0, 2));
         if ($zlibHeader[1] % 31 == 0) {
-            return gzuncompress($body);
+            return \gzuncompress($body);
         } else {
-            return gzinflate($body);
+            return \gzinflate($body);
         }
     }
 

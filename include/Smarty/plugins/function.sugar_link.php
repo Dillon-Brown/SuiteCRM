@@ -33,7 +33,7 @@ r42268 - 2008-12-02 13:29:54 -0800 (Tue, 02 Dec 2008) - rob - Get some tweaks to
 */
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -83,7 +83,7 @@ function smarty_function_sugar_link($params, &$smarty)
         $smarty->trigger_error("sugar_link: missing 'module' parameter");
         return;
     }
-    if (!empty($params['data']) && is_array($params['data'])) {
+    if (!empty($params['data']) && \is_array($params['data'])) {
         $link_url = 'index.php?';
         $link_url .= 'module=iFrames&action=index';
         $link_url .= '&record='.$params['data']['0'];
@@ -114,7 +114,7 @@ function smarty_function_sugar_link($params, &$smarty)
     $module = ' module="'.$params['module'].'"';
     $accesskey = (!empty($params['accesskey']))?' accesskey="'.$params['accesskey'].'" ':'';
     $options = (!empty($params['options']))?' '.$params['options'].'':'';
-    if (!empty($params['data']) && is_array($params['data'])) {
+    if (!empty($params['data']) && \is_array($params['data'])) {
         $label =$params['data']['4'];
     } elseif (!empty($params['label'])) {
         $label = $params['label'];

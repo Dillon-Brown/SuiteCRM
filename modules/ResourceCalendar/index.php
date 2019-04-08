@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -50,7 +50,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  ********************************************************************************/
 ?>
 <?php
-header("Location:index.php?module=Project&action=ResourceList&parentTab=All&ajax_load=1&loadLanguageJS=1");
+\header("Location:index.php?module=Project&action=ResourceList&parentTab=All&ajax_load=1&loadLanguageJS=1");
 die('--');
 
 ?>

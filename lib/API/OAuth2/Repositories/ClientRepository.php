@@ -66,7 +66,7 @@ class ClientRepository implements ClientRepositoryInterface
         if (
             $mustValidateSecret === true
             && (bool)$client->is_confidential === true
-            && hash('sha256', $clientSecret) !== $client->secret
+            && \hash('sha256', $clientSecret) !== $client->secret
         ) {
             return null;
         }

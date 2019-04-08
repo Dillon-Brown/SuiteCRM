@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -114,7 +114,7 @@ class VariableSubstitutionRule extends BaseRule
             foreach ($panels as $name=>$panel) {
                 foreach ($panel as $rowCount=>$row) {
                     foreach ($row as $key=>$column) {
-                        if ($this->matches($column, '/^salutation$/si') && is_array($column) && isset($column['fields']) && count($column['fields']) == 2) {
+                        if ($this->matches($column, '/^salutation$/si') && \is_array($column) && isset($column['fields']) && \count($column['fields']) == 2) {
                             //Change salutation field to salutation + first_name'
                             $panels[$name][$rowCount][$key] = array(
                                                             'name' => 'first_name',

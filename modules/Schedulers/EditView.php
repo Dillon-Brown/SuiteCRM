@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -113,7 +113,7 @@ $javascript->addToValidateBinaryDependency('time_minute_from', 'alpha', 'Active 
 $dtStart = $focus->date_time_start;
 $dtEnd = $focus->date_time_end;
 if (!empty($dtStart)) {
-    $exStart = explode(" ", $dtStart);
+    $exStart = \explode(" ", $dtStart);
     $date_start = $exStart[0];
     $time_start = $exStart[1];
 } else {
@@ -123,7 +123,7 @@ if (!empty($dtStart)) {
 }
 
 if (!empty($dtEnd) && $dtEnd != '2020-12-31 23:59') {
-    $exEnd = explode(" ", $dtEnd);
+    $exEnd = \explode(" ", $dtEnd);
     $date_end = $exEnd[0];
     $time_end = $exEnd[1];
 } else {
@@ -137,14 +137,14 @@ $time_meridiem_start = $timedate->AMPMMenu('time_start_', $time_start, '');
 $time_meridiem_end = $timedate->AMPMMenu('time_end_', $time_end, '');
 $time_meridiem_from = $timedate->AMPMMenu('time_from_', $focus->time_from, '');
 $time_meridiem_to = $timedate->AMPMMenu('time_to_', $focus->time_to, '');
-$time_start_hour = intval(substr($time_start, 0, 2));
-$time_start_minutes = substr($time_start, 3, 5);
-$time_end_hour = intval(substr($time_end, 0, 2));
-$time_end_minutes = substr($time_end, 3, 5);
-$time_from_hour = intval(substr($focus->time_from, 0, 2));
-$time_from_min = substr($focus->time_from, 3, 5);
-$time_to_hour = intval(substr($focus->time_to, 0, 2));
-$time_to_min = substr($focus->time_to, 3, 5);
+$time_start_hour = \intval(\substr($time_start, 0, 2));
+$time_start_minutes = \substr($time_start, 3, 5);
+$time_end_hour = \intval(\substr($time_end, 0, 2));
+$time_end_minutes = \substr($time_end, 3, 5);
+$time_from_hour = \intval(\substr($focus->time_from, 0, 2));
+$time_from_min = \substr($focus->time_from, 3, 5);
+$time_to_hour = \intval(\substr($focus->time_to, 0, 2));
+$time_to_min = \substr($focus->time_to, 3, 5);
 $hours_arr = array();
 $mins_arr = array();
 $num_of_hours = 13;
@@ -153,14 +153,14 @@ $start_at = 1;
 // setup function drop down
 include_once('modules/Schedulers/_AddJobsHere.php');
 
-if (is_array($job_strings) && !empty($job_strings)) {
+if (\is_array($job_strings) && !empty($job_strings)) {
     $job_function = "<option value=''>--</option>";
     foreach ($job_strings as $k => $function) {
         $job_function .= "<option value='function::".$function."'";
         if ($focus->job === "function::".$function) {
             $job_function .= " SELECTED ";
         }
-        $job_function .= ">".$mod_strings['LBL_'.strtoupper($function)]."</option>";
+        $job_function .= ">".$mod_strings['LBL_'.\strtoupper($function)]."</option>";
     }
 }
 
@@ -171,14 +171,14 @@ if (empty($time_meridiem_start)) {
 
 for ($i = $start_at; $i < $num_of_hours; $i ++) {
     $i = $i."";
-    if (strlen($i) == 1) {
+    if (\strlen($i) == 1) {
         $i = "0".$i;
     }
     $hours_arr[$i] = $i;
 }
 
 for ($j=0; $j<60; $j++) {
-    $mins_arr[$j] = str_pad($j, 2, 0, STR_PAD_LEFT);
+    $mins_arr[$j] = \str_pad($j, 2, 0, STR_PAD_LEFT);
 }
 
 // make two more array with "nulls"
@@ -189,7 +189,7 @@ $mins_arr_unreq[''] = '--';
 
 // explode crontab notation
 if (!empty($focus->job_interval)) {
-    $exInterval = explode("::", $focus->job_interval);
+    $exInterval = \explode("::", $focus->job_interval);
 } else {
     $exInterval = array('*','*','*','*','*');
 }
@@ -220,12 +220,12 @@ if ($exInterval[4] == '*') {
     $xtpl->assign('FRI', "CHECKED");
     $xtpl->assign('SAT', "CHECKED");
     $xtpl->assign('SUN', "CHECKED");
-} elseif (strpos($exInterval[4], ',')) {
+} elseif (\strpos($exInterval[4], ',')) {
     $daysRun = array();
-    $exDays = explode(',', trim($exInterval[4]));
+    $exDays = \explode(',', \trim($exInterval[4]));
     foreach ($exDays as $k => $days) {
-        if (strpos($days, '-')) {
-            $exDaysRange = explode('-', $days);
+        if (\strpos($days, '-')) {
+            $exDaysRange = \explode('-', $days);
             for ($i=$exDaysRange[0]; $i<=$exDaysRange[1]; $i++) {
                 $xtpl->assign($xtDays[$days], "CHECKED");
             }
@@ -233,8 +233,8 @@ if ($exInterval[4] == '*') {
             $xtpl->assign($xtDays[$days], "CHECKED");
         }
     }
-} elseif (strpos($exInterval[4], '-')) {
-    $exDaysRange = explode('-', $exInterval[4]);
+} elseif (\strpos($exInterval[4], '-')) {
+    $exDaysRange = \explode('-', $exInterval[4]);
     for ($i=$exDaysRange[0]; $i<=$exDaysRange[1]; $i++) {
         $xtpl->assign($xtDays[$i], "CHECKED");
     }
@@ -251,15 +251,15 @@ if ($exInterval[0] == '*' && $exInterval[1] == '*') {
     $xtpl->assign('BASIC_INTERVAL', get_select_options_with_id($ints, '1'));
     $xtpl->assign('BASIC_PERIOD', get_select_options_with_id($app_list_strings['scheduler_period_dom'], 'min'));
 // hours
-} elseif (strpos($exInterval[1], '*/') !== false && $exInterval[0] == '0') {
+} elseif (\strpos($exInterval[1], '*/') !== false && $exInterval[0] == '0') {
     // we have a "BASIC" type of hour setting
-    $exHours = explode('/', $exInterval[1]);
+    $exHours = \explode('/', $exInterval[1]);
     $xtpl->assign('BASIC_INTERVAL', get_select_options_with_id($ints, $exHours[1]));
     $xtpl->assign('BASIC_PERIOD', get_select_options_with_id($app_list_strings['scheduler_period_dom'], 'hour'));
 // Minutes
-} elseif (strpos($exInterval[0], '*/') !== false && $exInterval[1] == '*') {
+} elseif (\strpos($exInterval[0], '*/') !== false && $exInterval[1] == '*') {
     // we have a "BASIC" type of min setting
-    $exMins = explode('/', $exInterval[0]);
+    $exMins = \explode('/', $exInterval[0]);
     $xtpl->assign('BASIC_INTERVAL', get_select_options_with_id($ints, $exMins[1]));
     $xtpl->assign('BASIC_PERIOD', get_select_options_with_id($app_list_strings['scheduler_period_dom'], 'min'));
 // we've got an advanced time setting
@@ -296,7 +296,7 @@ $xtpl->assign('TIME_MERIDIEM_START', $time_meridiem_start);
 $xtpl->assign('TIME_MERIDIEM_END', $time_meridiem_end);
 $xtpl->assign('TIME_MERIDIEM_FROM', $time_meridiem_from);
 $xtpl->assign('TIME_MERIDIEM_TO', $time_meridiem_to);
-if (preg_match('/\d([^\d])\d/', $time_format, $match)) {
+if (\preg_match('/\d([^\d])\d/', $time_format, $match)) {
     $xtpl->assign('TIME_SEPARATOR', $match[1]);
 } else {
     $xtpl->assign('TIME_SEPARATOR', ':');
@@ -325,8 +325,8 @@ if ($focus->catch_up == 1) {
     $xtpl->assign('CATCH_UP_CHECKED', 'CHECKED');
 }
 // job
-if (strstr($focus->job, 'url::')) {
-    $job_url = str_replace('url::', '', $focus->job);
+if (\strstr($focus->job, 'url::')) {
+    $job_url = \str_replace('url::', '', $focus->job);
 } else {
     $job_url = 'http://';
 }
@@ -346,8 +346,8 @@ $xtpl->assign('MONTHS', $exInterval[3]);
 $xtpl->assign('DAY_OF_WEEK', $exInterval[4]);
 $xtpl->assign('ROLLOVER', $email->rolloverStyle);
 
-$xtpl->assign('SERVER_TIMEZONE', date("T"));
-$xtpl->assign('SERVER_OFFSET', date("O"));
+$xtpl->assign('SERVER_TIMEZONE', \date("T"));
+$xtpl->assign('SERVER_OFFSET', \date("O"));
 
 $xtpl->parse("main");
 $xtpl->out("main");

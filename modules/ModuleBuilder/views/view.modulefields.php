@@ -101,7 +101,7 @@ class ViewModulefields extends SugarView
                         $def['custom'] = false;
                     }
 
-                    $def['type'] = isset($fieldTypes[$def['type']]) ? $fieldTypes[$def['type']] : ucfirst($def['type']);
+                    $def['type'] = isset($fieldTypes[$def['type']]) ? $fieldTypes[$def['type']] : \ucfirst($def['type']);
                     $fieldsData[] = $def;
                     $customFieldsData[$def['name']] = $def['custom'];
                 }
@@ -136,13 +136,13 @@ class ViewModulefields extends SugarView
             $this->mbModule = $package->modules[$module_name];
             $this->loadPackageHelp($module_name);
             $this->mbModule->getVardefs(true);
-            $this->mbModule->mbvardefs->vardefs['fields'] = array_reverse($this->mbModule->mbvardefs->vardefs['fields'], true);
+            $this->mbModule->mbvardefs->vardefs['fields'] = \array_reverse($this->mbModule->mbvardefs->vardefs['fields'], true);
             $loadedFields = array();
 
-            if (file_exists($this->mbModule->path. '/language/'.$current_language.'.lang.php')) {
+            if (\file_exists($this->mbModule->path. '/language/'.$current_language.'.lang.php')) {
                 include($this->mbModule->path .'/language/'.$current_language.'.lang.php');
                 $this->mbModule->setModStrings($current_language, $mod_strings);
-            } elseif (file_exists($this->mbModule->path. '/language/en_us.lang.php')) {
+            } elseif (\file_exists($this->mbModule->path. '/language/en_us.lang.php')) {
                 include($this->mbModule->path .'/language/en_us.lang.php');
                 $this->mbModule->setModStrings('en_us', $mod_strings);
             }
@@ -150,7 +150,7 @@ class ViewModulefields extends SugarView
             foreach ($this->mbModule->mbvardefs->vardefs['fields'] as $k=>$v) {
                 if ($k != $this->mbModule->name) {
                     foreach ($v as $field => $def) {
-                        if (in_array($field, array_keys($this->mbModule->mbvardefs->vardefs['fields'][$this->mbModule->name]))) {
+                        if (\in_array($field, \array_keys($this->mbModule->mbvardefs->vardefs['fields'][$this->mbModule->name]))) {
                             $this->mbModule->mbvardefs->vardefs['fields'][$k][$field] = $this->mbModule->mbvardefs->vardefs['fields'][$this->mbModule->name][$field];
 
                             unset($this->mbModule->mbvardefs->vardefs['fields'][$this->mbModule->name][$field]);
@@ -161,7 +161,7 @@ class ViewModulefields extends SugarView
 
             foreach ($this->mbModule->mbvardefs->vardefs['fields'] as $k=>$v) {
                 if ($k != $module_name) {
-                    $titleLBL[$k]=translate("LBL_".strtoupper($k), 'ModuleBuilder');
+                    $titleLBL[$k]=translate("LBL_".\strtoupper($k), 'ModuleBuilder');
                 } else {
                     $titleLBL[$k]=$k;
                 }
@@ -180,7 +180,7 @@ class ViewModulefields extends SugarView
                             $loadedFields[$field] = true;
 
                             $type = $this->mbModule->mbvardefs->vardefs['fields'][$k][$field]['type'];
-                            $this->mbModule->mbvardefs->vardefs['fields'][$k][$field]['type'] = isset($fieldTypes[$type]) ? $fieldTypes[$type] : ucfirst($type);
+                            $this->mbModule->mbvardefs->vardefs['fields'][$k][$field]['type'] = isset($fieldTypes[$type]) ? $fieldTypes[$type] : \ucfirst($type);
                             $fieldsData[] = $this->mbModule->mbvardefs->vardefs['fields'][$k][$field];
                         }
                     }
@@ -239,7 +239,7 @@ class ViewModulefields extends SugarView
         $def
         ) {
         if (isset($def['studio'])) {
-            if (is_array($def [ 'studio' ])) {
+            if (\is_array($def [ 'studio' ])) {
                 if (isset($def['studio']['editField']) && $def['studio']['editField'] == true) {
                     return true;
                 }

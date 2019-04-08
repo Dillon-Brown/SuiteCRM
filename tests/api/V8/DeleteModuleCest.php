@@ -28,7 +28,7 @@ class DeleteModuleCest
         $endpoint = $I->getInstanceURL() . '/Api/V8/module/Accounts/' . $id;
         $expectedResult = [
             'meta' => [
-                'message' => sprintf('Record with id %s is deleted', $id)
+                'message' => \sprintf('Record with id %s is deleted', $id)
             ],
             'data' => []
         ];
@@ -36,7 +36,7 @@ class DeleteModuleCest
         $I->sendDELETE($endpoint);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
-        $I->seeResponseEquals(json_encode($expectedResult, JSON_PRETTY_PRINT));
+        $I->seeResponseEquals(\json_encode($expectedResult, JSON_PRETTY_PRINT));
 
         // perm delete
         $I->deleteBean('accounts', $id);
@@ -53,8 +53,8 @@ class DeleteModuleCest
         $I->deleteBean('accounts', $id);
 
         $endpoint = $I->getInstanceURL() . '/Api/V8/module/Accounts/{id}';
-        $endpoint = str_replace('{id}', $id, $endpoint);
-        $detail = str_replace('{id}', $id, 'Accounts module with id {id} is not found');
+        $endpoint = \str_replace('{id}', $id, $endpoint);
+        $detail = \str_replace('{id}', $id, 'Accounts module with id {id} is not found');
 
         $expectedResult = [
             'errors' => [
@@ -67,6 +67,6 @@ class DeleteModuleCest
         $I->sendGET($endpoint);
         $I->seeResponseCodeIs(400);
         $I->seeResponseIsJson();
-        $I->seeResponseEquals(json_encode($expectedResult, JSON_PRETTY_PRINT));
+        $I->seeResponseEquals(\json_encode($expectedResult, JSON_PRETTY_PRINT));
     }
 }

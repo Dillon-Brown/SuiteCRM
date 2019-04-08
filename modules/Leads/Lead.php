@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -166,7 +166,7 @@ class Lead extends Person implements EmailInterface
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -262,7 +262,7 @@ class Lead extends Person implements EmailInterface
     public function create_new_list_query($order_by, $where, $filter=array(), $params=array(), $show_deleted = 0, $join_type='', $return_array = false, $parentbean=null, $singleSelect = false, $ifListForExport = false)
     {
         $ret_array = parent::create_new_list_query($order_by, $where, $filter, $params, $show_deleted, $join_type, true, $parentbean, $singleSelect, $ifListForExport);
-        if (strpos($ret_array['select'], "leads.account_name") == false && strpos($ret_array['select'], "leads.*") == false) {
+        if (\strpos($ret_array['select'], "leads.account_name") == false && \strpos($ret_array['select'], "leads.*") == false) {
             $ret_array['select'] .= " ,leads.account_name";
         }
         if (!$return_array) {
@@ -277,7 +277,7 @@ class Lead extends Person implements EmailInterface
         $this->db->query($query, true, "Error converting lead: ");
 
         //we must move the status out here in order to be able to capture workflow conditions
-        $leadid = str_replace("'", "", $leadid);
+        $leadid = \str_replace("'", "", $leadid);
         $lead = new Lead();
         $lead->retrieve($leadid);
         $lead->status='Converted';
@@ -346,7 +346,7 @@ class Lead extends Person implements EmailInterface
             foreach ($fieldDefs as $name=>$properties) {
                 if ($name == 'oldmeetings' || $name == 'oldcalls') {
                     continue;
-                } elseif (array_search('link', $properties) === 'type') {
+                } elseif (\array_search('link', $properties) === 'type') {
                     $linked_fields[$name]=$properties;
                 }
             }
@@ -363,17 +363,17 @@ class Lead extends Person implements EmailInterface
         $where_clauses = array();
         $the_query_string = DBManagerFactory::getInstance()->quote($the_query_string);
 
-        array_push($where_clauses, "leads.last_name like '$the_query_string%'");
-        array_push($where_clauses, "leads.account_name like '$the_query_string%'");
-        array_push($where_clauses, "leads.first_name like '$the_query_string%'");
-        array_push($where_clauses, "ea.email_address like '$the_query_string%'");
+        \array_push($where_clauses, "leads.last_name like '$the_query_string%'");
+        \array_push($where_clauses, "leads.account_name like '$the_query_string%'");
+        \array_push($where_clauses, "leads.first_name like '$the_query_string%'");
+        \array_push($where_clauses, "ea.email_address like '$the_query_string%'");
 
-        if (is_numeric($the_query_string)) {
-            array_push($where_clauses, "leads.phone_home like '%$the_query_string%'");
-            array_push($where_clauses, "leads.phone_mobile like '%$the_query_string%'");
-            array_push($where_clauses, "leads.phone_work like '%$the_query_string%'");
-            array_push($where_clauses, "leads.phone_other like '%$the_query_string%'");
-            array_push($where_clauses, "leads.phone_fax like '%$the_query_string%'");
+        if (\is_numeric($the_query_string)) {
+            \array_push($where_clauses, "leads.phone_home like '%$the_query_string%'");
+            \array_push($where_clauses, "leads.phone_mobile like '%$the_query_string%'");
+            \array_push($where_clauses, "leads.phone_work like '%$the_query_string%'");
+            \array_push($where_clauses, "leads.phone_other like '%$the_query_string%'");
+            \array_push($where_clauses, "leads.phone_fax like '%$the_query_string%'");
         }
 
         $the_where = "";

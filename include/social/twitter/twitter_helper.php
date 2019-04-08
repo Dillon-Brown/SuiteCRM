@@ -14,8 +14,8 @@ function check_enabled($db, $type)
 
 function format_feed_tweets($db, $array, $limit)
 {
-    if (strlen($array['text']) > $limit) {
-        $array['text'] = '<br /><p style=line-height:30px;>' . substr($array['text'], 0, $limit) . '. . .<br /><a href=https://twitter.com/' . $array['user']['screen_name'] . '/status/' . $array['id'] . '>View full Tweet</a></p>';
+    if (\strlen($array['text']) > $limit) {
+        $array['text'] = '<br /><p style=line-height:30px;>' . \substr($array['text'], 0, $limit) . '. . .<br /><a href=https://twitter.com/' . $array['user']['screen_name'] . '/status/' . $array['id'] . '>View full Tweet</a></p>';
     } else {
         $array['text'] = '<br /><p style=line-height:30px;>' . $array['text'] . '<br /><a href=https://twitter.com/' . $array['user']['screen_name'] . '/status/' . $array['id'] . '>View on Twitter</a></p>';
     }
@@ -28,10 +28,10 @@ function format_feed_tweets($db, $array, $limit)
 function replace_hashtags($db, $array)
 {
     $i = 0;
-    $count = count($array['entities']['hashtags']);
+    $count = \count($array['entities']['hashtags']);
 
     while ($i < $count) {
-        $array['text'] = str_replace('#' . $array['entities']['hashtags'][$i]['text'], "<a href=http://twitter.com/#" . $array['entities']['hashtags'][$i]['text'] . ">" . "#" . $array['entities']['hashtags'][$i]['text'] . "</a>", $array['text']);
+        $array['text'] = \str_replace('#' . $array['entities']['hashtags'][$i]['text'], "<a href=http://twitter.com/#" . $array['entities']['hashtags'][$i]['text'] . ">" . "#" . $array['entities']['hashtags'][$i]['text'] . "</a>", $array['text']);
         $i++;
     }
 
@@ -41,10 +41,10 @@ function replace_hashtags($db, $array)
 function replace_users($db, $array)
 {
     $i = 0;
-    $count = count($array['entities']['user_mentions']);
+    $count = \count($array['entities']['user_mentions']);
 
     while ($i < $count) {
-        $array['text'] = str_replace('@' . $array['entities']['user_mentions'][$i]['screen_name'], "<a href=http://twitter.com/" . $array['entities']['user_mentions'][$i]['screen_name'] . ">" . "@" . $array['entities']['user_mentions'][$i]['screen_name'] . "</a>", $array['text']);
+        $array['text'] = \str_replace('@' . $array['entities']['user_mentions'][$i]['screen_name'], "<a href=http://twitter.com/" . $array['entities']['user_mentions'][$i]['screen_name'] . ">" . "@" . $array['entities']['user_mentions'][$i]['screen_name'] . "</a>", $array['text']);
         $i++;
     }
 

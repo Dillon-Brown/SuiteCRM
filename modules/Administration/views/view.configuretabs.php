@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -106,16 +106,16 @@ class ViewConfiguretabs extends SugarView
         $this->ss->assign('APP', $GLOBALS['app_strings']);
         $this->ss->assign('MOD', $GLOBALS['mod_strings']);
         $this->ss->assign('user_can_edit', $user_can_edit);
-        $this->ss->assign('enabled_tabs', json_encode($enabled));
-        $this->ss->assign('disabled_tabs', json_encode($disabled));
+        $this->ss->assign('enabled_tabs', \json_encode($enabled));
+        $this->ss->assign('disabled_tabs', \json_encode($disabled));
         $this->ss->assign('title', $this->getModuleTitle(false));
         
         //get list of all subpanels and panels to hide
-        $mod_list_strings_key_to_lower = array_change_key_case($app_list_strings['moduleList']);
+        $mod_list_strings_key_to_lower = \array_change_key_case($app_list_strings['moduleList']);
         $panels_arr = SubPanelDefinitions::get_all_subpanels();
         $hidpanels_arr = SubPanelDefinitions::get_hidden_subpanels();
         
-        if (!$hidpanels_arr || !is_array($hidpanels_arr)) {
+        if (!$hidpanels_arr || !\is_array($hidpanels_arr)) {
             $hidpanels_arr = array();
         }
         
@@ -125,7 +125,7 @@ class ViewConfiguretabs extends SugarView
             if (empty($key)) {
                 continue;
             }
-            $key = strtolower($key);
+            $key = \strtolower($key);
             $enabled[] =  array("module" => $key, "label" => $mod_list_strings_key_to_lower[$key]);
         }
         
@@ -135,12 +135,12 @@ class ViewConfiguretabs extends SugarView
             if (empty($key)) {
                 continue;
             }
-            $key = strtolower($key);
+            $key = \strtolower($key);
             $disabled[] =  array("module" => $key, "label" => $mod_list_strings_key_to_lower[$key]);
         }
         
-        $this->ss->assign('enabled_panels', json_encode($enabled));
-        $this->ss->assign('disabled_panels', json_encode($disabled));
+        $this->ss->assign('enabled_panels', \json_encode($enabled));
+        $this->ss->assign('disabled_panels', \json_encode($disabled));
         
         echo $this->ss->fetch('modules/Administration/templates/ConfigureTabs.tpl');
     }

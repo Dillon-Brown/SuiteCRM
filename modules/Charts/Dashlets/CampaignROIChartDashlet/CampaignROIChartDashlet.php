@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -98,7 +98,7 @@ class CampaignROIChartDashlet extends DashletGenericChart
         }
         $thousands_symbol = translate('LBL_OPP_THOUSANDS', 'Charts');
 
-        $canvasId = 'rGraphCampaignROI'.uniqid();
+        $canvasId = 'rGraphCampaignROI'.\uniqid();
         $chartWidth     = 900;
         $chartHeight    = 500;
         $autoRefresh = $this->processAutoRefresh();
@@ -106,18 +106,18 @@ class CampaignROIChartDashlet extends DashletGenericChart
         $chartReadyData = $this->prepareChartData($rawData, $currency_symbol, $thousands_symbol);
 
         //$chartReadyData['data'] = [[1.1,2.2],[3.3,4.4]];
-        $jsonData = json_encode($chartReadyData['data']);
-        $jsonLabels = json_encode($chartReadyData['labels']);
-        $jsonLabelsAndValues = json_encode($chartReadyData['labelsAndValues']);
+        $jsonData = \json_encode($chartReadyData['data']);
+        $jsonLabels = \json_encode($chartReadyData['labels']);
+        $jsonLabelsAndValues = \json_encode($chartReadyData['labelsAndValues']);
 
 
-        $jsonKey = json_encode($chartReadyData['key']);
-        $jsonTooltips = json_encode($chartReadyData['tooltips']);
+        $jsonKey = \json_encode($chartReadyData['key']);
+        $jsonTooltips = \json_encode($chartReadyData['tooltips']);
 
         //$colours = "['red','blue','green','orange','yellow','pink']";
         $colours = "['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928']";
 
-        if (!is_array($chartReadyData['data'])||count($chartReadyData['data']) < 1) {
+        if (!\is_array($chartReadyData['data'])||\count($chartReadyData['data']) < 1) {
             return "<h3 class='noGraphDataPoints'>$this->noDataMessage</h3>";
         }
 
@@ -337,7 +337,7 @@ EOD;
         $chart['tooltips']= array();
 
         foreach ($data as $key=>$value) {
-            $formattedFloat = (float)number_format((float)$value, 2, '.', '');
+            $formattedFloat = (float)\number_format((float)$value, 2, '.', '');
             $chart['labels'][] = $key;
             $chart['data'][] = $formattedFloat;
             /*

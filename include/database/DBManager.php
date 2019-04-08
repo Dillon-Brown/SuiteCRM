@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -411,7 +411,7 @@ abstract class DBManager
     protected function checkQuery($sql, $object_name = false)
     {
         $match = array();
-        preg_match_all("'.* FROM ([^ ]*).* ORDER BY (.*)'is", $sql, $match);
+        \preg_match_all("'.* FROM ([^ ]*).* ORDER BY (.*)'is", $sql, $match);
         $indices = false;
         if (!empty($match[1][0])) {
             $table = $match[1][0];
@@ -437,18 +437,18 @@ abstract class DBManager
             return false;
         }
         if (!empty($match[2][0])) {
-            $orderBys = explode(' ', $match[2][0]);
+            $orderBys = \explode(' ', $match[2][0]);
             foreach ($orderBys as $orderBy) {
-                $orderBy = trim($orderBy);
+                $orderBy = \trim($orderBy);
                 if (empty($orderBy)) {
                     continue;
                 }
-                $orderBy = strtolower($orderBy);
+                $orderBy = \strtolower($orderBy);
                 if ($orderBy == 'asc' || $orderBy == 'desc') {
                     continue;
                 }
 
-                $orderBy = str_replace(array($table . '.', ','), '', $orderBy);
+                $orderBy = \str_replace(array($table . '.', ','), '', $orderBy);
 
                 foreach ($indices as $index) {
                     if (empty($index['db']) || $index['db'] == $this->dbType) {
@@ -531,7 +531,7 @@ abstract class DBManager
     public function insertParams($table, $field_defs, $data, $field_map = null, $execute = true)
     {
         $values = array();
-        if (!is_array($field_defs) && !is_object($field_defs)) {
+        if (!\is_array($field_defs) && !\is_object($field_defs)) {
             $GLOBALS['log']->fatal('$filed_defs should be an array');
         } else {
             foreach ((array)$field_defs as $field => $fieldDef) {
@@ -546,7 +546,7 @@ abstract class DBManager
                     // clean the incoming value..
                     $val = from_html($data[$field]);
                 } else {
-                    if (isset($fieldDef['default']) && strlen($fieldDef['default']) > 0) {
+                    if (isset($fieldDef['default']) && \strlen($fieldDef['default']) > 0) {
                         $val = $fieldDef['default'];
                     } else {
                         $val = null;
@@ -563,7 +563,7 @@ abstract class DBManager
                     $values['deleted'] = (int)$val;
                 } else {
                     // need to do some thing about types of values
-                    if (!is_null($val) || !empty($fieldDef['required'])) {
+                    if (!\is_null($val) || !empty($fieldDef['required'])) {
                         $values[$field] = $this->massageValue($val, $fieldDef);
                     }
                 }
@@ -575,8 +575,8 @@ abstract class DBManager
         } // no columns set
 
         // get the entire sql
-        $query = "INSERT INTO $table (" . implode(",", array_keys($values)) . ")
-					VALUES (" . implode(",", $values) . ")";
+        $query = "INSERT INTO $table (" . \implode(",", \array_keys($values)) . ")
+					VALUES (" . \implode(",", $values) . ")";
 
         return $execute ? $this->query($query) : $query;
     }
@@ -677,7 +677,7 @@ abstract class DBManager
         if (!$this->supports("inline_keys")) {
             // handle constraints and indices
             $indicesArr = $this->createConstraintSql($bean);
-            if (count($indicesArr) > 0) {
+            if (\count($indicesArr) > 0) {
                 foreach ($indicesArr as $indexSql) {
                     $this->query($indexSql, true, $msg);
                 }
@@ -718,7 +718,7 @@ abstract class DBManager
             if (!$this->supports("inline_keys")) {
                 // handle constraints and indices
                 $indicesArr = $this->getConstraintSql($indices, $tablename);
-                if (count($indicesArr) > 0) {
+                if (\count($indicesArr) > 0) {
                     foreach ($indicesArr as $indexSql) {
                         $res = ($res and $this->query($indexSql, true, "Error creating indexes"));
                     }
@@ -772,7 +772,7 @@ abstract class DBManager
      */
     protected function isNullable($vardef)
     {
-        if (isset($vardef['isnull']) && (strtolower($vardef['isnull']) == 'false' || $vardef['isnull'] === false)
+        if (isset($vardef['isnull']) && (\strtolower($vardef['isnull']) == 'false' || $vardef['isnull'] === false)
             && !empty($vardef['required'])
         ) {
             /* required + is_null=false => not null */
@@ -845,7 +845,7 @@ abstract class DBManager
             }
 
 
-            $name = strtolower($value['name']);
+            $name = \strtolower($value['name']);
             // add or fix the field defs per what the DB is expected to give us back
             $this->massageFieldDef($value, $tablename);
 
@@ -904,8 +904,8 @@ abstract class DBManager
                     $ignorerequired = true;
                 }
                 $altersql = $this->alterColumnSQL($tablename, $value, $ignorerequired);
-                if (is_array($altersql)) {
-                    $altersql = join("\n", $altersql);
+                if (\is_array($altersql)) {
+                    $altersql = \join("\n", $altersql);
                 }
                 $sql .= $altersql . "\n";
                 if ($execute) {
@@ -923,8 +923,8 @@ abstract class DBManager
 
         // do indices comparisons case-insensitive
         foreach ($compareIndices as $k => $value) {
-            $value['name'] = strtolower($value['name']);
-            $compareIndices_case_insensitive[strtolower($k)] = $value;
+            $value['name'] = \strtolower($value['name']);
+            $compareIndices_case_insensitive[\strtolower($k)] = $value;
         }
         $compareIndices = $compareIndices_case_insensitive;
         unset($compareIndices_case_insensitive);
@@ -939,7 +939,7 @@ abstract class DBManager
             if (isset($compareIndices[$validDBName])) {
                 $value['name'] = $validDBName;
             }
-            $name = strtolower($value['name']);
+            $name = \strtolower($value['name']);
 
             //Don't attempt to fix the same index twice in one pass;
             if (isset($correctedIndexs[$name])) {
@@ -956,7 +956,7 @@ abstract class DBManager
                 continue;
             }
 
-            if (in_array($value['type'], array('alternate_key', 'foreign'))) {
+            if (\in_array($value['type'], array('alternate_key', 'foreign'))) {
                 $value['type'] = 'index';
             }
 
@@ -975,7 +975,7 @@ abstract class DBManager
                     if ($execute) {
                         $this->query($rename, true, "Cannot rename index");
                     }
-                    $sql .= is_array($rename) ? join("\n", $rename) . "\n" : $rename . "\n";
+                    $sql .= \is_array($rename) ? \join("\n", $rename) . "\n" : $rename . "\n";
                 } else {
                     // ok we need this field lets create it
                     $sql .= "/*MISSING INDEX IN DATABASE - $name -{$value['type']}  ROW */\n";
@@ -1033,12 +1033,12 @@ abstract class DBManager
                 continue;
             }
             if (isset($fielddef2[$key])) {
-                if (!is_array($fielddef1[$key]) && !is_array($fielddef2[$key])) {
-                    if (strtolower($fielddef1[$key]) == strtolower($fielddef2[$key])) {
+                if (!\is_array($fielddef1[$key]) && !\is_array($fielddef2[$key])) {
+                    if (\strtolower($fielddef1[$key]) == \strtolower($fielddef2[$key])) {
                         continue;
                     }
                 } else {
-                    if (array_map('strtolower', $fielddef1[$key]) == array_map('strtolower', $fielddef2[$key])) {
+                    if (\array_map('strtolower', $fielddef1[$key]) == \array_map('strtolower', $fielddef2[$key])) {
                         continue;
                     }
                 }
@@ -1082,7 +1082,7 @@ abstract class DBManager
                 // Exists on table1 but not table2
                 $returnArray['msg'] = 'not_exists_table2';
             } else {
-                if (sizeof($row1) != sizeof($row2)) {
+                if (\sizeof($row1) != \sizeof($row2)) {
                     $returnArray['msg'] = 'no_match';
                 } else {
                     $returnArray['msg'] = 'match';
@@ -1169,7 +1169,7 @@ abstract class DBManager
             }
         }
         if (!empty($alters)) {
-            $sql = join(";\n", $alters) . ";\n";
+            $sql = \join(";\n", $alters) . ";\n";
         } else {
             $sql = '';
         }
@@ -1199,7 +1199,7 @@ abstract class DBManager
             }
         }
         if (!empty($sqls)) {
-            return join(";\n", $sqls) . ";";
+            return \join(";\n", $sqls) . ";";
         }
         return '';
     }
@@ -1233,7 +1233,7 @@ abstract class DBManager
             foreach ($fieldDefs as $fieldDef) {
                 $columns[] = $fieldDef['name'];
             }
-            $columns = implode(",", $columns);
+            $columns = \implode(",", $columns);
         } else {
             $columns = $fieldDefs['name'];
         }
@@ -1258,7 +1258,7 @@ abstract class DBManager
             foreach ($newFieldDef as $fieldDef) {
                 $columns[] = $fieldDef['name'];
             }
-            $columns = implode(",", $columns);
+            $columns = \implode(",", $columns);
         } else {
             $columns = $newFieldDef['name'];
         }
@@ -1451,7 +1451,7 @@ abstract class DBManager
             if (!empty($values)) {
                 $row_array[] = $values;
             }
-            if (!empty($cstm_values) && !empty($cstm_values['id_c']) && (strlen($cstm_values['id_c']) > 7)) {
+            if (!empty($cstm_values) && !empty($cstm_values['id_c']) && (\strlen($cstm_values['id_c']) > 7)) {
                 $cstm_row_array[] = $cstm_values;
             }
         }
@@ -1459,22 +1459,22 @@ abstract class DBManager
         //if (sizeof ($values) == 0) return ""; // no columns set
 
         // get the entire sql
-        $sql .= "(" . implode(",", $columns) . ") ";
+        $sql .= "(" . \implode(",", $columns) . ") ";
         $sql .= "VALUES";
-        for ($i = 0; $i < count($row_array); $i++) {
-            $sql .= " (" . implode(",", $row_array[$i]) . ")";
-            if ($i < (count($row_array) - 1)) {
+        for ($i = 0; $i < \count($row_array); $i++) {
+            $sql .= " (" . \implode(",", $row_array[$i]) . ")";
+            if ($i < (\count($row_array) - 1)) {
                 $sql .= ", ";
             }
         }
         //custom
         // get the entire sql
-        $custom_sql .= "(" . implode(",", $cstm_columns) . ") ";
+        $custom_sql .= "(" . \implode(",", $cstm_columns) . ") ";
         $custom_sql .= "VALUES";
 
-        for ($i = 0; $i < count($cstm_row_array); $i++) {
-            $custom_sql .= " (" . implode(",", $cstm_row_array[$i]) . ")";
-            if ($i < (count($cstm_row_array) - 1)) {
+        for ($i = 0; $i < \count($cstm_row_array); $i++) {
+            $custom_sql .= " (" . \implode(",", $cstm_row_array[$i]) . ")";
+            if ($i < (\count($cstm_row_array) - 1)) {
                 $custom_sql .= ", ";
             }
         }
@@ -1659,7 +1659,7 @@ abstract class DBManager
         }
         $row = $this->fetchByAssoc($queryresult);
         if (!empty($row)) {
-            return array_shift($row);
+            return \array_shift($row);
         }
 
         return false;
@@ -1792,8 +1792,8 @@ abstract class DBManager
      */
     public function truncate($string, $len)
     {
-        if (is_numeric($len) && $len > 0) {
-            $string = mb_substr($string, 0, (int)$len, "UTF-8");
+        if (\is_numeric($len) && $len > 0) {
+            $string = \mb_substr($string, 0, (int)$len, "UTF-8");
         }
 
         return $string;
@@ -1820,7 +1820,7 @@ abstract class DBManager
             }
             $elems[] = $this->convert("$table.$field", 'IFNULL', array("''"));
         }
-        $first = array_shift($elems);
+        $first = \array_shift($elems);
 
         return "LTRIM(RTRIM(" . $this->convert($first, 'CONCAT', $elems) . "))";
     }
@@ -1838,7 +1838,7 @@ abstract class DBManager
     public function prepareQuery($sql)
     {
         //parse out the tokens
-        $tokens = preg_split('/((?<!\\\)[&?!])/', $sql, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $tokens = \preg_split('/((?<!\\\)[&?!])/', $sql, -1, PREG_SPLIT_DELIM_CAPTURE);
 
         //maintain a count of the actual tokens for quick reference in execute
         $count = 0;
@@ -1855,16 +1855,16 @@ abstract class DBManager
 
                 default:
                     //escape any special characters
-                    $tokens[$key] = preg_replace('/\\\([&?!])/', "\\1", $val);
+                    $tokens[$key] = \preg_replace('/\\\([&?!])/', "\\1", $val);
                     $sqlStr .= $tokens[$key];
                     break;
             } // switch
         } // foreach
 
         $this->preparedTokens[] = array('tokens' => $tokens, 'tokenCount' => $count, 'sqlString' => $sqlStr);
-        end($this->preparedTokens);
+        \end($this->preparedTokens);
 
-        return key($this->preparedTokens);
+        return \key($this->preparedTokens);
     }
 
     /**
@@ -1877,7 +1877,7 @@ abstract class DBManager
     public function executePreparedQuery($stmt, $data = array())
     {
         if (!empty($this->preparedTokens[$stmt])) {
-            if (!is_array($data)) {
+            if (!\is_array($data)) {
                 $data = array($data);
             }
 
@@ -1885,7 +1885,7 @@ abstract class DBManager
 
             //ensure that the number of data elements matches the number of replacement tokens
             //we found in prepare().
-            if (count($data) != $pTokens['tokenCount']) {
+            if (\count($data) != $pTokens['tokenCount']) {
                 //error the data count did not match the token count
                 return false;
             }
@@ -1900,7 +1900,7 @@ abstract class DBManager
                         break;
                     case '&':
                         $filename = $data[$dataIndex++];
-                        $query .= file_get_contents($filename);
+                        $query .= \file_get_contents($filename);
                         break;
                     case '!':
                         $query .= $data[$dataIndex++];
@@ -1958,7 +1958,7 @@ abstract class DBManager
         $sql = $this->insertParams(
             $bean->getTableName(),
             $bean->getFieldDefinitions(),
-            get_object_vars($bean),
+            \get_object_vars($bean),
             isset($bean->field_name_map) ? $bean->field_name_map : null,
             false
         );
@@ -1979,7 +1979,7 @@ abstract class DBManager
         $columns = array();
         $fields = $bean->getFieldDefinitions();
         // get column names and values
-        if (!is_array($fields) && !is_object($fields)) {
+        if (!\is_array($fields) && !\is_object($fields)) {
             $GLOBALS['log']->fatal('Field Definition should be an array.');
         } else {
             foreach ((array)$fields as $field => $fieldDef) {
@@ -2017,19 +2017,19 @@ abstract class DBManager
                     $val = $bean->getFieldValue($field);
                 }
 
-                if (strlen($val) == 0) {
-                    if (isset($fieldDef['default']) && strlen($fieldDef['default']) > 0) {
+                if (\strlen($val) == 0) {
+                    if (isset($fieldDef['default']) && \strlen($fieldDef['default']) > 0) {
                         $val = $fieldDef['default'];
                     } else {
                         $val = null;
                     }
                 }
 
-                if (!empty($val) && !empty($fieldDef['len']) && strlen($val) > $fieldDef['len']) {
+                if (!empty($val) && !empty($fieldDef['len']) && \strlen($val) > $fieldDef['len']) {
                     $val = $this->truncate($val, $fieldDef['len']);
                 }
                 $columnName = $this->quoteIdentifier($fieldDef['name']);
-                if (!is_null($val) || !empty($fieldDef['required'])) {
+                if (!\is_null($val) || !empty($fieldDef['required'])) {
                     $columns[] = "{$columnName}=".$this->massageValue($val, $fieldDef);
                 } elseif ($this->isNullable($fieldDef)) {
                     $columns[] = "{$columnName}=NULL";
@@ -2039,7 +2039,7 @@ abstract class DBManager
             }
         }
 
-        if (sizeof($columns) == 0) {
+        if (\sizeof($columns) == 0) {
             return "";
         } // no columns set
 
@@ -2050,7 +2050,7 @@ abstract class DBManager
         }
 
         return "UPDATE " . $bean->getTableName() . "
-					SET " . implode(",", $columns) . "
+					SET " . \implode(",", $columns) . "
 					$where";
     }
 
@@ -2064,7 +2064,7 @@ abstract class DBManager
      */
     protected function updateWhereArray(SugarBean $bean, array $where = array())
     {
-        if (count($where) == 0) {
+        if (\count($where) == 0) {
             $fieldDef = $bean->getPrimaryFieldDefinition();
             $primaryColumn = $fieldDef['name'];
 
@@ -2092,13 +2092,13 @@ abstract class DBManager
         $where = array();
         foreach ($whereArray as $name => $val) {
             $op = "=";
-            if (is_array($val)) {
+            if (\is_array($val)) {
                 $op = "IN";
                 $temp = array();
                 foreach ($val as $tval) {
                     $temp[] = $this->quoted($tval);
                 }
-                $val = implode(",", $temp);
+                $val = \implode(",", $temp);
                 $val = "($val)";
             } else {
                 $val = $this->quoted($val);
@@ -2108,7 +2108,7 @@ abstract class DBManager
         }
 
         if (!empty($where)) {
-            return implode(" AND ", $where);
+            return \implode(" AND ", $where);
         }
 
         return '';
@@ -2151,7 +2151,7 @@ abstract class DBManager
                         return 0;
                     }
 
-                    return intval($val);
+                    return \intval($val);
                 case 'bigint':
                     $val = (float)$val;
                     if (!empty($fieldDef['required']) && $val == false) {
@@ -2172,7 +2172,7 @@ abstract class DBManager
                         return 0;
                     }
 
-                    return floatval($val);
+                    return \floatval($val);
                 case 'time':
                 case 'date':
                     // empty date can't be '', so convert it to either NULL or empty date value
@@ -2190,12 +2190,12 @@ abstract class DBManager
                     break;
             }
         } else {
-            if (!empty($val) && !empty($fieldDef['len']) && strlen($val) > $fieldDef['len']) {
+            if (!empty($val) && !empty($fieldDef['len']) && \strlen($val) > $fieldDef['len']) {
                 $val = $this->truncate($val, $fieldDef['len']);
             }
         }
 
-        if (is_null($val)) {
+        if (\is_null($val)) {
             if (!empty($fieldDef['required'])) {
                 if (isset($fieldDef['default']) && $fieldDef['default'] != '') {
                     return $fieldDef['default'];
@@ -2231,14 +2231,14 @@ abstract class DBManager
         $type = $this->getColumnType($fieldDef['dbType'], $fieldDef['name'], $tablename);
         $matches = array();
         // len can be a number or a string like 'max', for example, nvarchar(max)
-        preg_match_all('/(\w+)(?:\(([0-9]+,?[0-9]*|\w+)\)|)/i', $type, $matches);
+        \preg_match_all('/(\w+)(?:\(([0-9]+,?[0-9]*|\w+)\)|)/i', $type, $matches);
         if (isset($matches[1][0])) {
             $fieldDef['type'] = $matches[1][0];
         }
         if (isset($matches[2][0]) && empty($fieldDef['len'])) {
             $fieldDef['len'] = $matches[2][0];
         }
-        if (!empty($fieldDef['precision']) && is_numeric($fieldDef['precision']) && !strstr($fieldDef['len'], ',')) {
+        if (!empty($fieldDef['precision']) && \is_numeric($fieldDef['precision']) && !\strstr($fieldDef['len'], ',')) {
             $fieldDef['len'] .= ",{$fieldDef['precision']}";
         }
         if (!empty($fieldDef['required']) || ($fieldDef['name'] == 'id' && !isset($fieldDef['required']))) {
@@ -2253,21 +2253,21 @@ abstract class DBManager
      */
     public function getSelectFieldsFromQuery($selectStatement)
     {
-        $selectStatement = trim($selectStatement);
-        if (strtoupper(substr($selectStatement, 0, 6)) == "SELECT") {
-            $selectStatement = trim(substr($selectStatement, 6));
+        $selectStatement = \trim($selectStatement);
+        if (\strtoupper(\substr($selectStatement, 0, 6)) == "SELECT") {
+            $selectStatement = \trim(\substr($selectStatement, 6));
         }
 
         //Due to sql functions existing in many selects, we can't use php explode
         $fields = array();
         $level = 0;
         $selectField = "";
-        $strLen = strlen($selectStatement);
+        $strLen = \strlen($selectStatement);
         for ($i = 0; $i < $strLen; $i++) {
             $char = $selectStatement[$i];
 
             if ($char == "," && $level == 0) {
-                $field = $this->getFieldNameFromSelect(trim($selectField));
+                $field = $this->getFieldNameFromSelect(\trim($selectField));
                 $fields[$field] = $selectField;
                 $selectField = "";
             } else {
@@ -2296,17 +2296,17 @@ abstract class DBManager
      */
     protected function getFieldNameFromSelect($string)
     {
-        if (strncasecmp($string, "DISTINCT ", 9) == 0) {
-            $string = substr($string, 9);
+        if (\strncasecmp($string, "DISTINCT ", 9) == 0) {
+            $string = \substr($string, 9);
         }
-        if (stripos($string, " as ") !== false) { //"as" used for an alias
-            return trim(substr($string, strripos($string, " as ") + 4));
+        if (\stripos($string, " as ") !== false) { //"as" used for an alias
+            return \trim(\substr($string, \strripos($string, " as ") + 4));
         }
-        if (strrpos($string, " ") != 0) { //Space used as a delimiter for an alias
-            return trim(substr($string, strrpos($string, " ")));
+        if (\strrpos($string, " ") != 0) { //Space used as a delimiter for an alias
+            return \trim(\substr($string, \strrpos($string, " ")));
         }
-        if (strpos($string, ".") !== false) { //No alias, but a table.field format was used
-            return substr($string, strpos($string, ".") + 1);
+        if (\strpos($string, ".") !== false) { //No alias, but a table.field format was used
+            return \substr($string, \strpos($string, ".") + 1);
         }   //Give up and assume the whole thing is the field name
         return $string;
     }
@@ -2370,14 +2370,14 @@ abstract class DBManager
             $aliases[$tableName][] = $table;
 
             // build part of select for this table
-            if (is_array($cols[$beanID])) {
+            if (\is_array($cols[$beanID])) {
                 foreach ($cols[$beanID] as $def) {
                     $select[] = $table . "." . $def['name'];
                 }
             }
 
             // build part of where clause
-            if (is_array($whereClause[$beanID])) {
+            if (\is_array($whereClause[$beanID])) {
                 $where[] = $this->getColumnWhereClause($table, $whereClause[$beanID]);
             }
             // initialize so that it can be used properly in form clause generation
@@ -2399,8 +2399,8 @@ abstract class DBManager
         }
 
         // join these clauses
-        $select = !empty($select) ? implode(",", $select) : "*";
-        $where = implode(" AND ", $where);
+        $select = !empty($select) ? \implode(",", $select) : "*";
+        $where = \implode(" AND ", $where);
 
         // generate the from clause. Use relations array to generate outer joins
         // all the rest of the tables will be used as a simple from
@@ -2462,7 +2462,7 @@ abstract class DBManager
             return "";
         }
 
-        $columns = implode(",", $columns);
+        $columns = \implode(",", $columns);
 
         return "CREATE $unique INDEX $name ON $tablename ($columns)";
     }
@@ -2507,7 +2507,7 @@ abstract class DBManager
      */
     public function getTypeParts($type)
     {
-        if (preg_match("#(?P<type>\w+)\s*(?P<arg>\((?P<len>\w+)\s*(,\s*(?P<scale>\d+))*\))*#", $type, $matches)) {
+        if (\preg_match("#(?P<type>\w+)\s*(?P<arg>\((?P<len>\w+)\s*(,\s*(?P<scale>\d+))*\))*#", $type, $matches)) {
             $return = array();  // Not returning matches array as such as we don't want to expose the regex make up on the interface
             $return['baseType'] = $matches['type'];
             if (isset($matches['arg'])) {
@@ -2551,7 +2551,7 @@ abstract class DBManager
         }
 
         if (!empty($fieldDef['len'])) {
-            if (in_array($colBaseType, array(
+            if (\in_array($colBaseType, array(
                 'nvarchar',
                 'nchar',
                 'varchar',
@@ -2563,8 +2563,8 @@ abstract class DBManager
             ))) {
                 $colType = "$colBaseType(${fieldDef['len']})";
             } elseif (($colBaseType == 'decimal' || $colBaseType == 'float')) {
-                if (!empty($fieldDef['precision']) && is_numeric($fieldDef['precision'])) {
-                    if (strpos($fieldDef['len'], ',') === false) {
+                if (!empty($fieldDef['precision']) && \is_numeric($fieldDef['precision'])) {
+                    if (\strpos($fieldDef['len'], ',') === false) {
                         $colType = $colBaseType . "(" . $fieldDef['len'] . "," . $fieldDef['precision'] . ")";
                     } else {
                         $colType = $colBaseType . "(" . $fieldDef['len'] . ")";
@@ -2574,7 +2574,7 @@ abstract class DBManager
                 }
             }
         } else {
-            if (in_array($colBaseType, array('nvarchar', 'nchar', 'varchar', 'varchar2', 'char'))) {
+            if (\in_array($colBaseType, array('nvarchar', 'nchar', 'varchar', 'varchar2', 'char'))) {
                 $colType = "$colBaseType($defLen)";
             }
         }
@@ -2584,7 +2584,7 @@ abstract class DBManager
         // Bug #52610 We should have ability don't add DEFAULT part to query for boolean fields
         if (!empty($fieldDef['no_default'])) {
             // nothing to do
-        } elseif (isset($fieldDef['default']) && strlen($fieldDef['default']) > 0) {
+        } elseif (isset($fieldDef['default']) && \strlen($fieldDef['default']) > 0) {
             $default = " DEFAULT " . $this->quoted($fieldDef['default']);
         } elseif (!isset($default) && $type == 'bool') {
             $default = " DEFAULT 0 ";
@@ -2597,14 +2597,14 @@ abstract class DBManager
 
         $required = 'NULL';  // MySQL defaults to NULL, SQL Server defaults to NOT NULL -- must specify
         //Starting in 6.0, only ID and auto_increment fields will be NOT NULL in the DB.
-        if ((empty($fieldDef['isnull']) || strtolower($fieldDef['isnull']) == 'false') &&
+        if ((empty($fieldDef['isnull']) || \strtolower($fieldDef['isnull']) == 'false') &&
             (!empty($auto_increment) || $name == 'id' || ($fieldDef['type'] == 'id' && !empty($fieldDef['required'])))
         ) {
             $required = "NOT NULL";
         }
         // If the field is marked both required & isnull=>false - alwqys make it not null
         // Use this to ensure primary key fields never defined as null
-        if (isset($fieldDef['isnull']) && (strtolower($fieldDef['isnull']) == 'false' || $fieldDef['isnull'] === false)
+        if (isset($fieldDef['isnull']) && (\strtolower($fieldDef['isnull']) == 'false' || $fieldDef['isnull'] === false)
             && !empty($fieldDef['required'])
         ) {
             $required = "NOT NULL";
@@ -2638,7 +2638,7 @@ abstract class DBManager
     protected function columnSQLRep($fieldDefs, $ignoreRequired, $tablename= null)
     {
         // set $ignoreRequired = false by default
-        if (!is_bool($ignoreRequired)) {
+        if (!\is_bool($ignoreRequired)) {
             $ignoreRequired = false;
         }
 
@@ -2650,7 +2650,7 @@ abstract class DBManager
                     $columns[] = $this->oneColumnSQLRep($fieldDef, false, $tablename);
                 }
             }
-            $columns = implode(",", $columns);
+            $columns = \implode(",", $columns);
         } else {
             $columns = $this->oneColumnSQLRep($fieldDefs, $ignoreRequired, $tablename);
         }
@@ -2815,7 +2815,7 @@ abstract class DBManager
      */
     public function getValidDBName($name, $ensureUnique = false, $type = 'column', $force = false)
     {
-        if (is_array($name)) {
+        if (\is_array($name)) {
             $result = array();
             foreach ($name as $field) {
                 $result[] = $this->getValidDBName($field, $ensureUnique, $type);
@@ -2823,34 +2823,34 @@ abstract class DBManager
 
             return $result;
         }
-        if (strchr($name, ".")) {
+        if (\strchr($name, ".")) {
             // this is a compound name with dots, handle separately
-            $parts = explode(".", $name);
-            if (count($parts) > 2) {
+            $parts = \explode(".", $name);
+            if (\count($parts) > 2) {
                 // some weird name, cut to table.name
-                array_splice($parts, 0, count($parts) - 2);
+                \array_splice($parts, 0, \count($parts) - 2);
             }
             $parts = $this->getValidDBName($parts, $ensureUnique, $type, $force);
 
-            return join(".", $parts);
+            return \join(".", $parts);
         }
         // first strip any invalid characters - all but word chars (which is alphanumeric and _)
-        $name = preg_replace('/[^\w]+/i', '', $name);
-        $len = strlen($name);
+        $name = \preg_replace('/[^\w]+/i', '', $name);
+        $len = \strlen($name);
         $maxLen = empty($this->maxNameLengths[$type]) ? $this->maxNameLengths[$type]['column'] : $this->maxNameLengths[$type];
         if ($len <= $maxLen && !$force) {
-            return strtolower($name);
+            return \strtolower($name);
         }
         if ($ensureUnique) {
-            $md5str = md5($name);
-            $tail = substr($name, -11);
-            $temp = substr($md5str, strlen($md5str) - 4);
-            $result = substr($name, 0, 10) . $temp . $tail;
+            $md5str = \md5($name);
+            $tail = \substr($name, -11);
+            $temp = \substr($md5str, \strlen($md5str) - 4);
+            $result = \substr($name, 0, 10) . $temp . $tail;
         } else {
-            $result = substr($name, 0, 11) . substr($name, 11 - $maxLen);
+            $result = \substr($name, 0, 11) . \substr($name, 11 - $maxLen);
         }
 
-        return strtolower($result);
+        return \strtolower($result);
     }
 
     /**
@@ -2875,13 +2875,13 @@ abstract class DBManager
      */
     public function isFieldArray($defArray)
     {
-        if (!is_array($defArray)) {
+        if (!\is_array($defArray)) {
             return false;
         }
 
         if (isset($defArray['type'])) {
             // type key exists. May be an array of defs or a simple definition
-            return is_array($defArray['type']); // type is not an array => definition else array
+            return \is_array($defArray['type']); // type is not an array => definition else array
         }
 
         // type does not exist. Must be array of definitions
@@ -2930,8 +2930,8 @@ abstract class DBManager
         $values['date_created'] = $this->massageValue(TimeDate::getInstance()->nowDb(), $fieldDefs['date_created']);
         $values['created_by'] = $this->massageValue($current_user->id, $fieldDefs['created_by']);
 
-        $sql .= "(" . implode(",", array_keys($values)) . ") ";
-        $sql .= "VALUES(" . implode(",", $values) . ")";
+        $sql .= "(" . \implode(",", \array_keys($values)) . ") ";
+        $sql .= "VALUES(" . \implode(",", $values) . ")";
 
         return $sql;
     }
@@ -2963,22 +2963,22 @@ abstract class DBManager
         $changed_values = array();
 
         $fetched_row = array();
-        if (is_array($bean->fetched_row)) {
-            $fetched_row = array_merge($bean->fetched_row, $bean->fetched_rel_row);
+        if (\is_array($bean->fetched_row)) {
+            $fetched_row = \array_merge($bean->fetched_row, $bean->fetched_rel_row);
         }
 
         if ($fetched_row) {
             $field_defs = $bean->field_defs;
 
-            if (is_array($field_filter)) {
-                $field_defs = array_intersect_key($field_defs, array_flip($field_filter));
+            if (\is_array($field_filter)) {
+                $field_defs = \array_intersect_key($field_defs, \array_flip($field_filter));
             }
 
             // remove fields which do not present in fetched row
-            $field_defs = array_intersect_key($field_defs, $fetched_row);
+            $field_defs = \array_intersect_key($field_defs, $fetched_row);
 
             // remove fields which do not exist as bean property
-            $field_defs = array_intersect_key($field_defs, (array)$bean);
+            $field_defs = \array_intersect_key($field_defs, (array)$bean);
 
             foreach ($field_defs as $field => $properties) {
                 $before_value = from_html($fetched_row[$field]);
@@ -3009,11 +3009,11 @@ abstract class DBManager
                 ))
                 ) {
                     $change = false;
-                    if (trim($before_value) !== trim($after_value)) {
+                    if (\trim($before_value) !== \trim($after_value)) {
                         // decode value for field type of 'text' or 'varchar' to check before audit if the value contain trip tags or special character
                         if ($field_type == 'varchar' || $field_type == 'name' || $field_type == 'text') {
-                            $decode_before_value = strip_tags(html_entity_decode($before_value));
-                            $decode_after_value = strip_tags(html_entity_decode($after_value));
+                            $decode_before_value = \strip_tags(\html_entity_decode($before_value));
+                            $decode_after_value = \strip_tags(\html_entity_decode($after_value));
                             if ($decode_before_value == $decode_after_value) {
                                 continue;
                             }
@@ -3023,8 +3023,8 @@ abstract class DBManager
                         // Manual merge of fix 95727f2eed44852f1b6bce9a9eccbe065fe6249f from DBHelper
                         // This fix also fixes Bug #44624 in a more generic way and therefore eliminates the need for fix 0a55125b281c4bee87eb347709af462715f33d2d in DBHelper
                         elseif ($this->isNumericType($field_type)) {
-                            $numerator = abs(2 * ((trim($before_value) + 0) - (trim($after_value) + 0)));
-                            $denominator = abs(((trim($before_value) + 0) + (trim($after_value) + 0)));
+                            $numerator = \abs(2 * ((\trim($before_value) + 0) - (\trim($after_value) + 0)));
+                            $denominator = \abs(((\trim($before_value) + 0) + (\trim($after_value) + 0)));
                             // detect whether to use absolute or relative error. use absolute if denominator is zero to avoid division by zero
                             $error = ($denominator == 0) ? $numerator : $numerator / $denominator;
                             if ($error >= 0.0000000001) {    // Smaller than 10E-10
@@ -3067,7 +3067,7 @@ abstract class DBManager
     {
         $audit_fields = $bean->getAuditEnabledFieldDefinitions();
 
-        return $this->getDataChanges($bean, array_keys($audit_fields));
+        return $this->getDataChanges($bean, \array_keys($audit_fields));
     }
 
     /**
@@ -3244,7 +3244,7 @@ abstract class DBManager
             $i++;
         }
 
-        return "CASE " . implode("\n", $order_by_arr) . " ELSE $i END $order_dir\n";
+        return "CASE " . \implode("\n", $order_by_arr) . " ELSE $i END $order_dir\n";
     }
 
     /**
@@ -3292,7 +3292,7 @@ abstract class DBManager
     {
         $table = $this->getTableDescription($table_name);
 
-        return count($table);
+        return \count($table);
     }
 
     /**
@@ -3377,10 +3377,10 @@ abstract class DBManager
      */
     protected function isSelect($query)
     {
-        $query = trim($query);
-        $select_check = strpos(strtolower($query), strtolower("SELECT"));
+        $query = \trim($query);
+        $select_check = \strpos(\strtolower($query), \strtolower("SELECT"));
         //Checks to see if there is union select which is valid
-        $select_check2 = strpos(strtolower($query), strtolower("(SELECT"));
+        $select_check2 = \strpos(\strtolower($query), \strtolower("(SELECT"));
         if ($select_check == 0 || $select_check2 == 0) {
             //Returning false means query is ok!
             return true;
@@ -3401,10 +3401,10 @@ abstract class DBManager
     public function parseFulltextQuery($query)
     {
         /* split on space or comma, double quotes with \ for escape */
-        if (strpbrk($query, " ,")) {
+        if (\strpbrk($query, " ,")) {
             // ("([^"]*?)"|[^" ,]+)((, )+)?
             // '/([^" ,]+|".*?[^\\\\]")(,|\s)\s*/'
-            if (!preg_match_all('/("([^"]*?)"|[^"\s,]+)((,\s)+)?/', $query, $m)) {
+            if (!\preg_match_all('/("([^"]*?)"|[^"\s,]+)((,\s)+)?/', $query, $m)) {
                 return false;
             }
             $qterms = $m[1];
@@ -3414,17 +3414,17 @@ abstract class DBManager
         $terms = $must_terms = $not_terms = array();
         foreach ($qterms as $item) {
             if ($item[0] == '"') {
-                $item = trim($item, '"');
+                $item = \trim($item, '"');
             }
             if ($item[0] == '+') {
-                if (strlen($item) > 1) {
-                    $must_terms[] = substr($item, 1);
+                if (\strlen($item) > 1) {
+                    $must_terms[] = \substr($item, 1);
                 }
                 continue;
             }
             if ($item[0] == '-') {
-                if (strlen($item) > 1) {
-                    $not_terms[] = substr($item, 1);
+                if (\strlen($item) > 1) {
+                    $not_terms[] = \substr($item, 1);
                 }
                 continue;
             }
@@ -3452,12 +3452,12 @@ abstract class DBManager
      */
     protected function extractTableName($query)
     {
-        $query = preg_replace('/[^A-Za-z0-9_\s]/', "", $query);
-        $query = trim(str_replace(array_keys($this->standardQueries), '', $query));
+        $query = \preg_replace('/[^A-Za-z0-9_\s]/', "", $query);
+        $query = \trim(\str_replace(\array_keys($this->standardQueries), '', $query));
 
-        $firstSpc = strpos($query, " ");
-        $end = ($firstSpc > 0) ? $firstSpc : strlen($query);
-        $table = substr($query, 0, $end);
+        $firstSpc = \strpos($query, " ");
+        $end = ($firstSpc > 0) ? $firstSpc : \strlen($query);
+        $table = \substr($query, 0, $end);
 
         return $table;
     }
@@ -3471,13 +3471,13 @@ abstract class DBManager
      */
     public function verifySQLStatement($query, $skipTables)
     {
-        $query = trim($query);
+        $query = \trim($query);
         foreach ($this->standardQueries as $qstart => $check) {
-            if (strncasecmp($qstart, $query, strlen($qstart)) == 0) {
-                if (is_callable(array($this, $check))) {
+            if (\strncasecmp($qstart, $query, \strlen($qstart)) == 0) {
+                if (\is_callable(array($this, $check))) {
                     $table = $this->extractTableName($query);
-                    if (!in_array($table, $skipTables)) {
-                        return call_user_func(array($this, $check), $table, $query);
+                    if (!\in_array($table, $skipTables)) {
+                        return \call_user_func(array($this, $check), $table, $query);
                     }
                     $this->log->debug("Skipping table $table as blacklisted");
                 } else {
@@ -3503,9 +3503,9 @@ abstract class DBManager
         // rewrite DDL with _temp name
         $this->log->debug('testing query: [' . $query . ']');
         $tempname = $table . "__uw_temp";
-        $tempTableQuery = str_replace("CREATE TABLE {$table}", "CREATE TABLE $tempname", $query);
+        $tempTableQuery = \str_replace("CREATE TABLE {$table}", "CREATE TABLE $tempname", $query);
 
-        if (strpos($tempTableQuery, '__uw_temp') === false) {
+        if (\strpos($tempTableQuery, '__uw_temp') === false) {
             return 'Could not use a temp table to test query!';
         }
 
@@ -3560,14 +3560,14 @@ abstract class DBManager
             return false;
         }
 
-        if (is_int($encode) && func_num_args() == 3) {
+        if (\is_int($encode) && \func_num_args() == 3) {
             // old API: $result, $rowNum, $encode
             $GLOBALS['log']->deprecated("Using row number in fetchByAssoc is not portable and no longer supported. Please fix your code.");
-            $encode = func_get_arg(2);
+            $encode = \func_get_arg(2);
         }
         $row = $this->fetchRow($result);
         if (!empty($row) && $encode && $this->encode) {
-            return array_map('to_html', $row);
+            return \array_map('to_html', $row);
         }
         return $row;
     }
@@ -3654,7 +3654,7 @@ abstract class DBManager
     public function isDatabaseNameValid($name)
     {
         // Generic case - no slashes, no dots
-        return preg_match('#[/.\\\\]#', $name) == 0;
+        return \preg_match('#[/.\\\\]#', $name) == 0;
     }
 
     /**
@@ -4054,6 +4054,6 @@ abstract class DBManager
      */
     public function removeLineBreaks($sql)
     {
-        return trim(str_replace(array("\r", "\n"), " ", $sql));
+        return \trim(\str_replace(array("\r", "\n"), " ", $sql));
     }
 }

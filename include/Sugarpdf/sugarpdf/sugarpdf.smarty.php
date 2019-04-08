@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -90,11 +90,11 @@ class SugarpdfSmarty extends Sugarpdf
         $state = new \SuiteCRM\StateSaver();
         $state->pushPHPConfigOptions();
         
-        $maxExecutionTime = ini_get('max_execution_time');
-        $errorReporting = error_reporting();
+        $maxExecutionTime = \ini_get('max_execution_time');
+        $errorReporting = \error_reporting();
         
-        error_reporting(E_ALL);
-        set_time_limit(1800);
+        \error_reporting(E_ALL);
+        \set_time_limit(1800);
         
         //Create new page
         $this->AddPage();
@@ -108,8 +108,8 @@ class SugarpdfSmarty extends Sugarpdf
         }
         
         $state->popPHPConfigOptions();
-        ini_set('max_execution_time', $maxExecutionTime);
-        error_reporting($errorReporting);
+        \ini_set('max_execution_time', $maxExecutionTime);
+        \error_reporting($errorReporting);
     }
     
     /**

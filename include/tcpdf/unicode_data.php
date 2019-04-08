@@ -76,36 +76,36 @@ r46451 - 2009-04-23 16:57:40 -0700 (Thu, 23 Apr 2009) - jenny - tcpdf initial ch
 /**
 * Left-to-Right Mark
 */
-define('K_LRM', 8206);
+\define('K_LRM', 8206);
 /**
 * Right-to-Left Mark
 */
-define('K_RLM', 8207);
+\define('K_RLM', 8207);
 /**
 * Left-to-Right Embedding
 */
-define('K_LRE', 8234);
+\define('K_LRE', 8234);
 /**
 * Right-to-Left Embedding
 */
-define('K_RLE', 8235);
+\define('K_RLE', 8235);
 /**
 * Pop Directional Format
 */
-define('K_PDF', 8236);
+\define('K_PDF', 8236);
 /**
 * Left-to-Right Override
 */
-define('K_LRO', 8237);
+\define('K_LRO', 8237);
 /**
 * Right-to-Left Override
 */
-define('K_RLO', 8238);
+\define('K_RLO', 8238);
 
 /*
  * Pattern to test RTL (Righ-To-Left) strings using regular expressions.
  */
-define('K_RE_PATTERN_RTL', "/(
+\define('K_RE_PATTERN_RTL', "/(
 	  \xD6\xBE                                             # R
 	| \xD7[\x80\x83\x86\x90-\xAA\xB0-\xB4]                 # R
 	| \xDF[\x80-\xAA\xB4\xB5\xBA]                          # R
@@ -123,7 +123,7 @@ define('K_RE_PATTERN_RTL', "/(
  * Pattern to test Arabic strings using regular expressions.
  * source: http://www.w3.org/International/questions/qa-forms-utf-8
  */
-define("K_RE_PATTERN_ARABIC", "/(
+\define("K_RE_PATTERN_ARABIC", "/(
 		  \xD8[\x80-\x83\x8B\x8D\x9B\x9E\x9F\xA1-\xBA]  # AL
 		| \xD9[\x80-\x8A\xAD-\xAF\xB1-\xBF]             # AL
 		| \xDA[\x80-\xBF]                               # AL

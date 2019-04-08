@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -125,12 +125,12 @@ class ViewAdminwizard extends SugarView
         $this->ss->assign('silentInstall', $silentInstall);
 
         // get javascript
-        ob_start();
+        \ob_start();
         $this->options['show_javascript'] = true;
         $this->renderJavascript();
         $this->options['show_javascript'] = false;
-        $this->ss->assign("SUGAR_JS", ob_get_contents().$themeObject->getJS());
-        ob_end_clean();
+        $this->ss->assign("SUGAR_JS", \ob_get_contents().$themeObject->getJS());
+        \ob_end_clean();
 
         $this->ss->assign('langHeader', get_language_header());
         $this->ss->assign('START_PAGE', !empty($_REQUEST['page']) ? $_REQUEST['page'] : 'welcome');
@@ -138,8 +138,8 @@ class ViewAdminwizard extends SugarView
         //Start of scenario block
         require_once('install/suite_install/scenarios.php');
         if (isset($installation_scenarios)) {
-            for ($i = 0; $i < count($installation_scenarios); $i++) {
-                $installation_scenarios[$i]['moduleOverview']='( '.implode(', ', $installation_scenarios[$i]['modules']).')';
+            for ($i = 0; $i < \count($installation_scenarios); $i++) {
+                $installation_scenarios[$i]['moduleOverview']='( '.\implode(', ', $installation_scenarios[$i]['modules']).')';
             }
 
             $this->ss->assign('scenarios', $installation_scenarios);

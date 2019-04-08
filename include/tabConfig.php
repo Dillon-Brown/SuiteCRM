@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -103,6 +103,6 @@ $GLOBALS['tabStructure'] = array(
     ),
 );
 
-if (file_exists('custom/include/tabConfig.php')) {
+if (\file_exists('custom/include/tabConfig.php')) {
     require 'custom/include/tabConfig.php';
 }

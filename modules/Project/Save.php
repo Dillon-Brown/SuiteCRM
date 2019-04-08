@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -70,7 +70,7 @@ if (isset($_REQUEST['save_type']) || isset($_REQUEST['duplicateSave']) && $_REQU
         $projectTaskBean->retrieve();
         $projectTaskBean->date_entered = '';
         $projectTaskBean->date_modified = '';
-        array_push($projectTasks, $projectTaskBean);
+        \array_push($projectTasks, $projectTaskBean);
         $row = $sugarbean->db->fetchByAssoc($result);
     }
 }
@@ -111,7 +111,7 @@ $sugarbean->save($check_notify);
 $return_id = $sugarbean->id;
 
 if (isset($_REQUEST['save_type']) || isset($_REQUEST['duplicateSave']) && $_REQUEST['duplicateSave'] === "true") {
-    for ($i = 0; $i < count($projectTasks); $i++) {
+    for ($i = 0; $i < \count($projectTasks); $i++) {
         if (isset($_REQUEST['save_type']) || (isset($_REQUEST['duplicateSave']) && $_REQUEST['duplicateSave'] === "true")) {
             $projectTasks[$i]->id = '';
             $projectTasks[$i]->project_id = $sugarbean->id;
@@ -128,7 +128,7 @@ if (isset($_REQUEST['save_type']) || isset($_REQUEST['duplicateSave']) && $_REQU
 }
 
 if ($sugarbean->is_template) {
-    header("Location: index.php?action=ProjectTemplatesDetailView&module=Project&record=$return_id&return_module=Project&return_action=ProjectTemplatesEditView");
+    \header("Location: index.php?action=ProjectTemplatesDetailView&module=Project&record=$return_id&return_module=Project&return_action=ProjectTemplatesEditView");
 } else {
     //customize default retrun view to make it to redirect to GanttChart view
     $_REQUEST['return_url'] = "index.php?module=Project&action=view_GanttChart&record=" . $return_id;

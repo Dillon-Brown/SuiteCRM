@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -73,16 +73,16 @@ class DashletsDialog
             $dashletsList['Web'] = array();
         }
 
-        asort($dashletsFiles);
+        \asort($dashletsFiles);
 
         foreach ($dashletsFiles as $className => $files) {
-            if (!empty($files['meta']) && is_file($files['meta'])) {
+            if (!empty($files['meta']) && \is_file($files['meta'])) {
                 require_once($files['meta']); // get meta file
 
-                $directory = substr($files['meta'], 0, strrpos($files['meta'], '/') + 1);
-                if (is_file($directory . $files['class'] . '.' . $current_language . '.lang.php')) {
+                $directory = \substr($files['meta'], 0, \strrpos($files['meta'], '/') + 1);
+                if (\is_file($directory . $files['class'] . '.' . $current_language . '.lang.php')) {
                     require_once($directory . $files['class'] . '.' . $current_language . '.lang.php');
-                } elseif (is_file($directory . $files['class'] . '.en_us.lang.php')) {
+                } elseif (\is_file($directory . $files['class'] . '.en_us.lang.php')) {
                     require_once($directory . $files['class'] . '.en_us.lang.php');
                 }
 
@@ -115,7 +115,7 @@ class DashletsDialog
                     if (empty($dashletMeta[$files['class']]['module'])) {
                         $icon = get_dashlets_dialog_icon('default');
                     } else {
-                        if ((!in_array($dashletMeta[$files['class']]['module'], $GLOBALS['moduleList']) && !in_array($dashletMeta[$files['class']]['module'], $GLOBALS['modInvisList'])) && (!in_array('Activities', $GLOBALS['moduleList']))) {
+                        if ((!\in_array($dashletMeta[$files['class']]['module'], $GLOBALS['moduleList']) && !\in_array($dashletMeta[$files['class']]['module'], $GLOBALS['modInvisList'])) && (!\in_array('Activities', $GLOBALS['moduleList']))) {
                             unset($dashletMeta[$files['class']]);
                             continue;
                         }
@@ -128,7 +128,7 @@ class DashletsDialog
                     $displayDashlet = false;
                 }
                 //co: fixes 20398 to respect ACL permissions
-                elseif (!empty($dashletMeta[$files['class']]['module']) && (!in_array($dashletMeta[$files['class']]['module'], $GLOBALS['moduleList']) && !in_array($dashletMeta[$files['class']]['module'], $GLOBALS['modInvisList'])) && (!in_array('Activities', $GLOBALS['moduleList']))) {
+                elseif (!empty($dashletMeta[$files['class']]['module']) && (!\in_array($dashletMeta[$files['class']]['module'], $GLOBALS['moduleList']) && !\in_array($dashletMeta[$files['class']]['module'], $GLOBALS['modInvisList'])) && (!\in_array('Activities', $GLOBALS['moduleList']))) {
                     $displayDashlet = false;
                 } else {
                     $displayDashlet = true;
@@ -154,11 +154,11 @@ class DashletsDialog
                 }
 
                 if ($displayDashlet && isset($dashletMeta[$files['class']]['dynamic_hide']) && $dashletMeta[$files['class']]['dynamic_hide']) {
-                    if (file_exists($files['file'])) {
+                    if (\file_exists($files['file'])) {
                         require_once($files['file']);
-                        if (class_exists($files['class'])) {
+                        if (\class_exists($files['class'])) {
                             $dashletClassName = $files['class'];
-                            $displayDashlet = call_user_func(array($files['class'],'shouldDisplay'));
+                            $displayDashlet = \call_user_func(array($files['class'],'shouldDisplay'));
                         }
                     }
                 }
@@ -169,22 +169,22 @@ class DashletsDialog
                         'onclick' => 'return SUGAR.mySugar.addDashlet(\'' . $className . '\', \'' . $type . '\', \''.(!empty($dashletMeta[$files['class']]['module']) ? $dashletMeta[$files['class']]['module'] : '') .'\');',
                         'icon' => $icon,
                         'id' => $files['class'] . '_select',
-                        'module_name'=> array_key_exists('module', $dashletsFiles[$className]) ? $dashletsFiles[$className]['module']:""
+                        'module_name'=> \array_key_exists('module', $dashletsFiles[$className]) ? $dashletsFiles[$className]['module']:""
                     );
 
                     if (!empty($category) && $dashletMeta[$files['class']]['category'] == $categories[$category]) {
-                        array_push($dashletsList[$categories[$category]], $cell);
+                        \array_push($dashletsList[$categories[$category]], $cell);
                     } elseif (empty($category)) {
-                        array_push($dashletsList[$dashletMeta[$files['class']]['category']], $cell);
+                        \array_push($dashletsList[$dashletMeta[$files['class']]['category']], $cell);
                     }
                 }
             }
         }
         if (!empty($category)) {
-            asort($dashletsList[$categories[$category]]);
+            \asort($dashletsList[$categories[$category]]);
         } else {
             foreach ($dashletsList as $key=>$value) {
-                asort($dashletsList[$key]);
+                \asort($dashletsList[$key]);
             }
         }
         $this->dashlets = $dashletsList;

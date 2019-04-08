@@ -48,5 +48,5 @@ function smarty_modifier_in_array($needle = null, $haystack = null)
     if ($haystack == null || empty($haystack)) {
         return false;
     }
-    return in_array($needle, $haystack);
+    return \in_array($needle, $haystack);
 }

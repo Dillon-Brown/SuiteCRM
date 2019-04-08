@@ -29,7 +29,7 @@ class AOS_Products_QuotesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstra
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($aosProductsQuotes->id));
-        $this->assertEquals(36, strlen($aosProductsQuotes->id));
+        $this->assertEquals(36, \strlen($aosProductsQuotes->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $aosProductsQuotes->mark_deleted($aosProductsQuotes->id);
@@ -71,7 +71,7 @@ class AOS_Products_QuotesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstra
 
         //get the linked beans and verify if records created
         $product_quote_lines = $aosQuote->get_linked_beans('aos_products_quotes', $aosQuote->object_name);
-        $this->assertEquals(count($post_data['name']), count($product_quote_lines));
+        $this->assertEquals(\count($post_data['name']), \count($product_quote_lines));
         
         // clean up
         
@@ -109,7 +109,7 @@ class AOS_Products_QuotesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstra
 
         //get the linked beans and get record count before deletion
         $product_quote_lines = $aosQuote->get_linked_beans('aos_products_quotes', $aosQuote->object_name);
-        $expected = count($product_quote_lines);
+        $expected = \count($product_quote_lines);
         $product_quote_lines = null;
 
         $aosProductsQuotes->mark_lines_deleted($aosQuote);
@@ -119,7 +119,7 @@ class AOS_Products_QuotesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstra
         $aosQuote = new AOS_Quotes();
         $aosQuote->id = 1;
         $product_quote_lines = $aosQuote->get_linked_beans('aos_products_quotes', $aosQuote->object_name);
-        $actual = count($product_quote_lines);
+        $actual = \count($product_quote_lines);
 
         $this->assertLessThanOrEqual($expected, $actual);
     }

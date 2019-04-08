@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -61,7 +61,7 @@ class DocumentsViewExtdoc extends SugarView
         global $mod_strings;
 
         if (isset($_REQUEST['name_basic'])) {
-            $file_search = trim($_REQUEST['name_basic']);
+            $file_search = \trim($_REQUEST['name_basic']);
         } else {
             $file_search = '';
         }
@@ -109,7 +109,7 @@ class DocumentsViewExtdoc extends SugarView
             // Bug #49987 : Documents view.extdoc.php doesn't allow custom override
             $tpl_file = get_custom_file_if_exists('include/externalAPI/'.$apiName.'/'.$apiName.'Signup.'.$GLOBALS['current_language'].'.tpl');
 
-            if (file_exists($tpl_file)) {
+            if (\file_exists($tpl_file)) {
                 $smarty = new Sugar_Smarty();
                 echo $smarty->fetch($tpl_file);
             } else {
@@ -136,16 +136,16 @@ class DocumentsViewExtdoc extends SugarView
         // In order to emulate the list views for the SugarFields, I need to uppercase all of the key names.
         $searchData = array();
 
-        if (is_array($searchDataLower)) {
+        if (\is_array($searchDataLower)) {
             foreach ($searchDataLower as $row) {
                 $newRow = array();
                 foreach ($row as $key => $value) {
-                    $newRow[strtoupper($key)] = $value;
+                    $newRow[\strtoupper($key)] = $value;
                 }
                 
                 if ($isPopup) {
                     // We are running as a popup window, we need to replace the direct url with some javascript
-                    $newRow['DOC_URL'] = "javascript:window.opener.SUGAR.field.file.populateFromPopup('".addslashes($_REQUEST['elemBaseName'])."','".addslashes($newRow['ID'])."','".addslashes($newRow['NAME'])."','".addslashes($newRow['URL'])."','".addslashes($newRow['URL'])."'); window.close();";
+                    $newRow['DOC_URL'] = "javascript:window.opener.SUGAR.field.file.populateFromPopup('".\addslashes($_REQUEST['elemBaseName'])."','".\addslashes($newRow['ID'])."','".\addslashes($newRow['NAME'])."','".\addslashes($newRow['URL'])."','".\addslashes($newRow['URL'])."'); window.close();";
                 } else {
                     $newRow['DOC_URL'] = $newRow['URL'];
                 }
@@ -188,11 +188,11 @@ class DocumentsViewExtdoc extends SugarView
 
         if ($isPopup) {
             // Need the popup header... I feel so dirty.
-            ob_start();
+            \ob_start();
             echo('<div class="dccontent">');
             insert_popup_header($GLOBALS['theme'], false);
-            $output_html = ob_get_contents();
-            ob_end_clean();
+            $output_html = \ob_get_contents();
+            \ob_end_clean();
             
             $output_html .= get_form_header(translate('LBL_SEARCH_FORM_TITLE', 'Documents'), '', false);
             

@@ -89,7 +89,7 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
     {
         global $app_list_strings;
         $enabled_modules = array();
-        $availModulesKey = array_flip($availModules);
+        $availModulesKey = \array_flip($availModules);
         foreach ($list as $key=>$value) {
             if (isset($availModulesKey[$key])) {
                 $label = !empty($app_list_strings['moduleList'][$key]) ? $app_list_strings['moduleList'][$key] : '';
@@ -141,26 +141,26 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
         $manager->loadVardef($moduleName, $beanName) ;
 
         // obtain the field definitions used by generateSearchWhere (duplicate code in view.list.php)
-        if (file_exists('custom/modules/'.$moduleName.'/metadata/metafiles.php')) {
+        if (\file_exists('custom/modules/'.$moduleName.'/metadata/metafiles.php')) {
             require('custom/modules/'.$moduleName.'/metadata/metafiles.php');
-        } elseif (file_exists('modules/'.$moduleName.'/metadata/metafiles.php')) {
+        } elseif (\file_exists('modules/'.$moduleName.'/metadata/metafiles.php')) {
             require('modules/'.$moduleName.'/metadata/metafiles.php');
         }
 
         if (!empty($metafiles[$moduleName]['searchfields'])) {
             require $metafiles[$moduleName]['searchfields'] ;
-        } elseif (file_exists("modules/{$moduleName}/metadata/SearchFields.php")) {
+        } elseif (\file_exists("modules/{$moduleName}/metadata/SearchFields.php")) {
             require "modules/{$moduleName}/metadata/SearchFields.php" ;
         }
 
         $fields = array();
         foreach ($dictionary [ $beanName ][ 'fields' ] as $field => $def) {
-            if (strpos($field, 'email') !== false) {
+            if (\strpos($field, 'email') !== false) {
                 $field = 'email' ;
             }
 
             //bug: 38139 - allow phone to be searched through Global Search
-            if (strpos($field, 'phone') !== false) {
+            if (\strpos($field, 'phone') !== false) {
                 $field = 'phone' ;
             }
 
@@ -211,7 +211,7 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
         $link_fields = array();
         if (!empty($value->field_defs)) {
             foreach ($value->field_defs as $var) {
-                if (!empty($fields) && !in_array($var['name'], $fields)) {
+                if (!empty($fields) && !\in_array($var['name'], $fields)) {
                     continue;
                 }
                 if (isset($var['source']) && ($var['source'] != 'db' && $var['source'] != 'non-db' &&$var['source'] != 'custom_fields') && $var['name'] != 'email1' && $var['name'] != 'email2' && (!isset($var['type'])|| $var['type'] != 'relate')) {
@@ -235,7 +235,7 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
 
                 if (isset($var['options'])) {
                     $options_dom = translate($var['options'], $value->module_dir);
-                    if (!is_array($options_dom)) {
+                    if (!\is_array($options_dom)) {
                         $options_dom = array();
                     }
                     foreach ($options_dom as $key=>$oneOption) {
@@ -350,10 +350,10 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
     public function get_file_contents_base64($filename, $remove = false)
     {
         $contents = "";
-        if (file_exists($filename)) {
-            $contents =  base64_encode(file_get_contents($filename));
+        if (\file_exists($filename)) {
+            $contents =  \base64_encode(\file_get_contents($filename));
             if ($remove) {
-                @unlink($filename);
+                @\unlink($filename);
             }
         }
 
@@ -365,8 +365,8 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
         require_once('include/MVC/View/SugarView.php');
         $metadataFile = null;
         $results = array();
-        $view = strtolower($view);
-        switch (strtolower($type)) {
+        $view = \strtolower($view);
+        switch (\strtolower($type)) {
             case 'default':
             default:
                 if ($view == 'subpanel') {
@@ -375,7 +375,7 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
                     $v = new SugarView(null, array());
                     $v->module = $module_name;
                     $v->type = $view;
-                    $fullView = ucfirst($view) . 'View';
+                    $fullView = \ucfirst($view) . 'View';
                     $metadataFile = $v->getMetaDataFile();
                     require_once($metadataFile);
                     if ($view == 'list') {
@@ -433,8 +433,8 @@ class SugarWebServiceUtilv3_1 extends SugarWebServiceUtilv3
      */
     public function addFieldLevelACLs($module_name, $view_type, $view, $metadata)
     {
-        $functionName = "metdataAclParser" . ucfirst($view_type) . ucfirst($view);
-        if (method_exists($this, $functionName)) {
+        $functionName = "metdataAclParser" . \ucfirst($view_type) . \ucfirst($view);
+        if (\method_exists($this, $functionName)) {
             return $this->$functionName($module_name, $metadata);
         }
         return $metadata;

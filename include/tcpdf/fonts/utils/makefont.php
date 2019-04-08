@@ -23,7 +23,7 @@ r47930 - 2009-06-02 16:21:39 -0700 (Tue, 02 Jun 2009) - jenny - Updating with ch
 
 
 // BEGIN SUGARCRM SPECIFIC
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 // END SUGARCRM SPECIFIC
@@ -88,19 +88,19 @@ function MakeFont($fontfile, $fmfile, $embedded=true, $enc='cp1252', $patch=arra
 {
     //Generate a font definition file
     set_magic_quotes_runtime(0);
-    ini_set('auto_detect_line_endings', '1');
-    if (!file_exists($fontfile)) {
+    \ini_set('auto_detect_line_endings', '1');
+    if (!\file_exists($fontfile)) {
         die('Error: file not found: '.$fontfile);
     }
-    if (!file_exists($fmfile)) {
+    if (!\file_exists($fmfile)) {
         die('Error: file not found: '.$fmfile);
     }
     $cidtogidmap = '';
     $map = array();
     $diff = '';
     $dw = 0; // default width
-    $ffext = strtolower(substr($fontfile, -3));
-    $fmext = strtolower(substr($fmfile, -3));
+    $ffext = \strtolower(\substr($fontfile, -3));
+    $fmext = \strtolower(\substr($fmfile, -3));
     if ($fmext == 'afm') {
         if (($ffext == 'ttf') or ($ffext == 'otf')) {
             $type = 'TrueType';
@@ -205,46 +205,46 @@ r47930 - 2009-06-02 16:21:39 -0700 (Tue, 02 Jun 2009) - jenny - Updating with ch
     }
     // END SUGARCRM SPECIFIC
     $s .= '$diff=\''.$diff."';\n";
-    $basename = substr(basename($fmfile), 0, -4);
+    $basename = \substr(\basename($fmfile), 0, -4);
     // BEGIN SUGARCRM SPECIFIC
-    $dirname = dirname($fmfile);
+    $dirname = \dirname($fmfile);
     // END SUGARCRM SPECIFIC
     if ($embedded) {
         //Embedded font
         if (($type == 'TrueType') or ($type == 'TrueTypeUnicode')) {
             CheckTTF($fontfile);
         }
-        $f = fopen($fontfile, 'rb');
+        $f = \fopen($fontfile, 'rb');
         if (!$f) {
             die('Error: Unable to open '.$fontfile);
         }
-        $file = stream_get_contents($f);
-        fclose($f);
+        $file = \stream_get_contents($f);
+        \fclose($f);
         if ($type == 'Type1') {
             //Find first two sections and discard third one
-            $header = (ord($file{0}) == 128);
+            $header = (\ord($file{0}) == 128);
             if ($header) {
                 //Strip first binary header
-                $file = substr($file, 6);
+                $file = \substr($file, 6);
             }
-            $pos = strpos($file, 'eexec');
+            $pos = \strpos($file, 'eexec');
             if (!$pos) {
                 die('Error: font file does not seem to be valid Type1');
             }
             $size1 = $pos + 6;
-            if ($header and (ord($file{$size1}) == 128)) {
+            if ($header and (\ord($file{$size1}) == 128)) {
                 //Strip second binary header
-                $file = substr($file, 0, $size1).substr($file, $size1+6);
+                $file = \substr($file, 0, $size1).\substr($file, $size1+6);
             }
-            $pos = strpos($file, '00000000');
+            $pos = \strpos($file, '00000000');
             if (!$pos) {
                 die('Error: font file does not seem to be valid Type1');
             }
             $size2 = $pos - $size1;
-            $file = substr($file, 0, ($size1 + $size2));
+            $file = \substr($file, 0, ($size1 + $size2));
         }
-        $basename = strtolower($basename);
-        if (function_exists('gzcompress')) {
+        $basename = \strtolower($basename);
+        if (\function_exists('gzcompress')) {
             $cmp = $basename.'.z';
             // BEGIN SUGARCRM SPECIFIC
             /*
@@ -252,7 +252,7 @@ r47930 - 2009-06-02 16:21:39 -0700 (Tue, 02 Jun 2009) - jenny - Updating with ch
             SaveToFile($cmp, gzcompress($file, 9), 'b');
             // BEGIN SUGARCRM SPECIFIC
             */
-            SaveToFile($dirname."/".$cmp, gzcompress($file, 9), 'b');
+            SaveToFile($dirname."/".$cmp, \gzcompress($file, 9), 'b');
             // END SUGARCRM SPECIFIC
             $s .= '$file=\''.$cmp."';\n";
             print "Font file compressed (".$cmp.")\n";
@@ -264,13 +264,13 @@ r47930 - 2009-06-02 16:21:39 -0700 (Tue, 02 Jun 2009) - jenny - Updating with ch
                 SaveToFile($cmp, gzcompress($cidtogidmap, 9), 'b');
                 // BEGIN SUGARCRM SPECIFIC
                 */
-                SaveToFile($dirname."/".$cmp, gzcompress($cidtogidmap, 9), 'b');
+                SaveToFile($dirname."/".$cmp, \gzcompress($cidtogidmap, 9), 'b');
                 // END SUGARCRM SPECIFIC
                 print "CIDToGIDMap created and compressed (".$cmp.")\n";
                 $s .= '$ctg=\''.$cmp."';\n";
             }
         } else {
-            $s .= '$file=\''.basename($fontfile)."';\n";
+            $s .= '$file=\''.\basename($fontfile)."';\n";
             print "Notice: font file could not be compressed (zlib extension not available)\n";
             if (!empty($cidtogidmap)) {
                 $cmp = $basename.'.ctg';
@@ -280,10 +280,10 @@ r47930 - 2009-06-02 16:21:39 -0700 (Tue, 02 Jun 2009) - jenny - Updating with ch
                 $f = fopen($cmp, 'wb');
                 // BEGIN SUGARCRM SPECIFIC
                 */
-                $f = fopen($dirname."/".$cmp, 'wb');
+                $f = \fopen($dirname."/".$cmp, 'wb');
                 // END SUGARCRM SPECIFIC
-                fwrite($f, $cidtogidmap);
-                fclose($f);
+                \fwrite($f, $cidtogidmap);
+                \fclose($f);
                 print "CIDToGIDMap created (".$cmp.")\n";
                 $s .= '$ctg=\''.$cmp."';\n";
             }
@@ -292,7 +292,7 @@ r47930 - 2009-06-02 16:21:39 -0700 (Tue, 02 Jun 2009) - jenny - Updating with ch
             $s .= '$size1='.$size1.";\n";
             $s .= '$size2='.$size2.";\n";
         } else {
-            $s.='$originalsize='.filesize($fontfile).";\n";
+            $s.='$originalsize='.\filesize($fontfile).";\n";
         }
     } else {
         //Not embedded font
@@ -327,16 +327,16 @@ r47930 - 2009-06-02 16:21:39 -0700 (Tue, 02 Jun 2009) - jenny - Updating with ch
 function ReadMap($enc)
 {
     //Read a map file
-    $file = dirname(__FILE__).'/enc/'.strtolower($enc).'.map';
-    $a = file($file);
+    $file = \dirname(__FILE__).'/enc/'.\strtolower($enc).'.map';
+    $a = \file($file);
     if (empty($a)) {
         die('Error: encoding not found: '.$enc);
     }
     $cc2gn = array();
     foreach ($a as $l) {
         if ($l{0} == '!') {
-            $e = preg_split('/[ \\t]+/', rtrim($l));
-            $cc = hexdec(substr($e[0], 1));
+            $e = \preg_split('/[ \\t]+/', \rtrim($l));
+            $cc = \hexdec(\substr($e[0], 1));
             $gn = $e[2];
             $cc2gn[$cc] = $gn;
         }
@@ -355,17 +355,17 @@ function ReadMap($enc)
 function ReadUFM($file, &$cidtogidmap)
 {
     //Prepare empty CIDToGIDMap
-    $cidtogidmap = str_pad('', (256 * 256 * 2), "\x00");
+    $cidtogidmap = \str_pad('', (256 * 256 * 2), "\x00");
     //Read a font metric file
-    $a = file($file);
+    $a = \file($file);
     if (empty($a)) {
         die('File not found');
     }
     $widths = array();
     $fm = array();
     foreach ($a as $l) {
-        $e = explode(' ', chop($l));
-        if (count($e) < 2) {
+        $e = \explode(' ', \chop($l));
+        if (\count($e) < 2) {
             continue;
         }
         $code = $e[0];
@@ -379,13 +379,13 @@ function ReadUFM($file, &$cidtogidmap)
                 $w = $e[4];
                 $glyph = $e[10];
                 $widths[$cc] = $w;
-                if ($cc == ord('X')) {
+                if ($cc == \ord('X')) {
                     $fm['CapXHeight'] = $e[13];
                 }
                 // Set GID
                 if (($cc >= 0) and ($cc < 0xFFFF) and $glyph) {
-                    $cidtogidmap{($cc * 2)} = chr($glyph >> 8);
-                    $cidtogidmap{(($cc * 2) + 1)} = chr($glyph & 0xFF);
+                    $cidtogidmap{($cc * 2)} = \chr($glyph >> 8);
+                    $cidtogidmap{(($cc * 2) + 1)} = \chr($glyph & 0xFF);
                 }
             }
             if (($gn == '.notdef') and (!isset($fm['MissingWidth']))) {
@@ -431,7 +431,7 @@ function ReadUFM($file, &$cidtogidmap)
 function ReadAFM($file, &$map)
 {
     //Read a font metric file
-    $a = file($file);
+    $a = \file($file);
     if (empty($a)) {
         die('File not found');
     }
@@ -473,8 +473,8 @@ function ReadAFM($file, &$map)
         'dongsign'=>'dong'
         );
     foreach ($a as $l) {
-        $e = explode(' ', rtrim($l));
-        if (count($e) < 2) {
+        $e = \explode(' ', \rtrim($l));
+        if (\count($e) < 2) {
             continue;
         }
         $code = $e[0];
@@ -484,7 +484,7 @@ function ReadAFM($file, &$map)
             $cc = (int)$e[1];
             $w = $e[4];
             $gn = $e[7];
-            if (substr($gn, -4) == '20AC') {
+            if (\substr($gn, -4) == '20AC') {
                 $gn = 'Euro';
             }
             if (isset($fix[$gn])) {
@@ -621,11 +621,11 @@ function MakeWidthArray($fm)
     $els = array();
     $c = 0;
     foreach ($cw as $i => $w) {
-        if (is_numeric($i)) {
+        if (\is_numeric($i)) {
             $els[] = (((($c++)%10) == 0) ? "\n" : '').$i.'=>'.$w;
         }
     }
-    $s .= implode(',', $els);
+    $s .= \implode(',', $els);
     $s .= ')';
     return $s;
 }
@@ -645,65 +645,65 @@ function MakeFontEncoding($map)
             $s .= '/'.$map[$i].' ';
         }
     }
-    return rtrim($s);
+    return \rtrim($s);
 }
 
 function SaveToFile($file, $s, $mode='t')
 {
-    $f = fopen($file, 'w'.$mode);
+    $f = \fopen($file, 'w'.$mode);
     if (!$f) {
         die('Can\'t write to file '.$file);
     }
-    fwrite($f, $s, strlen($s));
-    fclose($f);
+    \fwrite($f, $s, \strlen($s));
+    \fclose($f);
 }
 
 function ReadShort($f)
 {
-    $a = unpack('n1n', fread($f, 2));
+    $a = \unpack('n1n', \fread($f, 2));
     return $a['n'];
 }
 
 function ReadLong($f)
 {
-    $a = unpack('N1N', fread($f, 4));
+    $a = \unpack('N1N', \fread($f, 4));
     return $a['N'];
 }
 
 function CheckTTF($file)
 {
     //Check if font license allows embedding
-    $f = fopen($file, 'rb');
+    $f = \fopen($file, 'rb');
     if (!$f) {
         die('Error: unable to open '.$file);
     }
     //Extract number of tables
-    fseek($f, 4, SEEK_CUR);
+    \fseek($f, 4, SEEK_CUR);
     $nb = ReadShort($f);
-    fseek($f, 6, SEEK_CUR);
+    \fseek($f, 6, SEEK_CUR);
     //Seek OS/2 table
     $found = false;
     for ($i = 0; $i < $nb; $i++) {
-        if (fread($f, 4) == 'OS/2') {
+        if (\fread($f, 4) == 'OS/2') {
             $found = true;
             break;
         }
-        fseek($f, 12, SEEK_CUR);
+        \fseek($f, 12, SEEK_CUR);
     }
     if (!$found) {
-        fclose($f);
+        \fclose($f);
         return;
     }
-    fseek($f, 4, SEEK_CUR);
+    \fseek($f, 4, SEEK_CUR);
     $offset = ReadLong($f);
-    fseek($f, $offset, SEEK_SET);
+    \fseek($f, $offset, SEEK_SET);
     //Extract fsType flags
-    fseek($f, 8, SEEK_CUR);
+    \fseek($f, 8, SEEK_CUR);
     $fsType = ReadShort($f);
     $rl = ($fsType & 0x02) != 0;
     $pp = ($fsType & 0x04) != 0;
     $e = ($fsType & 0x08) != 0;
-    fclose($f);
+    \fclose($f);
     if ($rl and (!$pp) and (!$e)) {
         print "Warning: font license does not allow embedding\n";
     }

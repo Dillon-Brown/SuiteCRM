@@ -50,7 +50,7 @@ function smarty_function_cycle($params, &$smarty)
     $advance = (isset($params['advance'])) ? (bool)$params['advance'] : true;
     $reset = (isset($params['reset'])) ? (bool)$params['reset'] : false;
             
-    if (!in_array('values', array_keys($params))) {
+    if (!\in_array('values', \array_keys($params))) {
         if (!isset($cycle_vars[$name]['values'])) {
             $smarty->trigger_error("cycle: missing 'values' parameter");
             return;
@@ -69,10 +69,10 @@ function smarty_function_cycle($params, &$smarty)
         $cycle_vars[$name]['delimiter'] = ',';
     }
     
-    if (is_array($cycle_vars[$name]['values'])) {
+    if (\is_array($cycle_vars[$name]['values'])) {
         $cycle_array = $cycle_vars[$name]['values'];
     } else {
-        $cycle_array = explode($cycle_vars[$name]['delimiter'], $cycle_vars[$name]['values']);
+        $cycle_array = \explode($cycle_vars[$name]['delimiter'], $cycle_vars[$name]['values']);
     }
     
     if (!isset($cycle_vars[$name]['index']) || $reset) {
@@ -91,7 +91,7 @@ function smarty_function_cycle($params, &$smarty)
     }
 
     if ($advance) {
-        if ($cycle_vars[$name]['index'] >= count($cycle_array) -1) {
+        if ($cycle_vars[$name]['index'] >= \count($cycle_array) -1) {
             $cycle_vars[$name]['index'] = 0;
         } else {
             $cycle_vars[$name]['index']++;

@@ -44,7 +44,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -184,7 +184,7 @@ class Contact extends Person implements EmailInterface
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -193,7 +193,7 @@ class Contact extends Person implements EmailInterface
     public function add_list_count_joins(&$query, $where)
     {
         // accounts.name
-        if (stristr($where, "accounts.name")) {
+        if (\stristr($where, "accounts.name")) {
             // add a join to the accounts table.
             $query .= "
 	            LEFT JOIN accounts_contacts
@@ -254,7 +254,7 @@ class Contact extends Person implements EmailInterface
             );
         }
         //any other action goes to parent function in sugarbean
-        if (strpos($order_by, 'sync_contact') !== false) {
+        if (\strpos($order_by, 'sync_contact') !== false) {
             //we have found that the user is ordering by the sync_contact field, it would be troublesome to sort by this field
             //and perhaps a performance issue, so just remove it
             $order_by = '';
@@ -436,7 +436,7 @@ class Contact extends Person implements EmailInterface
         // Bug 43196 - If a contact is related to multiple accounts, make sure we pull the one we are looking for
         // Bug 44730  was introduced due to this, fix is to simply clear any whitespaces around the account_id first
 
-        $clean_account_id = trim($this->account_id);
+        $clean_account_id = \trim($this->account_id);
 
         if (!empty($clean_account_id)) {
             $query .= " and acc.id = '{$this->account_id}'";
@@ -452,8 +452,8 @@ class Contact extends Person implements EmailInterface
         if ($row != null) {
             $this->account_name = $row['name'];
             $this->account_id = $row['id'];
-            if (null === $locale || !is_object($locale) || !method_exists($locale, 'getLocaleFormattedName')) {
-                $GLOBALS['log']->fatal('Call to a member function getLocaleFormattedName() on ' . gettype($locale));
+            if (null === $locale || !\is_object($locale) || !\method_exists($locale, 'getLocaleFormattedName')) {
+                $GLOBALS['log']->fatal('Call to a member function getLocaleFormattedName() on ' . \gettype($locale));
             } else {
                 $this->report_to_name = $locale->getLocaleFormattedName(
                     $row['first_name'],
@@ -508,17 +508,17 @@ class Contact extends Person implements EmailInterface
         if (!isset($this->user_sync)) {
             $GLOBALS['log']->fatal('Contact::$user_sync is not set');
             $beanIDs = null;
-        } elseif (!is_object($this->user_sync)) {
+        } elseif (!\is_object($this->user_sync)) {
             $GLOBALS['log']->fatal('Contact::$user_sync is not an object');
             $beanIDs = null;
-        } elseif (!method_exists($this->user_sync, 'get')) {
+        } elseif (!\method_exists($this->user_sync, 'get')) {
             $GLOBALS['log']->fatal('Contact::$user_sync::get() is not a function');
             $beanIDs = null;
         } else {
             $beanIDs = $this->user_sync->get();
         }
 
-        if (in_array($current_user->id, $beanIDs)) {
+        if (\in_array($current_user->id, $beanIDs)) {
             $this->contacts_users_id = $current_user->id;
         }
     }
@@ -546,19 +546,19 @@ class Contact extends Person implements EmailInterface
         $where_clauses = array();
         $the_query_string = $this->db->quote($the_query_string);
 
-        array_push($where_clauses, "contacts.last_name like '$the_query_string%'");
-        array_push($where_clauses, "contacts.first_name like '$the_query_string%'");
-        array_push($where_clauses, "accounts.name like '$the_query_string%'");
-        array_push($where_clauses, "contacts.assistant like '$the_query_string%'");
-        array_push($where_clauses, "ea.email_address like '$the_query_string%'");
+        \array_push($where_clauses, "contacts.last_name like '$the_query_string%'");
+        \array_push($where_clauses, "contacts.first_name like '$the_query_string%'");
+        \array_push($where_clauses, "accounts.name like '$the_query_string%'");
+        \array_push($where_clauses, "contacts.assistant like '$the_query_string%'");
+        \array_push($where_clauses, "ea.email_address like '$the_query_string%'");
 
-        if (is_numeric($the_query_string)) {
-            array_push($where_clauses, "contacts.phone_home like '%$the_query_string%'");
-            array_push($where_clauses, "contacts.phone_mobile like '%$the_query_string%'");
-            array_push($where_clauses, "contacts.phone_work like '%$the_query_string%'");
-            array_push($where_clauses, "contacts.phone_other like '%$the_query_string%'");
-            array_push($where_clauses, "contacts.phone_fax like '%$the_query_string%'");
-            array_push($where_clauses, "contacts.assistant_phone like '%$the_query_string%'");
+        if (\is_numeric($the_query_string)) {
+            \array_push($where_clauses, "contacts.phone_home like '%$the_query_string%'");
+            \array_push($where_clauses, "contacts.phone_mobile like '%$the_query_string%'");
+            \array_push($where_clauses, "contacts.phone_work like '%$the_query_string%'");
+            \array_push($where_clauses, "contacts.phone_other like '%$the_query_string%'");
+            \array_push($where_clauses, "contacts.phone_fax like '%$the_query_string%'");
+            \array_push($where_clauses, "contacts.assistant_phone like '%$the_query_string%'");
         }
 
         $the_where = "";
@@ -577,7 +577,7 @@ class Contact extends Person implements EmailInterface
     {
         global $locale;
 
-        $xtpl->assign("CONTACT_NAME", trim($locale->getLocaleFormattedName($contact->first_name, $contact->last_name)));
+        $xtpl->assign("CONTACT_NAME", \trim($locale->getLocaleFormattedName($contact->first_name, $contact->last_name)));
         $xtpl->assign("CONTACT_DESCRIPTION", $contact->description);
 
         return $xtpl;
@@ -585,7 +585,7 @@ class Contact extends Person implements EmailInterface
 
     public function get_contact_id_by_email($email)
     {
-        $email = trim($email);
+        $email = \trim($email);
         if (empty($email)) {
             //email is empty, no need to query, return null
             return null;
@@ -606,7 +606,7 @@ class Contact extends Person implements EmailInterface
         //if account_id was replaced unlink the previous account_id.
         //this rel_fields_before_value is populated by sugarbean during the retrieve call.
         if (!empty($this->account_id) and !empty($this->rel_fields_before_value['account_id']) and
-            (trim($this->account_id) != trim($this->rel_fields_before_value['account_id']))
+            (\trim($this->account_id) != \trim($this->rel_fields_before_value['account_id']))
         ) {
             //unlink the old record.
             $this->load_relationship('accounts');
@@ -656,23 +656,23 @@ class Contact extends Person implements EmailInterface
             $this->load_relationship('user_sync');
         }
 
-        if (strtolower($list_of_users) == 'all') {
+        if (\strtolower($list_of_users) == 'all') {
             // add all non-deleted users
             $sql = "SELECT id FROM users WHERE deleted=0 AND is_group=0 AND portal_only=0";
             $result = $this->db->query($sql);
             while ($hash = $this->db->fetchByAssoc($result)) {
                 if (!isset($this->user_sync)) {
                     $GLOBALS['log']->fatal('Contact::$user_sync is not set');
-                } elseif (!is_object($this->user_sync)) {
+                } elseif (!\is_object($this->user_sync)) {
                     $GLOBALS['log']->fatal('Contact::$user_sync is not an object');
-                } elseif (!method_exists($this->user_sync, 'add')) {
+                } elseif (!\method_exists($this->user_sync, 'add')) {
                     $GLOBALS['log']->fatal('Contact::$user_sync::add() is not a function');
                 } else {
                     $this->user_sync->add($hash['id']);
                 }
             }
         } else {
-            $theList = explode(",", $list_of_users);
+            $theList = \explode(",", $list_of_users);
             foreach ($theList as $eachItem) {
                 if (($user_id = $focus_user->retrieve_user_id($eachItem))
                     || $focus_user->retrieve($eachItem)
@@ -680,9 +680,9 @@ class Contact extends Person implements EmailInterface
                     // it is a user, add user
                     if (!isset($this->user_sync)) {
                         $GLOBALS['log']->fatal('Contact::$user_sync is not set');
-                    } elseif (!is_object($this->user_sync)) {
+                    } elseif (!\is_object($this->user_sync)) {
                         $GLOBALS['log']->fatal('Contact::$user_sync is not an object');
-                    } elseif (!method_exists($this->user_sync, 'add')) {
+                    } elseif (!\method_exists($this->user_sync, 'add')) {
                         $GLOBALS['log']->fatal('Contact::$user_sync::add() is not a function');
                     } else {
                         $this->user_sync->add($user_id ? $user_id : $focus_user->id);

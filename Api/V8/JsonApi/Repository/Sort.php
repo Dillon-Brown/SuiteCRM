@@ -20,17 +20,17 @@ class Sort
         $orderBy = self::ORDER_BY_ASC;
         if ($value[0] === '-') {
             $orderBy = self::ORDER_BY_DESC;
-            $value = ltrim($value, '-');
+            $value = \ltrim($value, '-');
         }
 
-        if (!property_exists($bean, $value)) {
-            throw new \InvalidArgumentException(sprintf(
+        if (!\property_exists($bean, $value)) {
+            throw new \InvalidArgumentException(\sprintf(
                 'Sort field %s in %s module is not found',
                 $value,
                 $bean->getObjectName()
             ));
         }
 
-        return sprintf('%s %s', $value, $orderBy);
+        return \sprintf('%s %s', $value, $orderBy);
     }
 }

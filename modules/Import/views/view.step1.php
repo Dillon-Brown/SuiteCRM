@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -108,18 +108,18 @@ class ImportViewStep1 extends ImportView
             $tmpImportable = Importer::getImportableModules();
             $importableModulesOptions = get_select_options_with_id($tmpImportable, '');
             $importablePersonModules = $this->getImportablePersonModulesJS();
-            $this->ss->assign("IMPORT_MODULE", key($tmpImportable));
+            $this->ss->assign("IMPORT_MODULE", \key($tmpImportable));
         } else {
             $this->instruction = 'LBL_SELECT_DS_INSTRUCTION';
             $this->ss->assign('INSTRUCTION', $this->getInstruction());
         }
         $this->ss->assign("FROM_ADMIN", $showModuleSelection);
-        $this->ss->assign("PERSON_MODULE_LIST", json_encode($importablePersonModules));
+        $this->ss->assign("PERSON_MODULE_LIST", \json_encode($importablePersonModules));
         $this->ss->assign("showModuleSelection", $showModuleSelection);
         $this->ss->assign("IMPORTABLE_MODULES_OPTIONS", $importableModulesOptions);
 
         $this->ss->assign("EXTERNAL_SOURCES", $this->getAllImportableExternalEAPMs());
-        $this->ss->assign("EXTERNAL_AUTHENTICATED_SOURCES", json_encode($this->getAuthenticatedImportableExternalEAPMs()));
+        $this->ss->assign("EXTERNAL_AUTHENTICATED_SOURCES", \json_encode($this->getAuthenticatedImportableExternalEAPMs()));
         $selectExternal = !empty($_REQUEST['application']) ? $_REQUEST['application'] : '';
         $this->ss->assign("selectExternalSource", $selectExternal);
 
@@ -139,7 +139,7 @@ class ImportViewStep1 extends ImportView
         global $beanList;
         $results = array();
         foreach ($beanList as $moduleName => $beanName) {
-            if (class_exists($beanName)) {
+            if (\class_exists($beanName)) {
                 $tmp = new $beanName();
                 if (isset($tmp->importable) && $tmp->importable && ($tmp instanceof Person)) {
                     $results[$moduleName] = $moduleName;
@@ -166,7 +166,7 @@ class ImportViewStep1 extends ImportView
     private function _getJS($sourceType = false)
     {
         global $mod_strings;
-        $EXTERNAL_AUTHENTICATED_SOURCES = json_encode($this->getAuthenticatedImportableExternalEAPMs());
+        $EXTERNAL_AUTHENTICATED_SOURCES = \json_encode($this->getAuthenticatedImportableExternalEAPMs());
         $selectExternalSource = !empty($_REQUEST['application']) ? $_REQUEST['application'] : '';
         
         $showModuleSelection = ($this->importModule == 'Administration');
@@ -178,7 +178,7 @@ class ImportViewStep1 extends ImportView
         }
 
 
-        $PERSON_MODULE_LIST = json_encode($importablePersonModules);
+        $PERSON_MODULE_LIST = \json_encode($importablePersonModules);
         
         return <<<EOJAVASCRIPT
 

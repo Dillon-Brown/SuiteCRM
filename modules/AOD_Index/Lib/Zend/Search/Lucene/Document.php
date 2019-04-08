@@ -87,7 +87,7 @@ class Zend_Search_Lucene_Document
      */
     public function getFieldNames()
     {
-        return array_keys($this->_fields);
+        return \array_keys($this->_fields);
     }
 
 
@@ -99,7 +99,7 @@ class Zend_Search_Lucene_Document
      */
     public function getField($fieldName)
     {
-        if (!array_key_exists($fieldName, $this->_fields)) {
+        if (!\array_key_exists($fieldName, $this->_fields)) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception("Field name \"$fieldName\" not found in document.");
         }

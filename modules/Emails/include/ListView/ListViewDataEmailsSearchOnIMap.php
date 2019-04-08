@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -88,7 +88,7 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
 
         if (!empty($params['overrideOrder']) && !empty($params['orderBy'])) {
             $order = $this->lvde->getOrderBy(
-                strtolower($params['orderBy']),
+                \strtolower($params['orderBy']),
                 (empty($params['sortOrder']) ? '' : $params['sortOrder'])
             );
         } else {
@@ -103,8 +103,8 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
 
         // TODO: figure out why was it for?
         $orderby = $order['orderBy'];
-        if (strpos($order['orderBy'], '.') && ($order['orderBy'] != "report_cache.date_modified")) {
-            $orderby = substr($order['orderBy'], strpos($order['orderBy'], '.') + 1);
+        if (\strpos($order['orderBy'], '.') && ($order['orderBy'] != "report_cache.date_modified")) {
+            $orderby = \substr($order['orderBy'], \strpos($order['orderBy'], '.') + 1);
         }
 
 
@@ -131,13 +131,13 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
         $request['uids'] = array();
 
             
-        if (isset($emailServerEmails['data']) && is_array($emailServerEmails['data'])) {
+        if (isset($emailServerEmails['data']) && \is_array($emailServerEmails['data'])) {
             $emailServerEmailsData = $emailServerEmails['data'];
         } else {
             if (!isset($emailServerEmails['data'])) {
                 LoggerManager::getLogger()->warn('server email data is not set for seearch');
-            } elseif (!is_array($emailServerEmails['data'])) {
-                LoggerManager::getLogger()->warn('server email data should be an array, ' . gettype($emailServerEmails['data']) . ' given.');
+            } elseif (!\is_array($emailServerEmails['data'])) {
+                LoggerManager::getLogger()->warn('server email data should be an array, ' . \gettype($emailServerEmails['data']) . ' given.');
             }
         }
 
@@ -170,10 +170,10 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
 
         $ret_array['inner_join'] = '';
         if (!empty($this->lvde->seed->listview_inner_join)) {
-            $ret_array['inner_join'] = ' ' . implode(' ', $this->lvde->seed->listview_inner_join) . ' ';
+            $ret_array['inner_join'] = ' ' . \implode(' ', $this->lvde->seed->listview_inner_join) . ' ';
         }
 
-        if (!isset($params) || !is_array($params)) {
+        if (!isset($params) || !\is_array($params)) {
             $params = array();
         }
         if (!isset($params['custom_select'])) {
@@ -226,7 +226,7 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
         $pageData['offsets']['total'] = $total;
         $pageData['offsets']['next'] = $nextOffset;
         $pageData['offsets']['prev'] = $prevOffset;
-        $pageData['offsets']['end'] = ceil($endOffset);
+        $pageData['offsets']['end'] = \ceil($endOffset);
 
         $queries = array('baseUrl', 'endPage', 'nextPage', 'orderBy');
 
@@ -269,8 +269,8 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
                 if (!empty($inboundEmail->mailbox)) {
                     $request['folder'] = $inboundEmail->mailbox;
                 } elseif (!empty($inboundEmail->mailboxarray)
-                    && is_array($inboundEmail->mailboxarray)
-                    && count($inboundEmail->mailboxarray)) {
+                    && \is_array($inboundEmail->mailboxarray)
+                    && \count($inboundEmail->mailboxarray)) {
                     $request['folder'] = $inboundEmail->mailboxarray[0];
                 }
             } else {
@@ -287,7 +287,7 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
         }
 
         // TODO: TASK: UNDEFINED - HANDLE in second filter after IMap
-        $endOffset = floor(($total - 1) / $limit) * $limit;
+        $endOffset = \floor(($total - 1) / $limit) * $limit;
 
         if (!isset($pageData['ordering']) || !isset($pageData['ordering']['sortOrder'])) {
             LoggerManager::getLogger()->warn('ListViewDataEmailsSearchOnIMap::search: sort order is not set. Using null by default.');
@@ -322,7 +322,7 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
         $pageData['bean'] = array(
             'objectName' => $seed->object_name,
             'moduleDir' => $seed->module_dir,
-            'moduleName' => strtr($seed->module_dir, $module_names)
+            'moduleName' => \strtr($seed->module_dir, $module_names)
         );
         $pageData['stamp'] = $this->lvde->stamp;
         $pageData['access'] = array(
@@ -352,20 +352,20 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
                 }
 
                 foreach ($basicSearchFields as $basicSearchField) {
-                    $field_name = (is_array($basicSearchField) && isset($basicSearchField['name']))
+                    $field_name = (\is_array($basicSearchField) && isset($basicSearchField['name']))
                         ? $basicSearchField['name'] : $basicSearchField;
                     $field_name .= "_basic";
                     if (
                         isset($request[$field_name]) &&
                         (
-                            !is_array($basicSearchField) ||
+                            !\is_array($basicSearchField) ||
                             !isset($basicSearchField['type']) ||
                             $basicSearchField['type'] == 'text' ||
                             $basicSearchField['type'] == 'name'
                         )
                     ) {
                         // Ensure the encoding is UTF-8
-                        $queryString = htmlentities($request[$field_name], null, 'UTF-8');
+                        $queryString = \htmlentities($request[$field_name], null, 'UTF-8');
                         break;
                     }
                 }

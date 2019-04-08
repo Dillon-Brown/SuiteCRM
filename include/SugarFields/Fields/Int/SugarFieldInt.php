@@ -77,15 +77,15 @@ class SugarFieldInt extends SugarFieldBase
     public function getSearchWhereValue($value)
     {
         $newVal = parent::getSearchWhereValue($value);
-        if (!is_numeric($newVal)) {
-            if (strpos($newVal, ',') > 0) {
-                $multiVals = explode(',', $newVal);
+        if (!\is_numeric($newVal)) {
+            if (\strpos($newVal, ',') > 0) {
+                $multiVals = \explode(',', $newVal);
                 $newVal = '';
                 foreach ($multiVals as $key => $val) {
                     if (!empty($newVal)) {
                         $newVal .= ',';
                     }
-                    if (!empty($val) && !(is_numeric($val))) {
+                    if (!empty($val) && !(\is_numeric($val))) {
                         $newVal .= -1;
                     } else {
                         $newVal .= $val;
@@ -114,7 +114,7 @@ class SugarFieldInt extends SugarFieldBase
             $this->ss->assign('id_range_start', "start_range_{$id}");
             $this->ss->assign('id_range_end', "end_range_{$id}");
             $this->ss->assign('id_range_choice', "{$id}_range_choice");
-            if (file_exists('custom/include/SugarFields/Fields/Int/RangeSearchForm.tpl')) {
+            if (\file_exists('custom/include/SugarFields/Fields/Int/RangeSearchForm.tpl')) {
                 return $this->fetch('custom/include/SugarFields/Fields/Int/RangeSearchForm.tpl');
             }
             return $this->fetch('include/SugarFields/Fields/Int/RangeSearchForm.tpl');
@@ -132,8 +132,8 @@ class SugarFieldInt extends SugarFieldBase
         $focus,
         ImportFieldSanitize $settings
         ) {
-        $value = str_replace($settings->num_grp_sep, "", $value);
-        if (!is_numeric($value) || strstr($value, ".")) {
+        $value = \str_replace($settings->num_grp_sep, "", $value);
+        if (!\is_numeric($value) || \strstr($value, ".")) {
             return false;
         }
         

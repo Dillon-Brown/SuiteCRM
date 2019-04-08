@@ -79,7 +79,7 @@ class AOW_Action extends Basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -94,7 +94,7 @@ class AOW_Action extends Basic
             $postDataAtKeyAction = $post_data[$key . 'action'];
         }
 
-        $line_count = count((array)$postDataAtKeyAction);
+        $line_count = \count((array)$postDataAtKeyAction);
         $j = 0;
         for ($i = 0; $i < $line_count; ++$i) {
             if (isset($post_data[$key . 'deleted'][$i]) && $post_data[$key . 'deleted'][$i] == 1) {
@@ -116,7 +116,7 @@ class AOW_Action extends Basic
                             } elseif (!isset($post_data[$key . 'param'][$i]['value_type'][$p_id])) {
                                 LoggerManager::getLogger()->warn('AOW action error when trying to save lines, parameter id not found in post data, parameter id was: ' . $p_id);
                             } else {
-                                if ($post_data[$key . 'param'][$i]['value_type'][$p_id] == 'Value' && is_array($p_value)) {
+                                if ($post_data[$key . 'param'][$i]['value_type'][$p_id] == 'Value' && \is_array($p_value)) {
                                     $param_value[$p_id] = encodeMultienumValue($p_value);
                                 }
                             }
@@ -124,8 +124,8 @@ class AOW_Action extends Basic
                     }
                     $params[$param_name] = $param_value;
                 }
-                $action->parameters = base64_encode(serialize($params));
-                if (trim($action->action) != '') {
+                $action->parameters = \base64_encode(\serialize($params));
+                if (\trim($action->action) != '') {
                     $action->action_order = ++$j;
                     $action->aow_workflow_id = $parent->id;
                     $action->save();

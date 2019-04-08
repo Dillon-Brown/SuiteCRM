@@ -39,7 +39,7 @@
  */
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -222,9 +222,9 @@ class TimeDate
     public static function getInstance()
     {
         if (empty(self::$timedate)) {
-            if (ini_get('date.timezone') == '') {
+            if (\ini_get('date.timezone') == '') {
                 // Remove warning about default timezone
-                date_default_timezone_set(@date('e'));
+                \date_default_timezone_set(@\date('e'));
                 try {
                     $tz = self::guessTimezone();
                 } catch (Exception $e) {
@@ -233,7 +233,7 @@ class TimeDate
                 if (isset($GLOBALS['log'])) {
                     $GLOBALS['log']->warn("Configuration variable date.timezone is not set, guessed timezone $tz. Please set date.timezone=\"$tz\" in php.ini!");
                 }
-                date_default_timezone_set($tz);
+                \date_default_timezone_set($tz);
             }
             self::$timedate = new self;
         }
@@ -365,11 +365,11 @@ class TimeDate
     public function get_time_format(/*User*/
         $user = null
     ) {
-        if (is_bool($user) || func_num_args() > 1) {
+        if (\is_bool($user) || \func_num_args() > 1) {
             // BC dance - old signature was boolean, User
             $GLOBALS['log']->fatal('TimeDate::get_time_format(): Deprecated API used, please update you code - get_time_format() now has one argument of type User');
-            if (func_num_args() > 1) {
-                $user = func_get_arg(1);
+            if (\func_num_args() > 1) {
+                $user = \func_get_arg(1);
             } else {
                 $user = null;
             }
@@ -405,8 +405,8 @@ class TimeDate
     {
         // BC fix - had (bool, user) signature before
         if (!($user instanceof User)) {
-            if (func_num_args() > 1) {
-                $user = func_get_arg(1);
+            if (\func_num_args() > 1) {
+                $user = \func_get_arg(1);
                 if (!($user instanceof User)) {
                     $user = null;
                 }
@@ -435,7 +435,7 @@ class TimeDate
      */
     public function get_date_time_format_cache_key($user)
     {
-        $cacheKey = get_class($this) . "dateTimeFormat";
+        $cacheKey = \get_class($this) . "dateTimeFormat";
         $user = $this->_getUser($user);
 
         if ($user instanceof User) {
@@ -491,7 +491,7 @@ class TimeDate
      */
     public function split_date_time($datetime)
     {
-        return explode(' ', $datetime, 2);
+        return \explode(' ', $datetime, 2);
     }
 
 
@@ -528,7 +528,7 @@ class TimeDate
      */
     public function getCalFormat($format)
     {
-        return str_replace(array_keys(self::$format_to_str), array_values(self::$format_to_str), $format);
+        return \str_replace(\array_keys(self::$format_to_str), \array_values(self::$format_to_str), $format);
     }
 
     /**
@@ -544,7 +544,7 @@ class TimeDate
     {
         try {
             $dt = SugarDateTime::createFromFormat($format, $date);
-            if (!is_object($dt)) {
+            if (!\is_object($dt)) {
                 return false;
             }
         } catch (Exception $e) {
@@ -717,15 +717,15 @@ class TimeDate
             $date = '';
         }
 
-        if (!is_string($date)) {
-            $msg = 'Date should be a string, ' . gettype($date) . ' given.';
-            LoggerManager::getLogger()->fatal($msg . "\nDate was:\n" . print_r($date, true));
+        if (!\is_string($date)) {
+            $msg = 'Date should be a string, ' . \gettype($date) . ' given.';
+            LoggerManager::getLogger()->fatal($msg . "\nDate was:\n" . \print_r($date, true));
             throw new InvalidArgumentException($msg);
         }
         try {
             return SugarDateTime::createFromFormat(self::DB_DATETIME_FORMAT, $date, self::$gmtTimezone);
         } catch (Exception $e) {
-            if (is_string($date)) {
+            if (\is_string($date)) {
                 $GLOBALS['log']->error("fromDb: Conversion of $date from DB format failed: {$e->getMessage()}");
             } else {
                 LoggerManager::getLogger()->error('Date parameter is not a string');
@@ -970,12 +970,12 @@ class TimeDate
      */
     protected function _convert($date, $fromFormat, $fromTZ, $toFormat, $toTZ, $expand = false)
     {
-        $date = trim($date);
+        $date = \trim($date);
         if (empty($date)) {
             return $date;
         }
         try {
-            if ($expand && strlen($date) <= 10) {
+            if ($expand && \strlen($date) <= 10) {
                 $date = $this->expandDate($date, $fromFormat);
             }
             $phpdate = SugarDateTime::createFromFormat($fromFormat, $date, $fromTZ);
@@ -1031,7 +1031,7 @@ class TimeDate
      */
     public function to_display_time($date, $meridiem = true, $convert_tz = true)
     {
-        if ($convert_tz && strpos($date, ' ') === false) {
+        if ($convert_tz && \strpos($date, ' ') === false) {
             // we need TZ adjustment but have no date, assume today
             $date = $this->expandTime($date, self::DB_DATETIME_FORMAT, self::$gmtTimezone);
         }
@@ -1060,7 +1060,7 @@ class TimeDate
         if (!($date instanceof DateTime)) {
             $date = SugarDateTime::createFromFormat($format, $date);
         }
-        $ampm = strpbrk($format, 'aA');
+        $ampm = \strpbrk($format, 'aA');
         $datearr = array(
             "h" => ($ampm == false) ? $date->format("H") : $date->format("h"),
             'm' => $date->format("i"),
@@ -1190,7 +1190,7 @@ class TimeDate
     {
         $format = $this->get_date_time_format();
         $tz = $convert_tz ? $this->_getUserTZ() : self::$gmtTimezone;
-        if ($convert_tz && strpos($date, ' ') === false) {
+        if ($convert_tz && \strpos($date, ' ') === false) {
             // we need TZ adjustment but have short string, expand it to full one
             // FIXME: if the string is short, should we assume date or time?
             $date = $this->expandTime($date, $format, $tz);
@@ -1334,7 +1334,7 @@ class TimeDate
     public function timeSeparatorFormat($timeformat)
     {
         $date = $this->_convert("00:11:22", self::DB_TIME_FORMAT, null, $timeformat, null);
-        if (preg_match('/\d+(.+?)11/', $date, $matches)) {
+        if (\preg_match('/\d+(.+?)11/', $date, $matches)) {
             $sep = $matches[1];
         } else {
             $sep = ':';
@@ -1451,7 +1451,7 @@ class TimeDate
      */
     public static function guessTimezone($userOffset = 0)
     {
-        if (!is_numeric($userOffset)) {
+        if (!\is_numeric($userOffset)) {
             return '';
         }
         $defaultZones = array(
@@ -1477,16 +1477,16 @@ class TimeDate
         );
 
         $now = new DateTime();
-        $tzlist = timezone_identifiers_list();
+        $tzlist = \timezone_identifiers_list();
         if ($userOffset == 0) {
-            $gmtOffset = date('Z');
-            $nowtz = date('e');
-            if (in_array($nowtz, $tzlist)) {
-                array_unshift($defaultZones, $nowtz);
+            $gmtOffset = \date('Z');
+            $nowtz = \date('e');
+            if (\in_array($nowtz, $tzlist)) {
+                \array_unshift($defaultZones, $nowtz);
             } else {
-                $nowtz = timezone_name_from_abbr(date('T'), $gmtOffset, date('I'));
-                if (in_array($nowtz, $tzlist)) {
-                    array_unshift($defaultZones, $nowtz);
+                $nowtz = \timezone_name_from_abbr(\date('T'), $gmtOffset, \date('I'));
+                if (\in_array($nowtz, $tzlist)) {
+                    \array_unshift($defaultZones, $nowtz);
                 }
             }
         } else {
@@ -1543,7 +1543,7 @@ class TimeDate
         if ($name instanceof DateTimeZone) {
             $tz = $name;
         } else {
-            $tz = timezone_open($name);
+            $tz = \timezone_open($name);
         }
         if (!$tz) {
             return "???";
@@ -1551,15 +1551,15 @@ class TimeDate
         $now = new DateTime("now", $tz);
         $off = $now->getOffset();
         $translated = translate('timezone_dom', '', $name);
-        if (is_string($translated) && !empty($translated)) {
+        if (\is_string($translated) && !empty($translated)) {
             $name = $translated;
         }
 
-        return sprintf(
+        return \sprintf(
             "%s (GMT%+2d:%02d)%s",
-            str_replace('_', ' ', $name),
+            \str_replace('_', ' ', $name),
             $off / 3600,
-            (abs($off) / 60) % 60,
+            (\abs($off) / 60) % 60,
             ""
         );//$now->format('I')==1?"(+DST)":"");
     }
@@ -1576,7 +1576,7 @@ class TimeDate
     public static function _sortTz($a, $b)
     {
         if ($a[0] == $b[0]) {
-            return strcmp($a[1], $b[1]);
+            return \strcmp($a[1], $b[1]);
         }
         return $a[0] < $b[0] ? -1 : 1;
     }
@@ -1589,11 +1589,11 @@ class TimeDate
     {
         $now = new DateTime();
         $res_zones = $zones = array();
-        foreach (timezone_identifiers_list() as $zoneName) {
+        foreach (\timezone_identifiers_list() as $zoneName) {
             $tz = new DateTimeZone($zoneName);
             $zones[$zoneName] = array($tz->getOffset($now), self::tzName($zoneName));
         }
-        uasort($zones, array('TimeDate', '_sortTz'));
+        \uasort($zones, array('TimeDate', '_sortTz'));
         foreach ($zones as $name => $zonedef) {
             $res_zones[$name] = $zonedef[1];
         }
@@ -1609,10 +1609,10 @@ class TimeDate
     public static function httpTime($ts = null)
     {
         if ($ts === null) {
-            $ts = time();
+            $ts = \time();
         }
 
-        return gmdate(self::RFC2616_FORMAT, $ts);
+        return \gmdate(self::RFC2616_FORMAT, $ts);
     }
 
     /**
@@ -1622,7 +1622,7 @@ class TimeDate
      */
     public function fromTimeArray($time)
     {
-        if (!isset($time) || count($time) == 0) {
+        if (!isset($time) || \count($time) == 0) {
             return $this->nowDb();
         } elseif (isset($time['ts'])) {
             return $this->fromTimestamp($time['ts']);
@@ -1710,7 +1710,7 @@ class TimeDate
         $regPositions = array();
         $ignoreNextChar = false;
         $count = 1;
-        foreach (str_split($format) as $char) {
+        foreach (\str_split($format) as $char) {
             if (!$ignoreNextChar && isset(self::$format_to_regexp[$char])) {
                 $newFormat .= '(' . self::$format_to_regexp[$char] . ')';
                 $regPositions[$char] = $count;
@@ -1844,15 +1844,15 @@ class TimeDate
      */
     public function merge_time_meridiem($date, $format, $mer)
     {
-        $date = trim($date);
+        $date = \trim($date);
         if (empty($date)) {
             return $date;
         }
-        $fakeMerFormat = str_replace(array('a', 'A'), array('@~@', '@~@'), $format);
-        $noMerFormat = trim(str_replace(array('a', 'A'), array('', ''), $format));
+        $fakeMerFormat = \str_replace(array('a', 'A'), array('@~@', '@~@'), $format);
+        $noMerFormat = \trim(\str_replace(array('a', 'A'), array('', ''), $format));
         $newDate = $this->swap_formats($date, $noMerFormat, $fakeMerFormat);
 
-        return str_replace('@~@', $mer, $newDate);
+        return \str_replace('@~@', $mer, $newDate);
     }
 
     /**
@@ -1947,7 +1947,7 @@ class TimeDate
     public function adjustmentForUserTimeZone()
     {
         $tz = $this->_getUserTZ();
-        $server_tz = new DateTimeZone(date_default_timezone_get());
+        $server_tz = new DateTimeZone(\date_default_timezone_get());
         if ($tz && $server_tz) {
             return ($server_tz->getOffset($this->now) - $tz->getOffset($this->now)) / 60;
         }
@@ -1964,7 +1964,7 @@ class TimeDate
     public function convert_to_gmt_datetime($olddatetime)
     {
         if (!empty($olddatetime)) {
-            return date('Y-m-d H:i:s', strtotime($olddatetime) - date('Z'));
+            return \date('Y-m-d H:i:s', \strtotime($olddatetime) - \date('Z'));
         }
 
         return '';
@@ -1993,7 +1993,7 @@ class TimeDate
     public function getDSTRange($year, $zone = null)
     {
         if (!empty($zone)) {
-            $tz = timezone_open($zone);
+            $tz = \timezone_open($zone);
         }
         if (empty($tz)) {
             $tz = $this->_getUserTZ();
@@ -2008,7 +2008,7 @@ class TimeDate
         $result = array();
         $transitions = $tz->getTransitions($year_date->ts, $year_end->ts);
         $idx = 0;
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+        if (\version_compare(PHP_VERSION, '5.3.0', '<')) {
             // <5.3.0 ignores parameters, advance manually to current year
             $start_ts = $year_date->ts;
             while (isset($transitions[$idx]) && $transitions[$idx]["ts"] < $start_ts) {
@@ -2064,12 +2064,12 @@ class TimeDate
     public function AMPMMenu($prefix, $date, $attrs = '')
     {
         $tf = $this->get_time_format();
-        $am = strpbrk($tf, 'aA');
+        $am = \strpbrk($tf, 'aA');
         if ($am == false) {
             return '';
         }
         $selected = array("am" => "", "pm" => "", "AM" => "", "PM" => "");
-        if (preg_match('/([ap]m)/i', $date, $match)) {
+        if (\preg_match('/([ap]m)/i', $date, $match)) {
             $selected[$match[1]] = " selected";
         }
 
@@ -2092,7 +2092,7 @@ class TimeDate
      */
     public function get_user_date_format()
     {
-        return str_replace(array('Y', 'm', 'd'), array('yyyy', 'mm', 'dd'), $this->get_date_format());
+        return \str_replace(array('Y', 'm', 'd'), array('yyyy', 'mm', 'dd'), $this->get_date_format());
     }
 
     /**

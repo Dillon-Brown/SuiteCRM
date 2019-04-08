@@ -43,7 +43,7 @@ use SuiteCRM\JsonApiErrorObject;
 use SuiteCRM\LangException;
 use SuiteCRM\LangText;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -57,8 +57,8 @@ class JsonApiErrorObjectTest extends \SuiteCRM\StateCheckerPHPUnitTestCaseAbstra
     public function setUp()
     {
         parent::setUp();
-        if (!defined('sugarEntry')) {
-            define('sugarEntry', true);
+        if (!\defined('sugarEntry')) {
+            \define('sugarEntry', true);
         }
 
         global $app_strings, $mod_strings;

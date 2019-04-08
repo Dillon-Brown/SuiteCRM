@@ -39,7 +39,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -131,7 +131,7 @@ class EmailsViewCompose extends ViewEdit
      */
     public function getEditView()
     {
-        $a = dirname(dirname(__FILE__)) . '/include/ComposeView/ComposeView.php';
+        $a = \dirname(\dirname(__FILE__)) . '/include/ComposeView/ComposeView.php';
         require_once 'modules/Emails/include/ComposeView/ComposeView.php';
         return new ComposeView();
     }
@@ -152,17 +152,17 @@ class EmailsViewCompose extends ViewEdit
             );
         }
 
-        $emailSignatures = unserialize(base64_decode($user->getPreference('account_signatures', 'Emails')));
+        $emailSignatures = \unserialize(\base64_decode($user->getPreference('account_signatures', 'Emails')));
 
         if (isset($emailSignatures[$email->mailbox_id])) {
             $emailSignatureId = $emailSignatures[$email->mailbox_id];
         } else {
             $emailSignatureId = $user->getPreference('signature_default');
         }
-        if (gettype($emailSignatureId) === 'string') {
+        if (\gettype($emailSignatureId) === 'string') {
             $emailSignatures = $user->getSignature($emailSignatureId);
             $email->description .= $emailSignatures['signature'];
-            $email->description_html .= html_entity_decode($emailSignatures['signature_html']);
+            $email->description_html .= \html_entity_decode($emailSignatures['signature_html']);
             return $email;
         }
         $GLOBALS['log']->warn(

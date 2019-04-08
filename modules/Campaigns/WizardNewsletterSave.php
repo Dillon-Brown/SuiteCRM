@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -74,7 +74,7 @@ global $mod_strings;
             //save here so we can link relationships
             $campaign_focus->save();
             $GLOBALS['log']->debug("Saved record with id of ".$campaign_focus->id);
-            echo json_encode(array('record'=>$campaign_focus->id));
+            echo \json_encode(array('record'=>$campaign_focus->id));
             break;
         case 2:
             //process subscription lists if this is a newsletter
@@ -95,7 +95,7 @@ global $mod_strings;
                 //now remove the lists that may have existed before, but were not specified in UI.
                 //this will enforce that Newsletters only have 3 available target lists.
                 foreach ($existing_pls as $pl_del) {
-                    if (!in_array($pl_del, $ui_ids)) {
+                    if (!\in_array($pl_del, $ui_ids)) {
                         $campaign_focus->prospectlists->delete($campaign_focus->id, $pl_del);
                     }
                 }
@@ -104,7 +104,7 @@ global $mod_strings;
                 //remove Target Lists if defined
 
                 if (isset($_REQUEST['wiz_remove_target_list'])) {
-                    $remove_target_strings = explode(",", $_REQUEST['wiz_remove_target_list']);
+                    $remove_target_strings = \explode(",", $_REQUEST['wiz_remove_target_list']);
                     foreach ($remove_target_strings as $remove_trgt_string) {
                         if (!empty($remove_trgt_string)) {
                             //load relationship and add to the list
@@ -117,10 +117,10 @@ global $mod_strings;
 
                 //create new campaign tracker and save if defined
                 if (isset($_REQUEST['wiz_list_of_targets'])) {
-                    $target_strings = explode(",", $_REQUEST['wiz_list_of_targets']);
+                    $target_strings = \explode(",", $_REQUEST['wiz_list_of_targets']);
                     foreach ($target_strings as $trgt_string) {
-                        $target_values = explode("@@", $trgt_string);
-                        if (count($target_values) == 3) {
+                        $target_values = \explode("@@", $trgt_string);
+                        if (\count($target_values) == 3) {
                             if (!empty($target_values[0])) {
                                 //this is a selected target, as the id is already populated, retrieve and link
                                 $trgt_focus = new ProspectList();
@@ -150,7 +150,7 @@ global $mod_strings;
 
             //remove campaign trackers if defined
             if (isset($_REQUEST['wiz_remove_tracker_list'])) {
-                $remove_tracker_strings = explode(",", $_REQUEST['wiz_remove_tracker_list']);
+                $remove_tracker_strings = \explode(",", $_REQUEST['wiz_remove_tracker_list']);
                 foreach ($remove_tracker_strings as $remove_trkr_string) {
                     if (!empty($remove_trkr_string)) {
                         //load relationship and add to the list
@@ -163,9 +163,9 @@ global $mod_strings;
 
             //save  campaign trackers and save if defined
             if (isset($_REQUEST['wiz_list_of_existing_trackers'])) {
-                $tracker_strings = explode(",", $_REQUEST['wiz_list_of_existing_trackers']);
+                $tracker_strings = \explode(",", $_REQUEST['wiz_list_of_existing_trackers']);
                 foreach ($tracker_strings as $trkr_string) {
-                    $tracker_values = explode("@@", $trkr_string);
+                    $tracker_values = \explode("@@", $trkr_string);
                     $ct_focus = new CampaignTracker();
                     $ct_focus->retrieve($tracker_values[0]);
                     if (!empty($ct_focus->tracker_name)) {
@@ -184,10 +184,10 @@ global $mod_strings;
 
             //create new campaign tracker and save if defined
             if (isset($_REQUEST['wiz_list_of_trackers'])) {
-                $tracker_strings = explode(",", $_REQUEST['wiz_list_of_trackers']);
+                $tracker_strings = \explode(",", $_REQUEST['wiz_list_of_trackers']);
                 foreach ($tracker_strings as $trkr_string) {
-                    $tracker_values = explode("@@", $trkr_string);
-                    if (count($tracker_values)==3) {
+                    $tracker_values = \explode("@@", $trkr_string);
+                    if (\count($tracker_values)==3) {
                         $ct_focus = new CampaignTracker();
                         $ct_focus->tracker_name = $tracker_values[0];
                         $ct_focus->is_optout = $tracker_values[1];
@@ -252,7 +252,7 @@ global $mod_strings;
                 //now remove the lists that may have existed before, but were not specified in UI.
                 //this will enforce that Newsletters only have 3 available target lists.
                 foreach ($existing_pls as $pl_del) {
-                    if (!in_array($pl_del, $ui_ids)) {
+                    if (!\in_array($pl_del, $ui_ids)) {
                         $campaign_focus->prospectlists->delete($campaign_focus->id, $pl_del);
                     }
                 }
@@ -261,7 +261,7 @@ global $mod_strings;
                 //remove Target Lists if defined
 
                 if (isset($_REQUEST['wiz_remove_target_list'])) {
-                    $remove_target_strings = explode(",", $_REQUEST['wiz_remove_target_list']);
+                    $remove_target_strings = \explode(",", $_REQUEST['wiz_remove_target_list']);
                     foreach ($remove_target_strings as $remove_trgt_string) {
                         if (!empty($remove_trgt_string)) {
                             //load relationship and add to the list
@@ -274,10 +274,10 @@ global $mod_strings;
 
                 //create new campaign tracker and save if defined
                 if (isset($_REQUEST['wiz_list_of_targets'])) {
-                    $target_strings = explode(",", $_REQUEST['wiz_list_of_targets']);
+                    $target_strings = \explode(",", $_REQUEST['wiz_list_of_targets']);
                     foreach ($target_strings as $trgt_string) {
-                        $target_values = explode("@@", $trgt_string);
-                        if (count($target_values) == 3) {
+                        $target_values = \explode("@@", $trgt_string);
+                        if (\count($target_values) == 3) {
                             if (!empty($target_values[0])) {
                                 //this is a selected target, as the id is already populated, retrieve and link
                                 $trgt_focus = new ProspectList();
@@ -307,7 +307,7 @@ global $mod_strings;
 
             //remove campaign trackers if defined
             if (isset($_REQUEST['wiz_remove_tracker_list'])) {
-                $remove_tracker_strings = explode(",", $_REQUEST['wiz_remove_tracker_list']);
+                $remove_tracker_strings = \explode(",", $_REQUEST['wiz_remove_tracker_list']);
                 foreach ($remove_tracker_strings as $remove_trkr_string) {
                     if (!empty($remove_trkr_string)) {
                         //load relationship and add to the list
@@ -320,9 +320,9 @@ global $mod_strings;
 
             //save  campaign trackers and save if defined
             if (isset($_REQUEST['wiz_list_of_existing_trackers'])) {
-                $tracker_strings = explode(",", $_REQUEST['wiz_list_of_existing_trackers']);
+                $tracker_strings = \explode(",", $_REQUEST['wiz_list_of_existing_trackers']);
                 foreach ($tracker_strings as $trkr_string) {
-                    $tracker_values = explode("@@", $trkr_string);
+                    $tracker_values = \explode("@@", $trkr_string);
                     $ct_focus = new CampaignTracker();
                     $ct_focus->retrieve($tracker_values[0]);
                     if (!empty($ct_focus->tracker_name)) {
@@ -341,10 +341,10 @@ global $mod_strings;
 
             //create new campaign tracker and save if defined
             if (isset($_REQUEST['wiz_list_of_trackers'])) {
-                $tracker_strings = explode(",", $_REQUEST['wiz_list_of_trackers']);
+                $tracker_strings = \explode(",", $_REQUEST['wiz_list_of_trackers']);
                 foreach ($tracker_strings as $trkr_string) {
-                    $tracker_values = explode("@@", $trkr_string);
-                    if (count($tracker_values)==3) {
+                    $tracker_values = \explode("@@", $trkr_string);
+                    if (\count($tracker_values)==3) {
                         $ct_focus = new CampaignTracker();
                         $ct_focus->tracker_name = $tracker_values[0];
                         $ct_focus->is_optout = $tracker_values[1];
@@ -400,9 +400,9 @@ global $mod_strings;
 function populate_wizard_bean_from_request($bean, $prefix)
 {
     foreach ($_REQUEST as $key=> $val) {
-        $key = trim($key);
-        if ((strstr($key, $prefix)) && (strpos($key, $prefix)== 0)) {
-            $field  =substr($key, strlen($prefix)) ;
+        $key = \trim($key);
+        if ((\strstr($key, $prefix)) && (\strpos($key, $prefix)== 0)) {
+            $field  =\substr($key, \strlen($prefix)) ;
             if (isset($_REQUEST[$key]) && !empty($_REQUEST[$key])) {
                 //echo "prefix is $prefix, field is $field,    key is $key,   and value is $val<br>";
                 $value = $_REQUEST[$key];

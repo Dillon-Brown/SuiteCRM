@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -69,7 +69,7 @@ class MetaParser
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -87,11 +87,11 @@ class MetaParser
     public function getFormContents($contents, $all = true)
     {
         if ($all) {
-            preg_match_all("'(<form[^>]*?>)(.*?)(</form[^>]*?>)'si", $contents, $matches);
+            \preg_match_all("'(<form[^>]*?>)(.*?)(</form[^>]*?>)'si", $contents, $matches);
             return $matches;
         }
 
-        preg_match("'(<form[^>]*?>)(.*?)(</form[^>]*?>)'si", $contents, $matches);
+        \preg_match("'(<form[^>]*?>)(.*?)(</form[^>]*?>)'si", $contents, $matches);
         return $this->convertToTagElement($matches);
         //return $matches;
     }
@@ -105,7 +105,7 @@ class MetaParser
      */
     public function getFormElements($contents)
     {
-        preg_match_all("'(<[ ]*?)(textarea|input|select)([^>]*?)(>)'si", $contents, $matches, PREG_PATTERN_ORDER);
+        \preg_match_all("'(<[ ]*?)(textarea|input|select)([^>]*?)(>)'si", $contents, $matches, PREG_PATTERN_ORDER);
         $elems = array();
         foreach ($matches[3] as $match) {
             $elems[] = $match;
@@ -122,7 +122,7 @@ class MetaParser
      */
     public function getFormElementsNames($contents)
     {
-        preg_match_all("'(<[ ]*?)(textarea|input|select)[^>]*?name=[\'\"]([^\'\"]*?)(\[\])?(_basic)?[\'\"]([^>]*?>)'si", $contents, $matches, PREG_PATTERN_ORDER);
+        \preg_match_all("'(<[ ]*?)(textarea|input|select)[^>]*?name=[\'\"]([^\'\"]*?)(\[\])?(_basic)?[\'\"]([^>]*?>)'si", $contents, $matches, PREG_PATTERN_ORDER);
         return !empty($matches[3]) ? $matches[3] : null;
     }
 
@@ -140,14 +140,14 @@ class MetaParser
         //$exp = "'".$name."[ ]*?=[ ]*?[\'\"]([a-zA-Z0-9\_\[\]]*)[\'\"]'si";
 
         $exp = "'".$name."[\s]*?=[\s]*?[\'\"]([^\'^\"]*?)[\'\"]'si";
-        preg_match_all($exp, $contents, $matches, PREG_SET_ORDER);
+        \preg_match_all($exp, $contents, $matches, PREG_SET_ORDER);
         if (empty($filter)) {
             return !empty($matches[0][1]) ? $matches[0][1] : '';
         }
 
         $filtered = array();
         foreach ($matches as $tag) {
-            if (preg_match($filter, $tag[1])) {
+            if (\preg_match($filter, $tag[1])) {
                 $filtered[] = $tag;
             }
         }
@@ -166,14 +166,14 @@ class MetaParser
      */
     public function getTables($tableClass = null, $contents = '')
     {
-        preg_match_all("'(<table[^>]*?>)(.*?)(</table[^>]*?>)'si", $contents, $matches, PREG_SET_ORDER);
+        \preg_match_all("'(<table[^>]*?>)(.*?)(</table[^>]*?>)'si", $contents, $matches, PREG_SET_ORDER);
         if ($tableClass == null) {
             return $matches;
         }
 
         $tables = array();
         foreach ($matches as $key => $table) {
-            if (strpos($table[1], $tableClass) > 0) {
+            if (\strpos($table[1], $tableClass) > 0) {
                 $tables[] = $table;
             }
         }
@@ -194,30 +194,30 @@ class MetaParser
      */
     public function getElementsByType($type, $contents)
     {
-        $x = strlen($contents);
+        $x = \strlen($contents);
         $mark = 0;
         $count = 0;
-        $stag1 = "<" . trim($type, " <>") . '>';
-        $stag2 = "<" . trim($type, " <>") . ' ';
+        $stag1 = "<" . \trim($type, " <>") . '>';
+        $stag2 = "<" . \trim($type, " <>") . ' ';
         $etag = "</".$type.">";
-        $sincrement = strlen($stag1);
-        $eincrement = strlen($etag);
+        $sincrement = \strlen($stag1);
+        $eincrement = \strlen($etag);
         $sarr = array();
         $values = array();
 
         while ($count < $x) {
-            $stok = substr($contents, $count, $sincrement);
-            $etok = substr($contents, $count, $eincrement);
+            $stok = \substr($contents, $count, $sincrement);
+            $etok = \substr($contents, $count, $eincrement);
             if ($stok == $stag1 || $stok == $stag2) {
                 //Reset mark;
-                if (count($sarr) == 0) {
+                if (\count($sarr) == 0) {
                     $mark = $count;
                 }
                 $sarr[] = $count;
             } elseif ($etok == $etag) {
-                array_shift($sarr);
-                if (count($sarr) == 0) {
-                    $val = substr($contents, $mark, ($count - $mark) + $eincrement);
+                \array_shift($sarr);
+                if (\count($sarr) == 0) {
+                    $val = \substr($contents, $mark, ($count - $mark) + $eincrement);
                     $values[] = $val;
                     $mark = $count;
                 }
@@ -238,14 +238,14 @@ class MetaParser
     public function getElementValue($type, $contents, $filter = "(.*?)")
     {
         $exp = "'<".$type."[^>]*?>".$filter."</".$type."[^>]*?>'si";
-        preg_match($exp, $contents, $matches);
+        \preg_match($exp, $contents, $matches);
         return isset($matches[1]) ? $matches[1] : '';
     }
 
 
     public function stripComments($contents)
     {
-        return preg_replace("'(<!--.*?-->)'si", "", $contents);
+        return \preg_replace("'(<!--.*?-->)'si", "", $contents);
     }
 
     /**
@@ -261,9 +261,9 @@ class MetaParser
         $flavor = isset($GLOBALS['sugar_flavor']) ? $GLOBALS['sugar_flavor'] : 'PRO';
         $isPro = ($flavor == 'ENT' || $flavor == 'PRO') ? true : false;
         if ($isPro) {
-            $contents = preg_replace('/<!-- BEGIN: open_source -->.*?<!-- END: open_source -->/', '', $contents);
+            $contents = \preg_replace('/<!-- BEGIN: open_source -->.*?<!-- END: open_source -->/', '', $contents);
         } else {
-            $contents = preg_replace('/<!-- BEGIN: pro -->.*?<!-- END: pro -->/', '', $contents);
+            $contents = \preg_replace('/<!-- BEGIN: pro -->.*?<!-- END: pro -->/', '', $contents);
         }
         return $contents;
     }
@@ -277,10 +277,10 @@ class MetaParser
      */
     public function getMaxColumns($contents, $filter)
     {
-        preg_match_all("'(<tr[^>]*?>)(.*?)(</tr[^>]*?>)'si", $contents, $matches, PREG_SET_ORDER);
+        \preg_match_all("'(<tr[^>]*?>)(.*?)(</tr[^>]*?>)'si", $contents, $matches, PREG_SET_ORDER);
         $max = 0;
         foreach ($matches as $tableRows) {
-            $count = substr_count($tableRows[2], $filter);
+            $count = \substr_count($tableRows[2], $filter);
             if ($count > $max) {
                 $max = $count;
             }
@@ -295,7 +295,7 @@ class MetaParser
 
         foreach ($matches as $data) {
             // We need 4 because the 1,2,3 indexes make up start,body,end
-            if (count($data) == 4) {
+            if (\count($data) == 4) {
                 $element = array();
                 $element['start'] = $data[1];
                 $element['body'] = $data[2];
@@ -313,9 +313,9 @@ class MetaParser
      */
     public function trimHTML($contents)
     {
-        $contents = str_replace(array("\r"), array(""), $contents);
-        $contents = str_replace(array("\n"), array(""), $contents);
-        $contents = str_replace(array("\t"), array(""), $contents);
+        $contents = \str_replace(array("\r"), array(""), $contents);
+        $contents = \str_replace(array("\n"), array(""), $contents);
+        $contents = \str_replace(array("\t"), array(""), $contents);
         return $contents;
     }
 
@@ -336,7 +336,7 @@ class MetaParser
         $javascript = null;
 
         //Check if there are Javascript blocks of code to process
-        preg_match_all("'(<script[^>]*?>)(.*?)(</script[^>]*?>)'si", $contents, $matches, PREG_PATTERN_ORDER);
+        \preg_match_all("'(<script[^>]*?>)(.*?)(</script[^>]*?>)'si", $contents, $matches, PREG_PATTERN_ORDER);
         if (empty($matches)) {
             return $javascript;
         }
@@ -345,24 +345,24 @@ class MetaParser
             $javascript .= "\n" . $scriptBlock;
         } //foreach
 
-        $javascript = substr($javascript, 1);
+        $javascript = \substr($javascript, 1);
 
         //Remove stuff first
         //1) Calendar.setup {..} blocks
-        $javascript = preg_replace('/Calendar.setup[\s]*[\(][^\)]*?[\)][\s]*;/si', '', $javascript);
+        $javascript = \preg_replace('/Calendar.setup[\s]*[\(][^\)]*?[\)][\s]*;/si', '', $javascript);
 
         //Find all blocks that may need to be replaced with Smarty syntax
-        preg_match_all("'([\{])([a-zA-Z0-9_]*?)([\}])'si", $javascript, $matches, PREG_PATTERN_ORDER);
+        \preg_match_all("'([\{])([a-zA-Z0-9_]*?)([\}])'si", $javascript, $matches, PREG_PATTERN_ORDER);
         if (!empty($matches)) {
             $replace = array();
 
             foreach ($matches[0] as $xTemplateCode) {
                 if (!isset($replace[$xTemplateCode])) {
-                    $replace[$xTemplateCode] = str_replace("{", "{\$", $xTemplateCode);
+                    $replace[$xTemplateCode] = \str_replace("{", "{\$", $xTemplateCode);
                 } //if
             } //foreach
 
-    $javascript = str_replace(array_keys($replace), array_values($replace), $javascript);
+    $javascript = \str_replace(\array_keys($replace), \array_values($replace), $javascript);
         } //if
 
         if (!$addLiterals) {
@@ -375,7 +375,7 @@ class MetaParser
     public static function parseDelimiters($javascript)
     {
         $newJavascript = '';
-        $scriptLength = strlen($javascript);
+        $scriptLength = \strlen($javascript);
         $count = 0;
         $inSmartyVariable = false;
 
@@ -388,7 +388,7 @@ class MetaParser
                     $numOfChars++;
                 }
 
-                $newJavascript .= substr($javascript, $start, $numOfChars);
+                $newJavascript .= \substr($javascript, $start, $numOfChars);
                 $inSmartyVariable = false;
             } else {
                 $char = $javascript[$count];
@@ -430,13 +430,13 @@ class MetaParser
         }
 
         if (!isset($this->mPHPFile)) {
-            if (preg_match('/(.*?)(DetailView).html$/', $filePath, $matches)) {
+            if (\preg_match('/(.*?)(DetailView).html$/', $filePath, $matches)) {
                 $dir = $matches[1];
-            } elseif (preg_match('/(.*?)(EditView).html$/', $filePath, $matches)) {
+            } elseif (\preg_match('/(.*?)(EditView).html$/', $filePath, $matches)) {
                 $dir = $matches[1];
             }
 
-            if (!isset($dir) || !is_dir($dir)) {
+            if (!isset($dir) || !\is_dir($dir)) {
                 $this->mPHPFile = "INVALID";
                 return $name;
             }
@@ -444,21 +444,21 @@ class MetaParser
             $filesInDir = $this->dirList($dir);
             $phpFile = $matches[2].'.*?[\.]php';
             foreach ($filesInDir as $file) {
-                if (preg_match("/$phpFile/", $file)) {
+                if (\preg_match("/$phpFile/", $file)) {
                     $this->mPHPFile = $matches[1] . $file;
                     break;
                 }
             }
 
-            if (!isset($this->mPHPFile) || !file_exists($this->mPHPFile)) {
+            if (!isset($this->mPHPFile) || !\file_exists($this->mPHPFile)) {
                 $this->mPHPFile = "INVALID";
                 return $name;
             }
         }
 
-        $phpContents = file_get_contents($this->mPHPFile);
-        $uname = strtoupper($name);
-        if (preg_match("/xtpl->assign[\(][\"\']".$uname."[\"\'][\s]*?,[\s]*?[\$]focus->(.*?)[\)]/si", $phpContents, $matches)) {
+        $phpContents = \file_get_contents($this->mPHPFile);
+        $uname = \strtoupper($name);
+        if (\preg_match("/xtpl->assign[\(][\"\']".$uname."[\"\'][\s]*?,[\s]*?[\$]focus->(.*?)[\)]/si", $phpContents, $matches)) {
             return $matches[1];
         }
         return $name;
@@ -479,10 +479,10 @@ class MetaParser
         $results = array();
 
         // create a handler for the directory
-        $handler = opendir($directory);
+        $handler = \opendir($directory);
 
         // keep going until all files in directory have been read
-        while ($file = readdir($handler)) {
+        while ($file = \readdir($handler)) {
             // if $file isn't this directory or its parent,
             // add it to the results array
             if ($file != '.' && $file != '..') {
@@ -491,7 +491,7 @@ class MetaParser
         }
 
         // tidy up: close the handler
-        closedir($handler);
+        \closedir($handler);
         return $results;
     }
 
@@ -506,20 +506,20 @@ class MetaParser
      */
     public function getCustomField($elementNames)
     {
-        if (!isset($elementNames) || (!is_string($elementNames) && !is_array($elementNames))) {
+        if (!isset($elementNames) || (!\is_string($elementNames) && !\is_array($elementNames))) {
             return null;
         }
 
-        if (is_string($elementNames)) {
-            if (preg_match('/(.+_c)(_basic)?(\[\])?$/', $elementNames, $matches)) {
-                return count($matches) == 1 ? $matches[0] : $matches[1];
+        if (\is_string($elementNames)) {
+            if (\preg_match('/(.+_c)(_basic)?(\[\])?$/', $elementNames, $matches)) {
+                return \count($matches) == 1 ? $matches[0] : $matches[1];
             }
             return null;
         }
 
         foreach ($elementNames as $name) {
-            if (preg_match('/(.+_c)(_basic)?(\[\])?$/', $name, $matches)) {
-                return count($matches) == 1 ? $matches[0] : $matches[1];
+            if (\preg_match('/(.+_c)(_basic)?(\[\])?$/', $name, $matches)) {
+                return \count($matches) == 1 ? $matches[0] : $matches[1];
             }
         }
 
@@ -528,7 +528,7 @@ class MetaParser
 
     public function applyPreRules($moduleDir, $panels)
     {
-        if (file_exists("include/SugarFields/Parsers/Rules/".$moduleDir."ParseRule.php")) {
+        if (\file_exists("include/SugarFields/Parsers/Rules/".$moduleDir."ParseRule.php")) {
             require_once("include/SugarFields/Parsers/Rules/".$moduleDir."ParseRule.php");
             $class = $moduleDir."ParseRule";
             $parseRule = new $class();
@@ -545,7 +545,7 @@ class MetaParser
     public function applyPostRules($moduleDir, $panels)
     {
         //Run module specific rules
-        if (file_exists("include/SugarFields/Parsers/Rules/".$moduleDir."ParseRule.php")) {
+        if (\file_exists("include/SugarFields/Parsers/Rules/".$moduleDir."ParseRule.php")) {
             require_once("include/SugarFields/Parsers/Rules/".$moduleDir."ParseRule.php");
             $class = $moduleDir."ParseRule";
             $parseRule = new $class();
@@ -557,7 +557,7 @@ class MetaParser
         $rules = ParseRules::getRules();
 
         foreach ($rules as $rule) {
-            if (!file_exists($rule['file'])) {
+            if (!\file_exists($rule['file'])) {
                 $GLOBALS['log']->error("Cannot run rule for " . $rule['file']);
                 continue;
             } //if
@@ -590,11 +590,11 @@ class MetaParser
     ),";
         } else {
             $header .= "\$viewdefs['$moduleDir']['$this->mView'] = array(
-    'templateMeta' =>" . var_export($templateMeta, true) . ",";
+    'templateMeta' =>" . \var_export($templateMeta, true) . ",";
         }
 
         //Replace all the @sq (single quote tags that may have been inserted)
-        $header = preg_replace('/\@sq/', "'", $header);
+        $header = \preg_replace('/\@sq/', "'", $header);
 
         /*
         $contents = file_get_contents($htmlFilePath);
@@ -614,9 +614,9 @@ class MetaParser
 ?>";
 
         $metadata = '';
-        $body = var_export($panels, true);
+        $body = \var_export($panels, true);
         $metadata = $header . $body . $footer;
-        $metadata = preg_replace('/(\d+)[\s]=>[\s]?/', "", $metadata);
+        $metadata = \preg_replace('/(\d+)[\s]=>[\s]?/', "", $metadata);
         return $metadata;
     }
 
@@ -636,12 +636,12 @@ class MetaParser
         $hasMultiplePanels = $this->hasMultiplePanels($masterpanels);
 
         if (!$hasMultiplePanels) {
-            $keys = array_keys($viewdefs[$moduleDir][$this->mView]['panels']);
-            if (!empty($keys) && count($keys) == 1) {
-                if (strtolower($keys[0]) == 'default') {
+            $keys = \array_keys($viewdefs[$moduleDir][$this->mView]['panels']);
+            if (!empty($keys) && \count($keys) == 1) {
+                if (\strtolower($keys[0]) == 'default') {
                     $masterpanels = array('default'=>$viewdefs[$moduleDir][$this->mView]['panels'][$keys[0]]);
                 } else {
-                    $firstPanel = array_values($viewdefs[$moduleDir][$this->mView]['panels']);
+                    $firstPanel = \array_values($viewdefs[$moduleDir][$this->mView]['panels']);
                     $masterpanels = array('default'=> $firstPanel[0]);
                 }
             } else {
@@ -656,10 +656,10 @@ class MetaParser
 
                 foreach ($panels[$name] as $rowKey=>$row) {
                     foreach ($row as $colKey=>$column) {
-                        if (is_array($column) && !empty($column['name'])) {
+                        if (\is_array($column) && !empty($column['name'])) {
                             $existingElements[$column['name']] = $column['name'];
                             $existingLocation[$column['name']] = array("panel"=>$name, "row"=>$rowKey, "col"=>$colKey);
-                        } elseif (!is_array($column) && !empty($column)) {
+                        } elseif (!\is_array($column) && !empty($column)) {
                             $existingElements[$column] = $column;
                             $existingLocation[$column] = array("panel"=>$name, "row"=>$rowKey, "col"=>$colKey);
                         }
@@ -671,9 +671,9 @@ class MetaParser
                     $addRow = array();
 
                     foreach ($row as $colKey=>$column) {
-                        if (is_array($column) && isset($column['name'])) {
+                        if (\is_array($column) && isset($column['name'])) {
                             $id = $column['name'];
-                        } elseif (!is_array($column) && !empty($column)) {
+                        } elseif (!\is_array($column) && !empty($column)) {
                             $id = $column;
                         } else {
                             continue;
@@ -682,8 +682,8 @@ class MetaParser
                             //Only add if
                             // 1) if it is a required field (as defined in metadata)
                             // 2) or if it has a customLabel and customCode (a very deep customization)
-                            if ((is_array($column) && !empty($column['displayParams']['required'])) ||
-                                 (is_array($column) && !empty($column['customCode']) && !empty($column['customLabel']))) {
+                            if ((\is_array($column) && !empty($column['displayParams']['required'])) ||
+                                 (\is_array($column) && !empty($column['customCode']) && !empty($column['customLabel']))) {
                                 $addRow[] = $column;
                             }
                         } else {
@@ -705,7 +705,7 @@ class MetaParser
         // We're not done yet... go through the $panels Array now and try to remove duplicate
         // or empty panels
         foreach ($panels as $name=>$panel) {
-            if (count($panel) == 0 || !isset($masterpanels[$name])) {
+            if (\count($panel) == 0 || !isset($masterpanels[$name])) {
                 unset($panels[$name]);
             }
         } //foreach
@@ -728,7 +728,7 @@ class MetaParser
 
         if (isset($masterTemplateMeta['javascript'])) {
             //Insert the getJSPath code back into src value
-            $masterTemplateMeta['javascript'] = preg_replace('/src\s*=\s*[\'\"].*?(modules\/|include\/)([^\.]*?\.js)([^\'\"]*?)[\'\"]/i', 'src="@sq . getJSPath(@sq${1}${2}@sq) . @sq"', $masterTemplateMeta['javascript']);
+            $masterTemplateMeta['javascript'] = \preg_replace('/src\s*=\s*[\'\"].*?(modules\/|include\/)([^\.]*?\.js)([^\'\"]*?)[\'\"]/i', 'src="@sq . getJSPath(@sq${1}${2}@sq) . @sq"', $masterTemplateMeta['javascript']);
         }
 
         return $masterTemplateMeta;
@@ -740,25 +740,25 @@ class MetaParser
             return false;
         }
 
-        return preg_match('/\<(div|span) class=(\")?required(\")?\s?>\*<\/(div|span)>/si', $html);
+        return \preg_match('/\<(div|span) class=(\")?required(\")?\s?>\*<\/(div|span)>/si', $html);
     }
 
     public function hasMultiplePanels($panels)
     {
-        if (!isset($panels) || empty($panels) || !is_array($panels)) {
+        if (!isset($panels) || empty($panels) || !\is_array($panels)) {
             return false;
         }
 
-        if (is_array($panels) && (count($panels) == 0 || count($panels) == 1)) {
+        if (\is_array($panels) && (\count($panels) == 0 || \count($panels) == 1)) {
             return false;
         }
 
         foreach ($panels as $panel) {
-            if (!empty($panel) && !is_array($panel)) {
+            if (!empty($panel) && !\is_array($panel)) {
                 return false;
             }
             foreach ($panel as $row) {
-                if (!empty($row) && !is_array($row)) {
+                if (!empty($row) && !\is_array($row)) {
                     return false;
                 } //if
             } //foreach
@@ -770,15 +770,15 @@ class MetaParser
 
     public function getRelateFieldName($mixed='')
     {
-        if (!is_array($mixed)) {
+        if (!\is_array($mixed)) {
             return '';
-        } elseif (count($mixed) == 2) {
+        } elseif (\count($mixed) == 2) {
             $id = '';
             $name = '';
             foreach ($mixed as $el) {
-                if (preg_match('/_id$/', $el)) {
+                if (\preg_match('/_id$/', $el)) {
                     $id = $el;
-                } elseif (preg_match('/_name$/', $el)) {
+                } elseif (\preg_match('/_name$/', $el)) {
                     $name = $el;
                 }
             }
@@ -801,8 +801,8 @@ class MetaParser
      */
     public function fixTablesWithMissingTr($tableContents)
     {
-        if (preg_match('/(<table[^>]*?[\/]?>\s*?<td)/i', $tableContents, $matches)) {
-            return preg_replace('/(<table[^>]*?[\/]?>\s*?<td)/i', '<table><tr><td', $tableContents);
+        if (\preg_match('/(<table[^>]*?[\/]?>\s*?<td)/i', $tableContents, $matches)) {
+            return \preg_replace('/(<table[^>]*?[\/]?>\s*?<td)/i', '<table><tr><td', $tableContents);
         }
         return $tableContents;
     }
@@ -813,8 +813,8 @@ class MetaParser
      */
     public function fixRowsWithMissingTr($tableContents)
     {
-        if (preg_match('/(<\/tr[^>]*?[\/]?>\s*?<td)/i', $tableContents, $matches)) {
-            return preg_replace('/(<\/tr[^>]*?[\/]?>\s*?<td)/i', '</tr><tr><td', $tableContents);
+        if (\preg_match('/(<\/tr[^>]*?[\/]?>\s*?<td)/i', $tableContents, $matches)) {
+            return \preg_replace('/(<\/tr[^>]*?[\/]?>\s*?<td)/i', '</tr><tr><td', $tableContents);
         }
         return $tableContents;
     }
@@ -825,8 +825,8 @@ class MetaParser
      */
     public function fixDuplicateTrTags($tableContents)
     {
-        if (preg_match('/(<tr[^>]*?[\/]?>\s*?<tr)/i', $tableContents, $matches)) {
-            return preg_replace('/(<tr[^>]*?[\/]?>\s*?<tr)/i', '<tr', $tableContents);
+        if (\preg_match('/(<tr[^>]*?[\/]?>\s*?<tr)/i', $tableContents, $matches)) {
+            return \preg_replace('/(<tr[^>]*?[\/]?>\s*?<tr)/i', '<tr', $tableContents);
         }
         return $tableContents;
     }
@@ -838,7 +838,7 @@ class MetaParser
      */
     public function findSingleVardefElement($formElements=array(), $vardefs=array())
     {
-        if (empty($formElements) || !is_array($formElements)) {
+        if (empty($formElements) || !\is_array($formElements)) {
             return '';
         }
 
@@ -849,6 +849,6 @@ class MetaParser
             }
         }
 
-        return count($found) == 1 ? $found[0] : '';
+        return \count($found) == 1 ? $found[0] : '';
     }
 }

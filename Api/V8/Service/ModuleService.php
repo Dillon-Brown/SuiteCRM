@@ -122,9 +122,9 @@ class ModuleService
 
         // pagination
         if ($data && $limit !== BeanManager::DEFAULT_LIMIT) {
-            $totalPages = ceil($realRowCount / $size);
+            $totalPages = \ceil($realRowCount / $size);
 
-            $paginationMeta = $this->paginationHelper->getPaginationMeta($totalPages, count($data));
+            $paginationMeta = $this->paginationHelper->getPaginationMeta($totalPages, \count($data));
             $paginationLinks = $this->paginationHelper->getPaginationLinks($request, $totalPages, $number);
 
             $response->setMeta($paginationMeta);
@@ -148,7 +148,7 @@ class ModuleService
         $attributes = $params->getData()->getAttributes();
 
         if ($id !== null && $this->beanManager->getBean($module, $id, [], false) instanceof \SugarBean) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new \InvalidArgumentException(\sprintf(
                 'Bean %s with id %s is already exist',
                 $module,
                 $id
@@ -225,7 +225,7 @@ class ModuleService
 
         $response = new DocumentResponse();
         $response->setMeta(
-            new MetaResponse(['message' => sprintf('Record with id %s is deleted', $bean->id)])
+            new MetaResponse(['message' => \sprintf('Record with id %s is deleted', $bean->id)])
         );
 
         return $response;

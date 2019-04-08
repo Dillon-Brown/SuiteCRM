@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -118,7 +118,7 @@ class AccountFormBase
             global $mod_strings;
         }
         global $app_strings;
-        $cols = sizeof($rows[0]) * 2 + 1;
+        $cols = \sizeof($rows[0]) * 2 + 1;
         if ($action != 'ShowDuplicates') {
             $form = "<form action='index.php' method='post' id='dupAccounts'  name='dupAccounts'><input type='hidden' name='selectedAccount' value=''>";
             $form .= '<table width="100%"><tr><td>'.$mod_strings['MSG_DUPLICATE']. '</td></tr><tr><td height="20"></td></tr></table>';
@@ -379,7 +379,7 @@ EOQ;
 EOQ;
         //carry forward custom lead fields common to accounts during Lead Conversion
         $tempAccount = new Account();
-        if (method_exists($contact, 'convertCustomFieldsForm')) {
+        if (\method_exists($contact, 'convertCustomFieldsForm')) {
             $contact->convertCustomFieldsForm($form, $tempAccount, $prefix);
         }
         unset($tempAccount);
@@ -404,7 +404,7 @@ EOQ;
 
         $focus = new Account();
 
-        if ($useRequired &&  !checkRequired($prefix, array_keys($focus->required_fields))) {
+        if ($useRequired &&  !checkRequired($prefix, \array_keys($focus->required_fields))) {
             return null;
         }
         $focus = populateFromPost($prefix, $focus);
@@ -431,14 +431,14 @@ EOQ;
 
                 //add all of the post fields to redirect get string
                 foreach ($focus->column_fields as $field) {
-                    if (!empty($focus->$field) && !is_object($focus->$field)) {
-                        $get .= "&Accounts$field=".urlencode($focus->$field);
+                    if (!empty($focus->$field) && !\is_object($focus->$field)) {
+                        $get .= "&Accounts$field=".\urlencode($focus->$field);
                     }
                 }
 
                 foreach ($focus->additional_column_fields as $field) {
                     if (!empty($focus->$field)) {
-                        $get .= "&Accounts$field=".urlencode($focus->$field);
+                        $get .= "&Accounts$field=".\urlencode($focus->$field);
                     }
                 }
             
@@ -446,7 +446,7 @@ EOQ;
                 if ($focus->hasCustomFields()) {
                     foreach ($focus->field_defs as $name=>$field) {
                         if (!empty($field['source']) && $field['source'] == 'custom_fields') {
-                            $get .= "&Accounts$name=".urlencode($focus->$name);
+                            $get .= "&Accounts$name=".\urlencode($focus->$name);
                         }
                     }
                 }
@@ -472,21 +472,21 @@ EOQ;
                         $urlData[$var] = $_POST[$var];
                     }
                 }
-                $get .= "&".http_build_query($urlData);
+                $get .= "&".\http_build_query($urlData);
 
                 $_SESSION['SHOW_DUPLICATES'] = $get;
                 //now redirect the post to modules/Accounts/ShowDuplicates.php
                 if (!empty($_POST['is_ajax_call']) && $_POST['is_ajax_call'] == '1') {
-                    ob_clean();
+                    \ob_clean();
                     $json = getJSONobj();
                     echo $json->encode(array('status' => 'dupe', 'get' => $location));
                 } elseif (!empty($_REQUEST['ajax_load'])) {
                     echo "<script>SUGAR.ajaxUI.loadContent('index.php?$location');</script>";
                 } else {
                     if (!empty($_POST['to_pdf'])) {
-                        $location .= '&to_pdf='.urlencode($_POST['to_pdf']);
+                        $location .= '&to_pdf='.\urlencode($_POST['to_pdf']);
                     }
-                    header("Location: index.php?$location");
+                    \header("Location: index.php?$location");
                 }
                 return null;
             }
@@ -537,7 +537,7 @@ EOQ;
                     $urlData[$var] = $_POST[$var];
                 }
             }
-            header("Location: index.php?".http_build_query($urlData));
+            \header("Location: index.php?".\http_build_query($urlData));
             return;
         }
         if ($redirect) {

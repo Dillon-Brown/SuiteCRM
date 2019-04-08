@@ -51,7 +51,7 @@ class AOP_Case_UpdatesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $aopCaseUpdates->save();
 
         //test for record ID to verify that record is saved
-        $this->assertEquals(36, strlen($aopCaseUpdates->id));
+        $this->assertEquals(36, \strlen($aopCaseUpdates->id));
 
         //mark the record as deleted for cleanup
         $aopCaseUpdates->mark_deleted($aopCaseUpdates->id);
@@ -81,7 +81,7 @@ class AOP_Case_UpdatesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method and verify that it returns an array
         $result = $aopCaseUpdates->getContacts();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testgetUpdateContact()

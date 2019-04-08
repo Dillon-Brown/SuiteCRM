@@ -155,7 +155,7 @@ class OneLogin_Saml2_Auth
      */
     public function setStrict($value)
     {
-        if (! (is_bool($value))) {
+        if (! (\is_bool($value))) {
             throw new OneLogin_Saml2_Error(
                 'Invalid value passed to setStrict()',
                 OneLogin_Saml2_Error::SETTINGS_INVALID_SYNTAX
@@ -236,7 +236,7 @@ class OneLogin_Saml2_Auth
                     if ($cbDeleteSession === null) {
                         OneLogin_Saml2_Utils::deleteLocalSession();
                     } else {
-                        call_user_func($cbDeleteSession);
+                        \call_user_func($cbDeleteSession);
                     }
                 }
             }
@@ -251,7 +251,7 @@ class OneLogin_Saml2_Auth
                     if ($cbDeleteSession === null) {
                         OneLogin_Saml2_Utils::deleteLocalSession();
                     } else {
-                        call_user_func($cbDeleteSession);
+                        \call_user_func($cbDeleteSession);
                     }
                 }
                 $inResponseTo = $logoutRequest->id;
@@ -295,8 +295,8 @@ class OneLogin_Saml2_Auth
      */
     public function redirectTo($url = '', $parameters = array(), $stay = false)
     {
-        assert('is_string($url)');
-        assert('is_array($parameters)');
+        \assert('is_string($url)');
+        \assert('is_array($parameters)');
 
         if (empty($url) && isset($_REQUEST['RelayState'])) {
             $url = $_REQUEST['RelayState'];
@@ -404,7 +404,7 @@ class OneLogin_Saml2_Auth
      */
     public function getAttribute($name)
     {
-        assert('is_string($name)');
+        \assert('is_string($name)');
 
         $value = null;
         if (isset($this->_attributes[$name])) {
@@ -427,7 +427,7 @@ class OneLogin_Saml2_Auth
      */
     public function login($returnTo = null, $parameters = array(), $forceAuthn = false, $isPassive = false, $stay = false, $setNameIdPolicy = true)
     {
-        assert('is_array($parameters)');
+        \assert('is_array($parameters)');
 
         $authnRequest = new OneLogin_Saml2_AuthnRequest($this->_settings, $forceAuthn, $isPassive, $setNameIdPolicy);
 
@@ -469,7 +469,7 @@ class OneLogin_Saml2_Auth
      */
     public function logout($returnTo = null, $parameters = array(), $nameId = null, $sessionIndex = null, $stay = false, $nameIdFormat = null, $nameIdNameQualifier = null)
     {
-        assert('is_array($parameters)');
+        \assert('is_array($parameters)');
 
         $sloUrl = $this->getSLOurl();
         if (empty($sloUrl)) {
@@ -575,20 +575,20 @@ class OneLogin_Saml2_Auth
 
         $security = $this->_settings->getSecurityData();
         if ($security['lowercaseUrlencoding']) {
-            $msg = 'SAMLRequest='.rawurlencode($samlRequest);
+            $msg = 'SAMLRequest='.\rawurlencode($samlRequest);
             if (isset($relayState)) {
-                $msg .= '&RelayState='.rawurlencode($relayState);
+                $msg .= '&RelayState='.\rawurlencode($relayState);
             }
-            $msg .= '&SigAlg=' . rawurlencode($signAlgorithm);
+            $msg .= '&SigAlg=' . \rawurlencode($signAlgorithm);
         } else {
-            $msg = 'SAMLRequest='.urlencode($samlRequest);
+            $msg = 'SAMLRequest='.\urlencode($samlRequest);
             if (isset($relayState)) {
-                $msg .= '&RelayState='.urlencode($relayState);
+                $msg .= '&RelayState='.\urlencode($relayState);
             }
-            $msg .= '&SigAlg=' . urlencode($signAlgorithm);
+            $msg .= '&SigAlg=' . \urlencode($signAlgorithm);
         }
         $signature = $objKey->signData($msg);
-        return base64_encode($signature);
+        return \base64_encode($signature);
     }
 
     /**
@@ -618,20 +618,20 @@ class OneLogin_Saml2_Auth
 
         $security = $this->_settings->getSecurityData();
         if ($security['lowercaseUrlencoding']) {
-            $msg = 'SAMLResponse='.rawurlencode($samlResponse);
+            $msg = 'SAMLResponse='.\rawurlencode($samlResponse);
             if (isset($relayState)) {
-                $msg .= '&RelayState='.rawurlencode($relayState);
+                $msg .= '&RelayState='.\rawurlencode($relayState);
             }
-            $msg .= '&SigAlg=' . rawurlencode($signAlgorithm);
+            $msg .= '&SigAlg=' . \rawurlencode($signAlgorithm);
         } else {
-            $msg = 'SAMLResponse='.urlencode($samlResponse);
+            $msg = 'SAMLResponse='.\urlencode($samlResponse);
             if (isset($relayState)) {
-                $msg .= '&RelayState='.urlencode($relayState);
+                $msg .= '&RelayState='.\urlencode($relayState);
             }
-            $msg .= '&SigAlg=' . urlencode($signAlgorithm);
+            $msg .= '&SigAlg=' . \urlencode($signAlgorithm);
         }
         $signature = $objKey->signData($msg);
-        return base64_encode($signature);
+        return \base64_encode($signature);
     }
 
     /**
@@ -683,7 +683,7 @@ class OneLogin_Saml2_Auth
     {
         $response = null;
         if (isset($this->_lastResponse)) {
-            if (is_string($this->_lastResponse)) {
+            if (\is_string($this->_lastResponse)) {
                 $response = $this->_lastResponse;
             } else {
                 $response = $this->_lastResponse->saveXML();

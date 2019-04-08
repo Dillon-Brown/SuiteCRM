@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -89,10 +89,10 @@ class ViewLanguages extends SugarView
         $disabled = array();
         $disabled_list = array();
         if (isset($sugar_config['disabled_languages'])) {
-            if (!is_array($sugar_config['disabled_languages'])) {
-                $disabled_list = array_flip(explode(',', $sugar_config['disabled_languages']));
+            if (!\is_array($sugar_config['disabled_languages'])) {
+                $disabled_list = \array_flip(\explode(',', $sugar_config['disabled_languages']));
             } else {
-                $disabled_list = array_flip($sugar_config['disabled_languages']);
+                $disabled_list = \array_flip($sugar_config['disabled_languages']);
             }
         }
         foreach ($sugar_config['languages'] as $key=>$value) {
@@ -105,8 +105,8 @@ class ViewLanguages extends SugarView
 
         $this->ss->assign('APP', $GLOBALS['app_strings']);
         $this->ss->assign('MOD', $GLOBALS['mod_strings']);
-        $this->ss->assign('enabled_langs', json_encode($enabled));
-        $this->ss->assign('disabled_langs', json_encode($disabled));
+        $this->ss->assign('enabled_langs', \json_encode($enabled));
+        $this->ss->assign('disabled_langs', \json_encode($disabled));
         $this->ss->assign('title', $this->getModuleTitle(false));
 
         echo $this->ss->fetch('modules/Administration/templates/Languages.tpl');

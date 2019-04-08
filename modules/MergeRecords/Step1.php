@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -88,17 +88,17 @@ $bean_data=array();
 foreach ($temp_field_array as $field_array) {
     if (isset($field_array['merge_filter'])
     ) {
-        if (strtolower($field_array['merge_filter'])=='enabled' or strtolower($field_array['merge_filter'])=='selected') {
+        if (\strtolower($field_array['merge_filter'])=='enabled' or \strtolower($field_array['merge_filter'])=='selected') {
             $col_name = $field_array['name'];
 
                             
             if (!isset($focus->merge_bean_strings[$field_array['vname']])) {
                 $col_label = $col_name;
             } else {
-                $col_label = str_replace(':', '', $focus->merge_bean_strings[$field_array['vname']]);
+                $col_label = \str_replace(':', '', $focus->merge_bean_strings[$field_array['vname']]);
             }
             
-            if (strtolower($field_array['merge_filter'])=='selected') {
+            if (\strtolower($field_array['merge_filter'])=='selected') {
                 $sel_fields[$col_name]=$col_label;
             } else {
                 $avail_fields[$col_name] = $col_label;

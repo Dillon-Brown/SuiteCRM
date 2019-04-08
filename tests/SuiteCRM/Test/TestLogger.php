@@ -33,11 +33,11 @@ class TestLogger
     {
         $this->calls[$name][] = $arguments;
         $this->notes[] = array(
-            'entry_date' => date('Y-m-d H:i:s'),
+            'entry_date' => \date('Y-m-d H:i:s'),
             'level' => $name,
-            'message' => array_shift($arguments),
+            'message' => \array_shift($arguments),
             'arguments' => $arguments,
-            'backtrace' => debug_backtrace(),
+            'backtrace' => \debug_backtrace(),
         );
     }
 
@@ -48,14 +48,14 @@ class TestLogger
     public function getNotes($levels = 'fatal')
     {
         $results = array();
-        if (is_string($levels)) {
-            $levels = explode(',', $levels);
+        if (\is_string($levels)) {
+            $levels = \explode(',', $levels);
             foreach ($levels as &$level) {
-                $level = strtolower(trim($level));
+                $level = \strtolower(\trim($level));
             }
         }
         foreach ($this->notes as $note) {
-            if (in_array($note['level'], $levels, true)) {
+            if (\in_array($note['level'], $levels, true)) {
                 $results[] = $note;
             }
         }

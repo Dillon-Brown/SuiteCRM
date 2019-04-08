@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -70,7 +70,7 @@ if (is_admin($current_user)) {
                         
                 //set loading message and create url
                 ajaxStatus.showStatus(SUGAR.language.get('app_strings', 'LBL_PROCESSING_REQUEST'));
-                postData = \"module=Administration&action=callJSRepair&js_admin_repair=".$_REQUEST['type']."&root_directory=".urlencode(getcwd())."\";
+                postData = \"module=Administration&action=callJSRepair&js_admin_repair=".$_REQUEST['type']."&root_directory=".\urlencode(\getcwd())."\";
                  
     
                         

@@ -88,7 +88,7 @@ class AOBH_BusinessHours extends Basic
     public function areBusinessHoursSet()
     {
         if ($this->businessHoursSet === null) {
-            $this->businessHoursSet = count($this->get_full_list());
+            $this->businessHoursSet = \count($this->get_full_list());
         }
 
         return $this->businessHoursSet;
@@ -101,7 +101,7 @@ class AOBH_BusinessHours extends Basic
      */
     public function getBusinessHoursForDay($day)
     {
-        if (!array_key_exists($day, $this->cached)) {
+        if (!\array_key_exists($day, $this->cached)) {
             $this->cached[$day] = $this->get_full_list('', "day = '".$day."'");
         }
 

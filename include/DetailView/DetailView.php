@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,7 +71,7 @@ class DetailView extends ListView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -122,7 +122,7 @@ class DetailView extends ListView
             if ($nav_history_set) {
                 //try to locate the ID in the nav_history array.
 
-                $key = array_search($_REQUEST['record'], $nav_ids_visited);
+                $key = \array_search($_REQUEST['record'], $nav_ids_visited);
                 if ($key === false) {
                     //do not show the VCR buttons.
 
@@ -210,7 +210,7 @@ class DetailView extends ListView
         if (empty($object->id)) {
             $this->no_record_found=true;
         }
-        if (empty($_REQUEST['InDetailNav']) and strcmp($_REQUEST['record'], $object->id)!=0) {
+        if (empty($_REQUEST['InDetailNav']) and \strcmp($_REQUEST['record'], $object->id)!=0) {
             $this->offset_key_mismatch=true;
         }
         if ($this->no_record_found or $this->offset_key_mismatch) {
@@ -293,7 +293,7 @@ class DetailView extends ListView
 
                 $this->set_base_URL($html_varName);
                 $list_URL = $this->base_URL.'&action=index&module='.$_REQUEST['module'];
-                $current_page = floor($current_offset / $this->records_per_page) * $this->records_per_page;
+                $current_page = \floor($current_offset / $this->records_per_page) * $this->records_per_page;
 
                 $list_URL .= '&'.$this->getSessionVariableName($html_varName, "offset").'='.$current_page;
                 //$list_link = "<a href=\"$list_URL\" >".$this->local_app_strings['LNK_LIST_RETURN']."&nbsp;</a>";
@@ -329,7 +329,7 @@ class DetailView extends ListView
                 $next_URL  = $this->base_URL.$next_offset."&InDetailNav=1";
                 $end_URL  = $this->base_URL.$row_count."&InDetailNav=1";
 
-                $current_page = floor($current_offset / $this->records_per_page) * $this->records_per_page;
+                $current_page = \floor($current_offset / $this->records_per_page) * $this->records_per_page;
 
                 if (1 == $current_offset) {
                     //$start_link = SugarThemeRegistry::current()->getImage("start_off","border='0' align='absmiddle'",null,null,'.gif',$this->local_app_strings['LNK_LIST_START'])."&nbsp;".$this->local_app_strings['LNK_LIST_START'];
@@ -390,13 +390,13 @@ class DetailView extends ListView
             deletes when doing a search*/
             foreach ($_GET as $name=>$value) {
                 if (!empty($value)) {
-                    if ($name != $this->getSessionVariableName($html_varName, "ORDER_BY") && $name != "offset" && substr_count($name, "ORDER_BY")==0 && $name!="isfirstview") {
-                        if (is_array($value)) {
+                    if ($name != $this->getSessionVariableName($html_varName, "ORDER_BY") && $name != "offset" && \substr_count($name, "ORDER_BY")==0 && $name!="isfirstview") {
+                        if (\is_array($value)) {
                             foreach ($value as $valuename=>$valuevalue) {
                                 $this->base_URL	.= "&{$name}[]=".$valuevalue;
                             }
                         } else {
-                            if (substr_count($this->base_URL, '?') > 0) {
+                            if (\substr_count($this->base_URL, '?') > 0) {
                                 $this->base_URL	.= "&$name=$value";
                             } else {
                                 $this->base_URL	.= "?$name=$value";

@@ -1,6 +1,6 @@
 <?php
-if (!defined('sugarEntry')) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry')) {
+    \define('sugarEntry', true);
 }
 
 //assumes jsmin.php is in same directory
@@ -13,7 +13,7 @@ if (!defined('sugarEntry')) {
 //if we are coming from browser
 
 if (isset($_REQUEST['root_directory'])) {
-    if (!defined('sugarEntry') || !sugarEntry) {
+    if (!\defined('sugarEntry') || !sugarEntry) {
         die('Not A Valid Entry Point');
     }
 
@@ -43,10 +43,10 @@ if (isset($_REQUEST['root_directory'])) {
                 foreach ($grp as $original =>$concat) {
                     $concat = sugar_cached($concat);
                     //make sure both files are still valid
-                    if (is_file($original)  &&  is_file($concat)) {
+                    if (\is_file($original)  &&  \is_file($concat)) {
                         //if individual file has been modifed date later than modified date of
                         //concatenated file, then force a rebuild
-                        if (filemtime($original) > filemtime($concat)) {
+                        if (\filemtime($original) > \filemtime($concat)) {
                             $forceReb = true;
                             //no need to continue, we will rebuild
                             break;
@@ -82,18 +82,18 @@ if (isset($_REQUEST['root_directory'])) {
     }
 
     if ($argv[1] != '-?') {
-        chdir($from);
+        \chdir($from);
         require_once('include/utils.php');
         require_once('include/utils/file_utils.php');
         require_once('include/utils/sugar_file_utils.php');
     }
-    if (!function_exists('sugar_cached')) {
+    if (!\function_exists('sugar_cached')) {
         if ($argv[1] != '-?') {
             require_once($from.'/./include/utils.php');
             require_once($from.'/./include/utils/file_utils.php');
             require_once($from.'/./include/utils/sugar_file_utils.php');
         }
-        if (!function_exists('sugar_cached')) {
+        if (!\function_exists('sugar_cached')) {
             function sugar_cached($dir)
             {
                 return "cache/$dir";

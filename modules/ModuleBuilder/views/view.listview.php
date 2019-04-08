@@ -1,5 +1,5 @@
 <?php
-if (! defined('sugarEntry') || ! sugarEntry) {
+if (! \defined('sugarEntry') || ! sugarEntry) {
     die('Not A Valid Entry Point') ;
 }
 /**
@@ -72,8 +72,8 @@ class ViewListView extends SugarView
 
         $this->fromModuleBuilder = ! empty($_REQUEST [ 'view_package' ]) ;
         if (! $this->fromModuleBuilder) {
-            $moduleNames = array_change_key_case($GLOBALS['app_list_strings'] [ 'moduleList' ]) ;
-            $this->translatedEditModule = $moduleNames [ strtolower($this->editModule) ] ;
+            $moduleNames = \array_change_key_case($GLOBALS['app_list_strings'] [ 'moduleList' ]) ;
+            $this->translatedEditModule = $moduleNames [ \strtolower($this->editModule) ] ;
         }
     }
 
@@ -113,8 +113,8 @@ class ViewListView extends SugarView
                     MB_LISTVIEW => 'LBL_LISTVIEW' ,
                     ) ;
         $translatedViewType = '' ;
-        if (isset($labels [ strtolower($this->editLayout) ])) {
-            $translatedViewType = translate($labels [ strtolower($this->editLayout) ], 'ModuleBuilder') ;
+        if (isset($labels [ \strtolower($this->editLayout) ])) {
+            $translatedViewType = translate($labels [ \strtolower($this->editLayout) ], 'ModuleBuilder') ;
         }
         $this->translatedViewType = $translatedViewType;
 
@@ -185,9 +185,9 @@ class ViewListView extends SugarView
             $smarty->assign('subpanelLabel', $this->subpanelLabel) ;
             if (!$this->fromModuleBuilder) {
                 $subList =  SubPanel::getModuleSubpanels($this->editModule);
-                $subRef = $subList[strtolower($this->subpanel)];
-                $subTitleKey = !empty($subRef) ? $subRef : "LBL_" . strtoupper($this->subpanel) . "_SUBPANEL_TITLE";
-                $subTitle    = !empty($subRef) ? translate($subTitleKey, $this->editModule) : UCfirst($this->subpanel);
+                $subRef = $subList[\strtolower($this->subpanel)];
+                $subTitleKey = !empty($subRef) ? $subRef : "LBL_" . \strtoupper($this->subpanel) . "_SUBPANEL_TITLE";
+                $subTitle    = !empty($subRef) ? translate($subTitleKey, $this->editModule) : \UCfirst($this->subpanel);
                 $smarty->assign('subpanel_label', $subTitleKey) ;
                 $smarty->assign('subpanel_title', $subTitle) ;
             }
@@ -206,8 +206,8 @@ class ViewListView extends SugarView
         foreach ($groups as $groupKey => $group) {
             foreach ($group as $fieldKey => $field) {
                 if (isset($field [ 'width' ])) {
-                    if (substr($field [ 'width' ], - 1, 1) == '%') {
-                        $groups [ $groupKey ] [ $fieldKey ] [ 'width' ] = substr($field [ 'width' ], 0, strlen($field [ 'width' ]) - 1) ;
+                    if (\substr($field [ 'width' ], - 1, 1) == '%') {
+                        $groups [ $groupKey ] [ $fieldKey ] [ 'width' ] = \substr($field [ 'width' ], 0, \strlen($field [ 'width' ]) - 1) ;
                     }
                 }
             }

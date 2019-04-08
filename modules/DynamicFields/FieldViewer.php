@@ -54,7 +54,7 @@ class FieldViewer
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -138,9 +138,9 @@ class FieldViewer
                 return get_body($this->ss, $vardef);
             default:
                 $file = false;
-                if (file_exists('custom/modules/DynamicFields/templates/Fields/Forms/' . $vardef['type'] . '.php')) {
+                if (\file_exists('custom/modules/DynamicFields/templates/Fields/Forms/' . $vardef['type'] . '.php')) {
                     $file = 'custom/modules/DynamicFields/templates/Fields/Forms/' . $vardef['type'] . '.php';
-                } elseif (file_exists('modules/DynamicFields/templates/Fields/Forms/' . $vardef['type'] . '.php')) {
+                } elseif (\file_exists('modules/DynamicFields/templates/Fields/Forms/' . $vardef['type'] . '.php')) {
                     $file = 'modules/DynamicFields/templates/Fields/Forms/' . $vardef['type'] . '.php';
                 }
                 if (!empty($file)) {

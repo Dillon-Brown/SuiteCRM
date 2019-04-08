@@ -53,16 +53,16 @@ class StringValidator
      */
     public static function startsWith($haystack, $needle)
     {
-        if (!is_string($haystack)) {
+        if (!\is_string($haystack)) {
             throw new \InvalidArgumentException('StringValidator::startsWith $haystack must be a string');
         }
 
-        if (!is_string($needle)) {
+        if (!\is_string($needle)) {
             throw new \InvalidArgumentException('StringValidator::startsWith $needle must be a string');
         }
 
-        $length = strlen($needle);
-        return (substr($haystack, 0, $length) === $needle);
+        $length = \strlen($needle);
+        return (\substr($haystack, 0, $length) === $needle);
     }
 
     /**
@@ -72,16 +72,16 @@ class StringValidator
      */
     public static function endsWith($haystack, $needle)
     {
-        if (!is_string($haystack)) {
+        if (!\is_string($haystack)) {
             throw new \InvalidArgumentException('StringValidator::endsWith $haystack must be a string');
         }
 
-        if (!is_string($needle)) {
+        if (!\is_string($needle)) {
             throw new \InvalidArgumentException('StringValidator::endsWith $needle must be a string');
         }
 
-        $length = strlen($needle);
+        $length = \strlen($needle);
 
-        return $length === 0 || (substr($haystack, -$length) === $needle);
+        return $length === 0 || (\substr($haystack, -$length) === $needle);
     }
 }

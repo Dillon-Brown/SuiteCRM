@@ -59,7 +59,7 @@ class SugarOAuthServer
      */
     protected function check()
     {
-        if (!function_exists('mhash') && !function_exists('hash_hmac')) {
+        if (!\function_exists('mhash') && !\function_exists('hash_hmac')) {
             // define exception class
             throw new OAuthException("MHash extension required for OAuth support");
         }
@@ -70,7 +70,7 @@ class SugarOAuthServer
      */
     public static function enabled()
     {
-        return function_exists('mhash') || function_exists('hash_hmac');
+        return \function_exists('mhash') || \function_exists('hash_hmac');
     }
 
     /**
@@ -123,7 +123,7 @@ class SugarOAuthServer
         if ($token->consumer != $this->consumer->id) {
             return Zend_Oauth_Provider::TOKEN_REJECTED;
         }
-        $GLOBALS['log']->debug("OAUTH: tokenHandler, found token=".var_export($token->id, true));
+        $GLOBALS['log']->debug("OAUTH: tokenHandler, found token=".\var_export($token->id, true));
         if ($token->tstate == OAuthToken::REQUEST) {
             if (!empty($token->verify) && $provider->verifier == $token->verify) {
                 $provider->token_secret = $token->secret;
@@ -147,7 +147,7 @@ class SugarOAuthServer
     protected function decodePostGet()
     {
         $data = $_GET;
-        $data = array_merge($data, $_POST);
+        $data = \array_merge($data, $_POST);
         foreach ($data as $k => $v) {
             $data[$k] = from_html($v);
         }
@@ -162,7 +162,7 @@ class SugarOAuthServer
      */
     public function __construct($req_path = '')
     {
-        $GLOBALS['log']->debug("OAUTH: __construct($req_path): ".var_export($_REQUEST, true));
+        $GLOBALS['log']->debug("OAUTH: __construct($req_path): ".\var_export($_REQUEST, true));
         $this->check();
         $this->provider = new Zend_Oauth_Provider();
         try {
@@ -173,7 +173,7 @@ class SugarOAuthServer
                 $this->provider->isRequestTokenEndpoint($req_path);  // No token needed for this end point
             }
             $this->provider->checkOAuthRequest(null, $this->decodePostGet());
-            if (mt_rand() % 10 == 0) {
+            if (\mt_rand() % 10 == 0) {
                 // cleanup 1 in 10 times
                 OAuthToken::cleanup();
             }
@@ -226,7 +226,7 @@ class SugarOAuthServer
      */
     public function authUrl()
     {
-        return urlencode(rtrim($GLOBALS['sugar_config']['site_url'], '/')."/index.php?module=OAuthTokens&action=authorize");
+        return \urlencode(\rtrim($GLOBALS['sugar_config']['site_url'], '/')."/index.php?module=OAuthTokens&action=authorize");
     }
 
     /**
@@ -262,7 +262,7 @@ class SugarOAuthServer
     }
 }
 
-if (!class_exists('OAuthException')) {
+if (!\class_exists('OAuthException')) {
     // we will use this in case oauth extension is not loaded
     class OAuthException extends Exception
     {

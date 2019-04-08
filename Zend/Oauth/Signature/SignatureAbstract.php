@@ -103,7 +103,7 @@ abstract class Zend_Oauth_Signature_SignatureAbstract
         }
         $uri->setQuery('');
         $uri->setFragment('');
-        $uri->setHost(strtolower($uri->getHost()));
+        $uri->setHost(\strtolower($uri->getHost()));
         return $uri->getUri(true);
     }
 
@@ -121,7 +121,7 @@ abstract class Zend_Oauth_Signature_SignatureAbstract
         foreach ($parts as $key => $secret) {
             $parts[$key] = Zend_Oauth_Http_Utility::urlEncode($secret);
         }
-        return implode('&', $parts);
+        return \implode('&', $parts);
     }
 
     /**
@@ -141,7 +141,7 @@ abstract class Zend_Oauth_Signature_SignatureAbstract
         }
         $baseStrings = array();
         if (isset($method)) {
-            $baseStrings[] = strtoupper($method);
+            $baseStrings[] = \strtoupper($method);
         }
         if (isset($url)) {
             // should normalise later
@@ -155,7 +155,7 @@ abstract class Zend_Oauth_Signature_SignatureAbstract
         $baseStrings[] = Zend_Oauth_Http_Utility::urlEncode(
             $this->_toByteValueOrderedQueryString($encodedParams)
         );
-        return implode('&', $baseStrings);
+        return \implode('&', $baseStrings);
     }
 
     /**
@@ -167,10 +167,10 @@ abstract class Zend_Oauth_Signature_SignatureAbstract
     protected function _toByteValueOrderedQueryString(array $params)
     {
         $return = array();
-        uksort($params, 'strnatcmp');
+        \uksort($params, 'strnatcmp');
         foreach ($params as $key => $value) {
-            if (is_array($value)) {
-                natsort($value);
+            if (\is_array($value)) {
+                \natsort($value);
                 foreach ($value as $keyduplicate) {
                     $return[] = $key . '=' . $keyduplicate;
                 }
@@ -178,6 +178,6 @@ abstract class Zend_Oauth_Signature_SignatureAbstract
                 $return[] = $key . '=' . $value;
             }
         }
-        return implode('&', $return);
+        return \implode('&', $return);
     }
 }

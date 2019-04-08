@@ -37,7 +37,7 @@ function smarty_function_config_load($params, &$smarty)
     $_scope = isset($params['scope']) ? $smarty->_dequote($params['scope']) : 'global';
     $_global = isset($params['global']) ? $smarty->_dequote($params['global']) : false;
 
-    if (!isset($_file) || strlen($_file) == 0) {
+    if (!isset($_file) || \strlen($_file) == 0) {
         $smarty->trigger_error("missing 'file' attribute in config_load tag", E_USER_ERROR, __FILE__, __LINE__);
     }
 
@@ -66,21 +66,21 @@ function smarty_function_config_load($params, &$smarty)
         $_compile_file = $smarty->_get_compile_path($_file_path);
     }
 
-    if ($smarty->force_compile || !file_exists($_compile_file)) {
+    if ($smarty->force_compile || !\file_exists($_compile_file)) {
         $_compile = true;
     } elseif ($smarty->compile_check) {
         $_params = array('resource_name' => $_file,
                              'resource_base_path' => $smarty->config_dir,
                              'get_source' => false);
         $_compile = $smarty->_fetch_resource_info($_params) &&
-                $_params['resource_timestamp'] > filemtime($_compile_file);
+                $_params['resource_timestamp'] > \filemtime($_compile_file);
     } else {
         $_compile = false;
     }
 
     if ($_compile) {
         // compile config file
-        if (!is_object($smarty->_conf_obj)) {
+        if (!\is_object($smarty->_conf_obj)) {
             require_once SMARTY_DIR . $smarty->config_class . '.class.php';
             $smarty->_conf_obj = new $smarty->config_class();
             $smarty->_conf_obj->overwrite = $smarty->config_overwrite;
@@ -96,14 +96,14 @@ function smarty_function_config_load($params, &$smarty)
             return;
         }
         $smarty->_conf_obj->set_file_contents($_file, $_params['source_content']);
-        $_config_vars = array_merge(
+        $_config_vars = \array_merge(
             $smarty->_conf_obj->get($_file),
                     $smarty->_conf_obj->get($_file, $_section)
         );
-        if (function_exists('var_export')) {
-            $_output = '<?php $_config_vars = ' . var_export($_config_vars, true) . '; ?>';
+        if (\function_exists('var_export')) {
+            $_output = '<?php $_config_vars = ' . \var_export($_config_vars, true) . '; ?>';
         } else {
-            $_output = '<?php $_config_vars = unserialize(\'' . strtr(serialize($_config_vars), array('\''=>'\\\'', '\\'=>'\\\\')) . '\'); ?>';
+            $_output = '<?php $_config_vars = unserialize(\'' . \strtr(\serialize($_config_vars), array('\''=>'\\\'', '\\'=>'\\\\')) . '\'); ?>';
         }
         $_params = (array('compile_path' => $_compile_file, 'compiled_content' => $_output, 'resource_timestamp' => $_params['resource_timestamp']));
         require_once(SMARTY_CORE_DIR . 'core.write_compiled_resource.php');
@@ -116,15 +116,15 @@ function smarty_function_config_load($params, &$smarty)
         $smarty->_cache_info['config'][$_file] = true;
     }
 
-    $smarty->_config[0]['vars'] = @array_merge($smarty->_config[0]['vars'], $_config_vars);
+    $smarty->_config[0]['vars'] = @\array_merge($smarty->_config[0]['vars'], $_config_vars);
     $smarty->_config[0]['files'][$_file] = true;
 
     if ($_scope == 'parent') {
-        $smarty->_config[1]['vars'] = @array_merge($smarty->_config[1]['vars'], $_config_vars);
+        $smarty->_config[1]['vars'] = @\array_merge($smarty->_config[1]['vars'], $_config_vars);
         $smarty->_config[1]['files'][$_file] = true;
     } elseif ($_scope == 'global') {
-        for ($i = 1, $for_max = count($smarty->_config); $i < $for_max; $i++) {
-            $smarty->_config[$i]['vars'] = @array_merge($smarty->_config[$i]['vars'], $_config_vars);
+        for ($i = 1, $for_max = \count($smarty->_config); $i < $for_max; $i++) {
+            $smarty->_config[$i]['vars'] = @\array_merge($smarty->_config[$i]['vars'], $_config_vars);
             $smarty->_config[$i]['files'][$_file] = true;
         }
     }

@@ -56,7 +56,7 @@ class actionSendEmail extends actionBase
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id);
     }
@@ -72,7 +72,7 @@ class actionSendEmail extends actionBase
         global $app_list_strings;
         $email_templates_arr = get_bean_select_array(true, 'EmailTemplate', 'name', '', 'name');
 
-        if (!in_array($bean->module_dir, getEmailableModules())) {
+        if (!\in_array($bean->module_dir, getEmailableModules())) {
             unset($app_list_strings['aow_email_type_list']['Record Email']);
         }
         $targetOptions = getRelatedEmailableFields($bean->module_dir);
@@ -135,7 +135,7 @@ class actionSendEmail extends actionBase
         $html .= "<script id ='aow_script".$line."'>";
 
         //backward compatible
-        if (isset($params['email_target_type']) && !is_array($params['email_target_type'])) {
+        if (isset($params['email_target_type']) && !\is_array($params['email_target_type'])) {
             $email = '';
             switch ($params['email_target_type']) {
                 case 'Email Address':
@@ -154,8 +154,8 @@ class actionSendEmail extends actionBase
 
         if (isset($params['email_target_type'])) {
             foreach ($params['email_target_type'] as $key => $field) {
-                if (is_array($params['email'][$key])) {
-                    $params['email'][$key] = json_encode($params['email'][$key]);
+                if (\is_array($params['email'][$key])) {
+                    $params['email'][$key] = \json_encode($params['email'][$key]);
                 }
                 $html .= "load_emailline('".$line."','".$params['email_to_type'][$key]."','".$params['email_target_type'][$key]."','".$params['email'][$key]."');";
             }
@@ -169,7 +169,7 @@ class actionSendEmail extends actionBase
     {
         $emails = array();
         //backward compatible
-        if (isset($params['email_target_type']) && !is_array($params['email_target_type'])) {
+        if (isset($params['email_target_type']) && !\is_array($params['email_target_type'])) {
             $email = '';
             switch ($params['email_target_type']) {
                 case 'Email Address':
@@ -190,7 +190,7 @@ class actionSendEmail extends actionBase
             foreach ($params['email_target_type'] as $key => $field) {
                 switch ($field) {
                     case 'Email Address':
-                        if (trim($params['email'][$key]) != '') {
+                        if (\trim($params['email'][$key]) != '') {
                             $emails[$params['email_to_type'][$key]][] = $params['email'][$key];
                         }
                         break;
@@ -198,7 +198,7 @@ class actionSendEmail extends actionBase
                         $user = new User();
                         $user->retrieve($params['email'][$key]);
                         $user_email = $user->emailAddress->getPrimaryAddress($user);
-                        if (trim($user_email) != '') {
+                        if (\trim($user_email) != '') {
                             $emails[$params['email_to_type'][$key]][] = $user_email;
                             $emails['template_override'][$user_email] = array('Users' => $user->id);
                         }
@@ -208,7 +208,7 @@ class actionSendEmail extends actionBase
                         $users = array();
                         switch ($params['email'][$key][0]) {
                             case 'security_group':
-                                if (file_exists('modules/SecurityGroups/SecurityGroup.php')) {
+                                if (\file_exists('modules/SecurityGroups/SecurityGroup.php')) {
                                     require_once('modules/SecurityGroups/SecurityGroup.php');
                                     $security_group = new SecurityGroup();
                                     $security_group->retrieve($params['email'][$key][1]);
@@ -252,7 +252,7 @@ class actionSendEmail extends actionBase
                         }
                         foreach ($users as $user) {
                             $user_email = $user->emailAddress->getPrimaryAddress($user);
-                            if (trim($user_email) != '') {
+                            if (\trim($user_email) != '') {
                                 $emails[$params['email_to_type'][$key]][] = $user_email;
                                 $emails['template_override'][$user_email] = array('Users' => $user->id);
                             }
@@ -260,7 +260,7 @@ class actionSendEmail extends actionBase
                         break;
                     case 'Related Field':
                         $emailTarget = $params['email'][$key];
-                        $relatedFields = array_merge($bean->get_related_fields(), $bean->get_linked_fields());
+                        $relatedFields = \array_merge($bean->get_related_fields(), $bean->get_linked_fields());
                         $field = $relatedFields[$emailTarget];
                         if ($field['type'] == 'relate') {
                             $linkedBeans = array();
@@ -282,7 +282,7 @@ class actionSendEmail extends actionBase
                             foreach ($linkedBeans as $linkedBean) {
                                 if (!empty($linkedBean)) {
                                     $rel_email = $linkedBean->emailAddress->getPrimaryAddress($linkedBean);
-                                    if (trim($rel_email) != '') {
+                                    if (\trim($rel_email) != '') {
                                         $emails[$params['email_to_type'][$key]][] = $rel_email;
                                         $emails['template_override'][$rel_email] = array($linkedBean->module_dir => $linkedBean->id);
                                     }
@@ -295,7 +295,7 @@ class actionSendEmail extends actionBase
                         if ($recordEmail == '' && isset($bean->email1)) {
                             $recordEmail = $bean->email1;
                         }
-                        if (trim($recordEmail) != '') {
+                        if (\trim($recordEmail) != '') {
                             $emails[$params['email_to_type'][$key]][] = $recordEmail;
                         }
                         break;
@@ -429,11 +429,11 @@ class actionSendEmail extends actionBase
             }
         }
 
-        $object_arr['Users'] = is_a($bean, 'User') ? $bean->id : $bean->assigned_user_id;
+        $object_arr['Users'] = \is_a($bean, 'User') ? $bean->id : $bean->assigned_user_id;
 
-        $object_arr = array_merge($object_arr, $object_override);
+        $object_arr = \array_merge($object_arr, $object_override);
 
-        $parsedSiteUrl = parse_url($sugar_config['site_url']);
+        $parsedSiteUrl = \parse_url($sugar_config['site_url']);
         $host = $parsedSiteUrl['host'];
         if (!isset($parsedSiteUrl['port'])) {
             $parsedSiteUrl['port'] = 80;
@@ -445,16 +445,16 @@ class actionSendEmail extends actionBase
 
         $url =  $cleanUrl."/index.php?module={$bean->module_dir}&action=DetailView&record={$bean->id}";
 
-        $template->subject = str_replace("\$contact_user", "\$user", $template->subject);
-        $template->body_html = str_replace("\$contact_user", "\$user", $template->body_html);
-        $template->body = str_replace("\$contact_user", "\$user", $template->body);
+        $template->subject = \str_replace("\$contact_user", "\$user", $template->subject);
+        $template->body_html = \str_replace("\$contact_user", "\$user", $template->body_html);
+        $template->body = \str_replace("\$contact_user", "\$user", $template->body);
         $template->subject = aowTemplateParser::parse_template($template->subject, $object_arr);
         $template->body_html = aowTemplateParser::parse_template($template->body_html, $object_arr);
-        $template->body_html = str_replace("\$url", $url, $template->body_html);
-        $template->body_html = str_replace('$sugarurl', $sugar_config['site_url'], $template->body_html);
+        $template->body_html = \str_replace("\$url", $url, $template->body_html);
+        $template->body_html = \str_replace('$sugarurl', $sugar_config['site_url'], $template->body_html);
         $template->body = aowTemplateParser::parse_template($template->body, $object_arr);
-        $template->body = str_replace("\$url", $url, $template->body);
-        $template->body = str_replace('$sugarurl', $sugar_config['site_url'], $template->body);
+        $template->body = \str_replace("\$url", $url, $template->body);
+        $template->body = \str_replace('$sugarurl', $sugar_config['site_url'], $template->body);
     }
 
     public function getAttachments(EmailTemplate $template)
@@ -512,9 +512,9 @@ class actionSendEmail extends actionBase
 
         //now create email
         if ($mail->Send()) {
-            $emailObj->to_addrs= implode(',', $emailTo);
-            $emailObj->cc_addrs= implode(',', $emailCc);
-            $emailObj->bcc_addrs= implode(',', $emailBcc);
+            $emailObj->to_addrs= \implode(',', $emailTo);
+            $emailObj->cc_addrs= \implode(',', $emailCc);
+            $emailObj->bcc_addrs= \implode(',', $emailBcc);
             $emailObj->type= 'out';
             $emailObj->deleted = '0';
             $emailObj->name = $mail->Subject;
@@ -549,7 +549,7 @@ class actionSendEmail extends actionBase
                 $note->file_mime_type = $attachment->file_mime_type;
                 $fileLocation = "upload://{$attachment->id}";
                 $dest = "upload://{$note->id}";
-                if (!copy($fileLocation, $dest)) {
+                if (!\copy($fileLocation, $dest)) {
                     $GLOBALS['log']->debug("EMAIL 2.0: could not copy attachment file to $fileLocation => $dest");
                 }
                 $note->save();

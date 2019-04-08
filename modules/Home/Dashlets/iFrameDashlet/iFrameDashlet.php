@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -96,15 +96,15 @@ class iFrameDashlet extends Dashlet
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id, $options);
     }
 
     protected function checkURL()
     {
-        $scheme = parse_url($this->url, PHP_URL_SCHEME);
-        if (!in_array($scheme, $this->allowed_schemes)) {
+        $scheme = \parse_url($this->url, PHP_URL_SCHEME);
+        if (!\in_array($scheme, $this->allowed_schemes)) {
             $this->url = 'about:blank';
             return false;
         }
@@ -157,7 +157,7 @@ class iFrameDashlet extends Dashlet
         $sugar_edition = 'COM';
 
 
-        $out_url = str_replace(
+        $out_url = \str_replace(
             array('@@LANG@@','@@VER@@','@@EDITION@@'),
             array($GLOBALS['current_language'],$GLOBALS['sugar_config']['sugar_version'],$sugar_edition),
             $this->url

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -88,7 +88,7 @@ class Role extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -113,7 +113,7 @@ class Role extends SugarBean
         $return_array = array();
 
         while ($row = $this->db->fetchByAssoc($result)) {
-            array_push($return_array, $row['module_id']);
+            \array_push($return_array, $row['module_id']);
         }
 
         return $return_array;
@@ -166,7 +166,7 @@ class Role extends SugarBean
 
             while ($col = $this->db->fetchByAssoc($res)) {
                 $key = $col['module_id'];
-                if (!(array_key_exists($key, $userArray))) {
+                if (!(\array_key_exists($key, $userArray))) {
                     $userArray[$key] = $app_list_strings['moduleList'][$key];
                 }
             }
@@ -182,7 +182,7 @@ class Role extends SugarBean
         $returnArray = array();
 
         foreach ($moduleList as $key=>$val) {
-            if (array_key_exists($val, $allowed)) {
+            if (\array_key_exists($val, $allowed)) {
                 continue;
             }
             $returnArray[$val] = $val;

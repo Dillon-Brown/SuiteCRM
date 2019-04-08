@@ -44,24 +44,24 @@ class AOS_Products extends AOS_Products_sugar
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
 
     public function getGUID()
     {
-        if (function_exists('com_create_guid')) {
+        if (\function_exists('com_create_guid')) {
             return com_create_guid();
         }
-        mt_srand((double)microtime()*10000);//optional for php 4.2.0 and up.
-        $charid = strtoupper(md5(uniqid(rand(), true)));
-        $hyphen = chr(45);// "-"
-        $uuid = substr($charid, 0, 8).$hyphen
-                .substr($charid, 8, 4).$hyphen
-                .substr($charid, 12, 4).$hyphen
-                .substr($charid, 16, 4).$hyphen
-                .substr($charid, 20, 12);
+        \mt_srand((double)\microtime()*10000);//optional for php 4.2.0 and up.
+        $charid = \strtoupper(\md5(\uniqid(\rand(), true)));
+        $hyphen = \chr(45);// "-"
+        $uuid = \substr($charid, 0, 8).$hyphen
+                .\substr($charid, 8, 4).$hyphen
+                .\substr($charid, 12, 4).$hyphen
+                .\substr($charid, 16, 4).$hyphen
+                .\substr($charid, 20, 12);
         return $uuid;
     }
 
@@ -83,7 +83,7 @@ class AOS_Products extends AOS_Products_sugar
             }
             $prefix_image = $this->getGUID().'_';
             $this->product_image=$sugar_config['site_url'].'/'.$sugar_config['upload_dir'].$prefix_image.$_FILES['uploadimage']['name'];
-            move_uploaded_file($_FILES['uploadimage']['tmp_name'], $sugar_config['upload_dir'].$prefix_image.$_FILES['uploadimage']['name']);
+            \move_uploaded_file($_FILES['uploadimage']['tmp_name'], $sugar_config['upload_dir'].$prefix_image.$_FILES['uploadimage']['name']);
         }
 
         require_once('modules/AOS_Products_Quotes/AOS_Utils.php');

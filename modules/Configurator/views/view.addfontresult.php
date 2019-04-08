@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -89,8 +89,8 @@ class ConfiguratorViewAddFontResult extends SugarView
             // handle uploaded file
             $uploadFile = new UploadFile($k);
             if (isset($_FILES[$k]) && $uploadFile->confirm_upload()) {
-                $uploadFile->final_move(basename($_FILES[$k]['name']));
-                $uploadFileNames[$k] = $uploadFile->get_upload_path(basename($_FILES[$k]['name']));
+                $uploadFile->final_move(\basename($_FILES[$k]['name']));
+                $uploadFileNames[$k] = $uploadFile->get_upload_path(\basename($_FILES[$k]['name']));
             } else {
                 $this->log = translate('ERR_PDF_NO_UPLOAD', "Configurator");
                 $error=true;
@@ -105,12 +105,12 @@ class ConfiguratorViewAddFontResult extends SugarView
                 $_REQUEST['pdf_embedded'],
                 $_REQUEST['pdf_encoding_table'],
                 array(),
-                htmlspecialchars_decode($_REQUEST['pdf_cidinfo'], ENT_QUOTES),
+                \htmlspecialchars_decode($_REQUEST['pdf_cidinfo'], ENT_QUOTES),
                 $_REQUEST['pdf_style_list']
             );
             $this->log .= $fontManager->log;
             if ($error) {
-                $this->log .= implode("\n", $fontManager->errors);
+                $this->log .= \implode("\n", $fontManager->errors);
             }
         }
         return $error;

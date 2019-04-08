@@ -112,10 +112,10 @@ abstract class Zend_Gdata_App_BaseMediaSource implements Zend_Gdata_App_MediaSou
      */
     public function __get($name)
     {
-        $method = 'get'.ucfirst($name);
-        if (method_exists($this, $method)) {
-            return call_user_func(array(&$this, $method));
-        } elseif (property_exists($this, "_${name}")) {
+        $method = 'get'.\ucfirst($name);
+        if (\method_exists($this, $method)) {
+            return \call_user_func(array(&$this, $method));
+        } elseif (\property_exists($this, "_${name}")) {
             return $this->{'_' . $name};
         } else {
             require_once 'Zend/Gdata/App/InvalidArgumentException.php';
@@ -137,9 +137,9 @@ abstract class Zend_Gdata_App_BaseMediaSource implements Zend_Gdata_App_MediaSou
      */
     public function __set($name, $val)
     {
-        $method = 'set'.ucfirst($name);
-        if (method_exists($this, $method)) {
-            return call_user_func(array(&$this, $method), $val);
+        $method = 'set'.\ucfirst($name);
+        if (\method_exists($this, $method)) {
+            return \call_user_func(array(&$this, $method), $val);
         } elseif (isset($this->{'_' . $name}) || ($this->{'_' . $name} === null)) {
             $this->{'_' . $name} = $val;
         } else {
@@ -157,7 +157,7 @@ abstract class Zend_Gdata_App_BaseMediaSource implements Zend_Gdata_App_MediaSou
      */
     public function __isset($name)
     {
-        $rc = new ReflectionClass(get_class($this));
+        $rc = new ReflectionClass(\get_class($this));
         $privName = '_' . $name;
         if (!($rc->hasProperty($privName))) {
             require_once 'Zend/Gdata/App/InvalidArgumentException.php';
@@ -166,8 +166,8 @@ abstract class Zend_Gdata_App_BaseMediaSource implements Zend_Gdata_App_MediaSou
             );
         } else {
             if (isset($this->{$privName})) {
-                if (is_array($this->{$privName})) {
-                    if (count($this->{$privName}) > 0) {
+                if (\is_array($this->{$privName})) {
+                    if (\count($this->{$privName}) > 0) {
                         return true;
                     } else {
                         return false;

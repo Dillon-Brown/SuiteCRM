@@ -24,18 +24,18 @@ class OneLogin_Saml2_IdPMetadataParser
         $metadataInfo = array();
 
         try {
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+            $ch = \curl_init($url);
+            \curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+            \curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            \curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            \curl_setopt($ch, CURLOPT_FAILONERROR, 1);
 
-            $xml = curl_exec($ch);
+            $xml = \curl_exec($ch);
             if ($xml !== false) {
                 $metadataInfo = self::parseXML($xml, $entityId);
             } else {
-                throw new Exception(curl_error($ch), curl_errno($ch));
+                throw new Exception(\curl_error($ch), \curl_errno($ch));
             }
         } catch (Exception $e) {
         }
@@ -59,8 +59,8 @@ class OneLogin_Saml2_IdPMetadataParser
         $metadataInfo = array();
 
         try {
-            if (file_exists($filepath)) {
-                $data = file_get_contents($filepath);
+            if (\file_exists($filepath)) {
+                $data = \file_get_contents($filepath);
                 $metadataInfo = self::parseXML($data, $entityId);
             }
         } catch (Exception $e) {
@@ -156,7 +156,7 @@ class OneLogin_Saml2_IdPMetadataParser
                     }
 
                     $idpCertdata = $metadataInfo['idp']['x509certMulti'];
-                    if (count($idpCertdata) == 1 || ((isset($idpCertdata['signing']) && count($idpCertdata['signing']) == 1) && isset($idpCertdata['encryption']) && count($idpCertdata['encryption']) == 1 && strcmp($idpCertdata['signing'][0], $idpCertdata['encryption'][0]) == 0)) {
+                    if (\count($idpCertdata) == 1 || ((isset($idpCertdata['signing']) && \count($idpCertdata['signing']) == 1) && isset($idpCertdata['encryption']) && \count($idpCertdata['encryption']) == 1 && \strcmp($idpCertdata['signing'][0], $idpCertdata['encryption'][0]) == 0)) {
                         if (isset($metadataInfo['idp']['x509certMulti']['signing'][0])) {
                             $metadataInfo['idp']['x509cert'] = $metadataInfo['idp']['x509certMulti']['signing'][0];
                         } else {
@@ -171,7 +171,7 @@ class OneLogin_Saml2_IdPMetadataParser
                     $metadataInfo['sp']['NameIDFormat'] = $nameIdFormatNodes->item(0)->nodeValue;
                     if (!empty($desiredNameIdFormat)) {
                         foreach ($nameIdFormatNodes as $nameIdFormatNode) {
-                            if (strcmp($nameIdFormatNode->nodeValue, $desiredNameIdFormat) == 0) {
+                            if (\strcmp($nameIdFormatNode->nodeValue, $desiredNameIdFormat) == 0) {
                                 $metadataInfo['sp']['NameIDFormat'] = $nameIdFormatNode->nodeValue;
                                 break;
                             }
@@ -206,6 +206,6 @@ class OneLogin_Saml2_IdPMetadataParser
             }
         }
 
-        return array_replace_recursive($settings, $metadataInfo);
+        return \array_replace_recursive($settings, $metadataInfo);
     }
 }

@@ -40,7 +40,7 @@
 
 
 
-if (!class_exists('Tracker')) {
+if (!\class_exists('Tracker')) {
     require_once 'data/SugarBean.php';
 
     class Tracker extends SugarBean
@@ -70,7 +70,7 @@ if (!class_exists('Tracker')) {
             global $dictionary;
             if (isset($this->module_dir) && isset($this->object_name) && !isset($GLOBALS['dictionary'][$this->object_name])) {
                 $path = 'modules/Trackers/vardefs.php';
-                if (defined('TEMPLATE_URL')) {
+                if (\defined('TEMPLATE_URL')) {
                     $path = SugarTemplateUtilities::getFilePath($path);
                 }
                 require_once($path);
@@ -87,7 +87,7 @@ if (!class_exists('Tracker')) {
             if (isset($GLOBALS['log'])) {
                 $GLOBALS['log']->deprecated($deprecatedMessage);
             } else {
-                trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+                \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
             }
             self::__construct();
         }
@@ -102,7 +102,7 @@ if (!class_exists('Tracker')) {
         public function get_recently_viewed($user_id, $modules = '')
         {
             $path = 'modules/Trackers/BreadCrumbStack.php';
-            if (defined('TEMPLATE_URL')) {
+            if (\defined('TEMPLATE_URL')) {
                 $path = SugarTemplateUtilities::getFilePath($path);
             }
             require_once($path);
@@ -115,7 +115,7 @@ if (!class_exists('Tracker')) {
                 $module_query = '';
                 if (!empty($modules)) {
                     $history_max_viewed = 10;
-                    $module_query = is_array($modules) ? ' AND module_name IN (\'' . implode("','", $modules) . '\')' :  ' AND module_name = \'' . $modules . '\'';
+                    $module_query = \is_array($modules) ? ' AND module_name IN (\'' . \implode("','", $modules) . '\')' :  ' AND module_name = \'' . $modules . '\'';
                 } else {
                     $history_max_viewed = (!empty($GLOBALS['sugar_config']['history_max_viewed']))? $GLOBALS['sugar_config']['history_max_viewed'] : 50;
                 }
@@ -128,7 +128,7 @@ if (!class_exists('Tracker')) {
             }
 
             $list = $breadCrumb->getBreadCrumbList($modules);
-            $GLOBALS['log']->info("Tracker: retrieving ".count($list)." items");
+            $GLOBALS['log']->info("Tracker: retrieving ".\count($list)." items");
             return $list;
         }
 
@@ -137,7 +137,7 @@ if (!class_exists('Tracker')) {
             $query = "UPDATE $this->table_name SET visible = 0 WHERE item_id = '$item_id' AND visible = 1";
             $this->db->query($query, true);
             $path = 'modules/Trackers/BreadCrumbStack.php';
-            if (defined('TEMPLATE_URL')) {
+            if (\defined('TEMPLATE_URL')) {
                 $path = SugarTemplateUtilities::getFilePath($path);
             }
             require_once($path);
@@ -155,9 +155,9 @@ if (!class_exists('Tracker')) {
                 return;
             }
             if (!empty($_SESSION['lpage'])) {
-                $time_on_last_page = time() - $_SESSION['lpage'];
+                $time_on_last_page = \time() - $_SESSION['lpage'];
             }
-            $_SESSION['lpage']=time();
+            $_SESSION['lpage']=\time();
         }
 
 

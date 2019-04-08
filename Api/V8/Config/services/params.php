@@ -73,4 +73,4 @@ return CustomLoader::mergeCustomArray([
             $container->get(BeanManager::class)
         );
     },
-], basename(__FILE__));
+], \basename(__FILE__));

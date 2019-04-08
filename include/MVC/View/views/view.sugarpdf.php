@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -77,7 +77,7 @@ class ViewSugarpdf extends SugarView
                 LoggerManager::getLogger()->warn('Undefined index: record');
             }
 
-            header('Location:index.php?module='.(isset($_REQUEST['module']) ? $_REQUEST['module'] : null).'&action=DetailView&record='.(isset($_REQUEST['record']) ? $_REQUEST['record'] : null));
+            \header('Location:index.php?module='.(isset($_REQUEST['module']) ? $_REQUEST['module'] : null).'&action=DetailView&record='.(isset($_REQUEST['record']) ? $_REQUEST['record'] : null));
         }
     }
 
@@ -90,7 +90,7 @@ class ViewSugarpdf extends SugarView
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }

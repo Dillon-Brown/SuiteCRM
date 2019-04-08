@@ -81,7 +81,7 @@ function get_merge_query($seed, $merge_module, $key)
     if (!empty($selQuery[$relModule][$merge_module])) {
         $select = $selQuery[$relModule][$merge_module];
     } else {
-        $lowerRelModule = strtolower($relModule);
+        $lowerRelModule = \strtolower($relModule);
         if ($seed->load_relationship($lowerRelModule)) {
             $params = array('join_table_alias' => 'r1', 'join_table_link_alias' => 'r2', 'join_type' => 'LEFT JOIN');
             $join = $seed->$lowerRelModule->getJoin($params);

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -162,7 +162,7 @@ class DashletGeneric extends Dashlet
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id, $options);
     }
@@ -194,31 +194,31 @@ class DashletGeneric extends Dashlet
             foreach ($this->displayColumns as $num => $name) {
                 // defensive code for array being returned
                 $translated = translate($this->columns[$name]['label'], $this->seedBean->module_dir);
-                if (is_array($translated)) {
+                if (\is_array($translated)) {
                     $translated = $this->columns[$name]['label'];
                 }
-                $chooser->args['values_array'][0][$name] = trim($translated, ':');
+                $chooser->args['values_array'][0][$name] = \trim($translated, ':');
             }
             // columns not displayed
-            foreach (array_diff(array_keys($this->columns), array_values($this->displayColumns)) as $num => $name) {
+            foreach (\array_diff(\array_keys($this->columns), \array_values($this->displayColumns)) as $num => $name) {
                 // defensive code for array being returned
                 $translated = translate($this->columns[$name]['label'], $this->seedBean->module_dir);
-                if (is_array($translated)) {
+                if (\is_array($translated)) {
                     $translated = $this->columns[$name]['label'];
                 }
-                $chooser->args['values_array'][1][$name] = trim($translated, ':');
+                $chooser->args['values_array'][1][$name] = \trim($translated, ':');
             }
         } else {
             foreach ($this->columns as $name => $val) {
                 // defensive code for array being returned
                 $translated = translate($this->columns[$name]['label'], $this->seedBean->module_dir);
-                if (is_array($translated)) {
+                if (\is_array($translated)) {
                     $translated = $this->columns[$name]['label'];
                 }
                 if (!empty($val['default']) && $val['default']) {
-                    $chooser->args['values_array'][0][$name] = trim($translated, ':');
+                    $chooser->args['values_array'][0][$name] = \trim($translated, ':');
                 } else {
-                    $chooser->args['values_array'][1][$name] = trim($translated, ':');
+                    $chooser->args['values_array'][1][$name] = \trim($translated, ':');
                 }
             }
         }
@@ -235,7 +235,7 @@ class DashletGeneric extends Dashlet
         $query = false;
         $count = 0;
 
-        if (!is_array($this->filters)) {
+        if (!\is_array($this->filters)) {
             // use default search params
             $this->filters = array();
             foreach ($this->searchFields as $name => $params) {
@@ -247,7 +247,7 @@ class DashletGeneric extends Dashlet
         $currentSearchFields = array();
         foreach ($this->searchFields as $name=>$params) {
             if (!empty($name)) {
-                $name = strtolower($name);
+                $name = \strtolower($name);
                 $currentSearchFields[$name] = array();
                 $widgetDef = $this->seedBean->field_defs[$name];
                 if ($widgetDef['name'] == 'assigned_user_name') {
@@ -323,7 +323,7 @@ class DashletGeneric extends Dashlet
 
         $returnArray = array();
 
-        if (!is_array($this->filters)) {
+        if (!\is_array($this->filters)) {
             // use defaults
             $this->filters = array();
             foreach ($this->searchFields as $name => $params) {
@@ -350,7 +350,7 @@ class DashletGeneric extends Dashlet
                     case 'date':
                     case 'datetime':
                     case 'datetimecombo':
-                        if (is_array($params) && !empty($params)) {
+                        if (\is_array($params) && !empty($params)) {
                             if (!empty($params['date'])) {
                                 $widgetDef['input_name0'] = $params['date'];
                             }
@@ -358,7 +358,7 @@ class DashletGeneric extends Dashlet
                         } else {
                             $filter = 'queryFilter' . $params;
                         }
-                        array_push($returnArray, $widgetClass->$filter($widgetDef, true));
+                        \array_push($returnArray, $widgetClass->$filter($widgetDef, true));
                         break;
                     case 'assigned_user_name':
                         // This type runs through the SugarWidgetFieldname class, and needs a little extra help to make it through
@@ -375,10 +375,10 @@ class DashletGeneric extends Dashlet
                         // no break - run through the default handler
                     default:
                         $widgetDef['input_name0'] = $params;
-                        if (is_array($params) && !empty($params)) { // handle array query
-                            array_push($returnArray, $widgetClass->queryFilterone_of($widgetDef, false));
+                        if (\is_array($params) && !empty($params)) { // handle array query
+                            \array_push($returnArray, $widgetClass->queryFilterone_of($widgetDef, false));
                         } else {
-                            array_push($returnArray, $widgetClass->queryFilterStarts_With($widgetDef, true));
+                            \array_push($returnArray, $widgetClass->queryFilterStarts_With($widgetDef, true));
                         }
                         $widgetDef['input_name0'] = $params;
                     break;
@@ -387,7 +387,7 @@ class DashletGeneric extends Dashlet
         }
 
         if ($this->myItemsOnly) {
-            array_push($returnArray, $this->seedBean->table_name . '.' . "assigned_user_id = '" . $current_user->id . "'");
+            \array_push($returnArray, $this->seedBean->table_name . '.' . "assigned_user_id = '" . $current_user->id . "'");
         }
 
         return $returnArray;
@@ -396,7 +396,7 @@ class DashletGeneric extends Dashlet
     protected function loadCustomMetadata()
     {
         $customMetadate = 'custom/modules/'.$this->seedBean->module_dir.'/metadata/dashletviewdefs.php';
-        if (file_exists($customMetadate)) {
+        if (\file_exists($customMetadate)) {
             require($customMetadate);
             $this->searchFields = $dashletData[$this->seedBean->module_dir.'Dashlet']['searchFields'];
             foreach ($this->searchFields  as $key =>$def) {
@@ -435,15 +435,15 @@ class DashletGeneric extends Dashlet
         $displayColumns = array();
         if (!empty($this->displayColumns)) { // use user specified columns
             foreach ($this->displayColumns as $name => $val) {
-                $displayColumns[strtoupper($val)] = $this->columns[$val];
-                $displayColumns[strtoupper($val)]['label'] = trim($displayColumns[strtoupper($val)]['label'], ':');// strip : at the end of headers
+                $displayColumns[\strtoupper($val)] = $this->columns[$val];
+                $displayColumns[\strtoupper($val)]['label'] = \trim($displayColumns[\strtoupper($val)]['label'], ':');// strip : at the end of headers
             }
         } elseif (isset($this->columns)) {
             // use the default
             foreach ($this->columns as $name => $val) {
                 if (!empty($val['default']) && $val['default']) {
-                    $displayColumns[strtoupper($name)] = $val;
-                    $displayColumns[strtoupper($name)]['label'] = trim($displayColumns[strtoupper($name)]['label'], ':');
+                    $displayColumns[\strtoupper($name)] = $val;
+                    $displayColumns[\strtoupper($name)]['label'] = \trim($displayColumns[\strtoupper($name)]['label'], ':');
                 }
             }
         }
@@ -472,8 +472,8 @@ class DashletGeneric extends Dashlet
         // Check for 'last_name' column sorting with related fields (last_name, first_name)
         // See ListViewData.php for actual sorting change.
         if ($lvdOrderBy['orderBy'] == 'last_name' && !empty($displayColumns['NAME']) && !empty($displayColumns['NAME']['related_fields']) &&
-            in_array('last_name', $displayColumns['NAME']['related_fields']) &&
-            in_array('first_name', $displayColumns['NAME']['related_fields'])) {
+            \in_array('last_name', $displayColumns['NAME']['related_fields']) &&
+            \in_array('first_name', $displayColumns['NAME']['related_fields'])) {
             $lvsParams['overrideLastNameOrder'] = true;
         }
 
@@ -481,10 +481,10 @@ class DashletGeneric extends Dashlet
             //MFH BUG #14296
             $where = '';
             if (!empty($whereArray)) {
-                $where = '(' . implode(') AND (', $whereArray) . ')';
+                $where = '(' . \implode(') AND (', $whereArray) . ')';
             }
             $this->lvs->setup($this->seedBean, $this->displayTpl, $where, $lvsParams, 0, $this->displayRows/*, $filterFields*/, array(), 'id', $id);
-            if (in_array('CREATED_BY', array_keys($displayColumns))) { // handle the created by field
+            if (\in_array('CREATED_BY', \array_keys($displayColumns))) { // handle the created by field
                 foreach ($this->lvs->data['data'] as $row => $data) {
                     $this->lvs->data['data'][$row]['CREATED_BY'] = get_assigned_user_name($data['CREATED_BY']);
                 }
@@ -493,9 +493,9 @@ class DashletGeneric extends Dashlet
             foreach ($this->lvs->data['pageData']['urls'] as $type => $url) {
                 // awu Replacing action=DisplayDashlet with action=DynamicAction&DynamicAction=DisplayDashlet
                 if ($type == 'orderBy') {
-                    $this->lvs->data['pageData']['urls'][$type] = preg_replace('/(action=.*&)/Ui', 'action=DynamicAction&DynamicAction=displayDashlet&', $url);
+                    $this->lvs->data['pageData']['urls'][$type] = \preg_replace('/(action=.*&)/Ui', 'action=DynamicAction&DynamicAction=displayDashlet&', $url);
                 } else {
-                    $this->lvs->data['pageData']['urls'][$type] = preg_replace('/(action=.*&)/Ui', 'action=DynamicAction&DynamicAction=displayDashlet&', $url) . '&sugar_body_only=1&id=' . $this->id;
+                    $this->lvs->data['pageData']['urls'][$type] = \preg_replace('/(action=.*&)/Ui', 'action=DynamicAction&DynamicAction=displayDashlet&', $url) . '&sugar_body_only=1&id=' . $this->id;
                 }
             }
 
@@ -525,8 +525,8 @@ class DashletGeneric extends Dashlet
 
         $this->loadCustomMetadata();
         foreach ($req as $name => $value) {
-            if (!is_array($value)) {
-                $req[$name] = trim($value);
+            if (!\is_array($value)) {
+                $req[$name] = \trim($value);
             }
         }
         $options['filters'] = array();
@@ -567,7 +567,7 @@ class DashletGeneric extends Dashlet
         $options['displayRows'] = empty($req['displayRows']) ? '5' : $req['displayRows'];
         // displayColumns
         if (!empty($req['displayColumnsDef'])) {
-            $options['displayColumns'] = explode('|', $req['displayColumnsDef']);
+            $options['displayColumns'] = \explode('|', $req['displayColumnsDef']);
         }
         $options['autoRefresh'] = empty($req['autoRefresh']) ? '0' : $req['autoRefresh'];
         return $options;
@@ -585,7 +585,7 @@ class DashletGeneric extends Dashlet
             }
             if (isset($def['vname'])) {
                 $translated = translate($def['vname'], $this->seedBean->module_dir);
-                if (is_array($translated)) {
+                if (\is_array($translated)) {
                     $translated = $def['vname'];
                 }
                 if (!empty($def['source']) && $def['source'] == 'custom_fields') {

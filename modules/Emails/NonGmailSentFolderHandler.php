@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -112,7 +112,7 @@ class NonGmailSentFolderHandler
      */
     public function setLastError($err)
     {
-        if (!is_int($err)) {
+        if (!\is_int($err)) {
             throw new InvalidArgumentException('Error code should be an integer.', self::ERR_SHOULD_BE_INT);
         }
         
@@ -214,7 +214,7 @@ class NonGmailSentFolderHandler
      */
     protected function connectToNonGmailServer(InboundEmail $ie, SugarPHPMailer $mail, $sentFolder, $options = "\\Seen")
     {
-        if (!is_string($sentFolder) || !$sentFolder) {
+        if (!\is_string($sentFolder) || !$sentFolder) {
             throw new InvalidArgumentException('Sent folder should be a valid folder name string.', self::ERR_SHOULD_BE_STRING);
         }
         

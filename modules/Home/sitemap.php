@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -67,13 +67,13 @@ foreach ($sm as $mod_dir_name => $links) {
     }
 
     $temphtml .= '</ul>';
-    $sm_smarty->assign(strtoupper($mod_dir_name), $temphtml);
+    $sm_smarty->assign(\strtoupper($mod_dir_name), $temphtml);
 }
 
 // Specify the sitemap template to use; allow developers to override this with a custom one to add/remove modules
 // from the list
 $tpl = 'modules/Home/sitemap.tpl';
-if (is_file('custom/modules/Home/sitemap.tpl')) {
+if (\is_file('custom/modules/Home/sitemap.tpl')) {
     $tpl = 'custom/modules/Home/sitemap.tpl';
 }
 echo $sm_smarty->fetch($tpl);
@@ -112,17 +112,17 @@ function sm_build_array()
     }
 
     foreach ($modListHeader as $key=>$val) {
-        if (!empty($exclusion_array) && in_array($val, $exclude)) {
+        if (!empty($exclusion_array) && \in_array($val, $exclude)) {
             continue;
         }
-        if (file_exists('modules/'.$val.'/Menu.php')) {
+        if (\file_exists('modules/'.$val.'/Menu.php')) {
             $mod_strings = return_module_language($current_language, $val);
             $module_menu = array();
             include('modules/'.$val.'/Menu.php');
 
             $tmp_menu_items = array();
             foreach ($module_menu as $menu) {
-                if (isset($menu[0]) && !empty($menu[0]) && isset($menu[1]) && !empty($menu[1]) && trim($menu[0]) !='#') {
+                if (isset($menu[0]) && !empty($menu[0]) && isset($menu[1]) && !empty($menu[1]) && \trim($menu[0]) !='#') {
                     $tmp_menu_items[$menu[1]] =$menu[0];
                 }
             }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -60,14 +60,14 @@ class FilterFactory
             }
 
             //split the wrapper name to find the path to the file.
-            $dir = str_replace('_', '/', $filter_name);
-            $parts = explode("/", $dir);
-            $file = $parts[count($parts)-1];
+            $dir = \str_replace('_', '/', $filter_name);
+            $parts = \explode("/", $dir);
+            $file = $parts[\count($parts)-1];
 
             //check if this override wrapper file exists.
             require_once('include/connectors/ConnectorFactory.php');
-            if (file_exists("modules/Connectors/connectors/filters/{$dir}/{$file}.php") ||
-               file_exists("custom/modules/Connectors/connectors/filters/{$dir}/{$file}.php")) {
+            if (\file_exists("modules/Connectors/connectors/filters/{$dir}/{$file}.php") ||
+               \file_exists("custom/modules/Connectors/connectors/filters/{$dir}/{$file}.php")) {
                 ConnectorFactory::load($filter_name, 'filters');
                 try {
                     $filter_name .= '_filter';

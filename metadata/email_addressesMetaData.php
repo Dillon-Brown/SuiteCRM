@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -156,7 +156,7 @@ $dictionary['email_addresses'] = array(
 );
 
 // hack for installer
-if (file_exists("cache/modules/EmailAddresses/EmailAddressvardefs.php")) {
+if (\file_exists("cache/modules/EmailAddresses/EmailAddressvardefs.php")) {
     include("cache/modules/EmailAddresses/EmailAddressvardefs.php");
 } else {
     $dictionary['EmailAddress'] = $dictionary['email_addresses'];

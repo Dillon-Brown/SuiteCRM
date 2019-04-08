@@ -67,8 +67,8 @@ class ViewSugarFieldCollection
     {
         $this->json = getJSONobj();
         if ($fill_data) {
-            $this->displayParams = $this->json->decode(html_entity_decode($_REQUEST['displayParams']));
-            $this->vardef = $this->json->decode(html_entity_decode($_REQUEST['vardef']));
+            $this->displayParams = $this->json->decode(\html_entity_decode($_REQUEST['displayParams']));
+            $this->vardef = $this->json->decode(\html_entity_decode($_REQUEST['vardef']));
             $this->module_dir = $_REQUEST['module_dir'];
             $this->action_type = $_REQUEST['action_type'];
             $this->name = $this->vardef['name'];
@@ -91,7 +91,7 @@ class ViewSugarFieldCollection
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($fill_data);
     }
@@ -102,7 +102,7 @@ class ViewSugarFieldCollection
      */
     public function setup()
     {
-        if (!class_exists('Relationship')) {
+        if (!\class_exists('Relationship')) {
         }
         $rel = new Relationship();
         if (!empty($this->vardef['relationship'])) {
@@ -123,7 +123,7 @@ class ViewSugarFieldCollection
             }
             if (isset($GLOBALS['beanList'][$this->module_dir])) {
                 $class = $GLOBALS['beanList'][$this->module_dir];
-                if (file_exists($GLOBALS['beanFiles'][$class])) {
+                if (\file_exists($GLOBALS['beanFiles'][$class])) {
                     $this->bean = loadBean($this->module_dir);
                     $this->bean->retrieve($_REQUEST['bean_id']);
                     if ($this->bean->load_relationship($this->vardef['name'])) {
@@ -172,12 +172,12 @@ class ViewSugarFieldCollection
                 }
                 if (isset($GLOBALS['beanList'][ $this->related_module])) {
                     $class = $GLOBALS['beanList'][$this->related_module];
-                    if (file_exists($GLOBALS['beanFiles'][$class])) {
+                    if (\file_exists($GLOBALS['beanFiles'][$class])) {
                         $mod = loadBean($this->module_dir);
                         $mod->relDepth = $this->bean->relDepth + 1;
                         $mod->retrieve($primary_id);
                         if (isset($mod->name)) {
-                            $this->bean->{$this->value_name}=array_merge($this->bean->{$this->value_name}, array('primary'=>array('id'=>$primary_id, 'name'=>$mod->name)));
+                            $this->bean->{$this->value_name}=\array_merge($this->bean->{$this->value_name}, array('primary'=>array('id'=>$primary_id, 'name'=>$mod->name)));
                         }
                         $secondaries = array();
                         if (isset($secondary_ids)) {
@@ -189,7 +189,7 @@ class ViewSugarFieldCollection
                                 }
                             }
                         }
-                        $this->bean->{$this->value_name}=array_merge($this->bean->{$this->value_name}, $secondaries);
+                        $this->bean->{$this->value_name}=\array_merge($this->bean->{$this->value_name}, $secondaries);
                         if (isset($field['additionalFields'])) {
                             foreach ($field['additionalFields'] as $field=>$to) {
                                 if (isset($mod->$field)) {
@@ -222,7 +222,7 @@ class ViewSugarFieldCollection
     public function process_editview()
     {
         if (isset($this->bean->{$this->value_name}['secondaries'])) {
-            $this->numFields=count($this->bean->{$this->value_name}['secondaries'])+1;
+            $this->numFields=\count($this->bean->{$this->value_name}['secondaries'])+1;
         }
         if (!isset($this->displayParams['readOnly'])) {
             $this->displayParams['readOnly'] = '';
@@ -249,8 +249,8 @@ class ViewSugarFieldCollection
                     require_once('include/TemplateHandler/TemplateHandler.php');
                     $tph = new TemplateHandler();
                     $javascript = $tph->createQuickSearchCode(array($collection_field_vardef['name']=>$collection_field_vardef), array($v), $this->form_name);
-                    $javascript = str_replace('<script language="javascript">'."if(typeof sqs_objects == 'undefined'){var sqs_objects = new Array;}sqs_objects['{$collection_field_vardef['name']}']=", "", $javascript);
-                    $javascript = substr($javascript, 0, -10);//remove ";</script>"
+                    $javascript = \str_replace('<script language="javascript">'."if(typeof sqs_objects == 'undefined'){var sqs_objects = new Array;}sqs_objects['{$collection_field_vardef['name']}']=", "", $javascript);
+                    $javascript = \substr($javascript, 0, -10);//remove ";</script>"
                     $javascriptPHP = $this->json->decode($javascript);
                     foreach ($javascriptPHP['populate_list'] as $kk=>$vv) {
                         $javascriptPHP['populate_list'][$kk] .= "_" . $this->vardef['name'] . "_collection_extra_0";
@@ -316,7 +316,7 @@ FRA;
         }
         if (isset($this->displayParams['allow_new']) && ($this->displayParams['allow_new'] === false || $this->displayParams['allow_new'] === 'false')) {
             $this->displayParams['allow_new']='false';
-            $this->displayParams['class']=str_replace('sqsNoAutofill', '', $this->displayParams['class']);
+            $this->displayParams['class']=\str_replace('sqsNoAutofill', '', $this->displayParams['class']);
         } else {
             $this->displayParams['allow_new']='true';
             $this->displayParams['class'].=' sqsNoAutofill';
@@ -359,12 +359,12 @@ FRA;
     {
         $cacheRowFile = sugar_cached('modules/') . $this->module_dir .  '/collections/'. $this->name . '.tpl';
         if (!$this->checkTemplate($cacheRowFile)) {
-            $dir = dirname($cacheRowFile);
-            if (!file_exists($dir)) {
+            $dir = \dirname($cacheRowFile);
+            if (!\file_exists($dir)) {
                 mkdir_recursive($dir, null, true);
             }
             $cacheRow = $this->ss->fetch($this->findTemplate('CollectionEditViewRow'));
-            file_put_contents($cacheRowFile, $cacheRow);
+            \file_put_contents($cacheRowFile, $cacheRow);
         }
         $this->ss->assign('cacheRowFile', $cacheRowFile);
         return $this->ss->fetch($this->tpl_path);
@@ -378,7 +378,7 @@ FRA;
         if (inDeveloperMode() || !empty($_SESSION['developerMode'])) {
             return false;
         }
-        return file_exists($cacheRowFile);
+        return \file_exists($cacheRowFile);
     }
 
 
@@ -394,7 +394,7 @@ FRA;
         $qsd->setFormName($this->form_name);
         for ($i=0; $i<$this->numFields; $i++) {
             $name1 = "{$this->form_name}_{$this->name}_collection_{$i}";
-            if (!$this->skipModuleQuickSearch && preg_match('/(Campaigns|Teams|Users|Accounts)/si', $this->related_module, $matches)) {
+            if (!$this->skipModuleQuickSearch && \preg_match('/(Campaigns|Teams|Users|Accounts)/si', $this->related_module, $matches)) {
                 if ($matches[0] == 'Users') {
                     $sqs_objects[$name1] = $qsd->getQSUser();
                 } elseif ($matches[0] == 'Campaigns') {
@@ -421,7 +421,7 @@ FRA;
 
                 $temp_array = array('field_list'=>array(),'populate_list'=>array());
                 foreach ($sqs_objects[$name1]['field_list'] as $k=>$v) {
-                    if (!in_array($v, array('name','id'))) {
+                    if (!\in_array($v, array('name','id'))) {
                         $sqs_objects[$name1]['primary_field_list'][]=$v;
                         $sqs_objects[$name1]['primary_populate_list'][]=$sqs_objects[$name1]['populate_list'][$k];
                     } else {
@@ -461,8 +461,8 @@ FRA;
                         $sqs_objects[$name1]['primary_field_list'][] = $k;
                     }
                 } elseif (isset($field['field_list']) && isset($field['populate_list'])) {
-                    $sqs_objects[$name1]['primary_populate_list'] = array_merge($sqs_objects[$name1]['populate_list'], $field['field_list']);
-                    $sqs_objects[$name1]['primary_field_list'] = array_merge($sqs_objects[$name1]['field_list'], $field['populate_list']);
+                    $sqs_objects[$name1]['primary_populate_list'] = \array_merge($sqs_objects[$name1]['populate_list'], $field['field_list']);
+                    $sqs_objects[$name1]['primary_field_list'] = \array_merge($sqs_objects[$name1]['field_list'], $field['populate_list']);
                 } else {
                     $sqs_objects[$name1]['primary_populate_list'] = array();
                     $sqs_objects[$name1]['primary_field_list'] = array();
@@ -472,7 +472,7 @@ FRA;
 
         $id = "{$this->form_name}_{$this->name}_collection_0";
 
-        if (!empty($sqs_objects) && count($sqs_objects) > 0) {
+        if (!empty($sqs_objects) && \count($sqs_objects) > 0) {
             foreach ($sqs_objects[$id]['field_list'] as $k=>$v) {
                 $this->field_to_name_array[$v] = $sqs_objects[$id]['populate_list'][$k];
             }
@@ -518,7 +518,7 @@ FRA;
             );
 
             //Make sure to replace {{ and }} with spacing in between because Smarty template parsing will treat {{ or }} specially
-            $this->displayParams['popupData'] = '{literal}'. str_replace(array('{{', '}}'), array('{ {', '} }'), $this->json->encode($popup_request_data)) . '{/literal}';
+            $this->displayParams['popupData'] = '{literal}'. \str_replace(array('{{', '}}'), array('{ {', '} }'), $this->json->encode($popup_request_data)) . '{/literal}';
         }
     }
 
@@ -532,10 +532,10 @@ FRA;
             return $tplCache[$this->type][$view];
         }
 
-        $lastClass = get_class($this);
-        $classList = array($this->type,str_replace('ViewSugarField', '', $lastClass));
-        while ($lastClass = get_parent_class($lastClass)) {
-            $classList[] = str_replace('ViewSugarField', '', $lastClass);
+        $lastClass = \get_class($this);
+        $classList = array($this->type,\str_replace('ViewSugarField', '', $lastClass));
+        while ($lastClass = \get_parent_class($lastClass)) {
+            $classList[] = \str_replace('ViewSugarField', '', $lastClass);
         }
 
         $tplName = '';
@@ -543,20 +543,20 @@ FRA;
             global $current_language;
             if (isset($current_language)) {
                 $tplName = 'include/SugarFields/Fields/'. $className .'/'. $current_language . '.' . $view .'.tpl';
-                if (file_exists('custom/'.$tplName)) {
+                if (\file_exists('custom/'.$tplName)) {
                     $tplName = 'custom/'.$tplName;
                     break;
                 }
-                if (file_exists($tplName)) {
+                if (\file_exists($tplName)) {
                     break;
                 }
             }
             $tplName = 'include/SugarFields/Fields/'. $className .'/'. $view .'.tpl';
-            if (file_exists('custom/'.$tplName)) {
+            if (\file_exists('custom/'.$tplName)) {
                 $tplName = 'custom/'.$tplName;
                 break;
             }
-            if (file_exists($tplName)) {
+            if (\file_exists($tplName)) {
                 break;
             }
         }

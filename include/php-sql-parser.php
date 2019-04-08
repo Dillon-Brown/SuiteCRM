@@ -19,7 +19,7 @@ class PHPSQLParser
 
     public function parse($sql)
     {
-        $sql = trim($sql);
+        $sql = \trim($sql);
 
         #lex the SQL statement
         $in = $this->split_sql($sql);
@@ -43,11 +43,11 @@ class PHPSQLParser
         #This is the highest level lexical analysis.  This is the part of the
         #code which finds UNION and UNION ALL query parts
         foreach ($in as $key => $token) {
-            $token=trim($token);
+            $token=\trim($token);
 
             if ($skip_until) {
                 if ($token) {
-                    if (strtoupper($token) == $skip_until) {
+                    if (\strtoupper($token) == $skip_until) {
                         $skip_until = false;
                         continue;
                     }
@@ -56,13 +56,13 @@ class PHPSQLParser
                 }
             }
 
-            if (strtoupper($token) == "UNION") {
+            if (\strtoupper($token) == "UNION") {
                 $union = 'UNION';
-                for ($i=$key+1;$i<count($in);++$i) {
-                    if (trim($in[$i]) == '') {
+                for ($i=$key+1;$i<\count($in);++$i) {
+                    if (\trim($in[$i]) == '') {
                         continue;
                     }
-                    if (strtoupper($in[$i]) == 'ALL') {
+                    if (\strtoupper($in[$i]) == 'ALL') {
                         $skip_until = 'ALL';
                         $union = 'UNION ALL';
                         continue ;
@@ -100,12 +100,12 @@ class PHPSQLParser
             if (!empty($queries[$union_type])) {
                 foreach ($queries[$union_type] as $i => $tok_list) {
                     foreach ($tok_list as $z => $tok) {
-                        $tok = trim($tok);
+                        $tok = \trim($tok);
                         if (!$tok) {
                             continue;
                         }
-                        if (preg_match('/^\\(\\s*select\\s*/i', $tok)) {
-                            $queries[$union_type][$i] = $this->parse(substr($tok, 1, -1));
+                        if (\preg_match('/^\\(\\s*select\\s*/i', $tok)) {
+                            $queries[$union_type][$i] = $this->parse(\substr($tok, 1, -1));
                             break;
                         }
                         $queries[$union_type][$i] = $this->process_sql($queries[$union_type][$i]);
@@ -123,7 +123,7 @@ class PHPSQLParser
             $queries[0] = $this->process_sql($queries[0]);
         }
 
-        if (count($queries) == 1 && !$union) {
+        if (\count($queries) == 1 && !$union) {
             $queries = $queries[0];
         }
 
@@ -135,7 +135,7 @@ class PHPSQLParser
     #returns their location.  This might be faster as a regex
     private function count_paren($token, $chars=array('(',')'))
     {
-        $len = strlen($token);
+        $len = \strlen($token);
         $open=array();
         $close=array();
         for ($i=0;$i<$len;++$i) {
@@ -145,14 +145,14 @@ class PHPSQLParser
                 $close[] = $i;
             }
         }
-        return array('open' => $open, 'close' => $close, 'balanced' =>(count($close) - count($open)));
+        return array('open' => $open, 'close' => $close, 'balanced' =>(\count($close) - \count($open)));
     }
 
     #This function counts open and close parenthesis and
     #returns their location.  This might be faster as a regex
     private function count_backtick($token)
     {
-        $len = strlen($token);
+        $len = \strlen($token);
         $cnt=0;
         for ($i=0;$i<$len;++$i) {
             if ($token[$i] == '`') {
@@ -167,11 +167,11 @@ class PHPSQLParser
     #tokens for the SQL processor
     private function split_sql($sql)
     {
-        if (!is_string($sql)) {
+        if (!\is_string($sql)) {
             return false;
         }
 
-        $sql = str_replace(array('\\\'','\\"',"\r\n","\n","()"), array("''",'""'," "," "," "), $sql);
+        $sql = \str_replace(array('\\\'','\\"',"\r\n","\n","()"), array("''",'""'," "," "," "), $sql);
         $regex=<<<EOREGEX
 /(`(?:[^`]|``)`|[@A-Za-z0-9_.`-]+(?:\(\s*\)){0,1})
 |(\+|-|\*|\/|!=|>=|<=|<>|>|<|&&|\|\||=|\^)
@@ -183,8 +183,8 @@ class PHPSQLParser
 EOREGEX
 ;
 
-        $tokens = preg_split($regex, $sql, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-        $token_count = count($tokens);
+        $tokens = \preg_split($regex, $sql, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $token_count = \count($tokens);
 
         /* The above regex has one problem, because the parenthetical match is not greedy.
            Thus, when matching grouped expressions such as ( (a and b) or c) the
@@ -202,14 +202,14 @@ EOREGEX
             }
 
             $token = $tokens[$i];
-            $trim = trim($token);
+            $trim = \trim($token);
             if ($trim) {
                 if ($trim[0] != '('
-                        && substr($trim, -1) == ')') {
-                    $trim=trim(substr(
+                        && \substr($trim, -1) == ')') {
+                    $trim=\trim(\substr(
                         $trim,
                         0,
-                                strpos($trim, '(')
+                                \strpos($trim, '(')
                     ));
                 }
                 $tokens[$i]=$trim;
@@ -223,33 +223,33 @@ EOREGEX
                 }
 
                 // We need to find this many closing parentheses.
-                $needed = abs($info['balanced']);
+                $needed = \abs($info['balanced']);
                 $n = $i;
                 while ($needed > 0 && $n <$token_count-1) {
                     ++$n;
                     #echo "LOOKING FORWARD TO $n [ " . $tokens[$n] . "]\n";
                     $token2 = $tokens[$n];
                     $info2 = $this->count_paren($token2);
-                    $closes = count($info2['close']);
+                    $closes = \count($info2['close']);
                     if ($closes != $needed) {
                         $tokens[$i] .= $tokens[$n];
                         unset($tokens[$n]);
                         $reset = true;
                         $info2 = $this->count_paren($tokens[$i]);
-                        $needed = abs($info2['balanced']);
+                        $needed = \abs($info2['balanced']);
                     #	echo "CLOSES LESS THAN NEEDED (still need $needed)\n";
                     } else {
                         /*get the string pos of the last close parenthesis we need*/
-                        $pos = $info2['close'][count($info2['close'])-1];
+                        $pos = $info2['close'][\count($info2['close'])-1];
                         $str1 = $str2 = "";
                         if ($pos == 0) {
                             $str1 = ')';
                         } else {
-                            $str1 = substr($tokens[$n], 0, $pos) . ')';
-                            $str2 = substr($tokens[$n], $pos+1);
+                            $str1 = \substr($tokens[$n], 0, $pos) . ')';
+                            $str2 = \substr($tokens[$n], $pos+1);
                         }
                         #echo "CLOSES FOUND AT $n, offset:$pos  [$str1] [$str2]\n";
-                        if (strlen($str2) > 0) {
+                        if (\strlen($str2) > 0) {
                             $tokens[$n] = $str2;
                         } else {
                             unset($tokens[$n]);
@@ -257,7 +257,7 @@ EOREGEX
                         }
                         $tokens[$i] .= $str1;
                         $info2 = $this->count_paren($tokens[$i]);
-                        $needed = abs($info2['balanced']);
+                        $needed = \abs($info2['balanced']);
                     }
                 }
             }
@@ -267,10 +267,10 @@ EOREGEX
 
         /* reset the array if we deleted any tokens above */
         if ($reset) {
-            $tokens = array_values($tokens);
+            $tokens = \array_values($tokens);
         }
 
-        $token_count=count($tokens);
+        $token_count=\count($tokens);
         for ($i=0;$i<$token_count;++$i) {
             if (empty($tokens[$i])) {
                 continue;
@@ -278,7 +278,7 @@ EOREGEX
             $token=$tokens[$i];
             $needed=true;
             $reset=false;
-            if ($needed && $token && strpos($token, '`') !== false) {
+            if ($needed && $token && \strpos($token, '`') !== false) {
                 $info = $this->count_backtick($token);
                 if ($info %2 == 0) { #even number of backticks means we are balanced
                     continue;
@@ -300,7 +300,7 @@ EOREGEX
             }
         }
         /* reset the array if we deleted any tokens above */
-        $tokens = array_values($tokens);
+        $tokens = \array_values($tokens);
 
         return $tokens;
     }
@@ -311,11 +311,11 @@ EOREGEX
     private function process_sql(&$tokens, $start_at = 0, $stop_at = false)
     {
         $prev_category = "";
-        $start = microtime(true);
+        $start = \microtime(true);
         $token_category = "";
 
         $skip_next=false;
-        $token_count = count($tokens);
+        $token_count = \count($tokens);
 
         if (!$stop_at) {
             $stop_at = $token_count;
@@ -324,7 +324,7 @@ EOREGEX
         $out = false;
 
         for ($token_number = $start_at;$token_number<$stop_at;++$token_number) {
-            $token = trim($tokens[$token_number]);
+            $token = \trim($tokens[$token_number]);
             if ($token && $token[0] == '(' && $token_category == "") {
                 $token_category = 'SELECT';
             }
@@ -343,7 +343,7 @@ EOREGEX
                 $skip_next = false;
             }
 
-            $upper = strtoupper($token);
+            $upper = \strtoupper($token);
             switch ($upper) {
 
                     /* Tokens that get their own sections. These keywords have subclauses. */
@@ -631,7 +631,7 @@ EOREGEX
         $expression="";
         $expr=array();
         foreach ($tokens as $token) {
-            $token=trim($token);
+            $token=\trim($token);
             if (!$column) {
                 if ($token === false || empty($token)) {
                     continue;
@@ -645,7 +645,7 @@ EOREGEX
             }
 
             if ($token == ',') {
-                $expr[] = array('column' => trim($column), 'expr' => trim($expression));
+                $expr[] = array('column' => \trim($column), 'expr' => \trim($expression));
                 $expression = $column = "";
                 continue;
             }
@@ -653,7 +653,7 @@ EOREGEX
             $expression .= $token;
         }
         if ($expression) {
-            $expr[] = array('column' => trim($column), 'expr' => trim($expression));
+            $expr[] = array('column' => \trim($column), 'expr' => \trim($expression));
         }
 
         return $expr;
@@ -668,7 +668,7 @@ EOREGEX
         $start = 0;
         $end = 0;
 
-        if ($pos = array_search(',', $tokens)) {
+        if ($pos = \array_search(',', $tokens)) {
             for ($i=0;$i<$pos;++$i) {
                 if ($tokens[$i] != '') {
                     $start = $tokens[$i];
@@ -680,7 +680,7 @@ EOREGEX
             $pos = 0;
         }
 
-        for ($i=$pos;$i<count($tokens);++$i) {
+        for ($i=$pos;$i<\count($tokens);++$i) {
             if ($tokens[$i] != '') {
                 $end = $tokens[$i];
                 break;
@@ -702,7 +702,7 @@ EOREGEX
         $expr = array();
         foreach ($tokens as $token) {
             if ($token == ',') {
-                $expr[] = $this->process_select_expr(trim($expression));
+                $expr[] = $this->process_select_expr(\trim($expression));
                 $expression = "";
             } else {
                 if ($token === "" || $token===false) {
@@ -711,7 +711,7 @@ EOREGEX
                 $expression .= $token ;
             }
         }
-        $expression = trim($expression);
+        $expression = \trim($expression);
         if ($expression) {
             $expr[] = $this->process_select_expr($expression);
         }
@@ -730,7 +730,7 @@ EOREGEX
         $capture = false;
         $alias = "";
         $base_expression = $expression;
-        $upper = trim(strtoupper($expression));
+        $upper = \trim(\strtoupper($expression));
         #if necessary, unpack the expression
         if ($upper[0] == '(') {
             #$expression = substr($expression,1,-1);
@@ -738,7 +738,7 @@ EOREGEX
         }
 
         $tokens = $this->split_sql($expression);
-        $token_count = count($tokens);
+        $token_count = \count($tokens);
 
         /* Determine if there is an explicit alias after the AS clause.
         If AS is found, then the next non-whitespace token is captured as the alias.
@@ -750,8 +750,8 @@ EOREGEX
         $alias = "";
         $processed=false;
         for ($i=0;$i<$token_count;++$i) {
-            $token = strtoupper($tokens[$i]);
-            if (trim($token)) {
+            $token = \strtoupper($tokens[$i]);
+            if (\trim($token)) {
                 $stripped[] = $tokens[$i];
             }
 
@@ -762,7 +762,7 @@ EOREGEX
             }
 
             if ($capture) {
-                if (trim($token)) {
+                if (\trim($token)) {
                     $alias .= $tokens[$i];
                 }
                 unset($tokens[$i]);
@@ -772,9 +772,9 @@ EOREGEX
         }
 
         $stripped = $this->process_expr_list($stripped);
-        $last = array_pop($stripped);
+        $last = \array_pop($stripped);
         if (!$alias && $last['expr_type'] == 'colref') {
-            $prev = array_pop($stripped);
+            $prev = \array_pop($stripped);
             if ($prev['expr_type'] == 'operator' ||
                    $prev['expr_type'] == 'const' ||
                    $prev['expr_type'] == 'function' ||
@@ -785,27 +785,27 @@ EOREGEX
                 $alias = $last['base_expr'];
 
                 #remove the last token
-                array_pop($tokens);
+                \array_pop($tokens);
 
-                $base_expr = join("", $tokens);
+                $base_expr = \join("", $tokens);
             }
         }
 
         if (!$alias) {
-            $base_expr=join("", $tokens);
+            $base_expr=\join("", $tokens);
             $alias = $base_expr;
         }
 
         /* Properly escape the alias if it is not escaped */
         if ($alias[0] != '`') {
-            $alias = '`' . str_replace('`', '``', $alias) . '`';
+            $alias = '`' . \str_replace('`', '``', $alias) . '`';
         }
         $processed = false;
         $type='expression';
 
-        if (substr(trim($base_expr), 0, 1) == '(') {
-            $base_expr = substr($expression, 1, -1);
-            if (preg_match('/^sel/i', $base_expr)) {
+        if (\substr(\trim($base_expr), 0, 1) == '(') {
+            $base_expr = \substr($expression, 1, -1);
+            if (\preg_match('/^sel/i', $base_expr)) {
                 $type='subquery';
                 $processed = $this->parse($base_expr);
             }
@@ -814,7 +814,7 @@ EOREGEX
             $processed = $this->process_expr_list($tokens);
         }
 
-        if (count($processed) == 1) {
+        if (\count($processed) == 1) {
             $type = $processed[0]['expr_type'];
             $processed = false;
         }
@@ -824,12 +824,12 @@ EOREGEX
 
     private function trimSubquery($sq)
     {
-        $sq = trim($sq);
+        $sq = \trim($sq);
         if (empty($sq)) {
             return '';
         }
-        while ($sq[0] == '(' && substr($sq, -1) == ')') {
-            $sq = substr($sq, 1, -1);
+        while ($sq[0] == '(' && \substr($sq, -1) == ')') {
+            $sq = \substr($sq, 1, -1);
         }
         return $sq;
     }
@@ -857,7 +857,7 @@ EOREGEX
 
         foreach ($tokens as $token) {
             $base_expr = false;
-            $upper = strtoupper(trim($token));
+            $upper = \strtoupper(\trim($token));
 
             if ($skip_next && $token) {
                 $token_count++;
@@ -869,7 +869,7 @@ EOREGEX
             }
             
 
-            if (preg_match("/^\\s*\\(\\s*select/i", $token)) {
+            if (\preg_match("/^\\s*\\(\\s*select/i", $token)) {
                 $type = 'subquery';
                 $table = "DEPENDENT-SUBQUERY";
                 $sub_tree = $this->parse($this->trimSubquery($token));
@@ -900,7 +900,7 @@ EOREGEX
                         $n=1;
                         $alias = "";
                         while ($alias == "") {
-                            $alias = trim($tokens[$i+$n]);
+                            $alias = \trim($tokens[$i+$n]);
                             ++$n;
                         }
 
@@ -967,16 +967,16 @@ EOREGEX
 
                         $first_join = false;
 
-                        if (!trim($alias)) {
+                        if (!\trim($alias)) {
                             $alias = $table;
                         }
 
                         if ($subquery) {
-                            $sub_tree = $this->parse(trim($subquery, '()'));
+                            $sub_tree = $this->parse(\trim($subquery, '()'));
                             $base_expr=$subquery;
                         }
 
-                        if (substr(trim($table), 0, 1) == '(') {
+                        if (\substr(\trim($table), 0, 1) == '(') {
                             $base_expr=$this->trimSubquery($table);
                             $join_type = 'JOIN';
                             $sub_tree = $this->process_from($this->split_sql($base_expr));
@@ -1017,13 +1017,13 @@ EOREGEX
                 }
             ++$i;
         }
-        if (substr(trim($table), 0, 1) == '(') {
+        if (\substr(\trim($table), 0, 1) == '(') {
             $base_expr=$this->trimSubquery($table);
             $join_type = 'JOIN';
             $sub_tree = $this->process_from($this->split_sql($base_expr));
             $alias = "";
         } else {
-            if (!trim($alias)) {
+            if (!\trim($alias)) {
                 $alias = $table;
             }
         }
@@ -1048,17 +1048,17 @@ EOREGEX
         }
     
         foreach ($tokens as $token) {
-            switch (strtoupper($token)) {
+            switch (\strtoupper($token)) {
                     case ',':
-                        $expression = trim($expression);
-                        if ($expression[0] != '`' || substr($expression, -1) != '`') {
-                            $escaped = str_replace('`', '``', $expression);
+                        $expression = \trim($expression);
+                        if ($expression[0] != '`' || \substr($expression, -1) != '`') {
+                            $escaped = \str_replace('`', '``', $expression);
                         } else {
                             $escaped = $expression;
                         }
                         $escaped = '`' . $escaped . '`';
 
-                        if (is_numeric(trim($expression))) {
+                        if (\is_numeric(\trim($expression))) {
                             $type = 'pos';
                         } else {
 
@@ -1095,22 +1095,22 @@ EOREGEX
                 }
         }
         if ($expression) {
-            $expression = trim($expression);
-            if ($expression[0] != '`' || substr($expression, -1) != '`') {
-                $escaped = str_replace('`', '``', $expression);
+            $expression = \trim($expression);
+            if ($expression[0] != '`' || \substr($expression, -1) != '`') {
+                $escaped = \str_replace('`', '``', $expression);
             } else {
                 $escaped = $expression;
             }
             $escaped = '`' . $escaped . '`';
 
-            if (is_numeric(trim($expression))) {
+            if (\is_numeric(\trim($expression))) {
                 $type = 'pos';
             } else {
 
                         #search to see if the expression matches an alias
                 if (!$type && $select) {
                     foreach ($select as $clause) {
-                        if (!is_array($clause)) {
+                        if (!\is_array($clause)) {
                             continue;
                         }
                         if ($clause['alias'] == $escaped) {
@@ -1150,7 +1150,7 @@ EOREGEX
 
         $in_lists = array();
         foreach ($tokens as $key => $token) {
-            if (strlen(trim($token))==0) {
+            if (\strlen(\trim($token))==0) {
                 continue;
             }
             if ($skip_next) {
@@ -1159,13 +1159,13 @@ EOREGEX
             }
 
             $processed = false;
-            $upper = strtoupper(trim($token));
-            if (trim($token)) {
-                $token=trim($token);
+            $upper = \strtoupper(\trim($token));
+            if (\trim($token)) {
+                $token=\trim($token);
             }
 
             /* is it a subquery?*/
-            if (preg_match("/^\\s*\\(\\s*SELECT/i", $token)) {
+            if (\preg_match("/^\\s*\\(\\s*SELECT/i", $token)) {
                 $type = 'subquery';
                 #tokenize and parse the subquery.
                 #we remove the enclosing parenthesis for the tokenizer
@@ -1173,10 +1173,10 @@ EOREGEX
 
 
             /* is it an inlist */
-            } elseif ($upper[0] == '(' && substr($upper, -1) == ')') {
+            } elseif ($upper[0] == '(' && \substr($upper, -1) == ')') {
                 if ($prev_token == 'IN') {
                     $type = "in-list";
-                    $processed = $this->split_sql(substr($token, 1, -1));
+                    $processed = $this->split_sql(\substr($token, 1, -1));
                     $list = array();
                     foreach ($processed as $v) {
                         if ($v == ',') {
@@ -1189,9 +1189,9 @@ EOREGEX
                     $prev_token = "";
                 } elseif ($prev_token == 'AGAINST') {
                     $type = "match-arguments";
-                    $list = $this->split_sql(substr($token, 1, -1));
-                    if (count($list) > 1) {
-                        $match_mode = implode('', array_slice($list, 1));
+                    $list = $this->split_sql(\substr($token, 1, -1));
+                    if (\count($list) > 1) {
+                        $match_mode = \implode('', \array_slice($list, 1));
                         $processed = array($list[0], $match_mode);
                     } else {
                         $processed = $list[0];
@@ -1257,7 +1257,7 @@ EOREGEX
                                     break;
 
                             default:
-                                if (is_numeric($token)) {
+                                if (\is_numeric($token)) {
                                     $type = 'const';
                                 } else {
                                     $type = 'colref';
@@ -1270,9 +1270,9 @@ EOREGEX
                     }
             }
             /* is a reserved word? */
-            if (($type != 'operator' && $type != 'in-list' && $type != 'sub_expr') && in_array($upper, $this->reserved)) {
+            if (($type != 'operator' && $type != 'in-list' && $type != 'sub_expr') && \in_array($upper, $this->reserved)) {
                 $token = $upper;
-                if (!in_array($upper, $this->functions)) {
+                if (!\in_array($upper, $this->functions)) {
                     $type = 'reserved';
                 } else {
                     switch ($token) {
@@ -1315,7 +1315,7 @@ EOREGEX
 
             if (!$type) {
                 if ($upper[0] == '(') {
-                    $local_expr = substr(trim($token), 1, -1);
+                    $local_expr = \substr(\trim($token), 1, -1);
                 } else {
                     $local_expr = $token;
                 }
@@ -1329,7 +1329,7 @@ EOREGEX
 //					}
             }
 
-            $sub_expr=trim($sub_expr);
+            $sub_expr=\trim($sub_expr);
             $sub_expr = "";
 
             $expr[] = array( 'expr_type' => $type, 'base_expr' => $token, 'sub_tree' => $processed);
@@ -1338,10 +1338,10 @@ EOREGEX
             $type = "";
         }
         if ($sub_expr) {
-            $processed['sub_tree'] = $this->process_expr_list($this->split_sql(substr($sub_expr, 1, -1)));
+            $processed['sub_tree'] = $this->process_expr_list($this->split_sql(\substr($sub_expr, 1, -1)));
         }
 
-        if (!is_array($processed)) {
+        if (!\is_array($processed)) {
             $processed = false;
         }
 
@@ -1368,7 +1368,7 @@ EOREGEX
         */
 
         if ($mod) {
-            $expr=array_values($expr);
+            $expr=\array_values($expr);
         }
 
 
@@ -1385,8 +1385,8 @@ EOREGEX
         $del = $tokens['DELETE'];
 
         foreach ($tokens['DELETE'] as $expression) {
-            if ($expression != 'DELETE' && trim($expression, ' .*') != "" && $expression != ',') {
-                $tables[] = trim($expression, '.* ');
+            if ($expression != 'DELETE' && \trim($expression, ' .*') != "" && $expression != ',') {
+                $tables[] = \trim($expression, '.* ');
             }
         }
 
@@ -1408,7 +1408,7 @@ EOREGEX
 
         $into = $tokens['INTO'];
         foreach ($into as $token) {
-            if (!trim($token)) {
+            if (!\trim($token)) {
                 continue;
             }
             if (!$table) {
@@ -1421,7 +1421,7 @@ EOREGEX
         if (!$cols) {
             $cols = 'ALL';
         } else {
-            $cols = explode(",", $this->trimSubquery($cols));
+            $cols = \explode(",", $this->trimSubquery($cols));
         }
         unset($tokens['INTO']);
         $tokens[$token_category] =  array('table'=>$table, 'cols'=>$cols);
@@ -2059,10 +2059,10 @@ EOREGEX
             'zerofill'
             );
 
-        for ($i=0;$i<count($this->reserved);++$i) {
-            $this->reserved[$i]=strtoupper($this->reserved[$i]);
+        for ($i=0;$i<\count($this->reserved);++$i) {
+            $this->reserved[$i]=\strtoupper($this->reserved[$i]);
             if (!empty($this->functions[$i])) {
-                $this->functions[$i] = strtoupper($this->functions[$i]);
+                $this->functions[$i] = \strtoupper($this->functions[$i]);
             }
         }
     }

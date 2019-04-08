@@ -60,7 +60,7 @@ function install_aop()
         $template->save();
         $sugar_config['aop'][$configKey . "_id"] = $template->id;
     }
-    ksort($sugar_config);
+    \ksort($sugar_config);
     write_array_to_file('sugar_config', $sugar_config, 'config.php');
 
     installAOPHooks();

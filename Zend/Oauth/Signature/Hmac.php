@@ -49,6 +49,6 @@ class Zend_Oauth_Signature_Hmac extends Zend_Oauth_Signature_SignatureAbstract
             $this->_getBaseSignatureString($params, $method, $url),
             Zend_Crypt_Hmac::BINARY
         );
-        return base64_encode($binaryHash);
+        return \base64_encode($binaryHash);
     }
 }

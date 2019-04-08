@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -65,7 +65,7 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($layout_manager);
     }
@@ -81,7 +81,7 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
         $name = $layout_def['name'];
         $layout_def['name'] = 'id';
         $key = $this->_get_column_alias($layout_def);
-        $key = strtoupper($key);
+        $key = \strtoupper($key);
 
         if (empty($layout_def['fields'][$key])) {
             $layout_def['name'] = $name;
@@ -155,14 +155,14 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
             return $this->_get_normal_column_select($layout_def);
         }
         $localeNameFormat = $locale->getLocaleFormatMacro($current_user);
-        $localeNameFormat = trim(preg_replace('/s/i', '', $localeNameFormat));
+        $localeNameFormat = \trim(\preg_replace('/s/i', '', $localeNameFormat));
 
         if (empty($field_def['fields']) || empty($field_def['fields'][0]) || empty($field_def['fields'][1])) {
             return parent::_get_column_select($layout_def);
         }
 
         if (! empty($layout_def['table_alias'])) {
-            $comps = preg_split("/([fl])/", $localeNameFormat, null, PREG_SPLIT_DELIM_CAPTURE);
+            $comps = \preg_split("/([fl])/", $localeNameFormat, null, PREG_SPLIT_DELIM_CAPTURE);
             $name = array();
             foreach ($comps as $val) {
                 if ($val == 'f') {
@@ -191,7 +191,7 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
         $layout_def['type'] = 'id';
         $input_name0 = $layout_def['input_name0'];
 
-        if (is_array($layout_def['input_name0'])) {
+        if (\is_array($layout_def['input_name0'])) {
             $input_name0 = $layout_def['input_name0'][0];
         }
         if ($input_name0 == 'Current User') {
@@ -209,7 +209,7 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
         $layout_def['type'] = 'id';
         $input_name0 = $layout_def['input_name0'];
 
-        if (is_array($layout_def['input_name0'])) {
+        if (\is_array($layout_def['input_name0'])) {
             $input_name0 = $layout_def['input_name0'][0];
         }
         if ($input_name0 == 'Current User') {
@@ -233,13 +233,13 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
         foreach ($layout_def['input_name0'] as $value) {
             if ($value == 'Current User') {
                 global $current_user;
-                array_push($arr, $this->reporter->db->quoted($current_user->id));
+                \array_push($arr, $this->reporter->db->quoted($current_user->id));
             } else {
-                array_push($arr, $this->reporter->db->quoted($value));
+                \array_push($arr, $this->reporter->db->quoted($value));
             }
         }
 
-        $str = implode(",", $arr);
+        $str = \implode(",", $arr);
 
         return SugarWidgetFieldid::_get_column_select($layout_def)." IN (".$str.")\n";
     }
@@ -255,13 +255,13 @@ class SugarWidgetFieldName extends SugarWidgetFieldVarchar
         foreach ($layout_def['input_name0'] as $value) {
             if ($value == 'Current User') {
                 global $current_user;
-                array_push($arr, $this->reporter->db->quoted($current_user->id));
+                \array_push($arr, $this->reporter->db->quoted($current_user->id));
             } else {
-                array_push($arr, $this->reporter->db->quoted($value));
+                \array_push($arr, $this->reporter->db->quoted($value));
             }
         }
 
-        $str = implode(",", $arr);
+        $str = \implode(",", $arr);
 
         return SugarWidgetFieldid::_get_column_select($layout_def)." NOT IN (".$str.")\n";
     }

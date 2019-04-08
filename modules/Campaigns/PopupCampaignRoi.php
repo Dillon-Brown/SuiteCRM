@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -172,8 +172,8 @@ if (is_admin($current_user) && $_REQUEST['module'] != 'DynamicLayout' && !empty(
 
 //add chart
 $seps				= array("-", "/");
-$dates				= array(date($GLOBALS['timedate']->dbDayFormat), $GLOBALS['timedate']->dbDayFormat);
-$dateFileNameSafe	= str_replace($seps, "_", $dates);
+$dates				= array(\date($GLOBALS['timedate']->dbDayFormat), $GLOBALS['timedate']->dbDayFormat);
+$dateFileNameSafe	= \str_replace($seps, "_", $dates);
 $cache_file_name_roi	= $current_user->getUserPrivGuid()."_campaign_response_by_roi_".$dateFileNameSafe[0]."_".$dateFileNameSafe[1].".xml";
 $chart= new campaign_charts();
 

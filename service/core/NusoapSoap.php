@@ -1,6 +1,6 @@
 <?php
- if (!defined('sugarEntry')) {
-     define('sugarEntry', true);
+ if (!\defined('sugarEntry')) {
+     \define('sugarEntry', true);
  }
 /**
  *
@@ -64,7 +64,7 @@ abstract class NusoapSoap extends SugarSoapService
         $this->soapURL = $url;
         $this->server->configureWSDL('sugarsoap', $this->getNameSpace(), $url);
         if (!isset($GLOBALS['HTTP_RAW_POST_DATA'])) {
-            $GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents('php://input');
+            $GLOBALS['HTTP_RAW_POST_DATA'] = \file_get_contents('php://input');
         }
         parent::__construct();
         $GLOBALS['log']->info('End: NusoapSoap->__construct');
@@ -76,8 +76,8 @@ abstract class NusoapSoap extends SugarSoapService
     public function shutdown()
     {
         if ($this->in_service) {
-            $out = ob_get_contents();
-            ob_end_clean();
+            $out = \ob_get_contents();
+            \ob_end_clean();
             $GLOBALS['log']->info('NusoapSoap->shutdown: service died unexpectedly');
             $this->server->fault(-1, "Unknown error in SOAP call: service died unexpectedly", '', $out);
             $this->server->send_response();
@@ -91,14 +91,14 @@ abstract class NusoapSoap extends SugarSoapService
     public function serve()
     {
         $GLOBALS['log']->info('Begin: NusoapSoap->serve');
-        ob_clean();
+        \ob_clean();
         $this->in_service = true;
-        register_shutdown_function(array($this, "shutdown"));
-        ob_start();
+        \register_shutdown_function(array($this, "shutdown"));
+        \ob_start();
         $this->server->service($GLOBALS['HTTP_RAW_POST_DATA']);
         $this->in_service = false;
-        ob_end_flush();
-        flush();
+        \ob_end_flush();
+        \flush();
         $GLOBALS['log']->info('End: NusoapSoap->serve');
     } // fn
 
@@ -130,7 +130,7 @@ abstract class NusoapSoap extends SugarSoapService
      */
     public function registerFunction($function, $input, $output)
     {
-        if (in_array($function, $this->excludeFunctions)) {
+        if (\in_array($function, $this->excludeFunctions)) {
             return;
         }
         $use = false;

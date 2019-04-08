@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -104,12 +104,12 @@ class SubPanelTiles
                 $selected_group = $_REQUEST['subpanel'];
             } elseif (!empty($_COOKIE[$this->module.'_sp_tab'])) {
                 $selected_group = $_COOKIE[$this->module.'_sp_tab'];
-            } elseif (!empty($_SESSION['parentTab']) && !empty($GLOBALS['tabStructure'][$_SESSION['parentTab']]) && in_array($this->module, $GLOBALS['tabStructure'][$_SESSION['parentTab']]['modules'])) {
+            } elseif (!empty($_SESSION['parentTab']) && !empty($GLOBALS['tabStructure'][$_SESSION['parentTab']]) && \in_array($this->module, $GLOBALS['tabStructure'][$_SESSION['parentTab']]['modules'])) {
                 $selected_group = $_SESSION['parentTab'];
             } else {
                 $selected_group = '';
                 foreach ($GLOBALS['tabStructure'] as $mainTab => $group) {
-                    if (in_array($this->module, $group['modules'])) {
+                    if (\in_array($this->module, $group['modules'])) {
                         $selected_group = $mainTab;
                         break;
                     }
@@ -193,7 +193,7 @@ class SubPanelTiles
         $default_div_display = 'inline';
         if (!empty($sugar_config['hide_subpanels_on_login'])) {
             if (!isset($_SESSION['visited_details'][$this->focus->module_dir])) {
-                setcookie($this->focus->module_dir . '_divs', '', 0, null, null, isSSL(), true);
+                \setcookie($this->focus->module_dir . '_divs', '', 0, null, null, isSSL(), true);
                 unset($_COOKIE[$this->focus->module_dir . '_divs']);
                 $_SESSION['visited_details'][$this->focus->module_dir] = true;
             }
@@ -217,13 +217,13 @@ class SubPanelTiles
 
             if (!empty($usersLayout)) {
                 $availableTabs = $tabs ;
-                $tabs = array_intersect($usersLayout, $availableTabs) ; // remove any tabs that have been removed since the user's layout was saved
-                foreach (array_diff($availableTabs, $usersLayout) as $tab) {
+                $tabs = \array_intersect($usersLayout, $availableTabs) ; // remove any tabs that have been removed since the user's layout was saved
+                foreach (\array_diff($availableTabs, $usersLayout) as $tab) {
                     $tabs [] = $tab;
                 }
             }
         } else {
-            $tabs = explode(',', $_REQUEST['subpanels']);
+            $tabs = \explode(',', $_REQUEST['subpanels']);
         }
 
         // Display the group header. this section is executed only if the tabbed interface is being used.
@@ -236,7 +236,7 @@ class SubPanelTiles
         }
 
         if (empty($GLOBALS['relationships'])) {
-            if (!class_exists('Relationship')) {
+            if (!\class_exists('Relationship')) {
                 require('modules/Relationships/Relationship.php');
             }
             $rel= new Relationship();
@@ -255,7 +255,7 @@ class SubPanelTiles
                 // ignore when data source is a function
 
                 if (!isset($this->focus->field_defs[$thisPanel->_instance_properties['get_subpanel_data']])) {
-                    if (stripos($thisPanel->_instance_properties['get_subpanel_data'], 'function:') === false) {
+                    if (\stripos($thisPanel->_instance_properties['get_subpanel_data'], 'function:') === false) {
                         $GLOBALS['log']->fatal("Bad subpanel definition, it has incorrect value for get_subpanel_data property " .$tab);
                         continue;
                     }
@@ -275,7 +275,7 @@ class SubPanelTiles
             if ($thisPanel->isCollection()) {
                 // collect names of sub-panels that may contain items of each module
                 $collection_list = $thisPanel->get_inst_prop_value('collection_list');
-                if (is_array($collection_list)) {
+                if (\is_array($collection_list)) {
                     foreach ($collection_list as $data) {
                         if (!empty($data['module'])) {
                             $module_sub_panels[$data['module']][$tab] = true;
@@ -378,13 +378,13 @@ class SubPanelTiles
             }
 
 
-            array_push($tab_names, $tab);
+            \array_push($tab_names, $tab);
         }
 
-        $tab_names = '["' . join($tab_names, '","') . '"]';
+        $tab_names = '["' . \join($tab_names, '","') . '"]';
 
-        $module_sub_panels = array_map('array_keys', $module_sub_panels);
-        $module_sub_panels = json_encode($module_sub_panels);
+        $module_sub_panels = \array_map('array_keys', $module_sub_panels);
+        $module_sub_panels = \json_encode($module_sub_panels);
 
         $template->assign('layout_def_key', $this->layout_def_key);
         $template->assign('show_subpanel_tabs', $this->show_tabs);

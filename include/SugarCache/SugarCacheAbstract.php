@@ -165,7 +165,7 @@ abstract class SugarCacheAbstract
      */
     public function set($key, $value, $ttl = null)
     {
-        if (is_null($value)) {
+        if (\is_null($value)) {
             $value = SugarCache::EXTERNAL_CACHE_NULL_VALUE;
         }
 
@@ -192,7 +192,7 @@ abstract class SugarCacheAbstract
      */
     public function __isset($key)
     {
-        return !is_null($this->__get($key));
+        return !\is_null($this->__get($key));
     }
 
     /**
@@ -256,7 +256,7 @@ abstract class SugarCacheAbstract
      */
     public function __toString()
     {
-        return strtolower(str_replace('SugarCache', '', get_class($this)));
+        return \strtolower(\str_replace('SugarCache', '', \get_class($this)));
     }
 
     /**
@@ -304,7 +304,7 @@ abstract class SugarCacheAbstract
             return false;
         }
 
-        if (defined('SUGARCRM_IS_INSTALLING')) {
+        if (\defined('SUGARCRM_IS_INSTALLING')) {
             return false;
         }
 

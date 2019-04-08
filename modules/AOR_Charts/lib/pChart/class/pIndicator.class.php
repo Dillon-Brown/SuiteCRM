@@ -13,14 +13,14 @@
      You can find the whole class documentation on the pChart web site.
  */
 
- define("INDICATOR_CAPTION_DEFAULT", 700001);
- define("INDICATOR_CAPTION_EXTENDED", 700002);
+ \define("INDICATOR_CAPTION_DEFAULT", 700001);
+ \define("INDICATOR_CAPTION_EXTENDED", 700002);
 
- define("INDICATOR_CAPTION_INSIDE", 700011);
- define("INDICATOR_CAPTION_BOTTOM", 700012);
+ \define("INDICATOR_CAPTION_INSIDE", 700011);
+ \define("INDICATOR_CAPTION_BOTTOM", 700012);
 
- define("INDICATOR_VALUE_BUBBLE", 700021);
- define("INDICATOR_VALUE_LABEL", 700022);
+ \define("INDICATOR_VALUE_BUBBLE", 700021);
+ \define("INDICATOR_VALUE_LABEL", 700022);
 
  /* pIndicator class definition */
  class pIndicator
@@ -42,7 +42,7 @@
          $SectionsMargin		= isset($Format["SectionsMargin"]) ? $Format["SectionsMargin"] : 4;
          $DrawLeftHead		= isset($Format["DrawLeftHead"]) ? $Format["DrawLeftHead"] : true;
          $DrawRightHead		= isset($Format["DrawRightHead"]) ? $Format["DrawRightHead"] : true;
-         $HeadSize			= isset($Format["HeadSize"]) ? $Format["HeadSize"] : floor($Height/4);
+         $HeadSize			= isset($Format["HeadSize"]) ? $Format["HeadSize"] : \floor($Height/4);
          $TextPadding		= isset($Format["TextPadding"]) ? $Format["TextPadding"] : 4;
          $CaptionLayout		= isset($Format["CaptionLayout"]) ? $Format["CaptionLayout"] : INDICATOR_CAPTION_EXTENDED;
          $CaptionPosition		= isset($Format["CaptionPosition"]) ? $Format["CaptionPosition"] : INDICATOR_CAPTION_INSIDE;
@@ -63,7 +63,7 @@
          $Unit			= isset($Format["Unit"]) ? $Format["Unit"] : "";
 
          /* Convert the Values to display to an array if needed */
-         if (!is_array($Values)) {
+         if (!\is_array($Values)) {
              $Value = $Values;
              $Values = "";
              $Values[] = $Value;
@@ -85,7 +85,7 @@
                  $OverallMin = $Settings["Start"];
              }
          }
-         $RealWidth = $Width - (count($IndicatorSections)-1)*$SectionsMargin;
+         $RealWidth = $Width - (\count($IndicatorSections)-1)*$SectionsMargin;
          $XScale    = $RealWidth / ($OverallMax-$OverallMin);
 
          $X1 = $X;
@@ -116,7 +116,7 @@
                  if ($Value >= $Settings["Start"] && $Value <= $Settings["End"]) {
                      $XBreak  = $X1 + ($Value - $Settings["Start"]) * $XScale;
                      $ValuesPos[$Value] = $XBreak;
-                     $Break[] = floor($XBreak);
+                     $Break[] = \floor($XBreak);
                  }
              }
 
@@ -124,7 +124,7 @@
                  if ($Break == "") {
                      $this->pChartObject->drawFilledRectangle($X1, $Y, $X2, $Y+$Height, $Color);
                  } else {
-                     sort($Break);
+                     \sort($Break);
                      $Poly = "";
                      $Poly[] = $X1;
                      $Poly[] = $Y;
@@ -168,7 +168,7 @@
                  $this->pChartObject->drawFilledRectangle($X1, $Y, $X2, $Y+$Height, $Color);
              }
 
-             if ($Key == count($IndicatorSections)-1 && $DrawRightHead) {
+             if ($Key == \count($IndicatorSections)-1 && $DrawRightHead) {
                  $Poly = "";
                  $Poly[] = $X2+1;
                  $Poly[] = $Y;
@@ -237,7 +237,7 @@
 
                          if ($ValueDisplay == INDICATOR_VALUE_BUBBLE) {
                              $TxtPos = $this->pChartObject->getTextBox($X1, $Y, $ValueFontName, $ValueFontSize, 0, $Value.$Unit);
-                             $Radius = floor(($TxtPos[1]["X"] - $TxtPos[0]["X"] + $TextPadding*4)/2);
+                             $Radius = \floor(($TxtPos[1]["X"] - $TxtPos[0]["X"] + $TextPadding*4)/2);
 
                              $this->pChartObject->drawFilledCircle($X1, $Y, $Radius+4, array("R"=>$Settings["R"]+20,"G"=>$Settings["G"]+20,"B"=>$Settings["B"]+20));
                              $this->pChartObject->drawFilledCircle($X1, $Y, $Radius, array("R"=>255,"G"=>255,"B"=>255));
@@ -247,7 +247,7 @@
                          } elseif ($ValueDisplay == INDICATOR_VALUE_LABEL) {
                              $Caption = "";
                              $Caption[] = array("Format"=>array("R"=>$Settings["R"],"G"=>$Settings["G"],"B"=>$Settings["B"],"Alpha"=>100),"Caption"=>$Value.$Unit);
-                             $this->pChartObject->drawLabelBox(floor($X1), floor($Y)+2, "Value - ".$Settings["Caption"], $Caption);
+                             $this->pChartObject->drawLabelBox(\floor($X1), \floor($Y)+2, "Value - ".$Settings["Caption"], $Caption);
                          }
                      }
                      $X1 = $X2 + $SectionsMargin;

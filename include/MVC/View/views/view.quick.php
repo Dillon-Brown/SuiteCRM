@@ -69,7 +69,7 @@ class ViewQuick extends ViewDetail
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -84,7 +84,7 @@ class ViewQuick extends ViewDetail
             sugar_die($app_strings['ERROR_NO_RECORD']);
         }
         $this->dv->process();
-        ob_clean();
-        echo json_encode(array('title'=> $this->bean->name, 'url'=>'index.php?module=' . $this->bean->module_dir . '&action=DetailView&record=' . $this->bean->id ,'html'=> $this->dv->display(false)));
+        \ob_clean();
+        echo \json_encode(array('title'=> $this->bean->name, 'url'=>'index.php?module=' . $this->bean->module_dir . '&action=DetailView&record=' . $this->bean->id ,'html'=> $this->dv->display(false)));
     }
 }

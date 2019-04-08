@@ -68,7 +68,7 @@ class TestEnvironmentCommands extends \Robo\Tasks
         $this->say('Configure Test Environment');
 
         // Database
-        $default_db_driver = strtoupper($this->chooseConfigOrDefault('dbconfig.db_type', 'MYSQL'));
+        $default_db_driver = \strtoupper($this->chooseConfigOrDefault('dbconfig.db_type', 'MYSQL'));
         $this->askDefaultOptionWhenEmpty('Database Driver:', $default_db_driver, $opts['database_driver']);
 
         $default_db_host = $this->chooseConfigOrDefault('dbconfig.db_host_name', 'localhost');
@@ -128,8 +128,8 @@ class TestEnvironmentCommands extends \Robo\Tasks
         $url = $this->getChromeWebDriverUrl();
         $basePath = $os->toOsPath($paths->getProjectPath().'/build/tmp/');
 
-        if (!file_exists($basePath)) {
-            if (mkdir($basePath, 0777, true) === false) {
+        if (!\file_exists($basePath)) {
+            if (\mkdir($basePath, 0777, true) === false) {
                 throw  new \RuntimeException('Unable to create file structure ' . $basePath);
             }
         }
@@ -137,7 +137,7 @@ class TestEnvironmentCommands extends \Robo\Tasks
         $zipPath = $basePath . DIRECTORY_SEPARATOR . 'webdriver.zip';
         $unzippedPath = $basePath . DIRECTORY_SEPARATOR . 'webdriver';
 
-        if (!file_exists($unzippedPath)) {
+        if (!\file_exists($unzippedPath)) {
             $this->download($url, $zipPath);
             $this->unzip($zipPath, $unzippedPath);
         }
@@ -197,31 +197,31 @@ class TestEnvironmentCommands extends \Robo\Tasks
     {
         $environment_string_unix = $this->toUnixEnvironmentVariables($opts);
 
-        $homePath = getenv("HOME");
+        $homePath = \getenv("HOME");
         $bashAliasesPath = $homePath
             . DIRECTORY_SEPARATOR
             . '.bash_aliases';
 
         // create .bash_aliases file?
-        if (!file_exists($bashAliasesPath)) {
+        if (!\file_exists($bashAliasesPath)) {
             $this->say('Creating ' . $bashAliasesPath);
-            file_put_contents($bashAliasesPath, '');
+            \file_put_contents($bashAliasesPath, '');
         }
 
         $this->say('Get File Contents ' . $bashAliasesPath);
-        $bashAliasesFile = file_get_contents($bashAliasesPath);
-        $bashAliasesLines = explode(PHP_EOL, $bashAliasesFile);
+        $bashAliasesFile = \file_get_contents($bashAliasesPath);
+        $bashAliasesLines = \explode(PHP_EOL, $bashAliasesFile);
 
 
         // Delete existing variables
         $self = $this;
         foreach ($opts as $optionKey => $optionValue) {
             // find option key
-            $optionKeyReplaced = str_ireplace('-', '_', $optionKey);
+            $optionKeyReplaced = \str_ireplace('-', '_', $optionKey);
 
-            $bashAliasesLines = array_map(function ($line) use ($self, $optionKeyReplaced) {
+            $bashAliasesLines = \array_map(function ($line) use ($self, $optionKeyReplaced) {
                 // clear line
-                if (stristr($line, $optionKeyReplaced) !== false) {
+                if (\stristr($line, $optionKeyReplaced) !== false) {
                     $self->say('Removed: ' . $optionKeyReplaced);
                     return '';
                 }
@@ -246,11 +246,11 @@ class TestEnvironmentCommands extends \Robo\Tasks
 
             // write current file to backup file
             $this->say('Saving existing copy of .bash_aliases to ' . $bashAliasesPath . '~');
-            file_put_contents($bashAliasesPath . '~', $bashAliasesFile);
+            \file_put_contents($bashAliasesPath . '~', $bashAliasesFile);
 
             // write new file to .bash_aliases
             $this->say('Exporting variables to ' . $bashAliasesPath);
-            file_put_contents($bashAliasesPath, $newBashAliasesFile);
+            \file_put_contents($bashAliasesPath, $newBashAliasesFile);
             $this->writeln('Please restart your terminal or run `bash`');
         } else {
             $this->say('Skipping overwrite' . $bashAliasesPath);
@@ -269,7 +269,7 @@ class TestEnvironmentCommands extends \Robo\Tasks
         $this->writeln($windows_environment_variables);
         if ($this->confirm('May I overwrite the environment variables?')) {
             $this->say('Overwriting environment variables');
-            $environment_variables = explode(PHP_EOL, $windows_environment_variables);
+            $environment_variables = \explode(PHP_EOL, $windows_environment_variables);
 
             foreach ($environment_variables as $command) {
                 $this->_exec($command);
@@ -290,9 +290,9 @@ class TestEnvironmentCommands extends \Robo\Tasks
     {
         $script = '';
         foreach ($opts as $optionKey => $optionValue) {
-            $optionKeyReplaced = str_ireplace('-', '_', $optionKey);
+            $optionKeyReplaced = \str_ireplace('-', '_', $optionKey);
             if (!empty($optionValue)) {
-                $script .= sprintf($format, strtoupper($optionKeyReplaced), $optionValue);
+                $script .= \sprintf($format, \strtoupper($optionKeyReplaced), $optionValue);
             }
         }
         return $script;
@@ -351,11 +351,11 @@ class TestEnvironmentCommands extends \Robo\Tasks
      */
     private function download($url, $toPath)
     {
-        $contents = file_get_contents($url, false);
+        $contents = \file_get_contents($url, false);
         if ($contents === false) {
             throw new \RuntimeException('Unable to download ' . $url);
         }
-        if (file_put_contents($toPath, $contents) === false) {
+        if (\file_put_contents($toPath, $contents) === false) {
             throw new \RuntimeException('Unable to write to ' . $toPath);
         }
     }
@@ -394,12 +394,12 @@ class TestEnvironmentCommands extends \Robo\Tasks
             $binPath = $basePath
                 . DIRECTORY_SEPARATOR
                 . 'chromedriver';
-            chmod($binPath, 100);
+            \chmod($binPath, 100);
         } elseif ($os->isOsMacOsX()) {
             $binPath = $basePath
                 . DIRECTORY_SEPARATOR
                 . 'chromedriver';
-            chmod($binPath, 100);
+            \chmod($binPath, 100);
         } elseif ($os->isOsBSD()) {
             $this->say('BSD detected');
             throw new \DomainException('Unsupported Operating system');
@@ -412,7 +412,7 @@ class TestEnvironmentCommands extends \Robo\Tasks
             throw new \DomainException('Unable to detect Operating system');
         }
 
-        if (!file_exists($binPath)) {
+        if (!\file_exists($binPath)) {
             throw new \RuntimeException('Unable to find chrome driver ' . $binPath);
         }
 

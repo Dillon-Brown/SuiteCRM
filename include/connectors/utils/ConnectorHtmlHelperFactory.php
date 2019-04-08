@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -58,7 +58,7 @@ class ConnectorHtmlHelperFactory
      */
     public static function build()
     {
-        if (file_exists(self::CONNECTOR_HTML_HELPER_CUSTOM)) {
+        if (\file_exists(self::CONNECTOR_HTML_HELPER_CUSTOM)) {
             require_once(self::CONNECTOR_HTML_HELPER_CUSTOM);
         } else {
             require_once(self::CONNECTOR_HTML_HELPER_MAIN);

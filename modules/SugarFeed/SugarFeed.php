@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -80,7 +80,7 @@ class SugarFeed extends Basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -94,7 +94,7 @@ class SugarFeed extends Basic
             $fileList = SugarFeed::getModuleFeedFiles($module);
 
             foreach ($fileList as $fileName) {
-                $feedClass = substr(basename($fileName), 0, -4);
+                $feedClass = \substr(\basename($fileName), 0, -4);
 
                 require_once($fileName);
                 $tmpClass = new $feedClass();
@@ -115,7 +115,7 @@ class SugarFeed extends Basic
             $fileList = SugarFeed::getModuleFeedFiles($module);
 
             foreach ($fileList as $fileName) {
-                $feedClass = substr(basename($fileName), 0, -4);
+                $feedClass = \substr(\basename($fileName), 0, -4);
 
                 require_once($fileName);
                 $tmpClass = new $feedClass();
@@ -133,13 +133,13 @@ class SugarFeed extends Basic
     {
         // This function will flush the cache files used for the module list and the link type lists
         sugar_cache_clear('SugarFeedModules');
-        if (file_exists($cachefile = sugar_cached('modules/SugarFeed/moduleCache.php'))) {
-            unlink($cachefile);
+        if (\file_exists($cachefile = sugar_cached('modules/SugarFeed/moduleCache.php'))) {
+            \unlink($cachefile);
         }
 
         sugar_cache_clear('SugarFeedLinkType');
-        if (file_exists($cachefile = sugar_cached('modules/SugarFeed/linkTypeCache.php'))) {
-            unlink($cachefile);
+        if (\file_exists($cachefile = sugar_cached('modules/SugarFeed/linkTypeCache.php'))) {
+            \unlink($cachefile);
         }
     }
 
@@ -153,15 +153,15 @@ class SugarFeed extends Basic
         $fileList = array();
 
         foreach ($baseDirList as $baseDir) {
-            if (! file_exists($baseDir)) {
+            if (! \file_exists($baseDir)) {
                 continue;
             }
-            $d = dir($baseDir);
+            $d = \dir($baseDir);
             while ($file = $d->read()) {
                 if ($file{0} == '.') {
                     continue;
                 }
-                if (substr($file, -4) == '.php') {
+                if (\substr($file, -4) == '.php') {
                     // We found one
                     $fileList[$file] = $baseDir.$file;
                 }
@@ -180,7 +180,7 @@ class SugarFeed extends Basic
         }
 
         // Already stored in a file
-        if (file_exists($cachefile = sugar_cached('modules/SugarFeed/moduleCache.php'))) {
+        if (\file_exists($cachefile = sugar_cached('modules/SugarFeed/moduleCache.php'))) {
             require_once($cachefile);
             sugar_cache_put('SugarFeedModules', $feedModules);
             return $feedModules;
@@ -195,10 +195,10 @@ class SugarFeed extends Basic
         if (isset($admin->settings['sugarfeed_enabled']) && $admin->settings['sugarfeed_enabled'] == '1') {
             // Only enable modules if the feed system is enabled
             foreach ($admin->settings as $key => $value) {
-                if (strncmp($key, 'sugarfeed_module_', 17) === 0) {
+                if (\strncmp($key, 'sugarfeed_module_', 17) === 0) {
                     // It's a module setting
                     if ($value == '1') {
-                        $moduleName = substr($key, 17);
+                        $moduleName = \substr($key, 17);
                         $feedModules[$moduleName] = $moduleName;
                     }
                 }
@@ -207,12 +207,12 @@ class SugarFeed extends Basic
 
 
         sugar_cache_put('SugarFeedModules', $feedModules);
-        if (! file_exists($cachedir = sugar_cached('modules/SugarFeed'))) {
+        if (! \file_exists($cachedir = sugar_cached('modules/SugarFeed'))) {
             mkdir_recursive($cachedir);
         }
-        $fd = fopen("$cachedir/moduleCache.php", 'w');
-        fwrite($fd, '<'."?php\n\n".'$feedModules = '.var_export($feedModules, true).';');
-        fclose($fd);
+        $fd = \fopen("$cachedir/moduleCache.php", 'w');
+        \fwrite($fd, '<'."?php\n\n".'$feedModules = '.\var_export($feedModules, true).';');
+        \fclose($fd);
 
         return $feedModules;
     }
@@ -224,18 +224,18 @@ class SugarFeed extends Basic
 
         $baseDirList = array('modules/', 'custom/modules/');
         foreach ($baseDirList as $baseDir) {
-            if (! file_exists($baseDir)) {
+            if (! \file_exists($baseDir)) {
                 continue;
             }
-            $d = dir($baseDir);
+            $d = \dir($baseDir);
             while ($module = $d->read()) {
-                if (file_exists($baseDir.$module.'/SugarFeeds/')) {
-                    $dFeed = dir($baseDir.$module.'/SugarFeeds/');
+                if (\file_exists($baseDir.$module.'/SugarFeeds/')) {
+                    $dFeed = \dir($baseDir.$module.'/SugarFeeds/');
                     while ($file = $dFeed->read()) {
                         if ($file{0} == '.') {
                             continue;
                         }
-                        if (substr($file, -4) == '.php') {
+                        if (\substr($file, -4) == '.php') {
                             // We found one
                             $feedModules[$module] = $module;
                         }
@@ -288,11 +288,11 @@ class SugarFeed extends Basic
                 $linkClass->handleInput($feed, $link_type, $link_url);
             }
         }
-        $text = strip_tags(from_html($text));
+        $text = \strip_tags(from_html($text));
         $text = '<b>{this.CREATED_BY}</b> ' . $text;
-        $feed->name = mb_substr($text, 0, 255, 'UTF-8');
-        if (mb_strlen($text, 'UTF-8') > 255) {
-            $feed->description = mb_substr($text, 255, 510, 'UTF-8');
+        $feed->name = \mb_substr($text, 0, 255, 'UTF-8');
+        if (\mb_strlen($text, 'UTF-8') > 255) {
+            $feed->description = \mb_substr($text, 255, 510, 'UTF-8');
         }
 
         if ($record_assigned_user_id === false) {
@@ -321,7 +321,7 @@ class SugarFeed extends Basic
         }
 
         // Third fastest, already stored in a file
-        if (file_exists($cachedfile = sugar_cached('modules/SugarFeed/linkTypeCache.php'))) {
+        if (\file_exists($cachedfile = sugar_cached('modules/SugarFeed/linkTypeCache.php'))) {
             require_once($cachedfile);
             sugar_cache_put('SugarFeedLinkType', $linkTypeList);
             return $linkTypeList;
@@ -333,29 +333,29 @@ class SugarFeed extends Basic
         $linkTypeList = array();
 
         foreach ($baseDirs as $dirName) {
-            if (!file_exists($dirName)) {
+            if (!\file_exists($dirName)) {
                 continue;
             }
-            $d = dir($dirName);
+            $d = \dir($dirName);
             while ($file = $d->read()) {
                 if ($file{0} == '.') {
                     continue;
                 }
-                if (substr($file, -4) == '.php') {
+                if (\substr($file, -4) == '.php') {
                     // We found one
-                    $typeName = substr($file, 0, -4);
+                    $typeName = \substr($file, 0, -4);
                     $linkTypeList[$typeName] = $typeName;
                 }
             }
         }
 
         sugar_cache_put('SugarFeedLinkType', $linkTypeList);
-        if (! file_exists($cachedir = sugar_cached('modules/SugarFeed'))) {
+        if (! \file_exists($cachedir = sugar_cached('modules/SugarFeed'))) {
             mkdir_recursive($cachedir);
         }
-        $fd = fopen("$cachedir/linkTypeCache.php", 'w');
-        fwrite($fd, '<'."?php\n\n".'$linkTypeList = '.var_export($linkTypeList, true).';');
-        fclose($fd);
+        $fd = \fopen("$cachedir/linkTypeCache.php", 'w');
+        \fwrite($fd, '<'."?php\n\n".'$linkTypeList = '.\var_export($linkTypeList, true).';');
+        \fclose($fd);
 
         return $linkTypeList;
     }
@@ -370,7 +370,7 @@ class SugarFeed extends Basic
             return false;
         }
 
-        if (file_exists('custom/modules/SugarFeed/linkHandlers/'.$linkName.'.php')) {
+        if (\file_exists('custom/modules/SugarFeed/linkHandlers/'.$linkName.'.php')) {
             require_once('custom/modules/SugarFeed/linkHandlers/'.$linkName.'.php');
         } else {
             require_once('modules/SugarFeed/linkHandlers/'.$linkName.'.php');
@@ -429,7 +429,7 @@ class SugarFeed extends Basic
         }
 
         $data['NAME'] .= $dataDescription;
-        $data['NAME'] =  '<div style="padding:3px">' . html_entity_decode($data['NAME']);
+        $data['NAME'] =  '<div style="padding:3px">' . \html_entity_decode($data['NAME']);
         if (!empty($data['LINK_URL'])) {
             $linkClass = SugarFeed::getLinkClass($data['LINK_TYPE']);
             if ($linkClass !== false) {
@@ -471,7 +471,7 @@ class SugarFeed extends Basic
 
         $replies = $seedBean->get_list('date_entered', "related_module = 'SugarFeed' AND related_id = '".$dataId."'");
 
-        if (count($replies['list']) < 1) {
+        if (\count($replies['list']) < 1) {
             return '';
         }
 
@@ -508,7 +508,7 @@ class SugarFeed extends Basic
                 $image_url = 'index.php?entryPoint=download&id=' . $userPicture . '&type=SugarFieldImage&isTempFile=1&isProfile=1';
             }
             $replyHTML .= '<div style="float: left; margin-right: 3px; width: 50px; height: 50px;"><!--not_in_theme!--><img src="'.$image_url.'" style="max-width: 50px; max-height: 50px;"></div> ';
-            $replyHTML .= str_replace("{this.CREATED_BY}", get_assigned_user_name($reply->created_by), html_entity_decode($reply->name)).'<br>';
+            $replyHTML .= \str_replace("{this.CREATED_BY}", get_assigned_user_name($reply->created_by), \html_entity_decode($reply->name)).'<br>';
             $replyHTML .= '<div class="byLineBox"><span class="byLineLeft">'. $this->getTimeLapse($reply->date_entered) . '&nbsp;</span><div class="byLineRight">  &nbsp;' .$delete. '</div></div><div class="clear"></div>';
         }
 
@@ -533,11 +533,11 @@ class SugarFeed extends Basic
         $seconds = $nowTs - $userStartDateTs;
         $minutes = $seconds / 60;
         $seconds = $seconds % 60;
-        $hours = floor($minutes / 60);
+        $hours = \floor($minutes / 60);
         $minutes = $minutes % 60;
-        $days = floor($hours / 24);
+        $days = \floor($hours / 24);
         $hours = $hours % 24;
-        $weeks = floor($days / 7);
+        $weeks = \floor($days / 7);
         $days = $days % 7;
         $result = '';
         if ($weeks == 1) {
@@ -590,7 +590,7 @@ class SugarFeed extends Basic
         $urls = getUrls($input);
         foreach ($urls as $url) {
             $output = "<a href='$url' target='_blank'>".$url."</a>";
-            $input = str_replace($url, $output, $input);
+            $input = \str_replace($url, $output, $input);
         }
         return $input;
     }

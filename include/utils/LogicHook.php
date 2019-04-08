@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -83,7 +83,7 @@ class LogicHook
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -123,17 +123,17 @@ class LogicHook
 
     public function scanHooksDir($extpath)
     {
-        if (is_dir($extpath)) {
-            $dir = dir($extpath);
+        if (\is_dir($extpath)) {
+            $dir = \dir($extpath);
             while ($entry = $dir->read()) {
-                if ($entry != '.' && $entry != '..' && strtolower(substr($entry, -4)) == ".php" && is_file($extpath.'/'.$entry)) {
+                if ($entry != '.' && $entry != '..' && \strtolower(\substr($entry, -4)) == ".php" && \is_file($extpath.'/'.$entry)) {
                     unset($hook_array);
                     include($extpath.'/'.$entry);
                     if (!empty($hook_array)) {
                         foreach ($hook_array as $type => $hookg) {
                             foreach ($hookg as $index => $hook) {
                                 $this->hookscan[$type][] = $hook;
-                                $idx = count($this->hookscan[$type])-1;
+                                $idx = \count($this->hookscan[$type])-1;
                                 $this->hook_map[$type][$idx] = array("file" => $extpath.'/'.$entry, "index" => $index);
                             }
                         }
@@ -158,7 +158,7 @@ class LogicHook
         } else {
             $custom = "custom/modules";
         }
-        if (file_exists("$custom/logic_hooks.php")) {
+        if (\file_exists("$custom/logic_hooks.php")) {
             if (isset($GLOBALS['log'])) {
                 $GLOBALS['log']->debug('Including module specific hook file for '.$custom);
             }
@@ -167,7 +167,7 @@ class LogicHook
         if (empty($module_dir)) {
             $custom = "custom/application";
         }
-        if (file_exists("$custom/Ext/LogicHooks/logichooks.ext.php")) {
+        if (\file_exists("$custom/Ext/LogicHooks/logichooks.ext.php")) {
             if (isset($GLOBALS['log'])) {
                 $GLOBALS['log']->debug('Including Ext hook file for '.$custom);
             }
@@ -236,13 +236,13 @@ class LogicHook
                 $order_idx = $hook_details[0];
                 $sorted_indexes[$idx] = $order_idx;
             }
-            asort($sorted_indexes);
+            \asort($sorted_indexes);
 
-            $process_order = array_keys($sorted_indexes);
+            $process_order = \array_keys($sorted_indexes);
 
             foreach ($process_order as $hook_index) {
                 $hook_details = $hook_array[$event][$hook_index];
-                if (!file_exists($hook_details[2])) {
+                if (!\file_exists($hook_details[2])) {
                     if (isset($GLOBALS['log'])) {
                         $GLOBALS['log']->error('Unable to load custom logic file: '.$hook_details[2]);
                     }
@@ -258,7 +258,7 @@ class LogicHook
                     if (isset($GLOBALS['log'])) {
                         $GLOBALS['log']->debug('Creating new instance of hook class '.$hook_class.' with parameters');
                     }
-                    if (!is_null($this->bean)) {
+                    if (!\is_null($this->bean)) {
                         $class = new $hook_class($this->bean, $event, $arguments);
                     } else {
                         $class = new $hook_class($event, $arguments);
@@ -268,7 +268,7 @@ class LogicHook
                         $GLOBALS['log']->debug('Creating new instance of hook class '.$hook_class.' without parameters');
                     }
                     $class = new $hook_class();
-                    if (!is_null($this->bean)) {
+                    if (!\is_null($this->bean)) {
                         $class->$hook_function($this->bean, $event, $arguments);
                     } else {
                         $class->$hook_function($event, $arguments);

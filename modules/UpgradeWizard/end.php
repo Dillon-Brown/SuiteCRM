@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -70,21 +70,21 @@ $rac = new RepairAndClear();
 $rac->clearVardefs();
 $rac->rebuildExtensions();
 //bug: 44431 - defensive check to ensure the method exists since upgrades to 6.2.0 may not have this method define yet.
-if (method_exists($rac, 'clearExternalAPICache')) {
+if (\method_exists($rac, 'clearExternalAPICache')) {
     $rac->clearExternalAPICache();
 }
 
 $repairedTables = array();
 
 foreach ($beanFiles as $bean => $file) {
-    if (file_exists($file)) {
+    if (\file_exists($file)) {
         require_once $file;
         unset($GLOBALS['dictionary'][$bean]);
         $focus = new $bean();
         if (($focus instanceof SugarBean)) {
             if (!isset($repairedTables[$focus->table_name])) {
                 $sql = DBManagerFactory::getInstance()->repairTable($focus, true);
-                if (trim($sql) != '') {
+                if (\trim($sql) != '') {
                     logThis('Running sql:'.$sql, $path);
                 }
                 $repairedTables[$focus->table_name] = true;
@@ -100,7 +100,7 @@ foreach ($beanFiles as $bean => $file) {
 }
 
 // add suite version into upgrade pack!
-if (isset($repairedTables['reminders']) && $repairedTables['reminders'] && isset($_SESSION['suitecrm_version_before_upgrade']) && version_compare($_SESSION['suitecrm_version_before_upgrade'], Reminder::UPGRADE_VERSION, '<')) {
+if (isset($repairedTables['reminders']) && $repairedTables['reminders'] && isset($_SESSION['suitecrm_version_before_upgrade']) && \version_compare($_SESSION['suitecrm_version_before_upgrade'], Reminder::UPGRADE_VERSION, '<')) {
     Reminder::upgrade();
     unset($_SESSION['suitecrm_version_before_upgrade']);
 }
@@ -117,7 +117,7 @@ foreach ($dictionary as $meta) {
     $fielddefs = $meta['fields'];
     $indices = $meta['indices'];
     $sql = DBManagerFactory::getInstance()->repairTableParams($tablename, $fielddefs, $indices, true);
-    if (trim($sql) != '') {
+    if (\trim($sql) != '') {
         logThis('Running sql:'.$sql, $path);
     }
     $repairedTables[$tablename] = true;
@@ -158,16 +158,16 @@ logThis(' Finish Rebuilding the config file again', $path);
 set_upgrade_progress('end', 'in_progress');
 
 if (isset($_SESSION['current_db_version']) && isset($_SESSION['target_db_version'])) {
-    if (version_compare($_SESSION['current_db_version'], $_SESSION['target_db_version'], '!=')) {
+    if (\version_compare($_SESSION['current_db_version'], $_SESSION['target_db_version'], '!=')) {
     }
 
     //keeping separate. making easily visible and readable
-    if (version_compare($_SESSION['current_db_version'], $_SESSION['target_db_version'], '=')) {
+    if (\version_compare($_SESSION['current_db_version'], $_SESSION['target_db_version'], '=')) {
         $_REQUEST['upgradeWizard'] = true;
-        ob_start();
+        \ob_start();
         include 'modules/ACL/install_actions.php';
         include_once 'include/Smarty/internals/core.write_file.php';
-        ob_end_clean();
+        \ob_end_clean();
         $db = &DBManagerFactory::getInstance();
         if ($ce_to_pro_ent) {
             //Also set license information
@@ -194,18 +194,18 @@ upgrade_connectors();
 logThis('End upgrade_connectors', $path);
 
 //Unlink files that have been removed
-if (function_exists('unlinkUpgradeFiles')) {
+if (\function_exists('unlinkUpgradeFiles')) {
     unlinkUpgradeFiles($_SESSION['current_db_version']);
 }
 
-if (function_exists('rebuildSprites') && function_exists('imagecreatetruecolor')) {
+if (\function_exists('rebuildSprites') && \function_exists('imagecreatetruecolor')) {
     if (!empty($sugar_config['use_sprites']) && $sugar_config['use_sprites']) {
         rebuildSprites(true);
     }
 }
 
 //Run repairUpgradeHistoryTable
-if (version_compare($_SESSION['current_db_version'], '6.5.0', '<') && function_exists('repairUpgradeHistoryTable')) {
+if (\version_compare($_SESSION['current_db_version'], '6.5.0', '<') && \function_exists('repairUpgradeHistoryTable')) {
     repairUpgradeHistoryTable();
 }
 
@@ -237,7 +237,7 @@ require_once 'include/TemplateHandler/TemplateHandler.php';
 TemplateHandler::clearAll();
 
 //also add the cache cleaning here.
-if (function_exists('deleteCache')) {
+if (\function_exists('deleteCache')) {
     deleteCache();
 }
 
@@ -254,10 +254,10 @@ $mod_strings = return_module_language($current_language, 'UpgradeWizard');
 $stop = false;
 
 $httpHost = $_SERVER['HTTP_HOST'];  // cn: 8472 - HTTP_HOST includes port in some cases
-if ($colon = strpos($httpHost, ':')) {
-    $httpHost = substr($httpHost, 0, $colon);
+if ($colon = \strpos($httpHost, ':')) {
+    $httpHost = \substr($httpHost, 0, $colon);
 }
-$parsedSiteUrl = parse_url($sugar_config['site_url']);
+$parsedSiteUrl = \parse_url($sugar_config['site_url']);
 $host = ($parsedSiteUrl['host'] != $httpHost) ? $httpHost : $parsedSiteUrl['host'];
 
 // aw: 9747 - use SERVER_PORT for users who don't plug in the site_url at install correctly
@@ -326,7 +326,7 @@ unset($_SESSION['current_db_version']);
 unset($_SESSION['target_db_version']);
 
 
-ob_start();
+\ob_start();
 include __DIR__ . '/../Administration/UpgradeAccess.php';
-echo $cnt = ob_get_contents();
-ob_get_clean();
+echo $cnt = \ob_get_contents();
+\ob_get_clean();

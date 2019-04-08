@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -85,7 +85,7 @@ class MyCallsDashlet extends DashletGeneric
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id, $def);
     }
@@ -119,7 +119,7 @@ class MyCallsDashlet extends DashletGeneric
 
 
         if (!empty($keys)) {
-            $query = "SELECT call_id, accept_status FROM calls_users WHERE deleted = 0 and user_id = '" . $current_user->id . "' AND call_id IN ('" . implode("','", $keys). "')";
+            $query = "SELECT call_id, accept_status FROM calls_users WHERE deleted = 0 and user_id = '" . $current_user->id . "' AND call_id IN ('" . \implode("','", $keys). "')";
             $result = DBManagerFactory::getInstance()->query($query);
 
             while ($row = DBManagerFactory::getInstance()->fetchByAssoc($result)) {

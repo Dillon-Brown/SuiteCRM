@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,13 +71,13 @@ if (isset($runSilent) && $runSilent == true) {
 } else {
     $hide = array('Activities', 'Home', 'iFrames', 'Calendar', 'Dashboard');
 
-    sort($moduleList);
+    \sort($moduleList);
     $options = array();
     $options[] = $app_strings['LBL_NONE'];
     $options['all'] = "--{$app_strings['LBL_TABGROUP_ALL']}--";
     
     foreach ($moduleList as $module) {
-        if (!in_array($module, $hide)) {
+        if (!\in_array($module, $hide)) {
             $options[$module] = $module;
         }
     }

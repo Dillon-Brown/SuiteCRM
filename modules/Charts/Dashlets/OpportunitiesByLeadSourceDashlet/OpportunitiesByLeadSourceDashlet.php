@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -65,19 +65,19 @@ class OpportunitiesByLeadSourceDashlet extends DashletGenericChart
         global $app_list_strings;
 
         $selected_datax = array();
-        if (!empty($this->pbls_lead_sources) && sizeof($this->pbls_lead_sources) > 0) {
+        if (!empty($this->pbls_lead_sources) && \sizeof($this->pbls_lead_sources) > 0) {
             foreach ($this->pbls_lead_sources as $key) {
                 $selected_datax[] = $key;
             }
         } else {
-            $selected_datax = array_keys($app_list_strings['lead_source_dom']);
+            $selected_datax = \array_keys($app_list_strings['lead_source_dom']);
         }
 
-        $this->_searchFields['pbls_lead_sources']['options'] = array_filter($app_list_strings['lead_source_dom']);
+        $this->_searchFields['pbls_lead_sources']['options'] = \array_filter($app_list_strings['lead_source_dom']);
         $this->_searchFields['pbls_lead_sources']['input_name0'] = $selected_datax;
 
-        if (!isset($this->pbls_ids) || count($this->pbls_ids) == 0) {
-            $this->_searchFields['pbls_ids']['input_name0'] = array_keys(get_user_array(false));
+        if (!isset($this->pbls_ids) || \count($this->pbls_ids) == 0) {
+            $this->_searchFields['pbls_ids']['input_name0'] = \array_keys(get_user_array(false));
         }
 
         return parent::displayOptions();
@@ -99,14 +99,14 @@ class OpportunitiesByLeadSourceDashlet extends DashletGenericChart
         $thousands_symbol = translate('LBL_OPP_THOUSANDS', 'Charts');
         $data = $this->getChartData($this->constructQuery());
         $chartReadyData = $this->prepareChartData($data, $currency_symbol, $thousands_symbol);
-        $canvasId = 'rGraphLeadSource'.uniqid();
+        $canvasId = 'rGraphLeadSource'.\uniqid();
         $chartWidth     = 900;
         $chartHeight    = 500;
 
-        $jsonData = json_encode($chartReadyData['data']);
-        $jsonKeys = json_encode($chartReadyData['keys']);
-        $jsonLabels = json_encode($chartReadyData['labels']);
-        $jsonLabelsAndValues = json_encode($chartReadyData['labelsAndValues']);
+        $jsonData = \json_encode($chartReadyData['data']);
+        $jsonKeys = \json_encode($chartReadyData['keys']);
+        $jsonLabels = \json_encode($chartReadyData['labels']);
+        $jsonLabelsAndValues = \json_encode($chartReadyData['labelsAndValues']);
 
         $autoRefresh = $this->processAutoRefresh();
 
@@ -117,7 +117,7 @@ class OpportunitiesByLeadSourceDashlet extends DashletGenericChart
 
         $colours = "['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928','#8080ff','#c03f80']";
 
-        if (!is_array($chartReadyData['data'])||count($chartReadyData['data']) < 1) {
+        if (!\is_array($chartReadyData['data'])||\count($chartReadyData['data']) < 1) {
             return "<h3 class='noGraphDataPoints'>$this->noDataMessage</h3>";
         }
 
@@ -250,13 +250,13 @@ EOD;
         $query = "SELECT lead_source,sum(amount_usdollar/1000) as total,count(*) as opp_count ".
             "FROM opportunities ";
         $query .= "WHERE opportunities.deleted=0 ";
-        if (count($this->pbls_ids) > 0) {
-            $query .= "AND opportunities.assigned_user_id IN ('".implode("','", $this->pbls_ids)."') ";
+        if (\count($this->pbls_ids) > 0) {
+            $query .= "AND opportunities.assigned_user_id IN ('".\implode("','", $this->pbls_ids)."') ";
         }
-        if (count($this->pbls_lead_sources) > 0) {
-            $query .= "AND opportunities.lead_source IN ('".implode("','", $this->pbls_lead_sources)."') ";
+        if (\count($this->pbls_lead_sources) > 0) {
+            $query .= "AND opportunities.lead_source IN ('".\implode("','", $this->pbls_lead_sources)."') ";
         } else {
-            $query .= "AND opportunities.lead_source IN ('".implode("','", array_keys($GLOBALS['app_list_strings']['lead_source_dom']))."') ";
+            $query .= "AND opportunities.lead_source IN ('".\implode("','", \array_keys($GLOBALS['app_list_strings']['lead_source_dom']))."') ";
         }
         $query .= "GROUP BY lead_source ORDER BY total DESC";
 

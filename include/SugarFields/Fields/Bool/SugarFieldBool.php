@@ -55,7 +55,7 @@ class SugarFieldBool extends SugarFieldBase
     {
         $this->setup($parentFieldArray, $vardef, $displayParams, $tabindex);
         //If there was a type override to specifically render it as a boolean, show the EditView checkbox
-        if (preg_match("/(favorites|current_user|open)_only.*/", $vardef['name'])) {
+        if (\preg_match("/(favorites|current_user|open)_only.*/", $vardef['name'])) {
             return $this->fetch($this->findTemplate('EditView'));
         }
         return $this->fetch($this->findTemplate('SearchView'));
@@ -71,7 +71,7 @@ class SugarFieldBool extends SugarFieldBase
         ImportFieldSanitize $settings
         ) {
         $bool_values = array(0=>'0',1=>'no',2=>'off',3=>'n',4=>'yes',5=>'y',6=>'on',7=>'1');
-        $bool_search = array_search($value, $bool_values);
+        $bool_search = \array_search($value, $bool_values);
         if ($bool_search === false) {
             return false;
         }

@@ -42,14 +42,14 @@ $queryString = ! empty($_REQUEST['query_string']) ? $_REQUEST['query_string'] : 
 
 $luceneSearch = !empty($sugar_config['aod']['enable_aod']);
 
-if (array_key_exists('showGSDiv', $_REQUEST) || !empty($_REQUEST['search_fallback'])) {
+if (\array_key_exists('showGSDiv', $_REQUEST) || !empty($_REQUEST['search_fallback'])) {
     //Search from vanilla sugar search or request for the same
     $luceneSearch = false;
 }
 
 if (!$luceneSearch) {
     if (!empty($sugar_config['aod']['enable_aod'])) {
-        echo "<a href='index.php?action=UnifiedSearch&module=Home&query_string=".urlencode($queryString)."'>".translate("LBL_USE_AOD_SEARCH", "AOD_Index")."</a>";
+        echo "<a href='index.php?action=UnifiedSearch&module=Home&query_string=".\urlencode($queryString)."'>".translate("LBL_USE_AOD_SEARCH", "AOD_Index")."</a>";
     }
     require_once('modules/Home/UnifiedSearchAdvanced.php');
     global $mod_strings, $modListHeader, $app_strings, $beanList, $beanFiles;
@@ -58,7 +58,7 @@ if (!$luceneSearch) {
     return;
 }
 require_once('include/utils.php');
-echo "<a href='index.php?action=UnifiedSearch&module=Home&search_fallback=1&query_string=".urlencode($queryString)."'>".translate("LBL_USE_VANILLA_SEARCH", "AOD_Index")."</a>";
+echo "<a href='index.php?action=UnifiedSearch&module=Home&search_fallback=1&query_string=".\urlencode($queryString)."'>".translate("LBL_USE_VANILLA_SEARCH", "AOD_Index")."</a>";
 
 $index = BeanFactory::getBean("AOD_Index")->getIndex();
 $hits = array();
@@ -71,14 +71,14 @@ if (!empty($_REQUEST['start'])) {
 if (!empty($_REQUEST['total'])) {
     $total = $_REQUEST['total'];
 }
-if (array_key_exists('listViewStartButton', $_REQUEST)) {
+if (\array_key_exists('listViewStartButton', $_REQUEST)) {
     $start = 0;
-} elseif (array_key_exists('listViewPrevButton', $_REQUEST)) {
-    $start = max($start - $amount, 0);
-} elseif (array_key_exists('listViewNextButton', $_REQUEST)) {
-    $start = min($start + $amount, $total);
-} elseif (array_key_exists('listViewEndButton', $_REQUEST)) {
-    $start = floor($total / $amount) * $amount;
+} elseif (\array_key_exists('listViewPrevButton', $_REQUEST)) {
+    $start = \max($start - $amount, 0);
+} elseif (\array_key_exists('listViewNextButton', $_REQUEST)) {
+    $start = \min($start + $amount, $total);
+} elseif (\array_key_exists('listViewEndButton', $_REQUEST)) {
+    $start = \floor($total / $amount) * $amount;
 }
 if ($queryString) {
     $res = doSearch($index, $queryString, $start, $amount);
@@ -162,9 +162,9 @@ function getRecordSummary(SugarBean $bean)
 {
     global $listViewDefs;
     if (!isset($listViewDefs) || !isset($listViewDefs[$bean->module_dir])) {
-        if (file_exists('custom/modules/'.$bean->module_dir.'/metadata/listviewdefs.php')) {
+        if (\file_exists('custom/modules/'.$bean->module_dir.'/metadata/listviewdefs.php')) {
             require('custom/modules/'.$bean->module_dir.'/metadata/listviewdefs.php');
-        } elseif (file_exists('modules/'.$bean->module_dir.'/metadata/listviewdefs.php')) {
+        } elseif (\file_exists('modules/'.$bean->module_dir.'/metadata/listviewdefs.php')) {
             require('modules/'.$bean->module_dir.'/metadata/listviewdefs.php');
         }
     }
@@ -177,24 +177,24 @@ function getRecordSummary(SugarBean $bean)
         if (!$entry['default']) {
             continue;
         }
-        $key = strtolower($key);
+        $key = \strtolower($key);
 
-        if (in_array($key, array('date_entered','date_modified','name'))) {
+        if (\in_array($key, array('date_entered','date_modified','name'))) {
             continue;
         }
         $summary[] = $bean->$key;
     }
-    $summary = array_filter($summary);
-    return implode(' || ', $summary);
+    $summary = \array_filter($summary);
+    return \implode(' || ', $summary);
 }
 function getScoreDisplay($hit)
 {
-    return number_format(100*$hit->score, 2);
+    return \number_format(100*$hit->score, 2);
 }
 function unCamelCase($input, $sep = " ")
 {
-    $output = preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), $sep.'$0', $input);
-    return ucwords($output);
+    $output = \preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), $sep.'$0', $input);
+    return \ucwords($output);
 }
 function getModuleLabel($module)
 {
@@ -202,16 +202,16 @@ function getModuleLabel($module)
 }
 function cacheQuery($queryString, $resArray)
 {
-    $file = create_cache_directory('modules/AOD_Index/QueryCache/' . md5($queryString));
-    $out = serialize($resArray);
+    $file = create_cache_directory('modules/AOD_Index/QueryCache/' . \md5($queryString));
+    $out = \serialize($resArray);
     sugar_file_put_contents_atomic($file, $out);
 }
 
 function getCorrectMTime($filePath)
 {
-    $time = filemtime($filePath);
-    $isDST = (date('I', $time) == 1);
-    $systemDST = (date('I') == 1);
+    $time = \filemtime($filePath);
+    $isDST = (\date('I', $time) == 1);
+    $systemDST = (\date('I') == 1);
     $adjustment = 0;
     if ($isDST == false && $systemDST == true) {
         $adjustment = 3600;
@@ -226,11 +226,11 @@ function getCorrectMTime($filePath)
 function doSearch($index, $queryString, $start = 0, $amount = 20)
 {
     global $current_user;
-    $cachePath = 'cache/modules/AOD_Index/QueryCache/' . md5($queryString);
-    if (is_file($cachePath)) {
+    $cachePath = 'cache/modules/AOD_Index/QueryCache/' . \md5($queryString);
+    if (\is_file($cachePath)) {
         $mTime = getCorrectMTime($cachePath);
-        if ($mTime > (time() - 5*60)) {
-            $hits = unserialize(sugar_file_get_contents($cachePath));
+        if ($mTime > (\time() - 5*60)) {
+            $hits = \unserialize(sugar_file_get_contents($cachePath));
         }
     }
     if (!isset($hits)) {
@@ -266,8 +266,8 @@ function doSearch($index, $queryString, $start = 0, $amount = 20)
         cacheQuery($queryString, $hits);
     }
 
-    $total = count($hits);
-    $hits = array_slice($hits, $start, $amount);
+    $total = \count($hits);
+    $hits = \array_slice($hits, $start, $amount);
     $res = array('total'=>$total,'hits' => $hits);
     return $res;
 }
@@ -303,7 +303,7 @@ function getPaginateHTML($queryString, $start, $amount, $total)
             <button type="submit" id="listViewPrevButton_top" name="listViewPrevButton" class="button" title="Previous" <?php echo $first ? 'disabled="disabled"' : ''?>>
                 <span class='suitepicon suitepicon-action-left'></span>
             </button>
-            <span class="pageNumbers">(<?php echo $total ? $start+1 : 0; ?> - <?php echo min($start + $amount, $total); ?> of <?php echo $total; ?>)</span>
+            <span class="pageNumbers">(<?php echo $total ? $start+1 : 0; ?> - <?php echo \min($start + $amount, $total); ?> of <?php echo $total; ?>)</span>
             <button type="submit" id="listViewNextButton_top" name="listViewNextButton" title="Next" class="button" <?php echo $last ? 'disabled="disabled"' : ''?>>
                 <span class='suitepicon suitepicon-action-right'></span>
             </button>

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -63,7 +63,7 @@ $skipDirs = array(
     '.svn',
     '.git',
 );
-$files = uwFindAllFiles(getcwd(), array(), true, $skipDirs);
+$files = uwFindAllFiles(\getcwd(), array(), true, $skipDirs);
 
 $i=0;
 $filesOut = "
@@ -80,11 +80,11 @@ $filesOut = "
 $isWindows = is_windows();
 foreach ($files as $file) {
     if ($isWindows) {
-        if (!is_writable_windows($file) && file_exists($file)) {
+        if (!is_writable_windows($file) && \file_exists($file)) {
             logThis('WINDOWS: File ['.$file.'] not readable - saving for display');
             // don't warn yet - we're going to use this to check against replacement files
             $filesNotWritable[$i] = $file;
-            $filesNWPerms[$i] = substr(sprintf('%o', fileperms($file)), -4);
+            $filesNWPerms[$i] = \substr(\sprintf('%o', \fileperms($file)), -4);
             $filesOut .= "<tr>".
                             "<td><span class='error'>{$file}</span></td>".
                             "<td>{$filesNWPerms[$i]}</td>".
@@ -93,13 +93,13 @@ foreach ($files as $file) {
                           "</tr>";
         }
     } else {
-        if (!is_writable($file) && file_exists($file)) {
+        if (!\is_writable($file) && \file_exists($file)) {
             logThis('File ['.$file.'] not writable - saving for display');
             // don't warn yet - we're going to use this to check against replacement files
             $filesNotWritable[$i] = $file;
-            $filesNWPerms[$i] = substr(sprintf('%o', fileperms($file)), -4);
-            $owner = posix_getpwuid(fileowner($file));
-            $group = posix_getgrgid(filegroup($file));
+            $filesNWPerms[$i] = \substr(\sprintf('%o', \fileperms($file)), -4);
+            $owner = \posix_getpwuid(\fileowner($file));
+            $group = \posix_getgrgid(\filegroup($file));
             $filesOut .= "<tr>".
                             "<td><span class='error'>{$file}</span></td>".
                             "<td>{$filesNWPerms[$i]}</td>".
@@ -113,8 +113,8 @@ foreach ($files as $file) {
 
 $filesOut .= '</table></div>';
 // not a stop error
-$errors['files']['filesNotWritable'] = (count($filesNotWritable) > 0) ? true : false;
-if (count($filesNotWritable) < 1) {
+$errors['files']['filesNotWritable'] = (\count($filesNotWritable) > 0) ? true : false;
+if (\count($filesNotWritable) < 1) {
     $filesOut = "<b>{$mod_strings['LBL_UW_FILE_NO_ERRORS']}</b>";
 }
 
@@ -150,7 +150,7 @@ $outs = testPermsDropTable($db, $outs, $outs['skip']);
 $outs['dbOut'] .= '</table>';
 
 
-if (count($outs['db']) < 1) {
+if (\count($outs['db']) < 1) {
     logThis('No permissions errors found!');
     $outs['dbOut'] = "<b>".$mod_strings['LBL_UW_DB_NO_ERRORS']."</b>";
 }
@@ -183,7 +183,7 @@ if ($result['error_found'] == true || !empty($result['warn_found'])) {
     if ($result['error_found']) {
         $stop = true;
     }
-    $phpIniLocation = get_cfg_var("cfg_file_path");
+    $phpIniLocation = \get_cfg_var("cfg_file_path");
 
     $sysCompliance  = "<a href='javascript:void(0); toggleNwFiles(\"sysComp\");'>{$mod_strings['LBL_UW_SHOW_COMPLIANCE']}</a>";
     $sysCompliance .= "<div id='sysComp' >";
@@ -207,7 +207,7 @@ if ($result['error_found'] == true || !empty($result['warn_found'])) {
 
 ////	stop on all errors
 foreach ($errors as $k => $type) {
-    if (is_array($type) && count($type) > 0) {
+    if (\is_array($type) && \count($type) > 0) {
         foreach ($type as $k => $subtype) {
             if ($subtype == true) {
                 $stop = true;

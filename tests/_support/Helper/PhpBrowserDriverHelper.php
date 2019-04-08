@@ -185,10 +185,10 @@ class PhpBrowserDriverHelper extends \Codeception\Module
      */
     private function getEnvironmentVariableOrDefault($variable, $default)
     {
-        $upperCase = strtoupper($variable);
-        $lowerCase = strtoupper($variable);
+        $upperCase = \strtoupper($variable);
+        $lowerCase = \strtoupper($variable);
 
-        $env = getenv($upperCase);
+        $env = \getenv($upperCase);
         if ($env === false) {
             $webDriver = $this->moduleContainer->getModule('PhpBrowser');
             $config = $webDriver->_getConfig();

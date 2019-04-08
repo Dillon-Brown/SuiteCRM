@@ -105,9 +105,9 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
      */
     public function __construct($terms = null, $signs = null)
     {
-        if (is_array($terms)) {
+        if (\is_array($terms)) {
             require_once 'Zend/Search/Lucene.php';
-            if (count($terms) > Zend_Search_Lucene::getTermsPerQueryLimit()) {
+            if (\count($terms) > Zend_Search_Lucene::getTermsPerQueryLimit()) {
                 throw new Zend_Search_Lucene_Exception('Terms per query limit is reached.');
             }
 
@@ -115,7 +115,7 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
 
             $this->_signs = null;
             // Check if all terms are required
-            if (is_array($signs)) {
+            if (\is_array($signs)) {
                 foreach ($signs as $sign) {
                     if ($sign !== true) {
                         $this->_signs = $signs;
@@ -163,7 +163,7 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
      */
     public function rewrite(Zend_Search_Lucene_Interface $index)
     {
-        if (count($this->_terms) == 0) {
+        if (\count($this->_terms) == 0) {
             require_once 'Zend/Search/Lucene/Search/Query/Empty.php';
             return new Zend_Search_Lucene_Search_Query_Empty();
         }
@@ -245,18 +245,18 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
          * (they may have different signs)
          */
 
-        if (count($terms) == 1) {
+        if (\count($terms) == 1) {
             // It's already checked, that it's not a prohibited term
 
             // It's one term query with one required or optional element
             require_once 'Zend/Search/Lucene/Search/Query/Term.php';
-            $optimizedQuery = new Zend_Search_Lucene_Search_Query_Term(reset($terms));
+            $optimizedQuery = new Zend_Search_Lucene_Search_Query_Term(\reset($terms));
             $optimizedQuery->setBoost($this->getBoost());
 
             return $optimizedQuery;
         }
 
-        if (count($terms) == 0) {
+        if (\count($terms) == 0) {
             require_once 'Zend/Search/Lucene/Search/Query/Empty.php';
             return new Zend_Search_Lucene_Search_Query_Empty();
         }
@@ -325,7 +325,7 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
     {
         $this->_resVector = null;
 
-        if (count($this->_terms) == 0) {
+        if (\count($this->_terms) == 0) {
             $this->_resVector = array();
         }
 
@@ -336,7 +336,7 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
             $docFreqs[] = $reader->docFreq($term);
             $ids[]      = $id; // Used to keep original order for terms with the same selectivity and omit terms comparison
         }
-        array_multisort(
+        \array_multisort(
             $docFreqs,
             SORT_ASC,
             SORT_NUMERIC,
@@ -353,7 +353,7 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
         }
         // Treat last retrieved docs vector as a result set
         // (filter collects data for other terms)
-        $this->_resVector = array_flip($termDocs);
+        $this->_resVector = \array_flip($termDocs);
 
         foreach ($this->_terms as $termId => $term) {
             $this->_termsFreqs[$termId] = $reader->termFreqs($term, $docsFilter);
@@ -380,12 +380,12 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
         $prohibited = array();
 
         foreach ($this->_terms as $termId => $term) {
-            $termDocs = array_flip($reader->termDocs($term));
+            $termDocs = \array_flip($reader->termDocs($term));
 
             if ($this->_signs[$termId] === true) {
                 // required
                 $requiredVectors[]      = $termDocs;
-                $requiredVectorsSizes[] = count($termDocs);
+                $requiredVectorsSizes[] = \count($termDocs);
                 $requiredVectorsIds[]   = $termId;
             } elseif ($this->_signs[$termId] === false) {
                 // prohibited
@@ -401,7 +401,7 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
         }
 
         // sort resvectors in order of subquery cardinality increasing
-        array_multisort(
+        \array_multisort(
             $requiredVectorsSizes,
             SORT_ASC,
             SORT_NUMERIC,
@@ -430,7 +430,7 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
                 $required = $updatedVector;
             }
 
-            if (count($required) == 0) {
+            if (\count($required) == 0) {
                 // Empty result set, we don't need to check other terms
                 break;
             }
@@ -442,13 +442,13 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
             $this->_resVector = $optional;
         }
 
-        if (count($prohibited) != 0) {
+        if (\count($prohibited) != 0) {
             // $this->_resVector = array_diff_key($this->_resVector, $prohibited);
 
             /**
              * This code is used as workaround for array_diff_key() slowness problem.
              */
-            if (count($this->_resVector) < count($prohibited)) {
+            if (\count($this->_resVector) < \count($prohibited)) {
                 $updatedVector = $this->_resVector;
                 foreach ($this->_resVector as $id => $value) {
                     if (isset($prohibited[$id])) {
@@ -465,7 +465,7 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
             }
         }
 
-        ksort($this->_resVector, SORT_NUMERIC);
+        \ksort($this->_resVector, SORT_NUMERIC);
     }
 
 
@@ -480,8 +480,8 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
     {
         if ($this->_coord === null) {
             $this->_coord = $reader->getSimilarity()->coord(
-                count($this->_terms),
-                                                            count($this->_terms)
+                \count($this->_terms),
+                                                            \count($this->_terms)
             );
         }
 
@@ -672,7 +672,7 @@ class Zend_Search_Lucene_Search_Query_MultiTerm extends Zend_Search_Lucene_Searc
         }
 
         if ($this->getBoost() != 1) {
-            $query = '(' . $query . ')^' . round($this->getBoost(), 4);
+            $query = '(' . $query . ')^' . \round($this->getBoost(), 4);
         }
 
         return $query;

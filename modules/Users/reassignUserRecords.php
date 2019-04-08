@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -66,7 +66,7 @@ echo "<h2 class='moduleTitle' style=\"margin-bottom:0px;\">{$mod_strings_users['
 
 // Include Metadata for processing
 require_once("modules/Users/metadata/reassignScriptMetadata.php");
-if (file_exists("custom/modules/Users/reassignScriptMetadata_override.php")) {
+if (\file_exists("custom/modules/Users/reassignScriptMetadata_override.php")) {
     include("custom/modules/Users/reassignScriptMetadata_override.php");
 }
 
@@ -155,7 +155,7 @@ if (!isset($_SESSION['reassignRecords']['assignedModuleListCache'])) {
                 }
             }
         }
-        $beanListDup = array_diff($beanListDup, $exclude_modules);
+        $beanListDup = \array_diff($beanListDup, $exclude_modules);
 
         //Leon bug 20739
         $beanListDupDisp=array() ;
@@ -167,9 +167,9 @@ if (!isset($_SESSION['reassignRecords']['assignedModuleListCache'])) {
         $_SESSION['reassignRecords']['assignedModuleListCache'] = $beanListDup;
         $_SESSION['reassignRecords']['assignedModuleListCacheDisp'] = $beanListDupDisp;
     }
-    $beanListDup = array_flip($_SESSION['reassignRecords']['assignedModuleListCache']);
-    $beanListFlip = array_flip($_SESSION['reassignRecords']['assignedModuleListCacheDisp']);
-    asort($beanListFlip);
+    $beanListDup = \array_flip($_SESSION['reassignRecords']['assignedModuleListCache']);
+    $beanListFlip = \array_flip($_SESSION['reassignRecords']['assignedModuleListCacheDisp']);
+    \asort($beanListFlip);
     $selected = array();
     if (!empty($_SESSION['reassignRecords']['modules'])) {
         foreach ($_SESSION['reassignRecords']['modules'] as $mod => $arr) {
@@ -276,9 +276,9 @@ foreach ($moduleFilters as $modFilter => $fieldArray) {
     echo "<BR><input type=checkbox name=verbose> {$mod_strings_users['LBL_REASS_VERBOSE_OUTPUT']}".$help_img."<BR>\n";
     
     unset($_SESSION['reassignRecords']['modules']);
-    $beanListFlip = array_flip($_SESSION['reassignRecords']['assignedModuleListCache']);
+    $beanListFlip = \array_flip($_SESSION['reassignRecords']['assignedModuleListCache']);
     foreach ($_POST['modules'] as $module) {
-        if (!array_key_exists($module, $beanListFlip)) {
+        if (!\array_key_exists($module, $beanListFlip)) {
             //echo "$module not found as key in \$beanListFlip. Skipping $module.<BR>";
             continue;
         }
@@ -306,7 +306,7 @@ foreach ($moduleFilters as $modFilter => $fieldArray) {
         $q_where  = "where {$object->table_name}.deleted=0 and {$object->table_name}.assigned_user_id = '{$_POST['fromuser']}' ";
 
         // Process conditions based on metadata
-        if (isset($moduleFilters[$p_module]['fields']) && is_array($moduleFilters[$p_module]['fields'])) {
+        if (isset($moduleFilters[$p_module]['fields']) && \is_array($moduleFilters[$p_module]['fields'])) {
             $custom_added = false;
             foreach ($moduleFilters[$p_module]['fields'] as $meta) {
                 if (!empty($_POST[$meta['name']])) {
@@ -335,7 +335,7 @@ foreach ($moduleFilters as $modFilter => $fieldArray) {
                             }
                             $in_string .= "'$onevalue', ";
                         }
-                        $in_string = substr($in_string, 0, count($in_string) - 3);
+                        $in_string = \substr($in_string, 0, \count($in_string) - 3);
                         $q_where .= " and ({$object->table_name}{$addcstm}.{$meta['dbname']} in ($in_string) $empty_check)";
                         break;
                     default:
@@ -381,7 +381,7 @@ elseif (isset($_GET['execute']) && $_GET['execute'] == true) {
     $fromusername = $_SESSION['reassignRecords']['fromusername'];
     $tousername = $_SESSION['reassignRecords']['tousername'];
 
-    $beanListFlip = array_flip($_SESSION['reassignRecords']['assignedModuleListCache']);
+    $beanListFlip = \array_flip($_SESSION['reassignRecords']['assignedModuleListCache']);
 
     foreach ($_SESSION['reassignRecords']['modules'] as $module => $queries) {
         $p_module = $beanListFlip[$module];
@@ -455,8 +455,8 @@ elseif (isset($_GET['execute']) && $_GET['execute'] == true) {
                 }
             } else {
                 echo "{$mod_strings_users['LBL_REASS_UPDATE_COMPLETE']}\n<BR>\n";
-                echo "&nbsp;&nbsp;".count($successarr)." {$mod_strings_users['LBL_REASS_SUCCESSFUL']}\n<BR>\n";
-                echo "&nbsp;&nbsp;".count($failarr)." {$mod_strings_users['LBL_REASS_FAILED']}\n";
+                echo "&nbsp;&nbsp;".\count($successarr)." {$mod_strings_users['LBL_REASS_SUCCESSFUL']}\n<BR>\n";
+                echo "&nbsp;&nbsp;".\count($failarr)." {$mod_strings_users['LBL_REASS_FAILED']}\n";
             }
             echo "<BR>\n";
         }

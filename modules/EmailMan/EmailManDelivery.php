@@ -38,7 +38,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -138,7 +138,7 @@ do {
         $temp_user = $current_user;
     }
     $current_user = new User();
-    $startTime = microtime(true);
+    $startTime = \microtime(true);
 
 
     // for testing
@@ -147,11 +147,11 @@ do {
         //verify the queue item before further processing.
         //we have found cases where users have taken away access to email templates while them message is in queue.
         if ((empty($row['related_confirm_opt_in']) || $row['related_confirm_opt_in'] == '0') && empty($row['campaign_id'])) {
-            $GLOBALS['log']->fatal('Skipping emailman entry with empty campaign id' . print_r($row, true));
+            $GLOBALS['log']->fatal('Skipping emailman entry with empty campaign id' . \print_r($row, true));
             continue;
         }
         if ((empty($row['related_confirm_opt_in']) || $row['related_confirm_opt_in'] == '0') && empty($row['marketing_id'])) {
-            $GLOBALS['log']->fatal('Skipping emailman entry with empty marketing id' . print_r($row, true));
+            $GLOBALS['log']->fatal('Skipping emailman entry with empty marketing id' . \print_r($row, true));
             continue;  //do not process this row .
         }
 
@@ -201,7 +201,7 @@ do {
             $result1 = $db->query($plc_query);
             while ($row1 = $db->fetchByAssoc($result1)) {
                 if ($row1['list_type'] == 'exempt_domain') {
-                    $emailman->restricted_domains[strtolower($row1['domain_name'])] = 1;
+                    $emailman->restricted_domains[\strtolower($row1['domain_name'])] = 1;
                 } else {
                     //find email address of targets in this prospect list.
                     $email_query = "SELECT email_address FROM email_addresses ea JOIN email_addr_bean_rel eabr ON ea.id = eabr.email_address_id JOIN prospect_lists_prospects plp ON eabr.bean_id = plp.related_id AND eabr.bean_module = plp.related_type AND plp.prospect_list_id = '{$row1['prospect_list_id']}' and plp.deleted = 0";
@@ -209,7 +209,7 @@ do {
 
                     while ($email_address = $db->fetchByAssoc($email_query_result)) {
                         if (!empty($email_address['email_address'])) {
-                            $emailman->restricted_addresses[strtolower($email_address['email_address'])] = 1;
+                            $emailman->restricted_addresses[\strtolower($email_address['email_address'])] = 1;
                         }
                     }
                 }
@@ -220,7 +220,7 @@ do {
         if ($current_emailmarketing->outbound_email_id) {
             $outboundEmailAccount = BeanFactory::getBean('OutboundEmailAccounts', $current_emailmarketing->outbound_email_id);
 
-            if (strtolower($outboundEmailAccount->mail_sendtype) === 'smtp') {
+            if (\strtolower($outboundEmailAccount->mail_sendtype) === 'smtp') {
                 $mail->Mailer = 'smtp';
                 $mail->Host = $outboundEmailAccount->mail_smtpserver;
                 $mail->Port = $outboundEmailAccount->mail_smtpport;
@@ -254,9 +254,9 @@ do {
 
         if ((empty($row['related_confirm_opt_in']) || $row['related_confirm_opt_in'] == '0')) {
             if (!$emailman->sendEmail($mail, $massemailer_email_copy, $test)) {
-                $GLOBALS['log']->fatal("Email delivery FAILURE:" . print_r($row, true));
+                $GLOBALS['log']->fatal("Email delivery FAILURE:" . \print_r($row, true));
             } else {
-                $GLOBALS['log']->debug("Email delivery SUCCESS:" . print_r($row, true));
+                $GLOBALS['log']->debug("Email delivery SUCCESS:" . \print_r($row, true));
             }
         } else {
             if ($confirmOptInEnabled) {
@@ -266,14 +266,14 @@ do {
                 $now = TimeDate::getInstance()->nowDb();
                     
                 if (!$emailman->sendOptInEmail($emailAddress, $row['related_type'], $row['related_id'])) {
-                    $GLOBALS['log']->fatal("Confirm Opt In Email delivery FAILURE:" . print_r($row, true));
+                    $GLOBALS['log']->fatal("Confirm Opt In Email delivery FAILURE:" . \print_r($row, true));
                     $emailAddress->confirm_opt_in_fail_date = $now;
                 } else {
-                    $GLOBALS['log']->debug("Confirm Opt In Email delivery SUCCESS:" . print_r($row, true));
+                    $GLOBALS['log']->debug("Confirm Opt In Email delivery SUCCESS:" . \print_r($row, true));
 
-                    if (is_string($emailAddress->email_address)) {
+                    if (\is_string($emailAddress->email_address)) {
                         $emailAddressString = $emailAddress->email_address;
-                    } elseif (is_array($emailAddress->email_address) && is_string($emailAddress->email_address[0]['email_address'])) {
+                    } elseif (\is_array($emailAddress->email_address) && \is_string($emailAddress->email_address[0]['email_address'])) {
                         $emailAddressString = $emailAddress->email_address[0]['email_address'];
                     } else {
                         $log->fatal('Incorrect Email Address');
@@ -295,7 +295,7 @@ do {
         }
 
         if ($mail->isError()) {
-            $GLOBALS['log']->fatal("Email delivery error:" . print_r($row, true) . $mail->ErrorInfo);
+            $GLOBALS['log']->fatal("Email delivery error:" . \print_r($row, true) . $mail->ErrorInfo);
         }
         $count++;
     }
@@ -316,18 +316,18 @@ if (isset($_REQUEST['return_module']) && isset($_REQUEST['return_action']) && is
             $header_URL = "Location: index.php?action=WizardMarketing&module=Campaigns&return_module=Campaigns&return_action=Wi" .
                     "zardMarketing&return_id=" . $_REQUEST['campaign_id'] . "&campaign_id=" . $_REQUEST['campaign_id'] .
                     "&show_wizard_marketing&jump=3&marketing_id=" . (isset($_POST['marketing_id']) && $_POST['marketing_id'] ? $_POST['marketing_id'] : $_REQUEST['marketing_id']) . "&record=" . (isset($_POST['marketing_id']) && $_POST['marketing_id'] ? $_POST['marketing_id'] : $_REQUEST['marketing_id']);
-            header($header_URL);
+            \header($header_URL);
         } else {
-            header("Location: index.php?module={$_REQUEST['return_module']}&action={$_REQUEST['return_action']}&record={$_REQUEST['return_id']}&from=test");
+            \header("Location: index.php?module={$_REQUEST['return_module']}&action={$_REQUEST['return_action']}&record={$_REQUEST['return_id']}&from=test");
         }
     } else {
-        header("Location: index.php?module={$_REQUEST['return_module']}&action={$_REQUEST['return_action']}&record={$_REQUEST['return_id']}");
+        \header("Location: index.php?module={$_REQUEST['return_module']}&action={$_REQUEST['return_action']}&record={$_REQUEST['return_id']}");
     }
 } else {
     /* this will be triggered when manually sending off Email campaigns from the
      * Mass Email Queue Manager.
      */
     if (isset($_POST['manual'])) {
-        header("Location: index.php?module=EmailMan&action=index");
+        \header("Location: index.php?module=EmailMan&action=index");
     }
 }

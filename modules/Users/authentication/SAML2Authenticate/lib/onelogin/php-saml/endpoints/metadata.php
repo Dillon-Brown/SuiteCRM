@@ -4,7 +4,7 @@
  *  SP Metadata Endpoint
  */
 
-require_once dirname(dirname(__FILE__)) . '/_toolkit_loader.php';
+require_once \dirname(\dirname(__FILE__)) . '/_toolkit_loader.php';
 
 try {
     $auth = new OneLogin_Saml2_Auth();
@@ -12,11 +12,11 @@ try {
     $metadata = $settings->getSPMetadata();
     $errors = $settings->validateMetadata($metadata);
     if (empty($errors)) {
-        header('Content-Type: text/xml');
+        \header('Content-Type: text/xml');
         echo $metadata;
     } else {
         throw new OneLogin_Saml2_Error(
-            'Invalid SP metadata: '.implode(', ', $errors),
+            'Invalid SP metadata: '.\implode(', ', $errors),
             OneLogin_Saml2_Error::METADATA_SP_INVALID
         );
     }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -70,7 +70,7 @@ class ContactsViewEdit extends ViewEdit
         $admin = new Administration();
         $admin->retrieveSettings();
         if (empty($admin->settings['portal_on']) || !$admin->settings['portal_on']) {
-            unset($this->ev->sectionPanels[strtoupper('lbl_portal_information')]);
+            unset($this->ev->sectionPanels[\strtoupper('lbl_portal_information')]);
         } else {
             if (isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
                 $this->ev->fieldDefs['portal_name']['value'] = '';

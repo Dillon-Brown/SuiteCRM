@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -80,7 +80,7 @@ class CallsViewEdit extends ViewEdit
         $this->ss->assign('remindersData', Reminder::loadRemindersData('Calls', $this->bean->id, $this->ev->isDuplicate));
         $this->ss->assign('remindersDataJson', Reminder::loadRemindersDataJson('Calls', $this->bean->id, $this->ev->isDuplicate));
         $this->ss->assign('remindersDefaultValuesDataJson', Reminder::loadRemindersDefaultValuesDataJson());
-        $this->ss->assign('remindersDisabled', json_encode(false));
+        $this->ss->assign('remindersDisabled', \json_encode(false));
 
         if ($this->ev->isDuplicate) {
             $this->bean->status = $this->bean->getDefaultStatus();

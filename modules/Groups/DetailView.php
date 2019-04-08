@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -60,7 +60,7 @@ if (isset($_REQUEST['offset']) or isset($_REQUEST['record'])) {
     }
     $focus=$result;
 } else {
-    header("Location: index.php?module=Groups&action=index");
+    \header("Location: index.php?module=Groups&action=index");
 }
 
 echo getClassicModuleTitle($mod_strings['LBL_MODULE_NAME'], array($mod_strings['LBL_MODULE_NAME'],$focus->user_name), true);

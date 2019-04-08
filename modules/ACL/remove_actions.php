@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -48,7 +48,7 @@ $actionarr = ACLAction::getDefaultActions();
 if (is_admin($current_user)) {
     $foundOne = false;
     foreach ($actionarr as $actionobj) {
-        if (!isset($beanList[$actionobj->category]) || !file_exists($beanFiles[$beanList[$actionobj->category]])) {
+        if (!isset($beanList[$actionobj->category]) || !\file_exists($beanFiles[$beanList[$actionobj->category]])) {
             if (!isset($_REQUEST['upgradeWizard'])) {
                 echo 'Removing for ' . $actionobj->category . '<br>';
             }

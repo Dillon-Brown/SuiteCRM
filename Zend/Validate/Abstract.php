@@ -117,7 +117,7 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
      */
     public function getMessageVariables()
     {
-        return array_keys($this->_messageVariables);
+        return \array_keys($this->_messageVariables);
     }
 
     /**
@@ -141,7 +141,7 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
     public function setMessage($messageString, $messageKey = null)
     {
         if ($messageKey === null) {
-            $keys = array_keys($this->_messageTemplates);
+            $keys = \array_keys($this->_messageTemplates);
             foreach ($keys as $key) {
                 $this->setMessage($messageString, $key);
             }
@@ -185,7 +185,7 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
         if ($property == 'value') {
             return $this->_value;
         }
-        if (array_key_exists($property, $this->_messageVariables)) {
+        if (\array_key_exists($property, $this->_messageVariables)) {
             return $this->{$this->_messageVariables[$property]};
         }
         /**
@@ -223,9 +223,9 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
             }
         }
 
-        if (is_object($value)) {
-            if (!in_array('__toString', get_class_methods($value))) {
-                $value = get_class($value) . ' object';
+        if (\is_object($value)) {
+            if (!\in_array('__toString', \get_class_methods($value))) {
+                $value = \get_class($value) . ' object';
             } else {
                 $value = $value->__toString();
             }
@@ -234,17 +234,17 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
         }
 
         if ($this->getObscureValue()) {
-            $value = str_repeat('*', strlen($value));
+            $value = \str_repeat('*', \strlen($value));
         }
 
-        $message = str_replace('%value%', (string) $value, $message);
+        $message = \str_replace('%value%', (string) $value, $message);
         foreach ($this->_messageVariables as $ident => $property) {
-            $message = str_replace("%$ident%", (string) $this->$property, $message);
+            $message = \str_replace("%$ident%", (string) $this->$property, $message);
         }
 
         $length = self::getMessageLength();
-        if (($length > -1) && (strlen($message) > $length)) {
-            $message = substr($message, 0, (self::getMessageLength() - 3)) . '...';
+        if (($length > -1) && (\strlen($message) > $length)) {
+            $message = \substr($message, 0, (self::getMessageLength() - 3)) . '...';
         }
 
         return $message;
@@ -258,8 +258,8 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
     protected function _error($messageKey, $value = null)
     {
         if ($messageKey === null) {
-            $keys = array_keys($this->_messageTemplates);
-            $messageKey = current($keys);
+            $keys = \array_keys($this->_messageTemplates);
+            $messageKey = \current($keys);
         }
         if ($value === null) {
             $value = $this->_value;

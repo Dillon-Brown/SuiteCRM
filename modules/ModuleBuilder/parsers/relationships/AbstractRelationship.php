@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -223,28 +223,28 @@ class AbstractRelationship
     {
         $labelDefinitions = array( ) ;
         if (!$this->relationship_only) {
-            if (!$this->is_custom && $update && file_exists("modules/{$this->rhs_module}/metadata/subpaneldefs.php")) {
+            if (!$this->is_custom && $update && \file_exists("modules/{$this->rhs_module}/metadata/subpaneldefs.php")) {
                 include("modules/{$this->rhs_module}/metadata/subpaneldefs.php");
-                if (isset($layout_defs[$this->rhs_module]['subpanel_setup'][strtolower($this->lhs_module)]['title_key'])) {
-                    $rightSysLabel = $layout_defs[$this->rhs_module]['subpanel_setup'][strtolower($this->lhs_module)]['title_key'];
+                if (isset($layout_defs[$this->rhs_module]['subpanel_setup'][\strtolower($this->lhs_module)]['title_key'])) {
+                    $rightSysLabel = $layout_defs[$this->rhs_module]['subpanel_setup'][\strtolower($this->lhs_module)]['title_key'];
                 }
                 $layout_defs = array();
             }
-            if (!$this->is_custom && $update && file_exists("modules/{$this->lhs_module}/metadata/subpaneldefs.php")) {
+            if (!$this->is_custom && $update && \file_exists("modules/{$this->lhs_module}/metadata/subpaneldefs.php")) {
                 include("modules/{$this->lhs_module}/metadata/subpaneldefs.php");
-                if (isset($layout_defs[$this->lhs_module]['subpanel_setup'][strtolower($this->rhs_module)]['title_key'])) {
-                    $leftSysLabel = $layout_defs[$this->lhs_module]['subpanel_setup'][strtolower($this->rhs_module)]['title_key'];
+                if (isset($layout_defs[$this->lhs_module]['subpanel_setup'][\strtolower($this->rhs_module)]['title_key'])) {
+                    $leftSysLabel = $layout_defs[$this->lhs_module]['subpanel_setup'][\strtolower($this->rhs_module)]['title_key'];
                 }
                 $layout_defs = array();
             }
             $labelDefinitions [] = array(
                 'module' => $this->rhs_module ,
-                'system_label' => isset($rightSysLabel)?$rightSysLabel : 'LBL_' . strtoupper($this->relationship_name . '_FROM_' . $this->getLeftModuleSystemLabel()) . '_TITLE' ,
+                'system_label' => isset($rightSysLabel)?$rightSysLabel : 'LBL_' . \strtoupper($this->relationship_name . '_FROM_' . $this->getLeftModuleSystemLabel()) . '_TITLE' ,
                 'display_label' => ($update && !empty($_REQUEST [ 'lhs_label' ]))?$_REQUEST [ 'lhs_label' ] :(empty($this->lhs_label) ? translate($this->lhs_module) : $this->lhs_label),
             ) ;
             $labelDefinitions [] = array(
                 'module' => $this->lhs_module ,
-                'system_label' =>  isset($leftSysLabel)?$leftSysLabel :'LBL_' . strtoupper($this->relationship_name . '_FROM_' . $this->getRightModuleSystemLabel()) . '_TITLE' ,
+                'system_label' =>  isset($leftSysLabel)?$leftSysLabel :'LBL_' . \strtoupper($this->relationship_name . '_FROM_' . $this->getRightModuleSystemLabel()) . '_TITLE' ,
                 'display_label' => ($update && !empty($_REQUEST [ 'rhs_label' ]))?$_REQUEST [ 'rhs_label' ] :(empty($this->rhs_label) ? translate($this->rhs_module) : $this->rhs_label),
             ) ;
         }
@@ -311,9 +311,9 @@ class AbstractRelationship
         $subpanelDefinition [ 'sort_order' ] = 'asc' ;
         $subpanelDefinition [ 'sort_by' ] = 'id' ;
         if (!empty($titleKeyName)) {
-            $subpanelDefinition [ 'title_key' ] = 'LBL_' . strtoupper($relationshipName . '_FROM_' . $titleKeyName) . '_TITLE' ;
+            $subpanelDefinition [ 'title_key' ] = 'LBL_' . \strtoupper($relationshipName . '_FROM_' . $titleKeyName) . '_TITLE' ;
         } else {
-            $subpanelDefinition [ 'title_key' ] = 'LBL_' . strtoupper($relationshipName . '_FROM_' . $sourceModule) . '_TITLE' ;
+            $subpanelDefinition [ 'title_key' ] = 'LBL_' . \strtoupper($relationshipName . '_FROM_' . $sourceModule) . '_TITLE' ;
         }
         $subpanelDefinition [ 'get_subpanel_data' ] = $source ;
         $subpanelDefinition [ 'top_buttons' ] = array(
@@ -399,9 +399,9 @@ class AbstractRelationship
 
         $vardef [ 'source' ] = 'non-db' ;
         if (!empty($vnameLabel)) {
-            $vardef [ 'vname' ] = 'LBL_' . strtoupper($relationshipName . '_FROM_' . $vnameLabel) . '_TITLE' ;
+            $vardef [ 'vname' ] = 'LBL_' . \strtoupper($relationshipName . '_FROM_' . $vnameLabel) . '_TITLE' ;
         } else {
-            $vardef [ 'vname' ] = 'LBL_' . strtoupper($relationshipName . '_FROM_' . $sourceModule) . '_TITLE' ;
+            $vardef [ 'vname' ] = 'LBL_' . \strtoupper($relationshipName . '_FROM_' . $sourceModule) . '_TITLE' ;
         }
         
         $vardef [ 'save' ] = true; // the magic value to tell SugarBean to save this relate field even though it is not listed in the $relationship_fields array
@@ -426,13 +426,13 @@ class AbstractRelationship
             require_once 'modules/ModuleBuilder/MB/ModuleBuilder.php' ;
             $mb = new ModuleBuilder() ;
             $module = $mb->getPackageModule($parsedModuleName['packageName'], $parsedModuleName['moduleName']) ;
-            if (in_array('file', array_keys($module->config [ 'templates' ]))) {
+            if (\in_array('file', \array_keys($module->config [ 'templates' ]))) {
                 $vardef [ 'rname' ] = 'document_name' ;
-            } elseif (in_array('person', array_keys($module->config [ 'templates' ]))) {
+            } elseif (\in_array('person', \array_keys($module->config [ 'templates' ]))) {
                 $vardef [ 'db_concat_fields' ] = array( 0 =>'first_name', 1 =>'last_name') ;
             }
         } else {
-            switch (strtolower($sourceModule)) {
+            switch (\strtolower($sourceModule)) {
                 case 'prospects':
                     $vardef [ 'rname' ] = 'account_name' ;
                     break ;
@@ -455,9 +455,9 @@ class AbstractRelationship
                     require_once($GLOBALS ['beanFiles'] [ $object ]);
                     $bean = new $object();
                     if (isset($GLOBALS [ 'dictionary' ] [ $object ] [ 'templates'])) {
-                        if (in_array('file', $GLOBALS [ 'dictionary' ] [ $object ] [ 'templates'])) {
+                        if (\in_array('file', $GLOBALS [ 'dictionary' ] [ $object ] [ 'templates'])) {
                             $vardef [ 'rname' ] = 'document_name' ;
-                        } elseif (in_array('person', $GLOBALS [ 'dictionary' ] [ $object ] [ 'templates'])) {
+                        } elseif (\in_array('person', $GLOBALS [ 'dictionary' ] [ $object ] [ 'templates'])) {
                             $vardef [ 'db_concat_fields' ] = array( 0 =>'first_name', 1 =>'last_name') ;
                         }
                     }
@@ -547,7 +547,7 @@ class AbstractRelationship
         $properties [ 'fields' ] [] = array( 'name' => 'deleted' , 'type' => 'bool' , 'len' => '1' , 'default' => '0' , 'required' => true ) ;
         $properties [ 'fields' ] [] = array( 'name' => $rel_properties [ 'join_key_lhs' ] , 'type' => 'varchar' , 'len' => 36 ) ;
         $properties [ 'fields' ] [] = array( 'name' => $rel_properties [ 'join_key_rhs' ] , 'type' => 'varchar' , 'len' => 36 ) ;
-        if (strtolower($lhs_module) == 'documents' || strtolower($rhs_module) == 'documents') {
+        if (\strtolower($lhs_module) == 'documents' || \strtolower($rhs_module) == 'documents') {
             $properties [ 'fields' ] [] = array( 'name' => 'document_revision_id' , 'type' => 'varchar' , 'len' => '36' ) ;
         }
         // if we have an extended relationship condition, then add in the corresponding relationship_role_column to the relationship (join) table
@@ -575,7 +575,7 @@ class AbstractRelationship
                 $alternateKeys = array( $rel_properties [ 'join_key_lhs' ] , $rel_properties [ 'join_key_rhs' ] ) ;
         }
         
-        if (count($alternateKeys)>0) {
+        if (\count($alternateKeys)>0) {
             $properties [ 'indices' ] [] = array( 'name' => $indexBase . '_alt' , 'type' => 'alternate_key' , 'fields' => $alternateKeys ) ;
         } // type must be set to alternate_key for Link.php to correctly update an existing record rather than inserting a copy - it uses the fields in this array as the keys to check if a duplicate record already exists
         
@@ -594,7 +594,7 @@ class AbstractRelationship
      */
     public function getActivitiesSubModuleRelationshipName($activitiesSubModuleName)
     {
-        return $this->lhs_module . "_" . strtolower($activitiesSubModuleName) ;
+        return $this->lhs_module . "_" . \strtolower($activitiesSubModuleName) ;
     }
 
     /*
@@ -618,11 +618,11 @@ class AbstractRelationship
      */
     public static function parseRelationshipType($type)
     {
-        $type = strtolower($type) ;
-        $type = preg_replace('/[^\w]+/i', '', strtolower($type)) ;
+        $type = \strtolower($type) ;
+        $type = \preg_replace('/[^\w]+/i', '', \strtolower($type)) ;
         $canonicalTypes = array( ) ;
         foreach (array( MB_ONETOONE , MB_ONETOMANY , MB_MANYTOMANY , MB_MANYTOONE) as $canonicalType) {
-            if ($type == preg_replace('/[^\w]+/i', '', strtolower($canonicalType))) {
+            if ($type == \preg_replace('/[^\w]+/i', '', \strtolower($canonicalType))) {
                 return $canonicalType ;
             }
         }
@@ -671,20 +671,20 @@ class AbstractRelationship
             $module = get_module_info($moduleName) ;
             return $module->table_name ;
         }
-        return strtolower($moduleName) ;
+        return \strtolower($moduleName) ;
     }
 
     public function getTitleKey($left=false)
     {
-        if (!$this->is_custom && !$left && file_exists("modules/{$this->rhs_module}/metadata/subpaneldefs.php")) {
+        if (!$this->is_custom && !$left && \file_exists("modules/{$this->rhs_module}/metadata/subpaneldefs.php")) {
             include("modules/{$this->rhs_module}/metadata/subpaneldefs.php");
-            if (isset($layout_defs[$this->rhs_module]['subpanel_setup'][strtolower($this->lhs_module)]['title_key'])) {
-                return $layout_defs[$this->rhs_module]['subpanel_setup'][strtolower($this->lhs_module)]['title_key'];
+            if (isset($layout_defs[$this->rhs_module]['subpanel_setup'][\strtolower($this->lhs_module)]['title_key'])) {
+                return $layout_defs[$this->rhs_module]['subpanel_setup'][\strtolower($this->lhs_module)]['title_key'];
             }
-        } elseif (!$this->is_custom &&  file_exists("modules/{$this->lhs_module}/metadata/subpaneldefs.php")) {
+        } elseif (!$this->is_custom &&  \file_exists("modules/{$this->lhs_module}/metadata/subpaneldefs.php")) {
             include("modules/{$this->lhs_module}/metadata/subpaneldefs.php");
-            if (isset($layout_defs[$this->lhs_module]['subpanel_setup'][strtolower($this->rhs_module)]['title_key'])) {
-                return $layout_defs[$this->lhs_module]['subpanel_setup'][strtolower($this->rhs_module)]['title_key'];
+            if (isset($layout_defs[$this->lhs_module]['subpanel_setup'][\strtolower($this->rhs_module)]['title_key'])) {
+                return $layout_defs[$this->lhs_module]['subpanel_setup'][\strtolower($this->rhs_module)]['title_key'];
             }
         }
         
@@ -697,9 +697,9 @@ class AbstractRelationship
         }
         
         if (!empty($titleKeyName)) {
-            $title_key = 'LBL_' . strtoupper($this->relationship_name . '_FROM_' . $titleKeyName) . '_TITLE' ;
+            $title_key = 'LBL_' . \strtoupper($this->relationship_name . '_FROM_' . $titleKeyName) . '_TITLE' ;
         } else {
-            $title_key = 'LBL_' . strtoupper($this->relationship_name . '_FROM_' . $sourceModule) . '_TITLE' ;
+            $title_key = 'LBL_' . \strtoupper($this->relationship_name . '_FROM_' . $sourceModule) . '_TITLE' ;
         }
         
         return $title_key;

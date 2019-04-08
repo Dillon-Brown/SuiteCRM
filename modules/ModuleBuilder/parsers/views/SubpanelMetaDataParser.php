@@ -39,7 +39,7 @@
  */
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -69,7 +69,7 @@ class SubpanelMetaDataParser extends ListLayoutMetaDataParser
      */
     public function __construct($subpanelName, $moduleName, $packageName = '')
     {
-        $GLOBALS ['log']->debug(get_class($this) . ": __construct()");
+        $GLOBALS ['log']->debug(\get_class($this) . ": __construct()");
 
         // TODO: check the implementations
         if (empty($packageName)) {
@@ -81,14 +81,14 @@ class SubpanelMetaDataParser extends ListLayoutMetaDataParser
             $this->implementation = new UndeployedSubpanelImplementation($subpanelName, $moduleName, $packageName);
         }
 
-        $this->_viewdefs = array_change_key_case($this->implementation->getViewdefs()); // force to lower case so don't have problems with case mismatches later
+        $this->_viewdefs = \array_change_key_case($this->implementation->getViewdefs()); // force to lower case so don't have problems with case mismatches later
         $this->_fielddefs = $this->implementation->getFielddefs();
         $this->_standardizeFieldLabels($this->_fielddefs);
-        $GLOBALS['log']->debug(get_class($this) . "->__construct(): viewdefs = " . print_r($this->_viewdefs, true));
-        $GLOBALS['log']->debug(get_class($this) . "->__construct(): viewdefs = " . print_r($this->_viewdefs, true));
+        $GLOBALS['log']->debug(\get_class($this) . "->__construct(): viewdefs = " . \print_r($this->_viewdefs, true));
+        $GLOBALS['log']->debug(\get_class($this) . "->__construct(): viewdefs = " . \print_r($this->_viewdefs, true));
         $this->_invisibleFields = $this->findInvisibleFields($this->_viewdefs);
 
-        $GLOBALS['log']->debug(get_class($this) . "->__construct(): invisibleFields = " . print_r(
+        $GLOBALS['log']->debug(\get_class($this) . "->__construct(): invisibleFields = " . \print_r(
             $this->_invisibleFields,
                 true
         ));
@@ -142,8 +142,8 @@ class SubpanelMetaDataParser extends ListLayoutMetaDataParser
     {
         $defaultFields = array();
         foreach ($this->_viewdefs as $key => $def) {
-            if (empty($def ['usage']) || strcmp($def ['usage'], 'query_only') == 1) {
-                $defaultFields [strtolower($key)] = $this->_viewdefs [$key];
+            if (empty($def ['usage']) || \strcmp($def ['usage'], 'query_only') == 1) {
+                $defaultFields [\strtolower($key)] = $this->_viewdefs [$key];
             }
         }
 

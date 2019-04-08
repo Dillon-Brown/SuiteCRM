@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -149,14 +149,14 @@ class EmailsController extends SugarController
         $this->view = 'compose';
         // For viewing the Compose as modal from other modules we need to load the Emails language strings
         if (isset($_REQUEST['in_popup']) && $_REQUEST['in_popup']) {
-            if (!is_file('cache/jsLanguage/Emails/' . $GLOBALS['current_language'] . '.js')) {
+            if (!\is_file('cache/jsLanguage/Emails/' . $GLOBALS['current_language'] . '.js')) {
                 require_once('include/language/jsLanguage.php');
                 jsLanguage::createModuleStringsCache('Emails', $GLOBALS['current_language']);
             }
             echo '<script src="cache/jsLanguage/Emails/'. $GLOBALS['current_language'] . '.js"></script>';
         }
         if (isset($_REQUEST['ids']) && isset($_REQUEST['targetModule'])) {
-            $toAddressIds = explode(',', rtrim($_REQUEST['ids'], ','));
+            $toAddressIds = \explode(',', \rtrim($_REQUEST['ids'], ','));
             foreach ($toAddressIds as $id) {
                 $destinataryBean = BeanFactory::getBean($_REQUEST['targetModule'], $id);
                 if ($destinataryBean) {
@@ -200,7 +200,7 @@ class EmailsController extends SugarController
 
         if (!$bean) {
             $result = ['id' => false];
-            echo json_encode($result);
+            echo \json_encode($result);
             return;
         }
 
@@ -208,7 +208,7 @@ class EmailsController extends SugarController
             'id' => $bean->id,
             'module' => $bean->module_name,
         ];
-        echo json_encode($result);
+        echo \json_encode($result);
 
         if (empty($_REQUEST['parentEmailRecordId'])) {
             return;
@@ -218,7 +218,7 @@ class EmailsController extends SugarController
             return;
         }
 
-        $relationship = strtolower($controller->module);
+        $relationship = \strtolower($controller->module);
         $emailBean->load_relationship($relationship);
         $emailBean->$relationship->add($bean->id);
 
@@ -274,11 +274,11 @@ class EmailsController extends SugarController
 
             $this->view = 'ajax';
             $response['errors'] = [
-                'type' => get_class($this->bean),
+                'type' => \get_class($this->bean),
                 'id' => $this->bean->id,
                 'title' => $app_strings['LBL_EMAIL_ERROR_SENDING']
             ];
-            echo json_encode($response);
+            echo \json_encode($response);
         }
     }
 
@@ -348,7 +348,7 @@ class EmailsController extends SugarController
     {
         $isValidRequestForReplaceEmailVariables = true;
 
-        if (!is_array($request)) {
+        if (!\is_array($request)) {
 
             // request should be an array like standard $_REQUEST
 
@@ -468,8 +468,8 @@ class EmailsController extends SugarController
             }
         }
 
-        $dataEncoded = json_encode(array('data' => $data), JSON_UNESCAPED_UNICODE);
-        echo utf8_decode($dataEncoded);
+        $dataEncoded = \json_encode(array('data' => $data), JSON_UNESCAPED_UNICODE);
+        echo \utf8_decode($dataEncoded);
         $this->view = 'ajax';
     }
 
@@ -478,7 +478,7 @@ class EmailsController extends SugarController
         $inboundEmail = new InboundEmail();
         $inboundEmail->syncEmail();
 
-        echo json_encode(array('response' => array()));
+        echo \json_encode(array('response' => array()));
         $this->view = 'ajax';
     }
 
@@ -505,10 +505,10 @@ class EmailsController extends SugarController
                 $current_user,
                 true
             );
-            $out = json_encode(array('response' => $ret));
+            $out = \json_encode(array('response' => $ret));
         } catch (SugarFolderEmptyException $e) {
             $GLOBALS['log']->warn($e->getMessage());
-            $out = json_encode(array('errors' => array($mod_strings['LBL_ERROR_NO_FOLDERS'])));
+            $out = \json_encode(array('errors' => array($mod_strings['LBL_ERROR_NO_FOLDERS'])));
         }
 
         echo $out;
@@ -539,7 +539,7 @@ class EmailsController extends SugarController
         if (empty($result)) {
             $this->view = 'detailnonimported';
         } else {
-            header('location:index.php?module=Emails&action=DetailView&record=' . $result[0]->id);
+            \header('location:index.php?module=Emails&action=DetailView&record=' . $result[0]->id);
         }
     }
 
@@ -559,11 +559,11 @@ class EmailsController extends SugarController
             $this->bean = $this->setAfterImport($importedEmailId, $_REQUEST);
 
             if ($importedEmailId !== false) {
-                header('location:index.php?module=Emails&action=DetailView&record=' . $importedEmailId);
+                \header('location:index.php?module=Emails&action=DetailView&record=' . $importedEmailId);
             }
         } else {
             // When something fail redirect user to index
-            header('location:index.php?module=Emails&action=index');
+            \header('location:index.php?module=Emails&action=index');
         }
     }
 
@@ -578,7 +578,7 @@ class EmailsController extends SugarController
     public function action_GetCurrentUserID()
     {
         global $current_user;
-        echo json_encode(array("response" => $current_user->id));
+        echo \json_encode(array("response" => $current_user->id));
         $this->view = 'ajax';
     }
 
@@ -609,7 +609,7 @@ class EmailsController extends SugarController
             $GLOBALS['log']->fatal('EmailsController::action_ImportFromListView() missing inbound_email_record');
         }
 
-        header('location:index.php?module=Emails&action=index');
+        \header('location:index.php?module=Emails&action=index');
     }
 
     public function action_ReplyTo()
@@ -643,7 +643,7 @@ class EmailsController extends SugarController
     public function action_SendDraft()
     {
         $this->view = 'ajax';
-        echo json_encode(array());
+        echo \json_encode(array());
     }
 
 
@@ -653,7 +653,7 @@ class EmailsController extends SugarController
     public function action_MarkEmails()
     {
         $this->markEmails($_REQUEST);
-        echo json_encode(array('response' => true));
+        echo \json_encode(array('response' => true));
         $this->view = 'ajax';
     }
 
@@ -796,8 +796,8 @@ class EmailsController extends SugarController
     private function getRequestedUIDs($request)
     {
         $ret = $this->getRequestedArgument($request, 'uid');
-        if (is_array($ret)) {
-            $ret = implode(',', $ret);
+        if (\is_array($ret)) {
+            $ret = \implode(',', $ret);
         }
 
         return $ret;
@@ -860,9 +860,9 @@ class EmailsController extends SugarController
         $emails = BeanFactory::getBean("Emails", $importedEmailId);
 
         foreach ($request as $requestKey => $requestValue) {
-            if (strpos($requestKey, 'SET_AFTER_IMPORT_') !== false) {
-                $field = str_replace('SET_AFTER_IMPORT_', '', $requestKey);
-                if (in_array($field, self::$doNotImportFields)) {
+            if (\strpos($requestKey, 'SET_AFTER_IMPORT_') !== false) {
+                $field = \str_replace('SET_AFTER_IMPORT_', '', $requestKey);
+                if (\in_array($field, self::$doNotImportFields)) {
                     continue;
                 }
 

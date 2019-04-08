@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -56,15 +56,15 @@ function ajaxSqlProgress($persistence, $sql, $type)
     global $mod_strings;
 
     // $type is sql_to_check or sql_to_run
-    $whatsLeft = count($persistence[$type]);
+    $whatsLeft = \count($persistence[$type]);
 
-    ob_start();
+    \ob_start();
     $out  = "<b>{$mod_strings['LBL_UW_PREFLIGHT_QUERY']}</b><br />";
-    $out .= round((($persistence['sql_total'] - $whatsLeft) / $persistence['sql_total']) * 100, 1)."%
+    $out .= \round((($persistence['sql_total'] - $whatsLeft) / $persistence['sql_total']) * 100, 1)."%
 				{$mod_strings['LBL_UW_DONE']} - {$mod_strings['LBL_UW_PREFLIGHT_QUERIES_LEFT']}: {$whatsLeft}";
     $out .= "<br /><textarea cols='60' rows='3' DISABLED>{$sql}</textarea>";
     echo $out;
-    ob_flush();
+    \ob_flush();
 
     if ($whatsLeft < 1) {
         $persistence['sql_check_done'] = true;
@@ -111,7 +111,7 @@ function commitAjaxFinalTouches($persistence)
     // reminders if needed
     ///////////////////////////////////////////////////////////////////////////////
     ////	HANDLE REMINDERS
-    if (count($persistence['skipped_files']) > 0) {
+    if (\count($persistence['skipped_files']) > 0) {
         $desc  = $mod_strings['LBL_UW_COMMIT_ADD_TASK_OVERVIEW']."\n\n";
         $desc .= $mod_strings['LBL_UW_COMMIT_ADD_TASK_DESC_1'];
         $desc .= $persistence['uw_restore_dir']."\n\n";
@@ -150,7 +150,7 @@ function commitAjaxFinalTouches($persistence)
             $email->assigned_user_id = $current_user->id;
             $email->name = $mod_strings['LBL_UW_COMMIT_ADD_TASK_NAME'];
             $email->description = $desc;
-            $email->description_html = nl2br($desc);
+            $email->description_html = \nl2br($desc);
             $email->from_name = $current_user->full_name;
             $email->from_addr = $current_user->email1;
             isValidEmailAddress($email->from_addr);
@@ -169,9 +169,9 @@ function commitAjaxFinalTouches($persistence)
     // clean up
     unlinkUWTempFiles();
 
-    ob_start();
+    \ob_start();
     echo 'done';
-    ob_flush();
+    \ob_flush();
 
     return $persistence;
 }
@@ -192,10 +192,10 @@ function commitAjaxRunSql($persistence)
     // This flag is determined by the preflight check in the installer
     if ($persistence['schema_change'] == 'sugar') {
         if (isset($persistence['sql_to_run'])
-            && count($persistence['sql_to_run']) > 0
+            && \count($persistence['sql_to_run']) > 0
             && !empty($persistence['sql_to_run'])) {
-            $sql = array_shift($persistence['sql_to_run']);
-            $sql = trim($sql);
+            $sql = \array_shift($persistence['sql_to_run']);
+            $sql = \trim($sql);
 
             if (!empty($sql)) {
                 logThis("[RUNNING SQL QUERY] {$sql}");
@@ -212,14 +212,14 @@ function commitAjaxRunSql($persistence)
                 $persistence = ajaxSqlProgress($persistence, $sql, 'sql_to_run');
             }
         } else {
-            ob_start();
+            \ob_start();
             echo 'done';
-            ob_flush();
+            \ob_flush();
         }
     } else {
-        ob_start();
+        \ob_start();
         echo 'done';
-        ob_flush();
+        \ob_flush();
     }
 
     return $persistence;
@@ -247,9 +247,9 @@ function commitAjaxGetSqlErrors($persistence)
         $out = $mod_strings['LBL_UW_COMMIT_ALL_SQL_SUCCESSFULLY_RUN'];
     }
 
-    ob_start();
+    \ob_start();
     echo $out;
-    ob_flush();
+    \ob_flush();
 }
 
 /**
@@ -285,10 +285,10 @@ function commitAjaxPostInstall($persistence)
     $postInstallResults = "<b>{$mod_strings['LBL_UW_COMMIT_POSTINSTALL_RESULTS']}</b><br />
 							<a href='javascript:toggleNwFiles(\"postInstallResults\");'>{$mod_strings['LBL_UW_SHOW']}</a><br />
 							<div id='postInstallResults' style='display:none'>";
-    $file = $persistence['unzip_dir']. "/" . constant('SUGARCRM_POST_INSTALL_FILE');
-    if (is_file($file)) {
+    $file = $persistence['unzip_dir']. "/" . \constant('SUGARCRM_POST_INSTALL_FILE');
+    if (\is_file($file)) {
         include($file);
-        ob_start();
+        \ob_start();
         post_install();
     }
 
@@ -299,13 +299,13 @@ function commitAjaxPostInstall($persistence)
         $errors[] = $mod_strings['ERR_UW_CONFIG_WRITE'];
     }
 
-    $res = ob_get_contents();
+    $res = \ob_get_contents();
     $postInstallResults .= (empty($res)) ? $mod_strings['LBL_UW_SUCCESS'] : $res;
     $postInstallResults .= "</div>";
 
-    ob_start();
+    \ob_start();
     echo $postInstallResults;
-    ob_flush();
+    \ob_flush();
 
     logThis('post_install() done.');
 }
@@ -333,7 +333,7 @@ function preflightCheckJsonFindUpgradeFiles($persistence)
         $errors					= array();
         $base_upgrade_dir      = "upload://upgrades";
         $base_tmp_upgrade_dir  = sugar_cached("upgrades/temp");
-        $install_file			= urldecode($persistence['install_file']);
+        $install_file			= \urldecode($persistence['install_file']);
         $show_files				= true;
         $unzip_dir				= mk_temp_dir($base_tmp_upgrade_dir);
         $zip_from_dir			= ".";
@@ -357,7 +357,7 @@ function preflightCheckJsonFindUpgradeFiles($persistence)
         if (isset($manifest['version'])) {
             $version    = $manifest['version'];
         }
-        if (!is_writable("config.php")) {
+        if (!\is_writable("config.php")) {
             logThis('BAD error');
             return $mod_strings['ERR_UW_CONFIG'];
         }
@@ -390,8 +390,8 @@ function preflightCheckJsonDiffFiles($persistence)
     $md5_string = array();
     $finalZipDir = $persistence['unzip_dir'].'/'.$persistence['zip_from_dir'];
 
-    if (is_file(getcwd().'/files.md5')) {
-        require(getcwd().'/files.md5');
+    if (\is_file(\getcwd().'/files.md5')) {
+        require(\getcwd().'/files.md5');
     }
 
     // initialize pass array
@@ -402,7 +402,7 @@ function preflightCheckJsonDiffFiles($persistence)
     $cache_html_files = findAllFilesRelative(sugar_cached("layout"), array());
 
     foreach ($persistence['upgrade_files'] as $file) {
-        if (strpos($file, '.md5')) {
+        if (\strpos($file, '.md5')) {
             continue;
         } // skip md5 file
 
@@ -410,14 +410,14 @@ function preflightCheckJsonDiffFiles($persistence)
         $file = clean_path($file);
 
         // check that we can move/delete the upgraded file
-        if (!is_writable($file)) {
+        if (!\is_writable($file)) {
             $errors[] = $mod_strings['ERR_UW_FILE_NOT_WRITABLE'].": ".$file;
         }
         // check that destination files are writable
-        $destFile = getcwd().str_replace($finalZipDir, '', $file);
+        $destFile = \getcwd().\str_replace($finalZipDir, '', $file);
 
-        if (is_file($destFile)) { // of course it needs to exist first...
-            if (!is_writable($destFile)) {
+        if (\is_file($destFile)) { // of course it needs to exist first...
+            if (!\is_writable($destFile)) {
                 $errors[] = $mod_strings['ERR_UW_FILE_NOT_WRITABLE'].": ".$destFile;
             }
         }
@@ -425,18 +425,18 @@ function preflightCheckJsonDiffFiles($persistence)
         ///////////////////////////////////////////////////////////////////////
         ////	DIFFS
         // compare md5s and build up a manual merge list
-        $targetFile = clean_path(".".str_replace(getcwd(), '', $destFile));
+        $targetFile = clean_path(".".\str_replace(\getcwd(), '', $destFile));
         $targetMd5 = '0';
-        if (is_file($destFile)) {
-            if (strpos($targetFile, '.php')) {
+        if (\is_file($destFile)) {
+            if (\strpos($targetFile, '.php')) {
                 // handle PHP files that were hit with the security regex
-                $filesize = filesize($destFile);
+                $filesize = \filesize($destFile);
                 if ($filesize > 0) {
-                    $fileContents = file_get_contents($destFile);
-                    $targetMd5 = md5($fileContents);
+                    $fileContents = \file_get_contents($destFile);
+                    $targetMd5 = \md5($fileContents);
                 }
             } else {
-                $targetMd5 = md5_file($destFile);
+                $targetMd5 = \md5_file($destFile);
             }
         }
 
@@ -467,7 +467,7 @@ function preflightCheckJsonGetDiff($persistence)
 
     $disableEmail = (empty($current_user->email1)) ? 'DISABLED' : 'CHECKED';
 
-    if (count($persistence['manual']) > 0) {
+    if (\count($persistence['manual']) > 0) {
         $preserveFiles = array();
 
         $diffs =<<<eoq
@@ -538,7 +538,7 @@ eoq;
             $diffs .= "<tr><td valign='top'>";
             $diffs .= "<input type='checkbox' name='diff_files[]' value='{$diff}' $checked>";
             $diffs .= "</td><td valign='top'>";
-            $diffs .= str_replace(getcwd(), '.', $diff);
+            $diffs .= \str_replace(\getcwd(), '.', $diff);
             $diffs .= "</td></tr>";
         }
         $diffs .= "</table>";
@@ -553,7 +553,7 @@ eoq;
                 $preserve .= $mod_strings['LBL_UW_PREFLIGHT_PRESERVE_FILES'];
                 $preserve .= "</b></td></tr>";
             }
-            $preserve .= "<tr><td valign='top'><i>".str_replace(getcwd(), '.', $pf)."</i></td></tr>";
+            $preserve .= "<tr><td valign='top'><i>".\str_replace(\getcwd(), '.', $pf)."</i></td></tr>";
         }
         if (!empty($preserve)) {
             $preserve .= '</table><br>';
@@ -616,24 +616,24 @@ function preflightCheckJsonPrepSchemaCheck($persistence, $preflight=true)
     $newTables = array();
 
     logThis('looking for schema script at: '.$sqlScript);
-    if (is_file($sqlScript)) {
+    if (\is_file($sqlScript)) {
         logThis('found schema upgrade script: '.$sqlScript);
         $fp = sugar_fopen($sqlScript, 'r');
 
         if (!empty($fp)) {
             $completeLine = '';
-            while ($line = fgets($fp)) {
-                if (strpos($line, '--') === false) {
-                    $completeLine .= " ".trim($line);
-                    if (strpos($line, ';') !== false) {
-                        $completeLine = str_replace(';', '', $completeLine);
+            while ($line = \fgets($fp)) {
+                if (\strpos($line, '--') === false) {
+                    $completeLine .= " ".\trim($line);
+                    if (\strpos($line, ';') !== false) {
+                        $completeLine = \str_replace(';', '', $completeLine);
                         $persistence['sql_to_check'][] = $completeLine;
                         $completeLine = ''; //reset for next loop
                     }
                 }
             }
 
-            $persistence['sql_total'] = count($persistence['sql_to_check']);
+            $persistence['sql_total'] = \count($persistence['sql_to_check']);
         } else {
             logThis('*** ERROR: could not read schema script: '.$sqlScript);
             $persistence['sql_errors'][] = $mod_strings['ERR_UW_FILE_NOT_READABLE'].'::'.$sqlScript;
@@ -660,12 +660,12 @@ function preflightCheckJsonSchemaCheck($persistence)
 
     if (!isset($persistence['sql_check_done']) || $persistence['sql_check_done'] != true) {
         // must keep sql in order
-        $completeLine = array_shift($persistence['sql_to_check']);
-        $whatsLeft = count($persistence['sql_to_check']);
+        $completeLine = \array_shift($persistence['sql_to_check']);
+        $whatsLeft = \count($persistence['sql_to_check']);
 
         // populate newTables array to prevent "getting sample data" from non-existent tables
         $newTables = array();
-        if (strtoupper(substr($completeLine, 1, 5)) == 'CREAT') {
+        if (\strtoupper(\substr($completeLine, 1, 5)) == 'CREAT') {
             $newTables[] = getTableFromQuery($completeLine);
         }
 
@@ -692,7 +692,7 @@ function preflightCheckJsonGetSchemaErrors($persistence)
 {
     global $mod_strings;
 
-    if (isset($persistence['sql_errors']) && count($persistence['sql_errors'] > 0)) {
+    if (isset($persistence['sql_errors']) && \count($persistence['sql_errors'] > 0)) {
         $out = "<b class='error'>{$mod_strings['ERR_UW_PREFLIGHT_ERRORS']}:</b> ";
         $out .= "<a href='javascript:void(0);toggleNwFiles(\"sqlErrors\");'>{$mod_strings['LBL_UW_SHOW_SQL_ERRORS']}</a><div id='sqlErrors' style='display:none'>";
         foreach ($persistence['sql_errors'] as $sqlError) {
@@ -742,7 +742,7 @@ function preflightCheckJsonFillSchema()
     $newTables = array();
 
     logThis('looking for SQL script for DISPLAY at '.$sqlScript);
-    if (file_exists($sqlScript)) {
+    if (\file_exists($sqlScript)) {
         $contents = sugar_file_get_contents($sqlScript);
         $schema  = "<p><a href='javascript:void(0); toggleNwFiles(\"schemashow\");'>{$mod_strings['LBL_UW_SHOW_SCHEMA']}</a>";
         $schema .= "<div id='schemashow' style='display:none;'>";
@@ -752,9 +752,9 @@ function preflightCheckJsonFillSchema()
     ////	END SCHEMA SCRIPT HANDLING
     ///////////////////////////////////////////////////////////////////////////////
 
-    ob_start();
+    \ob_start();
     echo $schema;
-    ob_flush();
+    \ob_flush();
 }
 
 
@@ -770,9 +770,9 @@ function preflightCheckJsonAlterTableCharset()
 
     $alterTableSchema = '<i>'.$mod_strings['LBL_UW_PREFLIGHT_NOT_NEEDED'].'</i>';
 
-    ob_start();
+    \ob_start();
     echo $alterTableSchema;
-    ob_flush();
+    \ob_flush();
 }
 
 
@@ -793,14 +793,14 @@ function systemCheckJsonGetFiles($persistence)
     if (!isset($persistence['dirs_checked'])) {
         $the_array = array();
         $files = array();
-        $dir = getcwd();
-        $d = dir($dir);
+        $dir = \getcwd();
+        $d = \dir($dir);
         while ($f = $d->read()) {
             if ($f == "." || $f == "..") { // skip *nix self/parent
                 continue;
             }
 
-            if (is_dir("$dir/$f")) {
+            if (\is_dir("$dir/$f")) {
                 $the_array[] = clean_path("$dir/$f");
             } else {
                 $files[] = clean_path("$dir/$f");
@@ -808,33 +808,33 @@ function systemCheckJsonGetFiles($persistence)
         }
         $persistence['files_to_check'] = $files;
         $persistence['dirs_to_check'] = $the_array;
-        $persistence['dirs_total']	= count($the_array);
+        $persistence['dirs_total']	= \count($the_array);
         $persistence['dirs_checked'] = false;
 
         $out = "1% {$mod_strings['LBL_UW_DONE']}";
 
         return $persistence;
     } elseif ($persistence['dirs_checked'] == false) {
-        $dir = array_pop($persistence['dirs_to_check']);
+        $dir = \array_pop($persistence['dirs_to_check']);
 
         $files = uwFindAllFiles($dir, array(), true, $skipDirs);
 
-        $persistence['files_to_check'] = array_merge($persistence['files_to_check'], $files);
+        $persistence['files_to_check'] = \array_merge($persistence['files_to_check'], $files);
 
-        $whatsLeft = count($persistence['dirs_to_check']);
+        $whatsLeft = \count($persistence['dirs_to_check']);
 
         if (!isset($persistence['dirs_to_check']) || $whatsLeft < 1) {
             $whatsLeft = 0;
             $persistence['dirs_checked'] = true;
         }
 
-        $out  = round((($persistence['dirs_total'] - $whatsLeft) / 21) * 100, 1)."% {$mod_strings['LBL_UW_DONE']}";
+        $out  = \round((($persistence['dirs_total'] - $whatsLeft) / 21) * 100, 1)."% {$mod_strings['LBL_UW_DONE']}";
         $out .= " [{$mod_strings['LBL_UW_SYSTEM_CHECK_CHECKING_JSON']} {$dir}]";
     } else {
         $out = "Done";
     }
 
-    echo trim($out);
+    echo \trim($out);
 
     return $persistence;
 }
@@ -869,7 +869,7 @@ function systemCheckJsonCheckFiles($persistence)
         //	while($file = array_pop($persistence['files_to_check'])) {
 
         // admin deletes a bad file mid-check:
-        if (!file_exists($file)) {
+        if (!\file_exists($file)) {
             continue;
         }
 
@@ -878,7 +878,7 @@ function systemCheckJsonCheckFiles($persistence)
                 logThis('WINDOWS: File ['.$file.'] not readable - saving for display');
                 // don't warn yet - we're going to use this to check against replacement files
                 $filesNotWritable[$i] = $file;
-                $filesNWPerms[$i] = substr(sprintf('%o', fileperms($file)), -4);
+                $filesNWPerms[$i] = \substr(\sprintf('%o', \fileperms($file)), -4);
                 $filesOut .= "<tr>".
                                 "<td valign='top'><span class='error'>{$file}</span></td>".
                                 "<td valign='top'>{$filesNWPerms[$i]}</td>".
@@ -887,13 +887,13 @@ function systemCheckJsonCheckFiles($persistence)
                               "</tr>";
             }
         } else {
-            if (!is_writable($file)) {
+            if (!\is_writable($file)) {
                 logThis('File ['.$file.'] not writable - saving for display');
                 // don't warn yet - we're going to use this to check against replacement files
                 $filesNotWritable[$i] = $file;
-                $filesNWPerms[$i] = substr(sprintf('%o', fileperms($file)), -4);
-                $owner = posix_getpwuid(fileowner($file));
-                $group = posix_getgrgid(filegroup($file));
+                $filesNWPerms[$i] = \substr(\sprintf('%o', \fileperms($file)), -4);
+                $owner = \posix_getpwuid(\fileowner($file));
+                $group = \posix_getgrgid(\filegroup($file));
                 $filesOut .= "<tr>".
                                 "<td valign='top'><span class='error'>{$file}</span></td>".
                                 "<td valign='top'>{$filesNWPerms[$i]}</td>".
@@ -907,9 +907,9 @@ function systemCheckJsonCheckFiles($persistence)
 
     $filesOut .= '</table></div>';
     // not a stop error
-    $persistence['filesNotWritable'] = (count($filesNotWritable) > 0) ? true : false;
+    $persistence['filesNotWritable'] = (\count($filesNotWritable) > 0) ? true : false;
 
-    if (count($filesNotWritable) < 1) {
+    if (\count($filesNotWritable) < 1) {
         $filesOut = "{$mod_strings['LBL_UW_FILE_NO_ERRORS']}";
         $persistence['step']['systemCheck'] = 'success';
     }

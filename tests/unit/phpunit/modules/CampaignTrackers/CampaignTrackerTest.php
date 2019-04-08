@@ -54,7 +54,7 @@ class CampaignTrackerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($campaignTracker->id));
-        $this->assertEquals(36, strlen($campaignTracker->id));
+        $this->assertEquals(36, \strlen($campaignTracker->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $campaignTracker->mark_deleted($campaignTracker->id);

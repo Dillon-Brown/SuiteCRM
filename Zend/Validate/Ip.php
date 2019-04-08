@@ -63,11 +63,11 @@ class Zend_Validate_Ip extends Zend_Validate_Abstract
     {
         if ($options instanceof Zend_Config) {
             $options = $options->toArray();
-        } elseif (!is_array($options)) {
-            $options = func_get_args();
-            $temp['allowipv6'] = array_shift($options);
+        } elseif (!\is_array($options)) {
+            $options = \func_get_args();
+            $temp['allowipv6'] = \array_shift($options);
             if (!empty($options)) {
-                $temp['allowipv4'] = array_shift($options);
+                $temp['allowipv4'] = \array_shift($options);
             }
 
             $options = $temp;
@@ -95,11 +95,11 @@ class Zend_Validate_Ip extends Zend_Validate_Abstract
      */
     public function setOptions($options)
     {
-        if (array_key_exists('allowipv6', $options)) {
+        if (\array_key_exists('allowipv6', $options)) {
             $this->_options['allowipv6'] = (boolean) $options['allowipv6'];
         }
 
-        if (array_key_exists('allowipv4', $options)) {
+        if (\array_key_exists('allowipv4', $options)) {
             $this->_options['allowipv4'] = (boolean) $options['allowipv4'];
         }
 
@@ -121,7 +121,7 @@ class Zend_Validate_Ip extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             $this->_error(self::INVALID);
             return false;
         }
@@ -144,12 +144,12 @@ class Zend_Validate_Ip extends Zend_Validate_Abstract
      */
     protected function _validateIPv4($value)
     {
-        $ip2long = ip2long($value);
+        $ip2long = \ip2long($value);
         if ($ip2long === false) {
             return false;
         }
 
-        return $value == long2ip($ip2long);
+        return $value == \long2ip($ip2long);
     }
 
     /**
@@ -161,31 +161,31 @@ class Zend_Validate_Ip extends Zend_Validate_Abstract
      */
     protected function _validateIPv6($value)
     {
-        if (strlen($value) < 3) {
+        if (\strlen($value) < 3) {
             return $value == '::';
         }
 
-        if (strpos($value, '.')) {
-            $lastcolon = strrpos($value, ':');
-            if (!($lastcolon && $this->_validateIPv4(substr($value, $lastcolon + 1)))) {
+        if (\strpos($value, '.')) {
+            $lastcolon = \strrpos($value, ':');
+            if (!($lastcolon && $this->_validateIPv4(\substr($value, $lastcolon + 1)))) {
                 return false;
             }
 
-            $value = substr($value, 0, $lastcolon) . ':0:0';
+            $value = \substr($value, 0, $lastcolon) . ':0:0';
         }
 
-        if (strpos($value, '::') === false) {
-            return preg_match('/\A(?:[a-f0-9]{1,4}:){7}[a-f0-9]{1,4}\z/i', $value);
+        if (\strpos($value, '::') === false) {
+            return \preg_match('/\A(?:[a-f0-9]{1,4}:){7}[a-f0-9]{1,4}\z/i', $value);
         }
 
-        $colonCount = substr_count($value, ':');
+        $colonCount = \substr_count($value, ':');
         if ($colonCount < 8) {
-            return preg_match('/\A(?::|(?:[a-f0-9]{1,4}:)+):(?:(?:[a-f0-9]{1,4}:)*[a-f0-9]{1,4})?\z/i', $value);
+            return \preg_match('/\A(?::|(?:[a-f0-9]{1,4}:)+):(?:(?:[a-f0-9]{1,4}:)*[a-f0-9]{1,4})?\z/i', $value);
         }
 
         // special case with ending or starting double colon
         if ($colonCount == 8) {
-            return preg_match('/\A(?:::)?(?:[a-f0-9]{1,4}:){6}[a-f0-9]{1,4}(?:::)?\z/i', $value);
+            return \preg_match('/\A(?:::)?(?:[a-f0-9]{1,4}:){6}[a-f0-9]{1,4}(?:::)?\z/i', $value);
         }
 
         return false;

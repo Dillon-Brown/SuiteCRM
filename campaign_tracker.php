@@ -1,6 +1,6 @@
 <?php
- if (!defined('sugarEntry')) {
-     define('sugarEntry', true);
+ if (!\defined('sugarEntry')) {
+     \define('sugarEntry', true);
  }
 /**
  *
@@ -70,7 +70,7 @@ if (empty($_REQUEST['track'])) {
 }
 $track = $db->quote($track);
 
-if (preg_match('/^[0-9A-Za-z\-]*$/', $track)) {
+if (\preg_match('/^[0-9A-Za-z\-]*$/', $track)) {
     $query = "SELECT refer_url FROM campaigns WHERE tracker_key='$track'";
     $res = $db->query($query);
 
@@ -78,7 +78,7 @@ if (preg_match('/^[0-9A-Za-z\-]*$/', $track)) {
 
     $redirect_URL = $row['refer_url'];
     sugar_cleanup();
-    header("Location: $redirect_URL");
+    \header("Location: $redirect_URL");
 } else {
     sugar_cleanup();
 }

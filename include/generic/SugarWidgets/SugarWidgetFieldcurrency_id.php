@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -57,8 +57,8 @@ class SugarWidgetFieldcurrency_id extends SugarWidgetFieldEnum
             $currency = new Currency();
             $list = $currency->get_full_list('name');
             $currency->retrieve('-99');
-            if (is_array($list)) {
-                $list = array_merge(array($currency), $list);
+            if (\is_array($list)) {
+                $list = \array_merge(array($currency), $list);
             } else {
                 $list = array($currency);
             }

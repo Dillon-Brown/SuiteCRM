@@ -42,7 +42,7 @@ class OneLogin_Saml2_AuthnRequest
         $security = $this->_settings->getSecurityData();
 
         $id = OneLogin_Saml2_Utils::generateUniqueID();
-        $issueInstant = OneLogin_Saml2_Utils::parseTime2SAML(time());
+        $issueInstant = OneLogin_Saml2_Utils::parseTime2SAML(\time());
 
         $nameIdPolicyStr = '';
         if ($setNameIdPolicy) {
@@ -62,8 +62,8 @@ NAMEIDPOLICY;
         $providerNameStr = '';
         $organizationData = $settings->getOrganization();
         if (!empty($organizationData)) {
-            $langs = array_keys($organizationData);
-            if (in_array('en-US', $langs)) {
+            $langs = \array_keys($organizationData);
+            if (\in_array('en-US', $langs)) {
                 $lang = 'en-US';
             } else {
                 $lang = $langs[0];
@@ -113,8 +113,8 @@ REQUESTEDAUTHN;
             }
         }
 
-        $spEntityId = htmlspecialchars($spData['entityId'], ENT_QUOTES);
-        $acsUrl = htmlspecialchars($spData['assertionConsumerService']['url'], ENT_QUOTES);
+        $spEntityId = \htmlspecialchars($spData['entityId'], ENT_QUOTES);
+        $acsUrl = \htmlspecialchars($spData['assertionConsumerService']['url'], ENT_QUOTES);
         $request = <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -145,15 +145,15 @@ AUTHNREQUEST;
     {
         $subject = $this->_authnRequest;
 
-        if (is_null($deflate)) {
+        if (\is_null($deflate)) {
             $deflate = $this->_settings->shouldCompressRequests();
         }
 
         if ($deflate) {
-            $subject = gzdeflate($this->_authnRequest);
+            $subject = \gzdeflate($this->_authnRequest);
         }
 
-        $base64Request = base64_encode($subject);
+        $base64Request = \base64_encode($subject);
         return $base64Request;
     }
 

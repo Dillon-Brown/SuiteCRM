@@ -253,7 +253,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
      */
     public function getStartMax()
     {
-        if (array_key_exists('start-max', $this->_params)) {
+        if (\array_key_exists('start-max', $this->_params)) {
             return $this->_params['start-max'];
         } else {
             return null;
@@ -265,7 +265,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
      */
     public function getStartMin()
     {
-        if (array_key_exists('start-min', $this->_params)) {
+        if (\array_key_exists('start-min', $this->_params)) {
             return $this->_params['start-min'];
         } else {
             return null;
@@ -277,7 +277,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
      */
     public function getOrderBy()
     {
-        if (array_key_exists('orderby', $this->_params)) {
+        if (\array_key_exists('orderby', $this->_params)) {
             return $this->_params['orderby'];
         } else {
             return null;
@@ -289,7 +289,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
      */
     public function getSortOrder()
     {
-        if (array_key_exists('sortorder', $this->_params)) {
+        if (\array_key_exists('sortorder', $this->_params)) {
             return $this->_params['sortorder'];
         } else {
             return null;
@@ -314,7 +314,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
      */
     public function getRecurrenceExpansionStart()
     {
-        if (array_key_exists('recurrence-expansion-start', $this->_params)) {
+        if (\array_key_exists('recurrence-expansion-start', $this->_params)) {
             return $this->_params['recurrence-expansion-start'];
         } else {
             return null;
@@ -340,7 +340,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
      */
     public function getRecurrenceExpansionEnd()
     {
-        if (array_key_exists('recurrence-expansion-end', $this->_params)) {
+        if (\array_key_exists('recurrence-expansion-end', $this->_params)) {
             return $this->_params['recurrence-expansion-end'];
         } else {
             return null;
@@ -366,7 +366,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
      */
     public function getSingleEvents()
     {
-        if (array_key_exists('singleevents', $this->_params)) {
+        if (\array_key_exists('singleevents', $this->_params)) {
             $value = $this->_params['singleevents'];
             switch ($value) {
                 case 'true':
@@ -394,7 +394,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
     public function setSingleEvents($value)
     {
         if ($value !== null) {
-            if (is_bool($value)) {
+            if (\is_bool($value)) {
                 $this->_params['singleevents'] = ($value?'true':'false');
             } elseif ($value == 'true' | $value == 'false') {
                 $this->_params['singleevents'] = $value;
@@ -416,7 +416,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
      */
     public function getFutureEvents()
     {
-        if (array_key_exists('futureevents', $this->_params)) {
+        if (\array_key_exists('futureevents', $this->_params)) {
             $value = $this->_params['futureevents'];
             switch ($value) {
                 case 'true':
@@ -445,7 +445,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
     public function setFutureEvents($value)
     {
         if ($value !== null) {
-            if (is_bool($value)) {
+            if (\is_bool($value)) {
                 $this->_params['futureevents'] = ($value?'true':'false');
             } elseif ($value == 'true' | $value == 'false') {
                 $this->_params['futureevents'] = $value;

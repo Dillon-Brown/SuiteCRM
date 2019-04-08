@@ -103,7 +103,7 @@ class Zend_Search_Lucene_Search_QueryEntry_Phrase extends Zend_Search_Lucene_Sea
             $this->_phrase,
                                                                           $encoding,
                                                                           ($this->_field !== null)?
-                                                                              iconv($encoding, 'UTF-8', $this->_field) :
+                                                                              \iconv($encoding, 'UTF-8', $this->_field) :
                                                                               null
         );
 

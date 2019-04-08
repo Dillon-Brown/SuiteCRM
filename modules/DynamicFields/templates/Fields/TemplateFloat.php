@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -67,7 +67,7 @@ class TemplateFloat extends TemplateRange
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -86,6 +86,6 @@ class TemplateFloat extends TemplateRange
         if (empty($this->len)) {
             return parent::get_db_type();
         }
-        return " ".sprintf(DBManagerFactory::getInstance()->getColumnType("decimal_tpl"), $this->len, $precision);
+        return " ".\sprintf(DBManagerFactory::getInstance()->getColumnType("decimal_tpl"), $this->len, $precision);
     }
 }

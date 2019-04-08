@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -97,10 +97,10 @@ class SugarWidgetSubPanelTopCreateCampaignLogEntryButton extends SugarWidgetSubP
             $popup_mode=$widget_data['mode'];
         }
         if (isset($widget_data['initial_filter_fields'])) {
-            if (is_array($widget_data['initial_filter_fields'])) {
+            if (\is_array($widget_data['initial_filter_fields'])) {
                 foreach ($widget_data['initial_filter_fields'] as $value=>$alias) {
                     if (isset($focus->$value) and !empty($focus->$value)) {
-                        $initial_filter.="&".$alias . '='.urlencode($focus->$value);
+                        $initial_filter.="&".$alias . '='.\urlencode($focus->$value);
                     }
                 }
             }
@@ -115,8 +115,8 @@ class SugarWidgetSubPanelTopCreateCampaignLogEntryButton extends SugarWidgetSubP
 
         //field_to_name_array
         $fton_array= array('id' => 'subpanel_id');
-        if (isset($widget_data['field_to_name_array']) && is_array($widget_data['field_to_name_array'])) {
-            $fton_array=array_merge($fton_array, $widget_data['field_to_name_array']);
+        if (isset($widget_data['field_to_name_array']) && \is_array($widget_data['field_to_name_array'])) {
+            $fton_array=\array_merge($fton_array, $widget_data['field_to_name_array']);
         }
 
         $return_url = "index.php?module=$return_module&action=$return_action&subpanel=$subpanel_name&record=$return_id&sugar_body_only=1";
@@ -127,20 +127,20 @@ class SugarWidgetSubPanelTopCreateCampaignLogEntryButton extends SugarWidgetSubP
             'field_to_name_array' => $fton_array,
             'passthru_data' => array(
                 'child_field' => $subpanel_name,
-                'return_url' => urlencode($return_url),
+                'return_url' => \urlencode($return_url),
                 'link_field_name' => $link_field_name,
                 'module_name' => $subpanel_name,
                 'refresh_page'=>$refresh_page,
             ),
         );
 
-        if (is_array($this->button_properties) && !empty($this->button_properties['add_to_passthru_data'])) {
-            $popup_request_data['passthru_data']= array_merge($popup_request_data['passthru_data'], $this->button_properties['add_to_passthru_data']);
+        if (\is_array($this->button_properties) && !empty($this->button_properties['add_to_passthru_data'])) {
+            $popup_request_data['passthru_data']= \array_merge($popup_request_data['passthru_data'], $this->button_properties['add_to_passthru_data']);
         }
 
-        if (is_array($this->button_properties) && !empty($this->button_properties['add_to_passthru_data']['return_type'])) {
+        if (\is_array($this->button_properties) && !empty($this->button_properties['add_to_passthru_data']['return_type'])) {
             if ($this->button_properties['add_to_passthru_data']['return_type']=='report') {
-                $initial_filter = "&module_name=". urlencode($widget_data['module']);
+                $initial_filter = "&module_name=". \urlencode($widget_data['module']);
             }
         }
         $json_encoded_php_array = $this->_create_json_encoded_popup_request($popup_request_data);

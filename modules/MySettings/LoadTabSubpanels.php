@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -62,7 +62,7 @@ $focus->id = $_REQUEST['record'];
 require_once('include/SubPanel/SubPanelTiles.php');
 $subpanel = new SubPanelTiles($focus, $_REQUEST['loadModule']);
 
-if (!function_exists('get_form_header')) {
+if (!\function_exists('get_form_header')) {
     global $theme;
 }
 

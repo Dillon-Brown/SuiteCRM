@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -59,8 +59,8 @@ VardefManager::clearVardef();
 // SugarBean::createRelationshipMeta just takes the relationship definition in a file and inserts it as is into the Relationships table
 // It does not override or recreate existing relationships
 foreach ($GLOBALS['beanFiles'] as $bean => $file) {
-    if (strlen($file) > 0 && file_exists($file)) {
-        if (!class_exists($bean)) {
+    if (\strlen($file) > 0 && \file_exists($file)) {
+        if (!\class_exists($bean)) {
             require $file;
         }
         $focus = new $bean();
@@ -90,7 +90,7 @@ foreach ($GLOBALS['beanFiles'] as $bean => $file) {
 $dictionary = array();
 require 'modules/TableDictionary.php';
 //for module installer in case we already loaded the table dictionary
-if (file_exists('custom/application/Ext/TableDictionary/tabledictionary.ext.php')) {
+if (\file_exists('custom/application/Ext/TableDictionary/tabledictionary.ext.php')) {
     include 'custom/application/Ext/TableDictionary/tabledictionary.ext.php';
 }
 $rel_dictionary = $dictionary;

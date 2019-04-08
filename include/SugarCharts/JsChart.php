@@ -73,7 +73,7 @@ class JsChart extends SugarChart
             "line chart",
         );
 
-        if (in_array($chartType, $charts)) {
+        if (\in_array($chartType, $charts)) {
             return true;
         }
         return false;
@@ -82,7 +82,7 @@ class JsChart extends SugarChart
     public function tab($str, $depth)
     {
         // $str = preg_replace('/(<\w+>)(.*)(<\/\w+>)/e', "'\\1'.htmlentities(from_html('\\2')).'\\3'", $str);
-        return str_repeat("\t", $depth) . $str . "\n";
+        return \str_repeat("\t", $depth) . $str . "\n";
     }
 
     public function display($name, $xmlFile, $width='320', $height='480', $resize=false)
@@ -114,9 +114,9 @@ class JsChart extends SugarChart
         $this->ss->assign("width", $dimensions['width']);
         $this->ss->assign("height", $dimensions['height']);
         $config = $this->getConfigProperties();
-        $style['gridLineColor'] = str_replace("0x", "#", $config->gridLines);
+        $style['gridLineColor'] = \str_replace("0x", "#", $config->gridLines);
         $style['font-family'] = $config->labelFontFamily;
-        $style['color'] = str_replace("0x", "#", $config->labelFontColor);
+        $style['color'] = \str_replace("0x", "#", $config->labelFontColor);
         $this->ss->assign("css", $style);
         foreach ($this->getChartConfigParams($xmlStr) as $key => $value) {
             $chartConfig[$key] = $value;
@@ -144,11 +144,11 @@ class JsChart extends SugarChart
         $style = array();
         $chartConfig = array();
         $this->ss->assign("chartId", $this->chartId);
-        $this->ss->assign("filename", str_replace(".xml", ".js", $this->xmlFile));
+        $this->ss->assign("filename", \str_replace(".xml", ".js", $this->xmlFile));
         $config = $this->getConfigProperties();
-        $style['gridLineColor'] = str_replace("0x", "#", $config->gridLines);
+        $style['gridLineColor'] = \str_replace("0x", "#", $config->gridLines);
         $style['font-family'] = $config->labelFontFamily;
-        $style['color'] = str_replace("0x", "#", $config->labelFontColor);
+        $style['color'] = \str_replace("0x", "#", $config->labelFontColor);
         $this->ss->assign("css", $style);
         $xmlStr = $this->processXML($this->xmlFile);
         foreach ($this->getChartConfigParams($xmlStr) as $key => $value) {
@@ -167,14 +167,14 @@ class JsChart extends SugarChart
         foreach ($chartsArray as $id => $data) {
             $customChartsArray[$id] = array();
             $customChartsArray[$id]['chartId'] = $id;
-            $customChartsArray[$id]['filename'] = str_replace(".xml", ".js", $data['xmlFile']);
+            $customChartsArray[$id]['filename'] = \str_replace(".xml", ".js", $data['xmlFile']);
             $customChartsArray[$id]['width'] = $data['width'];
             $customChartsArray[$id]['height'] = $data['height'];
 
             $config = $this->getConfigProperties();
-            $style['gridLineColor'] = str_replace("0x", "#", $config->gridLines);
+            $style['gridLineColor'] = \str_replace("0x", "#", $config->gridLines);
             $style['font-family'] = (string)$config->labelFontFamily;
-            $style['color'] = str_replace("0x", "#", $config->labelFontColor);
+            $style['color'] = \str_replace("0x", "#", $config->labelFontColor);
             $customChartsArray[$id]['css'] = $style;
             $xmlStr = $this->processXML($data['xmlFile']);
             $xml = new SimpleXMLElement($xmlStr);
@@ -231,7 +231,7 @@ class JsChart extends SugarChart
     public function checkData($xmlstr)
     {
         $xml = new SimpleXMLElement($xmlstr);
-        if (sizeof($xml->data->group) > 0) {
+        if (\sizeof($xml->data->group) > 0) {
             return true;
         }
         return false;
@@ -240,7 +240,7 @@ class JsChart extends SugarChart
     public function getNumNodes($xmlstr)
     {
         $xml = new SimpleXMLElement($xmlstr);
-        return sizeof($xml->data->group);
+        return \sizeof($xml->data->group);
     }
 
     public function buildProperties($xmlstr)
@@ -252,7 +252,7 @@ class JsChart extends SugarChart
             $properties[] = $this->tab("\"".$property->getName()."\":"."\"".$this->processSpecialChars($property)."\"", 2);
         }
         $content .= $this->tab("{\n", 1);
-        $content .= join(",\n", $properties)."\n";
+        $content .= \join(",\n", $properties)."\n";
         $content .= $this->tab("}\n", 1);
         $content .= $this->tab("],\n", 1);
         return $content;
@@ -266,7 +266,7 @@ class JsChart extends SugarChart
         foreach ($xml->data->group[0]->subgroups->group as $group) {
             $labels[] = $this->tab("\"".$this->processSpecialChars($group->title)."\"", 2);
         }
-        $content .= join(",\n", $labels)."\n";
+        $content .= \join(",\n", $labels)."\n";
         $content .= $this->tab("],\n", 1);
         return $content;
     }
@@ -278,7 +278,7 @@ class JsChart extends SugarChart
         //    like a stacked bar chart, this applies when a stacked chart has been converted in templates_chart.php to a bar chart due to it
         //    having nothing but single value columns
         $xml = new SimpleXMLElement($xmlstr);
-        if (count($xml->data->group[0]->subgroups->group) > 0) {
+        if (\count($xml->data->group[0]->subgroups->group) > 0) {
             return $this->buildLabelsBarChartStacked($xmlstr);
         }
 
@@ -288,7 +288,7 @@ class JsChart extends SugarChart
         foreach ($xml->data->group as $group) {
             $labels[] = $this->tab("\"".$this->processSpecialChars($group->title)."\"", 2);
         }
-        $labelStr = join(",\n", $labels)."\n";
+        $labelStr = \join(",\n", $labels)."\n";
         $content .= $labelStr;
         $content .= $this->tab("],\n", 1);
         return $content;
@@ -315,9 +315,9 @@ class JsChart extends SugarChart
                 $subgroupValueLabels[] = $this->tab("\"".$this->processSpecialChars($subgroups->label)."\"", 3);
                 $subgroupLinks[] = $this->tab("\"".$subgroups->link."\"", 3);
             }
-            $subgroupValuesStr = join(",\n", $subgroupValues)."\n";
-            $subgroupValueLabelsStr = join(",\n", $subgroupValueLabels)."\n";
-            $subgroupLinksStr = join(",\n", $subgroupLinks)."\n";
+            $subgroupValuesStr = \join(",\n", $subgroupValues)."\n";
+            $subgroupValueLabelsStr = \join(",\n", $subgroupValueLabels)."\n";
+            $subgroupLinksStr = \join(",\n", $subgroupLinks)."\n";
 
             $groupcontent .= $this->tab("\"values\": [\n".$subgroupValuesStr, 2);
             $groupcontent .= $this->tab("],\n", 2);
@@ -328,7 +328,7 @@ class JsChart extends SugarChart
             $groupcontent .= $this->tab("}", 1);
             $data[] = $groupcontent;
         }
-        $content .= join(",\n", $data)."\n";
+        $content .= \join(",\n", $data)."\n";
         $content .= $this->tab("]", 1);
         return $content;
     }
@@ -356,10 +356,10 @@ class JsChart extends SugarChart
                 $subgroupLinks[] = $this->tab("\"".$subgroups->link."\"", 3);
                 $subgroupTitles[] = $this->tab("\"".$this->processSpecialChars($subgroups->title)."\"", 3);
             }
-            $subgroupValuesStr = join(",\n", $subgroupValues)."\n";
-            $subgroupValueLabelsStr = join(",\n", $subgroupValueLabels)."\n";
-            $subgroupLinksStr = join(",\n", $subgroupLinks)."\n";
-            $subgroupTitlesStr = join(",\n", $subgroupTitles)."\n";
+            $subgroupValuesStr = \join(",\n", $subgroupValues)."\n";
+            $subgroupValueLabelsStr = \join(",\n", $subgroupValueLabels)."\n";
+            $subgroupLinksStr = \join(",\n", $subgroupLinks)."\n";
+            $subgroupTitlesStr = \join(",\n", $subgroupTitles)."\n";
 
             $groupcontent .= $this->tab("\"values\": [\n".$subgroupValuesStr, 2);
             $groupcontent .= $this->tab("],\n", 2);
@@ -372,7 +372,7 @@ class JsChart extends SugarChart
             $groupcontent .= $this->tab("}", 1);
             $data[] = $groupcontent;
         }
-        $content .= join(",\n", $data)."\n";
+        $content .= \join(",\n", $data)."\n";
         $content .= $this->tab("]", 1);
         return $content;
     }
@@ -407,7 +407,7 @@ class JsChart extends SugarChart
             $groupcontent .= $this->tab("}", 1);
             $groupcontentArr[] = $groupcontent;
         }
-        $content .= join(",\n", $groupcontentArr)."\n";
+        $content .= \join(",\n", $groupcontentArr)."\n";
         $content .= $this->tab("]", 1);
         return $content;
     }
@@ -420,7 +420,7 @@ class JsChart extends SugarChart
         foreach ($xml->data->group as $group) {
             $labels[] = $this->tab("\"".$this->processSpecialChars($group->title)."\"", 2);
         }
-        $labelStr = join(",\n", $labels)."\n";
+        $labelStr = \join(",\n", $labels)."\n";
         $content .= $labelStr;
         $content .= $this->tab("],\n", 1);
         return $content;
@@ -454,7 +454,7 @@ class JsChart extends SugarChart
         }
 
 
-        $content .= join(",\n", $groupcontentArr)."\n";
+        $content .= \join(",\n", $groupcontentArr)."\n";
         $content .= $this->tab("\n]", 1);
         return $content;
     }
@@ -467,7 +467,7 @@ class JsChart extends SugarChart
         foreach ($xml->data->group as $group) {
             $labels[] = $this->tab("\"".$this->processSpecialChars($group->title)."\"", 2);
         }
-        $labelStr = join(",\n", $labels)."\n";
+        $labelStr = \join(",\n", $labels)."\n";
         $content .= $labelStr;
         $content .= $this->tab("],\n", 1);
         return $content;
@@ -489,7 +489,7 @@ class JsChart extends SugarChart
             $subgroupValueLabels = array();
             $subgroupLinks = array();
 
-            if (is_object($group->subgroups->group)) {
+            if (\is_object($group->subgroups->group)) {
                 foreach ($group->subgroups->group as $subgroups) {
                     $subgroupTitles[] = $this->tab("\"".$subgroups->title."\"", 3);
                     //$subgroupValues[] = $this->tab($subgroups->value,3);
@@ -497,10 +497,10 @@ class JsChart extends SugarChart
                     $subgroupValueLabels[] = $this->tab("\"".$subgroups->label."\"", 3);
                     $subgroupLinks[] = $this->tab("\"".$subgroups->link."\"", 3);
                 }
-                $subgroupTitlesStr = join(",\n", $subgroupTitles)."\n";
-                $subgroupValuesStr = join(",\n", $subgroupValues)."\n";
-                $subgroupValueLabelsStr = join(",\n", $subgroupValueLabels)."\n";
-                $subgroupLinksStr = join(",\n", $subgroupLinks)."\n";
+                $subgroupTitlesStr = \join(",\n", $subgroupTitles)."\n";
+                $subgroupValuesStr = \join(",\n", $subgroupValues)."\n";
+                $subgroupValueLabelsStr = \join(",\n", $subgroupValueLabels)."\n";
+                $subgroupLinksStr = \join(",\n", $subgroupLinks)."\n";
 
                 //$groupcontent .= $this->tab("\"labels\": [\n".$subgroupTitlesStr,2);
                 //$groupcontent .= $this->tab("],\n",2);
@@ -518,7 +518,7 @@ class JsChart extends SugarChart
             $data[] = $groupcontent;
         }
 
-        $content .= join(",\n", $data)."\n";
+        $content .= \join(",\n", $data)."\n";
 
 
         $content .= $this->tab("]", 1);
@@ -530,10 +530,10 @@ class JsChart extends SugarChart
     {
         $path = SugarThemeRegistry::current()->getImageURL('sugarColors.xml', false);
 
-        if (!file_exists($path)) {
+        if (!\file_exists($path)) {
             $GLOBALS['log']->debug("Cannot open file ($path)");
         }
-        $xmlstr = file_get_contents($path);
+        $xmlstr = \file_get_contents($path);
         $xml = new SimpleXMLElement($xmlstr);
         return $xml->charts;
     }
@@ -545,9 +545,9 @@ class JsChart extends SugarChart
         $xml = $this->getConfigProperties();
         $colors = ($this->chartType == "gauge chart") ? $xml->gaugeChartElementColors->color : $xml->chartElementColors->color;
         foreach ($colors as $color) {
-            $colorArr[] = $this->tab("\"".str_replace("0x", "#", $color)."\"", 2);
+            $colorArr[] = $this->tab("\"".\str_replace("0x", "#", $color)."\"", 2);
         }
-        $content .= join(",\n", $colorArr)."\n";
+        $content .= \join(",\n", $colorArr)."\n";
         $content .= $this->tab("],\n", 1);
 
         return $content;
@@ -603,21 +603,21 @@ class JsChart extends SugarChart
             || $this->chartType == 'stacked group by chart'
         ) {
             $groups = $xml->data->group[0]->subgroups->group;
-            $items = (sizeof($xml->data->group[0]->subgroups->group) <= 5) ? 5 : sizeof($xml->data->group[0]->subgroups->group);
+            $items = (\sizeof($xml->data->group[0]->subgroups->group) <= 5) ? 5 : \sizeof($xml->data->group[0]->subgroups->group);
         } else {
             if ($this->chartType == "funnel chart 3D") {
                 // reverse legend
                 $groups = array();
                 foreach ($xml->data->group as $group) {
-                    array_unshift($groups, $group);
+                    \array_unshift($groups, $group);
                 }
             } else {
                 $groups = $xml->data->group;
             }
-            $items = (sizeof($xml->data->group) <= 5) ? 5 : sizeof($xml->data->group);
+            $items = (\sizeof($xml->data->group) <= 5) ? 5 : \sizeof($xml->data->group);
         }
 
-        $rows = ceil($items/5);
+        $rows = \ceil($items/5);
         $fullItems = $rows * 5;
         $remainder = ($items < $fullItems) ? $fullItems - $items : 0;
         $i = 0;
@@ -629,7 +629,7 @@ class JsChart extends SugarChart
         $colors = ($this->chartType == "gauge chart") ? $xmlColors->gaugeChartElementColors->color : $xmlColors->chartElementColors->color;
 
         foreach ($colors as $color) {
-            $colorArr[] = str_replace("0x", "#", $color);
+            $colorArr[] = \str_replace("0x", "#", $color);
         }
 
         $isTrClosed = false;
@@ -664,7 +664,7 @@ class JsChart extends SugarChart
 
     public function saveJsonFile($jsonContents)
     {
-        $this->jsonFilename = str_replace(".xml", ".js", $this->xmlFile);
+        $this->jsonFilename = \str_replace(".xml", ".js", $this->xmlFile);
         //$jsonContents = $GLOBALS['locale']->translateCharset($jsonContents, 'UTF-8', 'UTF-16LE');
 
         // open file
@@ -674,20 +674,20 @@ class JsChart extends SugarChart
         }
 
         // write the contents to the file
-        if (fwrite($fh, $jsonContents) === false) {
+        if (\fwrite($fh, $jsonContents) === false) {
             $GLOBALS['log']->debug("Cannot write to file ($this->jsonFilename)");
             return false;
         }
 
         $GLOBALS['log']->debug("Success, wrote ($jsonContents) to file ($this->jsonFilename)");
 
-        fclose($fh);
+        \fclose($fh);
         return true;
     }
 
     public function get_image_cache_file_name($xmlFile, $ext = ".png")
     {
-        $filename = str_replace("/xml/", "/images/", str_replace(".xml", $ext, $xmlFile));
+        $filename = \str_replace("/xml/", "/images/", \str_replace(".xml", $ext, $xmlFile));
 
         return $filename;
     }
@@ -705,18 +705,18 @@ class JsChart extends SugarChart
 
     public function processSpecialChars($str)
     {
-        return addslashes(html_entity_decode($str, ENT_QUOTES));
+        return \addslashes(\html_entity_decode($str, ENT_QUOTES));
     }
 
     public function processXML($xmlFile)
     {
-        if (!file_exists($xmlFile)) {
+        if (!\file_exists($xmlFile)) {
             $GLOBALS['log']->debug("Cannot open file ($xmlFile)");
         }
 
         $pattern = array();
         $replacement = array();
-        $content = file_get_contents($xmlFile);
+        $content = \file_get_contents($xmlFile);
         $content = $GLOBALS['locale']->translateCharset($content, 'UTF-16LE', 'UTF-8');
 
         /*
@@ -729,8 +729,8 @@ class JsChart extends SugarChart
         * Replacement regex $pattern applied
         */
 
-        $return = preg_replace_callback('/\<link\>([a-zA-Z0-9#?&%.;\[\]\/=+\s\-\_]+)\<\/link\>/', function ($m) {
-            return '<link>'.urlencode($m[1]).'</link>';
+        $return = \preg_replace_callback('/\<link\>([a-zA-Z0-9#?&%.;\[\]\/=+\s\-\_]+)\<\/link\>/', function ($m) {
+            return '<link>'.\urlencode($m[1]).'</link>';
         }, $content);
         return $return;
     }

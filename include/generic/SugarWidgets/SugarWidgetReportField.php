@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -72,7 +72,7 @@ class SugarWidgetReportField extends SugarWidgetField
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($layout_manager);
     }
@@ -100,7 +100,7 @@ class SugarWidgetReportField extends SugarWidgetField
         $func_name = 'display'.$context;
 
 
-        if (! empty($context) && method_exists($obj, $func_name)) {
+        if (! empty($context) && \method_exists($obj, $func_name)) {
             return  $obj->$func_name($layout_def);
         }
         return 'display not found:'.$func_name;
@@ -114,14 +114,14 @@ class SugarWidgetReportField extends SugarWidgetField
         }
 
         if ($layout_def['name'] == 'weighted_sum') {
-            return sprintf(
+            return \sprintf(
                 "SUM(%s * %s * 0.01)",
                 $this->reporter->db->convert("$alias.probability", "IFNULL", array(0)),
             $this->reporter->db->convert("$alias.amount_usdollar", "IFNULL", array(0))
             );
         }
         if ($layout_def['name'] == 'weighted_amount') {
-            return sprintf(
+            return \sprintf(
                 "AVG(%s * %s * 0.01)",
                 $this->reporter->db->convert("$alias.probability", "IFNULL", array(0)),
             $this->reporter->db->convert("$alias.amount_usdollar", "IFNULL", array(0))
@@ -158,7 +158,7 @@ class SugarWidgetReportField extends SugarWidgetField
             }
 
             // for a field with type='currency' conversion of values into a user-preferred currency
-            if ($layout_def['type'] == 'currency' && strpos($layout_def['name'], '_usdoll') === false) {
+            if ($layout_def['type'] == 'currency' && \strpos($layout_def['name'], '_usdoll') === false) {
                 $currency = $this->reporter->currency_obj;
                 $currency_alias = isset($layout_def['currency_alias'])
                 ? $layout_def['currency_alias'] : $currency->table_name;
@@ -265,7 +265,7 @@ class SugarWidgetReportField extends SugarWidgetField
 
         // unable to retrieve the vardef here, exclude columns of type clob/text from being sortable
 
-        if (!in_array($layout_def['name'], array('description', 'account_description', 'lead_source_description', 'status_description', 'to_addrs', 'cc_addrs', 'bcc_addrs', 'work_log', 'objective', 'resolution'))) {
+        if (!\in_array($layout_def['name'], array('description', 'account_description', 'lead_source_description', 'status_description', 'to_addrs', 'cc_addrs', 'bcc_addrs', 'work_log', 'objective', 'resolution'))) {
             $header_cell = "<a class=\"listViewThLinkS1\" href=\"".$start.$sort_by.$end."\">";
             $header_cell .= $this->displayHeaderCellPlain($layout_def);
             $objListView = new ListView();
@@ -285,7 +285,7 @@ class SugarWidgetReportField extends SugarWidgetField
         $context = $this->layout_manager->getAttribute('context');
         $func_name = 'query'.$context;
 
-        if (! empty($context) && method_exists($obj, $func_name)) {
+        if (! empty($context) && \method_exists($obj, $func_name)) {
             return  $obj->$func_name($layout_def);
         }
         return '';
@@ -306,24 +306,24 @@ class SugarWidgetReportField extends SugarWidgetField
         }
 
         if (! empty($layout_def['table_alias'])) {
-            array_push($alias_arr, $layout_def['table_alias']);
+            \array_push($alias_arr, $layout_def['table_alias']);
         }
 
         if (! empty($layout_def['group_function']) && $layout_def['group_function'] != 'weighted_amount' && $layout_def['group_function'] != 'weighted_sum') {
-            array_push($alias_arr, $layout_def['group_function']);
+            \array_push($alias_arr, $layout_def['group_function']);
         } elseif (! empty($layout_def['column_function'])) {
-            array_push($alias_arr, $layout_def['column_function']);
+            \array_push($alias_arr, $layout_def['column_function']);
         } elseif (! empty($layout_def['qualifier'])) {
-            array_push($alias_arr, $layout_def['qualifier']);
+            \array_push($alias_arr, $layout_def['qualifier']);
         }
 
         if (! empty($layout_def['name'])) {
-            array_push($alias_arr, $layout_def['name']);
+            \array_push($alias_arr, $layout_def['name']);
         }
 
         global $used_aliases, $alias_map;
 
-        $alias = strtolower(implode("_", $alias_arr));
+        $alias = \strtolower(\implode("_", $alias_arr));
 
         $short_alias = $this->getTruncatedColumnAlias($alias);
 

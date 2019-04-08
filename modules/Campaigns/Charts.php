@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -71,7 +71,7 @@ class campaign_charts
             $sugarChart = SugarChartFactory::getInstance('', 'Reports');
             $xmlFile = $sugarChart->getXMLFileName($campaign_id);
 
-            if (!file_exists($xmlFile) || $refresh == true) {
+            if (!\file_exists($xmlFile) || $refresh == true) {
                 $GLOBALS['log']->debug("datay is:");
                 $GLOBALS['log']->debug($datay);
                 $GLOBALS['log']->debug("user_id is: ");
@@ -132,11 +132,11 @@ class campaign_charts
                     }
 
 
-                    if (is_array($leadSourceArr[$key]) && isset($leadSourceArr[$key]['row_total'])) {
+                    if (\is_array($leadSourceArr[$key]) && isset($leadSourceArr[$key]['row_total'])) {
                         $rowTotalArr[] = $leadSourceArr[$key]['row_total'];
                     }
-                    if (is_array($leadSourceArr[$key]) && isset($leadSourceArr[$key]['row_total']) && $leadSourceArr[$key]['row_total'] > 100) {
-                        $leadSourceArr[$key]['row_total'] = round($leadSourceArr[$key]['row_total']);
+                    if (\is_array($leadSourceArr[$key]) && isset($leadSourceArr[$key]['row_total']) && $leadSourceArr[$key]['row_total'] > 100) {
+                        $leadSourceArr[$key]['row_total'] = \round($leadSourceArr[$key]['row_total']);
                     }
                     $camp_data[$translation] = array();
                     foreach ($targets as $outcome => $outcome_translation) {
@@ -146,10 +146,10 @@ class campaign_charts
                             $alttext = $targets[$outcome] . ': ' . $mod_strings['LBL_TARGETED'] . ' ' . $targeted[$outcome] . ', ' . $mod_strings['LBL_TOTAL_TARGETED'] . ' ' . $total_targeted . ".";
                         }
                         if ($key != 'targeted') {
-                            $hits = (isset($leadSourceArr[$key][$outcome]) && is_array($leadSourceArr[$key][$outcome]) && is_array($leadSourceArr[$key][$outcome]['hits'])) ? array_sum($leadSourceArr[$key][$outcome]['hits']) : 0;
+                            $hits = (isset($leadSourceArr[$key][$outcome]) && \is_array($leadSourceArr[$key][$outcome]) && \is_array($leadSourceArr[$key][$outcome]['hits'])) ? \array_sum($leadSourceArr[$key][$outcome]['hits']) : 0;
                             $alttext .= " $translation " . $hits;
                         }
-                        $count = (isset($leadSourceArr[$key][$outcome]) && is_array($leadSourceArr[$key][$outcome]) && is_array($leadSourceArr[$key][$outcome]['total'])) ? array_sum($leadSourceArr[$key][$outcome]['total']) : 0;
+                        $count = (isset($leadSourceArr[$key][$outcome]) && \is_array($leadSourceArr[$key][$outcome]) && \is_array($leadSourceArr[$key][$outcome]['total'])) ? \array_sum($leadSourceArr[$key][$outcome]['total']) : 0;
                         $camp_data[$translation][$outcome] =
                             array(
                                 "numerical_value" => $count,
@@ -219,7 +219,7 @@ class campaign_charts
             $mod_strings = return_module_language($current_language, 'Campaigns');
         }
 
-        if ((!file_exists($cache_file_name) || $refresh == true) && $campaign_id) {
+        if ((!\file_exists($cache_file_name) || $refresh == true) && $campaign_id) {
             $GLOBALS['log']->debug("datay is:");
             $GLOBALS['log']->debug($datay);
             $GLOBALS['log']->debug("user_id is: ");
@@ -374,7 +374,7 @@ class campaign_charts
             $mod_strings = return_module_language($current_language, 'Campaigns');
         }
 
-        if (!file_exists($cache_file_name) || $refresh == true) {
+        if (!\file_exists($cache_file_name) || $refresh == true) {
             $GLOBALS['log']->debug("datay is:");
             $GLOBALS['log']->debug($datay);
             $GLOBALS['log']->debug("user_id is: ");

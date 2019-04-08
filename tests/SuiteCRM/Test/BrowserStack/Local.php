@@ -22,14 +22,14 @@ class Local extends \BrowserStack\Local
         $this->binary_path = $this->binary->binary_path();
 
         $call = $this->start_command();
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            system('echo "" > '. '$this->logfile');
+        if (\strtoupper(\substr(PHP_OS, 0, 3)) === 'WIN') {
+            \system('echo "" > '. '$this->logfile');
         } else {
-            system("echo \"\" > '$this->logfile' ");
+            \system("echo \"\" > '$this->logfile' ");
         }
         $call = $call . "2>&1";
-        $return_message = shell_exec($call);
-        $data = json_decode($return_message, true);
+        $return_message = \shell_exec($call);
+        $data = \json_decode($return_message, true);
         if ($data["state"] != "connected") {
             throw new LocalException($data['message']['message']);
         }

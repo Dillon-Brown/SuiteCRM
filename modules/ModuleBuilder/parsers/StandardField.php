@@ -1,5 +1,5 @@
 <?php
-if (! defined('sugarEntry') || ! sugarEntry) {
+if (! \defined('sugarEntry') || ! sugarEntry) {
     die('Not A Valid Entry Point') ;
 }
 /**
@@ -53,7 +53,7 @@ class StandardField extends DynamicField
     protected function loadCustomDef($field)
     {
         global $beanList;
-        if (!empty($beanList[$this->module]) && is_file("custom/Extension/modules/{$this->module}/Ext/Vardefs/sugarfield_$field.php")) {
+        if (!empty($beanList[$this->module]) && \is_file("custom/Extension/modules/{$this->module}/Ext/Vardefs/sugarfield_$field.php")) {
             $bean_name = get_valid_bean_name($this->module);
             $dictionary = array($bean_name => array("fields" => array($field => array())));
             include("$this->base_path/sugarfield_$field.php");
@@ -66,7 +66,7 @@ class StandardField extends DynamicField
     protected function loadBaseDef($field)
     {
         global $beanList;
-        if (!empty($beanList[$this->module]) && is_file("modules/{$this->module}/vardefs.php")) {
+        if (!empty($beanList[$this->module]) && \is_file("modules/{$this->module}/vardefs.php")) {
             $dictionary = array();
             include("modules/{$this->module}/vardefs.php");
             if (!empty($dictionary[$beanList[$this->module]]) && isset($dictionary[$beanList[$this->module]]["fields"][$field])) {
@@ -118,7 +118,7 @@ class StandardField extends DynamicField
         $this->baseField = get_widget($field->type) ;
         foreach ($field->vardef_map as $property => $fmd_col) {
             if ($property == "action" || $property == "label_value" || $property == "label"
-                || ((substr($property, 0, 3) == 'ext' && strlen($property) == 4))
+                || ((\substr($property, 0, 3) == 'ext' && \strlen($property) == 4))
             ) {
                 continue;
             }
@@ -131,7 +131,7 @@ class StandardField extends DynamicField
                 )
             ) {
                 $this->custom_def[$property] =
-                    is_string($newDef[$property]) ? htmlspecialchars_decode($newDef[$property], ENT_QUOTES) : $newDef[$property];
+                    \is_string($newDef[$property]) ? \htmlspecialchars_decode($newDef[$property], ENT_QUOTES) : $newDef[$property];
             }
             
             //Remove any orphaned entries
@@ -142,11 +142,11 @@ class StandardField extends DynamicField
             //Handle overrides of out of the box definitions with empty
             if (!empty($this->base_def[$property]) && !isset($newDef[$property])) {
                 //Switch on type of the property to find what the correct 'empty' is.
-                if (is_string($this->base_def[$property])) {
+                if (\is_string($this->base_def[$property])) {
                     $this->custom_def[$property] = "";
-                } elseif (is_array($this->base_def[$property])) {
+                } elseif (\is_array($this->base_def[$property])) {
                     $this->custom_def[$property] = array();
-                } elseif (is_bool($this->base_def[$property])) {
+                } elseif (\is_bool($this->base_def[$property])) {
                     $this->custom_def[$property] = false;
                 } else {
                     $this->custom_def[$property] = null;

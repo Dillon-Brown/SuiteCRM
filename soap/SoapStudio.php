@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -277,8 +277,8 @@ function set_custom_field($session, $module_name, $type, $properties, $add_to_la
 
     // $request_arr should now contain all the necessary information to create a custom field
     // merge $request_arr with $_POST/$_REQUEST, where the action_saveField() method expects them
-    $_REQUEST = array_merge($_REQUEST, $request_arr);
-    $_POST = array_merge($_POST, $request_arr);
+    $_REQUEST = \array_merge($_REQUEST, $request_arr);
+    $_POST = \array_merge($_POST, $request_arr);
 
     require_once('include/MVC/Controller/SugarController.php');
     require_once('modules/ModuleBuilder/controller.php');

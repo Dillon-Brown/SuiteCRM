@@ -40,7 +40,7 @@
 
 use SuiteCRM\StateCheckerPHPUnitTestCaseAbstract;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -103,12 +103,12 @@ class ImapHandlerFactoryTest extends StateCheckerPHPUnitTestCaseAbstract
     {
         $settingsFile = __DIR__ . '/../../../../../include/Imap' . ImapHandlerFactory::SETTINGS_KEY_FILE;
         $factory = new ImapHandlerFactory();
-        $existsBefore = file_exists($settingsFile);
+        $existsBefore = \file_exists($settingsFile);
         $this->assertFalse($existsBefore);
         $results = $factory->saveTestSettingsKey('testCaseExample');
-        $existsAfter = file_exists($settingsFile);
+        $existsAfter = \file_exists($settingsFile);
         $this->assertTrue($existsAfter);
-        $this->assertTrue(unlink($settingsFile));
+        $this->assertTrue(\unlink($settingsFile));
         $this->assertTrue($results);
     }
     

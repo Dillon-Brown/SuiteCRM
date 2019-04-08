@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -77,7 +77,7 @@ $button .= "<input type='hidden' name='return_id' value='".$focus->id."'>\n";
 $button .= "<input type='hidden' name='action'>\n";
 $button .= "<tr><td>&nbsp;</td>";
 if ($focus->parent_type == "Accounts") {
-    $button .= "<td><input title='".$app_strings['LBL_SELECT_CONTACT_BUTTON_TITLE']."' type='button' class='button' value='".$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=DetailView&form_submit=true&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name)."\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
+    $button .= "<td><input title='".$app_strings['LBL_SELECT_CONTACT_BUTTON_TITLE']."' type='button' class='button' value='".$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=DetailView&form_submit=true&query=true&account_id=$focus->parent_id&account_name=".\urlencode($focus->parent_name)."\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
 } else {
     $button .= "<td><input title='".$app_strings['LBL_SELECT_CONTACT_BUTTON_TITLE']."'  type='button' class='button' value='".$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=DetailView&form_submit=true\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
 }

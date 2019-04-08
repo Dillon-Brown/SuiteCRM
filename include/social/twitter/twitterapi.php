@@ -67,10 +67,10 @@ function format_tweets($db, $tweets)
 
         $tweet['text'] = format_feed_tweets($db, $tweet, $limit);
 
-        if (count($tweet['entities']['hashtags']) > 0) {
+        if (\count($tweet['entities']['hashtags']) > 0) {
             $tweets['text'] = replace_hashtags($db, $tweet);
         }
-        if (count($tweet['entities']['user_mentions']) > 0) {
+        if (\count($tweet['entities']['user_mentions']) > 0) {
             $tweet['text'] = replace_users($db, $tweet);
         }
 

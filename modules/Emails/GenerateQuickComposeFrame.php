@@ -48,7 +48,7 @@ require_once('modules/Emails/EmailUI.php');
 $em = new EmailUI();
 $out = $em->displayQuickComposeEmailFrame();
         
-@ob_end_clean();
-ob_start();
+@\ob_end_clean();
+\ob_start();
 echo $out;
-ob_end_flush();
+\ob_end_flush();

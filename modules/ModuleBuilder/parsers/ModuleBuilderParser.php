@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -62,7 +62,7 @@ class ModuleBuilderParser
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -84,7 +84,7 @@ class ModuleBuilderParser
     public function _loadFromFile($view, $file, $moduleName)
     {
         $variables = array();
-        if (! file_exists($file)) {
+        if (! \file_exists($file)) {
             $this->_fatalError("ModuleBuilderParser: required viewdef file {$file} does not exist");
         }
         $GLOBALS['log']->info('ModuleBuilderParser->_loadFromFile(): file='.$file);
@@ -101,7 +101,7 @@ class ModuleBuilderParser
                 $variables[$name] = $$name;
             }
         }
-        $viewVariable = $this->_defMap[strtolower($view)];
+        $viewVariable = $this->_defMap[\strtolower($view)];
         // Now tidy up the module name in the viewdef array
         // MB created definitions store the defs under packagename_modulename and later methods that expect to find them under modulename will fail
         $defs = $$viewVariable;
@@ -128,13 +128,13 @@ class ModuleBuilderParser
      */
     public function _writeToFile($file, $view, $moduleName, $defs, $variables)
     {
-        if (file_exists($file)) {
-            unlink($file);
+        if (\file_exists($file)) {
+            \unlink($file);
         }
 
-        mkdir_recursive(dirname($file)) ;
+        mkdir_recursive(\dirname($file)) ;
         $GLOBALS['log']->debug("ModuleBuilderParser->_writeFile(): file=".$file);
-        $useVariables = (count($variables)>0);
+        $useVariables = (\count($variables)>0);
         if ($fh = @sugar_fopen($file, 'w')) {
             $out = "<?php\n";
             if ($useVariables) {
@@ -145,7 +145,7 @@ class ModuleBuilderParser
             }
 
             // write out the defs array itself
-            switch (strtolower($view)) {
+            switch (\strtolower($view)) {
                     case 'editview':
                     case 'detailview':
                     case 'quickcreate':
@@ -154,7 +154,7 @@ class ModuleBuilderParser
                     default:
                         break;
                 }
-            $viewVariable = $this->_defMap[strtolower($view)];
+            $viewVariable = $this->_defMap[\strtolower($view)];
             $out .= "\$$viewVariable = ";
             $out .= ($useVariables) ? "array (\n\$module_name =>\n".var_export_helper($defs) : var_export_helper(array($moduleName => $defs));
 
@@ -165,8 +165,8 @@ class ModuleBuilderParser
             $out .= ";\n?>\n";
 
 //           $GLOBALS['log']->debug("parser.modifylayout.php->_writeFile(): out=".print_r($out,true));
-            fputs($fh, $out);
-            fclose($fh);
+            \fputs($fh, $out);
+            \fclose($fh);
         } else {
             $GLOBALS['log']->fatal("ModuleBuilderParser->_writeFile() Could not write new viewdef file ".$file);
         }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -44,8 +44,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 require_once('include/Smarty/Smarty.class.php');
 
-if (!defined('SUGAR_SMARTY_DIR')) {
-    define('SUGAR_SMARTY_DIR', sugar_cached('smarty/'));
+if (!\defined('SUGAR_SMARTY_DIR')) {
+    \define('SUGAR_SMARTY_DIR', sugar_cached('smarty/'));
 }
 
 /**
@@ -60,16 +60,16 @@ class Sugar_Smarty extends Smarty
     public function __construct()
     {
         parent::__construct();
-        if (!file_exists(SUGAR_SMARTY_DIR)) {
+        if (!\file_exists(SUGAR_SMARTY_DIR)) {
             mkdir_recursive(SUGAR_SMARTY_DIR, true);
         }
-        if (!file_exists(SUGAR_SMARTY_DIR . 'templates_c')) {
+        if (!\file_exists(SUGAR_SMARTY_DIR . 'templates_c')) {
             mkdir_recursive(SUGAR_SMARTY_DIR . 'templates_c', true);
         }
-        if (!file_exists(SUGAR_SMARTY_DIR . 'configs')) {
+        if (!\file_exists(SUGAR_SMARTY_DIR . 'configs')) {
             mkdir_recursive(SUGAR_SMARTY_DIR . 'configs', true);
         }
-        if (!file_exists(SUGAR_SMARTY_DIR . 'cache')) {
+        if (!\file_exists(SUGAR_SMARTY_DIR . 'cache')) {
             mkdir_recursive(SUGAR_SMARTY_DIR . 'cache', true);
         }
 
@@ -79,7 +79,7 @@ class Sugar_Smarty extends Smarty
         $this->cache_dir = SUGAR_SMARTY_DIR . 'cache';
         $this->request_use_auto_globals = true; // to disable Smarty from using long arrays
 
-        if (file_exists('custom/include/Smarty/plugins')) {
+        if (\file_exists('custom/include/Smarty/plugins')) {
             $plugins_dir[] = 'custom/include/Smarty/plugins';
         }
         $plugins_dir[] = 'include/Smarty/plugins';
@@ -97,7 +97,7 @@ class Sugar_Smarty extends Smarty
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -111,7 +111,7 @@ class Sugar_Smarty extends Smarty
      */
     public function _unlink($resource, $exp_time = null)
     {
-        if (file_exists($resource)) {
+        if (\file_exists($resource)) {
             return parent::_unlink($resource, $exp_time);
         }
 
@@ -144,9 +144,9 @@ class Sugar_Smarty extends Smarty
         /// otherwise fall back to the default tpl
         $current_theme = SugarThemeRegistry::current();
         $theme_directory = $current_theme->__toString();
-        if (strpos($resource_name, "themes" . DIRECTORY_SEPARATOR . $theme_directory) === false) {
+        if (\strpos($resource_name, "themes" . DIRECTORY_SEPARATOR . $theme_directory) === false) {
             $test_path = SUGAR_PATH . DIRECTORY_SEPARATOR . "themes" . DIRECTORY_SEPARATOR . $theme_directory . DIRECTORY_SEPARATOR . $resource_name;
-            if (file_exists($test_path)) {
+            if (\file_exists($test_path)) {
                 $resource_name = "themes" . DIRECTORY_SEPARATOR . $theme_directory . DIRECTORY_SEPARATOR . $resource_name;
             }
         }
@@ -162,7 +162,7 @@ class Sugar_Smarty extends Smarty
 
         if (!(isset($sugar_config['developerMode']) && $sugar_config['developerMode'])) {
             $level = isset($sugar_config['smarty_error_level']) ? $sugar_config['smarty_error_level'] : 0;
-            error_reporting($level);
+            \error_reporting($level);
         }
         $fetch = parent::fetch(get_custom_file_if_exists($resource_name), $cache_id, $compile_id, $display);
         $state->popErrorLevel('sugar_smarty_errors', 'error_reporting', false);
@@ -177,7 +177,7 @@ class Sugar_Smarty extends Smarty
      */
     public function trigger_error($error_msg, $error_type = E_USER_WARNING)
     {
-        $error_msg = htmlentities($error_msg);
+        $error_msg = \htmlentities($error_msg);
         
         switch ($error_type) {
             case E_USER_ERROR:

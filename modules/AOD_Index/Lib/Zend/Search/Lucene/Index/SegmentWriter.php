@@ -165,7 +165,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
     public function addField(Zend_Search_Lucene_Field $field)
     {
         if (!isset($this->_fields[$field->name])) {
-            $fieldNumber = count($this->_fields);
+            $fieldNumber = \count($this->_fields);
             $this->_fields[$field->name] =
                                 new Zend_Search_Lucene_Index_FieldInfo(
                                     $field->name,
@@ -193,7 +193,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
     public function addFieldInfo(Zend_Search_Lucene_Index_FieldInfo $fieldInfo)
     {
         if (!isset($this->_fields[$fieldInfo->name])) {
-            $fieldNumber = count($this->_fields);
+            $fieldNumber = \count($this->_fields);
             $this->_fields[$fieldInfo->name] =
                                 new Zend_Search_Lucene_Index_FieldInfo(
                                     $fieldInfo->name,
@@ -236,7 +236,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
         }
 
         $this->_fdxFile->writeLong($this->_fdtFile->tell());
-        $this->_fdtFile->writeVInt(count($storedFields));
+        $this->_fdtFile->writeVInt(\count($storedFields));
         foreach ($storedFields as $field) {
             $this->_fdtFile->writeVInt($this->_fields[$field->name]->number);
             $fieldBits = ($field->isTokenized ? 0x01 : 0x00) |
@@ -244,7 +244,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
                          0x00; /* 0x04 - third bit, compressed (ZLIB) */
             $this->_fdtFile->writeByte($fieldBits);
             if ($field->isBinary) {
-                $this->_fdtFile->writeVInt(strlen($field->value));
+                $this->_fdtFile->writeVInt(\strlen($field->value));
                 $this->_fdtFile->writeBytes($field->value);
             } else {
                 $this->_fdtFile->writeString($field->getUtf8Value());
@@ -280,7 +280,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
     protected function _dumpFNM()
     {
         $fnmFile = $this->_directory->createFile($this->_name . '.fnm');
-        $fnmFile->writeVInt(count($this->_fields));
+        $fnmFile->writeVInt(\count($this->_fields));
 
         $nrmFile = $this->_directory->createFile($this->_name . '.nrm');
         // Write header
@@ -447,9 +447,9 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
         foreach ($termDocs as $docId => $termPositions) {
             $docDelta = ($docId - $prevDoc)*2;
             $prevDoc = $docId;
-            if (count($termPositions) > 1) {
+            if (\count($termPositions) > 1) {
                 $this->_frqFile->writeVInt($docDelta);
-                $this->_frqFile->writeVInt(count($termPositions));
+                $this->_frqFile->writeVInt(\count($termPositions));
             } else {
                 $this->_frqFile->writeVInt($docDelta + 1);
             }
@@ -461,7 +461,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
             }
         }
 
-        if (count($termDocs) >= self::$skipInterval) {
+        if (\count($termDocs) >= self::$skipInterval) {
             /**
              * @todo Write Skip Data to a freq file.
              * It's not used now, but make index more optimal
@@ -476,7 +476,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
                                                   $this->_fields[$termEntry->field]->number
         );
         $termInfo = new Zend_Search_Lucene_Index_TermInfo(
-            count($termDocs),
+            \count($termDocs),
                                                           $freqPointer,
             $proxPointer,
             $skipOffset
@@ -527,7 +527,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
     ) {
         if (isset($prevTerm) && $prevTerm->field == $term->field) {
             $matchedBytes = 0;
-            $maxBytes = min(strlen($prevTerm->text), strlen($term->text));
+            $maxBytes = \min(\strlen($prevTerm->text), \strlen($term->text));
             while ($matchedBytes < $maxBytes  &&
                    $prevTerm->text[$matchedBytes] == $term->text[$matchedBytes]) {
                 $matchedBytes++;
@@ -538,11 +538,11 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
             $prefixChars = 0;
             while ($prefixBytes < $matchedBytes) {
                 $charBytes = 1;
-                if ((ord($term->text[$prefixBytes]) & 0xC0) == 0xC0) {
+                if ((\ord($term->text[$prefixBytes]) & 0xC0) == 0xC0) {
                     $charBytes++;
-                    if (ord($term->text[$prefixBytes]) & 0x20) {
+                    if (\ord($term->text[$prefixBytes]) & 0x20) {
                         $charBytes++;
-                        if (ord($term->text[$prefixBytes]) & 0x10) {
+                        if (\ord($term->text[$prefixBytes]) & 0x10) {
                             $charBytes++;
                         }
                     }
@@ -561,7 +561,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
             // Write preffix length
             $dicFile->writeVInt($prefixChars);
             // Write suffix
-            $dicFile->writeString(substr($term->text, $prefixBytes));
+            $dicFile->writeString(\substr($term->text, $prefixBytes));
         } else {
             // Write preffix length
             $dicFile->writeVInt(0);
@@ -601,7 +601,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
     protected function _generateCFS()
     {
         $cfsFile = $this->_directory->createFile($this->_name . '.cfs');
-        $cfsFile->writeVInt(count($this->_files));
+        $cfsFile->writeVInt(\count($this->_files));
 
         $dataOffsetPointers = array();
         foreach ($this->_files as $fileName) {
@@ -624,8 +624,8 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
 
             $byteCount = $this->_directory->fileLength($fileName);
             while ($byteCount > 0) {
-                $data = $dataFile->readBytes(min($byteCount, 131072 /*128Kb*/));
-                $byteCount -= strlen($data);
+                $data = $dataFile->readBytes(\min($byteCount, 131072 /*128Kb*/));
+                $byteCount -= \strlen($data);
                 $cfsFile->writeBytes($data);
             }
 

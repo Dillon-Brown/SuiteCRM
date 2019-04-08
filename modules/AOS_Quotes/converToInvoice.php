@@ -53,9 +53,9 @@
     $rawRow['template_ddown_c'] = ' ';
     $rawRow['quote_number'] = $rawRow['number'];
     $rawRow['number'] = '';
-    $dt = explode(' ', $rawRow['date_entered']);
+    $dt = \explode(' ', $rawRow['date_entered']);
     $rawRow['quote_date'] = $dt[0];
-    $rawRow['invoice_date'] = date('Y-m-d');
+    $rawRow['invoice_date'] = \date('Y-m-d');
     $rawRow['total_amt'] = format_number($rawRow['total_amt']);
     $rawRow['discount_amount'] = format_number($rawRow['discount_amount']);
     $rawRow['subtotal_amount'] = format_number($rawRow['subtotal_amount']);
@@ -135,5 +135,5 @@
         $prod_invoice->populateFromRow($row);
         $prod_invoice->save();
     }
-    ob_clean();
-    header('Location: index.php?module=AOS_Invoices&action=EditView&record='.$invoice->id);
+    \ob_clean();
+    \header('Location: index.php?module=AOS_Invoices&action=EditView&record='.$invoice->id);

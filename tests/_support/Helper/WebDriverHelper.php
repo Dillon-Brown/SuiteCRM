@@ -27,7 +27,7 @@ class WebDriverHelper extends \Codeception\Module
      */
     public function getInstanceURL()
     {
-        $envInstanceURL = getenv('INSTANCE_URL');
+        $envInstanceURL = \getenv('INSTANCE_URL');
         if ($envInstanceURL === false) {
             $webDriver = $this->moduleContainer->getModule('\SuiteCRM\Test\Driver\WebDriver');
             $config = $webDriver->_getConfig();
@@ -49,7 +49,7 @@ class WebDriverHelper extends \Codeception\Module
      */
     public function getDatabaseDriver()
     {
-        $envDatabaseDriver = getenv('DATABASE_DRIVER');
+        $envDatabaseDriver = \getenv('DATABASE_DRIVER');
         if ($envDatabaseDriver === false) {
             $webDriver = $this->moduleContainer->getModule('\SuiteCRM\Test\Driver\WebDriver');
             $config = $webDriver->_getConfig();
@@ -70,7 +70,7 @@ class WebDriverHelper extends \Codeception\Module
      */
     public function getDatabaseName()
     {
-        $envDatabaseName = getenv('DATABASE_NAME');
+        $envDatabaseName = \getenv('DATABASE_NAME');
         if ($envDatabaseName === false) {
             $webDriver = $this->moduleContainer->getModule('\SuiteCRM\Test\Driver\WebDriver');
             $config = $webDriver->_getConfig();
@@ -92,7 +92,7 @@ class WebDriverHelper extends \Codeception\Module
      */
     public function getDatabaseHost()
     {
-        $envDatabaseHost = getenv('DATABASE_HOST');
+        $envDatabaseHost = \getenv('DATABASE_HOST');
         if ($envDatabaseHost === false) {
             $webDriver = $this->moduleContainer->getModule('\SuiteCRM\Test\Driver\WebDriver');
             $config = $webDriver->_getConfig();
@@ -113,7 +113,7 @@ class WebDriverHelper extends \Codeception\Module
      */
     public function getDatabaseUser()
     {
-        $envDatabaseUser = getenv('DATABASE_USER');
+        $envDatabaseUser = \getenv('DATABASE_USER');
         if ($envDatabaseUser === false) {
             $webDriver = $this->moduleContainer->getModule('\SuiteCRM\Test\Driver\WebDriver');
             $config = $webDriver->_getConfig();
@@ -134,7 +134,7 @@ class WebDriverHelper extends \Codeception\Module
      */
     public function getDatabasePassword()
     {
-        $envDatabasePassword = getenv('DATABASE_PASSWORD');
+        $envDatabasePassword = \getenv('DATABASE_PASSWORD');
         if ($envDatabasePassword === false) {
             $webDriver = $this->moduleContainer->getModule('\SuiteCRM\Test\Driver\WebDriver');
             $config = $webDriver->_getConfig();
@@ -156,7 +156,7 @@ class WebDriverHelper extends \Codeception\Module
      */
     public function getAdminUser()
     {
-        $envDatabasePassword = getenv('INSTANCE_ADMIN_USER');
+        $envDatabasePassword = \getenv('INSTANCE_ADMIN_USER');
         if ($envDatabasePassword === false) {
             $webDriver = $this->moduleContainer->getModule('\SuiteCRM\Test\Driver\WebDriver');
             $config = $webDriver->_getConfig();
@@ -177,7 +177,7 @@ class WebDriverHelper extends \Codeception\Module
      */
     public function getAdminPassword()
     {
-        $envDatabasePassword = getenv('INSTANCE_ADMIN_PASSWORD');
+        $envDatabasePassword = \getenv('INSTANCE_ADMIN_PASSWORD');
         if ($envDatabasePassword === false) {
             $webDriver = $this->moduleContainer->getModule('\SuiteCRM\Test\Driver\WebDriver');
             $config = $webDriver->_getConfig();
@@ -199,7 +199,7 @@ class WebDriverHelper extends \Codeception\Module
      */
     public function getBrowserStackUsername()
     {
-        $envBrowserStackUsername = getenv('BROWSERSTACK_USERNAME');
+        $envBrowserStackUsername = \getenv('BROWSERSTACK_USERNAME');
         if ($envBrowserStackUsername === false) {
             $webDriver = $this->moduleContainer->getModule('\SuiteCRM\Test\Driver\WebDriver');
             $config = $webDriver->_getConfig();
@@ -221,7 +221,7 @@ class WebDriverHelper extends \Codeception\Module
      */
     public function getBrowserStackAccessKey()
     {
-        $envBrowserStackAccessKey = getenv('BROWSERSTACK_ACCESS_KEY');
+        $envBrowserStackAccessKey = \getenv('BROWSERSTACK_ACCESS_KEY');
         if ($envBrowserStackAccessKey === false) {
             $webDriver = $this->moduleContainer->getModule('\SuiteCRM\Test\Driver\WebDriver');
             $config = $webDriver->_getConfig();
@@ -243,7 +243,7 @@ class WebDriverHelper extends \Codeception\Module
      */
     public function getBrowserStackLocalFolderURL()
     {
-        $envBrowserStackAccessKey = getenv('BROWSERSTACK_LOCAL_FOLDER_URL');
+        $envBrowserStackAccessKey = \getenv('BROWSERSTACK_LOCAL_FOLDER_URL');
         if ($envBrowserStackAccessKey === false) {
             $webDriver = $this->moduleContainer->getModule('\SuiteCRM\Test\Driver\WebDriver');
             $config = $webDriver->_getConfig();

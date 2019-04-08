@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -82,16 +82,16 @@ foreach ($modules as $the_module => $fields) {
 
     $table = $db->getTableDescription($mod->table_name."_cstm");
     foreach ($table as $row) {
-        $col = strtolower(empty($row['Field']) ? $row['field'] : $row['Field']);
+        $col = \strtolower(empty($row['Field']) ? $row['field'] : $row['Field']);
         $the_field = $mod->custom_fields->getField($col);
-        $type = strtolower(empty($row['Type']) ? $row['type'] : $row['Type']);
+        $type = \strtolower(empty($row['Type']) ? $row['type'] : $row['Type']);
         if (!empty($row['data_precision']) && !empty($row['data_scale'])) {
             $type.='(' . $row['data_precision'];
             if (!empty($row['data_scale'])) {
                 $type.=',' . $row['data_scale'];
             }
             $type.=')';
-        } elseif (!empty($row['data_length']) && (strtolower($row['type'])=='varchar' or strtolower($row['type'])=='varchar2')) {
+        } elseif (!empty($row['data_length']) && (\strtolower($row['type'])=='varchar' or \strtolower($row['type'])=='varchar2')) {
             $type.='(' . $row['data_length'] . ')';
         }
         if (!isset($fields[$col]) && $col != 'id_c') {
@@ -102,10 +102,10 @@ foreach ($modules as $the_module => $fields) {
             echo "Dropping Column $col from $mod->table_name"."_cstm for module $the_module<br>";
         } else {
             if ($col != 'id_c') {
-                $db_data_type = strtolower(str_replace(' ', '', $the_field->get_db_type()));
+                $db_data_type = \strtolower(\str_replace(' ', '', $the_field->get_db_type()));
 
-                $type = strtolower(str_replace(' ', '', $type));
-                if (strcmp($db_data_type, $type) != 0) {
+                $type = \strtolower(\str_replace(' ', '', $type));
+                if (\strcmp($db_data_type, $type) != 0) {
                     echo "Fixing Column Type for $col changing $type to ".$db_data_type."<br>";
                     if (!$simulate) {
                         $db->query($the_field->get_db_modify_alter_table($mod->table_name.'_cstm'));
@@ -117,7 +117,7 @@ foreach ($modules as $the_module => $fields) {
         }
     }
 
-    echo sizeof($fields)." field(s) missing from $mod->table_name"."_cstm<br>";
+    echo \sizeof($fields)." field(s) missing from $mod->table_name"."_cstm<br>";
     foreach ($fields as $field) {
         echo "Adding Column $field to $mod->table_name"."_cstm<br>";
         if (!$simulate) {

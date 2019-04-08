@@ -84,9 +84,9 @@ class Zend_Gdata_Gbase_ItemEntry extends Zend_Gdata_Gbase_Entry
     public function removeGbaseAttribute($baseAttribute)
     {
         $baseAttributes = $this->_baseAttributes;
-        for ($i = 0; $i < count($this->_baseAttributes); $i++) {
+        for ($i = 0; $i < \count($this->_baseAttributes); $i++) {
             if ($this->_baseAttributes[$i] == $baseAttribute) {
-                array_splice($baseAttributes, $i, 1);
+                \array_splice($baseAttributes, $i, 1);
                 break;
             }
         }

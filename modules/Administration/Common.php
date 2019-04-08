@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -53,7 +53,7 @@ require_once('include/utils/array_utils.php');
  */
 function create_include_lang_dir()
 {
-    if (!is_dir("custom/include/language")) {
+    if (!\is_dir("custom/include/language")) {
         return sugar_mkdir("custom/include/language", null, true);
     }
 
@@ -67,7 +67,7 @@ function create_include_lang_dir()
  */
 function create_module_lang_dir($module)
 {
-    if (!is_dir("custom/modules/$module/language")) {
+    if (!\is_dir("custom/modules/$module/language")) {
         return sugar_mkdir("custom/modules/$module/language", null, true);
     }
 
@@ -82,11 +82,11 @@ function create_module_lang_dir($module)
 function &create_field_lang_pak_contents($old_contents, $key, $value, $language, $module)
 {
     if (!empty($old_contents)) {
-        $old_contents = preg_replace("'[^\[\n\r]+\[\'{$key}\'\][^\;]+;[\ \r\n]*'i", '', $old_contents);
-        $contents = str_replace("\n?>", "\n\$mod_strings['{$key}'] = '$value';\n?>", $old_contents);
+        $old_contents = \preg_replace("'[^\[\n\r]+\[\'{$key}\'\][^\;]+;[\ \r\n]*'i", '', $old_contents);
+        $contents = \str_replace("\n?>", "\n\$mod_strings['{$key}'] = '$value';\n?>", $old_contents);
     } else {
         $contents = "<?php\n"
-            . '// Creation date: ' . date('Y-m-d H:i:s') . "\n"
+            . '// Creation date: ' . \date('Y-m-d H:i:s') . "\n"
             . "// Module: $module\n"
             . "// Language: $language\n\n"
             . "\$mod_strings['$key'] = '$value';"
@@ -104,10 +104,10 @@ function &create_field_lang_pak_contents($old_contents, $key, $value, $language,
 function &create_dropdown_lang_pak_contents(&$the_array, $language)
 {
     $contents = "<?php\n" .
-               '// ' . date('Y-m-d H:i:s') . "\n" .
+               '// ' . \date('Y-m-d H:i:s') . "\n" .
                "// Language: $language\n\n" .
                '$app_list_strings = ' .
-               var_export($the_array, true) .
+               \var_export($the_array, true) .
                ";\n?>";
 
     return $contents;
@@ -147,9 +147,9 @@ function create_field_label($module, $language, $key, $value, $overwrite=false)
     if (isset($mod_strings[$key]) && !$overwrite) {
         $GLOBALS['log']->info("Tried to create a key that already exists: $key");
     } else {
-        $mod_strings = array_merge($mod_strings, array($key => $value));
+        $mod_strings = \array_merge($mod_strings, array($key => $value));
         $dirname = "custom/modules/$module/language";
-        $dir_exists = is_dir($dirname);
+        $dir_exists = \is_dir($dirname);
 
         if (!$dir_exists) {
             $dir_exists = create_module_lang_dir($module);
@@ -157,8 +157,8 @@ function create_field_label($module, $language, $key, $value, $overwrite=false)
 
         if ($dir_exists) {
             $filename = "$dirname/$language.lang.php";
-            if (is_file($filename) && filesize($filename) > 0) {
-                $old_contents = file_get_contents($filename);
+            if (\is_file($filename) && \filesize($filename) > 0) {
+                $old_contents = \file_get_contents($filename);
             } else {
                 $old_contents = '';
             }
@@ -174,12 +174,12 @@ function create_field_label($module, $language, $key, $value, $overwrite=false)
                     $module
                 );
 
-                if (fwrite($handle, $contents)) {
+                if (\fwrite($handle, $contents)) {
                     $return_value = true;
                     $GLOBALS['log']->info("Successful write to: $filename");
                 }
 
-                fclose($handle);
+                \fclose($handle);
             } else {
                 $GLOBALS['log']->info("Unable to write edited language pak to file: $filename");
             }
@@ -224,7 +224,7 @@ function save_custom_app_list_strings_contents(&$contents, $language, $custom_di
         $dirname = $custom_dir_name;
     }
 
-    $dir_exists = is_dir($dirname);
+    $dir_exists = \is_dir($dirname);
 
     if (!$dir_exists) {
         $dir_exists = create_include_lang_dir($dirname);
@@ -235,12 +235,12 @@ function save_custom_app_list_strings_contents(&$contents, $language, $custom_di
         $handle = @sugar_fopen($filename, 'wt');
 
         if ($handle) {
-            if (fwrite($handle, $contents)) {
+            if (\fwrite($handle, $contents)) {
                 $return_value = true;
                 $GLOBALS['log']->info("Successful write to: $filename");
             }
 
-            fclose($handle);
+            \fclose($handle);
         } else {
             $GLOBALS['log']->info("Unable to write edited language pak to file: $filename");
         }
@@ -265,7 +265,7 @@ function save_custom_app_list_strings(&$app_list_strings, $language)
     $return_value = false;
     $dirname = 'custom/include/language';
 
-    $dir_exists = is_dir($dirname);
+    $dir_exists = \is_dir($dirname);
 
     if (!$dir_exists) {
         $dir_exists = create_include_lang_dir($dirname);
@@ -281,12 +281,12 @@ function save_custom_app_list_strings(&$app_list_strings, $language)
                              $language
             );
 
-            if (fwrite($handle, $contents)) {
+            if (\fwrite($handle, $contents)) {
                 $return_value = true;
                 $GLOBALS['log']->info("Successful write to: $filename");
             }
 
-            fclose($handle);
+            \fclose($handle);
         } else {
             $GLOBALS['log']->info("Unable to write edited language pak to file: $filename");
         }
@@ -310,8 +310,8 @@ function return_custom_app_list_strings_file_contents($language, $custom_filenam
         $filename = $custom_filename;
     }
 
-    if (is_file($filename)) {
-        $contents = file_get_contents($filename);
+    if (\is_file($filename)) {
+        $contents = \file_get_contents($filename);
     }
 
     return $contents;
@@ -337,7 +337,7 @@ function create_dropdown_type($dropdown_name, $language)
         if ($contents == '') {
             $new_contents = "<?php\n\$app_list_strings['$dropdown_name'] = array(''=>'');\n?>";
         } else {
-            $new_contents = str_replace('?>', "\$app_list_strings['$dropdown_name'] = array(''=>'');\n?>", $contents);
+            $new_contents = \str_replace('?>', "\$app_list_strings['$dropdown_name'] = array(''=>'');\n?>", $contents);
         }
 
         // save the new contents to file
@@ -391,9 +391,9 @@ function dropdown_item_delete($dropdown_type, $language, $index)
 function helper_dropdown_item_delete(&$dropdown_array, $index)
 {
     // perform the delete from the array
-    $sliced_off_array = array_splice($dropdown_array, $index);
-    array_shift($sliced_off_array);
-    $dropdown_array = array_merge($dropdown_array, $sliced_off_array);
+    $sliced_off_array = \array_splice($dropdown_array, $index);
+    \array_shift($sliced_off_array);
+    $dropdown_array = \array_merge($dropdown_array, $sliced_off_array);
 }
 
 function dropdown_item_move_up($dropdown_type, $language, $index)
@@ -401,12 +401,12 @@ function dropdown_item_move_up($dropdown_type, $language, $index)
     $app_list_strings_to_edit = return_app_list_strings_language($language);
     $dropdown_array =$app_list_strings_to_edit[$dropdown_type];
 
-    if ($index > 0 && $index < count($dropdown_array)) {
+    if ($index > 0 && $index < \count($dropdown_array)) {
         $key = '';
         $value = '';
         $i = 0;
 
-        reset($dropdown_array);
+        \reset($dropdown_array);
         foreach ($dropdown_array as $k => $v) {
             if ($i == $index) {
                 $key = $k;
@@ -437,12 +437,12 @@ function dropdown_item_move_down($dropdown_type, $language, $index)
     $app_list_strings_to_edit = return_app_list_strings_language($language);
     $dropdown_array =$app_list_strings_to_edit[$dropdown_type];
 
-    if ($index >= 0 && $index < count($dropdown_array) - 1) {
+    if ($index >= 0 && $index < \count($dropdown_array) - 1) {
         $key = '';
         $value = '';
         $i = 0;
 
-        reset($dropdown_array);
+        \reset($dropdown_array);
         foreach ($dropdown_array as $k => $v) {
             if ($i == $index) {
                 $key = $k;
@@ -489,14 +489,14 @@ function helper_dropdown_item_insert(&$dropdown_array, $index, $key, $value)
 {
     $pair = array($key => $value);
     if ($index <= 0) {
-        $dropdown_array = array_merge($pair, $dropdown_array);
+        $dropdown_array = \array_merge($pair, $dropdown_array);
     }
-    if ($index >= count($dropdown_array)) {
-        $dropdown_array = array_merge($dropdown_array, $pair);
+    if ($index >= \count($dropdown_array)) {
+        $dropdown_array = \array_merge($dropdown_array, $pair);
     } else {
-        $sliced_off_array = array_splice($dropdown_array, $index);
-        $dropdown_array = array_merge($dropdown_array, $pair);
-        $dropdown_array = array_merge($dropdown_array, $sliced_off_array);
+        $sliced_off_array = \array_splice($dropdown_array, $index);
+        $dropdown_array = \array_merge($dropdown_array, $pair);
+        $dropdown_array = \array_merge($dropdown_array, $sliced_off_array);
     }
 }
 
@@ -546,7 +546,7 @@ function replace_or_add_dropdown_type(
 
         if ($new_contents == $file_contents) {
             // replace failed, append to end of file
-            $new_contents = str_replace("?>", '', $file_contents);
+            $new_contents = \str_replace("?>", '', $file_contents);
             $new_contents .= "\n$new_entry\n?>";
         }
     }
@@ -581,7 +581,7 @@ function replace_or_add_app_string(
 
         if ($new_contents == $file_contents) {
             // replace failed, append to end of file
-            $new_contents = str_replace("?>", '', $file_contents);
+            $new_contents = \str_replace("?>", '', $file_contents);
             $new_contents .= "\n$new_entry\n?>";
         }
     }
@@ -598,14 +598,14 @@ function dropdown_duplicate_check($dropdown_type, &$file_contents)
             '\'\][\ ]*=[\ ]*array[\ ]*\([^\)]*\)[\ ]*;/';
 
         $result = array();
-        preg_match_all($pattern, $file_contents, $result);
+        \preg_match_all($pattern, $file_contents, $result);
 
-        if (count($result[0]) > 1) {
+        if (\count($result[0]) > 1) {
             $new_entry = $result[0][0];
-            $new_contents = preg_replace($pattern, '', $file_contents);
+            $new_contents = \preg_replace($pattern, '', $file_contents);
 
             // Append the new entry.
-            $new_contents = str_replace("?>", '', $new_contents);
+            $new_contents = \str_replace("?>", '', $new_contents);
             $new_contents .= "\n$new_entry\n?>";
             return $new_contents;
         }
@@ -624,7 +624,7 @@ function replace_dropdown_type(
     $new_contents = $file_contents;
 
     if (!empty($dropdown_type) &&
-        is_array($dropdown_array) &&
+        \is_array($dropdown_array) &&
         !empty($file_contents)) {
         $pattern = '/\$app_list_strings\[\''. $dropdown_type .
             '\'\][\ ]*=[\ ]*array[\ ]*\([^\)]*\)[\ ]*;/';
@@ -633,7 +633,7 @@ function replace_dropdown_type(
             $dropdown_type,
             $dropdown_array
         );
-        $new_contents = preg_replace($pattern, $replacement, $file_contents, 1);
+        $new_contents = \preg_replace($pattern, $replacement, $file_contents, 1);
     }
 
     return $new_contents;
@@ -647,7 +647,7 @@ function replace_app_string(
     $new_contents = $file_contents;
 
     if (!empty($name) &&
-        is_string($value) &&
+        \is_string($value) &&
         !empty($file_contents)) {
         $pattern = '/\$app_strings\[\''. $name .'\'\][\ ]*=[\ ]*\'[^\']*\'[\ ]*;/';
         $replacement = override_value_to_string(
@@ -655,7 +655,7 @@ function replace_app_string(
             $name,
             $value
         );
-        $new_contents = preg_replace($pattern, $replacement, $file_contents, 1);
+        $new_contents = \preg_replace($pattern, $replacement, $file_contents, 1);
     }
 
     return $new_contents;
@@ -668,14 +668,14 @@ function app_string_duplicate_check($name, &$file_contents)
         $pattern = '/\$app_strings\[\''. $name .'\'\][\ ]*=[\ ]*\'[^\']*\'[\ ]*;/';
 
         $result = array();
-        preg_match_all($pattern, $file_contents, $result);
+        \preg_match_all($pattern, $file_contents, $result);
 
-        if (count($result[0]) > 1) {
+        if (\count($result[0]) > 1) {
             $new_entry = $result[0][0];
-            $new_contents = preg_replace($pattern, '', $file_contents);
+            $new_contents = \preg_replace($pattern, '', $file_contents);
 
             // Append the new entry.
-            $new_contents = str_replace("?>", '', $new_contents);
+            $new_contents = \str_replace("?>", '', $new_contents);
             $new_contents .= "\n$new_entry\n?>";
             return $new_contents;
         }

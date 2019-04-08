@@ -38,7 +38,7 @@
   * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
   */
 
- if (!defined('sugarEntry') || !sugarEntry) {
+ if (!\defined('sugarEntry') || !sugarEntry) {
      die('Not A Valid Entry Point');
  }
 
@@ -200,21 +200,21 @@ function manageSubscriptions($focus)
     $curr_subscription_arr = array();
     //build array of original subscriptions
     if (isset($_REQUEST['orig_enabled_values'])  && ! empty($_REQUEST['orig_enabled_values'])) {
-        $orig_subscription_arr = explode(",", $_REQUEST['orig_enabled_values']);
+        $orig_subscription_arr = \explode(",", $_REQUEST['orig_enabled_values']);
         $orig_subscription_arr = process_subscriptions($orig_subscription_arr);
     }
 
     //build array of current subscriptions
     if (isset($_REQUEST['enabled_subs'])  && ! empty($_REQUEST['enabled_subs'])) {
-        $curr_subscription_arr = explode(",", $_REQUEST['enabled_subs']);
+        $curr_subscription_arr = \explode(",", $_REQUEST['enabled_subs']);
         $curr_subscription_arr = process_subscriptions($curr_subscription_arr);
     }
 
     //compare both arrays and find differences
     $i=0;
-    while ($i<(count($curr_subscription_arr)/2)) {
+    while ($i<(\count($curr_subscription_arr)/2)) {
         //if current subscription existed in original subscription list, do nothing
-        if (in_array($curr_subscription_arr['campaign'.$i], $orig_subscription_arr)) {
+        if (\in_array($curr_subscription_arr['campaign'.$i], $orig_subscription_arr)) {
             //nothing to process
         } else {
             //current subscription is new, so subscribe
@@ -230,20 +230,20 @@ function manageSubscriptions($focus)
 
     //build array of original subscriptions
     if (isset($_REQUEST['orig_disabled_values'])  && ! empty($_REQUEST['orig_disabled_values'])) {
-        $orig_unsubscription_arr = explode(",", $_REQUEST['orig_disabled_values']);
+        $orig_unsubscription_arr = \explode(",", $_REQUEST['orig_disabled_values']);
         $orig_unsubscription_arr = process_subscriptions($orig_unsubscription_arr);
     }
 
     //build array of current subscriptions
     if (isset($_REQUEST['disabled_subs'])  && ! empty($_REQUEST['disabled_subs'])) {
-        $curr_unsubscription_arr = explode(",", $_REQUEST['disabled_subs']);
+        $curr_unsubscription_arr = \explode(",", $_REQUEST['disabled_subs']);
         $curr_unsubscription_arr = process_subscriptions($curr_unsubscription_arr);
     }
     //compare both arrays and find differences
     $i=0;
-    while ($i<(count($curr_unsubscription_arr)/2)) {
+    while ($i<(\count($curr_unsubscription_arr)/2)) {
         //if current subscription existed in original subscription list, do nothing
-        if (in_array($curr_unsubscription_arr['campaign'.$i], $orig_unsubscription_arr)) {
+        if (\in_array($curr_unsubscription_arr['campaign'.$i], $orig_unsubscription_arr)) {
             //nothing to process
         } else {
             //current subscription is new, so subscribe

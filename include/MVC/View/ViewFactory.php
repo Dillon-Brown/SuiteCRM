@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
   /**
@@ -73,7 +73,7 @@ class ViewFactory
         $view_object_map = array(),
         $target_module = ''
     ) {
-        $type = strtolower($type);
+        $type = \strtolower($type);
 
         //first let's check if the module handles this view
 
@@ -83,24 +83,24 @@ class ViewFactory
         loadParentView($type);
 
         if (!empty($target_module)) {
-            if (file_exists('custom/modules/'.$target_module.'/views/view.'.$type.'.php')) {
+            if (\file_exists('custom/modules/'.$target_module.'/views/view.'.$type.'.php')) {
                 $view = ViewFactory::_buildFromFile('custom/modules/'.$target_module.'/views/view.'.$type.'.php', $bean, $view_object_map, $type, $target_module);
-            } elseif (file_exists('modules/'.$target_module.'/views/view.'.$type.'.php')) {
+            } elseif (\file_exists('modules/'.$target_module.'/views/view.'.$type.'.php')) {
                 $view = ViewFactory::_buildFromFile('modules/'.$target_module.'/views/view.'.$type.'.php', $bean, $view_object_map, $type, $target_module);
             }
         }
 
         if (!isset($view)) {
-            if (file_exists('custom/modules/'.$module.'/views/view.'.$type.'.php')) {
+            if (\file_exists('custom/modules/'.$module.'/views/view.'.$type.'.php')) {
                 $view = ViewFactory::_buildFromFile('custom/modules/'.$module.'/views/view.'.$type.'.php', $bean, $view_object_map, $type, $module);
-            } elseif (file_exists('modules/'.$module.'/views/view.'.$type.'.php')) {
+            } elseif (\file_exists('modules/'.$module.'/views/view.'.$type.'.php')) {
                 $view = ViewFactory::_buildFromFile('modules/'.$module.'/views/view.'.$type.'.php', $bean, $view_object_map, $type, $module);
-            } elseif (file_exists('custom/include/MVC/View/views/view.'.$type.'.php')) {
+            } elseif (\file_exists('custom/include/MVC/View/views/view.'.$type.'.php')) {
                 $view = ViewFactory::_buildFromFile('custom/include/MVC/View/views/view.'.$type.'.php', $bean, $view_object_map, $type, $module);
             } else {
                 //if the module does not handle this view, then check if Sugar handles it OOTB
                 $file = 'include/MVC/View/views/view.'.$type.'.php';
-                if (file_exists($file)) {
+                if (\file_exists($file)) {
                     //it appears Sugar does have the proper logic for this file.
                     $view = ViewFactory::_buildFromFile($file, $bean, $view_object_map, $type, $module);
                 }
@@ -127,23 +127,23 @@ class ViewFactory
         $config_file_name = 'view.'.$type.'.config.php';
         $view_config = sugar_cache_retrieve("VIEW_CONFIG_FILE_".$view->module."_TYPE_".$type);
         if (!$view_config) {
-            if (file_exists('custom/modules/'.$view->module.'/views/'.$config_file_name)) {
+            if (\file_exists('custom/modules/'.$view->module.'/views/'.$config_file_name)) {
                 require_once('custom/modules/'.$view->module.'/views/'.$config_file_name);
                 $view_config_custom = $view_config;
             }
-            if (file_exists('modules/'.$view->module.'/views/'.$config_file_name)) {
+            if (\file_exists('modules/'.$view->module.'/views/'.$config_file_name)) {
                 require_once('modules/'.$view->module.'/views/'.$config_file_name);
                 $view_config_module = $view_config;
             }
-            if (file_exists('custom/include/MVC/View/views/'.$config_file_name)) {
+            if (\file_exists('custom/include/MVC/View/views/'.$config_file_name)) {
                 require_once('custom/include/MVC/View/views/'.$config_file_name);
                 $view_config_root_cstm = $view_config;
             }
-            if (file_exists('include/MVC/View/views/'.$config_file_name)) {
+            if (\file_exists('include/MVC/View/views/'.$config_file_name)) {
                 require_once('include/MVC/View/views/'.$config_file_name);
                 $view_config_root = $view_config;
             }
-            if (file_exists('include/MVC/View/views/view.config.php')) {
+            if (\file_exists('include/MVC/View/views/view.config.php')) {
                 require_once('include/MVC/View/views/view.config.php');
                 $view_config_app = $view_config;
             }
@@ -151,41 +151,41 @@ class ViewFactory
 
             //actions
             if (!empty($view_config_app) && !empty($view_config_app['actions'])) {
-                $view_config['actions'] = array_merge($view_config['actions'], $view_config_app['actions']);
+                $view_config['actions'] = \array_merge($view_config['actions'], $view_config_app['actions']);
             }
             if (!empty($view_config_root) && !empty($view_config_root['actions'])) {
-                $view_config['actions'] = array_merge($view_config['actions'], $view_config_root['actions']);
+                $view_config['actions'] = \array_merge($view_config['actions'], $view_config_root['actions']);
             }
             if (!empty($view_config_root_cstm) && !empty($view_config_root_cstm['actions'])) {
-                $view_config['actions'] = array_merge($view_config['actions'], $view_config_root_cstm['actions']);
+                $view_config['actions'] = \array_merge($view_config['actions'], $view_config_root_cstm['actions']);
             }
             if (!empty($view_config_module) && !empty($view_config_module['actions'])) {
-                $view_config['actions'] = array_merge($view_config['actions'], $view_config_module['actions']);
+                $view_config['actions'] = \array_merge($view_config['actions'], $view_config_module['actions']);
             }
             if (!empty($view_config_custom) && !empty($view_config_custom['actions'])) {
-                $view_config['actions'] = array_merge($view_config['actions'], $view_config_custom['actions']);
+                $view_config['actions'] = \array_merge($view_config['actions'], $view_config_custom['actions']);
             }
 
             //req_params
             if (!empty($view_config_app) && !empty($view_config_app['req_params'])) {
-                $view_config['req_params'] = array_merge($view_config['req_params'], $view_config_app['req_params']);
+                $view_config['req_params'] = \array_merge($view_config['req_params'], $view_config_app['req_params']);
             }
             if (!empty($view_config_root) && !empty($view_config_root['req_params'])) {
-                $view_config['req_params'] = array_merge($view_config['req_params'], $view_config_root['req_params']);
+                $view_config['req_params'] = \array_merge($view_config['req_params'], $view_config_root['req_params']);
             }
             if (!empty($view_config_root_cstm) && !empty($view_config_root_cstm['req_params'])) {
-                $view_config['req_params'] = array_merge($view_config['req_params'], $view_config_root_cstm['req_params']);
+                $view_config['req_params'] = \array_merge($view_config['req_params'], $view_config_root_cstm['req_params']);
             }
             if (!empty($view_config_module) && !empty($view_config_module['req_params'])) {
-                $view_config['req_params'] = array_merge($view_config['req_params'], $view_config_module['req_params']);
+                $view_config['req_params'] = \array_merge($view_config['req_params'], $view_config_module['req_params']);
             }
             if (!empty($view_config_custom) && !empty($view_config_custom['req_params'])) {
-                $view_config['req_params'] = array_merge($view_config['req_params'], $view_config_custom['req_params']);
+                $view_config['req_params'] = \array_merge($view_config['req_params'], $view_config_custom['req_params']);
             }
 
             sugar_cache_put("VIEW_CONFIG_FILE_".$view->module."_TYPE_".$type, $view_config);
         }
-        $action = strtolower($view->action);
+        $action = \strtolower($view->action);
         $config = null;
         if (!empty($view_config['req_params'])) {
             //try the params first
@@ -194,7 +194,7 @@ class ViewFactory
                     $_REQUEST[$key] = false;
                 }
                 if (!empty($_REQUEST[$key])) {
-                    if (!is_array($value['param_value'])) {
+                    if (!\is_array($value['param_value'])) {
                         if ($value['param_value'] ==  $_REQUEST[$key]) {
                             $config = $value['config'];
                             break;
@@ -228,28 +228,28 @@ class ViewFactory
     {
         require_once($file);
         //try ModuleViewType first then try ViewType if that fails then use SugarView
-        $class = ucfirst($module).'View'.ucfirst($type);
+        $class = \ucfirst($module).'View'.\ucfirst($type);
         $customClass = 'Custom' . $class;
 
-        if (class_exists($customClass)) {
+        if (\class_exists($customClass)) {
             return ViewFactory::_buildClass($customClass, $bean, $view_object_map);
         }
-        if (class_exists($class)) {
+        if (\class_exists($class)) {
             return ViewFactory::_buildClass($class, $bean, $view_object_map);
         }
         //Now try the next set of possibilites if it was none of the above
-        $class = 'View'.ucfirst($type);
+        $class = 'View'.\ucfirst($type);
         $customClass = 'Custom' . $class;
-        if (class_exists($customClass)) {
+        if (\class_exists($customClass)) {
             return ViewFactory::_buildClass($customClass, $bean, $view_object_map);
         }
-        if (class_exists($class)) {
+        if (\class_exists($class)) {
             return ViewFactory::_buildClass($class, $bean, $view_object_map);
         }
         //Now check if there is a custom SugarView for generic handling
-        if (file_exists('custom/include/MVC/View/SugarView.php')) {
+        if (\file_exists('custom/include/MVC/View/SugarView.php')) {
             require_once('custom/include/MVC/View/SugarView.php');
-            if (class_exists('CustomSugarView')) {
+            if (\class_exists('CustomSugarView')) {
                 return new CustomSugarView($bean, $view_object_map);
             }
         }

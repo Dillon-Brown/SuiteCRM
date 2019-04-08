@@ -90,7 +90,7 @@ class actionComputeField extends actionBase
             $formulas = $this->getArrayFromParams($params, 'formula');
             $formulaContents = $this->getArrayFromParams($params, 'formulaContent');
 
-            if (count($formulas) == 0) {
+            if (\count($formulas) == 0) {
                 return;
             }
 
@@ -103,8 +103,8 @@ class actionComputeField extends actionBase
 
             $relateFields = $this->getAllRelatedFields($bean);
 
-            for ($i = 0; $i < count($formulas); $i++) {
-                if (array_key_exists($formulas[$i], $relateFields) && isset($relateFields[$formulas[$i]]['id_name'])) {
+            for ($i = 0; $i < \count($formulas); $i++) {
+                if (\array_key_exists($formulas[$i], $relateFields) && isset($relateFields[$formulas[$i]]['id_name'])) {
                     $bean->{$relateFields[$formulas[$i]]['id_name']} =
                         $calculator->calculateFormula($formulaContents[$i]);
                 } else {
@@ -148,7 +148,7 @@ class actionComputeField extends actionBase
     {
         $resolvedParameters = array();
 
-        for ($i = 0; $i < count($parameters); $i++) {
+        for ($i = 0; $i < \count($parameters); $i++) {
             if ($parameterTypes[$i] == actionComputeField::FORMATTED_VALUE) {
                 $dataType = $bean->field_name_map[$parameters[$i]]['type'];
 
@@ -178,14 +178,14 @@ class actionComputeField extends actionBase
     {
         $displayFieldValues = unencodeMultienum($bean->$fieldName);
 
-        array_walk(
+        \array_walk(
             $displayFieldValues,
             function ($val) use ($bean, $fieldName) {
                 $val = $GLOBALS['app_list_strings'][$bean->field_defs[$fieldName]['options'][$bean->$fieldName]];
             }
         );
 
-        return implode(", ", $displayFieldValues);
+        return \implode(", ", $displayFieldValues);
     }
 
     /**
@@ -228,7 +228,7 @@ class actionComputeField extends actionBase
 
         $relateFields = $this->getAllRelatedFields($bean);
 
-        for ($i = 0; $i < count($relationParameters); $i++) {
+        for ($i = 0; $i < \count($relationParameters); $i++) {
             $entity = null;
 
             if (isset($relateFields[$relationParameters[$i]]) &&
@@ -241,7 +241,7 @@ class actionComputeField extends actionBase
                     continue;
                 }
 
-                if (is_object($relatedEntityId)) {
+                if (\is_object($relatedEntityId)) {
                     // If this is a Link2 object then need to use the relationship
                     // - because it's a one to many relationship's 'one' side
                     $relationship = $relateFields[$relationParameters[$i]]['link'];
@@ -449,7 +449,7 @@ class actionComputeField extends actionBase
 					</div>
 				</fieldset>";
 
-        if (count($params) > 0) {
+        if (\count($params) > 0) {
             $parameters = $this->createJavascriptArrayFromParams($params, 'parameter');
             $parameterTypes = $this->createJavascriptArrayFromParams($params, 'parameterType');
             $formulas = $this->createJavascriptArrayFromParams($params, 'formula');
@@ -506,7 +506,7 @@ class actionComputeField extends actionBase
      */
     public function getModuleFieldsDropdown($bean)
     {
-        $moduleFields = json_decode(getModuleFields($bean->module_name, "JSON"), true);
+        $moduleFields = \json_decode(getModuleFields($bean->module_name, "JSON"), true);
         $optionsString = "";
 
         foreach ($moduleFields as $key => $value) {
@@ -544,7 +544,7 @@ class actionComputeField extends actionBase
         $optionsArray = array();
 
         foreach ($oneRelations as $oneRelation) {
-            if (isset($oneRelation['name']) && in_array($oneRelation['name'], $alreadyAddedLinks)) {
+            if (isset($oneRelation['name']) && \in_array($oneRelation['name'], $alreadyAddedLinks)) {
                 continue;
             }
 
@@ -566,12 +566,12 @@ class actionComputeField extends actionBase
         }
 
         foreach ($relateFields as $name => $relateField) {
-            if (isset($relateField['link']) && in_array($relateField['link'], $alreadyAddedLinks)) {
+            if (isset($relateField['link']) && \in_array($relateField['link'], $alreadyAddedLinks)) {
                 continue;
             }
 
             if (isset($relateField['group']) &&
-                in_array($relateFields[$relateField['group']]['link'], $alreadyAddedLinks)
+                \in_array($relateFields[$relateField['group']]['link'], $alreadyAddedLinks)
             ) {
                 continue;
             }
@@ -690,7 +690,7 @@ class actionComputeField extends actionBase
     {
         $options = "";
 
-        usort(
+        \usort(
             $optionsArray,
             function ($item1, $item2) {
                 $compareString1 = $item1['module'] . ' : ' . $item1['relation'];
@@ -727,7 +727,7 @@ class actionComputeField extends actionBase
     {
         $paramArray = $this->getArrayFromParams($params, $key);
 
-        return count($paramArray) == 0 ? "[]" : "['" . implode("', '", $paramArray) . "']";
+        return \count($paramArray) == 0 ? "[]" : "['" . \implode("', '", $paramArray) . "']";
     }
 
     /**
@@ -765,11 +765,11 @@ class actionComputeField extends actionBase
         $row = $db->fetchByAssoc($result);
 
         if ($row != null) {
-            if (strtolower($row['rhs_module']) == strtolower($module)) {
+            if (\strtolower($row['rhs_module']) == \strtolower($module)) {
                 return $row['lhs_module'];
             }
 
-            if (strtolower($row['lhs_module']) == strtolower($module)) {
+            if (\strtolower($row['lhs_module']) == \strtolower($module)) {
                 return $row['rhs_module'];
             }
         }

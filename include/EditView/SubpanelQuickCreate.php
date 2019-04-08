@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,14 +71,14 @@ class SubpanelQuickCreate
 
         // locate the best viewdefs to use: 1. custom/module/quickcreatedefs.php 2. module/quickcreatedefs.php 3. custom/module/editviewdefs.php 4. module/editviewdefs.php
         $base = 'modules/' . $module . '/metadata/';
-        $source = 'custom/' . $base . strtolower($view) . 'defs.php';
-        if (!file_exists($source)) {
-            $source = $base . strtolower($view) . 'defs.php';
-            if (!file_exists($source)) {
+        $source = 'custom/' . $base . \strtolower($view) . 'defs.php';
+        if (!\file_exists($source)) {
+            $source = $base . \strtolower($view) . 'defs.php';
+            if (!\file_exists($source)) {
                 //if our view does not exist default to EditView
                 $view = 'EditView';
                 $source = 'custom/' . $base . 'editviewdefs.php';
-                if (!file_exists($source)) {
+                if (!\file_exists($source)) {
                     $source = $base . 'editviewdefs.php';
                 }
             }
@@ -115,26 +115,26 @@ class SubpanelQuickCreate
         loadParentView('edit');
 
         $viewEditSource = 'modules/'.$module.'/views/view.edit.php';
-        if (file_exists('custom/'. $viewEditSource)) {
+        if (\file_exists('custom/'. $viewEditSource)) {
             $viewEditSource = 'custom/'. $viewEditSource;
         }
 
-        if (file_exists($viewEditSource) && !$proccessOverride) {
+        if (\file_exists($viewEditSource) && !$proccessOverride) {
             include($viewEditSource);
             $c = $module . 'ViewEdit';
 
             $customClass = 'Custom' . $c;
-            if (class_exists($customClass)) {
+            if (\class_exists($customClass)) {
                 $c = $customClass;
             }
 
-            if (class_exists($c)) {
+            if (\class_exists($c)) {
                 $view = new $c;
                 if ($view->useForSubpanel) {
                     $this->defaultProcess = false;
 
                     // Check if we should use the module's QuickCreate.tpl file.
-                    if ($view->useModuleQuickCreateTemplate && file_exists('modules/'.$module.'/tpls/QuickCreate.tpl')) {
+                    if ($view->useModuleQuickCreateTemplate && \file_exists('modules/'.$module.'/tpls/QuickCreate.tpl')) {
                         $this->ev->defs['templateMeta']['form']['headerTpl'] = 'modules/'.$module.'/tpls/QuickCreate.tpl';
                     }
 
@@ -167,7 +167,7 @@ class SubpanelQuickCreate
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($module, $view, $proccessOverride);
     }
@@ -207,14 +207,14 @@ class SubpanelQuickCreate
     public function getModuleViewDefsSourceFile($module, $view)
     {
         $base = 'modules/' . $module . '/metadata/';
-        $source = 'custom/' . $base . strtolower($view) . 'defs.php';
-        if (!file_exists($source)) {
-            $source = $base . strtolower($view) . 'defs.php';
-            if (!file_exists($source)) {
+        $source = 'custom/' . $base . \strtolower($view) . 'defs.php';
+        if (!\file_exists($source)) {
+            $source = $base . \strtolower($view) . 'defs.php';
+            if (!\file_exists($source)) {
                 //if our view does not exist default to EditView
                 $this->viewType = 'EditView';
                 $source = 'custom/' . $base . 'editviewdefs.php';
-                if (!file_exists($source)) {
+                if (!\file_exists($source)) {
                     $source = $base . 'editviewdefs.php';
                 }
             }

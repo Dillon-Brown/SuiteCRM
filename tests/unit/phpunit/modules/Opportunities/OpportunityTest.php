@@ -135,7 +135,7 @@ class OpportunityTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $opportunity = new Opportunity();
 
         $result = $opportunity->get_contacts();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testupdate_currency_id()
@@ -227,7 +227,7 @@ class OpportunityTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($opportunity->id));
-        $this->assertEquals(36, strlen($opportunity->id));
+        $this->assertEquals(36, \strlen($opportunity->id));
         $this->assertEquals(-99, $opportunity->currency_id);
         $this->assertEquals(30, $opportunity->probability);
 
@@ -344,7 +344,7 @@ class OpportunityTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $opportunity = new Opportunity();
 
         $result = $opportunity->get_account_detail('1');
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testgetCurrencyType()

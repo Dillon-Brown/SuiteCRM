@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -62,7 +62,7 @@ if (!is_admin($focus)) {
         global $modInvisList;
         if (!empty($tabs)) {
             foreach ($categories as $key => $value) {
-                if (!in_array($key, $tabs) && !in_array($key, $modInvisList)) {
+                if (!\in_array($key, $tabs) && !\in_array($key, $modInvisList)) {
                     unset($categories[$key]);
                 }
             }
@@ -72,7 +72,7 @@ if (!is_admin($focus)) {
     $names = array();
     $names = ACLAction::setupCategoriesMatrix($categories);
     if (!empty($names)) {
-        $tdwidth = 100 / sizeof($names);
+        $tdwidth = 100 / \sizeof($names);
     }
     $sugar_smarty->assign('APP', $app_list_strings);
     $sugar_smarty->assign('CATEGORIES', $categories);

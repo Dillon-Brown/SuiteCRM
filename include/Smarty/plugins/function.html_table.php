@@ -72,12 +72,12 @@ function smarty_function_html_table($params, &$smarty)
                 break;
 
             case 'cols':
-                if (is_array($_value) && !empty($_value)) {
+                if (\is_array($_value) && !empty($_value)) {
                     $cols = $_value;
-                    $cols_count = count($_value);
-                } elseif (!is_numeric($_value) && is_string($_value) && !empty($_value)) {
-                    $cols = explode(',', $_value);
-                    $cols_count = count($cols);
+                    $cols_count = \count($_value);
+                } elseif (!\is_numeric($_value) && \is_string($_value) && !empty($_value)) {
+                    $cols = \explode(',', $_value);
+                    $cols_count = \count($cols);
                 } elseif (!empty($_value)) {
                     $cols_count = (int)$_value;
                 } else {
@@ -106,14 +106,14 @@ function smarty_function_html_table($params, &$smarty)
         }
     }
 
-    $loop_count = count($loop);
+    $loop_count = \count($loop);
     if (empty($params['rows'])) {
         /* no rows specified */
-        $rows = ceil($loop_count/$cols_count);
+        $rows = \ceil($loop_count/$cols_count);
     } elseif (empty($params['cols'])) {
         if (!empty($params['rows'])) {
             /* no cols specified, but rows */
-            $cols_count = ceil($loop_count/$rows);
+            $cols_count = \ceil($loop_count/$rows);
         }
     }
 
@@ -123,8 +123,8 @@ function smarty_function_html_table($params, &$smarty)
         $output .= '<caption>' . $caption . "</caption>\n";
     }
 
-    if (is_array($cols)) {
-        $cols = ($hdir == 'right') ? $cols : array_reverse($cols);
+    if (\is_array($cols)) {
+        $cols = ($hdir == 'right') ? $cols : \array_reverse($cols);
         $output .= "<thead><tr>\n";
 
         for ($r=0; $r<$cols_count; $r++) {
@@ -144,7 +144,7 @@ function smarty_function_html_table($params, &$smarty)
             $x =  ($hdir == 'right') ? $rx+$c : $rx+$cols_count-1-$c;
             if ($inner!='cols') {
                 /* shuffle x to loop over rows*/
-                $x = floor($x/$cols_count) + ($x%$cols_count)*$rows;
+                $x = \floor($x/$cols_count) + ($x%$cols_count)*$rows;
             }
 
             if ($x<$loop_count) {
@@ -163,10 +163,10 @@ function smarty_function_html_table($params, &$smarty)
 
 function smarty_function_html_table_cycle($name, $var, $no)
 {
-    if (!is_array($var)) {
+    if (!\is_array($var)) {
         $ret = $var;
     } else {
-        $ret = $var[$no % count($var)];
+        $ret = $var[$no % \count($var)];
     }
     
     return ($ret) ? ' '.$ret : '';

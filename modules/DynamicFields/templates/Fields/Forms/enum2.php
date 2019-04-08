@@ -81,14 +81,14 @@
     
      global $app_list_strings;
      $my_list_strings = $app_list_strings;
-     $my_list_strings = array_merge($my_list_strings, $package_strings);
+     $my_list_strings = \array_merge($my_list_strings, $package_strings);
      foreach ($my_list_strings as $key=>$value) {
-         if (!is_array($value)) {
+         if (!\is_array($value)) {
              unset($my_list_strings[$key]);
          }
      }
-     $dropdowns = array_keys($my_list_strings);
-     sort($dropdowns);
+     $dropdowns = \array_keys($my_list_strings);
+     \sort($dropdowns);
      $default_dropdowns = array();
      if (!empty($vardef['options']) && !empty($my_list_strings[$vardef['options']])) {
          $default_dropdowns = $my_list_strings[$vardef['options']];

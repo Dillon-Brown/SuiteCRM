@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -77,17 +77,17 @@ class SugarWidgetSubPanelTopCreateTaskButton extends SugarWidgetSubPanelTopButto
             $defines['subpanelDiv'] = $this->subpanelDiv;
         }
 
-        $defines['parent_bean_name'] = get_class($defines['focus']);
+        $defines['parent_bean_name'] = \get_class($defines['focus']);
 
         $form = 'form' . $defines['child_module_name'];
-        $button = '<form onsubmit="return SUGAR.subpanelUtils.sendAndRetrieve(this.id, \'subpanel_' . strtolower($defines['subpanelDiv']) . '\', \'' . addslashes($app_strings['LBL_LOADING']) . '\');" action="index.php" method="post" name="form" id="form' . $form . "\">\n";
+        $button = '<form onsubmit="return SUGAR.subpanelUtils.sendAndRetrieve(this.id, \'subpanel_' . \strtolower($defines['subpanelDiv']) . '\', \'' . \addslashes($app_strings['LBL_LOADING']) . '\');" action="index.php" method="post" name="form" id="form' . $form . "\">\n";
 
         //module_button is used to override the value of module name
         $button .= "<input type='hidden' name='target_module' value='".$defines['child_module_name']."'>\n";
-        $button .= "<input type='hidden' name='".strtolower($defines['parent_bean_name'])."_id' value='".$defines['focus']->id."'>\n";
+        $button .= "<input type='hidden' name='".\strtolower($defines['parent_bean_name'])."_id' value='".$defines['focus']->id."'>\n";
 
         if (isset($defines['focus']->name)) {
-            $button .= "<input type='hidden' name='".strtolower($defines['parent_bean_name'])."_name' value='".$defines['focus']->name."'>";
+            $button .= "<input type='hidden' name='".\strtolower($defines['parent_bean_name'])."_name' value='".$defines['focus']->name."'>";
         }
 
         $button .= '<input type="hidden" name="to_pdf" value="true" />';

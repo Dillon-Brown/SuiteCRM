@@ -120,7 +120,7 @@ class ProspectTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $prospect = new Prospect();
 
         $result = $prospect->retrieveTargetList('', array('id', 'first_name'), 0, 1, 1, 0, 'Accounts');
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testretrieveTarget()

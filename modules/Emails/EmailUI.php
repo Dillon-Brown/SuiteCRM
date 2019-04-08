@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -103,7 +103,7 @@ class EmailUI
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -153,9 +153,9 @@ class EmailUI
         $qsd = QuickSearchDefaults::getQuickSearchDefaults();
         $qsd->setFormName('advancedSearchForm');
         $quicksearchAssignedUser = "if(typeof sqs_objects == 'undefined'){var sqs_objects = new Array;}";
-        $quicksearchAssignedUser .= "sqs_objects['advancedSearchForm_assigned_user_name']=" . json_encode($qsd->getQSUser()) . ";";
+        $quicksearchAssignedUser .= "sqs_objects['advancedSearchForm_assigned_user_name']=" . \json_encode($qsd->getQSUser()) . ";";
         $qsd->setFormName('Distribute');
-        $quicksearchAssignedUser .= "sqs_objects['Distribute_assigned_user_name']=" . json_encode($qsd->getQSUser()) . ";";
+        $quicksearchAssignedUser .= "sqs_objects['Distribute_assigned_user_name']=" . \json_encode($qsd->getQSUser()) . ";";
         $this->smarty->assign('quickSearchForAssignedUser', $quicksearchAssignedUser);
 
 
@@ -174,7 +174,7 @@ class EmailUI
         $this->smarty->assign('sugar_flavor', $sugar_flavor);
         $this->smarty->assign('current_language', $current_language);
         $this->smarty->assign('server_unique_key', $server_unique_key);
-        $this->smarty->assign('qcModules', json_encode($QCAvailableModules));
+        $this->smarty->assign('qcModules', \json_encode($QCAvailableModules));
         $extAllDebugValue = "ext-all.js";
         $this->smarty->assign('extFileName', $extAllDebugValue);
 
@@ -200,7 +200,7 @@ class EmailUI
         $this->smarty->assign('dateFormat', $cuDatePref['date']);
         $this->smarty->assign(
             'dateFormatExample',
-            str_replace(array("Y", "m", "d"), array("yyyy", "mm", "dd"), $cuDatePref['date'])
+            \str_replace(array("Y", "m", "d"), array("yyyy", "mm", "dd"), $cuDatePref['date'])
         );
         $this->smarty->assign('calFormat', $timedate->get_cal_date_format());
         $this->smarty->assign('TIME_FORMAT', $timedate->get_user_time_format());
@@ -291,7 +291,7 @@ class EmailUI
         ///////////////////////////////////////////////////////////////////////
         ////	EMAIL TEMPLATES
         $email_templates_arr = $this->getEmailTemplatesArray();
-        natcasesort($email_templates_arr);
+        \natcasesort($email_templates_arr);
         $this->smarty->assign('EMAIL_TEMPLATE_OPTIONS', get_select_options_with_id($email_templates_arr, ''));
         ////	END EMAIL TEMPLATES
         ///////////////////////////////////////////////////////////////////////
@@ -311,7 +311,7 @@ class EmailUI
         if (!empty($focusFolderSerial)) {
             $focusFolder = sugar_unserialize($focusFolderSerial);
             //$focusFolder['ieId'], $focusFolder['folder']
-            $preloadFolder .= json_encode($focusFolder) . ";";
+            $preloadFolder .= \json_encode($focusFolder) . ";";
         } else {
             $preloadFolder .= "new Object();";
         }
@@ -371,7 +371,7 @@ eoq;
         $divOut .= $this->smarty->fetch("modules/Emails/templates/addressSearchContent.tpl");
 
         $outData = array('jsData' => $javascriptOut, 'divData' => $divOut);
-        $out = json_encode($outData);
+        $out = \json_encode($outData);
 
         return $out;
     }
@@ -387,7 +387,7 @@ eoq;
         $QCModules = array();
 
         include('modules/Emails/metadata/qcmodulesdefs.php');
-        if (file_exists('custom/modules/Emails/metadata/qcmodulesdefs.php')) {
+        if (\file_exists('custom/modules/Emails/metadata/qcmodulesdefs.php')) {
             include('custom/modules/Emails/metadata/qcmodulesdefs.php');
         }
 
@@ -412,11 +412,11 @@ eoq;
      */
     public function generateComposePackageForQuickCreateFromComposeUrl($emailLinkUrl, $lazyLoad = false)
     {
-        $composeData = explode("&", $emailLinkUrl);
+        $composeData = \explode("&", $emailLinkUrl);
         $a_composeData = array();
         foreach ($composeData as $singleRequest) {
-            $tmp = explode("=", $singleRequest);
-            $a_composeData[$tmp[0]] = urldecode($tmp[1]);
+            $tmp = \explode("=", $singleRequest);
+            $a_composeData[$tmp[0]] = \urldecode($tmp[1]);
         }
 
         return $this->generateComposePackageForQuickCreate($a_composeData, $emailLinkUrl, $lazyLoad);
@@ -496,10 +496,10 @@ HTML;
         );
 
         // focus is set?
-        if (!is_object($myBean)) {
+        if (!\is_object($myBean)) {
             $GLOBALS['log']->warn('incorrect bean');
         } else {
-            if (is_array($emailField)) {
+            if (\is_array($emailField)) {
                 $emailFields = $emailField;
             } else {
                 $emailFields = array($emailField);
@@ -514,7 +514,7 @@ HTML;
                     $i++;
                     $emailField = 'email' . $i;
                 }
-                $emailFields = array_unique($emailFields);
+                $emailFields = \array_unique($emailFields);
             }
 
             foreach ($emailFields as $emailField) {
@@ -526,7 +526,7 @@ HTML;
                         $composeData['to_addrs'],
                         ''
                     );
-                } elseif (is_object($myBean) && (property_exists($myBean, $emailField))) {
+                } elseif (\is_object($myBean) && (\property_exists($myBean, $emailField))) {
                     $email_tick = $this->getEmailAddressConfirmOptInTick($myBean, $emailField);
                     $optOut = false;
                     $invalid = false;
@@ -603,7 +603,7 @@ HTML;
                             }
                         }
                     } else {
-                        $GLOBALS['log']->warn(get_class($myBean) . ' does not have email1 field');
+                        $GLOBALS['log']->warn(\get_class($myBean) . ' does not have email1 field');
                     }
                 }
             }
@@ -680,8 +680,8 @@ HTML;
         // which is delimeted by '.  Need to escape all single quotes and &, <, >
         // but not double quotes since json would escape them
         foreach ($composePackage as $key => $singleCompose) {
-            if (is_string($singleCompose)) {
-                $composePackage[$key] = str_replace("&nbsp;", " ", from_html($singleCompose));
+            if (\is_string($singleCompose)) {
+                $composePackage[$key] = \str_replace("&nbsp;", " ", from_html($singleCompose));
             }
         }
 
@@ -711,8 +711,8 @@ HTML;
         foreach ($disabled_parent_types as $disabled_parent_type) {
             unset($parent_types[$disabled_parent_type]);
         }
-        asort($parent_types);
-        $linkBeans = json_encode(get_select_options_with_id($parent_types, ''));
+        \asort($parent_types);
+        $linkBeans = \json_encode(get_select_options_with_id($parent_types, ''));
 
         //TinyMCE Config
         require_once("include/SugarTinyMCE.php");
@@ -722,8 +722,8 @@ HTML;
         //Generate Language Packs
         $lang = "var app_strings = new Object();\n";
         foreach ($app_strings as $k => $v) {
-            if (strpos($k, 'LBL_EMAIL_') !== false) {
-                $vJS = json_encode($v);
+            if (\strpos($k, 'LBL_EMAIL_') !== false) {
+                $vJS = \json_encode($v);
                 $lang .= "app_strings.{$k} = {$vJS};\n";
             }
         }
@@ -732,7 +732,7 @@ HTML;
         $email_mod_strings = return_module_language($current_language, 'Emails');
         $modStrings = "var mod_strings = new Object();\n";
         foreach ($email_mod_strings as $k => $v) {
-            $v = str_replace("'", "\'", $v);
+            $v = \str_replace("'", "\'", $v);
             $modStrings .= "mod_strings.{$k} = '{$v}';\n";
         }
         $lang .= "\n\n{$modStrings}\n";
@@ -741,7 +741,7 @@ HTML;
         $ieModStrings = "var ie_mod_strings = new Object();\n";
         $ie_mod_strings = return_module_language($current_language, 'InboundEmail');
         foreach ($ie_mod_strings as $k => $v) {
-            $v = str_replace("'", "\'", $v);
+            $v = \str_replace("'", "\'", $v);
             $ieModStrings .= "ie_mod_strings.{$k} = '{$v}';\n";
         }
         $lang .= "\n\n{$ieModStrings}\n";
@@ -757,11 +757,11 @@ HTML;
         //Signatures
         $defsigID = $current_user->getPreference('signature_default');
         $defaultSignature = $current_user->getDefaultSignature();
-        $sigJson = !empty($defaultSignature) ? json_encode(array($defaultSignature['id'] => from_html($defaultSignature['signature_html']))) : "new Object()";
+        $sigJson = !empty($defaultSignature) ? \json_encode(array($defaultSignature['id'] => from_html($defaultSignature['signature_html']))) : "new Object()";
         $this->smarty->assign('defaultSignature', $sigJson);
         $this->smarty->assign('signatureDefaultId', (isset($defaultSignature['id'])) ? $defaultSignature['id'] : "");
         //User Preferences
-        $this->smarty->assign('userPrefs', json_encode($this->getUserPrefsJS()));
+        $this->smarty->assign('userPrefs', \json_encode($this->getUserPrefsJS()));
 
         $useRequestedRecord = false;
         if (isset($_REQUEST['record']) && $_REQUEST['record'] && $_REQUEST['record'] != $current_user->id) {
@@ -775,7 +775,7 @@ HTML;
 
         $defaultSignature = $user->getDefaultSignature();
         $sigJson = !empty($defaultSignature) ?
-            json_encode(array($defaultSignature['id'] => from_html($defaultSignature['signature_html']))) :
+            \json_encode(array($defaultSignature['id'] => from_html($defaultSignature['signature_html']))) :
             'new Object()';
         $this->smarty->assign('defaultSignature', $sigJson);
         $this->smarty->assign(
@@ -785,7 +785,7 @@ HTML;
         //User Preferences
         $this->smarty->assign(
             'userPrefs',
-            json_encode($this->getUserPreferencesJS($useRequestedRecord))
+            \json_encode($this->getUserPreferencesJS($useRequestedRecord))
         );
 
         //Get the users default outbound id
@@ -793,7 +793,7 @@ HTML;
         $this->smarty->assign('defaultOutID', $defaultOutID);
 
         //Character Set
-        $charsets = json_encode($locale->getCharsetSelect());
+        $charsets = \json_encode($locale->getCharsetSelect());
         $this->smarty->assign('emailCharsets', $charsets);
 
         //Relateable List of People for address book search
@@ -809,8 +809,8 @@ HTML;
         global $app_list_strings, $app_strings;
         $filterPeopleTables['LBL_DROPDOWN_LIST_ALL'] = $app_strings['LBL_DROPDOWN_LIST_ALL'];
         foreach ($peopleTables as $table) {
-            $module = ucfirst($table);
-            $class = substr($module, 0, strlen($module) - 1);
+            $module = \ucfirst($table);
+            $class = \substr($module, 0, \strlen($module) - 1);
             require_once("modules/{$module}/{$class}.php");
             $person = new $class();
 
@@ -863,7 +863,7 @@ HTML;
         $oldContacts = $this->getContacts();
 
         foreach ($contacts as $cid => $contact) {
-            if (!in_array($contact['id'], $oldContacts)) {
+            if (!\in_array($contact['id'], $oldContacts)) {
                 $q = "INSERT INTO address_book (assigned_user_id, bean, bean_id) VALUES ('{$current_user->id}', '{$contact['module']}', '{$contact['id']}')";
                 $r = $this->db->query($q, true);
             }
@@ -913,7 +913,7 @@ HTML;
         $addresses = array();
 
         foreach ($obj as $k => $req) {
-            if (strpos($k, 'emailAddress') !== false) {
+            if (\strpos($k, 'emailAddress') !== false) {
                 $addresses[$k] = $req;
             }
         }
@@ -935,7 +935,7 @@ HTML;
         global $app_strings;
 
 
-        if (!class_exists("Contact")) {
+        if (!\class_exists("Contact")) {
         }
 
         $contact = new Contact();
@@ -1009,7 +1009,7 @@ HTML;
                 $union .= " UNION ALL ";
             }
 
-            $table = strtolower($module);
+            $table = \strtolower($module);
             $idsSerial = '';
 
             foreach ($contacts as $contact) {
@@ -1083,7 +1083,7 @@ HTML;
         }
 
         // subscribed accounts
-        $showFolders = sugar_unserialize(base64_decode($user->getPreference('showFolders', 'Emails')));
+        $showFolders = sugar_unserialize(\base64_decode($user->getPreference('showFolders', 'Emails')));
 
         // general settings
         $emailSettings = $user->getPreference('emailSettings', 'Emails');
@@ -1191,7 +1191,7 @@ HTML;
 
         $sortArray[$ieId][$focusFolder]['current']['sort'] = $sortBy;
         $sortArray[$ieId][$focusFolder]['current']['direction'] = $sortDir;
-        $sortSerial = serialize($sortArray);
+        $sortSerial = \serialize($sortArray);
         $current_user->setPreference('folderSortOrder', $sortSerial, '', 'Emails');
     }
 
@@ -1210,7 +1210,7 @@ HTML;
         }
 
         $folderStates[$focusFolder] = $focusFolderOpen;
-        $newFolderStateSerial = serialize($folderStates);
+        $newFolderStateSerial = \serialize($folderStates);
         $current_user->setPreference('folderOpenState', $newFolderStateSerial, '', 'Emails');
     }
 
@@ -1224,7 +1224,7 @@ HTML;
         $saveState = array();
         $saveState['ieId'] = $ieId;
         $saveState['folder'] = $folder;
-        $saveStateSerial = serialize($saveState);
+        $saveStateSerial = \serialize($saveState);
         $current_user->setPreference('focusFolder', $saveStateSerial, '', 'Emails');
     }
 
@@ -1234,22 +1234,22 @@ HTML;
     public function preflightEmailCache($cacheRoot)
     {
         // base
-        if (!file_exists($cacheRoot)) {
+        if (!\file_exists($cacheRoot)) {
             mkdir_recursive(clean_path($cacheRoot));
         }
 
         // folders
-        if (!file_exists($cacheRoot . "/folders")) {
+        if (!\file_exists($cacheRoot . "/folders")) {
             mkdir_recursive(clean_path("{$cacheRoot}/folders"));
         }
 
         // messages
-        if (!file_exists($cacheRoot . "/messages")) {
+        if (!\file_exists($cacheRoot . "/messages")) {
             mkdir_recursive(clean_path("{$cacheRoot}/messages"));
         }
 
         // attachments
-        if (!file_exists($cacheRoot . "/attachments")) {
+        if (!\file_exists($cacheRoot . "/attachments")) {
             mkdir_recursive(clean_path("{$cacheRoot}/attachments"));
         }
     }
@@ -1257,8 +1257,8 @@ HTML;
     public function deleteEmailCacheForFolders($cacheRoot)
     {
         $filePath = $cacheRoot . "/folders/folders.php";
-        if (file_exists($filePath)) {
-            unlink($filePath);
+        if (\file_exists($filePath)) {
+            \unlink($filePath);
         }
     }
     ///////////////////////////////////////////////////////////////////////////
@@ -1271,9 +1271,9 @@ HTML;
     {
         global $current_user;
 
-        $showFolders = sugar_unserialize(base64_decode($current_user->getPreference('showFolders', 'Emails')));
+        $showFolders = sugar_unserialize(\base64_decode($current_user->getPreference('showFolders', 'Emails')));
 
-        if (is_array($showFolders)) {
+        if (\is_array($showFolders)) {
             foreach ($showFolders as $ieId) {
                 if (!empty($ieId)) {
                     $ie->retrieve($ieId);
@@ -1310,7 +1310,7 @@ HTML;
         $rootNode->dynamicloadfunction = '';
         $rootNode->expanded = true;
         $rootNode->dynamic_load = true;
-        $showFolders = sugar_unserialize(base64_decode($user->getPreference('showFolders', 'Emails')));
+        $showFolders = sugar_unserialize(\base64_decode($user->getPreference('showFolders', 'Emails')));
 
         if (empty($showFolders)) {
             $showFolders = array();
@@ -1321,7 +1321,7 @@ HTML;
             $personals = $ie->retrieveByGroupId($user->id);
 
             foreach ($personals as $k => $personalAccount) {
-                if (in_array($personalAccount->id, $showFolders)) {
+                if (\in_array($personalAccount->id, $showFolders)) {
                     // check for cache value
                     $cacheRoot = sugar_cached("modules/Emails/{$personalAccount->id}");
                     $this->preflightEmailCache($cacheRoot);
@@ -1339,7 +1339,7 @@ HTML;
                     $acctNode->set_property('ieId', $personalAccount->id);
                     $acctNode->set_property('protocol', $personalAccount->protocol);
 
-                    if (array_key_exists('Home::' . $personalAccount->name, $this->folderStates)) {
+                    if (\array_key_exists('Home::' . $personalAccount->name, $this->folderStates)) {
                         if ($this->folderStates['Home::' . $personalAccount->name] == 'open') {
                             $acctNode->expanded = true;
                         }
@@ -1368,7 +1368,7 @@ HTML;
         // GROUP INBOX NODES
         $beans = $ie->retrieveAllByGroupId($user->id, false);
         foreach ($beans as $k => $groupAccount) {
-            if (in_array($groupAccount->id, $showFolders)) {
+            if (\in_array($groupAccount->id, $showFolders)) {
                 // check for cache value
                 $cacheRoot = sugar_cached("modules/Emails/{$groupAccount->id}");
                 $this->preflightEmailCache($cacheRoot);
@@ -1387,7 +1387,7 @@ HTML;
                 $acctNode->set_property('ieId', $groupAccount->id);
                 $acctNode->set_property('protocol', $groupAccount->protocol);
 
-                if (array_key_exists('Home::' . $groupAccount->name, $this->folderStates)) {
+                if (\array_key_exists('Home::' . $groupAccount->name, $this->folderStates)) {
                     if ($this->folderStates['Home::' . $groupAccount->name] == 'open') {
                         $acctNode->expanded = true;
                     }
@@ -1449,20 +1449,20 @@ HTML;
         global $sugar_config;
 
         // get unread counts
-        $exMbox = explode("::", $nodePath);
+        $exMbox = \explode("::", $nodePath);
         $unseen = 0;
         $GLOBALS['log']->debug("$key --- $nodePath::$label");
 
-        if (count($exMbox) >= 2) {
+        if (\count($exMbox) >= 2) {
             $mailbox = "";
-            for ($i = 2; $i < count($exMbox); $i++) {
+            for ($i = 2; $i < \count($exMbox); $i++) {
                 if ($mailbox != "") {
                     $mailbox .= ".";
                 }
                 $mailbox .= "{$exMbox[$i]}";
             }
 
-            $mailbox = substr($key, strpos($key, '.'));
+            $mailbox = \substr($key, \strpos($key, '.'));
 
             $unseen = $this->getUnreadCount($ie, $mailbox);
 
@@ -1478,7 +1478,7 @@ HTML;
         $node->set_property('labelStyle', "remoteFolder");
 
 
-        if (array_key_exists($nodePath, $this->folderStates)) {
+        if (\array_key_exists($nodePath, $this->folderStates)) {
             if ($this->folderStates[$nodePath] == 'open') {
                 $node->expanded = true;
             }
@@ -1494,7 +1494,7 @@ HTML;
         $node->set_property('unseen', $unseen);
         $node->set_property('cls', 'ieFolder');
 
-        if (is_array($mbox)) {
+        if (\is_array($mbox)) {
             foreach ($mbox as $k => $v) {
                 $node->add_node($this->buildTreeNode("$key.$k", $k, $v, $ieId, $nodePath, $isGroup, $ie));
             }
@@ -1547,30 +1547,30 @@ HTML;
         global $sugar_config;
         if ($ie->isPop3Protocol()) {
             // get the UIDL from database;
-            $cachedUIDL = md5($uid);
+            $cachedUIDL = \md5($uid);
             $cache = sugar_cached("modules/Emails/{$ie->id}/messages/{$ie->mailbox}{$cachedUIDL}.php");
         } else {
             $cache = sugar_cached("modules/Emails/{$ie->id}/messages/{$ie->mailbox}{$uid}.php");
         }
-        if (file_exists($cache)) {
+        if (\file_exists($cache)) {
             include($cache); // profides $cacheFile
-            $metaOut = unserialize($cacheFile['out']);
+            $metaOut = \unserialize($cacheFile['out']);
             $meta = $metaOut['meta']['email'];
             if (isset($meta['attachments'])) {
                 $attachmentHtmlData = $meta['attachments'];
                 $actualAttachmentInfo = array();
                 $this->parseAttachmentInfo($actualAttachmentInfo, $attachmentHtmlData);
-                if (sizeof($actualAttachmentInfo) > 0) {
+                if (\sizeof($actualAttachmentInfo) > 0) {
                     foreach ($actualAttachmentInfo as $key => $value) {
                         $info_vars = array();
-                        parse_str($value, $info_vars);
+                        \parse_str($value, $info_vars);
                         $fileName = $info_vars['tempName'];
                         $attachmentid = $info_vars['id'];
                         $guid = create_guid();
                         $destination = clean_path("{$this->userCacheDir}/{$guid}");
 
                         $attachmentFilePath = sugar_cached("modules/Emails/{$ie->id}/attachments/{$attachmentid}");
-                        copy($attachmentFilePath, $destination);
+                        \copy($attachmentFilePath, $destination);
                         $ret['attachments'][$guid] = array();
                         $ret['attachments'][$guid]['id'] = $guid . $fileName;
                         $ret['attachments'][$guid]['filename'] = $fileName;
@@ -1584,13 +1584,13 @@ HTML;
 
     public function parseAttachmentInfo(&$actualAttachmentInfo, $attachmentHtmlData)
     {
-        $downLoadPHP = strpos($attachmentHtmlData, "index.php?entryPoint=download&");
+        $downLoadPHP = \strpos($attachmentHtmlData, "index.php?entryPoint=download&");
         while ($downLoadPHP) {
-            $attachmentHtmlData = substr($attachmentHtmlData, $downLoadPHP + 30);
-            $final = strpos($attachmentHtmlData, "\">");
-            $actualAttachmentInfo[] = substr($attachmentHtmlData, 0, $final);
-            $attachmentHtmlData = substr($attachmentHtmlData, $final);
-            $downLoadPHP = strpos($attachmentHtmlData, "index.php?entryPoint=download&");
+            $attachmentHtmlData = \substr($attachmentHtmlData, $downLoadPHP + 30);
+            $final = \strpos($attachmentHtmlData, "\">");
+            $actualAttachmentInfo[] = \substr($attachmentHtmlData, 0, $final);
+            $attachmentHtmlData = \substr($attachmentHtmlData, $final);
+            $downLoadPHP = \strpos($attachmentHtmlData, "index.php?entryPoint=download&");
         } // while
     }
 
@@ -1628,10 +1628,10 @@ HTML;
         $emailAddress = array();
 
         // people
-        if (in_array($bean, $people)) {
+        if (\in_array($bean, $people)) {
             // lead specific
             $focus->lead_source = 'Email';
-            $focus->lead_source_description = trim($email->name);
+            $focus->lead_source_description = \trim($email->name);
 
             $from = (isset($email->from_name) && !empty($email->from_name)) ? $email->from_name : $email->from_addr;
 
@@ -1643,10 +1643,10 @@ HTML;
                 }
             }
 
-            $name = explode(" ", trim($from));
+            $name = \explode(" ", \trim($from));
 
-            $address = trim(array_pop($name));
-            $address = str_replace(array("<", ">", "&lt;", "&gt;"), "", $address);
+            $address = \trim(\array_pop($name));
+            $address = \str_replace(array("<", ">", "&lt;", "&gt;"), "", $address);
 
             isValidEmailAddress($address);
 
@@ -1661,21 +1661,21 @@ HTML;
             $focus->email1 = $address;
 
             if (!empty($name)) {
-                $focus->last_name = trim(array_pop($name));
+                $focus->last_name = \trim(\array_pop($name));
 
                 foreach ($name as $first) {
                     if (!empty($focus->first_name)) {
                         $focus->first_name .= " ";
                     }
-                    $focus->first_name .= trim($first);
+                    $focus->first_name .= \trim($first);
                 }
             }
         } else {
             // bugs, cases, tasks
-            $focus->name = trim($email->name);
+            $focus->name = \trim($email->name);
         }
 
-        $focus->description = trim(strip_tags($email->description));
+        $focus->description = \trim(\strip_tags($email->description));
         $focus->assigned_user_id = $current_user->id;
 
 
@@ -1719,7 +1719,7 @@ HTML;
         }
 
         //Get the module language for javascript
-        if (!is_file(sugar_cached('jsLanguage/') . $_REQUEST['qc_module'] . '/' . $GLOBALS['current_language'] . '.js')) {
+        if (!\is_file(sugar_cached('jsLanguage/') . $_REQUEST['qc_module'] . '/' . $GLOBALS['current_language'] . '.js')) {
             require_once('include/language/jsLanguage.php');
             jsLanguage::createModuleStringsCache($_REQUEST['qc_module'], $GLOBALS['current_language']);
         }
@@ -1734,7 +1734,7 @@ HTML;
         $EditView->defs['templateMeta']['form']['footerTpl'] = 'include/EditView/footer.tpl';
         $meta = array();
         $meta['html'] = $jsLanguage . $EditView->display(false, true);
-        $meta['html'] = str_replace(
+        $meta['html'] = \str_replace(
             "src='" . getVersionedPath('include/SugarEmailAddress/SugarEmailAddress.js') . "'",
             '',
             $meta['html']
@@ -1796,7 +1796,7 @@ HTML;
         $parent_types = $app_list_strings['record_type_display'];
         $smarty->assign('parentOptions', get_select_options_with_id($parent_types, $email->parent_type));
 
-        $quicksearch_js = '<script type="text/javascript" language="javascript">sqs_objects = ' . json_encode($sqs_objects) . '</script>';
+        $quicksearch_js = '<script type="text/javascript" language="javascript">sqs_objects = ' . \json_encode($sqs_objects) . '</script>';
         $smarty->assign('SQS', $quicksearch_js);
 
         $meta = array();
@@ -1838,7 +1838,7 @@ HTML;
         $smarty->assign("emailTitle", $title);
 
         // DEFAULT TO TEXT IF NO HTML CONTENT:
-        $html = trim(from_html($focus->description_html));
+        $html = \trim(from_html($focus->description_html));
         if (empty($html)) {
             $smarty->assign('SHOW_PLAINTEXT', 'true');
         } else {
@@ -1868,9 +1868,9 @@ HTML;
         $smarty->assign('TIME_START', $focus->time_start);
         $smarty->assign('FROM', $focus->from_addr);
         isValidEmailAddress($focus->from_addr);
-        $smarty->assign('TO', nl2br($focus->to_addrs));
-        $smarty->assign('CC', nl2br($focus->cc_addrs));
-        $smarty->assign('BCC', nl2br($focus->bcc_addrs));
+        $smarty->assign('TO', \nl2br($focus->to_addrs));
+        $smarty->assign('CC', \nl2br($focus->cc_addrs));
+        $smarty->assign('BCC', \nl2br($focus->bcc_addrs));
         $smarty->assign('CREATED_BY', $focus->created_by_name);
         $smarty->assign('MODIFIED_BY', $focus->modified_by_name);
         $smarty->assign('DATE_SENT_RECEIVED', $focus->date_sent_received);
@@ -1910,12 +1910,12 @@ HTML;
         }
 
         $attachments = '';
-        for ($i = 0; $i < count($notes_list); $i++) {
+        for ($i = 0; $i < \count($notes_list); $i++) {
             $the_note = $notes_list[$i];
             $attachments .= "<a href=\"index.php?entryPoint=download&id={$the_note->id}&type=Notes\">" . $the_note->name . "</a><br />";
             $focus->cid2Link($the_note->id, $the_note->file_mime_type);
         }
-        $smarty->assign('DESCRIPTION', nl2br($focus->description));
+        $smarty->assign('DESCRIPTION', \nl2br($focus->description));
         $smarty->assign('DESCRIPTION_HTML', from_html($focus->description_html));
         $smarty->assign("ATTACHMENTS", $attachments);
         ///////////////////////////////////////////////////////////////////////////////
@@ -1952,9 +1952,9 @@ HTML;
     {
         global $app_strings;
         $uids = $this->_cleanUIDList($uids);
-        $exUids = explode($app_strings['LBL_EMAIL_DELIMITER'], $uids);
+        $exUids = \explode($app_strings['LBL_EMAIL_DELIMITER'], $uids);
 
-        if (strpos($folder, 'sugar::') !== false) {
+        if (\strpos($folder, 'sugar::') !== false) {
             // dealing with a sugar email object, uids are GUIDs
             foreach ($exUids as $id) {
                 $email = new Email();
@@ -2019,7 +2019,7 @@ HTML;
                 $manipulated = array();
 
                 foreach ($overviews['retArr'] as $k => $overview) {
-                    if (in_array($overview->uid, $exUids)) {
+                    if (\in_array($overview->uid, $exUids)) {
                         switch ($type) {
                             case "unread":
                                 $overview->seen = 0;
@@ -2044,7 +2044,7 @@ HTML;
                 if (!empty($manipulated)) {
                     $ie->setCacheValue($ie->mailbox, array(), $manipulated);
                     /* now mark emails on email server */
-                    $ie->markEmails(implode(",", explode($app_strings['LBL_EMAIL_DELIMITER'], $uids)), $type);
+                    $ie->markEmails(\implode(",", \explode($app_strings['LBL_EMAIL_DELIMITER'], $uids)), $type);
                 }
             } // end not type == deleted
         }
@@ -2053,12 +2053,12 @@ HTML;
     public function doAssignment($distributeMethod, $ieid, $folder, $uids, $users)
     {
         global $app_strings;
-        $users = explode(",", $users);
-        $emailIds = explode($app_strings['LBL_EMAIL_DELIMITER'], $uids);
+        $users = \explode(",", $users);
+        $emailIds = \explode($app_strings['LBL_EMAIL_DELIMITER'], $uids);
         $out = "";
         if ($folder != 'sugar::Emails') {
             $emailIds = array();
-            $uids = explode($app_strings['LBL_EMAIL_DELIMITER'], $uids);
+            $uids = \explode($app_strings['LBL_EMAIL_DELIMITER'], $uids);
             $ie = new InboundEmail();
             $ie->retrieve($ieid);
             $messageIndex = 1;
@@ -2089,7 +2089,7 @@ HTML;
             } // for
         } // if
 
-        if (count($emailIds) > 0) {
+        if (\count($emailIds) > 0) {
             $this->doDistributionWithMethod($users, $emailIds, $distributeMethod);
         } // if
 
@@ -2112,7 +2112,7 @@ HTML;
         } elseif ($distributionMethod == 'leastBusy') {
             $this->distLeastBusy($users, $emailIds);
         } elseif ($distributionMethod == 'direct') {
-            if (count($users) > 1) {
+            if (\count($users) > 1) {
                 // only 1 user allowed in direct assignment
                 $error = 1;
             } else {
@@ -2133,7 +2133,7 @@ HTML;
         // check if we have a 'lastRobin'
         $lastRobin = $userIds[0];
         foreach ($mailIds as $k => $mailId) {
-            $userIdsKeys = array_flip($userIds); // now keys are values
+            $userIdsKeys = \array_flip($userIds); // now keys are values
             $thisRobinKey = $userIdsKeys[$lastRobin] + 1;
             if (!empty($userIds[$thisRobinKey])) {
                 $thisRobin = $userIds[$thisRobinKey];
@@ -2169,9 +2169,9 @@ HTML;
                 $a = $this->db->fetchByAssoc($r);
                 $counts[$id] = $a['c'];
             }
-            asort($counts); // lowest to highest
-            $countsKeys = array_flip($counts); // keys now the 'count of items'
-            $leastBusy = array_shift($countsKeys); // user id of lowest item count
+            \asort($counts); // lowest to highest
+            $countsKeys = \array_flip($counts); // keys now the 'count of items'
+            $leastBusy = \array_shift($countsKeys); // user id of lowest item count
             $email->assigned_user_id = $leastBusy;
             $email->status = 'unread';
             $email->save();
@@ -2214,7 +2214,7 @@ HTML;
     {
         global $sugar_config;
         $cacheFolderPath = sugar_cached("modules/Emails/{$ie->id}/folders");
-        if (!file_exists($cacheFolderPath)) {
+        if (!\file_exists($cacheFolderPath)) {
             mkdir_recursive($cacheFolderPath);
         }
         $this->writeCacheFile('robin', $lastRobin, $ie->id, 'folders', "robin.cache.php");
@@ -2235,11 +2235,11 @@ HTML;
         $filename = $_REQUEST['mbox'] . $_REQUEST['uid'] . ".php";
         $md5uidl = "";
         if ($ie->isPop3Protocol()) {
-            $md5uidl = md5($_REQUEST['uid']);
+            $md5uidl = \md5($_REQUEST['uid']);
             $filename = $_REQUEST['mbox'] . $md5uidl . ".php";
         } // if
 
-        if (isset($filename) && strpos($filename, "..") !== false) {
+        if (isset($filename) && \strpos($filename, "..") !== false) {
             die("Directory navigation attack denied.");
         }
 
@@ -2395,30 +2395,30 @@ eoq;
             $userEmails = array();
             $userEmailsMeta = $ea->getAddressesByGUID($current_user->id, 'Users');
             foreach ($userEmailsMeta as $emailMeta) {
-                $userEmails[] = from_html(strtolower(trim($emailMeta['email_address'])));
+                $userEmails[] = from_html(\strtolower(\trim($emailMeta['email_address'])));
             }
-            $fromAddr = from_html(strtolower(trim($email->from_addr)));
+            $fromAddr = from_html(\strtolower(\trim($email->from_addr)));
             isValidEmailAddress($fromAddr);
             $userEmails[] = $fromAddr;
 
             $ret['cc'] = from_html($email->cc_addrs);
             $toAddresses = from_html($toAddresses);
-            $to = str_replace($this->addressSeparators, "::", $toAddresses);
-            $exTo = explode("::", $to);
+            $to = \str_replace($this->addressSeparators, "::", $toAddresses);
+            $exTo = \explode("::", $to);
 
-            if (is_array($exTo)) {
+            if (\is_array($exTo)) {
                 foreach ($exTo as $addr) {
-                    $addr = strtolower(trim($addr));
-                    if (!in_array($addr, $userEmails)) {
+                    $addr = \strtolower(\trim($addr));
+                    if (!\in_array($addr, $userEmails)) {
                         if (!empty($ret['cc'])) {
                             $ret['cc'] = $ret['cc'] . ", ";
                         }
-                        $ret['cc'] = $ret['cc'] . trim($addr);
+                        $ret['cc'] = $ret['cc'] . \trim($addr);
                     }
                 }
             } elseif (!empty($exTo)) {
-                $exTo = trim($exTo);
-                if (!in_array($exTo, $userEmails)) {
+                $exTo = \trim($exTo);
+                if (!\in_array($exTo, $userEmails)) {
                     $ret['cc'] = $ret['cc'] . ", " . $exTo;
                 }
             }
@@ -2441,7 +2441,7 @@ eoq;
             case "reply":
             case "replyAll":
                 $header = $email->getReplyHeader();
-                if (!preg_match('/^(re:)+/i', $email->name)) {
+                if (!\preg_match('/^(re:)+/i', $email->name)) {
                     $email->name = "{$mod_strings['LBL_RE']} {$email->name}";
                 }
                 if ($type == "reply") {
@@ -2459,7 +2459,7 @@ eoq;
 
             case "forward":
                 $header = $email->getForwardHeader();
-                if (!preg_match('/^(fw:)+/i', $email->name)) {
+                if (!\preg_match('/^(fw:)+/i', $email->name)) {
                     $email->name = "{$mod_strings['LBL_FW']} {$email->name}";
                 }
                 $email->cc_addrs = "";
@@ -2474,16 +2474,16 @@ eoq;
                 $myCaseMacro = $myCase->getEmailSubjectMacro();
                 $email->parent_name = $myCase->name;
                 $GLOBALS['log']->debug("****Case # : {$myCase->case_number} macro: $myCaseMacro");
-                if (!strpos($email->name, str_replace('%1', $myCase->case_number, $myCaseMacro))) {
+                if (!\strpos($email->name, \str_replace('%1', $myCase->case_number, $myCaseMacro))) {
                     $GLOBALS['log']->debug("Replacing");
-                    $email->name = str_replace('%1', $myCase->case_number, $myCaseMacro) . ' ' . $email->name;
+                    $email->name = \str_replace('%1', $myCase->case_number, $myCaseMacro) . ' ' . $email->name;
                 }
                 $email->name = "{$mod_strings['LBL_RE']} {$email->name}";
                 break;
         }
 
-        $html = trim($email->description_html);
-        $plain = trim($email->description);
+        $html = \trim($email->description_html);
+        $plain = \trim($email->description);
 
         $desc = (!empty($html)) ? $html : $plain;
 
@@ -2527,8 +2527,8 @@ eoq;
 
 
         foreach ($peopleTables as $table) {
-            $module = ucfirst($table);
-            $class = substr($module, 0, strlen($module) - 1);
+            $module = \ucfirst($table);
+            $class = \substr($module, 0, \strlen($module) - 1);
             require_once("modules/{$module}/{$class}.php");
             $person = new $class();
             if (!$person->ACLAccess('list')) {
@@ -2608,7 +2608,7 @@ eoq;
                     }
                 }
                 if (!empty($q)) {
-                    $finalQuery .= implode("\n UNION ALL \n", $q);
+                    $finalQuery .= \implode("\n UNION ALL \n", $q);
                 }
             } else {
                 $finalQuery = $this->findEmailFromBeanIds('', $beanType, $whereArr);
@@ -2622,18 +2622,18 @@ eoq;
                 foreach ($searchBeans as $searchBean) {
                     if ($focus->load_relationship($searchBean)) {
                         $data = $focus->$searchBean->get();
-                        if (count($data) != 0) {
+                        if (\count($data) != 0) {
                             $q[] = '(' . $this->findEmailFromBeanIds($data, $searchBean, $whereArr) . ')';
                         }
                     }
                 }
                 if (!empty($q)) {
-                    $finalQuery .= implode("\n UNION ALL \n", $q);
+                    $finalQuery .= \implode("\n UNION ALL \n", $q);
                 }
             } else {
                 if ($focus->load_relationship($beanType)) {
                     $data = $focus->$beanType->get();
-                    if (count($data) != 0) {
+                    if (\count($data) != 0) {
                         $finalQuery = $this->findEmailFromBeanIds($data, $beanType, $whereArr);
                     }
                 }
@@ -2654,7 +2654,7 @@ eoq;
             foreach ($beanIds as $key => $value) {
                 $beanIds[$key] = '\'' . $value . '\'';
             }
-            $relatedIDs = implode(',', $beanIds);
+            $relatedIDs = \implode(',', $beanIds);
         }
 
         if ($beanType == 'accounts') {
@@ -2673,8 +2673,8 @@ eoq;
             $whereAdd .= "{$column} LIKE '{$clause}%'";
         }
         $table = $beanType;
-        $module = ucfirst($table);
-        $class = substr($module, 0, strlen($module) - 1);
+        $module = \ucfirst($table);
+        $class = \substr($module, 0, \strlen($module) - 1);
         require_once("modules/{$module}/{$class}.php");
         $person = new $class();
         if ($person->ACLAccess('list')) {
@@ -2727,10 +2727,10 @@ eoq;
         global $app_strings;
         $GLOBALS['log']->debug("_cleanUIDList: before - [ {$uids} ]");
 
-        if (!is_array($uids)) {
+        if (!\is_array($uids)) {
             $returnString = true;
 
-            $exUids = explode($app_strings['LBL_EMAIL_DELIMITER'], $uids);
+            $exUids = \explode($app_strings['LBL_EMAIL_DELIMITER'], $uids);
             $uids = $exUids;
         }
 
@@ -2739,10 +2739,10 @@ eoq;
             $cleanUids[$uid] = $uid;
         }
 
-        sort($cleanUids);
+        \sort($cleanUids);
 
         if ($returnString) {
-            $cleanImplode = implode($app_strings['LBL_EMAIL_DELIMITER'], $cleanUids);
+            $cleanImplode = \implode($app_strings['LBL_EMAIL_DELIMITER'], $cleanUids);
             $GLOBALS['log']->debug("_cleanUIDList: after - [ {$cleanImplode} ]");
 
             return $cleanImplode;
@@ -2831,8 +2831,8 @@ eoq;
             if ($row['folder_type'] == 'inbound') {
                 $parent_id = $row['id'];
             }
-            if (!in_array($row['folder_type'], $folder_types)) {
-                array_push($folder_types, $row['folder_type']);
+            if (!\in_array($row['folder_type'], $folder_types)) {
+                \array_push($folder_types, $row['folder_type']);
             }
             if (isset($params[$row['folder_type']])) {
                 unset($params[$row['folder_type']]);
@@ -2848,7 +2848,7 @@ eoq;
                 $parent_id = $folder->id;
 
                 // handle the case where inbound folder was deleted, but other folders exist
-                if (count($folder_types) != 0) {
+                if (\count($folder_types) != 0) {
                     // This update query will exclude inbound parent, and any custom created folders.
                     // For others, it will update their parent_id for the current user.
                     $q = "UPDATE folders SET parent_folder = '" . $parent_id .
@@ -2884,7 +2884,7 @@ eoq;
         $replacee = array("::TYPE::", "::STATUS::", "::USER_ID::");
         $replacer = array($type, $status, $userId);
 
-        $ret = str_replace($replacee, $replacer, $q);
+        $ret = \str_replace($replacee, $replacer, $q);
 
         if ($type == 'inbound') {
             $ret .= " AND status NOT IN ('sent', 'archived', 'draft') AND type NOT IN ('out', 'archived', 'draft')";
@@ -2901,14 +2901,14 @@ eoq;
     public function preflightUserCache()
     {
         $path = clean_path($this->userCacheDir);
-        if (!file_exists($this->userCacheDir)) {
+        if (!\file_exists($this->userCacheDir)) {
             mkdir_recursive($path);
         }
 
         $files = findAllFiles($path, array());
 
         foreach ($files as $file) {
-            unlink($file);
+            \unlink($file);
         }
     }
 
@@ -2918,11 +2918,11 @@ eoq;
         $cacheRoot = sugar_cached("modules/Emails/{$ieId}");
         $files = findAllFiles($cacheRoot . "/messages/", array());
         foreach ($files as $file) {
-            unlink($file);
+            \unlink($file);
         } // fn
         $files = findAllFiles($cacheRoot . "/attachments/", array());
         foreach ($files as $file) {
-            unlink($file);
+            \unlink($file);
         } // for
     } // fn
 
@@ -2986,15 +2986,15 @@ eoq;
         } // if
 
         //Check to make sure that the user has set the associated inbound email account -> outbound account is active.
-        $showFolders = sugar_unserialize(base64_decode($current_user->getPreference('showFolders', 'Emails')));
+        $showFolders = sugar_unserialize(\base64_decode($current_user->getPreference('showFolders', 'Emails')));
         $sf = new SugarFolder();
         $groupSubs = $sf->getSubscriptions($current_user);
 
         foreach ($ieAccountsFull as $k => $v) {
-            $personalSelected = (!empty($showFolders) && in_array($v->id, $showFolders));
+            $personalSelected = (!empty($showFolders) && \in_array($v->id, $showFolders));
 
             $allowOutboundGroupUsage = $v->get_stored_options('allow_outbound_group_usage', false);
-            $groupSelected = (in_array($v->groupfolder_id, $groupSubs) && $allowOutboundGroupUsage);
+            $groupSelected = (\in_array($v->groupfolder_id, $groupSubs) && $allowOutboundGroupUsage);
             $selected = ($personalSelected || $groupSelected);
 
             if (!$selected) {
@@ -3063,12 +3063,12 @@ eoq;
 
         //$toArray = array();
         if ($ret['type'] == "draft") {
-            $toArray = explode(",", $ret['from']);
+            $toArray = \explode(",", $ret['from']);
         } else {
             $toArray = $ie->email->email2ParseAddressesForAddressesOnly($ret['to']);
         } // else
         foreach ($ieAccountsFull as $k => $v) {
-            $storedOptions = unserialize(base64_decode($v->stored_options));
+            $storedOptions = \unserialize(\base64_decode($v->stored_options));
             if (array_search_insensitive($storedOptions['from_addr'], $toArray)) {
                 if ($v->is_personal) {
                     $foundInPersonalAccounts = true;
@@ -3101,7 +3101,7 @@ eoq;
         if (!empty($system->id)) {
             $admin = new Administration();
             $admin->retrieveSettings(); //retrieve all admin settings.
-            if (in_array(trim($return['email']), $toArray)) {
+            if (\in_array(\trim($return['email']), $toArray)) {
                 $foundInSystemAccounts = true;
             } // if
         } // if
@@ -3114,7 +3114,7 @@ eoq;
 
         $ieAccountsFrom = array();
         foreach ($ieAccountsFull as $k => $v) {
-            $storedOptions = unserialize(base64_decode($v->stored_options));
+            $storedOptions = \unserialize(\base64_decode($v->stored_options));
             $storedOptionsName = from_html($storedOptions['from_name']);
 
             $selected = false;
@@ -3171,7 +3171,7 @@ eoq;
      */
     public function arrayToXML($a, $paramName)
     {
-        if (!is_array($a)) {
+        if (!\is_array($a)) {
             return '';
         }
 
@@ -3180,12 +3180,12 @@ eoq;
 
         $ret = "";
 
-        for ($i = 0; $i < count($a); $i++) {
+        for ($i = 0; $i < \count($a); $i++) {
             $email = $a[$i];
             $ret .= "\n<{$paramName}>";
 
             foreach ($email as $k => $v) {
-                $ret .= "\n\t<{$k}>" . str_replace($bad, $good, $v) . "</{$k}>";
+                $ret .= "\n\t<{$k}>" . \str_replace($bad, $good, $v) . "</{$k}>";
             }
             $ret .= "\n</{$paramName}>";
         }
@@ -3204,12 +3204,12 @@ eoq;
 
         $ieAccountsFull = $ie->retrieveAllByGroupId($current_user->id);
         $ieAccountsShowOptionsMeta = array();
-        $showFolders = sugar_unserialize(base64_decode($current_user->getPreference('showFolders', 'Emails')));
+        $showFolders = sugar_unserialize(\base64_decode($current_user->getPreference('showFolders', 'Emails')));
 
         $defaultIEAccount = $ie->getUsersDefaultOutboundServerId($current_user);
 
         foreach ($ieAccountsFull as $k => $v) {
-            $selected = (!empty($showFolders) && in_array($v->id, $showFolders)) ? true : false;
+            $selected = (!empty($showFolders) && \in_array($v->id, $showFolders)) ? true : false;
             $default = ($defaultIEAccount == $v->id) ? true : false;
             $has_groupfolder = !empty($v->groupfolder_id) ? true : false;
             $type = ($v->is_personal) ? $mod_strings['LBL_MAILBOX_TYPE_PERSONAL'] : $mod_strings['LBL_MAILBOX_TYPE_GROUP'];
@@ -3235,10 +3235,10 @@ eoq;
             //Retrieve the related IE accounts.
             $relatedIEAccounts = $ie->retrieveByGroupFolderId($singleGroup['id']);
 
-            if (count($relatedIEAccounts) == 0) {
+            if (\count($relatedIEAccounts) == 0) {
                 $server_url = $app_strings['LBL_EMAIL_MULT_GROUP_FOLDER_ACCOUNTS_EMPTY'];
             } else {
-                if (count($relatedIEAccounts) == 1) {
+                if (\count($relatedIEAccounts) == 1) {
                     if ($relatedIEAccounts[0]->status != 'Active' || $relatedIEAccounts[0]->mailbox_type == 'bounce') {
                         continue;
                     }
@@ -3277,10 +3277,10 @@ eoq;
         //$ieAccountsShowOptions = "<option value=''>{$app_strings['LBL_NONE']}</option>\n";
         $ieAccountsShowOptionsMeta = array();
         $ieAccountsShowOptionsMeta[] = array("value" => "", "text" => $app_strings['LBL_NONE'], 'selected' => '');
-        $showFolders = sugar_unserialize(base64_decode($current_user->getPreference('showFolders', 'Emails')));
+        $showFolders = sugar_unserialize(\base64_decode($current_user->getPreference('showFolders', 'Emails')));
 
         foreach ($ieAccountsFull as $k => $v) {
-            if (!in_array($v->id, $showFolders)) {
+            if (!\in_array($v->id, $showFolders)) {
                 continue;
             }
             $group = (!$v->is_personal) ? $app_strings['LBL_EMAIL_GROUP'] . "." : "";
@@ -3334,7 +3334,7 @@ eoq;
         }
 
         $cacheFilePath = sugar_cached("modules/Emails/{$ieId}/{$type}/{$file}");
-        if (file_exists($cacheFilePath)) {
+        if (\file_exists($cacheFilePath)) {
             return true;
         }
 
@@ -3359,11 +3359,11 @@ eoq;
         $cacheFilePath = sugar_cached("modules/Emails/{$cleanIeId}/{$cleanType}/{$cleanFile}");
         $cacheFile = array();
 
-        if (file_exists($cacheFilePath)) {
+        if (\file_exists($cacheFilePath)) {
             include($cacheFilePath); // provides $cacheFile
 
             if (isset($cacheFile[$key])) {
-                $ret = unserialize($cacheFile[$key]);
+                $ret = \unserialize($cacheFile[$key]);
 
                 return $ret;
             }
@@ -3389,7 +3389,7 @@ eoq;
         $cacheFilePath = sugar_cached("modules/Emails/{$ieId}/{$type}/{$file}");
         $cacheFile = array();
 
-        if (file_exists($cacheFilePath)) {
+        if (\file_exists($cacheFilePath)) {
             include($cacheFilePath); // provides $cacheFile['timestamp']
 
             if (isset($cacheFile['timestamp'])) {
@@ -3416,11 +3416,11 @@ eoq;
         $cacheFilePath = sugar_cached("modules/Emails/{$ieId}/{$type}/{$file}");
         $cacheFile = array();
 
-        if (file_exists($cacheFilePath)) {
+        if (\file_exists($cacheFilePath)) {
             include($cacheFilePath); // provides $cacheFile['timestamp']
 
             if (isset($cacheFile['timestamp'])) {
-                $cacheFile['timestamp'] = strtotime('now');
+                $cacheFile['timestamp'] = \strtotime('now');
                 $GLOBALS['log']->debug("EMAILUI: setting updated timestamp [ {$cacheFile['timestamp']} ]");
 
                 return $this->_writeCacheFile($cacheFile, $cacheFilePath);
@@ -3445,10 +3445,10 @@ eoq;
         $cleanType = cleanDirName($type);
         $cleanFile = cleanFileName($file);
         $the_file = sugar_cached("modules/Emails/{$cleanIeId}/{$cleanType}/{$cleanFile}");
-        $timestamp = strtotime('now');
+        $timestamp = \strtotime('now');
         $array = array();
         $array['timestamp'] = $timestamp;
-        $array[$key] = serialize($var); // serialized since varexport_helper() can't handle PHP objects
+        $array[$key] = \serialize($var); // serialized since varexport_helper() can't handle PHP objects
 
         return $this->_writeCacheFile($array, $the_file);
     }
@@ -3466,15 +3466,15 @@ eoq;
 
         $arrayString = var_export_helper($array);
 
-        $date = date("r");
+        $date = \date("r");
         $the_string = <<<eoq
 <?php // created: {$date}
     \$cacheFile = {$arrayString};
 ?>
 eoq;
         if ($fh = @sugar_fopen($file, "w")) {
-            fputs($fh, $the_string);
-            fclose($fh);
+            \fputs($fh, $the_string);
+            \fclose($fh);
 
             return true;
         }
@@ -3513,7 +3513,7 @@ eoq;
             $resultsParam => $data['out']
         );
 
-        return json_encode($jsonOut);
+        return \json_encode($jsonOut);
     }
 
     /**
@@ -3566,19 +3566,19 @@ eoq;
     {
         global $mod_strings;
         $tempStr = $str . ',';
-        $tempStr = html_entity_decode($tempStr);
+        $tempStr = \html_entity_decode($tempStr);
         $tempStr = $this->unifyEmailString($tempStr);
         $defaultNum = 2;
         $pattern = '/@.*,/U';
-        preg_match_all($pattern, $tempStr, $matchs);
-        $totalCount = count($matchs[0]);
+        \preg_match_all($pattern, $tempStr, $matchs);
+        $totalCount = \count($matchs[0]);
 
         if (!empty($matchs[0]) && $totalCount > $defaultNum) {
-            $position = strpos($tempStr, $matchs[0][$defaultNum]);
+            $position = \strpos($tempStr, $matchs[0][$defaultNum]);
             $hiddenCount = $totalCount - $defaultNum;
-            $frontStr = substr($tempStr, 0, $position);
-            $backStr = substr($tempStr, $position, -1);
-            $str = htmlentities($frontStr) . '<a class="utilsLink" onclick="javascript: SUGAR.email2.detailView.displayAllAddrs(this);">...[' . $mod_strings['LBL_EMAIL_DETAIL_VIEW_SHOW'] . $hiddenCount . $mod_strings['LBL_EMAIL_DETAIL_VIEW_MORE'] . ']</a><span style="display: none;">' . htmlentities($backStr) . '</span>';
+            $frontStr = \substr($tempStr, 0, $position);
+            $backStr = \substr($tempStr, $position, -1);
+            $str = \htmlentities($frontStr) . '<a class="utilsLink" onclick="javascript: SUGAR.email2.detailView.displayAllAddrs(this);">...[' . $mod_strings['LBL_EMAIL_DETAIL_VIEW_SHOW'] . $hiddenCount . $mod_strings['LBL_EMAIL_DETAIL_VIEW_MORE'] . ']</a><span style="display: none;">' . \htmlentities($backStr) . '</span>';
         }
 
         return $str;
@@ -3592,13 +3592,13 @@ eoq;
      */
     public function unifyEmailString($str)
     {
-        preg_match_all('/@.*;/U', $str, $matches);
+        \preg_match_all('/@.*;/U', $str, $matches);
         if (!empty($matches[0])) {
             foreach ($matches[0] as $key => $value) {
-                $new[] = str_replace(";", ",", $value);
+                $new[] = \str_replace(";", ",", $value);
             }
 
-            return str_replace($matches[0], $new, $str);
+            return \str_replace($matches[0], $new, $str);
         }
 
         return $str;

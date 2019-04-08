@@ -49,7 +49,7 @@ use Api\V8\Param\ListViewColumnsParams;
 use ListViewFacade;
 use SuiteCRM\LangText;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -133,11 +133,11 @@ class ListViewService
         $displayColumns = ListViewFacade::getDisplayColumns($moduleName);
         $data = [];
         foreach ($displayColumns as $key => $column) {
-            $column = array_merge(self::$listViewColumnInterface, $column);
+            $column = \array_merge(self::$listViewColumnInterface, $column);
             $column['fieldName'] = $key; // get the vardef instead this "intuitive fieldName"
             $translated = $text->getText($column['label']);
             if (!$translated) {
-                $translated = $text->getText($bean->field_name_map[strtolower($key)]['vname']);
+                $translated = $text->getText($bean->field_name_map[\strtolower($key)]['vname']);
             }
             $column['label'] = $translated ? $translated : $column['label'];
             

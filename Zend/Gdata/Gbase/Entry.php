@@ -97,7 +97,7 @@ class Zend_Gdata_Gbase_Entry extends Zend_Gdata_Entry
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
 
-        if (strstr($absoluteNodeName, $this->lookupNamespace('g') . ':')) {
+        if (\strstr($absoluteNodeName, $this->lookupNamespace('g') . ':')) {
             $baseAttribute = new Zend_Gdata_Gbase_Extension_BaseAttribute();
             $baseAttribute->transferFromDOM($child);
             $this->_baseAttributes[] = $baseAttribute;
@@ -114,7 +114,7 @@ class Zend_Gdata_Gbase_Entry extends Zend_Gdata_Entry
     public function getItemType()
     {
         $itemType = $this->getGbaseAttribute('item_type');
-        if (is_object($itemType[0])) {
+        if (\is_object($itemType[0])) {
             return $itemType[0];
         } else {
             return null;
@@ -139,7 +139,7 @@ class Zend_Gdata_Gbase_Entry extends Zend_Gdata_Entry
     public function getGbaseAttribute($name)
     {
         $matches = array();
-        for ($i = 0; $i < count($this->_baseAttributes); $i++) {
+        for ($i = 0; $i < \count($this->_baseAttributes); $i++) {
             $baseAttribute = $this->_baseAttributes[$i];
             if ($baseAttribute->rootElement == $name &&
                 $baseAttribute->rootNamespaceURI == $this->lookupNamespace('g')) {

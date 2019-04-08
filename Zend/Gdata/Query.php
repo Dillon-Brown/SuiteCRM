@@ -84,13 +84,13 @@ class Zend_Gdata_Query
     {
         $queryArray = array();
         foreach ($this->_params as $name => $value) {
-            if (substr($name, 0, 1) == '_') {
+            if (\substr($name, 0, 1) == '_') {
                 continue;
             }
-            $queryArray[] = urlencode($name) . '=' . urlencode($value);
+            $queryArray[] = \urlencode($name) . '=' . \urlencode($value);
         }
-        if (count($queryArray) > 0) {
-            return '?' . implode('&', $queryArray);
+        if (\count($queryArray) > 0) {
+            return '?' . \implode('&', $queryArray);
         } else {
             return '';
         }
@@ -271,7 +271,7 @@ class Zend_Gdata_Query
      */
     public function getAlt()
     {
-        if (array_key_exists('alt', $this->_params)) {
+        if (\array_key_exists('alt', $this->_params)) {
             return $this->_params['alt'];
         } else {
             return null;
@@ -283,8 +283,8 @@ class Zend_Gdata_Query
      */
     public function getMaxResults()
     {
-        if (array_key_exists('max-results', $this->_params)) {
-            return intval($this->_params['max-results']);
+        if (\array_key_exists('max-results', $this->_params)) {
+            return \intval($this->_params['max-results']);
         } else {
             return null;
         }
@@ -295,7 +295,7 @@ class Zend_Gdata_Query
      */
     public function getQuery()
     {
-        if (array_key_exists('q', $this->_params)) {
+        if (\array_key_exists('q', $this->_params)) {
             return $this->_params['q'];
         } else {
             return null;
@@ -307,8 +307,8 @@ class Zend_Gdata_Query
      */
     public function getStartIndex()
     {
-        if (array_key_exists('start-index', $this->_params)) {
-            return intval($this->_params['start-index']);
+        if (\array_key_exists('start-index', $this->_params)) {
+            return \intval($this->_params['start-index']);
         } else {
             return null;
         }
@@ -319,7 +319,7 @@ class Zend_Gdata_Query
      */
     public function getUpdatedMax()
     {
-        if (array_key_exists('updated-max', $this->_params)) {
+        if (\array_key_exists('updated-max', $this->_params)) {
             return $this->_params['updated-max'];
         } else {
             return null;
@@ -331,7 +331,7 @@ class Zend_Gdata_Query
      */
     public function getUpdatedMin()
     {
-        if (array_key_exists('updated-min', $this->_params)) {
+        if (\array_key_exists('updated-min', $this->_params)) {
             return $this->_params['updated-min'];
         } else {
             return null;
@@ -343,7 +343,7 @@ class Zend_Gdata_Query
      */
     public function getPublishedMax()
     {
-        if (array_key_exists('published-max', $this->_params)) {
+        if (\array_key_exists('published-max', $this->_params)) {
             return $this->_params['published-max'];
         } else {
             return null;
@@ -355,7 +355,7 @@ class Zend_Gdata_Query
      */
     public function getPublishedMin()
     {
-        if (array_key_exists('published-min', $this->_params)) {
+        if (\array_key_exists('published-min', $this->_params)) {
             return $this->_params['published-min'];
         } else {
             return null;
@@ -367,7 +367,7 @@ class Zend_Gdata_Query
      */
     public function getAuthor()
     {
-        if (array_key_exists('author', $this->_params)) {
+        if (\array_key_exists('author', $this->_params)) {
             return $this->_params['author'];
         } else {
             return null;
@@ -395,9 +395,9 @@ class Zend_Gdata_Query
 
     public function __get($name)
     {
-        $method = 'get'.ucfirst($name);
-        if (method_exists($this, $method)) {
-            return call_user_func(array(&$this, $method));
+        $method = 'get'.\ucfirst($name);
+        if (\method_exists($this, $method)) {
+            return \call_user_func(array(&$this, $method));
         } else {
             require_once 'Zend/Gdata/App/Exception.php';
             throw new Zend_Gdata_App_Exception('Property ' . $name . '  does not exist');
@@ -406,9 +406,9 @@ class Zend_Gdata_Query
 
     public function __set($name, $val)
     {
-        $method = 'set'.ucfirst($name);
-        if (method_exists($this, $method)) {
-            return call_user_func(array(&$this, $method), $val);
+        $method = 'set'.\ucfirst($name);
+        if (\method_exists($this, $method)) {
+            return \call_user_func(array(&$this, $method), $val);
         } else {
             require_once 'Zend/Gdata/App/Exception.php';
             throw new Zend_Gdata_App_Exception('Property ' . $name . '  does not exist');

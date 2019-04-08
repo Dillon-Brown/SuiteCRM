@@ -60,7 +60,7 @@ function smarty_function_sugar_evalcolumn_old($params, &$smarty)
         return;
     }
 
-    if (is_array($params['var'])) {
+    if (\is_array($params['var'])) {
         foreach ($params['var'] as $key => $value) {
             $params['var'][$key] = searchReplace($value, $params['rowData']);
         }
@@ -82,13 +82,13 @@ function smarty_function_sugar_evalcolumn_old($params, &$smarty)
 
 function searchReplace($value, &$rowData)
 {
-    preg_match_all('/\{\$(.*)\}/U', $value, $matches);
+    \preg_match_all('/\{\$(.*)\}/U', $value, $matches);
 
-    for ($wp = 0; $wp < count($matches[0]); $wp++) {
+    for ($wp = 0; $wp < \count($matches[0]); $wp++) {
         if (isset($rowData[$matches[1][$wp]])) {
-            $value = str_replace($matches[0][$wp], $rowData[$matches[1][$wp]], $value);
+            $value = \str_replace($matches[0][$wp], $rowData[$matches[1][$wp]], $value);
         } else {
-            $value = str_replace($matches[0][$wp], '', $value);
+            $value = \str_replace($matches[0][$wp], '', $value);
         }
     }
     return $value;

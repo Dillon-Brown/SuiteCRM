@@ -149,7 +149,7 @@ class Resource extends ResourceIdentifier
     public function mergeAttributes(Resource $resource)
     {
         $resourceArray = $resource->toJsonApiResponse();
-        $this->attributes = array_merge($this->attributes, $resourceArray[self::ATTRIBUTES]);
+        $this->attributes = \array_merge($this->attributes, $resourceArray[self::ATTRIBUTES]);
     }
 
     /**
@@ -157,7 +157,7 @@ class Resource extends ResourceIdentifier
      */
     public function toJsonApiResponse()
     {
-        return $this->toJsonApiResponseWithFields(array_keys($this->attributes));
+        return $this->toJsonApiResponseWithFields(\array_keys($this->attributes));
     }
 
 
@@ -176,8 +176,8 @@ class Resource extends ResourceIdentifier
             if ($attribute === 'id') {
                 continue;
             }
-            if (in_array($attribute, $fields) === true) {
-                if (substr($attribute, -5) === "_file") {
+            if (\in_array($attribute, $fields) === true) {
+                if (\substr($attribute, -5) === "_file") {
                     $value = "<OMITTED>";
                 } else {
                     $value = $this->attributes[$attribute];
@@ -314,7 +314,7 @@ class Resource extends ResourceIdentifier
             // Filter security sensitive information from attributes
             if (
                 isset($sugar_config['filter_module_fields'][$this->type]) &&
-                in_array($attributeName, $sugar_config['filter_module_fields'][$this->type], true)
+                \in_array($attributeName, $sugar_config['filter_module_fields'][$this->type], true)
             ) {
                 continue;
             }

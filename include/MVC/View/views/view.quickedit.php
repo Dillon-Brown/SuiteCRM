@@ -1,6 +1,6 @@
 <?php
 //FILE SUGARCRM flav=pro || flav=sales
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -83,7 +83,7 @@ class ViewQuickedit extends ViewAjax
         if (!empty($_REQUEST['source_module']) && $_REQUEST['source_module'] != 'undefined' && !empty($_REQUEST['record'])) {
             $this->bean = loadBean($_REQUEST['source_module']);
             if ($this->bean instanceof SugarBean
-                    && !in_array($this->bean->object_name, array('EmailMan'))) {
+                    && !\in_array($this->bean->object_name, array('EmailMan'))) {
                 $this->bean->retrieve($_REQUEST['record']);
                 if (!empty($this->bean->id)) {
                     $_REQUEST['parent_id'] = $this->bean->id;
@@ -128,7 +128,7 @@ class ViewQuickedit extends ViewAjax
     {
         if (($this->bean instanceof SugarBean) && !$this->bean->ACLAccess('edit')) {
             $no_defs_js = '<script>SUGAR.ajaxUI.loadContent("index.php?module=' . $this->bean->module_dir . '&action=Noaccess&record=' . $this->bean->id.'")</script>';
-            echo json_encode(array('scriptOnly'=> $no_defs_js));
+            echo \json_encode(array('scriptOnly'=> $no_defs_js));
             return;
         }
 
@@ -137,38 +137,38 @@ class ViewQuickedit extends ViewAjax
 
         // locate the best viewdefs to use: 1. custom/module/quickcreatedefs.php 2. module/quickcreatedefs.php 3. custom/module/editviewdefs.php 4. module/editviewdefs.php
         $base = 'modules/' . $module . '/metadata/';
-        $source = 'custom/' . $base . strtolower($view) . 'defs.php';
-        if (!file_exists($source)) {
-            $source = $base . strtolower($view) . 'defs.php';
-            if (!file_exists($source)) {
+        $source = 'custom/' . $base . \strtolower($view) . 'defs.php';
+        if (!\file_exists($source)) {
+            $source = $base . \strtolower($view) . 'defs.php';
+            if (!\file_exists($source)) {
                 //if our view does not exist default to EditView
                 $view = 'EditView';
                 $source = 'custom/' . $base . 'editviewdefs.php';
-                if (!file_exists($source)) {
+                if (!\file_exists($source)) {
                     $source = $base . 'editviewdefs.php';
                 }
             }
         }
 
         // In some cases, the source file will not exist. In these cases, just navigate to the full form directly.
-        if (!file_exists($source)) {
+        if (!\file_exists($source)) {
             global $app_strings;
 
             //write out jscript that will get evaluated and redirect the browser window.
             $no_defs_js = '<script>SUGAR.ajaxUI.loadContent("index.php?return_module='.$this->bean->module_dir.'&module=' . $this->bean->module_dir . '&action=EditView&record=' . $this->bean->id.'")</script>';
 
             //reports is a special case as it does not have an edit view so navigate to wizard view
-            if (strtolower($module) == 'reports') {
+            if (\strtolower($module) == 'reports') {
                 $no_defs_js = '<script>SUGAR.ajaxUI.loadContent("index.php?return_module='.$this->bean->module_dir.'&module=' . $this->bean->module_dir . '&action=ReportsWizard&record=' . $this->bean->id.'")</script>';
             }
             //if this is not reports and there are no edit view files then go to detail view
-            elseif (!file_exists('custom/' . $base . 'editviewdefs.php') && !file_exists($base . 'editviewdefs.php')
-            && !file_exists('custom/modules/' . $module .'/EditView.php') && !file_exists('modules/' . $module .'/EditView.php')
+            elseif (!\file_exists('custom/' . $base . 'editviewdefs.php') && !\file_exists($base . 'editviewdefs.php')
+            && !\file_exists('custom/modules/' . $module .'/EditView.php') && !\file_exists('modules/' . $module .'/EditView.php')
             ) {
                 $no_defs_js = '<script>SUGAR.ajaxUI.loadContent("index.php?return_module='.$this->bean->module_dir.'&module=' . $this->bean->module_dir . '&action=DetailView&record=' . $this->bean->id.'")</script>';
             }
 
-            echo json_encode(array('scriptOnly'=> $no_defs_js));
+            echo \json_encode(array('scriptOnly'=> $no_defs_js));
 
             return;
         }
@@ -191,22 +191,22 @@ class ViewQuickedit extends ViewAjax
 
         //use module level view if available
         $editFileName = 'modules/'.$module.'/views/view.edit.php';
-        if (file_exists('custom/modules/'.$module.'/views/view.edit.php')) {
+        if (\file_exists('custom/modules/'.$module.'/views/view.edit.php')) {
             $editFileName = 'custom/modules/'.$module.'/views/view.edit.php';
         }
 
         $defaultProcess = true;
-        if (file_exists($editFileName)) {
+        if (\file_exists($editFileName)) {
             include_once $editFileName;
             $c = $module . 'ViewEdit';
 
-            if (class_exists($c)) {
+            if (\class_exists($c)) {
                 $view = new $c;
                 if ($view->useForSubpanel) {
                     $defaultProcess = false;
 
                     //Check if we should use the module's QuickCreate.tpl file
-                    if ($view->useModuleQuickCreateTemplate && file_exists('modules/'.$module.'/tpls/QuickCreate.tpl')) {
+                    if ($view->useModuleQuickCreateTemplate && \file_exists('modules/'.$module.'/tpls/QuickCreate.tpl')) {
                         $this->ev->defs['templateMeta']['form']['headerTpl'] = 'modules/'.$module.'/tpls/QuickCreate.tpl';
                     }
 
@@ -223,10 +223,10 @@ class ViewQuickedit extends ViewAjax
                     }
                     $view->ev->formName = 'form_DC'.$view->ev->view .'_'.$module;
                     $view->showTitle = false; // Do not show title since this is for subpanel
-                    ob_start();
+                    \ob_start();
                     $view->display();
-                    $captured =  ob_get_clean();
-                    echo json_encode(array('title'=> $this->bean->name, 'url'=>'index.php?module=' . $this->bean->module_dir . '&action=DetailView&record=' . $this->bean->id ,'html'=> $captured, 'eval'=>true));
+                    $captured =  \ob_get_clean();
+                    echo \json_encode(array('title'=> $this->bean->name, 'url'=>'index.php?module=' . $this->bean->module_dir . '&action=DetailView&record=' . $this->bean->id ,'html'=> $captured, 'eval'=>true));
                 }
             }
         }
@@ -236,8 +236,8 @@ class ViewQuickedit extends ViewAjax
             $form_name = 'form_DC'.$this->ev->view .'_'.$module;
             $this->ev->formName = $form_name;
             $this->ev->process(true, $form_name);
-            ob_clean();
-            echo json_encode(array('title'=> $this->bean->name, 'url'=>'index.php?module=' . $this->bean->module_dir . '&action=DetailView&record=' . $this->bean->id ,'html'=> $this->ev->display(false, true), 'eval'=>true));
+            \ob_clean();
+            echo \json_encode(array('title'=> $this->bean->name, 'url'=>'index.php?module=' . $this->bean->module_dir . '&action=DetailView&record=' . $this->bean->id ,'html'=> $this->ev->display(false, true), 'eval'=>true));
         }
     }
 

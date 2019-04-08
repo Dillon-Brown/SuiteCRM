@@ -335,8 +335,8 @@ class SecurityGroupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $result = $securityGroup->retrieveDefaultGroups();
 
         //verify that default group is created
-        $this->assertTrue(is_array($result));
-        $this->assertGreaterThan(0, count($result));
+        $this->assertTrue(\is_array($result));
+        $this->assertGreaterThan(0, \count($result));
 
         //execute removeDefaultGroup method for each default group
         foreach ($result as $key => $value) {
@@ -345,7 +345,7 @@ class SecurityGroupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //retrieve back and verify that default securith groups are deleted
         $result = $securityGroup->retrieveDefaultGroups();
-        $this->assertEquals(0, count($result));
+        $this->assertEquals(0, \count($result));
 
         //delete the security group as well for cleanup
         $securityGroup->mark_deleted($securityGroup->id);
@@ -405,9 +405,9 @@ class SecurityGroupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         );
 
         $actual = $securityGroup->getSecurityModules();
-        $actualKeys = array_keys($actual);
-        sort($expected);
-        sort($actualKeys);
+        $actualKeys = \array_keys($actual);
+        \sort($expected);
+        \sort($actualKeys);
         $this->assertSame($expected, $actualKeys);
     }
 
@@ -506,7 +506,7 @@ class SecurityGroupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $securityGroup->getUserSecurityGroups('1');
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testgetAllSecurityGroups()
@@ -521,7 +521,7 @@ class SecurityGroupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $securityGroup->getAllSecurityGroups();
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testgetMembers()
@@ -536,7 +536,7 @@ class SecurityGroupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $securityGroup->getMembers();
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testgetPrimaryGroupID()

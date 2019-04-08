@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -97,7 +97,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
          if (isset($GLOBALS['log'])) {
              $GLOBALS['log']->deprecated($deprecatedMessage);
          } else {
-             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+             \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
          }
          self::__construct($focus, $module, $type);
      }
@@ -113,17 +113,17 @@ if (!defined('sugarEntry') || !sugarEntry) {
      {
          $metadataFile = null;
          $foundViewDefs = false;
-         if (file_exists('custom/modules/' . $module. '/metadata/listviewdefs.php')) {
+         if (\file_exists('custom/modules/' . $module. '/metadata/listviewdefs.php')) {
              $metadataFile = 'custom/modules/' .  $module . '/metadata/listviewdefs.php';
              $foundViewDefs = true;
          } else {
-             if (file_exists('custom/modules/'. $module.'/metadata/metafiles.php')) {
+             if (\file_exists('custom/modules/'. $module.'/metadata/metafiles.php')) {
                  require_once('custom/modules/'. $module.'/metadata/metafiles.php');
                  if (!empty($metafiles[$module]['listviewdefs'])) {
                      $metadataFile = $metafiles[$module]['listviewdefs'];
                      $foundViewDefs = true;
                  }
-             } elseif (file_exists('modules/'. $module.'/metadata/metafiles.php')) {
+             } elseif (\file_exists('modules/'. $module.'/metadata/metafiles.php')) {
                  require_once('modules/'. $module.'/metadata/metafiles.php');
                  if (!empty($metafiles[$module]['listviewdefs'])) {
                      $metadataFile = $metafiles[$module]['listviewdefs'];
@@ -131,12 +131,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
                  }
              }
          }
-         if (!$foundViewDefs && file_exists('modules/'. $module.'/metadata/listviewdefs.php')) {
+         if (!$foundViewDefs && \file_exists('modules/'. $module.'/metadata/listviewdefs.php')) {
              $metadataFile = 'modules/'. $module.'/metadata/listviewdefs.php';
          }
          
          if ($metadataFile) {
-             if (!file_exists($metadataFile)) {
+             if (!\file_exists($metadataFile)) {
                  throw new Exception("Metadata file '$metadataFile' not found for module '$module'.");
              }
              require_once($metadataFile);
@@ -145,7 +145,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
          $displayColumns = array();
          if (!empty($listViewDefs)) {
              if (!empty($request['displayColumns'])) {
-                 foreach (explode('|', $_REQUEST['displayColumns']) as $num => $col) {
+                 foreach (\explode('|', $_REQUEST['displayColumns']) as $num => $col) {
                      if (!empty($listViewDefs[$module][$col])) {
                          $displayColumns[$col] = $listViewDefs[$module][$col];
                      }
@@ -166,7 +166,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
      public function build()
      {
          //we will assume that if the ListView.html file exists we will want to use that one
-         if (file_exists('modules/'.$this->module.'/ListView.html')) {
+         if (\file_exists('modules/'.$this->module.'/ListView.html')) {
              $this->type = 1;
              $this->lv = new ListView();
              $this->template = 'modules/'.$this->module.'/ListView.html';
@@ -208,11 +208,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
      public function display($title = '', $section = 'main', $return = false)
      {
          if ($this->type == 1) {
-             ob_start();
+             \ob_start();
              $this->lv->setHeaderTitle($title);
              $this->lv->processListView($this->focus, $section, $this->prefix);
-             $output = ob_get_contents();
-             ob_end_clean();
+             $output = \ob_get_contents();
+             \ob_end_clean();
          } else {
              $output = get_form_header($title, '', false) . $this->lv->display();
          }

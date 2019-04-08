@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -63,8 +63,8 @@ class ViewShowDuplicates extends SugarView
             sugar_die("Unauthorized access to this area.");
         }
 
-        parse_str($_SESSION['SHOW_DUPLICATES'], $_POST);
-        $post = array_map("securexss", $_POST);
+        \parse_str($_SESSION['SHOW_DUPLICATES'], $_POST);
+        $post = \array_map("securexss", $_POST);
         foreach ($post as $k => $v) {
             $_POST[$k] = $v;
         }
@@ -79,7 +79,7 @@ class ViewShowDuplicates extends SugarView
         $query = 'SELECT id, first_name, last_name, title FROM leads WHERE deleted=0 ';
 
         $duplicates = $_POST['duplicate'];
-        $count = count($duplicates);
+        $count = \count($duplicates);
         $db = DBManagerFactory::getInstance();
         if ($count > 0) {
             $query .= "and (";
@@ -183,7 +183,7 @@ class ViewShowDuplicates extends SugarView
 
         //Load the appropriate template
         $template = 'modules/Leads/tpls/ShowDuplicates.tpl';
-        if (file_exists('custom/' . $template)) {
+        if (\file_exists('custom/' . $template)) {
             $template = 'custom/' . $template;
         }
 

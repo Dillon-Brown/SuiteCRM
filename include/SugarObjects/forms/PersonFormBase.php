@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -75,17 +75,17 @@ abstract class PersonFormBase extends FormBase
         global $mod_strings;
         global $app_strings;
 
-        $newLinkLabel = 'LNK_NEW_' . strtoupper($this->objectName);
+        $newLinkLabel = 'LNK_NEW_' . \strtoupper($this->objectName);
     
-        $cols = sizeof($rows[0]) * 2 + 1;
+        $cols = \sizeof($rows[0]) * 2 + 1;
     
         if ($action != 'ShowDuplicates') {
-            $duplicateLabel = string_format($app_strings['MSG_DUPLICATE'], array(strtolower($this->objectName), $this->moduleName));
+            $duplicateLabel = string_format($app_strings['MSG_DUPLICATE'], array(\strtolower($this->objectName), $this->moduleName));
             $form = '<table width="100%"><tr><td>'.$duplicateLabel.'</td></tr><tr><td height="20"></td></tr></table>';
             $form .= "<form action='index.php' method='post' name='dup{$this->moduleName}'><input type='hidden' name='selected{$this->objectName}' value=''>";
             $form .= getPostToForm('/emailAddress(PrimaryFlag|OptOutFlag|InvalidFlag)?[0-9]*?$/', true);
         } else {
-            $duplicateLabel = string_format($app_strings['MSG_SHOW_DUPLICATES'], array(strtolower($this->objectName), $this->moduleName));
+            $duplicateLabel = string_format($app_strings['MSG_SHOW_DUPLICATES'], array(\strtolower($this->objectName), $this->moduleName));
             $form = '<table width="100%"><tr><td>'.$duplicateLabel.'</td></tr><tr><td height="20"></td></tr></table>';
         }
     
@@ -217,11 +217,11 @@ abstract class PersonFormBase extends FormBase
         $emails = array();
         $emailStr = '';
         while (isset($_POST["{$this->moduleName}{$count}emailAddress{$count}"])) {
-            $emailStr .= ",'" . strtoupper(trim($_POST["{$this->moduleName}{$count}emailAddress" . $count++])) . "'";
+            $emailStr .= ",'" . \strtoupper(\trim($_POST["{$this->moduleName}{$count}emailAddress" . $count++])) . "'";
         } //while
 
         if (!empty($emailStr)) {
-            $emailStr = substr($emailStr, 1);
+            $emailStr = \substr($emailStr, 1);
             $query = 'SELECT DISTINCT er.bean_id AS id FROM email_addr_bean_rel er, ' .
                  'email_addresses ea WHERE ea.id = er.email_address_id ' .
                  'AND ea.deleted = 0 AND er.deleted = 0 AND er.bean_module = \'' . $this->moduleName . '\' ' .

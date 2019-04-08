@@ -29,7 +29,7 @@ function display_field_lines($focus, $field, $value, $view)
 
     $html = '';
 
-    if (!is_file('cache/jsLanguage/AOR_Fields/' . $GLOBALS['current_language'] . '.js')) {
+    if (!\is_file('cache/jsLanguage/AOR_Fields/' . $GLOBALS['current_language'] . '.js')) {
         require_once('include/language/jsLanguage.php');
         jsLanguage::createModuleStringsCache('AOR_Fields', $GLOBALS['current_language']);
     }
@@ -46,13 +46,13 @@ function display_field_lines($focus, $field, $value, $view)
         $html .= "<input type=\"button\" tabindex=\"116\" class=\"button\" value=\"".$mod_strings['LBL_ADD_FIELD']."\" id=\"btn_FieldLine\" onclick=\"insertFieldLine()\" disabled/>";
         $html .= "</div>";
         $html .= "<script>";
-        $html .= "sort_by_values = \"".trim(preg_replace('/\s+/', ' ', get_select_options_with_id($app_list_strings['aor_sort_operator'], '')))."\";";
+        $html .= "sort_by_values = \"".\trim(\preg_replace('/\s+/', ' ', get_select_options_with_id($app_list_strings['aor_sort_operator'], '')))."\";";
         $html .= "</script>";
 
         if (isset($focus->report_module) && $focus->report_module != '') {
             require_once("modules/AOW_WorkFlow/aow_utils.php");
             $html .= "<script>";
-            $html .= "report_rel_modules = \"".trim(preg_replace('/\s+/', ' ', getModuleRelationships($focus->report_module)))."\";";
+            $html .= "report_rel_modules = \"".\trim(\preg_replace('/\s+/', ' ', getModuleRelationships($focus->report_module)))."\";";
             $html .= "report_module = \"".$focus->report_module."\";";
             $html .= "document.getElementById('btn_FieldLine').disabled = '';";
             if ($focus->id != '') {
@@ -62,13 +62,13 @@ function display_field_lines($focus, $field, $value, $view)
                 while ($row = $focus->db->fetchByAssoc($result)) {
                     $field_name = new AOR_Field();
                     $field_name->retrieve($row['id']);
-                    $field_name->module_path = unserialize(base64_decode($field_name->module_path));
-                    $html .= "report_fields = \"".trim(preg_replace('/\s+/', ' ', getModuleFields(getRelatedModule($focus->report_module, $field_name->module_path[0]))))."\";";
-                    $field_item = json_encode($field_name->toArray());
+                    $field_name->module_path = \unserialize(\base64_decode($field_name->module_path));
+                    $html .= "report_fields = \"".\trim(\preg_replace('/\s+/', ' ', getModuleFields(getRelatedModule($focus->report_module, $field_name->module_path[0]))))."\";";
+                    $field_item = \json_encode($field_name->toArray());
                     $html .= "loadFieldLine(".$field_item.");";
                 }
             }
-            $html .= "report_fields = \"".trim(preg_replace('/\s+/', ' ', getModuleFields($focus->report_module)))."\";";
+            $html .= "report_fields = \"".\trim(\preg_replace('/\s+/', ' ', getModuleFields($focus->report_module)))."\";";
             $html .= "</script>";
         }
     }

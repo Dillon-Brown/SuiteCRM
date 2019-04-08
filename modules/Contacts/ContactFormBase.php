@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -74,7 +74,7 @@ class ContactFormBase extends PersonFormBase
         // add team security
 
         $query .= ' where contacts.deleted = 0 AND ';
-        if (isset($_POST[$prefix.'first_name']) && strlen($_POST[$prefix.'first_name']) != 0 && isset($_POST[$prefix.'last_name']) && strlen($_POST[$prefix.'last_name']) != 0) {
+        if (isset($_POST[$prefix.'first_name']) && \strlen($_POST[$prefix.'first_name']) != 0 && isset($_POST[$prefix.'last_name']) && \strlen($_POST[$prefix.'last_name']) != 0) {
             $query .= " contacts.first_name LIKE '". $_POST[$prefix.'first_name'] . "%' AND contacts.last_name = '". $_POST[$prefix.'last_name'] ."'";
         } else {
             $query .= " contacts.last_name = '". $_POST[$prefix.'last_name'] ."'";
@@ -256,7 +256,7 @@ EOQ;
         //carry forward custom lead fields common to contacts during Lead Conversion
         $tempContact = $this->getContact();
 
-        if (method_exists($contact, 'convertCustomFieldsForm')) {
+        if (\method_exists($contact, 'convertCustomFieldsForm')) {
             $contact->convertCustomFieldsForm($form, $tempContact, $prefix);
         }
         unset($tempContact);
@@ -434,7 +434,7 @@ EOQ;
 
         $focus = $this->getContact();
 
-        if ($useRequired &&  !checkRequired($prefix, array_keys($focus->required_fields))) {
+        if ($useRequired &&  !checkRequired($prefix, \array_keys($focus->required_fields))) {
             return null;
         }
 
@@ -495,21 +495,21 @@ EOQ;
 
                 //add all of the post fields to redirect get string
                 foreach ($focus->column_fields as $field) {
-                    if (!empty($focus->$field) && !is_object($focus->$field)) {
-                        $get .= "&Contacts$field=".urlencode($focus->$field);
+                    if (!empty($focus->$field) && !\is_object($focus->$field)) {
+                        $get .= "&Contacts$field=".\urlencode($focus->$field);
                     }
                 }
 
                 foreach ($focus->additional_column_fields as $field) {
                     if (!empty($focus->$field)) {
-                        $get .= "&Contacts$field=".urlencode($focus->$field);
+                        $get .= "&Contacts$field=".\urlencode($focus->$field);
                     }
                 }
 
                 if ($focus->hasCustomFields()) {
                     foreach ($focus->field_defs as $name=>$field) {
                         if (!empty($field['source']) && $field['source'] == 'custom_fields') {
-                            $get .= "&Contacts$name=".urlencode($focus->$name);
+                            $get .= "&Contacts$name=".\urlencode($focus->$name);
                         }
                     }
                 }
@@ -533,21 +533,21 @@ EOQ;
                         $urlData[$var] = $_POST[$var];
                     }
                 }
-                $get .= "&".http_build_query($urlData);
+                $get .= "&".\http_build_query($urlData);
                 $_SESSION['SHOW_DUPLICATES'] = $get;
 
                 //now redirect the post to modules/Contacts/ShowDuplicates.php
                 if (!empty($_POST['is_ajax_call']) && $_POST['is_ajax_call'] == '1') {
-                    ob_clean();
+                    \ob_clean();
                     $json = getJSONobj();
                     echo $json->encode(array('status' => 'dupe', 'get' => $location));
                 } elseif (!empty($_REQUEST['ajax_load'])) {
                     echo "<script>SUGAR.ajaxUI.loadContent('index.php?$location');</script>";
                 } else {
                     if (!empty($_POST['to_pdf'])) {
-                        $location .= '&to_pdf='.urlencode($_POST['to_pdf']);
+                        $location .= '&to_pdf='.\urlencode($_POST['to_pdf']);
                     }
-                    header("Location: index.php?$location");
+                    \header("Location: index.php?$location");
                 }
                 return null;
             }
@@ -581,7 +581,7 @@ EOQ;
             $email->load_relationship('contacts');
             $email->contacts->add($focus->id);
 
-            header("Location: index.php?&module=Emails&action=EditView&type=out&inbound_email_id=".$_REQUEST['inbound_email_id']."&parent_id=".$email->parent_id."&parent_type=".$email->parent_type.'&start='.$_REQUEST['start'].'&assigned_user_id='.$current_user->id);
+            \header("Location: index.php?&module=Emails&action=EditView&type=out&inbound_email_id=".$_REQUEST['inbound_email_id']."&parent_id=".$email->parent_id."&parent_type=".$email->parent_type.'&start='.$_REQUEST['start'].'&assigned_user_id='.$current_user->id);
             exit();
         }
         ////	END INBOUND EMAIL HANDLING
@@ -628,7 +628,7 @@ EOQ;
                     $urlData[$var] = $_POST[$var];
                 }
             }
-            header("Location: index.php?".http_build_query($urlData));
+            \header("Location: index.php?".\http_build_query($urlData));
             return;
         }
 
@@ -642,28 +642,28 @@ EOQ;
     public function handleRedirect($return_id)
     {
         if (isset($_POST['return_module']) && $_POST['return_module'] != "") {
-            $return_module = urlencode($_POST['return_module']);
+            $return_module = \urlencode($_POST['return_module']);
         } else {
             $return_module = "Contacts";
         }
 
         if (isset($_POST['return_action']) && $_POST['return_action'] != "") {
             if ($_REQUEST['return_module'] == 'Emails') {
-                $return_action = urlencode($_REQUEST['return_action']);
+                $return_action = \urlencode($_REQUEST['return_action']);
             }
             // if we create a new record "Save", we want to redirect to the DetailView
             elseif ($_REQUEST['action'] == "Save" && $_REQUEST['return_module'] != "Home") {
                 $return_action = 'DetailView';
             } else {
                 // if we "Cancel", we go back to the list view.
-                $return_action = urlencode($_REQUEST['return_action']);
+                $return_action = \urlencode($_REQUEST['return_action']);
             }
         } else {
             $return_action = "DetailView";
         }
 
         if (isset($_POST['return_id']) && $_POST['return_id'] != "") {
-            $return_id = urlencode($_POST['return_id']);
+            $return_id = \urlencode($_POST['return_id']);
         }
 
         //eggsurplus Bug 23816: maintain VCR after an edit/save. If it is a duplicate then don't worry about it. The offset is now worthless.
@@ -675,7 +675,7 @@ EOQ;
         if (!empty($_REQUEST['ajax_load'])) {
             echo "<script>SUGAR.ajaxUI.loadContent('$redirect_url');</script>\n";
         } else {
-            header("Location: ". $redirect_url);
+            \header("Location: ". $redirect_url);
         }
     }
 

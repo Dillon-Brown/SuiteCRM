@@ -2,13 +2,13 @@
 
 //Grab the survey
 if (empty($_REQUEST['id'])) {
-    header("HTTP/1.0 404 Not Found");
+    \header("HTTP/1.0 404 Not Found");
     exit();
 }
 $surveyId = $_REQUEST['id'];
 $survey = BeanFactory::getBean('Surveys', $surveyId);
 if (empty($survey->id)) {
-    header("HTTP/1.0 404 Not Found");
+    \header("HTTP/1.0 404 Not Found");
     exit();
 }
 if ($survey->status == 'Closed') {
@@ -16,7 +16,7 @@ if ($survey->status == 'Closed') {
     exit();
 }
 if ($survey->status != 'Public') {
-    header("HTTP/1.0 404 Not Found");
+    \header("HTTP/1.0 404 Not Found");
     exit();
 }
 $contactId = $_REQUEST['contact'];
@@ -128,7 +128,7 @@ function displaySurvey($survey, $contactId, $trackerId)
         <input type="hidden" name="tracker" value="<?= $trackerId ?>">
         <?php
         $questions = $survey->get_linked_beans('surveys_surveyquestions', 'SurveyQuestions');
-    usort(
+    \usort(
             $questions,
             function ($a, $b) {
                 return $a->sort_order - $b->sort_order;

@@ -55,9 +55,9 @@ class SugarWebServiceUtilv4_1 extends SugarWebServiceUtilv4
         if (!empty($session_id)) {
 
             // only initialize session once in case this method is called multiple times
-            if (!session_id()) {
-                session_id($session_id);
-                session_start();
+            if (!\session_id()) {
+                \session_id($session_id);
+                \session_start();
             }
 
             if (!empty($_SESSION['is_valid_session']) && $this->is_valid_ip_address('ip_address') && $_SESSION['type'] == 'user') {
@@ -72,7 +72,7 @@ class SugarWebServiceUtilv4_1 extends SugarWebServiceUtilv4
             }
 
             $GLOBALS['log']->debug("calling destroy");
-            session_destroy();
+            \session_destroy();
         }
         LogicHook::initialize();
         $GLOBALS['logic_hook']->call_custom_logic('Users', 'login_failed');
@@ -92,7 +92,7 @@ class SugarWebServiceUtilv4_1 extends SugarWebServiceUtilv4
                     return true;
                 }
                 return false;
-            } elseif ($action == 'write' && strcmp(strtolower($module_name), 'users') == 0 && !$user->isAdminForModule($module_name)) {
+            } elseif ($action == 'write' && \strcmp(\strtolower($module_name), 'users') == 0 && !$user->isAdminForModule($module_name)) {
                 //rrs bug: 46000 - If the client is trying to write to the Users module and is not an admin then we need to stop them
                 return false;
             }
@@ -157,7 +157,7 @@ class SugarWebServiceUtilv4_1 extends SugarWebServiceUtilv4
                     }
                 }
                 //Users can't see other user's hashes
-                if (is_a($bean, 'User') && $current_user->id != $bean->id && isset($row['user_hash'])) {
+                if (\is_a($bean, 'User') && $current_user->id != $bean->id && isset($row['user_hash'])) {
                     $row['user_hash'] = "";
                 }
                 $row = clean_sensitive_data($bean->field_defs, $row);

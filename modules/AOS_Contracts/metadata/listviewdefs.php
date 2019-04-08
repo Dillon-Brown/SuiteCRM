@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -92,6 +92,6 @@ array(
   array(
     'width' => '5%',
     'label' => 'LBL_DATE_ENTERED',
-    'default' => preg_match('/^6\.?[2-9]/', $sugar_config['sugar_version']),
+    'default' => \preg_match('/^6\.?[2-9]/', $sugar_config['sugar_version']),
   ),
 );

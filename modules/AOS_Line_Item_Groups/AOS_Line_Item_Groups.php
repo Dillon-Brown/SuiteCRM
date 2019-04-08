@@ -56,7 +56,7 @@ class AOS_Line_Item_Groups extends AOS_Line_Item_Groups_sugar
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -65,7 +65,7 @@ class AOS_Line_Item_Groups extends AOS_Line_Item_Groups_sugar
     public function save_groups($post_data, $parent, $key = '')
     {
         $groups = array();
-        $group_count = isset($post_data[$key . 'group_number']) ? count($post_data[$key . 'group_number']) : 0;
+        $group_count = isset($post_data[$key . 'group_number']) ? \count($post_data[$key . 'group_number']) : 0;
         $j = 0;
         for ($i = 0; $i < $group_count; ++$i) {
             $postData = null;

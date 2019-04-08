@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -72,9 +72,9 @@ class SugarChartFactory
 
         $file = "include/SugarCharts/".$chartEngine."/".$chartEngine.$module.".php";
 
-        if (file_exists('custom/' . $file)) {
+        if (\file_exists('custom/' . $file)) {
             require_once('custom/' . $file);
-        } elseif (file_exists($file)) {
+        } elseif (\file_exists($file)) {
             require_once($file);
         } else {
             $GLOBALS['log']->debug("using default engine include/SugarCharts/".$defaultEngine."/".$defaultEngine.$module.".php");

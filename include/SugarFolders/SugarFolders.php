@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -356,11 +356,11 @@ class SugarFolder
         $cleanSubscriptions = array();
 
         // Remove the duplications
-        $subs = array_unique($subs);
+        $subs = \array_unique($subs);
 
         // Ensure parent folders are selected, regardless.
         foreach ($subs as $id) {
-            $id = trim($id);
+            $id = \trim($id);
             if (!empty($id)) {
                 $cleanSubscriptions[] = $id;
                 $queryChk = "SELECT parent_folder FROM folders WHERE id = " . $this->db->quoted($id);
@@ -410,7 +410,7 @@ class SugarFolder
         $r = $this->db->query($query);
         $a = $this->db->fetchByAssoc($r);
 
-        if (!in_array($id, $ret)) {
+        if (!\in_array($id, $ret)) {
             $ret[] = $id;
         }
 
@@ -515,7 +515,7 @@ class SugarFolder
         $start = ($page - 1) * $pageSize;
 
         $sort = (empty($sort)) ? $this->defaultSort : $sort;
-        if (!in_array(strtolower($direction), array('asc', 'desc'))) {
+        if (!\in_array(\strtolower($direction), array('asc', 'desc'))) {
             $direction = $this->defaultDirection;
         }
 
@@ -550,9 +550,9 @@ class SugarFolder
 
         while ($a = $this->db->fetchByAssoc($r)) {
             $temp = array();
-            $temp['flagged']   = (is_null($a['flagged']) || $a['flagged'] == '0') ? '' : 1;
-            $temp['status']    = (is_null($a['reply_to_status']) || $a['reply_to_status'] == '0') ? '' : 1;
-            $temp['from']      = preg_replace('/[\x00-\x08\x0B-\x1F]/', '', $a['from_addr']);
+            $temp['flagged']   = (\is_null($a['flagged']) || $a['flagged'] == '0') ? '' : 1;
+            $temp['status']    = (\is_null($a['reply_to_status']) || $a['reply_to_status'] == '0') ? '' : 1;
+            $temp['from']      = \preg_replace('/[\x00-\x08\x0B-\x1F]/', '', $a['from_addr']);
             $temp['subject']   = $a['name'];
             $temp['date']      = $this->timeDate->to_display_date_time($this->db->fromConvert($a['date_sent_received'], 'datetime'));
             $temp['uid']       = $a['id'];
@@ -562,7 +562,7 @@ class SugarFolder
             $temp['seen']      = ($a['status'] == 'unread') ? 0 : 1;
             $temp['type']      = $a['type'];
             $temp['hasAttach'] = $email->doesImportedEmailHaveAttachment($a['id']);
-            $temp['to_addrs']  = preg_replace('/[\x00-\x08\x0B-\x1F]/', '', $a['to_addrs']);
+            $temp['to_addrs']  = \preg_replace('/[\x00-\x08\x0B-\x1F]/', '', $a['to_addrs']);
             $return[] = $temp;
         }
 
@@ -590,7 +590,7 @@ class SugarFolder
         if ($this->is_dynamic) {
             $pattern = '/SELECT(.*?)(\s){1}FROM(\s){1}/is';  // ignores the case
             $replacement = 'SELECT count(*) c FROM ';
-            $modifiedSelectQuery = preg_replace($pattern, $replacement, $this->generateSugarsDynamicFolderQuery(), 1);
+            $modifiedSelectQuery = \preg_replace($pattern, $replacement, $this->generateSugarsDynamicFolderQuery(), 1);
 
             $res = $this->db->query(from_html($modifiedSelectQuery));
         } else {
@@ -623,7 +623,7 @@ class SugarFolder
         if ($this->is_dynamic) {
             $pattern = '/SELECT(.*?)(\s){1}FROM(\s){1}/is';  // ignores the case
             $replacement = 'SELECT count(*) c FROM ';
-            $modified_select_query = preg_replace($pattern, $replacement, $this->generateSugarsDynamicFolderQuery(), 1);
+            $modified_select_query = \preg_replace($pattern, $replacement, $this->generateSugarsDynamicFolderQuery(), 1);
             $r = $this->db->query(from_html($modified_select_query) . " AND emails.status = 'unread'");
         } else {
             // get items and iterate through them
@@ -755,7 +755,7 @@ class SugarFolder
         $subscriptions = $this->getSubscriptions($focusUser);
 
         foreach ($folders as $a) {
-            $a['selected'] = (in_array($a['id'], $subscriptions)) ? true : false;
+            $a['selected'] = (\in_array($a['id'], $subscriptions)) ? true : false;
             $a['origName'] = $a['name'];
 
             if ($a['is_group'] == 1) {
@@ -801,7 +801,7 @@ class SugarFolder
             $subscriptions = $this->getSubscriptions($focusUser);
 
             foreach ($folders as $a) {
-                $a['selected'] = (in_array($a['id'], $subscriptions)) ? true : false;
+                $a['selected'] = (\in_array($a['id'], $subscriptions)) ? true : false;
                 $a['origName'] = $a['name'];
 
                 if (isset($a['dynamic_query'])) {
@@ -884,7 +884,7 @@ class SugarFolder
      */
     public function getFoldersChildForSettings($a, $collection, $subscriptions)
     {
-        $a['selected'] = (in_array($a['id'], $subscriptions)) ? true : false;
+        $a['selected'] = (\in_array($a['id'], $subscriptions)) ? true : false;
         $a['origName'] = $a['name'];
 
         if (isset($a['dynamic_query'])) {
@@ -950,7 +950,7 @@ class SugarFolder
 
         $refresh = ($forRefresh) ? array() : null;
 
-        if (!is_array($folderStates)) {
+        if (!\is_array($folderStates)) {
             $folderStates = array();
         }
 
@@ -966,7 +966,7 @@ class SugarFolder
             $folderNode->dynamicloadfunction = '';
             $folderNode->expanded = false;
 
-            if (array_key_exists('Home::' . $a['id'], $folderStates)) {
+            if (\array_key_exists('Home::' . $a['id'], $folderStates)) {
                 if ($folderStates['Home::' . $a['id']] == 'open') {
                     $folderNode->expanded = true;
                 }
@@ -983,12 +983,12 @@ class SugarFolder
             $folderNode->set_property('folder_type', $a['folder_type']);
             $folderNode->set_property('children', array());
 
-            if (in_array($a['id'], $subscriptions) && $a['has_child'] == 1) {
+            if (\in_array($a['id'], $subscriptions) && $a['has_child'] == 1) {
                 $qGetChildren = $this->core . $this->coreWhere . "AND parent_folder = " . $this->db->quoted($a['id']);
                 $rGetChildren = $this->db->query($qGetChildren);
 
                 while ($aGetChildren = $this->db->fetchByAssoc($rGetChildren)) {
-                    if (in_array($aGetChildren['id'], $subscriptions)) {
+                    if (\in_array($aGetChildren['id'], $subscriptions)) {
                         $folderNode->add_node(
                             $this->buildTreeNodeFolders(
                                 $aGetChildren,
@@ -1001,7 +1001,7 @@ class SugarFolder
                 }
             }
 
-            if (is_null($rootNode)) {
+            if (\is_null($rootNode)) {
                 $guid = create_guid();
                 $label = 'Parent';
                 $rootNode = new ExtNode($guid, $label);
@@ -1052,7 +1052,7 @@ class SugarFolder
 
         if (!empty($folderNode->nodes)) {
             foreach ($folderNode->nodes as $node) {
-                if (in_array($node->_properties['id'], $subscriptions)) {
+                if (\in_array($node->_properties['id'], $subscriptions)) {
                     $metaNode['children'][] = $this->buildTreeNodeRefresh($node, $subscriptions);
                 }
             }
@@ -1085,7 +1085,7 @@ class SugarFolder
 
         $nodePath .= "::{$a['id']}";
 
-        if (array_key_exists($nodePath, $folderStates)) {
+        if (\array_key_exists($nodePath, $folderStates)) {
             if ($folderStates[$nodePath] == 'open') {
                 $folderNode->expanded = true;
             }
@@ -1106,7 +1106,7 @@ class SugarFolder
         $folderNode->set_property('unseen', $unseen);
         $folderNode->set_property('folder_type', $a['folder_type']);
 
-        if (in_array($a['id'], $subscriptions) && $a['has_child'] == 1) {
+        if (\in_array($a['id'], $subscriptions) && $a['has_child'] == 1) {
             $qGetChildren = $this->core . $this->coreWhere . "AND parent_folder = " . $this->db->quoted($a['id']) . $this->coreOrderBy;
             $rGetChildren = $this->db->query($qGetChildren);
 
@@ -1310,7 +1310,7 @@ class SugarFolder
         if ($this->has_child) {
             $childrenArray = array();
             $this->findAllChildren($id, $childrenArray);
-            if (in_array($parent_folder, $childrenArray)) {
+            if (\in_array($parent_folder, $childrenArray)) {
                 return array('status' => "failed", 'message' => "Can not add this folder to its children");
             }
         }

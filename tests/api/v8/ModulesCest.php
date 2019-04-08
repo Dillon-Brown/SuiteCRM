@@ -41,7 +41,7 @@ class ModulesCest
     {
         if (!$this->fakeData) {
             $this->fakeData = Faker\Factory::create();
-            $this->fakeDataSeed = rand(0, 2048);
+            $this->fakeDataSeed = \rand(0, 2048);
         }
         $this->fakeData->seed($this->fakeDataSeed);
     }
@@ -67,7 +67,7 @@ class ModulesCest
         $I->seeResponseCodeIs(200);
         $I->seeJsonApiContentNegotiation();
         $I->seeJsonAPISuccess();
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('meta', $response);
         $I->assertArrayHasKey('modules', $response['meta']);
         $I->assertNotEmpty($response['meta']['modules']);
@@ -93,7 +93,7 @@ class ModulesCest
         $I->sendJwtAuthorisation();
         $I->sendPOST(
             $I->getInstanceURL() . self::$ACCOUNT_RESOURCE,
-            json_encode(
+            \json_encode(
                 array(
                     'data' => array(
                     )
@@ -123,7 +123,7 @@ class ModulesCest
         $I->sendJwtAuthorisation();
         $I->sendPOST(
             $I->getInstanceURL() . self::$ACCOUNT_RESOURCE,
-            json_encode(
+            \json_encode(
                 array(
                     'data' => array(
                         'type' => 'Accounts',
@@ -155,7 +155,7 @@ class ModulesCest
         $I->sendJwtAuthorisation();
         $I->sendPOST(
             $I->getInstanceURL() . self::$ACCOUNT_RESOURCE,
-            json_encode(
+            \json_encode(
                 array(
                     'data' => array(
                         'type' => 'Accounts',
@@ -186,10 +186,10 @@ class ModulesCest
         $I->loginAsAdmin();
         $I->sendJwtAuthorisation();
         $I->sendJsonApiContentNegotiation();
-        $this->fakeData->seed(rand(0, 2148));
+        $this->fakeData->seed(\rand(0, 2148));
         $I->sendPOST(
             $I->getInstanceURL() . self::$ACCOUNT_RESOURCE,
-            json_encode(
+            \json_encode(
                 array(
                     'data' => array(
                         'id' => '',
@@ -203,7 +203,7 @@ class ModulesCest
         );
         $I->seeResponseCodeIs(201);
         $I->seeJsonApiContentNegotiation();
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $response);
         $I->assertArrayHasKey('links', $response);
         $I->assertArrayHasKey('self', $response['links']);
@@ -231,10 +231,10 @@ class ModulesCest
         $I->loginAsAdminWithClientCredentials();
         $I->sendJwtAuthorisation();
         $I->sendJsonApiContentNegotiation();
-        $this->fakeData->seed(rand(0, 2148));
+        $this->fakeData->seed(\rand(0, 2148));
         $I->sendPOST(
             $I->getInstanceURL() . self::$ACCOUNT_RESOURCE,
-            json_encode(
+            \json_encode(
                 array(
                     'data' => array(
                         'id' => '',
@@ -248,7 +248,7 @@ class ModulesCest
         );
         $I->seeResponseCodeIs(201);
         $I->seeJsonApiContentNegotiation();
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $response);
         $I->assertArrayHasKey('links', $response);
         $I->assertArrayHasKey('self', $response['links']);
@@ -279,10 +279,10 @@ class ModulesCest
         $I->loginAsAdmin();
         $I->sendJwtAuthorisation();
         $I->sendJsonApiContentNegotiation();
-        $this->fakeData->seed(rand(0, 2148));
+        $this->fakeData->seed(\rand(0, 2148));
         $I->sendPOST(
             $I->getInstanceURL() . self::$ACCOUNT_RESOURCE,
-            json_encode(
+            \json_encode(
                 array(
                     'data' => array(
                         'id' => self::$RECORD,
@@ -321,16 +321,16 @@ class ModulesCest
         $I->comment('Create a notes resource and attach binary a document');
         $filenameBinaryFile = 'testFile.png';
         $pathToBinaryFile = codecept_data_dir() . $filenameBinaryFile;
-        $binaryFile = file_get_contents($pathToBinaryFile);
+        $binaryFile = \file_get_contents($pathToBinaryFile);
         $binaryFileEncoded = '<OMITTED>';
 
         $I->loginAsAdmin();
         $I->sendJwtAuthorisation();
         $I->sendJsonApiContentNegotiation();
-        $this->fakeData->seed(rand(0, 2148));
+        $this->fakeData->seed(\rand(0, 2148));
 
 
-        $payload = json_encode(
+        $payload = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -356,7 +356,7 @@ class ModulesCest
         $I->seeResponseCodeIs(201);
         $I->seeJsonApiContentNegotiation();
         $I->seeJsonAPISuccess();
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $response);
         $I->assertArrayHasKey('type', $response['data']);
         $I->assertArrayHasKey('id', $response['data']);
@@ -370,7 +370,7 @@ class ModulesCest
         $I->seeResponseCodeIs(200);
         $I->seeJsonApiContentNegotiation();
         $I->seeJsonAPISuccess();
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $response);
         $I->assertArrayHasKey('type', $response['data']);
         $I->assertArrayHasKey('id', $response['data']);
@@ -406,20 +406,20 @@ class ModulesCest
         $I->comment('Create a notes resource and attach binary a document');
         $filenameBinaryFile = 'testFile.png';
         $pathToBinaryFile = codecept_data_dir().'/'.$filenameBinaryFile;
-        $binaryFile = file_get_contents($pathToBinaryFile);
+        $binaryFile = \file_get_contents($pathToBinaryFile);
         $binaryFileEncoded = '<OMITTED>';
 
         $I->loginAsAdmin();
         $I->sendJwtAuthorisation();
         $I->sendJsonApiContentNegotiation();
-        $this->fakeData->seed(rand(0, 2148));
+        $this->fakeData->seed(\rand(0, 2148));
 
         $document_name = $faker->name();
         // Publish date
         $active_datetime = new \DateTime();
         $active_date = $active_datetime->format(DATE_ATOM);
 
-        $payload = json_encode(
+        $payload = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -448,7 +448,7 @@ class ModulesCest
         $I->seeResponseCodeIs(201);
         $I->seeJsonApiContentNegotiation();
         $I->seeJsonAPISuccess();
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $response);
         $I->assertArrayHasKey('type', $response['data']);
         $I->assertArrayHasKey('id', $response['data']);
@@ -462,7 +462,7 @@ class ModulesCest
         $I->seeResponseCodeIs(200);
         $I->seeJsonApiContentNegotiation();
         $I->seeJsonAPISuccess();
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $response);
         $I->assertArrayHasKey('type', $response['data']);
         $I->assertArrayHasKey('id', $response['data']);
@@ -494,7 +494,7 @@ class ModulesCest
         $I->sendGET($I->getInstanceURL() . self::$ACCOUNT_RESOURCE .  '/' . self::$RECORD);
         $I->seeResponseCodeIs(200);
         $I->seeJsonAPISuccess();
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
 
         $I->assertArrayHasKey('data', $response);
         $I->assertArrayHasKey('id', $response['data']);
@@ -525,7 +525,7 @@ class ModulesCest
 
         $I->sendPATCH(
             $I->getInstanceURL() . self::$ACCOUNT_RESOURCE . '/' . self::$RECORD,
-            json_encode(
+            \json_encode(
                 array(
                     'data' => array(
                         'id' => self::$RECORD,
@@ -540,7 +540,7 @@ class ModulesCest
 
         $I->seeResponseCodeIs(200);
         $I->seeJsonAPISuccess();
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $response);
         $I->assertArrayHasKey('type', $response['data']);
         $I->assertArrayHasKey('id', $response['data']);
@@ -589,16 +589,16 @@ class ModulesCest
         $I->seeJsonApiContentNegotiation();
         $I->seeJsonAPISuccess();
 
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $response);
-        $I->assertTrue(is_array($response['data']));
+        $I->assertTrue(\is_array($response['data']));
 
         if (!empty($response['data'])) {
             $I->assertTrue(isset($response['data']['0']));
             $I->assertTrue(isset($response['data']['0']['id']));
             $I->assertTrue(isset($response['data']['0']['type']));
             $I->assertTrue(isset($response['data']['0']['attributes']));
-            $I->assertTrue(is_array($response['data']['0']['attributes']));
+            $I->assertTrue(\is_array($response['data']['0']['attributes']));
         }
 
         $I->assertArrayHasKey('links', $response);
@@ -630,16 +630,16 @@ class ModulesCest
         $I->seeJsonApiContentNegotiation();
         $I->seeJsonAPISuccess();
 
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $response);
-        $I->assertTrue(is_array($response['data']));
+        $I->assertTrue(\is_array($response['data']));
 
         if (!empty($response['data'])) {
             $I->assertTrue(isset($response['data']['0']));
             $I->assertTrue(isset($response['data']['0']['id']));
             $I->assertTrue(isset($response['data']['0']['type']));
             $I->assertTrue(isset($response['data']['0']['attributes']));
-            $I->assertTrue(is_array($response['data']['0']['attributes']));
+            $I->assertTrue(\is_array($response['data']['0']['attributes']));
         }
 
         $I->assertArrayHasKey('links', $response);
@@ -661,9 +661,9 @@ class ModulesCest
         $I->sendJwtAuthorisation();
         $I->sendJsonApiContentNegotiation();
 
-        $this->fakeData->seed(rand(0, 2148));
+        $this->fakeData->seed(\rand(0, 2148));
         // Create AOS_Product_Categories
-        $payloadProductCategory = json_encode(
+        $payloadProductCategory = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -681,12 +681,12 @@ class ModulesCest
         );
         // Validate response
         $I->seeResponseCodeIs(201);
-        $responseProductCategory = json_decode($I->grabResponse(), true);
+        $responseProductCategory = \json_decode($I->grabResponse(), true);
         self::$PRODUCT_CATEGORY_RECORD_ID = $responseProductCategory['data']['id'];
 
-        $this->fakeData->seed(rand(0, 2148));
+        $this->fakeData->seed(\rand(0, 2148));
         // Create AOS_Products and Relate to AOS_Product_Categories
-        $payload = json_encode(
+        $payload = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -714,7 +714,7 @@ class ModulesCest
         );
         // Validate response
         $I->seeResponseCodeIs(201);
-        $responseProduct = json_decode($I->grabResponse(), true);
+        $responseProduct = \json_decode($I->grabResponse(), true);
         self::$PRODUCT_RECORD_ID = $responseProduct['data']['id'];
     }
 
@@ -740,7 +740,7 @@ class ModulesCest
         // Verify that the objects have been created
         // Validate response
         $I->seeResponseCodeIs(200);
-        $responseProduct = json_decode($I->grabResponse(), true);
+        $responseProduct = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseProduct);
         $I->assertArrayHasKey('id', $responseProduct['data']);
         $I->assertNotEmpty($responseProduct['data']['id']);
@@ -767,8 +767,8 @@ class ModulesCest
         $I->sendJwtAuthorisation();
         $I->sendJsonApiContentNegotiation();
         // Create AOS_Product_Categories
-        $this->fakeData->seed(rand(0, 2148));
-        $payloadProductCategory = json_encode(
+        $this->fakeData->seed(\rand(0, 2148));
+        $payloadProductCategory = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -786,11 +786,11 @@ class ModulesCest
         );
         // Validate response
         $I->seeResponseCodeIs(201);
-        $responseProductCategory = json_decode($I->grabResponse(), true);
+        $responseProductCategory = \json_decode($I->grabResponse(), true);
         self::$PRODUCT_CATEGORY_RECORD_ID = $responseProductCategory['data']['id'];
 
         // Create AOS_Products and Relate to AOS_Product_Categories
-        $payload = json_encode(
+        $payload = \json_encode(
             array(
                 'data' => array(
                     'id' => self::$PRODUCT_CATEGORY_RECORD_ID,
@@ -809,7 +809,7 @@ class ModulesCest
 
         // Validate response
         $I->seeResponseCodeIs(200);
-        $responseProduct = json_decode($I->grabResponse(), true);
+        $responseProduct = \json_decode($I->grabResponse(), true);
 
         // Verify that the product category has changed
         $url =  $I->getInstanceURL() . self::$PRODUCT_RESOURCE . '/' .
@@ -820,7 +820,7 @@ class ModulesCest
             $url
         );
 
-        $responseProductCategories = json_decode($I->grabResponse(), true);
+        $responseProductCategories = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseProductCategories);
         $I->assertNotEmpty($responseProductCategories['data']);
         $I->assertArrayHasKey('id', $responseProductCategories['data']);
@@ -842,9 +842,9 @@ class ModulesCest
         $I->loginAsAdmin();
         $I->sendJwtAuthorisation();
         $I->sendJsonApiContentNegotiation();
-        $this->fakeData->seed(rand(0, 2148));
+        $this->fakeData->seed(\rand(0, 2148));
         // Create AOS_Product_Categories
-        $payloadProductCategory = json_encode(
+        $payloadProductCategory = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -862,11 +862,11 @@ class ModulesCest
         );
         // Validate response
         $I->seeResponseCodeIs(201);
-        $responseProductCategory = json_decode($I->grabResponse(), true);
+        $responseProductCategory = \json_decode($I->grabResponse(), true);
         self::$PRODUCT_CATEGORY_RECORD_ID = $responseProductCategory['data']['id'];
 
         // Create AOS_Products and Relate to AOS_Product_Categories
-        $payload = json_encode(
+        $payload = \json_encode(
             array(
                 'data' => array(
                     'id' => self::$PRODUCT_CATEGORY_RECORD_ID,
@@ -885,7 +885,7 @@ class ModulesCest
 
         // Validate response
         $I->seeResponseCodeIs(200);
-        $responseProduct = json_decode($I->grabResponse(), true);
+        $responseProduct = \json_decode($I->grabResponse(), true);
 
         // Verify that the product category has changed
         $url =  $I->getInstanceURL() . self::$PRODUCT_RESOURCE . '/' .
@@ -896,7 +896,7 @@ class ModulesCest
             $url
         );
 
-        $responseProductCategories = json_decode($I->grabResponse(), true);
+        $responseProductCategories = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseProductCategories);
         $I->assertNotEmpty($responseProductCategories['data']);
         $I->assertArrayHasKey('id', $responseProductCategories['data']);
@@ -919,7 +919,7 @@ class ModulesCest
         $I->sendJwtAuthorisation();
         $I->sendJsonApiContentNegotiation();
         // Clear AOS_Product_Categories relationship
-        $payload = json_encode(
+        $payload = \json_encode(
             array(
                 'data' => array()
             )
@@ -936,7 +936,7 @@ class ModulesCest
 
         // Validate response
         $I->seeResponseCodeIs(200);
-        $responseProduct = json_decode($I->grabResponse(), true);
+        $responseProduct = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseProduct);
 
         // Verify that the link has been deleted
@@ -944,7 +944,7 @@ class ModulesCest
             $url
         );
 
-        $responseProductCategories = json_decode($I->grabResponse(), true);
+        $responseProductCategories = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseProductCategories);
         $I->assertEmpty($responseProductCategories['data']);
     }
@@ -962,9 +962,9 @@ class ModulesCest
         $I->loginAsAdmin();
         $I->sendJwtAuthorisation();
         $I->sendJsonApiContentNegotiation();
-        $this->fakeData->seed(rand(0, 2148));
+        $this->fakeData->seed(\rand(0, 2148));
         // Create AOS_Product_Categories
-        $payloadProductCategory = json_encode(
+        $payloadProductCategory = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -982,11 +982,11 @@ class ModulesCest
         );
         // Validate response
         $I->seeResponseCodeIs(201);
-        $responseProductCategory = json_decode($I->grabResponse(), true);
+        $responseProductCategory = \json_decode($I->grabResponse(), true);
         self::$PRODUCT_CATEGORY_RECORD_ID = $responseProductCategory['data']['id'];
 
         // Create AOS_Products and Relate to AOS_Product_Categories
-        $payload = json_encode(
+        $payload = \json_encode(
             array(
                 'data' => array(
                     'id' => self::$PRODUCT_CATEGORY_RECORD_ID,
@@ -1018,7 +1018,7 @@ class ModulesCest
             $url
         );
 
-        $responseProductCategories = json_decode($I->grabResponse(), true);
+        $responseProductCategories = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseProductCategories);
         $I->assertEmpty($responseProductCategories['data']);
     }
@@ -1040,8 +1040,8 @@ class ModulesCest
 
         // Create Products of Product Categories
         // Create AOS_Product #1
-        $this->fakeData->seed(rand(0, 2148));
-        $payloadProduct1 = json_encode(
+        $this->fakeData->seed(\rand(0, 2148));
+        $payloadProduct1 = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -1061,12 +1061,12 @@ class ModulesCest
 
         // Validate response
         $I->seeResponseCodeIs(201);
-        $responseProduct1 = json_decode($I->grabResponse(), true);
+        $responseProduct1 = \json_decode($I->grabResponse(), true);
         self::$PRODUCT_CATEGORY_RELATED_RECORD_IDS[] = $responseProduct1['data']['id'];
 
         // Create AOS_Product #2
-        $this->fakeData->seed(rand(0, 2148));
-        $payloadProduct2 = json_encode(
+        $this->fakeData->seed(\rand(0, 2148));
+        $payloadProduct2 = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -1086,13 +1086,13 @@ class ModulesCest
 
         // Validate response
         $I->seeResponseCodeIs(201);
-        $responseProduct2 = json_decode($I->grabResponse(), true);
+        $responseProduct2 = \json_decode($I->grabResponse(), true);
         self::$PRODUCT_CATEGORY_RELATED_RECORD_IDS[] = $responseProduct2['data']['id'];
 
 
         // Create AOS_Product_Categories Parent
-        $this->fakeData->seed(rand(0, 2148));
-        $payloadProduct = json_encode(
+        $this->fakeData->seed(\rand(0, 2148));
+        $payloadProduct = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -1110,12 +1110,12 @@ class ModulesCest
         );
         // Validate response
         $I->seeResponseCodeIs(201);
-        $responseProductCategory = json_decode($I->grabResponse(), true);
+        $responseProductCategory = \json_decode($I->grabResponse(), true);
         self::$PRODUCT_CATEGORY_RECORD_ID = $responseProductCategory['data']['id'];
 
 
         // Relate to Parent AOS_Product_Categories with child AOS_Product_Categories
-        $payload = json_encode(
+        $payload = \json_encode(
             array(
                 'data' => array(
                     array(
@@ -1140,7 +1140,7 @@ class ModulesCest
         );
 
         // Validate response
-        $responseParentCategory = json_decode($I->grabResponse(), true);
+        $responseParentCategory = \json_decode($I->grabResponse(), true);
         $I->seeResponseCodeIs(200);
         $I->assertArrayHasKey('data', $responseParentCategory);
         $I->assertNotEmpty($responseParentCategory['data']);
@@ -1168,7 +1168,7 @@ class ModulesCest
         );
 
         $I->seeResponseCodeIs(200);
-        $responseProducts = json_decode($I->grabResponse(), true);
+        $responseProducts = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseProducts);
         $I->assertNotEmpty($responseProducts['data']);
 
@@ -1198,7 +1198,7 @@ class ModulesCest
         $I->sendJsonApiContentNegotiation();
         // Replace the relationships with just one of the related items
         // We should only see the the item we have posted in the responses
-        $payload = json_encode(
+        $payload = \json_encode(
             array(
                 'data' => array(
                     array(
@@ -1220,7 +1220,7 @@ class ModulesCest
 
         // Validate response
         $I->seeResponseCodeIs(200);
-        $responseParentCategory = json_decode($I->grabResponse(), true);
+        $responseParentCategory = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseParentCategory);
         $I->assertNotEmpty($responseParentCategory['data']);
 
@@ -1230,7 +1230,7 @@ class ModulesCest
         );
 
         $I->seeResponseCodeIs(200);
-        $responseProducts = json_decode($I->grabResponse(), true);
+        $responseProducts = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseProducts);
         $I->assertNotEmpty($responseProducts['data']);
         $I->assertCount(1, $responseProducts['data']);
@@ -1261,7 +1261,7 @@ class ModulesCest
 
         // Replace the relationships with just one of the related items
         // We should only see the the item we have posted in the responses
-        $payload = json_encode(
+        $payload = \json_encode(
             array(
                 'data' => array()
             )
@@ -1278,7 +1278,7 @@ class ModulesCest
 
         // Validate response
         $I->seeResponseCodeIs(200);
-        $responseParentCategory = json_decode($I->grabResponse(), true);
+        $responseParentCategory = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseParentCategory);
         $I->assertEmpty($responseParentCategory['data']);
 
@@ -1288,7 +1288,7 @@ class ModulesCest
         );
 
         $I->seeResponseCodeIs(200);
-        $responseProducts = json_decode($I->grabResponse(), true);
+        $responseProducts = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseProducts);
         $I->assertEmpty($responseProducts['data']);
     }
@@ -1310,8 +1310,8 @@ class ModulesCest
 
         // Create Products of Product Categories
         // Create AOS_Product #1
-        $this->fakeData->seed(rand(0, 2148));
-        $payloadProduct1 = json_encode(
+        $this->fakeData->seed(\rand(0, 2148));
+        $payloadProduct1 = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -1331,12 +1331,12 @@ class ModulesCest
 
         // Validate response
         $I->seeResponseCodeIs(201);
-        $responseProduct1 = json_decode($I->grabResponse(), true);
+        $responseProduct1 = \json_decode($I->grabResponse(), true);
         self::$PRODUCT_CATEGORY_RELATED_RECORD_IDS[] = $responseProduct1['data']['id'];
 
         // Create AOS_Product #2
-        $this->fakeData->seed(rand(0, 2148));
-        $payloadProduct2 = json_encode(
+        $this->fakeData->seed(\rand(0, 2148));
+        $payloadProduct2 = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -1356,13 +1356,13 @@ class ModulesCest
 
         // Validate response
         $I->seeResponseCodeIs(201);
-        $responseProduct2 = json_decode($I->grabResponse(), true);
+        $responseProduct2 = \json_decode($I->grabResponse(), true);
         self::$PRODUCT_CATEGORY_RELATED_RECORD_IDS[] = $responseProduct2['data']['id'];
 
 
         // Create AOS_Product_Categories Parent
-        $this->fakeData->seed(rand(0, 2148));
-        $payloadProduct = json_encode(
+        $this->fakeData->seed(\rand(0, 2148));
+        $payloadProduct = \json_encode(
             array(
                 'data' => array(
                     'id' => '',
@@ -1380,12 +1380,12 @@ class ModulesCest
         );
         // Validate response
         $I->seeResponseCodeIs(201);
-        $responseProductCategory = json_decode($I->grabResponse(), true);
+        $responseProductCategory = \json_decode($I->grabResponse(), true);
         self::$PRODUCT_CATEGORY_RECORD_ID = $responseProductCategory['data']['id'];
 
 
         // Relate to Parent AOS_Product_Categories with child AOS_Product_Categories
-        $payload = json_encode(
+        $payload = \json_encode(
             array(
                 'data' => array(
                     array(
@@ -1411,12 +1411,12 @@ class ModulesCest
 
         // Validate response
         $I->seeResponseCodeIs(200);
-        $responseParentCategory = json_decode($I->grabResponse(), true);
+        $responseParentCategory = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseParentCategory);
         $I->assertNotEmpty($responseParentCategory['data']);
 
         // Delete first product
-        $payloadDelete = json_encode(
+        $payloadDelete = \json_encode(
             array(
                 'data' => array(
                     array(
@@ -1442,7 +1442,7 @@ class ModulesCest
         );
 
         $I->seeResponseCodeIs(200);
-        $responseProducts = json_decode($I->grabResponse(), true);
+        $responseProducts = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $responseProducts);
         $I->assertNotEmpty($responseProducts['data']);
         $I->assertCount(1, $responseProducts['data']);

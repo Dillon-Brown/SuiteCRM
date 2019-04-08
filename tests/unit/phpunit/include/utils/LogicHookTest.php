@@ -62,7 +62,7 @@ class LogicHookTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $LogicHook = new LogicHook();
         $hook_map = $LogicHook->getHooksMap();
-        $this->assertTrue(is_array($hook_map));
+        $this->assertTrue(\is_array($hook_map));
     }
 
     public function testgetHooksList()
@@ -71,7 +71,7 @@ class LogicHookTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $LogicHook = new LogicHook();
         $hookscan = $LogicHook->getHooksList();
-        $this->assertTrue(is_array($hookscan));
+        $this->assertTrue(\is_array($hookscan));
     }
 
     public function testscanHooksDir()
@@ -177,7 +177,7 @@ class LogicHookTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $hookscan = $LogicHook->getHooksList();
 
 
-        if (file_exists('custom/modules/Accounts') && is_dir('custom/modules/Accounts')) {
+        if (\file_exists('custom/modules/Accounts') && \is_dir('custom/modules/Accounts')) {
             $this->assertSame($expected_hook_map, $hook_map);
             $this->assertSame($expected_hookscan, $hookscan);
         } else {
@@ -317,8 +317,8 @@ class LogicHookTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test with a valid module
         $accounts_hooks = $LogicHook->loadHooks('Accounts');
         if (
-            file_exists("custom/modules/Accounts/logic_hooks.php") ||
-            file_exists("custom/modules/Accounts/Ext/LogicHooks/logichooks.ext.php")
+            \file_exists("custom/modules/Accounts/logic_hooks.php") ||
+            \file_exists("custom/modules/Accounts/Ext/LogicHooks/logichooks.ext.php")
         ) {
             $this->assertSame($expected_accounts, $accounts_hooks);
         } else {
@@ -328,8 +328,8 @@ class LogicHookTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test with an invalid module, it will get the application hooks
         $default_hooks = $LogicHook->loadHooks('');
         if (
-            file_exists("custom/modules/logic_hooks.php") ||
-            file_exists("custom/application/Ext/LogicHooks/logichooks.ext.php")
+            \file_exists("custom/modules/logic_hooks.php") ||
+            \file_exists("custom/application/Ext/LogicHooks/logichooks.ext.php")
         ) {
             //$this->assertSame($expected_default, $default_hooks);
         } else {
@@ -479,8 +479,8 @@ class LogicHookTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test with refresh false/default
         $hooks = $LogicHook->getHooks('Accounts');
         if (
-            file_exists("custom/modules/Accounts/logic_hooks.php") ||
-            file_exists("custom/modules/Accounts/Ext/LogicHooks/logichooks.ext.php")
+            \file_exists("custom/modules/Accounts/logic_hooks.php") ||
+            \file_exists("custom/modules/Accounts/Ext/LogicHooks/logichooks.ext.php")
         ) {
             $this->assertEquals($expected, $hooks);
         } else {
@@ -490,8 +490,8 @@ class LogicHookTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test wit hrefresh true
         $hooks = $LogicHook->getHooks('Accounts', true);
         if (
-            file_exists("custom/modules/Accounts/logic_hooks.php") ||
-            file_exists("custom/modules/Accounts/Ext/LogicHooks/logichooks.ext.php")
+            \file_exists("custom/modules/Accounts/logic_hooks.php") ||
+            \file_exists("custom/modules/Accounts/Ext/LogicHooks/logichooks.ext.php")
         ) {
             $this->assertSame($expected, $hooks);
         } else {

@@ -44,7 +44,7 @@ $vardefs = array(
 ),
 
 'relationships'=>array(
-    strtolower($module).'_team_count_relationship' =>
+    \strtolower($module).'_team_count_relationship' =>
          array(
             'lhs_module'=> 'Teams',
             'lhs_table'=> 'team_sets',
@@ -54,7 +54,7 @@ $vardefs = array(
             'rhs_key' => 'team_set_id',
             'relationship_type'=>'one-to-many'
          ),
-    strtolower($module).'_teams' =>
+    \strtolower($module).'_teams' =>
         array(
             'lhs_module'        => $module,
             'lhs_table'         => $table_name,
@@ -70,7 +70,7 @@ $vardefs = array(
 ),
 'indices' => array(
         array(
-            'name' => 'idx_'.strtolower($table_name).'_tmst_id',
+            'name' => 'idx_'.\strtolower($table_name).'_tmst_id',
             'type' => 'index',
             'fields' => array('team_set_id')
         ),

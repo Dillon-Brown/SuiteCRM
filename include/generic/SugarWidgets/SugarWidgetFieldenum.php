@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -58,7 +58,7 @@ class SugarWidgetFieldEnum extends SugarWidgetReportField
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($layout_manager);
     }
@@ -79,7 +79,7 @@ class SugarWidgetFieldEnum extends SugarWidgetReportField
     public function queryFilteris($layout_def)
     {
         $input_name0 = $layout_def['input_name0'];
-        if (is_array($layout_def['input_name0'])) {
+        if (\is_array($layout_def['input_name0'])) {
             $input_name0 = $layout_def['input_name0'][0];
         }
         return $this->_get_column_select($layout_def)." = ".$this->reporter->db->quoted($input_name0)."\n";
@@ -88,7 +88,7 @@ class SugarWidgetFieldEnum extends SugarWidgetReportField
     public function queryFilteris_not($layout_def)
     {
         $input_name0 = $layout_def['input_name0'];
-        if (is_array($layout_def['input_name0'])) {
+        if (\is_array($layout_def['input_name0'])) {
             $input_name0 = $layout_def['input_name0'][0];
         }
         return $this->_get_column_select($layout_def)." <> ".$this->reporter->db->quoted($input_name0)."\n";
@@ -100,7 +100,7 @@ class SugarWidgetFieldEnum extends SugarWidgetReportField
         foreach ($layout_def['input_name0'] as $value) {
             $arr[] = $this->reporter->db->quoted($value);
         }
-        $str = implode(",", $arr);
+        $str = \implode(",", $arr);
         return $this->_get_column_select($layout_def)." IN (".$str.")\n";
     }
 
@@ -111,7 +111,7 @@ class SugarWidgetFieldEnum extends SugarWidgetReportField
             $arr[] = $this->reporter->db->quoted($value);
         }
         $reporter = $this->layout_manager->getAttribute("reporter");
-        $str = implode(",", $arr);
+        $str = \implode(",", $arr);
         return $this->_get_column_select($layout_def)." NOT IN (".$str.")\n";
     }
 
@@ -130,7 +130,7 @@ class SugarWidgetFieldEnum extends SugarWidgetReportField
             $name = $layout_def['name'];
             $layout_def['name'] = 'id';
             $key = $this->_get_column_alias($layout_def);
-            $key = strtoupper($key);
+            $key = \strtoupper($key);
 
             //If the key isn't in the layout fields, skip it
             if (!empty($layout_def['fields'][$key])) {
@@ -160,7 +160,7 @@ class SugarWidgetFieldEnum extends SugarWidgetReportField
         if (!empty($layout_def['table_key']) &&(empty($field_def['fields']) || empty($field_def['fields'][0]) || empty($field_def['fields'][1]))) {
             $value = $this->_get_list_value($layout_def);
         } elseif (!empty($layout_def['name']) && !empty($layout_def['fields'])) {
-            $key = strtoupper($layout_def['name']);
+            $key = \strtoupper($layout_def['name']);
             $value = $layout_def['fields'][$key];
         }
         $cell = '';
@@ -177,18 +177,18 @@ class SugarWidgetFieldEnum extends SugarWidgetReportField
             $list = $field_def['function']();
             $cell = $list[$value];
         }
-        if (is_array($cell)) {
+        if (\is_array($cell)) {
 
             //#22632
             $value = unencodeMultienum($value);
             $cell=array();
             foreach ($value as $val) {
                 $returnVal = translate($field_def['options'], $field_def['module'], $val);
-                if (!is_array($returnVal)) {
-                    array_push($cell, translate($field_def['options'], $field_def['module'], $val));
+                if (!\is_array($returnVal)) {
+                    \array_push($cell, translate($field_def['options'], $field_def['module'], $val));
                 }
             }
-            $cell = implode(", ", $cell);
+            $cell = \implode(", ", $cell);
         }
         return $cell;
     }
@@ -226,11 +226,11 @@ class SugarWidgetFieldEnum extends SugarWidgetReportField
         global $app_list_strings;
 
         if (!empty($layout_def['remove_blank']) && $layout_def['remove_blank']) {
-            if (isset($layout_def['options']) &&  is_array($layout_def['options'])) {
+            if (isset($layout_def['options']) &&  \is_array($layout_def['options'])) {
                 $ops = $layout_def['options'];
             } elseif (isset($layout_def['options']) && isset($app_list_strings[$layout_def['options']])) {
                 $ops = $app_list_strings[$layout_def['options']];
-                if (array_key_exists('', $app_list_strings[$layout_def['options']])) {
+                if (\array_key_exists('', $app_list_strings[$layout_def['options']])) {
                     unset($ops['']);
                 }
             } else {

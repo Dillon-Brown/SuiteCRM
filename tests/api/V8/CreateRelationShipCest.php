@@ -26,7 +26,7 @@ class CreateRelationShipCest
         $contactId = $I->createContact();
 
         $endpoint = $I->getInstanceURL() . '/Api/V8/module/Accounts/{id}/relationships';
-        $endpoint = str_replace('{id}', $accountId, $endpoint);
+        $endpoint = \str_replace('{id}', $accountId, $endpoint);
 
         $payload = [
             'data' => [
@@ -34,7 +34,7 @@ class CreateRelationShipCest
                 'id' => '{id}',
             ]
         ];
-        $payload['data']['id'] = str_replace('{id}', $contactId, $payload['data']['id']);
+        $payload['data']['id'] = \str_replace('{id}', $contactId, $payload['data']['id']);
 
         $I->sendPOST($endpoint, $payload);
 
@@ -43,7 +43,7 @@ class CreateRelationShipCest
         $I->seeResponseJsonMatchesJsonPath('$.meta.message');
         $I->seeResponseContainsJson(
             [
-                'message' => sprintf(
+                'message' => \sprintf(
                     'Contact with id %s has been added to Account with id %s',
                     $contactId,
                     $accountId

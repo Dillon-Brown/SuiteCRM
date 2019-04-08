@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -60,7 +60,7 @@ class SugarWidgetFieldText extends SugarWidgetFieldVarchar
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($layout_manager);
     }
@@ -93,6 +93,6 @@ class SugarWidgetFieldText extends SugarWidgetFieldVarchar
 
     public function displayList(&$layout_def)
     {
-        return nl2br(parent::displayListPlain($layout_def));
+        return \nl2br(parent::displayListPlain($layout_def));
     }
 }

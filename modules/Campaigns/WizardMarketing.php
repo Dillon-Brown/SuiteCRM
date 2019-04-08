@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -121,15 +121,15 @@ if (isset($_REQUEST['func']) && $_REQUEST['func'] == 'createEmailMarketing') {
     $mrkt_lists = $campaign_focus->emailmarketing->get();
 }
 
-if (!empty($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId']) && !in_array($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'], $mrkt_lists)) {
+if (!empty($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId']) && !\in_array($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'], $mrkt_lists)) {
     unset($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId']);
 }
 
 if (!empty($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'])) {
-    if (!empty($_REQUEST['record']) && in_array($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'], $mrkt_lists)) {
+    if (!empty($_REQUEST['record']) && \in_array($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'], $mrkt_lists)) {
         $_REQUEST['record'] = $_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'];
     }
-    if (!empty($_REQUEST['marketing_id']) && in_array($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'], $mrkt_lists)) {
+    if (!empty($_REQUEST['marketing_id']) && \in_array($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'], $mrkt_lists)) {
         if (!empty($_REQUEST['func']) && $_REQUEST['func'] == 'editEmailMarketing') {
             $_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'] = $_REQUEST['marketing_id'];
         } else {
@@ -148,7 +148,7 @@ if (isset($_REQUEST['record']) and !empty($_REQUEST['record'])) {
 } else {
     if (!isset($mrkt_lists) || !$mrkt_lists) {
         unset($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId']);
-    } elseif (count($mrkt_lists) == 1) {
+    } elseif (\count($mrkt_lists) == 1) {
         if (empty($_REQUEST['func']) || (isset($_REQUEST['func']) && $_REQUEST['func'] != 'createEmailMarketing')) {
             $mrkt_focus->retrieve($mrkt_lists[0]);
             $_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'] = $mrkt_lists[0];
@@ -160,8 +160,8 @@ if (isset($_REQUEST['record']) and !empty($_REQUEST['record'])) {
             // clone
             $_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'] = $mrkt_focus->id;
         }
-    } elseif (count($mrkt_lists) > 1) {
-        if (!empty($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId']) && in_array($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'], $mrkt_lists)) {
+    } elseif (\count($mrkt_lists) > 1) {
+        if (!empty($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId']) && \in_array($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId'], $mrkt_lists)) {
             if (!isset($_REQUEST['func']) || (empty($_REQUEST['func']) && $_REQUEST['func'] != 'createEmailMarketing')) {
                 $mrkt_focus->retrieve($_SESSION['campaignWizard'][$campaign_focus->id]['defaultSelectedMarketingId']);
             } else {
@@ -260,7 +260,7 @@ if (empty($mrkt_focus->inbound_email_id)) {
             $mailboxIds[] = $mailboxId;
         }
     }
-    if (count($mailboxIds) == 1) {
+    if (\count($mailboxIds) == 1) {
         $defaultMailboxId = $mailboxIds[0];
     }
     $ss->assign("MAILBOXES", get_select_options_with_id($mailboxes, $defaultMailboxId));
@@ -577,7 +577,7 @@ foreach ($links as $link => $url) {
 $ss->assign('link_to_campaign_header', $camp_url.'1');
 
 if ($campaign_focus->campaign_type == 'Telesales') {
-    $stepValues = array_values($steps);
+    $stepValues = \array_values($steps);
     $ss->assign('link_to_target_list', $stepValues[2]);
 } else {
     $ss->assign('link_to_target_list', $camp_url.'2');
@@ -595,7 +595,7 @@ $ss->assign('link_to_sender_details', 'index.php?return_module=Campaigns&module=
 require_once 'include/SuiteEditor/SuiteEditorConnector.php';
 $templateWidth = 600;
 $ss->assign('template_width', $templateWidth);
-$ss->assign('BODY_EDITOR', SuiteEditorConnector::getHtml(SuiteEditorConnector::getSuiteSettings(isset($focus->body_html) ? html_entity_decode($focus->body_html) : '', $templateWidth)));
+$ss->assign('BODY_EDITOR', SuiteEditorConnector::getHtml(SuiteEditorConnector::getSuiteSettings(isset($focus->body_html) ? \html_entity_decode($focus->body_html) : '', $templateWidth)));
 $ss->assign('hide_width_set', $current_user->getEditorType() != 'mozaik');
 
 // ---------------------------------
@@ -659,7 +659,7 @@ if ($has_campaign || $inboundEmail) {
         $campaign_urls = $get_campaign_urls($_REQUEST['campaign_id']);
     }
     if (!empty($campaign_urls)) {
-        $ss->assign("DEFAULT_URL_TEXT", key($campaign_urls));
+        $ss->assign("DEFAULT_URL_TEXT", \key($campaign_urls));
     }
     if ($has_campaign) {
         $get_tracker_options = function ($label_list, $key_list, $selected_key, $massupdate = false) {
@@ -680,7 +680,7 @@ if ($has_campaign || $inboundEmail) {
             foreach ($key_list as $option_key => $option_value) {
                 $select_options .= '<OPTION value="'.$option_key.'" data-id="'.$label_list[$option_key]['id'].'" data-url="'.$label_list[$option_key]['url'].'">'.$label_list[$option_key]['text'].'</OPTION>';
             }
-            $select_options = preg_replace($pattern, $replacement, $select_options);
+            $select_options = \preg_replace($pattern, $replacement, $select_options);
 
             return $select_options;
         };
@@ -704,7 +704,7 @@ if ($has_campaign || $inboundEmail) {
 }
 // create option of "Contact/Lead/Task" from corresponding module
 // translations
-$lblContactAndOthers = implode('/', array(
+$lblContactAndOthers = \implode('/', array(
     isset($app_list_strings['moduleListSingular']['Contacts']) ? $app_list_strings['moduleListSingular']['Contacts'] : 'Contact',
     isset($app_list_strings['moduleListSingular']['Leads']) ? $app_list_strings['moduleListSingular']['Leads'] : 'Lead',
     isset($app_list_strings['moduleListSingular']['Prospects']) ? $app_list_strings['moduleListSingular']['Prospects'] : 'Target',
@@ -747,7 +747,7 @@ if (!empty($etid)) {
     if (!isset($notes_list)) {
         $notes_list = array();
     }
-    for ($i = 0; $i < count($notes_list); $i++) {
+    for ($i = 0; $i < \count($notes_list); $i++) {
         $the_note = $notes_list[$i];
         if (empty($the_note->filename)) {
             continue;

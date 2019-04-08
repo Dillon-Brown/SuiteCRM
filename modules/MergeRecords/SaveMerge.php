@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -78,7 +78,7 @@ foreach ($_REQUEST['merged_ids'] as $mergeId) {
 foreach ($focus->merge_bean->column_fields as $field) {
     if (isset($_POST[$field])) {
         $value = $_POST[$field];
-        if (is_array($value) && !empty($focus->merge_bean->field_defs[$field]['isMultiSelect'])) {
+        if (\is_array($value) && !empty($focus->merge_bean->field_defs[$field]['isMultiSelect'])) {
             if (empty($value[0])) {
                 unset($value[0]);
             }
@@ -93,7 +93,7 @@ foreach ($focus->merge_bean->column_fields as $field) {
 foreach ($focus->merge_bean->additional_column_fields as $field) {
     if (isset($_POST[$field])) {
         $value = $_POST[$field];
-        if (is_array($value) && !empty($focus->merge_bean->field_defs[$field]->properties['isMultiSelect'])) {
+        if (\is_array($value) && !empty($focus->merge_bean->field_defs[$field]->properties['isMultiSelect'])) {
             if (empty($value[0])) {
                 unset($value[0]);
             }
@@ -121,9 +121,9 @@ $return_action = 'DetailView';
 
 $linked_fields = $focus->merge_bean->get_linked_fields();
 
-$exclude = explode(',', $_REQUEST['merged_links']);
+$exclude = \explode(',', $_REQUEST['merged_links']);
 
-if (is_array($_POST['merged_ids'])) {
+if (\is_array($_POST['merged_ids'])) {
     foreach ($_POST['merged_ids'] as $id) {
         require_once $focus->merge_bean_file_path;
         $mergeSource = new $focus->merge_bean_class();
@@ -131,7 +131,7 @@ if (is_array($_POST['merged_ids'])) {
             continue;
         }
         foreach ($linked_fields as $name => $properties) {
-            if ($properties['name'] == 'modified_user_link' || $properties['name'] == 'created_by_link' || in_array($properties['name'], $exclude)) {
+            if ($properties['name'] == 'modified_user_link' || $properties['name'] == 'created_by_link' || \in_array($properties['name'], $exclude)) {
                 continue;
             }
             if (isset($properties['duplicate_merge']) &&
@@ -148,12 +148,12 @@ if (is_array($_POST['merged_ids'])) {
             if ($mergeSource->load_relationship($name)) {
                 //check to see if loaded relationship is with email address
                 $relName = $mergeSource->$name->getRelatedModuleName();
-                if (!empty($relName) && strtolower($relName) == 'emailaddresses') {
+                if (!empty($relName) && \strtolower($relName) == 'emailaddresses') {
                     //handle email address merge
                     handleEmailMerge($focus, $name, $mergeSource->$name->get());
                 } else {
                     $data = $mergeSource->$name->get();
-                    if (is_array($data) && $focus->merge_bean->load_relationship($name)) {
+                    if (\is_array($data) && $focus->merge_bean->load_relationship($name)) {
                         foreach ($data as $related_id) {
                             //add to primary bean
                             $focus->merge_bean->$name->add($related_id);
@@ -171,7 +171,7 @@ $GLOBALS['log']->debug('Merged record with id of '.$return_id);
 
 //do not redirect if noRedirect flag is set.  This is mostly used by Unit tests
 if (empty($_REQUEST['noRedirect'])) {
-    header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+    \header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 }
 
 /**
@@ -194,7 +194,7 @@ function handleEmailMerge($focus, $name, $data)
     $focus->merge_bean->load_relationship($name);
     $exData = $focus->merge_bean->$name->get();
 
-    if (!is_array($existingData) || empty($existingData)) {
+    if (!\is_array($existingData) || empty($existingData)) {
         return;
     }
     //query email and retrieve existing email address
@@ -239,7 +239,7 @@ function handleEmailMerge($focus, $name, $data)
 
     //compare the two arrays and remove duplicates
     foreach ($newEmails as $k => $n) {
-        if (!in_array($n, $existingEmails)) {
+        if (!\in_array($n, $existingEmails)) {
             $mrgArray[$k] = $n;
         }
     }

@@ -8,7 +8,7 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 	// Used to get font information from files in directory
 	function extractCoreInfo($file, $TTCfontID=0) {
 		$this->filename = $file;
-		$this->fh = fopen($file,'rb');
+		$this->fh = \fopen($file,'rb');
 		if (!$this->fh) { return ('ERROR - Can\'t open file ' . $file); }
 		$this->_pos = 0;
 		$this->charWidths = '';
@@ -27,7 +27,7 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 		if ($version==0x74746366) {
 			if ($TTCfontID > 0) {
 				$this->version = $version = $this->read_ulong();	// TTC Header version now
-				if (!in_array($version, array(0x00010000,0x00020000)))
+				if (!\in_array($version, array(0x00010000,0x00020000)))
 					return("ERROR - NOT ADDED as Error parsing TrueType Collection: version=".$version." - " . $file);
 			}
 			else return("ERROR - Error parsing TrueType Collection - " . $file);
@@ -40,7 +40,7 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 			$this->readTableDirectory(false);
 		}
 		else {
-			if (!in_array($version, array(0x00010000,0x74727565)))
+			if (!\in_array($version, array(0x00010000,0x74727565)))
 				return("ERROR - NOT ADDED as Not a TrueType font: version=".$version." - " . $file);
 			$this->readTableDirectory(false);
 		}
@@ -115,8 +115,8 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 			$numRecords = $this->read_ushort();
 			$string_data_offset = $name_offset + $this->read_ushort();
 			$names = array(1=>'',2=>'',3=>'',4=>'',6=>'');
-			$K = array_keys($names);
-			$nameCount = count($names);
+			$K = \array_keys($names);
+			$nameCount = \count($names);
 			for ($i=0;$i<$numRecords; $i++) {
 				$platformId = $this->read_ushort();
 				$encodingId = $this->read_ushort();
@@ -124,7 +124,7 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 				$nameId = $this->read_ushort();
 				$length = $this->read_ushort();
 				$offset = $this->read_ushort();
-				if (!in_array($nameId,$K)) continue;
+				if (!\in_array($nameId,$K)) continue;
 				$N = '';
 				if ($platformId == 3 && $encodingId == 1 && $languageId == 0x409) { // Microsoft, Unicode, US English, PS Name
 					$opos = $this->_pos;
@@ -135,7 +135,7 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 					$N = '';
 					while ($length > 0) {
 						$char = $this->read_ushort();
-						$N .= (chr($char));
+						$N .= (\chr($char));
 						$length -= 1;
 					}
 					$this->_pos = $opos;
@@ -154,11 +154,11 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 				}
 			}
 			if ($names[6])
-				$psName = preg_replace('/ /','-',$names[6]);
+				$psName = \preg_replace('/ /','-',$names[6]);
 			elseif ($names[4])
-				$psName = preg_replace('/ /','-',$names[4]);
+				$psName = \preg_replace('/ /','-',$names[4]);
 			elseif ($names[1])
-				$psName = preg_replace('/ /','-',$names[1]);
+				$psName = \preg_replace('/ /','-',$names[1]);
 			else
 				$psName = '';
 			if (!$names[1] && !$psName)
@@ -200,9 +200,9 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 			$sF = $this->read_short();
 			$sFamily = ($sF >> 8);
 			$this->_pos += 10;  //PANOSE = 10 byte length
-			$panose = fread($this->fh,10);
+			$panose = \fread($this->fh,10);
 			$this->panose = array();
-			for ($p=0;$p<strlen($panose);$p++) { $this->panose[] = ord($panose[$p]); }
+			for ($p=0;$p<\strlen($panose);$p++) { $this->panose[] = \ord($panose[$p]); }
 			$this->skip(20); 
 			$fsSelection = $this->read_short();
 		}
@@ -380,22 +380,22 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 				$opost = $this->get_table('post');
 				$ptr = 34+($nGlyfs*2);
 				for ($i=0; $i<$nGlyfs; $i++) {
-					$len = ord(substr($opost,$ptr,1));
+					$len = \ord(\substr($opost,$ptr,1));
 					$ptr++;
-					$name = substr($opost,$ptr,$len);
+					$name = \substr($opost,$ptr,$len);
 					$gid = $glyphNameIndex[$i+258];
 					// Select uni0600.xxx(x) - uni06FF.xxx(x)
-					if (preg_match('/^uni(06[0-9a-f]{2})\.(fina|medi|init|fin|med|ini)$/i',$name,$m)) {
-					  if (!isset($glyphToChar[$gid]) || (isset($glyphToChar[$gid]) && is_array($glyphToChar[$gid]) && count($glyphToChar[$gid])==1 && $glyphToChar[$gid][0]>57343 && $glyphToChar[$gid][0]<63489)) {	// if set in PUA private use area E000-F8FF, or NOT Unicode mapped
-						$uni = hexdec($m[1]);
-						$form = strtoupper(substr($m[2],0,1));
+					if (\preg_match('/^uni(06[0-9a-f]{2})\.(fina|medi|init|fin|med|ini)$/i',$name,$m)) {
+					  if (!isset($glyphToChar[$gid]) || (isset($glyphToChar[$gid]) && \is_array($glyphToChar[$gid]) && \count($glyphToChar[$gid])==1 && $glyphToChar[$gid][0]>57343 && $glyphToChar[$gid][0]<63489)) {	// if set in PUA private use area E000-F8FF, or NOT Unicode mapped
+						$uni = \hexdec($m[1]);
+						$form = \strtoupper(\substr($m[2],0,1));
 						// Assign new PUA Unicode between F500 - F7FF
 						$bit = $uni & 0xFF;
 						if ($form == 'I') { $bit += 0xF600; }
 						elseif ($form == 'M') { $bit += 0xF700; }
 						else  { $bit += 0xF500; }
 						$unAGlyphs .= $gid;
-						$name = 'uni'.strtoupper($m[1]).'.'.strtolower($m[2]);
+						$name = 'uni'.\strtoupper($m[1]).'.'.\strtolower($m[2]);
 						$unAGlyphs .= ' : '.$name;
 						$unihexstr = $m[1];
 						$unAGlyphs .= ' : '.$unihexstr;
@@ -403,10 +403,10 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 						$unAGlyphs .= ' : '.$form;
 						// if already set in PUA private use area E000-F8FF
 						if (isset($glyphToChar[$gid]) && $glyphToChar[$gid][0]>57343 && $glyphToChar[$gid][0]<63489) {
-								$unAGlyphs .= ' : '.$glyphToChar[$gid][0].' {'.dechex($glyphToChar[$gid][0]).'}';
+								$unAGlyphs .= ' : '.$glyphToChar[$gid][0].' {'.\dechex($glyphToChar[$gid][0]).'}';
 						}
 						//else $unAGlyphs .= ':';
-						$unAGlyphs .= ' : '.strtoupper(dechex($bit));
+						$unAGlyphs .= ' : '.\strtoupper(\dechex($bit));
 						$unAGlyphs .= '<br />';
 					  }
 					}
@@ -436,14 +436,14 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 		elseif ($sFamily ==10) { $ftype = 'cursive'; }
 		// Use PANOSE
 		if ($panose) { 
-			$bFamilyType=ord($panose[0]); 
+			$bFamilyType=\ord($panose[0]); 
 			if ($bFamilyType==2) {
-				$bSerifStyle=ord($panose[1]); 
+				$bSerifStyle=\ord($panose[1]); 
 				if (!$ftype) { 
 					if ($bSerifStyle>1 && $bSerifStyle<11) { $ftype = 'serif'; }
 					elseif ($bSerifStyle>10) { $ftype = 'sans'; }
 				}
-				$bProportion=ord($panose[3]);
+				$bProportion=\ord($panose[3]);
 				if ($bProportion==9 || $bProportion==1) { $ftype = 'mono'; }	// ==1 i.e. No Fit needed for OCR-a and -b
 			}
 			elseif ($bFamilyType==3) {
@@ -451,7 +451,7 @@ class TTFontFile_Analysis EXTENDS TTFontFile
 			}
 		}
 
-		fclose($this->fh);
+		\fclose($this->fh);
 		return array($this->familyName, $bold, $italic, $ftype, $TTCfontID, $rtl, $indic, $cjk, $sip, $smp, $puaag, $pua, $unAGlyphs);
 	}
 

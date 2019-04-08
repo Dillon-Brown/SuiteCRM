@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -62,7 +62,7 @@ class Popup_Picker
         global $currentModule, $popupMeta;
 
         // cn: bug 12269 - directory navigation attack - detect and stop.
-        if (isset($_REQUEST['metadata']) && strpos($_REQUEST['metadata'], "..") !== false) {
+        if (isset($_REQUEST['metadata']) && \strpos($_REQUEST['metadata'], "..") !== false) {
             die("Directory navigation attack denied.");
         }
         if (empty($popupMeta)) {
@@ -90,7 +90,7 @@ class Popup_Picker
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -103,7 +103,7 @@ class Popup_Picker
         $where = '';
         $whereClauses = array();
         if (isset($_REQUEST['query'])) {
-            foreach (array_keys($this->_popupMeta['whereClauses']) as $key) {
+            foreach (\array_keys($this->_popupMeta['whereClauses']) as $key) {
                 append_where_clause($whereClauses, $key, $this->_popupMeta['whereClauses'][$key]);
             }
 
@@ -133,8 +133,8 @@ class Popup_Picker
         $output_html = "<script type=\"text/javascript\" src=\"" . getJSPath('include/javascript/sugar_3.js'). "\"></script>";
         $where = '';
 
-        if (empty($_REQUEST[$currentModule . '_' . strtoupper($this->_popupMeta['moduleMain']) . '_offset'])) {
-            $_POST[$currentModule . '_' . strtoupper($this->_popupMeta['moduleMain']) . '_offset'] = '';
+        if (empty($_REQUEST[$currentModule . '_' . \strtoupper($this->_popupMeta['moduleMain']) . '_offset'])) {
+            $_POST[$currentModule . '_' . \strtoupper($this->_popupMeta['moduleMain']) . '_offset'] = '';
         }
         if (empty($_REQUEST['saved_associated_data'])) {
             $_POST['saved_associated_data'] = '';
@@ -161,7 +161,7 @@ class Popup_Picker
             $formbody = $formBase->$getFormMethod($prefix, $mod, $formBody);
 
             $addform = '<table><tr><td nowrap="nowrap" valign="top">'
-                . str_replace('<br>', '</td><td nowrap="nowrap" valign="top">&nbsp;', $formbody)
+                . \str_replace('<br>', '</td><td nowrap="nowrap" valign="top">&nbsp;', $formbody)
                 . '</td></tr></table>'
                 . '<input type="hidden" name="action" value="Popup" />';
             $formSave = <<<EOQ
@@ -174,7 +174,7 @@ class Popup_Picker
 			<input type="button" name="button" class="button" title="{$app_strings['LBL_CANCEL_BUTTON_TITLE']}" accesskey="{$app_strings['LBL_CANCEL_BUTTON_KEY']}" value="{$app_strings['LBL_CANCEL_BUTTON_LABEL']}" onclick="toggleDisplay('addform');" />
 EOQ;
             // if metadata contains custom inputs for the quickcreate
-            if (!empty($this->_popupMeta['customInput']) && is_array($this->_popupMeta['customInput'])) {
+            if (!empty($this->_popupMeta['customInput']) && \is_array($this->_popupMeta['customInput'])) {
                 foreach ($this->_popupMeta['customInput'] as $key => $value) {
                     $formSave .= '<input type="hidden" name="' . $key . '" value="'. $value .'">\n';
                 }
@@ -199,14 +199,14 @@ EOQ;
         $button = '<script>eval("var request_data = " + window.document.forms[\'popup_query_form\'].request_data.value);</script>';
 
         if (isset($_REQUEST['mass'])) {
-            foreach (array_unique($_REQUEST['mass']) as $record) {
+            foreach (\array_unique($_REQUEST['mass']) as $record) {
                 $button .= "<input style='display: none' checked type='checkbox' name='mass[]' value='$record'>\n";
             }
         }
 
         //START:FOR MULTI-SELECT
         $multi_select = false;
-        if (!empty($_REQUEST['mode']) && strtoupper($_REQUEST['mode']) == 'MULTISELECT') {
+        if (!empty($_REQUEST['mode']) && \strtoupper($_REQUEST['mode']) == 'MULTISELECT') {
             $multi_select = true;
             $button .= "<input type='hidden' name='mode' value='MultiSelect'>";
             $button .= "<input type='button' name='button' class='button' onclick=\"send_back_selected('$currentModule',document.MassUpdate,'mass[]','" .$app_strings['ERR_NOTHING_SELECTED']."', request_data.field_to_name_array);\" title='"
@@ -251,11 +251,11 @@ EOQ;
         }
 
         // assign search inputs to xtemplates
-        foreach (array_keys($searchInputs) as $key) {
+        foreach (\array_keys($searchInputs) as $key) {
             if (!empty($_REQUEST[$key]) && (isset($seed_bean->field_name_map[$key]['type']) && $seed_bean->field_name_map[$key]['type'] == 'bool')) {
-                $form->assign(strtoupper($key), ' checked ');
+                $form->assign(\strtoupper($key), ' checked ');
             } else {
-                $form->assign(strtoupper($key), $searchInputs[$key]);
+                $form->assign(\strtoupper($key), $searchInputs[$key]);
             }
         }
 
@@ -272,12 +272,12 @@ EOQ;
             }
         }
 
-        $form->assign('MULTI_SELECT', !empty($_REQUEST['mode']) ? strtoupper($_REQUEST['mode']) : '');
+        $form->assign('MULTI_SELECT', !empty($_REQUEST['mode']) ? \strtoupper($_REQUEST['mode']) : '');
 
-        ob_start();
+        \ob_start();
         insert_popup_header($theme);
-        $output_html .= ob_get_contents();
-        ob_end_clean();
+        $output_html .= \ob_get_contents();
+        \ob_end_clean();
 
         $output_html .= get_form_header($mod_strings['LBL_SEARCH_FORM_TITLE'], '', false);
 
@@ -305,10 +305,10 @@ EOQ;
         $ListView->setQuery($where, '', $this->_popupMeta['orderBy'], $this->_popupMeta['varName']);
         $ListView->setModStrings($mod_strings);
 
-        ob_start();
+        \ob_start();
         $ListView->processListView($seed_bean, 'main', $this->_popupMeta['varName']);
-        $output_html .= ob_get_contents();
-        ob_end_clean();
+        $output_html .= \ob_get_contents();
+        \ob_end_clean();
         $json = getJSONobj();
 
         // decode then encode to escape "'s
@@ -331,12 +331,12 @@ EOQ;
 			document.MassUpdate.saved_associated_data.value = escape('{' + checked_ids.join(',') + '}');
 
 			document.MassUpdate.action.value = \"Popup\";
-			document.MassUpdate.$currentModule" . '_' . strtoupper($this->_popupMeta['moduleMain']) . '_offset.value = offset;
+			document.MassUpdate.$currentModule" . '_' . \strtoupper($this->_popupMeta['moduleMain']) . '_offset.value = offset;
 			document.MassUpdate.submit();
 		}
 		// reassigned the saved data from the saved checks
 		if(typeof(document.MassUpdate) != \'undefined\' && document.MassUpdate.saved_associated_data.value != \'\') {
-			temp_array = ' . (!empty($_REQUEST['saved_associated_data']) ? $json->encode($json->decode(urldecode($_REQUEST['saved_associated_data']))) : '\'\'') . ';
+			temp_array = ' . (!empty($_REQUEST['saved_associated_data']) ? $json->encode($json->decode(\urldecode($_REQUEST['saved_associated_data']))) : '\'\'') . ';
 			for(the_key in temp_array) {
 				associated_javascript_data[the_key] = temp_array[the_key];
 			}

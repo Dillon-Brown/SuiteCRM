@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -70,7 +70,7 @@ class One2MRelationship extends M2MRelationship
             if (empty($links)) {
                 $GLOBALS['log']->fatal("No Links found for relationship {$this->name}");
             } else {
-                if (!is_array($links)) { //Only one link for a self referencing relationship, this is very bad.
+                if (!\is_array($links)) { //Only one link for a self referencing relationship, this is very bad.
                     $this->lhsLinkDef = $this->rhsLinkDef = $links;
                 } elseif (!empty($links[0]) && !empty($links[1])) {
                     if ((!empty($links[0]['side']) && $links[0]['side'] == "right")

@@ -52,7 +52,7 @@ class SugarFieldCurrency extends SugarFieldFloat
 
         $currencyUSD = '-99';
 
-        $amount = $parentFieldArray[strtoupper($vardef['name'])];
+        $amount = $parentFieldArray[\strtoupper($vardef['name'])];
         $currencyId = isset($parentFieldArray['CURRENCY_ID']) ? $parentFieldArray['CURRENCY_ID'] : "";
         $currencySymbol = isset($parentFieldArray['CURRENCY_SYMBOL']) ? $parentFieldArray['CURRENCY_SYMBOL'] : "";
 
@@ -64,7 +64,7 @@ class SugarFieldCurrency extends SugarFieldFloat
             $currencySymbol = $locale->getPrecedentPreference('default_currency_symbol');
         }
         
-        if (stripos($vardef['name'], '_USD')) {
+        if (\stripos($vardef['name'], '_USD')) {
             $userCurrencyId = $current_user->getPreference('currency');
             if (!empty($userCurrencyId) && $currencyUSD !== $userCurrencyId) {
                 $userCurrency = BeanFactory::getBean('Currencies', $userCurrencyId);
@@ -93,7 +93,7 @@ class SugarFieldCurrency extends SugarFieldFloat
         $focus,
         ImportFieldSanitize $settings
         ) {
-        $value = str_replace($settings->currency_symbol, "", $value);
+        $value = \str_replace($settings->currency_symbol, "", $value);
         
         return $settings->float($value, $vardef, $focus);
     }

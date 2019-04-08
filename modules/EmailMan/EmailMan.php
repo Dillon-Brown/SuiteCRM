@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -172,7 +172,7 @@ class EmailMan extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -337,7 +337,7 @@ class EmailMan extends SugarBean
 
         //B.F. #37943
         if (isset($params['group_by'])) {
-            $group_by = str_replace("emailman", "em", $params['group_by']);
+            $group_by = \str_replace("emailman", "em", $params['group_by']);
             $query .= "INNER JOIN (select min(id) as id from emailman  em GROUP BY $group_by) secondary on {$this->table_name}.id = secondary.id ";
         }
 
@@ -426,9 +426,9 @@ class EmailMan extends SugarBean
         $is_person = SugarModule::get($related_type)->moduleImplements('Person');
 
         if ($is_person) {
-            $query = "SELECT first_name, last_name FROM " . strtolower($related_type) . " WHERE id ='" . $related_id . "'";
+            $query = "SELECT first_name, last_name FROM " . \strtolower($related_type) . " WHERE id ='" . $related_id . "'";
         } else {
-            $query = "SELECT name FROM " . strtolower($related_type) . " WHERE id ='" . $related_id . "'";
+            $query = "SELECT name FROM " . \strtolower($related_type) . " WHERE id ='" . $related_id . "'";
         }
 
         $result = $this->db->query($query);
@@ -596,11 +596,11 @@ class EmailMan extends SugarBean
                 $retId = $this->ref_email->save();
 
                 foreach ((array)$notes as $note) {
-                    if (!is_object($note)) {
-                        LoggerManager::getLogger()->warn('EmailMan create a reference email but given note is not an object. Type of note was: "' . gettype($note) . '"');
+                    if (!\is_object($note)) {
+                        LoggerManager::getLogger()->warn('EmailMan create a reference email but given note is not an object. Type of note was: "' . \gettype($note) . '"');
                     } else {
                         if ($note->object_name == 'Note') {
-                            if (!empty($note->file->temp_file_location) && is_file($note->file->temp_file_location)) {
+                            if (!empty($note->file->temp_file_location) && \is_file($note->file->temp_file_location)) {
                                 $file_location = $note->file->temp_file_location;
                                 $filename = $note->file->original_file_name;
                                 $mime_type = $note->file->mime_type;
@@ -690,7 +690,7 @@ class EmailMan extends SugarBean
             }
 
             //serialize data to be passed into Link2->add() function
-            $campaignData = serialize($macro_nv);
+            $campaignData = \serialize($macro_nv);
 
             //required for one email per campaign per marketing message.
             $this->ref_email->$rel_name->add(
@@ -873,7 +873,7 @@ class EmailMan extends SugarBean
         }
 
         //make sure tracking url ends with '/' character
-        $strLen = strlen($this->tracking_url);
+        $strLen = \strlen($this->tracking_url);
         if ($this->tracking_url{$strLen - 1} != '/') {
             $this->tracking_url .= '/';
         }
@@ -882,7 +882,7 @@ class EmailMan extends SugarBean
             return false;
         }
         $class = $beanList[$this->related_type];
-        if (!class_exists($class)) {
+        if (!\class_exists($class)) {
             require_once($beanFiles[$class]);
         }
 
@@ -930,12 +930,12 @@ class EmailMan extends SugarBean
                 || ($module->invalid_email !== 'on' && $module->invalid_email !== 1 && $module->invalid_email !== '1')
             )) {
             // If email address is not opted out or the email is valid
-            $lower_email_address = strtolower($module->email1);
+            $lower_email_address = \strtolower($module->email1);
             //test against restricted domains
-            $at_pos = strrpos($lower_email_address, '@');
+            $at_pos = \strrpos($lower_email_address, '@');
             if ($at_pos !== false) {
                 foreach ($this->restricted_domains as $domain => $value) {
-                    $pos = strrpos($lower_email_address, $domain);
+                    $pos = \strrpos($lower_email_address, $domain);
                     if ($pos !== false && $pos > $at_pos) {
                         //found
                         $this->set_as_sent($lower_email_address, true, null, null, 'blocked');
@@ -984,7 +984,7 @@ class EmailMan extends SugarBean
 
                 // cn: bug 4684 - initialize the notes array, else old data is still around for the next round
                 $this->notes_array = array();
-                if (!class_exists('Note')) {
+                if (!\class_exists('Note')) {
                     require_once('modules/Notes/Note.php');
                 }
                 while ($a = $this->db->fetchByAssoc($r)) {
@@ -1016,7 +1016,7 @@ class EmailMan extends SugarBean
                 $this->current_campaign->load_relationship('tracked_urls');
                 $query_array = $this->current_campaign->tracked_urls->getQuery(true);
                 $query_array['select'] = "SELECT tracker_name, tracker_key, id, is_optout ";
-                $result = $this->current_campaign->db->query(implode(' ', $query_array));
+                $result = $this->current_campaign->db->query(\implode(' ', $query_array));
 
                 $this->has_optout_links = false;
                 $this->tracker_urls = array();
@@ -1035,7 +1035,7 @@ class EmailMan extends SugarBean
             isValidEmailAddress($mail->Sender);
             $mail->From = $this->current_emailmarketing->from_addr ? $this->current_emailmarketing->from_addr : $this->mailbox_from_addr;
             isValidEmailAddress($mail->From);
-            $mail->FromName = $locale->translateCharsetMIME(trim($this->current_emailmarketing->from_name), 'UTF-8', $OBCharset);
+            $mail->FromName = $locale->translateCharsetMIME(\trim($this->current_emailmarketing->from_name), 'UTF-8', $OBCharset);
 
             $mail->ClearCustomHeaders();
             $mail->AddCustomHeader('X-CampTrackID:' . $this->getTargetId());
@@ -1044,7 +1044,7 @@ class EmailMan extends SugarBean
             $replyToAddr = empty($this->current_emailmarketing->reply_to_addr) ? $this->current_mailbox->get_stored_options('reply_to_addr', $mail->From, null) : $this->current_emailmarketing->reply_to_addr;
 
             if (!empty($replyToAddr)) {
-                $mail->AddReplyTo($replyToAddr, $locale->translateCharsetMIME(trim($replyToName), 'UTF-8', $OBCharset));
+                $mail->AddReplyTo($replyToAddr, $locale->translateCharsetMIME(\trim($replyToName), 'UTF-8', $OBCharset));
             }
 
             //parse and replace bean variables.
@@ -1069,7 +1069,7 @@ class EmailMan extends SugarBean
             $tracker_url_template = $this->tracking_url . 'index.php?entryPoint=campaign_trackerv2&track=%s' . '&identifier=' . $this->getTargetId();
             $removeme_url_template = $this->tracking_url . 'index.php?entryPoint=removeme&identifier=' . $this->getTargetId();
             $template_data = $this->current_emailtemplate->parse_tracker_urls($template_data, $tracker_url_template, $this->tracker_urls, $removeme_url_template);
-            $mail->AddAddress($module->email1, $locale->translateCharsetMIME(trim($module->name), 'UTF-8', $OBCharset));
+            $mail->AddAddress($module->email1, $locale->translateCharsetMIME(\trim($module->name), 'UTF-8', $OBCharset));
 
             //refetch strings in case they have been changed by creation of email templates or other beans.
             $mod_strings = return_module_language($sugar_config['default_language'], 'EmailMan');
@@ -1092,7 +1092,7 @@ class EmailMan extends SugarBean
                 $mail->IsHTML(false);
                 $mail->Body = $template_data['body'];
             } else {
-                $mail->Body = wordwrap($template_data['body_html'], 900);
+                $mail->Body = \wordwrap($template_data['body_html'], 900);
                 //BEGIN:this code will trigger for only campaigns pending before upgrade to 4.2.0.
                 //will be removed for the next release.
                 if (!isset($btracker)) {
@@ -1102,10 +1102,10 @@ class EmailMan extends SugarBean
                     $mail->Body .= "<br /><br /><a href='" . $tracker_url . "'>" . $tracker_text . "</a><br /><br />";
                 } else {
                     if (!empty($tracker_url)) {
-                        $mail->Body = str_replace('TRACKER_URL_START', "<a href='" . $tracker_url . "'>", $mail->Body);
-                        $mail->Body = str_replace('TRACKER_URL_END', "</a>", $mail->Body);
-                        $mail->AltBody = str_replace('TRACKER_URL_START', "<a href='" . $tracker_url . "'>", $mail->AltBody);
-                        $mail->AltBody = str_replace('TRACKER_URL_END', "</a>", $mail->AltBody);
+                        $mail->Body = \str_replace('TRACKER_URL_START', "<a href='" . $tracker_url . "'>", $mail->Body);
+                        $mail->Body = \str_replace('TRACKER_URL_END', "</a>", $mail->Body);
+                        $mail->AltBody = \str_replace('TRACKER_URL_START', "<a href='" . $tracker_url . "'>", $mail->AltBody);
+                        $mail->AltBody = \str_replace('TRACKER_URL_END', "</a>", $mail->AltBody);
                     }
                 }
                 //END
@@ -1139,7 +1139,7 @@ class EmailMan extends SugarBean
                     $email_id = $this->create_indiv_email($module, $mail);
                 } else {
                     //find/create reference email record. all campaign targets reveiving this message will be linked with this message.
-                    $decodedFromName = mb_decode_mimeheader($this->current_emailmarketing->from_name);
+                    $decodedFromName = \mb_decode_mimeheader($this->current_emailmarketing->from_name);
                     $fromAddressName = "{$decodedFromName} <{$this->mailbox_from_addr}>";
 
                     $email_id=$this->create_ref_email(
@@ -1163,13 +1163,13 @@ class EmailMan extends SugarBean
                 $this->set_as_sent($module->email1, true, $email_id, 'Emails', 'targeted');
             } else {
                 if (!empty($layout_def['parent_id'])) {
-                    if (isset($layout_def['fields'][strtoupper($layout_def['parent_id'])])) {
-                        $parent .= "&parent_id=" . $layout_def['fields'][strtoupper($layout_def['parent_id'])];
+                    if (isset($layout_def['fields'][\strtoupper($layout_def['parent_id'])])) {
+                        $parent .= "&parent_id=" . $layout_def['fields'][\strtoupper($layout_def['parent_id'])];
                     }
                 }
                 if (!empty($layout_def['parent_module'])) {
-                    if (isset($layout_def['fields'][strtoupper($layout_def['parent_module'])])) {
-                        $parent .= "&parent_module=" . $layout_def['fields'][strtoupper($layout_def['parent_module'])];
+                    if (isset($layout_def['fields'][\strtoupper($layout_def['parent_module'])])) {
+                        $parent .= "&parent_module=" . $layout_def['fields'][\strtoupper($layout_def['parent_module'])];
                     }
                 }
                 //log send error. save for next attempt after 24hrs. no campaign log entry will be created.
@@ -1200,13 +1200,13 @@ class EmailMan extends SugarBean
      */
     public function valid_email_address($email_address)
     {
-        $email_address = trim($email_address);
+        $email_address = \trim($email_address);
         if (empty($email_address)) {
             return false;
         }
 
         $pattern = '/[A-Z0-9\._%-]+@[A-Z0-9\.-]+\.[A-Za-z]{2,}$/i';
-        $ret = preg_match($pattern, $email_address);
+        $ret = \preg_match($pattern, $email_address);
         if ($ret === false or $ret == 0) {
             return false;
         }
@@ -1227,7 +1227,7 @@ class EmailMan extends SugarBean
             return false;
         }
 
-        $email_address = trim($bean->email1);
+        $email_address = \trim($bean->email1);
 
         if (empty($email_address)) {
             return false;
@@ -1281,7 +1281,7 @@ class EmailMan extends SugarBean
      */
     public function mark_deleted($id)
     {
-        $this->db->query("DELETE FROM {$this->table_name} WHERE id=" . intval($id));
+        $this->db->query("DELETE FROM {$this->table_name} WHERE id=" . \intval($id));
     }
 
     /**
@@ -1447,9 +1447,9 @@ class EmailMan extends SugarBean
         $mailer->Body_html = from_html($emailTemplate->body_html);
         $mailer->AltBody = from_html($emailTemplate->body);
 
-        if (is_string($emailAddress->email_address)) {
+        if (\is_string($emailAddress->email_address)) {
             $emailAddressString = $emailAddress->email_address;
-        } elseif (is_array($emailAddress->email_address) && is_string($emailAddress->email_address[0]['email_address'])) {
+        } elseif (\is_array($emailAddress->email_address) && \is_string($emailAddress->email_address[0]['email_address'])) {
             $emailAddressString = $emailAddress->email_address[0]['email_address'];
         } else {
             $log->fatal('Incorrect Email Address');
@@ -1510,7 +1510,7 @@ class EmailMan extends SugarBean
         $optInLevel = isset($sugar_config['email_enable_confirm_opt_in']) ? $sugar_config['email_enable_confirm_opt_in'] : '';
 
         // Find email address
-        $email_address = trim($bean->email1);
+        $email_address = \trim($bean->email1);
 
         if (empty($email_address)) {
             return false;

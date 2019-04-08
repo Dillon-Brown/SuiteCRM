@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -56,7 +56,7 @@ $app_list_strings['record_type_module'] = array('Contact'=>'Contacts', 'Account'
 $users = array(
     'PUT A RANDOM KEY FROM THE WEBSITE HERE' => array('name'=>'PUT THE USER_NAME HERE', 'pass'=>'PUT THE USER_HASH FOR THE RESPECTIVE USER HERE'),
 );
-if (file_exists('leadCapture_override.php')) {
+if (\file_exists('leadCapture_override.php')) {
     include('leadCapture_override.php');
 }
 if (!empty($_POST['user']) && !empty($users[$_POST['user']])) {
@@ -77,8 +77,8 @@ if (!empty($_POST['user']) && !empty($users[$_POST['user']])) {
         $_POST['record'] ='';
 
         if (isset($_POST['_splitName'])) {
-            $name = explode(' ', $_POST['name']);
-            if (sizeof($name) == 1) {
+            $name = \explode(' ', $_POST['name']);
+            if (\sizeof($name) == 1) {
                 $_POST['first_name'] = '';
                 $_POST['last_name'] = $name[0];
             } else {

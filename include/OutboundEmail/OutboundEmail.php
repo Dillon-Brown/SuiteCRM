@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -106,7 +106,7 @@ class OutboundEmail
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -281,7 +281,7 @@ class OutboundEmail
             $a = $this->db->fetchByAssoc($r);
 
             if (!empty($a)) {
-                $opts = unserialize(base64_decode($a['stored_options']));
+                $opts = \unserialize(\base64_decode($a['stored_options']));
 
                 if (isset($opts['outbound_email'])) {
                     $mailer = "AND id = '{$opts['outbound_email']}'";
@@ -317,7 +317,7 @@ class OutboundEmail
 
         $results = array();
         while ($row = $this->db->fetchByAssoc($rs)) {
-            $opts = unserialize(base64_decode($row['stored_options']));
+            $opts = \unserialize(\base64_decode($row['stored_options']));
             if (isset($opts['outbound_email']) && $opts['outbound_email'] == $this->id) {
                 $results[] = $row['id'];
             }
@@ -344,7 +344,7 @@ class OutboundEmail
             $a = $this->db->fetchByAssoc($r);
 
             if (!empty($a)) {
-                $opts = unserialize(base64_decode($a['stored_options']));
+                $opts = \unserialize(\base64_decode($a['stored_options']));
 
                 if (isset($opts['outbound_email'])) {
                     $mailer = "id = '{$opts['outbound_email']}'";
@@ -492,7 +492,7 @@ class OutboundEmail
                 if (empty($this->$def)) {
                     $this->$def = 0;
                 }
-                $values[] = intval($this->$def);
+                $values[] = \intval($this->$def);
                 $validKeys[] = $def;
             } else {
                 if (isset($this->$def)) {
@@ -521,13 +521,13 @@ class OutboundEmail
         $values = $this->getValues($cols);
 
         if ($this->new_with_id) {
-            $q = sprintf("INSERT INTO outbound_email (%s) VALUES (%s)", implode($cols, ","), implode($values, ","));
+            $q = \sprintf("INSERT INTO outbound_email (%s) VALUES (%s)", \implode($cols, ","), \implode($values, ","));
         } else {
             $updvalues = array();
             foreach ($values as $k => $val) {
                 $updvalues[] = "{$cols[$k]} = $val";
             }
-            $q = "UPDATE outbound_email SET " . implode(
+            $q = "UPDATE outbound_email SET " . \implode(
                 ', ',
                     $updvalues
             ) . " WHERE id = " . $this->db->quoted($this->id);
@@ -592,7 +592,7 @@ class OutboundEmail
         foreach ($values as $k => $val) {
             $updvalues[] = "{$updateFields[$k]} = $val";
         }
-        $query = "UPDATE outbound_email set " . implode(', ', $updvalues) . " WHERE type='system-override' ";
+        $query = "UPDATE outbound_email set " . \implode(', ', $updvalues) . " WHERE type='system-override' ";
 
         $this->db->query($query);
     }

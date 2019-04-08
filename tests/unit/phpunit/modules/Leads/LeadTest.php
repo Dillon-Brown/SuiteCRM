@@ -149,7 +149,7 @@ class LeadTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($lead->id));
-        $this->assertEquals(36, strlen($lead->id));
+        $this->assertEquals(36, \strlen($lead->id));
         $this->assertEquals("New", $lead->status);
 
 
@@ -294,10 +294,10 @@ class LeadTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             'SecurityGroups',
         );
         $actual = $lead->get_linked_fields();
-        $this->assertTrue(is_array($actual));
-        sort($expected);
-        $actualKeys = array_keys($actual);
-        sort($actualKeys);
+        $this->assertTrue(\is_array($actual));
+        \sort($expected);
+        $actualKeys = \array_keys($actual);
+        \sort($actualKeys);
         $this->assertSame($expected, $actualKeys);
     }
 

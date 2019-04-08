@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -88,7 +88,7 @@ class UndeployedSubpanelImplementation extends AbstractMetaDataImplementation im
             }
         }
         $template_subpanel_def = 'include/SugarObjects/templates/'.$template_def. '/metadata/subpanels/default.php';
-        if (file_exists($template_subpanel_def)) {
+        if (\file_exists($template_subpanel_def)) {
             include($template_subpanel_def);
             if (!empty($subpanel_layout['list_fields'])) {
                 $this->_mergeFielddefs($this->_fielddefs, $subpanel_layout['list_fields']);
@@ -104,7 +104,7 @@ class UndeployedSubpanelImplementation extends AbstractMetaDataImplementation im
         if (isset($GLOBALS['current_language']) &&!empty($GLOBALS['current_language'])) {
             $selected_lang = $GLOBALS['current_language'];
         }
-        $GLOBALS [ 'mod_strings' ] = array_merge($GLOBALS [ 'mod_strings' ], $this->module->getModStrings($selected_lang)) ;
+        $GLOBALS [ 'mod_strings' ] = \array_merge($GLOBALS [ 'mod_strings' ], $this->module->getModStrings($selected_lang)) ;
     }
 
     /**

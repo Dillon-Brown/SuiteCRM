@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /*
@@ -46,12 +46,12 @@ if (!defined('sugarEntry') || !sugarEntry) {
 include_once 'modules/TableDictionary.php';
 require_once 'data/BeanFactory.php';
 
-define('REL_LHS', 'LHS');
-define('REL_RHS', 'RHS');
-define('REL_BOTH', 'BOTH_SIDES');
-define('REL_MANY_MANY', 'many-to-many');
-define('REL_ONE_MANY', 'one-to-many');
-define('REL_ONE_ONE', 'one-to-one');
+\define('REL_LHS', 'LHS');
+\define('REL_RHS', 'RHS');
+\define('REL_BOTH', 'BOTH_SIDES');
+\define('REL_MANY_MANY', 'many-to-many');
+\define('REL_ONE_MANY', 'one-to-many');
+\define('REL_ONE_ONE', 'one-to-one');
 
 /**
  * A relationship is between two modules.
@@ -229,7 +229,7 @@ abstract class SugarRelationship
     {
         $existing = $this->checkExisting($row);
         if (!empty($existing)) { //Update the existing row, overriding the values with those passed in
-            return $this->updateRow($existing['id'], array_merge($existing, $row));
+            return $this->updateRow($existing['id'], \array_merge($existing, $row));
         }
 
         $values = array();
@@ -239,8 +239,8 @@ abstract class SugarRelationship
                 $values[$field] = "'{$row[$field]}'";
             }
         }
-        $columns = implode(',', array_keys($values));
-        $values = implode(',', $values);
+        $columns = \implode(',', \array_keys($values));
+        $values = \implode(',', $values);
         if (!empty($values)) {
             $query = "INSERT INTO {$this->getRelationshipTable()} ($columns) VALUES ($values)";
             DBManagerFactory::getInstance()->query($query);
@@ -266,7 +266,7 @@ abstract class SugarRelationship
             $newVals[] = "$field='$val'";
         }
 
-        $newVals = implode(',', $newVals);
+        $newVals = \implode(',', $newVals);
 
         $query = "UPDATE {$this->getRelationshipTable()} set $newVals WHERE id='$id'";
 
@@ -291,7 +291,7 @@ abstract class SugarRelationship
         foreach ($where as $field => $val) {
             $stringSets[] = "$field = '$val'";
         }
-        $whereString = 'WHERE '.implode(' AND ', $stringSets);
+        $whereString = 'WHERE '.\implode(' AND ', $stringSets);
 
         $query = "UPDATE {$this->getRelationshipTable()} set deleted=1 , date_modified = '$date_modified' $whereString";
 

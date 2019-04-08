@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -93,7 +93,7 @@ class JotPadDashlet extends Dashlet
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id, $def);
     }
@@ -165,7 +165,7 @@ class JotPadDashlet extends Dashlet
         global $sugar_config, $timedate, $current_user, $theme;
         $options = array();
         $options['title'] = $_REQUEST['title'];
-        if (is_numeric($_REQUEST['height'])) {
+        if (\is_numeric($_REQUEST['height'])) {
             if ($_REQUEST['height'] > 0 && $_REQUEST['height'] <= 300) {
                 $options['height'] = $_REQUEST['height'];
             } elseif ($_REQUEST['height'] > 300) {
@@ -188,8 +188,8 @@ class JotPadDashlet extends Dashlet
         $json = getJSONobj();
         if (isset($_REQUEST['savedText'])) {
             $optionsArray = $this->loadOptions();
-            $optionsArray['savedText']=$json->decode(html_entity_decode($_REQUEST['savedText']));
-            $optionsArray['savedText']=SugarCleaner::cleanHtml(nl2br($optionsArray['savedText']));
+            $optionsArray['savedText']=$json->decode(\html_entity_decode($_REQUEST['savedText']));
+            $optionsArray['savedText']=SugarCleaner::cleanHtml(\nl2br($optionsArray['savedText']));
             $this->storeOptions($optionsArray);
         } else {
             $optionsArray['savedText'] = '';

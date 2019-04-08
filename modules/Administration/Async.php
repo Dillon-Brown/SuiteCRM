@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -73,11 +73,11 @@ switch ($_REQUEST['adminAction']) {
         if ($target == 'all') {
             $hide = array('Activities', 'Home', 'iFrames', 'Calendar', 'Dashboard');
         
-            sort($moduleList);
+            \sort($moduleList);
             $options = array();
             
             foreach ($moduleList as $module) {
-                if (!in_array($module, $hide)) {
+                if (!\in_array($module, $hide)) {
                     $options[$module] = $module;
                 }
             }
@@ -89,7 +89,7 @@ switch ($_REQUEST['adminAction']) {
                 
                 $file = $beanFiles[$beanList[$module]];
                 
-                if (!file_exists($file)) {
+                if (!\file_exists($file)) {
                     continue;
                 }
                     
@@ -111,7 +111,7 @@ switch ($_REQUEST['adminAction']) {
                 }
                 $toRepair[$module] = $ids;
             }
-        } elseif (in_array($target, $moduleList)) {
+        } elseif (\in_array($target, $moduleList)) {
             require_once($beanFiles[$beanList[$target]]);
             $bean = new $beanList[$target]();
             $q = "SELECT count(*) as count FROM {$bean->table_name}";

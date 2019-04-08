@@ -110,7 +110,7 @@ class Crypt_Blowfish
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($key);
     }
@@ -207,7 +207,7 @@ class Crypt_Blowfish
      */
     public function encrypt($plainText)
     {
-        if (!is_string($plainText)) {
+        if (!\is_string($plainText)) {
             $GLOBALS['log']->fatal('Plain text must be a string');
         }
 
@@ -218,12 +218,12 @@ class Crypt_Blowfish
         */
 
         $cipherText = '';
-        $len = strlen($plainText);
-        $plainText .= str_repeat(chr(0), (8 - ($len%8))%8);
+        $len = \strlen($plainText);
+        $plainText .= \str_repeat(\chr(0), (8 - ($len%8))%8);
         for ($i = 0; $i < $len; $i += 8) {
-            list(, $Xl, $Xr) = unpack("N2", substr($plainText, $i, 8));
+            list(, $Xl, $Xr) = \unpack("N2", \substr($plainText, $i, 8));
             $this->_encipher($Xl, $Xr);
-            $cipherText .= pack("N2", $Xl, $Xr);
+            $cipherText .= \pack("N2", $Xl, $Xr);
         }
         return $cipherText;
     }
@@ -238,7 +238,7 @@ class Crypt_Blowfish
      */
     public function decrypt($cipherText)
     {
-        if (!is_string($cipherText)) {
+        if (!\is_string($cipherText)) {
             $GLOBALS['log']->fatal('Chiper text must be a string');
         }
 
@@ -249,12 +249,12 @@ class Crypt_Blowfish
         */
 
         $plainText = '';
-        $len = strlen($cipherText);
-        $cipherText .= str_repeat(chr(0), (8 - ($len%8))%8);
+        $len = \strlen($cipherText);
+        $cipherText .= \str_repeat(\chr(0), (8 - ($len%8))%8);
         for ($i = 0; $i < $len; $i += 8) {
-            list(, $Xl, $Xr) = unpack("N2", substr($cipherText, $i, 8));
+            list(, $Xl, $Xr) = \unpack("N2", \substr($cipherText, $i, 8));
             $this->_decipher($Xl, $Xr);
-            $plainText .= pack("N2", $Xl, $Xr);
+            $plainText .= \pack("N2", $Xl, $Xr);
         }
         return $plainText;
     }
@@ -271,11 +271,11 @@ class Crypt_Blowfish
      */
     public function setKey($key)
     {
-        if (!is_string($key)) {
+        if (!\is_string($key)) {
             $GLOBALS['log']->fatal('Key must be a string');
         }
 
-        $len = strlen($key);
+        $len = \strlen($key);
 
         if ($len > 56 || $len == 0) {
             $GLOBALS['log']->fatal('Key must be less than 56 characters and non-zero. Supplied key length: ' . $len);
@@ -300,7 +300,7 @@ class Crypt_Blowfish
         for ($i = 0; $i < 18; $i++) {
             $data = 0;
             for ($j = 4; $j > 0; $j--) {
-                $data = $data << 8 | ord($key{$k});
+                $data = $data << 8 | \ord($key{$k});
                 $k = ($k+1) % $len;
             }
             $this->_P[$i] ^= $data;

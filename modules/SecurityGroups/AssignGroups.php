@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -25,7 +25,7 @@ class AssignGroups
                 $groupFocus = new SecurityGroup();
                 $security_modules = $groupFocus->getSecurityModules();
                 //sanity check
-                if (in_array($bean->module_dir, array_keys($security_modules))) {
+                if (\in_array($bean->module_dir, \array_keys($security_modules))) {
                     //add each group in securitygroup_list to new record
                     $rel_name = $groupFocus->getLinkName($bean->module_dir, "SecurityGroups");
 
@@ -149,10 +149,10 @@ EOQ;
   
         $no_mass_assign_list = array("Emails"=>"Emails","ACLRoles"=>"ACLRoles"); //,"Users"=>"Users");
         //check if security suite enabled
-        $action = strtolower($action);
+        $action = \strtolower($action);
         if (isset($module) && ($action == "list" || $action == "index" || $action == "listview")
         && (!isset($_REQUEST['search_form_only']) || $_REQUEST['search_form_only'] != true)
-        && !array_key_exists($module, $no_mass_assign_list)
+        && !\array_key_exists($module, $no_mass_assign_list)
         ) {
             global $current_user;
             if (is_admin($current_user) || ACLAction::getUserAccessLevel($current_user->id, "SecurityGroups", 'access') == ACL_ALLOW_ENABLED) {
@@ -160,7 +160,7 @@ EOQ;
                 $groupFocus = new SecurityGroup();
                 $security_modules = $groupFocus->getSecurityModules();
                 //if(in_array($module,$security_modules)) {
-                if (in_array($module, array_keys($security_modules))) {
+                if (\in_array($module, \array_keys($security_modules))) {
                     global $app_strings;
 
                     global $current_language;

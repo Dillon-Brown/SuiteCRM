@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -317,14 +317,14 @@ function get_module_in($module_name)
         return '()';
     }
 
-    $module_name_in = array_keys($_SESSION['viewable'][$module_name]);
+    $module_name_in = \array_keys($_SESSION['viewable'][$module_name]);
     $module_name_list = array();
     foreach ($module_name_in as $name) {
         $module_name_list[] = DBManagerFactory::getInstance()->quote($name);
     }
 
-    $mod_in = "('" . join("','", $module_name_list) . "')";
-    $_SESSION['viewable'][strtolower($module_name).'_in'] = $mod_in;
+    $mod_in = "('" . \join("','", $module_name_list) . "')";
+    $_SESSION['viewable'][\strtolower($module_name).'_in'] = $mod_in;
 
     return $mod_in;
 }
@@ -341,23 +341,23 @@ function set_module_in($arrayList, $module_name)
         $_SESSION['account_id'] = $id;
     }
 
-    if (!empty($_SESSION['viewable'][strtolower($module_name).'_in'])) {
+    if (!empty($_SESSION['viewable'][\strtolower($module_name).'_in'])) {
         if ($arrayList['in'] != '()') {
             $newList = array();
-            if (is_array($_SESSION['viewable'][strtolower($module_name).'_in'])) {
-                foreach ($_SESSION['viewable'][strtolower($module_name).'_in'] as $name) {
+            if (\is_array($_SESSION['viewable'][\strtolower($module_name).'_in'])) {
+                foreach ($_SESSION['viewable'][\strtolower($module_name).'_in'] as $name) {
                     $newList[] = DBManagerFactory::getInstance()->quote($name);
                 }
             }
-            if (is_array($arrayList['list'])) {
+            if (\is_array($arrayList['list'])) {
                 foreach ($arrayList['list'] as $name) {
                     $newList[] = DBManagerFactory::getInstance()->quote($name);
                 }
             }
-            $_SESSION['viewable'][strtolower($module_name).'_in'] = "('" . implode("', '", $newList) . "')";
+            $_SESSION['viewable'][\strtolower($module_name).'_in'] = "('" . \implode("', '", $newList) . "')";
         }
     } else {
-        $_SESSION['viewable'][strtolower($module_name).'_in'] = $arrayList['in'];
+        $_SESSION['viewable'][\strtolower($module_name).'_in'] = $arrayList['in'];
     }
 }
 
@@ -471,7 +471,7 @@ function portal_get_entry_list_limited($session, $module_name, $where, $order_by
     $output_list = filter_return_list($output_list, $select_fields, $module_name);
     $field_list = filter_field_list($field_list, $select_fields, $module_name);
 
-    return array('result_count'=>sizeof($output_list), 'next_offset'=>0,'field_list'=>$field_list, 'entry_list'=>$output_list, 'error'=>$error->get_soap_array());
+    return array('result_count'=>\sizeof($output_list), 'next_offset'=>0,'field_list'=>$field_list, 'entry_list'=>$output_list, 'error'=>$error->get_soap_array());
 }
 
 $invalid_contact_fields = array('portal_password'=>1, 'portal_active'=>1);

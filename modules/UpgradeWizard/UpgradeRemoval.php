@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -82,23 +82,23 @@ class UpgradeRemoval
      */
     public function processFilesToRemove($files=array())
     {
-        if (empty($files) || !is_array($files)) {
+        if (empty($files) || !\is_array($files)) {
             return;
         }
     
         require_once('include/dir_inc.php');
     
-        if (!file_exists('custom/backup')) {
+        if (!\file_exists('custom/backup')) {
             mkdir_recursive('custom/backup');
         }
     
         foreach ($files as $file) {
-            if (file_exists($file)) {
+            if (\file_exists($file)) {
                 $this->backup($file);
-                if (is_dir($file)) {
+                if (\is_dir($file)) {
                     rmdir_recursive($file);
                 } else {
-                    unlink($file);
+                    \unlink($file);
                 }
             }
         }
@@ -113,17 +113,17 @@ class UpgradeRemoval
      */
     protected function backup($file)
     {
-        $basename = basename($file);
-        $basepath = str_replace($basename, '', $file);
+        $basename = \basename($file);
+        $basepath = \str_replace($basename, '', $file);
 
-        if (!empty($basepath) && !file_exists('custom/backup/' . $basepath)) {
+        if (!empty($basepath) && !\file_exists('custom/backup/' . $basepath)) {
             mkdir_recursive('custom/backup/' . $basepath);
         }
     
-        if (is_dir($file)) {
+        if (\is_dir($file)) {
             copy_recursive($file, 'custom/backup/' . $file);
         } else {
-            copy($file, 'custom/backup/' . $file);
+            \copy($file, 'custom/backup/' . $file);
         }
     }
 }

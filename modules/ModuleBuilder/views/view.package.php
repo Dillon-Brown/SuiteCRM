@@ -86,7 +86,7 @@ class Viewpackage extends SugarView
             if (!empty($nodes['tree_data']['nodes'])) {
                 foreach ($nodes['tree_data']['nodes'] as $entry) {
                     if (!empty($entry['data']['label']) && $name != $entry['data']['label']) {
-                        $package_labels[] = strtoupper($entry['data']['label']);
+                        $package_labels[] = \strtoupper($entry['data']['label']);
                     }
                 }
             }
@@ -102,7 +102,7 @@ class Viewpackage extends SugarView
             $smarty->assign('mod_strings', $mod_strings);
             $smarty->assign('package_already_deployed', 'false');
             foreach ($this->package->modules as $a_module) {
-                if (in_array($a_module->key_name, $GLOBALS['moduleList'])) {
+                if (\in_array($a_module->key_name, $GLOBALS['moduleList'])) {
                     $smarty->assign('package_already_deployed', 'true');
                     break;
                 }
@@ -127,7 +127,7 @@ class Viewpackage extends SugarView
     {
         $this->package->moduleTypes = array();
         $this->package->loadModules();
-        foreach (array_keys($this->package->modules) as $name) {
+        foreach (\array_keys($this->package->modules) as $name) {
             foreach ($this->package->modules[$name]->config['templates'] as $template=>$var) {
                 $this->package->moduleTypes[$name] = $template;
             }

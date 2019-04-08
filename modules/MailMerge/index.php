@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -57,4 +57,4 @@ if (isset($_REQUEST['step'])) {
 } else {
     $step = '1';
 }
-include('modules/MailMerge/Step'. intval($step). '.php');
+include('modules/MailMerge/Step'. \intval($step). '.php');

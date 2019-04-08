@@ -64,9 +64,9 @@ class ParamsMiddleware
      */
     protected function getParameters(Request $request)
     {
-        $routeParams = array_map(
+        $routeParams = \array_map(
             function ($value) {
-                return is_bool($value) ? $value : urldecode($value);
+                return \is_bool($value) ? $value : \urldecode($value);
             },
             $request->getAttribute('route')->getArguments()
         );
@@ -74,7 +74,7 @@ class ParamsMiddleware
         $queryParams = $request->getQueryParams();
         $parsedBody = $request->getParsedBody();
 
-        return array_merge(
+        return \array_merge(
             $routeParams,
             isset($queryParams) ? $queryParams : [],
             isset($parsedBody) ? $parsedBody : []

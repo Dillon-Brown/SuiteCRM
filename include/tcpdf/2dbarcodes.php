@@ -123,8 +123,8 @@ class TCPDF2DBarcode
      */
     public function setBarcode($code, $type)
     {
-        $mode = explode(',', $type);
-        switch (strtoupper($mode[0])) {
+        $mode = \explode(',', $type);
+        switch (\strtoupper($mode[0])) {
             case 'TEST': { // TEST MODE
                 $this->barcode_array['num_rows'] = 5;
                 $this->barcode_array['num_cols'] = 15;

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -65,11 +65,11 @@ class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation im
 
         // BEGIN ASSERTIONS
         if (! isset($this->_fileVariables [ $view ])) {
-            sugar_die(get_class($this) . ": View $view is not supported") ;
+            sugar_die(\get_class($this) . ": View $view is not supported") ;
         }
         // END ASSERTIONS
 
-        $this->_view = strtolower($view) ;
+        $this->_view = \strtolower($view) ;
         $this->_moduleName = $moduleName ;
         $this->_packageName = $packageName ;
 
@@ -80,14 +80,14 @@ class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation im
         $module->mbvardefs->updateVardefs() ;
 
         // Set the list of fields associated with this module
-        $fielddefs = array_change_key_case($module->mbvardefs->vardefs [ 'fields' ]) ;
+        $fielddefs = \array_change_key_case($module->mbvardefs->vardefs [ 'fields' ]) ;
 
         // Set the global mod_strings directly as Sugar does not automatically load the language files for undeployed modules (how could it?)
         $selected_lang = 'en_us';
         if (isset($GLOBALS['current_language']) &&!empty($GLOBALS['current_language'])) {
             $selected_lang = $GLOBALS['current_language'];
         }
-        $GLOBALS [ 'mod_strings' ] = array_merge($GLOBALS [ 'mod_strings' ], $module->getModStrings($selected_lang)) ;
+        $GLOBALS [ 'mod_strings' ] = \array_merge($GLOBALS [ 'mod_strings' ], $module->getModStrings($selected_lang)) ;
 
         //Load relationshhip based fields and labels
         $moduleRels = $pak->getRelationshipsForModule($moduleName);
@@ -122,7 +122,7 @@ class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation im
         }
 
         if ($loaded === null) {
-            throw new Exception(get_class($this) . ": view definitions for View $this->_view and Module $this->_moduleName are missing");
+            throw new Exception(\get_class($this) . ": view definitions for View $this->_view and Module $this->_moduleName are missing");
         }
 
         $this->_viewdefs = $loaded ;
@@ -150,13 +150,13 @@ class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation im
     {
         //If we are pulling from the History Location, that means we did a restore, and we need to save the history for the previous file.
         if ($this->_sourceFilename == $this->getFileName($this->_view, $this->_moduleName, MB_HISTORYMETADATALOCATION)
-        && file_exists($this->getFileName($this->_view, $this->_moduleName, MB_BASEMETADATALOCATION))) {
+        && \file_exists($this->getFileName($this->_view, $this->_moduleName, MB_BASEMETADATALOCATION))) {
             $this->_history->append($this->getFileName($this->_view, $this->_moduleName, MB_BASEMETADATALOCATION));
         } else {
             $this->_history->append($this->_sourceFilename) ;
         }
         $filename = $this->getFileName($this->_view, $this->_moduleName, MB_BASEMETADATALOCATION);
-        $GLOBALS ['log']->debug(get_class($this) . "->deploy(): writing to " . $filename);
+        $GLOBALS ['log']->debug(\get_class($this) . "->deploy(): writing to " . $filename);
         $this->_saveToFile($filename, $defs);
     }
 
@@ -185,7 +185,7 @@ class UndeployedMetaDataImplementation extends AbstractMetaDataImplementation im
      */
     public function getFileNameInPackage($view, $moduleName, $packageName, $type = MB_BASEMETADATALOCATION)
     {
-        $type = strtolower($type) ;
+        $type = \strtolower($type) ;
 
         // BEGIN ASSERTIONS
         if ($type != MB_BASEMETADATALOCATION && $type != MB_HISTORYMETADATALOCATION) {

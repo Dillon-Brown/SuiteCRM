@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -48,10 +48,10 @@ global  $beanList, $beanFiles;
 
 $module = $_POST['mailmerge_module'];
 $document_id = $_POST['document_id'];
-$selObjs = urldecode($_POST['selected_objects_def']);
+$selObjs = \urldecode($_POST['selected_objects_def']);
 
 $item_ids = array();
-parse_str($selObjs, $item_ids);
+\parse_str($selObjs, $item_ids);
 
 $class_name = $beanList[$module];
 $includedir = $beanFiles[$class_name];
@@ -72,10 +72,10 @@ foreach ($item_ids as $key=>$value) {
 $state = new \SuiteCRM\StateSaver();
 $state->pushPHPConfigOptions();
 
-ini_set('max_execution_time', 600);
+\ini_set('max_execution_time', 600);
 $dataDir = create_cache_directory("MergedDocuments/");
 $fileName = UploadFile::realpath("upload://$document->document_revision_id");
-$outfile = pathinfo($document->filename, PATHINFO_FILENAME);
+$outfile = \pathinfo($document->filename, PATHINFO_FILENAME);
 
 $mm = new MailMerge(null, null, $dataDir);
 $mm->SetDataList($items);
@@ -86,4 +86,4 @@ $mm->CleanUp();
 
 $state->popPHPConfigOptions();
 
-header("Location: index.php?module=MailMerge&action=Step4&file=".urlencode($file));
+\header("Location: index.php?module=MailMerge&action=Step4&file=".\urlencode($file));

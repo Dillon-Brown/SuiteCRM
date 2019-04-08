@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -65,9 +65,9 @@ class UndefinedVardefRule extends BaseRule
         foreach ($panels as $name=>$panel) {
             foreach ($panel as $rowCount=>$row) {
                 foreach ($row as $key=>$column) {
-                    if (is_array($column) && isset($column['name']) && empty($column['name'])) {
+                    if (\is_array($column) && isset($column['name']) && empty($column['name'])) {
                         $panels[$name][$rowCount][$key] = '';
-                    } elseif (!is_array($column) && isset($column['name']) && empty($column['name'])) {
+                    } elseif (!\is_array($column) && isset($column['name']) && empty($column['name'])) {
                         $panels[$name][$rowCount][$key] = '';
                     }
                 } //foreach

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -60,7 +60,7 @@ global $mod_strings;
 $xtpl = new XTemplate('modules/MailMerge/Merge.html');
 $xtpl->assign("MAILMERGE_IS_REDIRECT", false);
 
-$mTime = microtime();
+$mTime = \microtime();
 $redirectUrl = 'index.php?action=index&step=5&module=MailMerge&mtime=' . $mTime;
 
 /**
@@ -72,7 +72,7 @@ if (empty($_SESSION['MAILMERGE_MODULE']) && !empty($_SESSION['mail_merge_file_lo
 } else {
     $module = $_SESSION['MAILMERGE_MODULE'];
     $document_id = $_SESSION['MAILMERGE_DOCUMENT_ID'];
-    $selObjs = urldecode($_SESSION['SELECTED_OBJECTS_DEF']);
+    $selObjs = \urldecode($_SESSION['SELECTED_OBJECTS_DEF']);
     $relObjs = (isset($_SESSION['MAILMERGE_RELATED_CONTACTS']) ? $_SESSION['MAILMERGE_RELATED_CONTACTS'] : '');
 
     $relModule = '';
@@ -90,12 +90,12 @@ if (empty($_SESSION['MAILMERGE_MODULE']) && !empty($_SESSION['mail_merge_file_lo
     $_SESSION['MAILMERGE_SKIP_REL'] = null;
     $_SESSION['MAILMERGE_CONTAINS_CONTACT_INFO'] = null;
     $item_ids = array();
-    parse_str(stripslashes(html_entity_decode($selObjs, ENT_QUOTES)), $item_ids);
+    \parse_str(\stripslashes(\html_entity_decode($selObjs, ENT_QUOTES)), $item_ids);
 
     if ($module == 'CampaignProspects') {
         $module = 'Prospects';
         if (!empty($_SESSION['MAILMERGE_CAMPAIGN_ID'])) {
-            $targets = array_keys($item_ids);
+            $targets = \array_keys($item_ids);
             require_once('modules/Campaigns/utils.php');
             campaign_log_mail_merge($_SESSION['MAILMERGE_CAMPAIGN_ID'], $targets);
         }
@@ -119,10 +119,10 @@ if (empty($_SESSION['MAILMERGE_MODULE']) && !empty($_SESSION['mail_merge_file_lo
     global $sugar_config;
 
     $filter = array();
-    if (array_key_exists('mailmerge_filter', $sugar_config)) {
+    if (\array_key_exists('mailmerge_filter', $sugar_config)) {
         //$filter = $sugar_config['mailmerge_filter'];
     }
-    array_push($filter, 'link');
+    \array_push($filter, 'link');
 
     $merge_array = array();
     $merge_array['master_module'] = $module;
@@ -139,11 +139,11 @@ if (empty($_SESSION['MAILMERGE_MODULE']) && !empty($_SESSION['mail_merge_file_lo
     }//rof
     $merge_array['ids'] = $ids;
 
-    $dataDir = getcwd() . '/' . sugar_cached('MergedDocuments/');
-    if (!file_exists($dataDir)) {
+    $dataDir = \getcwd() . '/' . sugar_cached('MergedDocuments/');
+    if (!\file_exists($dataDir)) {
         sugar_mkdir($dataDir);
     }
-    srand((double)microtime()*1000000);
+    \srand((double)\microtime()*1000000);
     $dataFileName = 'sugardata' . $mTime . '.php';
     write_array_to_file('merge_array', $merge_array, $dataDir . $dataFileName);
     //Save the temp file so we can remove when we are done
@@ -154,13 +154,13 @@ if (empty($_SESSION['MAILMERGE_MODULE']) && !empty($_SESSION['mail_merge_file_lo
     $dataFile =$dataFileName;
     $startUrl = 'index.php?action=index&module=MailMerge&reset=true';
 
-    $relModule = trim($relModule);
+    $relModule = \trim($relModule);
     $contents = "SUGARCRM_MAIL_MERGE_TOKEN#$templateFile#$dataFile#$module#$relModule";
 
     $rtfFileName = 'sugartokendoc' . $mTime . '.doc';
     $fp = sugar_fopen($dataDir . $rtfFileName, 'w');
-    fwrite($fp, $contents);
-    fclose($fp);
+    \fwrite($fp, $contents);
+    \fclose($fp);
 
     $_SESSION['mail_merge_file_location'] = sugar_cached('MergedDocuments/') . $rtfFileName;
     $_SESSION['mail_merge_file_name'] = $rtfFileName;

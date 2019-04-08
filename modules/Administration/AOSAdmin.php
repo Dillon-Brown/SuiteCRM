@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -70,10 +70,10 @@ $errors = array();
 
 if (isset($_REQUEST['do']) && $_REQUEST['do'] == 'save') {
     foreach ($_POST as $key => $value) {
-        if (strcmp("$value", 'true') == 0) {
+        if (\strcmp("$value", 'true') == 0) {
             $value = true;
         }
-        if (strcmp("$value", 'false') == 0) {
+        if (\strcmp("$value", 'false') == 0) {
             $value = false;
         }
         $_POST[$key] = $value;

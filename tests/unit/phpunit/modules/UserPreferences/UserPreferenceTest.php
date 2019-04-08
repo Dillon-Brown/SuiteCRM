@@ -28,7 +28,7 @@ class UserPreferenceTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $userPreference = new UserPreference($user);
 
         $result = $userPreference->getUserDateTimePreferences();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         // clean up
         

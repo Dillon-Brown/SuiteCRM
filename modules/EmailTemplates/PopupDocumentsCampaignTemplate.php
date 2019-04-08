@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -134,10 +134,10 @@ $form->assign("IS_TEMPLATE_OPTIONS", get_select_options_with_id($app_list_string
 $form->assign("TEMPLATE_TYPE_OPTIONS", get_select_options_with_id($app_list_strings['document_template_type_dom'], $template_type));
 
 
-ob_start();
+\ob_start();
 insert_popup_header($theme);
-$output_html .= ob_get_contents();
-ob_end_clean();
+$output_html .= \ob_get_contents();
+\ob_end_clean();
 
 $output_html .= get_form_header($current_mod_strings['LBL_SEARCH_FORM_TITLE'], '', false);
 
@@ -158,10 +158,10 @@ $ListView->setHeaderText($button);
 $ListView->setQuery($where, '', 'document_name', 'DOCUMENT');
 $ListView->setModStrings($current_mod_strings);
 
-ob_start();
+\ob_start();
 $ListView->processListView($seed_bean, 'main', 'DOCUMENT');
-$output_html .= ob_get_contents();
-ob_end_clean();
+$output_html .= \ob_get_contents();
+\ob_end_clean();
         
 $output_html .= insert_popup_footer();
 

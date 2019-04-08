@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -53,8 +53,8 @@ logThis('cleaning up files and session.  goodbye.');
 
 //Check the current step.
 
-if (isset($_SESSION['install_file']) && file_exists(isset($_SESSION['install_file']))) {
-    @unlink(isset($_SESSION['install_file']));
+if (isset($_SESSION['install_file']) && \file_exists(isset($_SESSION['install_file']))) {
+    @\unlink(isset($_SESSION['install_file']));
 }
 unlinkUWTempFiles();
 unlinkUploadFiles();

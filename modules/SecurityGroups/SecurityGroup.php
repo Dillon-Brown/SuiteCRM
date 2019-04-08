@@ -22,7 +22,7 @@ class SecurityGroup extends SecurityGroup_sugar
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -206,7 +206,7 @@ class SecurityGroup extends SecurityGroup_sugar
             //Otherwise, this is taken on the edit view on create now
             $groupFocus = new self();
             $security_modules = $groupFocus->getSecurityModules();
-            if (in_array($focus->module_dir, array_keys($security_modules))) {
+            if (\in_array($focus->module_dir, \array_keys($security_modules))) {
                 //check if user is in more than 1 group. If so then set the session var otherwise inherit it's only group
                 global $current_user;
 
@@ -229,7 +229,7 @@ class SecurityGroup extends SecurityGroup_sugar
             //inherit only for those that support Security Groups
             $groupFocus = new self();
             $security_modules = $groupFocus->getSecurityModules();
-            if (!in_array($focus->module_dir, array_keys($security_modules))) {
+            if (!\in_array($focus->module_dir, \array_keys($security_modules))) {
                 return;
             }
 
@@ -277,7 +277,7 @@ class SecurityGroup extends SecurityGroup_sugar
             $groupFocus = new self();
             $security_modules = $groupFocus->getSecurityModules();
 
-            if (in_array($focus->module_dir, array_keys($security_modules))) {
+            if (\in_array($focus->module_dir, \array_keys($security_modules))) {
                 $query = 'INSERT INTO securitygroups_records(id,securitygroup_id,record_id,module,date_modified,deleted) '
                     . 'SELECT DISTINCT ';
                 if ($focus->db->dbType == 'mysql') {
@@ -311,7 +311,7 @@ class SecurityGroup extends SecurityGroup_sugar
                 $groupFocus = new self();
                 $security_modules = $groupFocus->getSecurityModules();
                 //if(in_array($focus->module_dir,$security_modules)) {
-                if (in_array($focus->module_dir, array_keys($security_modules))) {
+                if (\in_array($focus->module_dir, \array_keys($security_modules))) {
                     $query = 'INSERT INTO securitygroups_records(id,securitygroup_id,record_id,module,date_modified,deleted) '
                         . 'SELECT DISTINCT ';
                     if ($focus->db->dbType == 'mysql') {
@@ -350,7 +350,7 @@ class SecurityGroup extends SecurityGroup_sugar
             $groupFocus = new self();
             $security_modules = $groupFocus->getSecurityModules();
             //if(!in_array($focus_module_dir,$security_modules)) {
-            if (!in_array($focus_module_dir, array_keys($security_modules))) {
+            if (!\in_array($focus_module_dir, \array_keys($security_modules))) {
                 //rost fix2
                 return; //don't inherit for this module
             }
@@ -363,7 +363,7 @@ class SecurityGroup extends SecurityGroup_sugar
             if (isset($_REQUEST['relate_to']) && isset($_REQUEST['relate_id'])) {
                 //relate_to is not guaranteed to be a module name anymore.
                 //if it isn't load the relationship and find the module name that way
-                if (!in_array($_REQUEST['relate_to'], array_keys($security_modules))) {
+                if (!\in_array($_REQUEST['relate_to'], \array_keys($security_modules))) {
                     //check to see if relate_to is the relationship name
                     require_once 'modules/Relationships/Relationship.php';
                     $relationship = new Relationship();
@@ -403,7 +403,7 @@ class SecurityGroup extends SecurityGroup_sugar
             //allow inheritance for all relate field types....iterate through and inherit each related field
             foreach ($focus->field_name_map as $name => $def) {
                 if ((!isset($def['type']) || ($def['type'] == 'relate' && isset($def['id_name'])))
-                    && isset($def['module']) && strtolower($def['module']) != 'users'
+                    && isset($def['module']) && \strtolower($def['module']) != 'users'
                 ) {
                     if (isset($_REQUEST[$def['id_name']])) {
                         $relate_parent_id = $_REQUEST[$def['id_name']];
@@ -577,7 +577,7 @@ class SecurityGroup extends SecurityGroup_sugar
         } elseif ($this->db->dbType == 'mssql') {
             $query .= ' lower(newid()) ';
         }
-        $query .= ",'" . htmlspecialchars($group_id, ENT_QUOTES) . "', '" . htmlspecialchars(
+        $query .= ",'" . \htmlspecialchars($group_id, ENT_QUOTES) . "', '" . \htmlspecialchars(
             $module,
                 ENT_QUOTES
         ) . "'," . $this->db->convert('', 'today') . ',0 )';
@@ -590,7 +590,7 @@ class SecurityGroup extends SecurityGroup_sugar
      */
     public function removeDefaultGroup($default_id)
     {
-        $query = "DELETE FROM securitygroups_default WHERE id = '" . htmlspecialchars($default_id) . "' ";
+        $query = "DELETE FROM securitygroups_default WHERE id = '" . \htmlspecialchars($default_id) . "' ";
         $this->db->query($query);
     }
 
@@ -617,7 +617,7 @@ class SecurityGroup extends SecurityGroup_sugar
         $result = $rs->db->query($query);
         while (($row = $rs->db->fetchByAssoc($result)) != null) {
             if ($row['lhs_module'] == 'SecurityGroups') {
-                if (in_array($row['rhs_module'], $module_blacklist)) {
+                if (\in_array($row['rhs_module'], $module_blacklist)) {
                     continue;
                 }
 
@@ -625,7 +625,7 @@ class SecurityGroup extends SecurityGroup_sugar
                     $security_modules[$row['rhs_module']] = $app_list_strings['moduleList'][$row['rhs_module']];//rost fix
                 }
             } else {
-                if (in_array($row['lhs_module'], $module_blacklist)) {
+                if (\in_array($row['lhs_module'], $module_blacklist)) {
                     continue;
                 }
 

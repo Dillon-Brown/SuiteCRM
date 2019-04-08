@@ -39,7 +39,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -73,7 +73,7 @@ class EmailsViewSendEmail extends ViewAjax
         switch ($this->bean->status) {
             case 'sent':
                 $response['data'] = array(
-                    'type' => get_class($this->bean),
+                    'type' => \get_class($this->bean),
                     'id' => $this->bean->id,
                     'title' => $app_strings['LBL_EMAIL_SENT_SUCCESS'],
                     'attributes' => array(),
@@ -82,20 +82,20 @@ class EmailsViewSendEmail extends ViewAjax
                 break;
             case 'send_error':
                 $response['errors'] = array(
-                    'type' => get_class($this->bean),
+                    'type' => \get_class($this->bean),
                     'id' => $this->bean->id,
                     'title' => $app_strings['LBL_EMAIL_ERROR_SENDING']
                 );
                 break;
             default:
                 $response['errors'] = array(
-                    'type' => get_class($this->bean),
+                    'type' => \get_class($this->bean),
                     'id' => $this->bean->id,
                     'title' => $app_strings['ERR_BAD_RESPONSE_FROM_SERVER']
                 );
                 break;
         }
 
-        echo json_encode($response);
+        echo \json_encode($response);
     }
 }

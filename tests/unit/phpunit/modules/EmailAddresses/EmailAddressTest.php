@@ -39,7 +39,7 @@ class EmailAddressTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($email->id));
-        $this->assertEquals(36, strlen($email->id));
+        $this->assertEquals(36, \strlen($email->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $email->mark_deleted($email->id);

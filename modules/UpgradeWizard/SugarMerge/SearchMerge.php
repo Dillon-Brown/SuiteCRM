@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -91,7 +91,7 @@ class SearchMerge extends ListViewMerge
         
         foreach ($panels as $panel_id=>$panel) {
             foreach ($panel as $col_id=>$col) {
-                if (is_array($col)) {
+                if (\is_array($col)) {
                     $field_name = $col['name'];
                 } else {
                     $field_name = $col;
@@ -158,7 +158,7 @@ class SearchMerge extends ListViewMerge
         }
         
         $this->clear();
-        $this->log("\n\n". 'Starting a merge in ' . get_class($this));
+        $this->log("\n\n". 'Starting a merge in ' . \get_class($this));
         $this->log('merging the following files');
         $this->log('original file:'  . $original_file);
         $this->log('new file:'  . $new_file);
@@ -175,7 +175,7 @@ class SearchMerge extends ListViewMerge
         $this->mergeMetaData();
         if ($save && !empty($this->newData) && !empty($custom_file)) {
             //backup the file
-            copy($custom_file, $custom_file . '.suback.php');
+            \copy($custom_file, $custom_file . '.suback.php');
             return $this->save($custom_file);
         }
         

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -61,7 +61,7 @@ class EmployeesViewDetail extends ViewDetail
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -79,14 +79,14 @@ class EmployeesViewDetail extends ViewDetail
 
         $theTitle = "<div class='moduleTitle'>\n";
 
-        $module = preg_replace("/ /", "", $this->module);
+        $module = \preg_replace("/ /", "", $this->module);
 
         $params = $this->_getModuleTitleParams();
-        $count = count($params);
+        $count = \count($params);
         $index = 0;
 
         if (SugarThemeRegistry::current()->directionality == "rtl") {
-            $params = array_reverse($params);
+            $params = \array_reverse($params);
         }
 
         $paramString = '';

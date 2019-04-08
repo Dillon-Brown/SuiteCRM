@@ -54,10 +54,10 @@ class ACLActionTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         
 
         //take count of actions initially and then after method execution and test if action count increases
-        $action_count = count(ACLAction::getDefaultActions());
+        $action_count = \count(ACLAction::getDefaultActions());
         ACLAction::addActions('Test');
         $actual = ACLAction::getDefaultActions();
-        $this->assertGreaterThan($action_count, count($actual));
+        $this->assertGreaterThan($action_count, \count($actual));
         
         // clean up
         
@@ -69,10 +69,10 @@ class ACLActionTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
 
         //take count of actions initially and then after method execution and test if action count decreases
-        $action_count = count(ACLAction::getDefaultActions());
+        $action_count = \count(ACLAction::getDefaultActions());
         ACLAction::removeActions('Test');
         $actual = ACLAction::getDefaultActions();
-        $this->assertLessThanOrEqual($action_count, count($actual), 'actual count was: ' . count($actual));
+        $this->assertLessThanOrEqual($action_count, \count($actual), 'actual count was: ' . \count($actual));
     }
 
     public function testAccessName()
@@ -92,12 +92,12 @@ class ACLActionTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         global $beanList;
         $actual = ACLAction::getDefaultActions();
-        $this->assertTrue(is_array($actual)); //verify that it returns an array
+        $this->assertTrue(\is_array($actual)); //verify that it returns an array
         foreach ($actual as $acl) {
             $this->assertInstanceOf('ACLAction', $acl);
         }
         $actual = ACLAction::getDefaultActions('module', 'list');
-        $this->assertTrue(is_array($actual)); //verify that it returns an array
+        $this->assertTrue(\is_array($actual)); //verify that it returns an array
         foreach ($actual as $acl) {
             $this->assertInstanceOf('ACLAction', $acl);
             $this->assertEquals('list', $acl->name);

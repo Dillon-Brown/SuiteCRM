@@ -1,5 +1,5 @@
 <?php
-if (! defined('sugarEntry') || ! sugarEntry) {
+if (! \defined('sugarEntry') || ! sugarEntry) {
     die('Not A Valid Entry Point') ;
 }
 /**
@@ -79,18 +79,18 @@ class DeployedRelationships extends AbstractRelationships implements Relationshi
         if (! empty($relationships)) {
             // load the relationship definitions for all installed custom relationships into $dictionary
             $dictionary = array( ) ;
-            if (file_exists('custom/application/Ext/TableDictionary/tabledictionary.ext.php')) {
+            if (\file_exists('custom/application/Ext/TableDictionary/tabledictionary.ext.php')) {
                 include('custom/application/Ext/TableDictionary/tabledictionary.ext.php') ;
             }
             
             $invalidModules = array();
-            $validModules = array_keys(self::findRelatableModules()) ;
+            $validModules = \array_keys(self::findRelatableModules()) ;
             
             // now convert the relationships array into an array of AbstractRelationship objects
             foreach ($relationships as $name => $definition) {
                 if (($definition [ 'lhs_module' ] == $this->moduleName) || ($definition [ 'rhs_module' ] == $this->moduleName)) {
-                    if (in_array($definition [ 'lhs_module' ], $validModules) && in_array($definition [ 'rhs_module' ], $validModules)
-                        && ! in_array($definition [ 'lhs_module' ], $invalidModules) && ! in_array($definition [ 'rhs_module' ], $invalidModules)) {
+                    if (\in_array($definition [ 'lhs_module' ], $validModules) && \in_array($definition [ 'rhs_module' ], $validModules)
+                        && ! \in_array($definition [ 'lhs_module' ], $invalidModules) && ! \in_array($definition [ 'rhs_module' ], $invalidModules)) {
                         // identify the subpanels for this relationship - TODO: optimize this - currently does m x n scans through the subpanel list...
                         $definition [ 'rhs_subpanel' ] = self::identifySubpanel($definition [ 'lhs_module' ], $definition [ 'rhs_module' ]) ;
                         $definition [ 'lhs_subpanel' ] = self::identifySubpanel($definition [ 'rhs_module' ], $definition [ 'lhs_module' ]) ;
@@ -185,7 +185,7 @@ class DeployedRelationships extends AbstractRelationships implements Relationshi
      */
     protected function getAllRelationships()
     {
-        return array_merge($this->relationships, parent::getDeployedRelationships()) ;
+        return \array_merge($this->relationships, parent::getDeployedRelationships()) ;
     }
 
     /*
@@ -276,7 +276,7 @@ class DeployedRelationships extends AbstractRelationships implements Relationshi
         foreach ($this->relationships as $name => $relationship) {
             $definition = $relationship->getDefinition() ;
             // activities will always appear on the rhs only - lhs will be always be this module in MB
-            if (strtolower($definition [ 'rhs_module' ]) == 'activities') {
+            if (\strtolower($definition [ 'rhs_module' ]) == 'activities') {
                 $this->activitiesToAdd = true ;
                 $relationshipName = $definition [ 'relationship_name' ] ;
                 foreach (self::$activities as $activitiesSubModuleLower => $activitiesSubModuleName) {
@@ -289,7 +289,7 @@ class DeployedRelationships extends AbstractRelationships implements Relationshi
             }
         }
         
-        $GLOBALS [ 'log' ]->info(get_class($this) . "->build(): installing relationships") ;
+        $GLOBALS [ 'log' ]->info(\get_class($this) . "->build(): installing relationships") ;
 
         $MBModStrings = $GLOBALS [ 'mod_strings' ] ;
         $adminModStrings = return_module_language('', 'Administration') ; // required by ModuleInstaller
@@ -350,7 +350,7 @@ class DeployedRelationships extends AbstractRelationships implements Relationshi
         // save out the updated definitions so that we keep track of the change in built status
         $this->save() ;
         
-        $GLOBALS [ 'log' ]->info(get_class($this) . "->build(): finished relationship installation") ;
+        $GLOBALS [ 'log' ]->info(\get_class($this) . "->build(): finished relationship installation") ;
     }
 
     /*
@@ -369,9 +369,9 @@ class DeployedRelationships extends AbstractRelationships implements Relationshi
         $invalidModules = array( 'emails' , 'kbdocuments' ) ;
         
         foreach ($layoutAdditions as $deployedModuleName => $fieldName) {
-            if (! in_array(strtolower($deployedModuleName), $invalidModules)) {
+            if (! \in_array(\strtolower($deployedModuleName), $invalidModules)) {
                 foreach (array( MB_EDITVIEW , MB_DETAILVIEW ) as $view) {
-                    $GLOBALS [ 'log' ]->info(get_class($this) . ": adding $fieldName to $view layout for module $deployedModuleName") ;
+                    $GLOBALS [ 'log' ]->info(\get_class($this) . ": adding $fieldName to $view layout for module $deployedModuleName") ;
                     $parser = new GridLayoutMetaDataParser($view, $deployedModuleName) ;
                     $parser->addField(array( 'name' => $fieldName )) ;
                     $parser->handleSave(false) ;

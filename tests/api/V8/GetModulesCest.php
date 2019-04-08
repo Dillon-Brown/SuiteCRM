@@ -39,7 +39,7 @@ class GetModulesCest
         $I->sendGET($I->getInstanceURL() . $iterator->offsetGet('endPoint'));
         $I->seeResponseCodeIs(400);
         $I->seeResponseIsJson();
-        $I->seeResponseEquals(json_encode($expectedResult, JSON_PRETTY_PRINT));
+        $I->seeResponseEquals(\json_encode($expectedResult, JSON_PRETTY_PRINT));
     }
 
     /**

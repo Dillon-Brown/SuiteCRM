@@ -1,6 +1,6 @@
 <?php
 //FILE SUGARCRM flav=pro || flav=sales
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -46,9 +46,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 $mod_strings   = return_module_language($current_language, $_REQUEST['target_module']);
 $target_module = $_REQUEST['target_module']; // target class
 
-if (file_exists('modules/'. $_REQUEST['target_module'] . '/EditView.php')) {
+if (\file_exists('modules/'. $_REQUEST['target_module'] . '/EditView.php')) {
     $tpl = $_REQUEST['tpl'];
-    if (is_file('modules/' . $target_module . '/' . $target_module . 'QuickCreate.php')) { // if there is a quickcreate override
+    if (\is_file('modules/' . $target_module . '/' . $target_module . 'QuickCreate.php')) { // if there is a quickcreate override
         require_once('modules/' . $target_module . '/' . $target_module . 'QuickCreate.php');
         $editviewClass     = $target_module . 'QuickCreate'; // eg. OpportunitiesQuickCreate
         $editview          = new $editviewClass($target_module, 'modules/' . $target_module . '/tpls/' . $tpl);
@@ -63,11 +63,11 @@ if (file_exists('modules/'. $_REQUEST['target_module'] . '/EditView.php')) {
     $subpanelView = 'modules/'. $target_module . '/views/view.subpanelquickedit.php';
     $view = (!empty($_REQUEST['target_view'])) ? $_REQUEST['target_view'] : 'QuickEdit';
     //Check if there is a custom override, then check for module override, finally use default (SubpanelQuickCreate)
-    if (file_exists('custom/' . $subpanelView)) {
+    if (\file_exists('custom/' . $subpanelView)) {
         require_once('custom/' . $subpanelView);
         $subpanelClass =  'Custom' . $target_module . 'SubpanelQuickEdit';
         $sqc  = new $subpanelClass($target_module, $view);
-    } elseif (file_exists($subpanelView)) {
+    } elseif (\file_exists($subpanelView)) {
         require_once($subpanelView);
         $subpanelClass = $target_module . 'SubpanelQuickEdit';
         $sqc  = new $subpanelClass($target_module, $view);

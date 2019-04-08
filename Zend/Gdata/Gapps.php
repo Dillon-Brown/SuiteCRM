@@ -877,14 +877,14 @@ class Zend_Gdata_Gapps extends Zend_Gdata
      */
     public function __call($method, $args)
     {
-        if (preg_match('/^new(\w+Query)/', $method, $matches)) {
+        if (\preg_match('/^new(\w+Query)/', $method, $matches)) {
             $class = $matches[1];
             $foundClassName = null;
             foreach ($this->_registeredPackages as $name) {
                 try {
                     // Autoloading disabled on next line for compatibility
                     // with magic factories. See ZF-6660.
-                    if (!class_exists($name . '_' . $class, false)) {
+                    if (!\class_exists($name . '_' . $class, false)) {
                         require_once 'Zend/Loader.php';
                         @Zend_Loader::loadClass($name . '_' . $class);
                     }
@@ -897,7 +897,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
             if ($foundClassName != null) {
                 $reflectionObj = new ReflectionClass($foundClassName);
                 // Prepend the domain to the query
-                $args = array_merge(array($this->getDomain()), $args);
+                $args = \array_merge(array($this->getDomain()), $args);
                 return $reflectionObj->newInstanceArgs($args);
             } else {
                 require_once 'Zend/Gdata/App/Exception.php';

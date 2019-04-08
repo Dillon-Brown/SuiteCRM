@@ -41,7 +41,7 @@
 
 namespace SuiteCRM;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -163,15 +163,15 @@ class LangText
             \LanguageManager::loadModuleLanguage($module, $lang);
         }
 
-        if (!is_null($key)) {
+        if (!\is_null($key)) {
             $this->key = $key;
         }
 
-        if (!is_null($args)) {
+        if (!\is_null($args)) {
             $this->args = $args;
         }
 
-        if (!is_null($use)) {
+        if (!\is_null($use)) {
             $this->use = $use;
         }
 
@@ -198,7 +198,7 @@ class LangText
         }
 
         foreach ((array) $this->args as $name => $value) {
-            $text = str_replace('{' . $name . '}', $value, $text);
+            $text = \str_replace('{' . $name . '}', $value, $text);
         }
 
         return $text;

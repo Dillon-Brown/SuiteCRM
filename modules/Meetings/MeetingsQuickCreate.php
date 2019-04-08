@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -79,10 +79,10 @@ class MeetingsQuickCreate extends QuickCreate
         $this->javascript->setSugarBean($focus);
         $this->javascript->addAllFields('');
 
-        if (is_null($focus->date_start)) {
+        if (\is_null($focus->date_start)) {
             $focus->date_start = $timedate->to_display_date(TimeDate::getInstance()->nowDb());
         }
-        if (is_null($focus->time_start)) {
+        if (\is_null($focus->time_start)) {
             $focus->time_start = $timedate->to_display_time(TimeDate::getInstance()->nowDb(), true);
         }
         if (!isset($focus->duration_hours)) {
@@ -90,16 +90,16 @@ class MeetingsQuickCreate extends QuickCreate
         }
 
         
-        $date_start_array=explode(" ", trim($focus->date_start));
-        if (count($date_start_array)==2) {
+        $date_start_array=\explode(" ", \trim($focus->date_start));
+        if (\count($date_start_array)==2) {
             $focus->time_start = $timedate->to_db_time($date_start_array[1], false);
             //$focus->date_start = $date_start_array[0];
         }
 
         $this->ss->assign("DATE_START", $focus->date_start);
-        $this->ss->assign("TIME_START", substr($focus->time_start, 0, 5));
-        $time_start_hour = intval(substr($focus->time_start, 0, 2));
-        $time_start_minutes = substr($focus->time_start, 3, 5);
+        $this->ss->assign("TIME_START", \substr($focus->time_start, 0, 5));
+        $time_start_hour = \intval(\substr($focus->time_start, 0, 2));
+        $time_start_minutes = \substr($focus->time_start, 3, 5);
         
         if ($time_start_minutes > 0 && $time_start_minutes < 15) {
             $time_start_minutes = "15";
@@ -119,7 +119,7 @@ class MeetingsQuickCreate extends QuickCreate
         $start_at = 0;
 
         $time_pref = $timedate->get_time_format();
-        if (strpos($time_pref, 'a') || strpos($time_pref, 'A')) {
+        if (\strpos($time_pref, 'a') || \strpos($time_pref, 'A')) {
             $num_of_hours = 13;
             $start_at = 1;
         }
@@ -134,7 +134,7 @@ class MeetingsQuickCreate extends QuickCreate
         
         for ($i = $start_at; $i < $num_of_hours; $i ++) {
             $i = $i."";
-            if (strlen($i) == 1) {
+            if (\strlen($i) == 1) {
                 $i = "0".$i;
             }
             $hours_arr[$i] = $i;
@@ -146,7 +146,7 @@ class MeetingsQuickCreate extends QuickCreate
         $this->ss->assign("DURATION_MINUTES_OPTIONS", get_select_options_with_id($focus->minutes_values, $focus->duration_minutes));
         // Test to see if time format is 11:00am; otherwise it's 11:00AM
         if ($num_of_hours == 13) {
-            if (strpos($time_pref, 'a')) {
+            if (\strpos($time_pref, 'a')) {
                 if (!isset($focus->meridiem_am_values)) {
                     $focus->meridiem_am_values = array('am'=>'am', 'pm'=>'pm');
                 }

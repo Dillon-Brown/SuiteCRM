@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -56,18 +56,18 @@ class TemplateRelatedTextField extends TemplateText
     {
         $this->prepare();
         $name = $this->name .'_name';
-        $value_name = strtoupper('{'.$name.'}');
+        $value_name = \strtoupper('{'.$name.'}');
         $id = $this->name ;
-        $value_id = strtoupper('{'.$id .'}');
-        return "<input type='text' name='$name' id='$name' size='".$this->size."' readonly value='$value_name'><input type='button' onclick='open_popup(\"{". strtoupper($this->name). "_MODULE}\", 600, 400,\" \", true, false, {ENCODED_". strtoupper($this->name). "_POPUP_REQUEST_DATA})' type='button'  class='button' value='{APP.LBL_SELECT_BUTTON_LABEL}' ><input type='hidden' name='$id' value='$value_id'>";
+        $value_id = \strtoupper('{'.$id .'}');
+        return "<input type='text' name='$name' id='$name' size='".$this->size."' readonly value='$value_name'><input type='button' onclick='open_popup(\"{". \strtoupper($this->name). "_MODULE}\", 600, 400,\" \", true, false, {ENCODED_". \strtoupper($this->name). "_POPUP_REQUEST_DATA})' type='button'  class='button' value='{APP.LBL_SELECT_BUTTON_LABEL}' ><input type='hidden' name='$id' value='$value_id'>";
     }
 
     public function get_html_detail()
     {
         $name = $this->name .'_name';
-        $value_name = strtoupper('{'.$name.'}');
+        $value_name = \strtoupper('{'.$name.'}');
         $id = $this->name ;
-        $value_id = strtoupper('{'.$id .'}');
+        $value_id = \strtoupper('{'.$id .'}');
         
         return "<a href='index.php?module=$this->ext2&action=DetailView&record={$value_id}'>{$value_name}</a>" ;
     }
@@ -79,16 +79,16 @@ class TemplateRelatedTextField extends TemplateText
         } else {
             $name = $this->ext1;
         }
-        return '{'. strtoupper($name) . '}';
+        return '{'. \strtoupper($name) . '}';
     }
 
     public function get_html_search()
     {
         $searchable=array();
         $def = $this->bean->field_name_map[$this->name];
-        if (!empty($def['id_name']) && in_array($def['id_name'], $searchable)) {
+        if (!empty($def['id_name']) && \in_array($def['id_name'], $searchable)) {
             $name = $def['id_name'];
-            return "<select size='3' name='{$name}[]' tabindex='1' multiple='multiple'>{".strtoupper($name). "_FILTER}</select>";
+            return "<select size='3' name='{$name}[]' tabindex='1' multiple='multiple'>{".\strtoupper($name). "_FILTER}</select>";
         }
         //return 'NOT AVAILABLE';
         return $this->get_html_edit();
@@ -99,18 +99,18 @@ class TemplateRelatedTextField extends TemplateText
         $searchable=array();
         $def = $this->bean->field_name_map[$this->name];
         $returnXTPL = array();
-        if (!empty($def['id_name']) && in_array($def['id_name'], $searchable)) {
+        if (!empty($def['id_name']) && \in_array($def['id_name'], $searchable)) {
             $name = $def['id_name'];
             $team_list = '';
             foreach (get_team_array() as $id=>$team) {
                 $selected = '';
                 
-                if (!empty($_REQUEST[$name]) && is_array($_REQUEST[$name]) && in_array($id, $_REQUEST[$name])) {
+                if (!empty($_REQUEST[$name]) && \is_array($_REQUEST[$name]) && \in_array($id, $_REQUEST[$name])) {
                     $selected = 'selected';
                 }
                 $team_list .= "<option  $selected value='$id'>$team</option>";
             }
-            $returnXTPL[strtoupper($name). '_FILTER'] = $team_list;
+            $returnXTPL[\strtoupper($name). '_FILTER'] = $team_list;
         } else {
             $id = $this->name;
             $name = $this->name .'_name';
@@ -126,14 +126,14 @@ class TemplateRelatedTextField extends TemplateText
         
             $json = getJSONobj();
             $encoded_popup_request_data = $json->encode($popup_request_data);
-            $returnXTPL['ENCODED_'.strtoupper($id).'_POPUP_REQUEST_DATA'] = $encoded_popup_request_data;
-            $returnXTPL[strtoupper($id).'_MODULE'] = $module;
+            $returnXTPL['ENCODED_'.\strtoupper($id).'_POPUP_REQUEST_DATA'] = $encoded_popup_request_data;
+            $returnXTPL[\strtoupper($id).'_MODULE'] = $module;
 
             if (isset($_REQUEST[$name])) {
-                $returnXTPL[strtoupper($name)] =  $_REQUEST[$name];
+                $returnXTPL[\strtoupper($name)] =  $_REQUEST[$name];
             }
             if (isset($_REQUEST[$id])) {
-                $returnXTPL[strtoupper($id)] =  $_REQUEST[$id];
+                $returnXTPL[\strtoupper($id)] =  $_REQUEST[$id];
             }
         }
         return $returnXTPL;
@@ -161,8 +161,8 @@ class TemplateRelatedTextField extends TemplateText
       
         $json = getJSONobj();
         $encoded_contact_popup_request_data = $json->encode($popup_request_data);
-        $returnXTPL['ENCODED_'.strtoupper($id).'_POPUP_REQUEST_DATA'] = $encoded_contact_popup_request_data;
-        $returnXTPL[strtoupper($id).'_MODULE'] = $module;
+        $returnXTPL['ENCODED_'.\strtoupper($id).'_POPUP_REQUEST_DATA'] = $encoded_contact_popup_request_data;
+        $returnXTPL[\strtoupper($id).'_MODULE'] = $module;
 
         if (isset($beanList[$module]) && isset($this->bean->$id)) {
             if (!isset($this->bean->$name)) {
@@ -180,13 +180,13 @@ class TemplateRelatedTextField extends TemplateText
             }
             
             
-            $returnXTPL[strtoupper($id)] = $this->bean->$id;
+            $returnXTPL[\strtoupper($id)] = $this->bean->$id;
         }
         if (isset($this->bean->$name)) {
-            $returnXTPL[strtoupper($name)] = $this->bean->$name;
+            $returnXTPL[\strtoupper($name)] = $this->bean->$name;
         }
         if (isset($this->bean->$id)) {
-            $returnXTPL[strtoupper($id)] = $this->bean->$id;
+            $returnXTPL[\strtoupper($id)] = $this->bean->$id;
         }
         
         
@@ -249,7 +249,7 @@ class TemplateRelatedTextField extends TemplateText
     {
         if ($df instanceof DynamicField) {
             require_once 'modules/ModuleBuilder/parsers/parser.label.php';
-            foreach (array_keys($GLOBALS['sugar_config']['languages']) as $language) {
+            foreach (\array_keys($GLOBALS['sugar_config']['languages']) as $language) {
                 foreach (ModuleBuilder::getModuleAliases($df->module) as $module) {
                     $mod_strings = return_module_language($language, $module);
                     if (isset($mod_strings[$fieldId->vname])) {
@@ -258,7 +258,7 @@ class TemplateRelatedTextField extends TemplateText
                 }
             }
         } elseif ($df instanceof MBModule) {
-            foreach (array_keys($GLOBALS['sugar_config']['languages']) as $language) {
+            foreach (\array_keys($GLOBALS['sugar_config']['languages']) as $language) {
                 $df->deleteLabel($language, $fieldId->vname);
                 $df->save();
             }
@@ -274,12 +274,12 @@ class TemplateRelatedTextField extends TemplateText
         if (!$df->fieldExists($this->name)) {
             $id = new TemplateId();
             $id->len = 36;
-            $id->label = strtoupper("LBL_{$this->name}_".BeanFactory::getBeanName($this->ext2)."_ID");
+            $id->label = \strtoupper("LBL_{$this->name}_".BeanFactory::getBeanName($this->ext2)."_ID");
             $id->vname = $id->label;
             $this->saveIdLabel($id->label, $df);
 
             $count = 0;
-            $basename = strtolower(get_singular_bean_name($this->ext2)).'_id' ;
+            $basename = \strtolower(get_singular_bean_name($this->ext2)).'_id' ;
             $idName = $basename.'_c' ;
             
             while ($df->fieldExists($idName, 'id')) {

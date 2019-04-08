@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -78,13 +78,13 @@ class AdministrationViewThemesettings extends SugarView
         }
 
         // Check if default_theme is valid
-        if (isset($_REQUEST['default_theme']) && !in_array($_REQUEST['default_theme'], array_keys(SugarThemeRegistry::allThemes()))) {
+        if (isset($_REQUEST['default_theme']) && !\in_array($_REQUEST['default_theme'], \array_keys(SugarThemeRegistry::allThemes()))) {
             sugar_die("Default theme is invalid.");
         }
         
         if (isset($_REQUEST['disabled_themes'])) {
             $configurator = new Configurator();
-            $configurator->config['disabled_themes'] = implode(',', $_REQUEST['disabled_themes']);
+            $configurator->config['disabled_themes'] = \implode(',', $_REQUEST['disabled_themes']);
             $configurator->config['default_theme'] = $_REQUEST['default_theme'];
             $configurator->handleOverride();
         }
@@ -114,8 +114,8 @@ class AdministrationViewThemesettings extends SugarView
         $this->ss->assign('available_themes', SugarThemeRegistry::allThemesDefs());
         $this->ss->assign('default_theme', $GLOBALS['sugar_config']['default_theme']);
         $this->ss->assign("THEMES", get_select_options_with_id(SugarThemeRegistry::allThemes(), $GLOBALS['sugar_config']['default_theme']));
-        $this->ss->assign('enabled_modules', json_encode($enabled));
-        $this->ss->assign('disabled_modules', json_encode($disabled));
+        $this->ss->assign('enabled_modules', \json_encode($enabled));
+        $this->ss->assign('disabled_modules', \json_encode($disabled));
         $this->ss->assign('mod', $mod_strings);
         $this->ss->assign('APP', $app_strings);
         $this->ss->assign('currentTheme', SugarThemeRegistry::current());

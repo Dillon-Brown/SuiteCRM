@@ -147,7 +147,7 @@ class aCaseTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         $aCase = new aCase();
         $result = $aCase->get_contacts();
-        $this->assertFalse(is_array($result));
+        $this->assertFalse(\is_array($result));
         $this->assertEquals(false, $result);
     }
 
@@ -166,9 +166,9 @@ class aCaseTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
                 'ENCODED_NAME' => null,
                 'CASE_NUMBER' => null,
                 'SET_COMPLETE' => '~'
-                                .preg_quote('<a href=\'index.php?return_module=Home&return_action=index&action=EditView&module=Cases&record=&status=Closed\'><img src="themes/'.$current_theme.'/images/close_inline.png?v=')
+                                .\preg_quote('<a href=\'index.php?return_module=Home&return_action=index&action=EditView&module=Cases&record=&status=Closed\'><img src="themes/'.$current_theme.'/images/close_inline.png?v=')
                                 .'[\w-]+'
-                                .preg_quote('"    title=Close border=\'0\' alt="Close" /></a>')
+                                .\preg_quote('"    title=Close border=\'0\' alt="Close" /></a>')
                                 .'~',
         );
 
@@ -267,7 +267,7 @@ class aCaseTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($aCase->id));
-        $this->assertEquals(36, strlen($aCase->id));
+        $this->assertEquals(36, \strlen($aCase->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $aCase->mark_deleted($aCase->id);
@@ -296,7 +296,7 @@ class aCaseTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         $aCase = new aCase();
         $result = $aCase->getAccount(1);
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         $this->assertEquals(array('account_name' => '', 'account_id' => ''), $result);
     }
 }

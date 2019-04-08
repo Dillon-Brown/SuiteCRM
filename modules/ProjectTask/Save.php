@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -99,4 +99,4 @@ if (isset($_REQUEST['form'])) {
     if ($return_action == 'index') {
         $return_id ='';
     }
-    header("Location: index.php?module=$return_module&action=$return_action&record=$return_id");
+    \header("Location: index.php?module=$return_module&action=$return_action&record=$return_id");

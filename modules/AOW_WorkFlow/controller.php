@@ -36,7 +36,7 @@ class AOW_WorkFlowController extends SugarController
                 $module = $_REQUEST['aow_module'];
             }
             $override = array();
-            if (isset($_REQUEST['override']) && is_array($_REQUEST['override'])) {
+            if (isset($_REQUEST['override']) && \is_array($_REQUEST['override'])) {
                 $override = $_REQUEST['override'];
             }
             $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : 'EditView';
@@ -55,7 +55,7 @@ class AOW_WorkFlowController extends SugarController
             } else {
                 $module = $_REQUEST['aow_module'];
             }
-            echo htmlspecialchars($module);
+            echo \htmlspecialchars($module);
         }
         die;
     }
@@ -134,7 +134,7 @@ class AOW_WorkFlowController extends SugarController
             }
 
             foreach ($app_list_strings['aow_operator_list'] as $key => $keyValue) {
-                if (!in_array($key, $valid_opp)) {
+                if (!\in_array($key, $valid_opp)) {
                     unset($app_list_strings['aow_operator_list'][$key]);
                 }
             }
@@ -214,11 +214,11 @@ class AOW_WorkFlowController extends SugarController
                 break;
         }
 
-        if (!file_exists('modules/SecurityGroups/SecurityGroup.php')) {
+        if (!\file_exists('modules/SecurityGroups/SecurityGroup.php')) {
             unset($app_list_strings['aow_condition_type_list']['SecurityGroup']);
         }
         foreach ($app_list_strings['aow_condition_type_list'] as $key => $keyValue) {
-            if (!in_array($key, $valid_opp)) {
+            if (!\in_array($key, $valid_opp)) {
                 unset($app_list_strings['aow_condition_type_list'][$key]);
             }
         }
@@ -292,7 +292,7 @@ class AOW_WorkFlowController extends SugarController
         }
 
         foreach ($app_list_strings['aow_action_type_list'] as $key => $keyValue) {
-            if (!in_array($key, $valid_opp)) {
+            if (!\in_array($key, $valid_opp)) {
                 unset($app_list_strings['aow_action_type_list'][$key]);
             }
         }
@@ -500,7 +500,7 @@ class AOW_WorkFlowController extends SugarController
         $valid_opp = array('Value','Field');
 
         foreach ($app_list_strings['aow_rel_action_type_list'] as $key => $keyValue) {
-            if (!in_array($key, $valid_opp)) {
+            if (!\in_array($key, $valid_opp)) {
                 unset($app_list_strings['aow_rel_action_type_list'][$key]);
             }
         }
@@ -525,9 +525,9 @@ class AOW_WorkFlowController extends SugarController
             die;
         }
 
-        if (file_exists('custom/modules/AOW_Actions/actions/'.$action_name.'.php')) {
+        if (\file_exists('custom/modules/AOW_Actions/actions/'.$action_name.'.php')) {
             require_once('custom/modules/AOW_Actions/actions/'.$action_name.'.php');
-        } elseif (file_exists('modules/AOW_Actions/actions/'.$action_name.'.php')) {
+        } elseif (\file_exists('modules/AOW_Actions/actions/'.$action_name.'.php')) {
             require_once('modules/AOW_Actions/actions/'.$action_name.'.php');
         } else {
             echo '';
@@ -535,7 +535,7 @@ class AOW_WorkFlowController extends SugarController
         }
 
         $custom_action_name = "custom" . $action_name;
-        if (class_exists($custom_action_name)) {
+        if (\class_exists($custom_action_name)) {
             $action_name = $custom_action_name;
         }
 
@@ -546,7 +546,7 @@ class AOW_WorkFlowController extends SugarController
             $aow_action = new AOW_Action();
             $aow_action->retrieve($_REQUEST['id']);
             $id = $aow_action->id;
-            $params = unserialize(base64_decode($aow_action->parameters));
+            $params = \unserialize(\base64_decode($aow_action->parameters));
         }
 
         $action = new $action_name($id);

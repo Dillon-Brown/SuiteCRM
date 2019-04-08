@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -88,15 +88,15 @@ class JsonRPCServer
 
         $log->debug('JSON_SERVER:');
 
-        ob_start();
+        \ob_start();
         insert_charset_header();
 
         if (!empty($sugar_config['session_dir'])) {
-            session_save_path($sugar_config['session_dir']);
+            \session_save_path($sugar_config['session_dir']);
             $log->debug('JSON_SERVER:session_save_path:' . $sugar_config['session_dir']);
         }
 
-        session_start();
+        \session_start();
         $log->debug('JSON_SERVER:session started');
 
         if (isset($_SESSION['authenticated_user_language']) && $_SESSION['authenticated_user_language'] !== '') {
@@ -107,7 +107,7 @@ class JsonRPCServer
 
         $log->debug('JSON_SERVER: current_language:' . $current_language);
 
-        if (strtolower($_SERVER['REQUEST_METHOD']) === 'get') {
+        if (\strtolower($_SERVER['REQUEST_METHOD']) === 'get') {
             $response['error'] = array('error_msg' => 'DEPRECATED API');
             $log->deprecated('JsonServer: Get Request Method is deprecated');
         } else {
@@ -115,7 +115,7 @@ class JsonRPCServer
         }
 
         print $jsonParser::encode($response, true);
-        ob_end_flush();
+        \ob_end_flush();
         sugar_cleanup();
     }
 
@@ -139,10 +139,10 @@ class JsonRPCServer
         if (isset($GLOBALS['HTTP_RAW_POST_DATA'])) {
             $request = $jsonParser::decode($GLOBALS['HTTP_RAW_POST_DATA'], true);
         } else {
-            $request = $jsonParser::decode(file_get_contents('php://input'), true);
+            $request = $jsonParser::decode(\file_get_contents('php://input'), true);
         }
 
-        if (!is_array($request)) {
+        if (!\is_array($request)) {
             $response['error'] = array('error_msg' => 'malformed request');
 
             return $response;
@@ -157,8 +157,8 @@ class JsonRPCServer
 
         $response['id'] = $request['id'];
 
-        if (method_exists($this->jsonServerCalls, $request['method'])) {
-            $response = call_user_func(
+        if (\method_exists($this->jsonServerCalls, $request['method'])) {
+            $response = \call_user_func(
                 array($this->jsonServerCalls, $request['method']),
                 $request['id'],
                 $request['params']

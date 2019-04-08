@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -126,7 +126,7 @@ class Prospect extends Person implements EmailInterface
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -154,17 +154,17 @@ class Prospect extends Person implements EmailInterface
         $where_clauses = array();
         $the_query_string = DBManagerFactory::getInstance()->quote($the_query_string);
 
-        array_push($where_clauses, "prospects.last_name like '$the_query_string%'");
-        array_push($where_clauses, "prospects.first_name like '$the_query_string%'");
-        array_push($where_clauses, "prospects.assistant like '$the_query_string%'");
+        \array_push($where_clauses, "prospects.last_name like '$the_query_string%'");
+        \array_push($where_clauses, "prospects.first_name like '$the_query_string%'");
+        \array_push($where_clauses, "prospects.assistant like '$the_query_string%'");
 
-        if (is_numeric($the_query_string)) {
-            array_push($where_clauses, "prospects.phone_home like '%$the_query_string%'");
-            array_push($where_clauses, "prospects.phone_mobile like '%$the_query_string%'");
-            array_push($where_clauses, "prospects.phone_work like '%$the_query_string%'");
-            array_push($where_clauses, "prospects.phone_other like '%$the_query_string%'");
-            array_push($where_clauses, "prospects.phone_fax like '%$the_query_string%'");
-            array_push($where_clauses, "prospects.assistant_phone like '%$the_query_string%'");
+        if (\is_numeric($the_query_string)) {
+            \array_push($where_clauses, "prospects.phone_home like '%$the_query_string%'");
+            \array_push($where_clauses, "prospects.phone_mobile like '%$the_query_string%'");
+            \array_push($where_clauses, "prospects.phone_work like '%$the_query_string%'");
+            \array_push($where_clauses, "prospects.phone_other like '%$the_query_string%'");
+            \array_push($where_clauses, "prospects.phone_fax like '%$the_query_string%'");
+            \array_push($where_clauses, "prospects.assistant_phone like '%$the_query_string%'");
         }
 
         $the_where = "";
@@ -205,13 +205,13 @@ class Prospect extends Person implements EmailInterface
         if (empty($module)) {
             //The call to retrieveTargetList contains a query that may contain a pound token
             $pattern = '/AND related_type = [\'#]([a-zA-Z]+)[\'#]/i';
-            if (preg_match($pattern, $query, $matches)) {
+            if (\preg_match($pattern, $query, $matches)) {
                 $module_name = $matches[1];
-                $query = preg_replace($pattern, "", $query);
+                $query = \preg_replace($pattern, "", $query);
             }
         }
 
-        $count = count($fields);
+        $count = \count($fields);
         $index = 1;
         $sel_fields = "";
         if (!empty($fields)) {
@@ -219,7 +219,7 @@ class Prospect extends Person implements EmailInterface
                 if ($field == 'id') {
                     $sel_fields .= 'prospect_lists_prospects.id id';
                 } else {
-                    $sel_fields .= strtolower($module_name).".".$field;
+                    $sel_fields .= \strtolower($module_name).".".$field;
                 }
                 if ($index < $count) {
                     $sel_fields .= ",";
@@ -228,7 +228,7 @@ class Prospect extends Person implements EmailInterface
             }
         }
 
-        $module_name = ucfirst($module_name);
+        $module_name = \ucfirst($module_name);
         $class_name = $beanList[$module_name];
         require_once($beanFiles[$class_name]);
         $seed = new $class_name();

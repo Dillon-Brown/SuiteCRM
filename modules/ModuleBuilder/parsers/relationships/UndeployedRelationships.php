@@ -1,5 +1,5 @@
 <?php
-if (! defined('sugarEntry') || ! sugarEntry) {
+if (! \defined('sugarEntry') || ! sugarEntry) {
     die('Not A Valid Entry Point') ;
 }
 /**
@@ -62,8 +62,8 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
     {
         $this->basepath = $path ;
         // pull the module and package names out of the path
-        $this->moduleName = basename($path, "/") ; // just in case there are any trailing /
-        $this->packageName = basename(dirname(dirname($path))) ; // simpler than explode :)
+        $this->moduleName = \basename($path, "/") ; // just in case there are any trailing /
+        $this->packageName = \basename(\dirname(\dirname($path))) ; // simpler than explode :)
         require_once 'modules/ModuleBuilder/MB/ModuleBuilder.php' ;
         $mb = new ModuleBuilder() ;
         $this->packageKey = $mb->getPackageKey($this->packageName) ;
@@ -167,7 +167,7 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
     protected function getAllRelationships()
     {
         // start with the set of relationships known to this module plus those already deployed
-        $allRelationships = array_merge($this->relationships, parent::getDeployedRelationships()) ;
+        $allRelationships = \array_merge($this->relationships, parent::getDeployedRelationships()) ;
         
         // add in the relationships known to ModuleBuilder
         require_once 'modules/ModuleBuilder/MB/ModuleBuilder.php' ;
@@ -224,7 +224,7 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
         foreach ($this->relationships as $relationshipName => $relationship) {
             $definition = $relationship->getDefinition() ;
             // activities will always appear on the rhs only - lhs will be always be this module in MB
-            if (strtolower($definition [ 'rhs_module' ]) == 'activities') {
+            if (\strtolower($definition [ 'rhs_module' ]) == 'activities') {
                 $this->activitiesToAdd = true ;
                 $relationshipName = $definition [ 'relationship_name' ] ;
                 foreach (self::$activities as $activitiesSubModuleLower => $activitiesSubModuleName) {
@@ -298,7 +298,7 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
     private function removeAppLangStrings($relationship)
     {
         $def = $relationship->getDefinition();
-        if (strtolower($def [ 'rhs_module' ]) == 'activities' && !empty($_REQUEST [ 'view_package' ]) && !empty($_REQUEST [ 'view_module' ])) {
+        if (\strtolower($def [ 'rhs_module' ]) == 'activities' && !empty($_REQUEST [ 'view_package' ]) && !empty($_REQUEST [ 'view_module' ])) {
             $mb = new ModuleBuilder() ;
             $module = $mb->getPackageModule($_REQUEST [ 'view_package' ], $_REQUEST [ 'view_module' ]) ;
             $appStrings = $module->getAppListStrings() ;
@@ -334,13 +334,13 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
             foreach (array( MB_EDITVIEW , MB_DETAILVIEW ) as $view) {
                 $parsedName = AbstractRelationships::parseDeployedModuleName($deployedModuleName) ;
                 if (isset($parsedName [ 'packageName' ])) {
-                    $GLOBALS [ 'log' ]->debug(get_class($this) . ": " . (($actionAdd) ? "adding" : "removing") . " $fieldName on $view layout for undeployed module {$parsedName [ 'moduleName' ]} in package {$parsedName [ 'packageName' ]}") ;
+                    $GLOBALS [ 'log' ]->debug(\get_class($this) . ": " . (($actionAdd) ? "adding" : "removing") . " $fieldName on $view layout for undeployed module {$parsedName [ 'moduleName' ]} in package {$parsedName [ 'packageName' ]}") ;
                     $parser = new GridLayoutMetaDataParser($view, $parsedName [ 'moduleName' ], $parsedName [ 'packageName' ]) ;
                     
                     if (($actionAdd) ? $parser->addField(array( 'name' => $fieldName )) : $parser->removeField($fieldName)) {
                         $parser->handleSave(false) ;
                     } else {
-                        $GLOBALS [ 'log' ]->debug(get_class($this) . ": couldn't " . (($actionAdd) ? "add" : "remove") . " $fieldName on $view layout for undeployed module $deployedModuleName") ;
+                        $GLOBALS [ 'log' ]->debug(\get_class($this) . ": couldn't " . (($actionAdd) ? "add" : "remove") . " $fieldName on $view layout for undeployed module $deployedModuleName") ;
                         $successful = false ;
                     }
                 }
@@ -368,9 +368,9 @@ class UndeployedRelationships extends AbstractRelationships implements Relations
         
         $fieldsToAdd = array();
         foreach ($layoutAdditions as $deployedModuleName => $fieldName) {
-            if (! in_array(strtolower($deployedModuleName), $invalidModules)) {
+            if (! \in_array(\strtolower($deployedModuleName), $invalidModules)) {
                 foreach (array( MB_EDITVIEW , MB_DETAILVIEW ) as $view) {
-                    $GLOBALS [ 'log' ]->debug(get_class($this) . ": adding $fieldName to $view layout for module $deployedModuleName") ;
+                    $GLOBALS [ 'log' ]->debug(\get_class($this) . ": adding $fieldName to $view layout for module $deployedModuleName") ;
                     $parsedName = self::parseDeployedModuleName($deployedModuleName) ;
                     if (! isset($parsedName [ 'packageName' ])) {
                         $fieldsToAdd [$parsedName [ 'moduleName' ]] = $fieldName;

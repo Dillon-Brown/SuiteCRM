@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -60,14 +60,14 @@ function displayHasAttachmentField($focus, $field, $value, $view)
         return $result;
     }
 
-    if (strtolower($field) !== 'has_attachment') {
+    if (\strtolower($field) !== 'has_attachment') {
         return $result;
     }
 
-    if (is_object($focus)) {
-        $focus = get_object_vars($focus);
-    } elseif (is_array($focus)) {
-        $focus = array_change_key_case($focus, CASE_LOWER);
+    if (\is_object($focus)) {
+        $focus = \get_object_vars($focus);
+    } elseif (\is_array($focus)) {
+        $focus = \array_change_key_case($focus, CASE_LOWER);
     }
 
     if (!empty($focus['id'])) {
@@ -75,9 +75,9 @@ function displayHasAttachmentField($focus, $field, $value, $view)
         $bean->load_relationship('notes');
         $attachmentIds = $bean->notes->get();
 
-        $bean->has_attachment = (count($attachmentIds) > 0);
-        if (is_object($bean)) {
-            $bean = get_object_vars($bean);
+        $bean->has_attachment = (\count($attachmentIds) > 0);
+        if (\is_object($bean)) {
+            $bean = \get_object_vars($bean);
         }
     } else {
         $bean = $focus;

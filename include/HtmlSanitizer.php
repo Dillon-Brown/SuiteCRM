@@ -32,7 +32,7 @@ class HtmlSanitizer
 
         $config = \HTMLPurifier_Config::createDefault();
 
-        if (!is_dir(sugar_cached("htmlclean"))) {
+        if (!\is_dir(sugar_cached("htmlclean"))) {
             create_cache_directory("htmlclean/");
         }
 
@@ -112,7 +112,7 @@ class HtmlSanitizer
     {
         // $encode_html previously effected the decoding process.
         // we should decode regardless, just in case, the calling method passing encoded html
-        $dirty_html_decoded = html_entity_decode($dirtyHtml);
+        $dirty_html_decoded = \html_entity_decode($dirtyHtml);
 
         // Re-encode html
         if ($removeHtml === true) {
@@ -138,7 +138,7 @@ class HtmlSanitizer
         if ($isEncoded) {
             $dirtyHtml = from_html($dirtyHtml);
         }
-        $dirtyHtml = filter_var($dirtyHtml, FILTER_SANITIZE_STRIPPED, FILTER_FLAG_NO_ENCODE_QUOTES);
+        $dirtyHtml = \filter_var($dirtyHtml, FILTER_SANITIZE_STRIPPED, FILTER_FLAG_NO_ENCODE_QUOTES);
         return $isEncoded ? to_html($dirtyHtml) : $dirtyHtml;
     }
 }

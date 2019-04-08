@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -60,11 +60,11 @@ function getJSLanguage()
     $lang = clean_path($_REQUEST['lang']);
     $languages = get_languages();
 
-    if (!preg_match("/^\w\w_\w\w$/", $lang) || !isset($languages[$lang])) {
-        if (!preg_match("/^\w\w_\w\w$/", $lang)) {
+    if (!\preg_match("/^\w\w_\w\w$/", $lang) || !isset($languages[$lang])) {
+        if (!\preg_match("/^\w\w_\w\w$/", $lang)) {
             echo 'did not match regex<br/>';
         } else {
-            echo  "$lang was not in list . <pre>".print_r($languages, true).'</pre>';
+            echo  "$lang was not in list . <pre>".\print_r($languages, true).'</pre>';
         }
         echo 'Invalid language specified';
 
@@ -72,30 +72,30 @@ function getJSLanguage()
     }
     if (empty($_REQUEST['modulename']) || $_REQUEST['modulename'] === 'app_strings') {
         $file = sugar_cached('jsLanguage/').$lang.'.js';
-        if (!is_file($file)) {
+        if (!\is_file($file)) {
             jsLanguage::createAppStringsCache($lang);
         }
     } else {
         $module = clean_path($_REQUEST['modulename']);
-        $fullModuleList = array_merge($GLOBALS['moduleList'], $GLOBALS['modInvisList']);
-        if (!isset($app_list_strings['moduleList'][$module]) && !in_array($module, $fullModuleList)) {
+        $fullModuleList = \array_merge($GLOBALS['moduleList'], $GLOBALS['modInvisList']);
+        if (!isset($app_list_strings['moduleList'][$module]) && !\in_array($module, $fullModuleList)) {
             echo 'Invalid module specified';
 
             return;
         }
         $file = sugar_cached('jsLanguage/').$module.'/'.$lang.'.js';
-        if (!is_file($file)) {
+        if (!\is_file($file)) {
             jsLanguage::createModuleStringsCache($module, $lang);
         }
     }
 
     //Setup cache headers
-    header('Content-Type: application/javascript');
-    header('Cache-Control: max-age=31556940, private');
-    header('Pragma: ');
-    header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 31556940));
+    \header('Content-Type: application/javascript');
+    \header('Cache-Control: max-age=31556940, private');
+    \header('Pragma: ');
+    \header('Expires: '.\gmdate('D, d M Y H:i:s \G\M\T', \time() + 31556940));
 
-    readfile($file);
+    \readfile($file);
 }
 
 getJSLanguage();

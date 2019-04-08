@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -70,7 +70,7 @@ class PasswordExpirationService
     {
         $this->setExpiration();
 
-        $expirationMessage = sprintf(
+        $expirationMessage = \sprintf(
             '%s! <a href="%s/index.php?module=Administration&action=PasswordManager">%s</a>',
             $this->modStrings['LBL_PASSWORD_EXPIRATON_CHANGED'],
             $this->suiteConfig['site_url'],

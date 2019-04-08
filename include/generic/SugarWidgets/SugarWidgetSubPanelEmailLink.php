@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -58,10 +58,10 @@ class SugarWidgetSubPanelEmailLink extends SugarWidgetField
         global $focus;
 
         if (isset($layout_def['varname'])) {
-            $key = strtoupper($layout_def['varname']);
+            $key = \strtoupper($layout_def['varname']);
         } else {
             $key = $this->_get_column_alias($layout_def);
-            $key = strtoupper($key);
+            $key = \strtoupper($key);
         }
         $value = $layout_def['fields'][$key];
 

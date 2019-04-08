@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -49,7 +49,7 @@ global $current_user;
 if (!empty($_REQUEST['layout']) && !empty($_REQUEST['layoutModule'])) {
 //    sleep (2);
     //  _ppd($_REQUEST['layout']);
-    $subpanels = explode(',', $_REQUEST['layout']);
+    $subpanels = \explode(',', $_REQUEST['layout']);
     
     $layoutParam = $_REQUEST['layoutModule'];
     

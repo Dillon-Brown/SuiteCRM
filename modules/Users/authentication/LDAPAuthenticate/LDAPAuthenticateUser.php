@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -49,7 +49,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once('modules/Users/authentication/LDAPAuthenticate/LDAPConfigs/default.php');
 require_once('modules/Users/authentication/SugarAuthenticate/SugarAuthenticateUser.php');
 
-define('DEFAULT_PORT', 389);
+\define('DEFAULT_PORT', 389);
 class LDAPAuthenticateUser extends SugarAuthenticateUser
 {
 
@@ -80,7 +80,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
         @ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
         @ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0); // required for AD
         // If constant is defined, set the timeout (PHP >= 5.3)
-        if (defined('LDAP_OPT_NETWORK_TIMEOUT')) {
+        if (\defined('LDAP_OPT_NETWORK_TIMEOUT')) {
             // Network timeout, lower than PHP and DB timeouts
             @ldap_set_option($ldapconn, LDAP_OPT_NETWORK_TIMEOUT, 60);
         }
@@ -94,7 +94,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
         }
 
         // MRF - Bug #18578 - punctuation was being passed as HTML entities, i.e. &amp;
-        $bind_password = html_entity_decode($password, ENT_QUOTES);
+        $bind_password = \html_entity_decode($password, ENT_QUOTES);
 
         $GLOBALS['log']->info("ldapauth: Binding user " . $bind_user);
         $bind = ldap_bind($ldapconn, $bind_user, $bind_password);
@@ -115,7 +115,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
 
         if ($bind) {
             // Authentication succeeded, get info from LDAP directory
-            $attrs = array_keys($GLOBALS['ldapConfig']['users']['fields']);
+            $attrs = \array_keys($GLOBALS['ldapConfig']['users']['fields']);
             $base_dn = $GLOBALS['ldap_config']->settings['ldap_base_dn'];
             $name_filter = $this->getUserNameFilter($name);
 
@@ -123,14 +123,14 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
             if (!empty($GLOBALS['ldap_config']->settings['ldap_group'])
                 && !empty($GLOBALS['ldap_config']->settings['ldap_group_user_attr'])
                 && !empty($GLOBALS['ldap_config']->settings['ldap_group_attr'])) {
-                if (!in_array($attrs, $GLOBALS['ldap_config']->settings['ldap_group_user_attr'])) {
+                if (!\in_array($attrs, $GLOBALS['ldap_config']->settings['ldap_group_user_attr'])) {
                     $attrs[] = $GLOBALS['ldap_config']->settings['ldap_group_user_attr'];
                 }
             }
 
             $GLOBALS['log']->debug(
                 "ldapauth: Fetching user info from Directory using base dn: "
-                . $base_dn . ", name_filter: " . $name_filter . ", attrs: " . var_export($attrs, true)
+                . $base_dn . ", name_filter: " . $name_filter . ", attrs: " . \var_export($attrs, true)
             );
 
             $result = @ldap_search($ldapconn, $base_dn, $name_filter, $attrs);
@@ -154,7 +154,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
             $this->ldapUserInfo = array();
             foreach ($GLOBALS['ldapConfig']['users']['fields'] as $key=>$value) {
                 //MRF - BUG:19765
-                $key = strtolower($key);
+                $key = \strtolower($key);
                 if (isset($info[0]) && isset($info[0][$key]) && isset($info[0][$key][0])) {
                     $this->ldapUserInfo[$value] = $info[0][$key][0];
                 }
@@ -171,11 +171,11 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
                     return '';
                 }
                 $user_uid = $info[0][$group_user_attr];
-                if (is_array($user_uid)) {
+                if (\is_array($user_uid)) {
                     $user_uid = $user_uid[0];
                 }
                 // If user_uid contains special characters (for LDAP) we need to escape them !
-                $user_uid = str_replace(array("(", ")"), array("\(", "\)"), $user_uid);
+                $user_uid = \str_replace(array("(", ")"), array("\(", "\)"), $user_uid);
 
 
                 // build search query and determine if we are searching for a bare id or the full dn path
@@ -196,7 +196,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
                 if (!isset($user_uid)
                     || ldap_count_entries($ldapconn, ldap_search($ldapconn, $group_name, $user_search)) ==  0) {
                     $GLOBALS['log']->fatal("ldapauth: User ($name) is not a member of the LDAP group");
-                    $user_id = var_export($user_uid, true);
+                    $user_id = \var_export($user_uid, true);
                     $GLOBALS['log']->debug(
                         "ldapauth: Group DN:{$GLOBALS['ldap_config']->settings['ldap_group_dn']}"
                         . " Group Name: " . $GLOBALS['ldap_config']->settings['ldap_group_name']
@@ -244,7 +244,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
         //add the additional user filter if it is specified
         if (!empty($GLOBALS['ldap_config']->settings['ldap_login_filter'])) {
             $add_filter = $GLOBALS['ldap_config']->settings['ldap_login_filter'];
-            if (substr($add_filter, 0, 1) !== "(") {
+            if (\substr($add_filter, 0, 1) !== "(") {
                 $add_filter = "(" . $add_filter . ")";
             }
             $name_filter = "(&" . $name_filter . $add_filter . ")";
@@ -287,7 +287,7 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
         global $mod_strings;
 
         // Check if the LDAP extensions are loaded
-        if (!function_exists('ldap_connect')) {
+        if (!\function_exists('ldap_connect')) {
             $error = $mod_strings['LBL_LDAP_EXTENSION_ERROR'];
             $GLOBALS['log']->fatal($error);
             $_SESSION['login_error'] = $error;
@@ -351,10 +351,10 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
 
         // MFH BUG# 14547 - Added htmlspecialchars_decode()
         $server = $GLOBALS['ldap_config']->settings['ldap_hostname'];
-        $base_dn = htmlspecialchars_decode($GLOBALS['ldap_config']->settings['ldap_base_dn']);
+        $base_dn = \htmlspecialchars_decode($GLOBALS['ldap_config']->settings['ldap_base_dn']);
         if (!empty($GLOBALS['ldap_config']->settings['ldap_authentication'])) {
-            $admin_user = htmlspecialchars_decode($GLOBALS['ldap_config']->settings['ldap_admin_user']);
-            $admin_password = htmlspecialchars_decode($GLOBALS['ldap_config']->settings['ldap_admin_password']);
+            $admin_user = \htmlspecialchars_decode($GLOBALS['ldap_config']->settings['ldap_admin_user']);
+            $admin_password = \htmlspecialchars_decode($GLOBALS['ldap_config']->settings['ldap_admin_password']);
         } else {
             $admin_user = '';
             $admin_password = '';
@@ -416,12 +416,12 @@ class LDAPAuthenticateUser extends SugarAuthenticateUser
         }
         ldap_unbind($ldapconn);
 
-        $GLOBALS['log']->info("ldapauth.ldap_rdn_lookup: Search result:\nldapauth.ldap_rdn_lookup: " . count($info));
+        $GLOBALS['log']->info("ldapauth.ldap_rdn_lookup: Search result:\nldapauth.ldap_rdn_lookup: " . \count($info));
 
         if ($bind_attr == "dn") {
             $found_bind_user = $info[0]['dn'];
         } else {
-            $found_bind_user = $info[0][strtolower($bind_attr)][0];
+            $found_bind_user = $info[0][\strtolower($bind_attr)][0];
         }
 
         $GLOBALS['log']->info("ldapauth.ldap_rdn_lookup: found_bind_user=" . $found_bind_user);

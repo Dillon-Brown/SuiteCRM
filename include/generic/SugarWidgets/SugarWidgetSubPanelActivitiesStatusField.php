@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -57,10 +57,10 @@ class SugarWidgetSubPanelActivitiesStatusField extends SugarWidgetField
         $module = empty($layout_def['module']) ? '' : $layout_def['module'];
         
         if (isset($layout_def['varname'])) {
-            $key = strtoupper($layout_def['varname']);
+            $key = \strtoupper($layout_def['varname']);
         } else {
             $key = $this->_get_column_alias($layout_def);
-            $key = strtoupper($key);
+            $key = \strtoupper($key);
         }
 
         $value = $layout_def['fields'][$key];

@@ -1,6 +1,6 @@
 <?php
-if (!defined('sugarEntry')) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry')) {
+    \define('sugarEntry', true);
 }
 /**
  *
@@ -50,7 +50,7 @@ class SugarRestServiceImpl extends SugarWebServiceImpl
 {
     public function md5($string)
     {
-        return md5($string);
+        return \md5($string);
     }
 }
 require_once('service/core/SugarRestUtils.php');

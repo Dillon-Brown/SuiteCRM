@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -58,7 +58,7 @@ class TemplateText extends TemplateField
         $returnXTPL = array();
 
         if (!empty($this->help)) {
-            $returnXTPL[strtoupper($this->name . '_help')] = translate($this->help, $this->bean->module_dir);
+            $returnXTPL[\strtoupper($this->name . '_help')] = translate($this->help, $this->bean->module_dir);
         }
 
         if (isset($this->bean->$name)) {

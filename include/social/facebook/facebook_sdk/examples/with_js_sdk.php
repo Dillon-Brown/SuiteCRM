@@ -15,7 +15,7 @@ if ($user) {
         // Proceed knowing you have a logged in user who's authenticated.
         $user_profile = $facebook->api('/me');
     } catch (FacebookApiException $e) {
-        echo '<pre>'.htmlspecialchars(print_r($e, true)).'</pre>';
+        echo '<pre>'.\htmlspecialchars(\print_r($e, true)).'</pre>';
         $user = null;
     }
 }
@@ -28,7 +28,7 @@ if ($user) {
     ?>
       Your user profile is
       <pre>
-        <?php print htmlspecialchars(print_r($user_profile, true)) ?>
+        <?php print \htmlspecialchars(\print_r($user_profile, true)) ?>
       </pre>
     <?php
 } else {

@@ -42,7 +42,7 @@ require_once 'modules/ModuleBuilder/Module/StudioModuleFactory.php' ;
 
 function cmp($a, $b)
 {
-    return strcasecmp($a, $b);
+    return \strcasecmp($a, $b);
 }
 
 class StudioBrowser
@@ -53,12 +53,12 @@ class StudioBrowser
     {
         global $current_user;
         $access = $current_user->getDeveloperModules();
-        $d = dir('modules');
+        $d = \dir('modules');
         while ($e = $d->read()) {
-            if (substr($e, 0, 1) == '.' || !is_dir('modules/' . $e)) {
+            if (\substr($e, 0, 1) == '.' || !\is_dir('modules/' . $e)) {
                 continue;
             }
-            if (file_exists('modules/' . $e . '/metadata/studio.php') && isset($GLOBALS [ 'beanList' ][$e]) && (in_array($e, $access) || $current_user->isAdmin())) { // installed modules must also exist in the beanList
+            if (\file_exists('modules/' . $e . '/metadata/studio.php') && isset($GLOBALS [ 'beanList' ][$e]) && (\in_array($e, $access) || $current_user->isAdmin())) { // installed modules must also exist in the beanList
                 $this->modules[$e] =  StudioModuleFactory::getStudioModule($e) ;
             }
         }
@@ -66,12 +66,12 @@ class StudioBrowser
     
     public function loadRelatableModules()
     {
-        $d = dir('modules');
+        $d = \dir('modules');
         while ($e = $d->read()) {
-            if (substr($e, 0, 1) == '.' || !is_dir('modules/' . $e)) {
+            if (\substr($e, 0, 1) == '.' || !\is_dir('modules/' . $e)) {
                 continue;
             }
-            if (file_exists('modules/' . $e . '/metadata/studio.php') && isset($GLOBALS [ 'beanList' ][$e])) { // installed modules must also exist in the beanList
+            if (\file_exists('modules/' . $e . '/metadata/studio.php') && isset($GLOBALS [ 'beanList' ][$e])) { // installed modules must also exist in the beanList
                 $this->modules[$e] = StudioModuleFactory::getStudioModule($e) ;
             }
         }
@@ -84,7 +84,7 @@ class StudioBrowser
         foreach ($this->modules as $module) {
             $nodes[$module->name] = $module->getNodes();
         }
-        uksort($nodes, 'cmp'); // bug 15103 - order is important - this array is later looped over by foreach to generate the module list
+        \uksort($nodes, 'cmp'); // bug 15103 - order is important - this array is later looped over by foreach to generate the module list
         return $nodes;
     }
 }

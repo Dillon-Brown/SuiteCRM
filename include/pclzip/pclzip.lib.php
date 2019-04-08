@@ -78,7 +78,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 // --------------------------------------------------------------------------------
 
   // ----- Constants
-  define('PCLZIP_READ_BLOCK_SIZE', 2048);
+  \define('PCLZIP_READ_BLOCK_SIZE', 2048);
 
   // ----- File list separator
   // In version 1.x of PclZip, the separator for file list is a space
@@ -90,14 +90,14 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
   // Recommanded values for compatibility with older versions :
   //define( 'PCLZIP_SEPARATOR', ' ' );
   // Recommanded values for smart separation of filenames.
-  define('PCLZIP_SEPARATOR', ',');
+  \define('PCLZIP_SEPARATOR', ',');
 
   // ----- Error configuration
   // 0 : PclZip Class integrated error handling
   // 1 : PclError external library error handling. By enabling this
   //     you must ensure that you have included PclError library.
   // [2,...] : reserved for futur use
-  define('PCLZIP_ERROR_EXTERNAL', 0);
+  \define('PCLZIP_ERROR_EXTERNAL', 0);
 
   // ----- Optional static temporary directory
   //       By default temporary files are generated in the script current
@@ -108,7 +108,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
   //       Samples :
   // define( 'PCLZIP_TEMPORARY_DIR', '/temp/' );
   // define( 'PCLZIP_TEMPORARY_DIR', 'C:/Temp/' );
-  define('PCLZIP_TEMPORARY_DIR', '');
+  \define('PCLZIP_TEMPORARY_DIR', '');
 
 // --------------------------------------------------------------------------------
 // ***** UNDER THIS LINE NOTHING NEEDS TO BE MODIFIED *****
@@ -132,55 +132,55 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
   //  -12 : Unable to rename file (rename)
   //  -13 : Invalid header checksum
   //  -14 : Invalid archive size
-  define('PCLZIP_ERR_USER_ABORTED', 2);
-  define('PCLZIP_ERR_NO_ERROR', 0);
-  define('PCLZIP_ERR_WRITE_OPEN_FAIL', -1);
-  define('PCLZIP_ERR_READ_OPEN_FAIL', -2);
-  define('PCLZIP_ERR_INVALID_PARAMETER', -3);
-  define('PCLZIP_ERR_MISSING_FILE', -4);
-  define('PCLZIP_ERR_FILENAME_TOO_LONG', -5);
-  define('PCLZIP_ERR_INVALID_ZIP', -6);
-  define('PCLZIP_ERR_BAD_EXTRACTED_FILE', -7);
-  define('PCLZIP_ERR_DIR_CREATE_FAIL', -8);
-  define('PCLZIP_ERR_BAD_EXTENSION', -9);
-  define('PCLZIP_ERR_BAD_FORMAT', -10);
-  define('PCLZIP_ERR_DELETE_FILE_FAIL', -11);
-  define('PCLZIP_ERR_RENAME_FILE_FAIL', -12);
-  define('PCLZIP_ERR_BAD_CHECKSUM', -13);
-  define('PCLZIP_ERR_INVALID_ARCHIVE_ZIP', -14);
-  define('PCLZIP_ERR_MISSING_OPTION_VALUE', -15);
-  define('PCLZIP_ERR_INVALID_OPTION_VALUE', -16);
-  define('PCLZIP_ERR_ALREADY_A_DIRECTORY', -17);
-  define('PCLZIP_ERR_UNSUPPORTED_COMPRESSION', -18);
-  define('PCLZIP_ERR_UNSUPPORTED_ENCRYPTION', -19);
+  \define('PCLZIP_ERR_USER_ABORTED', 2);
+  \define('PCLZIP_ERR_NO_ERROR', 0);
+  \define('PCLZIP_ERR_WRITE_OPEN_FAIL', -1);
+  \define('PCLZIP_ERR_READ_OPEN_FAIL', -2);
+  \define('PCLZIP_ERR_INVALID_PARAMETER', -3);
+  \define('PCLZIP_ERR_MISSING_FILE', -4);
+  \define('PCLZIP_ERR_FILENAME_TOO_LONG', -5);
+  \define('PCLZIP_ERR_INVALID_ZIP', -6);
+  \define('PCLZIP_ERR_BAD_EXTRACTED_FILE', -7);
+  \define('PCLZIP_ERR_DIR_CREATE_FAIL', -8);
+  \define('PCLZIP_ERR_BAD_EXTENSION', -9);
+  \define('PCLZIP_ERR_BAD_FORMAT', -10);
+  \define('PCLZIP_ERR_DELETE_FILE_FAIL', -11);
+  \define('PCLZIP_ERR_RENAME_FILE_FAIL', -12);
+  \define('PCLZIP_ERR_BAD_CHECKSUM', -13);
+  \define('PCLZIP_ERR_INVALID_ARCHIVE_ZIP', -14);
+  \define('PCLZIP_ERR_MISSING_OPTION_VALUE', -15);
+  \define('PCLZIP_ERR_INVALID_OPTION_VALUE', -16);
+  \define('PCLZIP_ERR_ALREADY_A_DIRECTORY', -17);
+  \define('PCLZIP_ERR_UNSUPPORTED_COMPRESSION', -18);
+  \define('PCLZIP_ERR_UNSUPPORTED_ENCRYPTION', -19);
 
   // ----- Options values
-  define('PCLZIP_OPT_PATH', 77001);
-  define('PCLZIP_OPT_ADD_PATH', 77002);
-  define('PCLZIP_OPT_REMOVE_PATH', 77003);
-  define('PCLZIP_OPT_REMOVE_ALL_PATH', 77004);
-  define('PCLZIP_OPT_SET_CHMOD', 77005);
-  define('PCLZIP_OPT_EXTRACT_AS_STRING', 77006);
-  define('PCLZIP_OPT_NO_COMPRESSION', 77007);
-  define('PCLZIP_OPT_BY_NAME', 77008);
-  define('PCLZIP_OPT_BY_INDEX', 77009);
-  define('PCLZIP_OPT_BY_EREG', 77010);
-  define('PCLZIP_OPT_BY_PREG', 77011);
-  define('PCLZIP_OPT_COMMENT', 77012);
-  define('PCLZIP_OPT_ADD_COMMENT', 77013);
-  define('PCLZIP_OPT_PREPEND_COMMENT', 77014);
-  define('PCLZIP_OPT_EXTRACT_IN_OUTPUT', 77015);
-  define('PCLZIP_OPT_REPLACE_NEWER', 77016);
-  define('PCLZIP_OPT_STOP_ON_ERROR', 77017);
+  \define('PCLZIP_OPT_PATH', 77001);
+  \define('PCLZIP_OPT_ADD_PATH', 77002);
+  \define('PCLZIP_OPT_REMOVE_PATH', 77003);
+  \define('PCLZIP_OPT_REMOVE_ALL_PATH', 77004);
+  \define('PCLZIP_OPT_SET_CHMOD', 77005);
+  \define('PCLZIP_OPT_EXTRACT_AS_STRING', 77006);
+  \define('PCLZIP_OPT_NO_COMPRESSION', 77007);
+  \define('PCLZIP_OPT_BY_NAME', 77008);
+  \define('PCLZIP_OPT_BY_INDEX', 77009);
+  \define('PCLZIP_OPT_BY_EREG', 77010);
+  \define('PCLZIP_OPT_BY_PREG', 77011);
+  \define('PCLZIP_OPT_COMMENT', 77012);
+  \define('PCLZIP_OPT_ADD_COMMENT', 77013);
+  \define('PCLZIP_OPT_PREPEND_COMMENT', 77014);
+  \define('PCLZIP_OPT_EXTRACT_IN_OUTPUT', 77015);
+  \define('PCLZIP_OPT_REPLACE_NEWER', 77016);
+  \define('PCLZIP_OPT_STOP_ON_ERROR', 77017);
   // Having big trouble with crypt. Need to multiply 2 long int
   // which is not correctly supported by PHP ...
   //define( 'PCLZIP_OPT_CRYPT', 77018 );
 
   // ----- Call backs values
-  define('PCLZIP_CB_PRE_EXTRACT', 78001);
-  define('PCLZIP_CB_POST_EXTRACT', 78002);
-  define('PCLZIP_CB_PRE_ADD', 78003);
-  define('PCLZIP_CB_POST_ADD', 78004);
+  \define('PCLZIP_CB_PRE_EXTRACT', 78001);
+  \define('PCLZIP_CB_POST_EXTRACT', 78002);
+  \define('PCLZIP_CB_PRE_ADD', 78003);
+  \define('PCLZIP_CB_POST_ADD', 78004);
   /* For futur use
   define( 'PCLZIP_CB_PRE_LIST', 78005 );
   define( 'PCLZIP_CB_POST_LIST', 78006 );
@@ -232,9 +232,9 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, 'PclZip::PclZip', "zipname=$p_zipname");
 
            // ----- Tests the zlib
-           if (!function_exists('gzopen')) {
+           if (!\function_exists('gzopen')) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 1, "zlib extension seems to be missing");
-               die('Abort '.basename(__FILE__).' : Missing zlib extensions');
+               die('Abort '.\basename(__FILE__).' : Missing zlib extensions');
            }
 
            // ----- Set the attributes
@@ -302,20 +302,20 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_options[PCLZIP_OPT_NO_COMPRESSION] = false;
 
            // ----- Look for variable options arguments
-           $v_size = func_num_args();
+           $v_size = \func_num_args();
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "$v_size arguments passed to the method");
 
            // ----- Look for arguments
            if ($v_size > 1) {
                // ----- Get the arguments
-               $v_arg_list = func_get_args();
+               $v_arg_list = \func_get_args();
 
                // ----- Remove form the options list the first argument
-               array_shift($v_arg_list);
+               \array_shift($v_arg_list);
                $v_size--;
 
                // ----- Look for first arg
-               if ((is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
+               if ((\is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Variable list of options detected");
 
                    // ----- Parse the options
@@ -381,15 +381,15 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Look if the $p_filelist is really an array
            $p_result_list = array();
-           if (is_array($p_filelist)) {
+           if (\is_array($p_filelist)) {
                // ----- Call the create fct
                $v_result = $this->privCreate($p_filelist, $p_result_list, $v_add_path, $v_remove_path, $v_remove_all_path, $v_options);
            }
 
            // ----- Look if the $p_filelist is a string
-           elseif (is_string($p_filelist)) {
+           elseif (\is_string($p_filelist)) {
                // ----- Create a list with the elements from the string
-               $v_list = explode(PCLZIP_SEPARATOR, $p_filelist);
+               $v_list = \explode(PCLZIP_SEPARATOR, $p_filelist);
 
                // ----- Call the create fct
                $v_result = $this->privCreate($v_list, $p_result_list, $v_add_path, $v_remove_path, $v_remove_all_path, $v_options);
@@ -466,20 +466,20 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_options[PCLZIP_OPT_NO_COMPRESSION] = false;
 
            // ----- Look for variable options arguments
-           $v_size = func_num_args();
+           $v_size = \func_num_args();
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "$v_size arguments passed to the method");
 
            // ----- Look for arguments
            if ($v_size > 1) {
                // ----- Get the arguments
-               $v_arg_list = func_get_args();
+               $v_arg_list = \func_get_args();
 
                // ----- Remove form the options list the first argument
-               array_shift($v_arg_list);
+               \array_shift($v_arg_list);
                $v_size--;
 
                // ----- Look for first arg
-               if ((is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
+               if ((\is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Variable list of options detected");
 
                    // ----- Parse the options
@@ -544,15 +544,15 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Look if the $p_filelist is really an array
            $p_result_list = array();
-           if (is_array($p_filelist)) {
+           if (\is_array($p_filelist)) {
                // ----- Call the create fct
                $v_result = $this->privAdd($p_filelist, $p_result_list, $v_add_path, $v_remove_path, $v_remove_all_path, $v_options);
            }
 
            // ----- Look if the $p_filelist is a string
-           elseif (is_string($p_filelist)) {
+           elseif (\is_string($p_filelist)) {
                // ----- Create a list with the elements from the string
-               $v_list = explode(PCLZIP_SEPARATOR, $p_filelist);
+               $v_list = \explode(PCLZIP_SEPARATOR, $p_filelist);
 
                // ----- Call the create fct
                $v_result = $this->privAdd($v_list, $p_result_list, $v_add_path, $v_remove_path, $v_remove_all_path, $v_options);
@@ -701,7 +701,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_remove_all_path = false;
 
            // ----- Look for variable options arguments
-           $v_size = func_num_args();
+           $v_size = \func_num_args();
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "$v_size arguments passed to the method");
 
            // ----- Default values for option
@@ -710,10 +710,10 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            // ----- Look for arguments
            if ($v_size > 0) {
                // ----- Get the arguments
-               $v_arg_list = func_get_args();
+               $v_arg_list = \func_get_args();
 
                // ----- Look for first arg
-               if ((is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
+               if ((\is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Variable list of options");
 
                    // ----- Parse the options
@@ -755,7 +755,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    }
                    if (isset($v_options[PCLZIP_OPT_ADD_PATH])) {
                        // ----- Check for '/' in last path char
-                       if ((strlen($v_path) > 0) && (substr($v_path, -1) != '/')) {
+                       if ((\strlen($v_path) > 0) && (\substr($v_path, -1) != '/')) {
                            $v_path .= '/';
                        }
                        $v_path .= $v_options[PCLZIP_OPT_ADD_PATH];
@@ -868,7 +868,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_remove_all_path = false;
 
            // ----- Look for variable options arguments
-           $v_size = func_num_args();
+           $v_size = \func_num_args();
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "$v_size arguments passed to the method");
 
            // ----- Default values for option
@@ -877,14 +877,14 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            // ----- Look for arguments
            if ($v_size > 1) {
                // ----- Get the arguments
-               $v_arg_list = func_get_args();
+               $v_arg_list = \func_get_args();
 
                // ----- Remove form the options list the first argument
-               array_shift($v_arg_list);
+               \array_shift($v_arg_list);
                $v_size--;
 
                // ----- Look for first arg
-               if ((is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
+               if ((\is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Variable list of options");
 
                    // ----- Parse the options
@@ -921,7 +921,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    }
                    if (isset($v_options[PCLZIP_OPT_ADD_PATH])) {
                        // ----- Check for '/' in last path char
-                       if ((strlen($v_path) > 0) && (substr($v_path, -1) != '/')) {
+                       if ((\strlen($v_path) > 0) && (\substr($v_path, -1) != '/')) {
                            $v_path .= '/';
                        }
                        $v_path .= $v_options[PCLZIP_OPT_ADD_PATH];
@@ -966,7 +966,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_options_trick = array();
            $v_result = $this->privParseOptions(
                $v_arg_trick,
-               sizeof($v_arg_trick),
+               \sizeof($v_arg_trick),
                $v_options_trick,
                                         array(PCLZIP_OPT_BY_INDEX => 'optional' )
            );
@@ -1024,13 +1024,13 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_options = array();
 
            // ----- Look for variable options arguments
-           $v_size = func_num_args();
+           $v_size = \func_num_args();
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "$v_size arguments passed to the method");
 
            // ----- Look for arguments
            if ($v_size > 0) {
                // ----- Get the arguments
-               $v_arg_list = func_get_args();
+               $v_arg_list = \func_get_args();
 
                // ----- Parse the options
                $v_result = $this->privParseOptions(
@@ -1125,10 +1125,10 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_prop['status'] = 'not_exist';
 
            // ----- Look if file exists
-           if (@is_file($this->zipname)) {
+           if (@\is_file($this->zipname)) {
                // ----- Open the zip file
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Open file in binary read mode");
-               if (($this->zip_fd = @fopen($this->zipname, 'rb')) == 0) {
+               if (($this->zip_fd = @\fopen($this->zipname, 'rb')) == 0) {
                    $this->privSwapBackMagicQuotes();
 
                    // ----- Error log
@@ -1186,7 +1186,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $this->privErrorReset();
 
            // ----- Look if the $p_archive is a PclZip object
-           if ((is_object($p_archive)) && (get_class($p_archive) == 'pclzip')) {
+           if ((\is_object($p_archive)) && (\get_class($p_archive) == 'pclzip')) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "The parameter is valid PclZip object '".$p_archive->zipname."'");
 
                // ----- Duplicate the archive
@@ -1194,12 +1194,12 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Look if the $p_archive is a string (so a filename)
-           elseif (is_string($p_archive)) {
+           elseif (\is_string($p_archive)) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "The parameter is a filename '$p_archive'");
 
                // ----- Check that $p_archive is a valid zip file
                // TBC : Should also check the archive format
-               if (!is_file($p_archive)) {
+               if (!\is_file($p_archive)) {
                    // ----- Error log
                    PclZip::privErrorLog(PCLZIP_ERR_MISSING_FILE, "No file with filename '".$p_archive."'");
                    $v_result = PCLZIP_ERR_MISSING_FILE;
@@ -1251,7 +1251,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Look if the $p_archive_to_add is a PclZip object
-           if ((is_object($p_archive_to_add)) && (get_class($p_archive_to_add) == 'pclzip')) {
+           if ((\is_object($p_archive_to_add)) && (\get_class($p_archive_to_add) == 'pclzip')) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "The parameter is valid PclZip object");
 
                // ----- Merge the archive
@@ -1259,7 +1259,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Look if the $p_archive_to_add is a string (so a filename)
-           elseif (is_string($p_archive_to_add)) {
+           elseif (\is_string($p_archive_to_add)) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "The parameter is a filename");
 
                // ----- Create a temporary archive
@@ -1384,13 +1384,13 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_result = true;
 
            // ----- Reset the file system cache
-           clearstatcache();
+           \clearstatcache();
 
            // ----- Reset the error handler
            $this->privErrorReset();
 
            // ----- Look if the file exits
-           if (!is_file($this->zipname)) {
+           if (!\is_file($this->zipname)) {
                // ----- Error log
                PclZip::privErrorLog(PCLZIP_ERR_MISSING_FILE, "Missing archive file '".$this->zipname."'");
                //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, false, PclZip::errorInfo());
@@ -1398,7 +1398,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Check that the file is readeable
-           if (!is_readable($this->zipname)) {
+           if (!\is_readable($this->zipname)) {
                // ----- Error log
                PclZip::privErrorLog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to read archive '".$this->zipname."'");
                //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, false, PclZip::errorInfo());
@@ -1490,9 +1490,9 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
           }
 
           // ----- Get the value
-          if (is_string($p_options_list[$i+1])) {
+          if (\is_string($p_options_list[$i+1])) {
               $v_result_list[$p_options_list[$i]][0] = $p_options_list[$i+1];
-          } elseif (is_array($p_options_list[$i+1])) {
+          } elseif (\is_array($p_options_list[$i+1])) {
               $v_result_list[$p_options_list[$i]] = $p_options_list[$i+1];
           } else {
               // ----- Error log
@@ -1521,7 +1521,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
           }
 
           // ----- Get the value
-          if (is_string($p_options_list[$i+1])) {
+          if (\is_string($p_options_list[$i+1])) {
               $v_result_list[$p_options_list[$i]] = $p_options_list[$i+1];
           } else {
               // ----- Error log
@@ -1555,7 +1555,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
           }
 
           // ----- Get the value
-          if (is_string($p_options_list[$i+1])) {
+          if (\is_string($p_options_list[$i+1])) {
               $v_result_list[$p_options_list[$i]] = $p_options_list[$i+1];
           } else {
               // ----- Error log
@@ -1588,18 +1588,18 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
           // ----- Get the value
           $v_work_list = array();
-          if (is_string($p_options_list[$i+1])) {
+          if (\is_string($p_options_list[$i+1])) {
               //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Index value is a string '".$p_options_list[$i+1]."'");
 
               // ----- Remove spaces
-              $p_options_list[$i+1] = strtr($p_options_list[$i+1], ' ', '');
+              $p_options_list[$i+1] = \strtr($p_options_list[$i+1], ' ', '');
 
               // ----- Parse items
-              $v_work_list = explode(",", $p_options_list[$i+1]);
-          } elseif (is_integer($p_options_list[$i+1])) {
+              $v_work_list = \explode(",", $p_options_list[$i+1]);
+          } elseif (\is_integer($p_options_list[$i+1])) {
               //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Index value is an integer '".$p_options_list[$i+1]."'");
               $v_work_list[0] = $p_options_list[$i+1].'-'.$p_options_list[$i+1];
-          } elseif (is_array($p_options_list[$i+1])) {
+          } elseif (\is_array($p_options_list[$i+1])) {
               //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Index value is an array");
               $v_work_list = $p_options_list[$i+1];
           } else {
@@ -1617,10 +1617,10 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
           // ----- Check the format of each item
           $v_sort_flag=false;
           $v_sort_value=0;
-          for ($j=0; $j<sizeof($v_work_list); $j++) {
+          for ($j=0; $j<\sizeof($v_work_list); $j++) {
               // ----- Explode the item
-              $v_item_list = explode("-", $v_work_list[$j]);
-              $v_size_item_list = sizeof($v_item_list);
+              $v_item_list = \explode("-", $v_work_list[$j]);
+              $v_size_item_list = \sizeof($v_item_list);
 
               // ----- TBC : Here we might check that each item is a
               // real integer ...
@@ -1726,7 +1726,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
           //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "call-back ".PclZipUtilOptionText($p_options_list[$i])." = '".$v_function_name."'");
 
           // ----- Check that the value is a valid existing function
-          if (!function_exists($v_function_name)) {
+          if (!\function_exists($v_function_name)) {
               // ----- Error log
               PclZip::privErrorLog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Function '".$v_function_name."()' is not an existing function for option '".PclZipUtilOptionText($p_options_list[$i])."'");
 
@@ -1759,7 +1759,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Look for mandatory options
            if ($v_requested_options !== false) {
-               for ($key=reset($v_requested_options); $key=key($v_requested_options); $key=next($v_requested_options)) {
+               for ($key=\reset($v_requested_options); $key=\key($v_requested_options); $key=\next($v_requested_options)) {
                    // ----- Look for mandatory option
                    if ($v_requested_options[$key] == 'mandatory') {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Detect a mandatory option : ".PclZipUtilOptionText($key)."(".$key.")");
@@ -1832,7 +1832,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_list_detail = array();
 
            // ----- Look if the archive exists or is empty
-           if ((!is_file($this->zipname)) || (filesize($this->zipname) == 0)) {
+           if ((!\is_file($this->zipname)) || (\filesize($this->zipname) == 0)) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Archive does not exist, or is empty, create it.");
 
                // ----- Do a create
@@ -1867,15 +1867,15 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Go to beginning of File
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position in file : ".ftell($this->zip_fd)."'");
-           @rewind($this->zip_fd);
+           @\rewind($this->zip_fd);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position in file : ".ftell($this->zip_fd)."'");
 
            // ----- Creates a temporay file
-           $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.uniqid('pclzip-').'.tmp';
+           $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.\uniqid('pclzip-').'.tmp';
 
            // ----- Open the temporary file in write mode
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Open file in binary read mode");
-           if (($v_zip_temp_fd = @fopen($v_zip_temp_name, 'wb')) == 0) {
+           if (($v_zip_temp_fd = @\fopen($v_zip_temp_name, 'wb')) == 0) {
                $this->privCloseFd();
                $this->privSwapBackMagicQuotes();
 
@@ -1892,8 +1892,8 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            while ($v_size != 0) {
                $v_read_size = ($v_size < PCLZIP_READ_BLOCK_SIZE ? $v_size : PCLZIP_READ_BLOCK_SIZE);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Read $v_read_size bytes");
-               $v_buffer = fread($this->zip_fd, $v_read_size);
-               @fwrite($v_zip_temp_fd, $v_buffer, $v_read_size);
+               $v_buffer = \fread($this->zip_fd, $v_read_size);
+               @\fwrite($v_zip_temp_fd, $v_buffer, $v_read_size);
                $v_size -= $v_read_size;
            }
 
@@ -1907,9 +1907,9 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            // ----- Add the files
            $v_header_list = array();
            if (($v_result = $this->privAddFileList($p_list, $v_header_list, $p_add_dir, $p_remove_dir, $p_remove_all_dir, $p_options)) != 1) {
-               fclose($v_zip_temp_fd);
+               \fclose($v_zip_temp_fd);
                $this->privCloseFd();
-               @unlink($v_zip_temp_name);
+               @\unlink($v_zip_temp_name);
                $this->privSwapBackMagicQuotes();
 
                // ----- Return
@@ -1918,7 +1918,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Store the offset of the central dir
-           $v_offset = @ftell($this->zip_fd);
+           $v_offset = @\ftell($this->zip_fd);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "New offset of central dir : $v_offset");
 
            // ----- Copy the block of file headers from the old archive
@@ -1926,19 +1926,19 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            while ($v_size != 0) {
                $v_read_size = ($v_size < PCLZIP_READ_BLOCK_SIZE ? $v_size : PCLZIP_READ_BLOCK_SIZE);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Read $v_read_size bytes");
-               $v_buffer = @fread($v_zip_temp_fd, $v_read_size);
-               @fwrite($this->zip_fd, $v_buffer, $v_read_size);
+               $v_buffer = @\fread($v_zip_temp_fd, $v_read_size);
+               @\fwrite($this->zip_fd, $v_buffer, $v_read_size);
                $v_size -= $v_read_size;
            }
 
            // ----- Create the Central Dir files header
-           for ($i=0, $v_count=0; $i<sizeof($v_header_list); $i++) {
+           for ($i=0, $v_count=0; $i<\sizeof($v_header_list); $i++) {
                // ----- Create the file header
                if ($v_header_list[$i]['status'] == 'ok') {
                    if (($v_result = $this->privWriteCentralFileHeader($v_header_list[$i])) != 1) {
-                       fclose($v_zip_temp_fd);
+                       \fclose($v_zip_temp_fd);
                        $this->privCloseFd();
-                       @unlink($v_zip_temp_name);
+                       @\unlink($v_zip_temp_name);
                        $this->privSwapBackMagicQuotes();
 
                        // ----- Return
@@ -1965,7 +1965,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Calculate the size of the central header
-           $v_size = @ftell($this->zip_fd)-$v_offset;
+           $v_size = @\ftell($this->zip_fd)-$v_offset;
 
            // ----- Create the central dir footer
            if (($v_result = $this->privWriteCentralHeader($v_count+$v_central_dir['entries'], $v_size, $v_offset, $v_comment)) != 1) {
@@ -1987,14 +1987,14 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $this->privCloseFd();
 
            // ----- Close the temporary file
-           @fclose($v_zip_temp_fd);
+           @\fclose($v_zip_temp_fd);
 
            // ----- Magic quotes trick
            $this->privSwapBackMagicQuotes();
 
            // ----- Delete the zip file
            // TBC : I should test the result ...
-           @unlink($this->zipname);
+           @\unlink($this->zipname);
 
            // ----- Rename the temporary file
            // TBC : I should test the result ...
@@ -2029,7 +2029,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Open the zip file
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, 'Open file in '.$p_mode.' mode');
-           if (($this->zip_fd = @fopen($this->zipname, $p_mode)) == 0) {
+           if (($this->zip_fd = @\fopen($this->zipname, $p_mode)) == 0) {
                // ----- Error log
                PclZip::privErrorLog(PCLZIP_ERR_READ_OPEN_FAIL, 'Unable to open archive \''.$this->zipname.'\' in '.$p_mode.' mode');
 
@@ -2055,7 +2055,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_result=1;
 
            if ($this->zip_fd != 0) {
-               @fclose($this->zip_fd);
+               @\fclose($this->zip_fd);
            }
            $this->zip_fd = 0;
 
@@ -2092,10 +2092,10 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Store the offset of the central dir
-           $v_offset = @ftell($this->zip_fd);
+           $v_offset = @\ftell($this->zip_fd);
 
            // ----- Create the Central Dir files header
-           for ($i=0,$v_count=0; $i<sizeof($v_header_list); $i++) {
+           for ($i=0,$v_count=0; $i<\sizeof($v_header_list); $i++) {
                // ----- Create the file header
                if ($v_header_list[$i]['status'] == 'ok') {
                    if (($v_result = $this->privWriteCentralFileHeader($v_header_list[$i])) != 1) {
@@ -2117,7 +2117,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Calculate the size of the central header
-           $v_size = @ftell($this->zip_fd)-$v_offset;
+           $v_size = @\ftell($this->zip_fd)-$v_offset;
 
            // ----- Create the central dir footer
            if (($v_result = $this->privWriteCentralHeader($v_count, $v_size, $v_offset, $v_comment)) != 1) {
@@ -2155,11 +2155,11 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_header = array();
 
            // ----- Recuperate the current number of elt in list
-           $v_nb = sizeof($p_result_list);
+           $v_nb = \sizeof($p_result_list);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Before add, list have $v_nb elements");
 
            // ----- Loop on the files
-           for ($j=0; ($j<count($p_list)) && ($v_result==1); $j++) {
+           for ($j=0; ($j<\count($p_list)) && ($v_result==1); $j++) {
                // ----- Recuperate the filename
                $p_filename = PclZipUtilTranslateWinPath($p_list[$j], false);
 
@@ -2172,7 +2172,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                }
 
                // ----- Check the filename
-               if (!file_exists($p_filename)) {
+               if (!\file_exists($p_filename)) {
                    // ----- Error log
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "File '$p_filename' does not exists");
                    PclZip::privErrorLog(PCLZIP_ERR_MISSING_FILE, "File '$p_filename' does not exists");
@@ -2183,7 +2183,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                }
 
                // ----- Look if it is a file or a dir with no all pathnre move
-               if ((is_file($p_filename)) || ((is_dir($p_filename)) && !$p_remove_all_dir)) {
+               if ((\is_file($p_filename)) || ((\is_dir($p_filename)) && !$p_remove_all_dir)) {
                    // ----- Add the file
                    if (($v_result = $this->privAddFile($p_filename, $v_header, $p_add_dir, $p_remove_dir, $p_remove_all_dir, $p_options)) != 1) {
                        // ----- Return status
@@ -2196,7 +2196,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                }
 
                // ----- Look for directory
-               if (@is_dir($p_filename)) {
+               if (@\is_dir($p_filename)) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "$p_filename is a directory");
 
                    // ----- Look for path
@@ -2207,10 +2207,10 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    }
 
                    // ----- Read the directory for files and sub-directories
-                   if ($p_hdir = @opendir($p_filename)) {
+                   if ($p_hdir = @\opendir($p_filename)) {
 //          $p_hitem = @readdir($p_hdir); // '.' directory
 //          $p_hitem = @readdir($p_hdir); // '..' directory
-                       while (($p_hitem = @readdir($p_hdir)) !== false) {
+                       while (($p_hitem = @\readdir($p_hdir)) !== false) {
                            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Looking for $p_hitem in the directory");
 
                            // ----- Skip '.' and '..'
@@ -2219,7 +2219,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                            }
 
                            // ----- Look for a file
-                           if (@is_file($v_path.$p_hitem)) {
+                           if (@\is_file($v_path.$p_hitem)) {
                                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Add the file '".$v_path.$p_hitem."'");
 
                                // ----- Add the file
@@ -2234,7 +2234,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                            }
 
                            // ----- Recursive call to privAddFileList()
-                           elseif (@is_dir($v_path.$p_hitem)) {
+                           elseif (@\is_dir($v_path.$p_hitem)) {
                                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Add the directory '".$v_path.$p_hitem."'");
 
                                // ----- Need an array as parameter
@@ -2249,14 +2249,14 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                                );
 
                                // ----- Update the number of elements of the list
-                               $v_nb = sizeof($p_result_list);
+                               $v_nb = \sizeof($p_result_list);
                            }
 
                            // ----- Unsupported file types
                             
                                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Unsupported file type");
                        }
-                       @closedir($p_hdir);
+                       @\closedir($p_hdir);
                    }
 
                    // ----- Free memory for the recursive loop
@@ -2298,20 +2298,20 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Look for all path to remove
            if ($p_remove_all_dir) {
-               $v_stored_filename = basename($p_filename);
+               $v_stored_filename = \basename($p_filename);
            }
            // ----- Look for partial path remove
            elseif ($p_remove_dir != "") {
-               if (substr($p_remove_dir, -1) != '/') {
+               if (\substr($p_remove_dir, -1) != '/') {
                    $p_remove_dir .= "/";
                }
 
-               if ((substr($p_filename, 0, 2) == "./") || (substr($p_remove_dir, 0, 2) == "./")) {
-                   if ((substr($p_filename, 0, 2) == "./") && (substr($p_remove_dir, 0, 2) != "./")) {
+               if ((\substr($p_filename, 0, 2) == "./") || (\substr($p_remove_dir, 0, 2) == "./")) {
+                   if ((\substr($p_filename, 0, 2) == "./") && (\substr($p_remove_dir, 0, 2) != "./")) {
                        $p_remove_dir = "./".$p_remove_dir;
                    }
-                   if ((substr($p_filename, 0, 2) != "./") && (substr($p_remove_dir, 0, 2) == "./")) {
-                       $p_remove_dir = substr($p_remove_dir, 2);
+                   if ((\substr($p_filename, 0, 2) != "./") && (\substr($p_remove_dir, 0, 2) == "./")) {
+                       $p_remove_dir = \substr($p_remove_dir, 2);
                    }
                }
 
@@ -2322,14 +2322,14 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        $v_stored_filename = "";
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Path to remove is the current folder");
                    } else {
-                       $v_stored_filename = substr($p_filename, strlen($p_remove_dir));
+                       $v_stored_filename = \substr($p_filename, \strlen($p_remove_dir));
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Remove path '$p_remove_dir' in file '$p_filename' = '$v_stored_filename'");
                    }
                }
            }
            // ----- Look for path to add
            if ($p_add_dir != "") {
-               if (substr($p_add_dir, -1) == "/") {
+               if (\substr($p_add_dir, -1) == "/") {
                    $v_stored_filename = $p_add_dir.$v_stored_filename;
                } else {
                    $v_stored_filename = $p_add_dir."/".$v_stored_filename;
@@ -2343,22 +2343,22 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Filename (reduced) '$v_stored_filename', strlen ".strlen($v_stored_filename));
 
            // ----- Set the file properties
-           clearstatcache();
+           \clearstatcache();
            $p_header['version'] = 20;
            $p_header['version_extracted'] = 10;
            $p_header['flag'] = 0;
            $p_header['compression'] = 0;
-           $p_header['mtime'] = filemtime($p_filename);
+           $p_header['mtime'] = \filemtime($p_filename);
            $p_header['crc'] = 0;
            $p_header['compressed_size'] = 0;
-           $p_header['size'] = filesize($p_filename);
-           $p_header['filename_len'] = strlen($p_filename);
+           $p_header['size'] = \filesize($p_filename);
+           $p_header['filename_len'] = \strlen($p_filename);
            $p_header['extra_len'] = 0;
            $p_header['comment_len'] = 0;
            $p_header['disk'] = 0;
            $p_header['internal'] = 0;
 //    $p_header['external'] = (is_file($p_filename)?0xFE49FFE0:0x41FF0010);
-           $p_header['external'] = (is_file($p_filename)?0x00000000:0x00000010);
+           $p_header['external'] = (\is_file($p_filename)?0x00000000:0x00000010);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Header external extension '".sprintf("0x%X",$p_header['external'])."'");
            $p_header['offset'] = 0;
            $p_header['filename'] = $p_filename;
@@ -2401,7 +2401,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Check the path length
-           if (strlen($p_header['stored_filename']) > 0xFF) {
+           if (\strlen($p_header['stored_filename']) > 0xFF) {
                $p_header['status'] = 'filename_too_long';
            }
 
@@ -2409,10 +2409,10 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            if ($p_header['status'] == 'ok') {
 
       // ----- Look for a file
-               if (is_file($p_filename)) {
+               if (\is_file($p_filename)) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "'".$p_filename."' is a file");
                    // ----- Open the source file
-                   if (($v_file = @fopen($p_filename, "rb")) == 0) {
+                   if (($v_file = @\fopen($p_filename, "rb")) == 0) {
                        PclZip::privErrorLog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to open file '$p_filename' in binary read mode");
                        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
                        return PclZip::errorCode();
@@ -2421,10 +2421,10 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    if ($p_options[PCLZIP_OPT_NO_COMPRESSION]) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "File will not be compressed");
                        // ----- Read the file content
-                       $v_content_compressed = @fread($v_file, $p_header['size']);
+                       $v_content_compressed = @\fread($v_file, $p_header['size']);
 
                        // ----- Calculate the CRC
-                       $p_header['crc'] = @crc32($v_content_compressed);
+                       $p_header['crc'] = @\crc32($v_content_compressed);
 
                        // ----- Set header parameters
                        $p_header['compressed_size'] = $p_header['size'];
@@ -2432,16 +2432,16 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    } else {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "File will be compressed");
                        // ----- Read the file content
-                       $v_content = @fread($v_file, $p_header['size']);
+                       $v_content = @\fread($v_file, $p_header['size']);
 
                        // ----- Calculate the CRC
-                       $p_header['crc'] = @crc32($v_content);
+                       $p_header['crc'] = @\crc32($v_content);
 
                        // ----- Compress the file
-                       $v_content_compressed = @gzdeflate($v_content);
+                       $v_content_compressed = @\gzdeflate($v_content);
 
                        // ----- Set header parameters
-                       $p_header['compressed_size'] = strlen($v_content_compressed);
+                       $p_header['compressed_size'] = \strlen($v_content_compressed);
                        $p_header['compression'] = 8;
                    }
 
@@ -2470,7 +2470,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
                    // ----- Call the header generation
                    if (($v_result = $this->privWriteFileHeader($p_header)) != 1) {
-                       @fclose($v_file);
+                       @\fclose($v_file);
                        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
                        return $v_result;
                    }
@@ -2481,21 +2481,21 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                               $v_content_compressed);
                    @fwrite($this->zip_fd, $v_binary_data, $p_header['compressed_size']);
                    */
-                   @fwrite(
+                   @\fwrite(
                        $this->zip_fd,
                 $v_content_compressed,
                        $p_header['compressed_size']
                    );
 
                    // ----- Close the file
-                   @fclose($v_file);
+                   @\fclose($v_file);
                }
 
                // ----- Look for a directory
                else {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "'".$p_filename."' is a folder");
                    // ----- Look for directory last '/'
-                   if (@substr($p_header['stored_filename'], -1) != '/') {
+                   if (@\substr($p_header['stored_filename'], -1) != '/') {
                        $p_header['stored_filename'] .= '/';
                    }
 
@@ -2556,17 +2556,17 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            //}
 
            // ----- Store the offset position of the file
-           $p_header['offset'] = ftell($this->zip_fd);
+           $p_header['offset'] = \ftell($this->zip_fd);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, 'File offset of the header :'.$p_header['offset']);
 
            // ----- Transform UNIX mtime to DOS format mdate/mtime
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, 'Date : \''.date("d/m/y H:i:s", $p_header['mtime']).'\'');
-           $v_date = getdate($p_header['mtime']);
+           $v_date = \getdate($p_header['mtime']);
            $v_mtime = ($v_date['hours']<<11) + ($v_date['minutes']<<5) + $v_date['seconds']/2;
            $v_mdate = (($v_date['year']-1980)<<9) + ($v_date['mon']<<5) + $v_date['mday'];
 
            // ----- Packed data
-           $v_binary_data = pack(
+           $v_binary_data = \pack(
                "VvvvvvVVVvv",
                0x04034b50,
                           $p_header['version_extracted'],
@@ -2577,19 +2577,19 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                           $p_header['crc'],
                $p_header['compressed_size'],
                           $p_header['size'],
-                          strlen($p_header['stored_filename']),
+                          \strlen($p_header['stored_filename']),
                           $p_header['extra_len']
            );
 
            // ----- Write the first 148 bytes of the header in the archive
-           fputs($this->zip_fd, $v_binary_data, 30);
+           \fputs($this->zip_fd, $v_binary_data, 30);
 
            // ----- Write the variable fields
-           if (strlen($p_header['stored_filename']) != 0) {
-               fputs($this->zip_fd, $p_header['stored_filename'], strlen($p_header['stored_filename']));
+           if (\strlen($p_header['stored_filename']) != 0) {
+               \fputs($this->zip_fd, $p_header['stored_filename'], \strlen($p_header['stored_filename']));
            }
            if ($p_header['extra_len'] != 0) {
-               fputs($this->zip_fd, $p_header['extra'], $p_header['extra_len']);
+               \fputs($this->zip_fd, $p_header['extra'], $p_header['extra_len']);
            }
 
            // ----- Return
@@ -2616,12 +2616,12 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Transform UNIX mtime to DOS format mdate/mtime
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, 'Date : \''.date("d/m/y H:i:s", $p_header['mtime']).'\'');
-           $v_date = getdate($p_header['mtime']);
+           $v_date = \getdate($p_header['mtime']);
            $v_mtime = ($v_date['hours']<<11) + ($v_date['minutes']<<5) + $v_date['seconds']/2;
            $v_mdate = (($v_date['year']-1980)<<9) + ($v_date['mon']<<5) + $v_date['mday'];
 
            // ----- Packed data
-           $v_binary_data = pack(
+           $v_binary_data = \pack(
                "VvvvvvvVVVvvvvvVV",
                0x02014b50,
                           $p_header['version'],
@@ -2633,7 +2633,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                $p_header['crc'],
                           $p_header['compressed_size'],
                $p_header['size'],
-                          strlen($p_header['stored_filename']),
+                          \strlen($p_header['stored_filename']),
                           $p_header['extra_len'],
                $p_header['comment_len'],
                           $p_header['disk'],
@@ -2643,17 +2643,17 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            );
 
            // ----- Write the 42 bytes of the header in the zip file
-           fputs($this->zip_fd, $v_binary_data, 46);
+           \fputs($this->zip_fd, $v_binary_data, 46);
 
            // ----- Write the variable fields
-           if (strlen($p_header['stored_filename']) != 0) {
-               fputs($this->zip_fd, $p_header['stored_filename'], strlen($p_header['stored_filename']));
+           if (\strlen($p_header['stored_filename']) != 0) {
+               \fputs($this->zip_fd, $p_header['stored_filename'], \strlen($p_header['stored_filename']));
            }
            if ($p_header['extra_len'] != 0) {
-               fputs($this->zip_fd, $p_header['extra'], $p_header['extra_len']);
+               \fputs($this->zip_fd, $p_header['extra'], $p_header['extra_len']);
            }
            if ($p_header['comment_len'] != 0) {
-               fputs($this->zip_fd, $p_header['comment'], $p_header['comment_len']);
+               \fputs($this->zip_fd, $p_header['comment'], $p_header['comment_len']);
            }
 
            // ----- Return
@@ -2674,7 +2674,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_result=1;
 
            // ----- Packed data
-           $v_binary_data = pack(
+           $v_binary_data = \pack(
                "VvvvvVVv",
                0x06054b50,
                0,
@@ -2683,15 +2683,15 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                           $p_nb_entries,
                $p_size,
                           $p_offset,
-               strlen($p_comment)
+               \strlen($p_comment)
            );
 
            // ----- Write the 22 bytes of the header in the zip file
-           fputs($this->zip_fd, $v_binary_data, 22);
+           \fputs($this->zip_fd, $v_binary_data, 22);
 
            // ----- Write the variable fields
-           if (strlen($p_comment) != 0) {
-               fputs($this->zip_fd, $p_comment, strlen($p_comment));
+           if (\strlen($p_comment) != 0) {
+               \fputs($this->zip_fd, $p_comment, \strlen($p_comment));
            }
 
            // ----- Return
@@ -2716,7 +2716,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Open the zip file
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Open file in binary read mode");
-           if (($this->zip_fd = @fopen($this->zipname, 'rb')) == 0) {
+           if (($this->zip_fd = @\fopen($this->zipname, 'rb')) == 0) {
                // ----- Magic quotes trick
                $this->privSwapBackMagicQuotes();
 
@@ -2739,9 +2739,9 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            // ----- Go to beginning of Central Dir
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Offset : ".$v_central_dir['offset']."'");
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Position in file : ".ftell($this->zip_fd)."'");
-           @rewind($this->zip_fd);
+           @\rewind($this->zip_fd);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Position in file : ".ftell($this->zip_fd)."'");
-           if (@fseek($this->zip_fd, $v_central_dir['offset'])) {
+           if (@\fseek($this->zip_fd, $v_central_dir['offset'])) {
                $this->privSwapBackMagicQuotes();
 
                // ----- Error log
@@ -2846,27 +2846,27 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Check the path
            if (($p_path == "")
-        || ((substr($p_path, 0, 1) != "/")
-            && (substr($p_path, 0, 3) != "../")
-            && (substr($p_path, 1, 2)!=":/"))) {
+        || ((\substr($p_path, 0, 1) != "/")
+            && (\substr($p_path, 0, 3) != "../")
+            && (\substr($p_path, 1, 2)!=":/"))) {
                $p_path = "./".$p_path;
            }
 
            // ----- Reduce the path last (and duplicated) '/'
            if (($p_path != "./") && ($p_path != "/")) {
                // ----- Look for the path end '/'
-               while (substr($p_path, -1) == "/") {
+               while (\substr($p_path, -1) == "/") {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Destination path [$p_path] ends by '/'");
-                   $p_path = substr($p_path, 0, strlen($p_path)-1);
+                   $p_path = \substr($p_path, 0, \strlen($p_path)-1);
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Modified to [$p_path]");
                }
            }
 
            // ----- Look for path to remove format (should end by /)
-           if (($p_remove_path != "") && (substr($p_remove_path, -1) != '/')) {
+           if (($p_remove_path != "") && (\substr($p_remove_path, -1) != '/')) {
                $p_remove_path .= '/';
            }
-           $p_remove_path_size = strlen($p_remove_path);
+           $p_remove_path_size = \strlen($p_remove_path);
 
            // ----- Open the zip file
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Open file in binary read mode");
@@ -2897,9 +2897,9 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
                // ----- Read next Central dir entry
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Position before rewind : ".ftell($this->zip_fd)."'");
-               @rewind($this->zip_fd);
+               @\rewind($this->zip_fd);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Position after rewind : ".ftell($this->zip_fd)."'");
-               if (@fseek($this->zip_fd, $v_pos_entry)) {
+               if (@\fseek($this->zip_fd, $v_pos_entry)) {
                    // ----- Close the zip file
                    $this->privCloseFd();
                    $this->privSwapBackMagicQuotes();
@@ -2928,7 +2928,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                $v_header['index'] = $i;
 
                // ----- Store the file position
-               $v_pos_entry = ftell($this->zip_fd);
+               $v_pos_entry = \ftell($this->zip_fd);
 
                // ----- Look for the specific extract rules
                $v_extract = false;
@@ -2939,16 +2939,16 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract with rule 'ByName'");
 
                    // ----- Look if the filename is in the list
-                   for ($j=0; ($j<sizeof($p_options[PCLZIP_OPT_BY_NAME])) && (!$v_extract); $j++) {
+                   for ($j=0; ($j<\sizeof($p_options[PCLZIP_OPT_BY_NAME])) && (!$v_extract); $j++) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Compare with file '".$p_options[PCLZIP_OPT_BY_NAME][$j]."'");
 
                        // ----- Look for a directory
-                       if (substr($p_options[PCLZIP_OPT_BY_NAME][$j], -1) == "/") {
+                       if (\substr($p_options[PCLZIP_OPT_BY_NAME][$j], -1) == "/") {
                            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "The searched item is a directory");
 
                            // ----- Look if the directory is in the filename path
-                           if ((strlen($v_header['stored_filename']) > strlen($p_options[PCLZIP_OPT_BY_NAME][$j]))
-                      && (substr($v_header['stored_filename'], 0, strlen($p_options[PCLZIP_OPT_BY_NAME][$j])) == $p_options[PCLZIP_OPT_BY_NAME][$j])) {
+                           if ((\strlen($v_header['stored_filename']) > \strlen($p_options[PCLZIP_OPT_BY_NAME][$j]))
+                      && (\substr($v_header['stored_filename'], 0, \strlen($p_options[PCLZIP_OPT_BY_NAME][$j])) == $p_options[PCLZIP_OPT_BY_NAME][$j])) {
                                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "The directory is in the file path");
                                $v_extract = true;
                            }
@@ -2966,7 +2966,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                && ($p_options[PCLZIP_OPT_BY_EREG] != "")) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract by ereg '".$p_options[PCLZIP_OPT_BY_EREG]."'");
 
-                   if (preg_match('/'.$p_options[PCLZIP_OPT_BY_EREG].'/', $v_header['stored_filename'])) {
+                   if (\preg_match('/'.$p_options[PCLZIP_OPT_BY_EREG].'/', $v_header['stored_filename'])) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Filename match the regular expression");
                        $v_extract = true;
                    }
@@ -2977,7 +2977,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                && ($p_options[PCLZIP_OPT_BY_PREG] != "")) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract with rule 'ByEreg'");
 
-                   if (preg_match($p_options[PCLZIP_OPT_BY_PREG], $v_header['stored_filename'])) {
+                   if (\preg_match($p_options[PCLZIP_OPT_BY_PREG], $v_header['stored_filename'])) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Filename match the regular expression");
                        $v_extract = true;
                    }
@@ -2989,7 +2989,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract with rule 'ByIndex'");
 
                    // ----- Look if the index is in the list
-                   for ($j=$j_start; ($j<sizeof($p_options[PCLZIP_OPT_BY_INDEX])) && (!$v_extract); $j++) {
+                   for ($j=$j_start; ($j<\sizeof($p_options[PCLZIP_OPT_BY_INDEX])) && (!$v_extract); $j++) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Look if index '$i' is in [".$p_options[PCLZIP_OPT_BY_INDEX][$j]['start'].",".$p_options[PCLZIP_OPT_BY_INDEX][$j]['end']."]");
 
                        if (($i>=$p_options[PCLZIP_OPT_BY_INDEX][$j]['start']) && ($i<=$p_options[PCLZIP_OPT_BY_INDEX][$j]['end'])) {
@@ -3087,9 +3087,9 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
                    // ----- Go to the file position
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position before rewind : ".ftell($this->zip_fd)."'");
-                   @rewind($this->zip_fd);
+                   @\rewind($this->zip_fd);
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position after rewind : ".ftell($this->zip_fd)."'");
-                   if (@fseek($this->zip_fd, $v_header['offset'])) {
+                   if (@\fseek($this->zip_fd, $v_header['offset'])) {
                        // ----- Close the zip file
                        $this->privCloseFd();
 
@@ -3249,7 +3249,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "All path is removed");
                // ----- Get the basename of the path
-               $p_entry['filename'] = basename($p_entry['filename']);
+               $p_entry['filename'] = \basename($p_entry['filename']);
            }
 
            // ----- Look for path to remove
@@ -3266,12 +3266,12 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    return $v_result;
                }
 
-               $p_remove_path_size = strlen($p_remove_path);
-               if (substr($p_entry['filename'], 0, $p_remove_path_size) == $p_remove_path) {
+               $p_remove_path_size = \strlen($p_remove_path);
+               if (\substr($p_entry['filename'], 0, $p_remove_path_size) == $p_remove_path) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Found path '$p_remove_path' to remove in file '".$p_entry['filename']."'");
 
                    // ----- Remove the path
-                   $p_entry['filename'] = substr($p_entry['filename'], $p_remove_path_size);
+                   $p_entry['filename'] = \substr($p_entry['filename'], $p_remove_path_size);
 
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Resulting file is '".$p_entry['filename']."'");
                }
@@ -3320,11 +3320,11 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            if ($p_entry['status'] == 'ok') {
 
     // ----- Look for specific actions while the file exist
-               if (file_exists($p_entry['filename'])) {
+               if (\file_exists($p_entry['filename'])) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "File '".$p_entry['filename']."' already exists");
 
                    // ----- Look if file is a directory
-                   if (is_dir($p_entry['filename'])) {
+                   if (\is_dir($p_entry['filename'])) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Existing file '".$p_entry['filename']."' is a directory");
 
                        // ----- Change the file status
@@ -3348,7 +3348,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        }
                    }
                    // ----- Look if file is write protected
-                   elseif (!is_writeable($p_entry['filename'])) {
+                   elseif (!\is_writeable($p_entry['filename'])) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Existing file '".$p_entry['filename']."' is write protected");
 
                        // ----- Change the file status
@@ -3373,7 +3373,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    }
 
                    // ----- Look if the extracted file is older
-                   elseif (filemtime($p_entry['filename']) > $p_entry['mtime']) {
+                   elseif (\filemtime($p_entry['filename']) > $p_entry['mtime']) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Existing file '".$p_entry['filename']."' is newer (".date("l dS of F Y h:i:s A", filemtime($p_entry['filename'])).") than the extracted file (".date("l dS of F Y h:i:s A", $p_entry['mtime']).")");
                        // ----- Change the file status
                        if ((isset($p_options[PCLZIP_OPT_REPLACE_NEWER]))
@@ -3406,12 +3406,12 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
                // ----- Check the directory availability and create it if necessary
                else {
-                   if ((($p_entry['external']&0x00000010)==0x00000010) || (substr($p_entry['filename'], -1) == '/')) {
+                   if ((($p_entry['external']&0x00000010)==0x00000010) || (\substr($p_entry['filename'], -1) == '/')) {
                        $v_dir_to_check = $p_entry['filename'];
-                   } elseif (!strstr($p_entry['filename'], "/")) {
+                   } elseif (!\strstr($p_entry['filename'], "/")) {
                        $v_dir_to_check = "";
                    } else {
-                       $v_dir_to_check = dirname($p_entry['filename']);
+                       $v_dir_to_check = \dirname($p_entry['filename']);
                    }
 
                    if (($v_result = $this->privDirCheck($v_dir_to_check, (($p_entry['external']&0x00000010)==0x00000010))) != 1) {
@@ -3438,7 +3438,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Extracting an un-compressed file");
 
                        // ----- Opening destination file
-                       if (($v_dest_file = @fopen($p_entry['filename'], 'wb')) == 0) {
+                       if (($v_dest_file = @\fopen($p_entry['filename'], 'wb')) == 0) {
                            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Error while opening '".$p_entry['filename']."' in write binary mode");
 
                            // ----- Change the file status
@@ -3456,20 +3456,20 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        while ($v_size != 0) {
                            $v_read_size = ($v_size < PCLZIP_READ_BLOCK_SIZE ? $v_size : PCLZIP_READ_BLOCK_SIZE);
                            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Read $v_read_size bytes");
-                           $v_buffer = @fread($this->zip_fd, $v_read_size);
+                           $v_buffer = @\fread($this->zip_fd, $v_read_size);
                            /* Try to speed up the code
                            $v_binary_data = pack('a'.$v_read_size, $v_buffer);
                            @fwrite($v_dest_file, $v_binary_data, $v_read_size);
                            */
-                           @fwrite($v_dest_file, $v_buffer, $v_read_size);
+                           @\fwrite($v_dest_file, $v_buffer, $v_read_size);
                            $v_size -= $v_read_size;
                        }
 
                        // ----- Closing the destination file
-                       fclose($v_dest_file);
+                       \fclose($v_dest_file);
 
                        // ----- Change the file mtime
-                       touch($p_entry['filename'], $p_entry['mtime']);
+                       \touch($p_entry['filename'], $p_entry['mtime']);
                    } else {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Extracting a compressed file (Compression method ".$p_entry['compression'].")");
                        // ----- TBC
@@ -3493,11 +3493,11 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        } else {
                            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Read '".$p_entry['compressed_size']."' compressed bytes");
                            // ----- Read the compressed file in a buffer (one shot)
-                           $v_buffer = @fread($this->zip_fd, $p_entry['compressed_size']);
+                           $v_buffer = @\fread($this->zip_fd, $p_entry['compressed_size']);
                        }
 
                        // ----- Decompress the file
-                       $v_file_content = @gzinflate($v_buffer);
+                       $v_file_content = @\gzinflate($v_buffer);
                        unset($v_buffer);
                        if ($v_file_content === false) {
                            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Unable to inflate compressed file");
@@ -3511,7 +3511,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        }
 
                        // ----- Opening destination file
-                       if (($v_dest_file = @fopen($p_entry['filename'], 'wb')) == 0) {
+                       if (($v_dest_file = @\fopen($p_entry['filename'], 'wb')) == 0) {
                            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Error while opening '".$p_entry['filename']."' in write binary mode");
 
                            // ----- Change the file status
@@ -3522,14 +3522,14 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        }
 
                        // ----- Write the uncompressed data
-                       @fwrite($v_dest_file, $v_file_content, $p_entry['size']);
+                       @\fwrite($v_dest_file, $v_file_content, $p_entry['size']);
                        unset($v_file_content);
 
                        // ----- Closing the destination file
-                       @fclose($v_dest_file);
+                       @\fclose($v_dest_file);
 
                        // ----- Change the file mtime
-                       @touch($p_entry['filename'], $p_entry['mtime']);
+                       @\touch($p_entry['filename'], $p_entry['mtime']);
                    }
 
                    // ----- Look for chmod option
@@ -3537,7 +3537,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "chmod option activated '".$p_options[PCLZIP_OPT_SET_CHMOD]."'");
 
                        // ----- Change the mode of the file
-                       @chmod($p_entry['filename'], $p_options[PCLZIP_OPT_SET_CHMOD]);
+                       @\chmod($p_entry['filename'], $p_options[PCLZIP_OPT_SET_CHMOD]);
                    }
 
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Extraction done");
@@ -3645,7 +3645,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Reading '".$p_entry['size']."' bytes");
 
                        // ----- Read the file in a buffer (one shot)
-                       $v_buffer = @fread($this->zip_fd, $p_entry['compressed_size']);
+                       $v_buffer = @\fread($this->zip_fd, $p_entry['compressed_size']);
 
                        // ----- Send the file to the output
                        echo $v_buffer;
@@ -3655,10 +3655,10 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Reading '".$p_entry['size']."' bytes");
 
                        // ----- Read the compressed file in a buffer (one shot)
-                       $v_buffer = @fread($this->zip_fd, $p_entry['compressed_size']);
+                       $v_buffer = @\fread($this->zip_fd, $p_entry['compressed_size']);
 
                        // ----- Decompress the file
-                       $v_file_content = gzinflate($v_buffer);
+                       $v_file_content = \gzinflate($v_buffer);
                        unset($v_buffer);
 
                        // ----- Send the file to the output
@@ -3736,15 +3736,15 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Reading '".$p_entry['size']."' bytes");
 
                    // ----- Reading the file
-                   $p_string = @fread($this->zip_fd, $p_entry['compressed_size']);
+                   $p_string = @\fread($this->zip_fd, $p_entry['compressed_size']);
                } else {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Extracting a compressed file (compression method '".$p_entry['compression']."')");
 
                    // ----- Reading the file
-                   $v_data = @fread($this->zip_fd, $p_entry['compressed_size']);
+                   $v_data = @\fread($this->zip_fd, $p_entry['compressed_size']);
 
                    // ----- Decompress the file
-                   if (($p_string = @gzinflate($v_data)) === false) {
+                   if (($p_string = @\gzinflate($v_data)) === false) {
                        // TBC
                    }
                }
@@ -3773,9 +3773,9 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_result=1;
 
            // ----- Read the 4 bytes signature
-           $v_binary_data = @fread($this->zip_fd, 4);
+           $v_binary_data = @\fread($this->zip_fd, 4);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Binary data is : '".sprintf("%08x", $v_binary_data)."'");
-           $v_data = unpack('Vid', $v_binary_data);
+           $v_data = \unpack('Vid', $v_binary_data);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Binary signature is : '".sprintf("0x%08x", $v_data['id'])."'");
 
            // ----- Check signature
@@ -3791,16 +3791,16 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Read the first 42 bytes of the header
-           $v_binary_data = fread($this->zip_fd, 26);
+           $v_binary_data = \fread($this->zip_fd, 26);
 
            // ----- Look for invalid block size
-           if (mb_strlen($v_binary_data, 'iso-8859-1') != 26) {
+           if (\mb_strlen($v_binary_data, 'iso-8859-1') != 26) {
                $p_header['filename'] = "";
                $p_header['status'] = "invalid_header";
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Invalid block size : ".strlen($v_binary_data));
 
                // ----- Error log
-               PclZip::privErrorLog(PCLZIP_ERR_BAD_FORMAT, "Invalid block size : ".mb_strlen($v_binary_data, 'iso-8859-1'));
+               PclZip::privErrorLog(PCLZIP_ERR_BAD_FORMAT, "Invalid block size : ".\mb_strlen($v_binary_data, 'iso-8859-1'));
 
                // ----- Return
                //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
@@ -3810,17 +3810,17 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            // ----- Extract the values
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Header : '".$v_binary_data."'");
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Header (Hex) : '".bin2hex($v_binary_data)."'");
-           $v_data = unpack('vversion/vflag/vcompression/vmtime/vmdate/Vcrc/Vcompressed_size/Vsize/vfilename_len/vextra_len', $v_binary_data);
+           $v_data = \unpack('vversion/vflag/vcompression/vmtime/vmdate/Vcrc/Vcompressed_size/Vsize/vfilename_len/vextra_len', $v_binary_data);
 
            // ----- Get filename
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "File name length : ".$v_data['filename_len']);
-           $p_header['filename'] = fread($this->zip_fd, $v_data['filename_len']);
+           $p_header['filename'] = \fread($this->zip_fd, $v_data['filename_len']);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, 'Filename : \''.$p_header['filename'].'\'');
 
            // ----- Get extra_fields
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extra field length : ".$v_data['extra_len']);
            if ($v_data['extra_len'] != 0) {
-               $p_header['extra'] = fread($this->zip_fd, $v_data['extra_len']);
+               $p_header['extra'] = \fread($this->zip_fd, $v_data['extra_len']);
            } else {
                $p_header['extra'] = '';
            }
@@ -3857,11 +3857,11 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                $v_day = $p_header['mdate'] & 0x001F;
 
                // ----- Get UNIX date format
-               $p_header['mtime'] = mktime($v_hour, $v_minute, $v_seconde, $v_month, $v_day, $v_year);
+               $p_header['mtime'] = \mktime($v_hour, $v_minute, $v_seconde, $v_month, $v_day, $v_year);
 
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, 'Date : \''.date("d/m/y H:i:s", $p_header['mtime']).'\'');
            } else {
-               $p_header['mtime'] = time();
+               $p_header['mtime'] = \time();
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, 'Date is actual : \''.date("d/m/y H:i:s", $p_header['mtime']).'\'');
            }
 
@@ -3894,9 +3894,9 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_result=1;
 
            // ----- Read the 4 bytes signature
-           $v_binary_data = @fread($this->zip_fd, 4);
+           $v_binary_data = @\fread($this->zip_fd, 4);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Binary data is : '".sprintf("%08x", $v_binary_data)."'");
-           $v_data = unpack('Vid', $v_binary_data);
+           $v_data = \unpack('Vid', $v_binary_data);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Binary signature is : '".sprintf("0x%08x", $v_data['id'])."'");
 
            // ----- Check signature
@@ -3912,16 +3912,16 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Read the first 42 bytes of the header
-           $v_binary_data = fread($this->zip_fd, 42);
+           $v_binary_data = \fread($this->zip_fd, 42);
 
            // ----- Look for invalid block size
-           if (mb_strlen($v_binary_data, 'iso-8859-1') != 42) {
+           if (\mb_strlen($v_binary_data, 'iso-8859-1') != 42) {
                $p_header['filename'] = "";
                $p_header['status'] = "invalid_header";
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Invalid block size : ".strlen($v_binary_data));
 
                // ----- Error log
-               PclZip::privErrorLog(PCLZIP_ERR_BAD_FORMAT, "Invalid block size : ".mb_strlen($v_binary_data, 'iso-8859-1'));
+               PclZip::privErrorLog(PCLZIP_ERR_BAD_FORMAT, "Invalid block size : ".\mb_strlen($v_binary_data, 'iso-8859-1'));
 
                // ----- Return
                //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
@@ -3931,12 +3931,12 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            // ----- Extract the values
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Header : '".$v_binary_data."'");
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Header (Hex) : '".bin2hex($v_binary_data)."'");
-           $p_header = unpack('vversion/vversion_extracted/vflag/vcompression/vmtime/vmdate/Vcrc/Vcompressed_size/Vsize/vfilename_len/vextra_len/vcomment_len/vdisk/vinternal/Vexternal/Voffset', $v_binary_data);
+           $p_header = \unpack('vversion/vversion_extracted/vflag/vcompression/vmtime/vmdate/Vcrc/Vcompressed_size/Vsize/vfilename_len/vextra_len/vcomment_len/vdisk/vinternal/Vexternal/Voffset', $v_binary_data);
 
            // ----- Get filename
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "File name length : ".$p_header['filename_len']);
            if ($p_header['filename_len'] != 0) {
-               $p_header['filename'] = fread($this->zip_fd, $p_header['filename_len']);
+               $p_header['filename'] = \fread($this->zip_fd, $p_header['filename_len']);
            } else {
                $p_header['filename'] = '';
            }
@@ -3945,7 +3945,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            // ----- Get extra
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Extra length : ".$p_header['extra_len']);
            if ($p_header['extra_len'] != 0) {
-               $p_header['extra'] = fread($this->zip_fd, $p_header['extra_len']);
+               $p_header['extra'] = \fread($this->zip_fd, $p_header['extra_len']);
            } else {
                $p_header['extra'] = '';
            }
@@ -3954,7 +3954,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            // ----- Get comment
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Comment length : ".$p_header['comment_len']);
            if ($p_header['comment_len'] != 0) {
-               $p_header['comment'] = fread($this->zip_fd, $p_header['comment_len']);
+               $p_header['comment'] = \fread($this->zip_fd, $p_header['comment_len']);
            } else {
                $p_header['comment'] = '';
            }
@@ -3982,11 +3982,11 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                $v_day = $p_header['mdate'] & 0x001F;
 
                // ----- Get UNIX date format
-               $p_header['mtime'] = mktime($v_hour, $v_minute, $v_seconde, $v_month, $v_day, $v_year);
+               $p_header['mtime'] = \mktime($v_hour, $v_minute, $v_seconde, $v_month, $v_day, $v_year);
 
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, 'Date : \''.date("d/m/y H:i:s", $p_header['mtime']).'\'');
            } else {
-               $p_header['mtime'] = time();
+               $p_header['mtime'] = \time();
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, 'Date is actual : \''.date("d/m/y H:i:s", $p_header['mtime']).'\'');
            }
 
@@ -3999,7 +3999,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            // ----- Look if it is a directory
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Internal (Hex) : '".sprintf("Ox%04X", $p_header['internal'])."'");
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "External (Hex) : '".sprintf("Ox%04X", $p_header['external'])."' (".(($p_header['external']&0x00000010)==0x00000010?'is a folder':'is a file').')');
-           if (substr($p_header['filename'], -1) == '/') {
+           if (\substr($p_header['filename'], -1) == '/') {
                //$p_header['external'] = 0x41FF0010;
                $p_header['external'] = 0x00000010;
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, 'Force folder external : \''.sprintf("Ox%04X", $p_header['external']).'\'');
@@ -4077,11 +4077,11 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_result=1;
 
            // ----- Go to the end of the zip file
-           $v_size = filesize($this->zipname);
+           $v_size = \filesize($this->zipname);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Size of the file :$v_size");
-           @fseek($this->zip_fd, $v_size);
+           @\fseek($this->zip_fd, $v_size);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, 'Position at end of zip file : \''.ftell($this->zip_fd).'\'');
-           if (@ftell($this->zip_fd) != $v_size) {
+           if (@\ftell($this->zip_fd) != $v_size) {
                // ----- Error log
                PclZip::privErrorLog(PCLZIP_ERR_BAD_FORMAT, 'Unable to go to the end of the archive \''.$this->zipname.'\'');
 
@@ -4095,9 +4095,9 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_found = 0;
            if ($v_size > 26) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, 'Look for central dir with no comment');
-               @fseek($this->zip_fd, $v_size-22);
+               @\fseek($this->zip_fd, $v_size-22);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, 'Position after min central position : \''.ftell($this->zip_fd).'\'');
-               if (($v_pos = @ftell($this->zip_fd)) != ($v_size-22)) {
+               if (($v_pos = @\ftell($this->zip_fd)) != ($v_size-22)) {
                    // ----- Error log
                    PclZip::privErrorLog(PCLZIP_ERR_BAD_FORMAT, 'Unable to seek back to the middle of the archive \''.$this->zipname.'\'');
 
@@ -4107,9 +4107,9 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                }
 
                // ----- Read for bytes
-               $v_binary_data = @fread($this->zip_fd, 4);
+               $v_binary_data = @\fread($this->zip_fd, 4);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Binary data is : '".sprintf("%08x", $v_binary_data)."'");
-               $v_data = @unpack('Vid', $v_binary_data);
+               $v_data = @\unpack('Vid', $v_binary_data);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Binary signature is : '".sprintf("0x%08x", $v_data['id'])."'");
 
                // ----- Check signature
@@ -4118,7 +4118,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    $v_found = 1;
                }
 
-               $v_pos = ftell($this->zip_fd);
+               $v_pos = \ftell($this->zip_fd);
            }
 
            // ----- Go back to the maximum possible size of the Central Dir End Record
@@ -4128,8 +4128,8 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
       if ($v_maximum_size > $v_size) {
           $v_maximum_size = $v_size;
       }
-               @fseek($this->zip_fd, $v_size-$v_maximum_size);
-               if (@ftell($this->zip_fd) != ($v_size-$v_maximum_size)) {
+               @\fseek($this->zip_fd, $v_size-$v_maximum_size);
+               if (@\ftell($this->zip_fd) != ($v_size-$v_maximum_size)) {
                    // ----- Error log
                    PclZip::privErrorLog(PCLZIP_ERR_BAD_FORMAT, 'Unable to seek back to the middle of the archive \''.$this->zipname.'\'');
 
@@ -4140,14 +4140,14 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, 'Position after max central position : \''.ftell($this->zip_fd).'\'');
 
                // ----- Read byte per byte in order to find the signature
-               $v_pos = ftell($this->zip_fd);
+               $v_pos = \ftell($this->zip_fd);
                $v_bytes = 0x00000000;
                while ($v_pos < $v_size) {
                    // ----- Read a byte
-                   $v_byte = @fread($this->zip_fd, 1);
+                   $v_byte = @\fread($this->zip_fd, 1);
 
                    // -----  Add the byte
-                   $v_bytes = ($v_bytes << 8) | Ord($v_byte);
+                   $v_bytes = ($v_bytes << 8) | \Ord($v_byte);
 
                    // ----- Compare the bytes
                    if ($v_bytes == 0x504b0506) {
@@ -4173,14 +4173,14 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Read the first 18 bytes of the header
-           $v_binary_data = fread($this->zip_fd, 18);
+           $v_binary_data = \fread($this->zip_fd, 18);
 
            // ----- Look for invalid block size
-           if (mb_strlen($v_binary_data, 'iso-8859-1') != 18) {
+           if (\mb_strlen($v_binary_data, 'iso-8859-1') != 18) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "Invalid End of Central Dir Record size : ".strlen($v_binary_data));
 
                // ----- Error log
-               PclZip::privErrorLog(PCLZIP_ERR_BAD_FORMAT, "Invalid End of Central Dir Record size : ".mb_strlen($v_binary_data, 'iso-8859-1'));
+               PclZip::privErrorLog(PCLZIP_ERR_BAD_FORMAT, "Invalid End of Central Dir Record size : ".\mb_strlen($v_binary_data, 'iso-8859-1'));
 
                // ----- Return
                //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
@@ -4190,7 +4190,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            // ----- Extract the values
            ////--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Central Dir Record : '".$v_binary_data."'");
            ////--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Central Dir Record (Hex) : '".bin2hex($v_binary_data)."'");
-           $v_data = unpack('vdisk/vdisk_start/vdisk_entries/ventries/Vsize/Voffset/vcomment_size', $v_binary_data);
+           $v_data = \unpack('vdisk/vdisk_start/vdisk_entries/ventries/Vsize/Voffset/vcomment_size', $v_binary_data);
 
            // ----- Check the global size
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Comment length : ".$v_data['comment_size']);
@@ -4217,7 +4217,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Get comment
            if ($v_data['comment_size'] != 0) {
-               $p_central_dir['comment'] = fread($this->zip_fd, $v_data['comment_size']);
+               $p_central_dir['comment'] = \fread($this->zip_fd, $v_data['comment_size']);
            } else {
                $p_central_dir['comment'] = '';
            }
@@ -4277,16 +4277,16 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Go to beginning of File
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position in file : ".ftell($this->zip_fd)."'");
-           @rewind($this->zip_fd);
+           @\rewind($this->zip_fd);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position in file : ".ftell($this->zip_fd)."'");
 
            // ----- Scan all the files
            // ----- Start at beginning of Central Dir
            $v_pos_entry = $v_central_dir['offset'];
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position before rewind : ".ftell($this->zip_fd)."'");
-           @rewind($this->zip_fd);
+           @\rewind($this->zip_fd);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position after rewind : ".ftell($this->zip_fd)."'");
-           if (@fseek($this->zip_fd, $v_pos_entry)) {
+           if (@\fseek($this->zip_fd, $v_pos_entry)) {
                // ----- Close the zip file
                $this->privCloseFd();
 
@@ -4329,16 +4329,16 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract with rule 'ByName'");
 
                    // ----- Look if the filename is in the list
-                   for ($j=0; ($j<sizeof($p_options[PCLZIP_OPT_BY_NAME])) && (!$v_found); $j++) {
+                   for ($j=0; ($j<\sizeof($p_options[PCLZIP_OPT_BY_NAME])) && (!$v_found); $j++) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Compare with file '".$p_options[PCLZIP_OPT_BY_NAME][$j]."'");
 
                        // ----- Look for a directory
-                       if (substr($p_options[PCLZIP_OPT_BY_NAME][$j], -1) == "/") {
+                       if (\substr($p_options[PCLZIP_OPT_BY_NAME][$j], -1) == "/") {
                            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "The searched item is a directory");
 
                            // ----- Look if the directory is in the filename path
-                           if ((strlen($v_header_list[$v_nb_extracted]['stored_filename']) > strlen($p_options[PCLZIP_OPT_BY_NAME][$j]))
-                      && (substr($v_header_list[$v_nb_extracted]['stored_filename'], 0, strlen($p_options[PCLZIP_OPT_BY_NAME][$j])) == $p_options[PCLZIP_OPT_BY_NAME][$j])) {
+                           if ((\strlen($v_header_list[$v_nb_extracted]['stored_filename']) > \strlen($p_options[PCLZIP_OPT_BY_NAME][$j]))
+                      && (\substr($v_header_list[$v_nb_extracted]['stored_filename'], 0, \strlen($p_options[PCLZIP_OPT_BY_NAME][$j])) == $p_options[PCLZIP_OPT_BY_NAME][$j])) {
                                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "The directory is in the file path");
                                $v_found = true;
                            } elseif ((($v_header_list[$v_nb_extracted]['external']&0x00000010)==0x00000010) /* Indicates a folder */
@@ -4360,7 +4360,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                && ($p_options[PCLZIP_OPT_BY_EREG] != "")) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract by ereg '".$p_options[PCLZIP_OPT_BY_EREG]."'");
 
-                   if (preg_match('/'.$p_options[PCLZIP_OPT_BY_EREG].'/', $v_header_list[$v_nb_extracted]['stored_filename'])) {
+                   if (\preg_match('/'.$p_options[PCLZIP_OPT_BY_EREG].'/', $v_header_list[$v_nb_extracted]['stored_filename'])) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Filename match the regular expression");
                        $v_found = true;
                    }
@@ -4371,7 +4371,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                && ($p_options[PCLZIP_OPT_BY_PREG] != "")) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract with rule 'ByEreg'");
 
-                   if (preg_match($p_options[PCLZIP_OPT_BY_PREG], $v_header_list[$v_nb_extracted]['stored_filename'])) {
+                   if (\preg_match($p_options[PCLZIP_OPT_BY_PREG], $v_header_list[$v_nb_extracted]['stored_filename'])) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Filename match the regular expression");
                        $v_found = true;
                    }
@@ -4383,7 +4383,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract with rule 'ByIndex'");
 
                    // ----- Look if the index is in the list
-                   for ($j=$j_start; ($j<sizeof($p_options[PCLZIP_OPT_BY_INDEX])) && (!$v_found); $j++) {
+                   for ($j=$j_start; ($j<\sizeof($p_options[PCLZIP_OPT_BY_INDEX])) && (!$v_found); $j++) {
                        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Look if index '$i' is in [".$p_options[PCLZIP_OPT_BY_INDEX][$j]['start'].",".$p_options[PCLZIP_OPT_BY_INDEX][$j]['end']."]");
 
                        if (($i>=$p_options[PCLZIP_OPT_BY_INDEX][$j]['start']) && ($i<=$p_options[PCLZIP_OPT_BY_INDEX][$j]['end'])) {
@@ -4419,7 +4419,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            if ($v_nb_extracted > 0) {
 
         // ----- Creates a temporay file
-               $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.uniqid('pclzip-').'.tmp';
+               $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.\uniqid('pclzip-').'.tmp';
 
                // ----- Creates a temporary zip archive
                $v_temp_zip = new PclZip($v_zip_temp_name);
@@ -4435,19 +4435,19 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                }
 
                // ----- Look which file need to be kept
-               for ($i=0; $i<sizeof($v_header_list); $i++) {
+               for ($i=0; $i<\sizeof($v_header_list); $i++) {
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Keep entry index '$i' : '".$v_header_list[$i]['filename']."'");
 
                    // ----- Calculate the position of the header
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Offset='". $v_header_list[$i]['offset']."'");
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position before rewind : ".ftell($this->zip_fd)."'");
-                   @rewind($this->zip_fd);
+                   @\rewind($this->zip_fd);
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position after rewind : ".ftell($this->zip_fd)."'");
-                   if (@fseek($this->zip_fd, $v_header_list[$i]['offset'])) {
+                   if (@\fseek($this->zip_fd, $v_header_list[$i]['offset'])) {
                        // ----- Close the zip file
                        $this->privCloseFd();
                        $v_temp_zip->privCloseFd();
-                       @unlink($v_zip_temp_name);
+                       @\unlink($v_zip_temp_name);
 
                        // ----- Error log
                        PclZip::privErrorLog(PCLZIP_ERR_INVALID_ARCHIVE_ZIP, 'Invalid archive size');
@@ -4464,7 +4464,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        // ----- Close the zip file
                        $this->privCloseFd();
                        $v_temp_zip->privCloseFd();
-                       @unlink($v_zip_temp_name);
+                       @\unlink($v_zip_temp_name);
 
                        // ----- Return
                        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
@@ -4485,7 +4485,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        // ----- Close the zip file
                        $this->privCloseFd();
                        $v_temp_zip->privCloseFd();
-                       @unlink($v_zip_temp_name);
+                       @\unlink($v_zip_temp_name);
 
                        // ----- Return
                        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
@@ -4498,7 +4498,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                        // ----- Close the zip file
                        $this->privCloseFd();
                        $v_temp_zip->privCloseFd();
-                       @unlink($v_zip_temp_name);
+                       @\unlink($v_zip_temp_name);
 
                        // ----- Return
                        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
@@ -4507,18 +4507,18 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                }
 
                // ----- Store the offset of the central dir
-               $v_offset = @ftell($v_temp_zip->zip_fd);
+               $v_offset = @\ftell($v_temp_zip->zip_fd);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "New offset of central dir : $v_offset");
 
                // ----- Re-Create the Central Dir files header
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Creates the new central directory");
-               for ($i=0; $i<sizeof($v_header_list); $i++) {
+               for ($i=0; $i<\sizeof($v_header_list); $i++) {
                    // ----- Create the file header
                    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Offset of file : ".$v_header_list[$i]['offset']);
                    if (($v_result = $v_temp_zip->privWriteCentralFileHeader($v_header_list[$i])) != 1) {
                        $v_temp_zip->privCloseFd();
                        $this->privCloseFd();
-                       @unlink($v_zip_temp_name);
+                       @\unlink($v_zip_temp_name);
 
                        // ----- Return
                        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
@@ -4538,15 +4538,15 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                }
 
                // ----- Calculate the size of the central header
-               $v_size = @ftell($v_temp_zip->zip_fd)-$v_offset;
+               $v_size = @\ftell($v_temp_zip->zip_fd)-$v_offset;
 
                // ----- Create the central dir footer
-               if (($v_result = $v_temp_zip->privWriteCentralHeader(sizeof($v_header_list), $v_size, $v_offset, $v_comment)) != 1) {
+               if (($v_result = $v_temp_zip->privWriteCentralHeader(\sizeof($v_header_list), $v_size, $v_offset, $v_comment)) != 1) {
                    // ----- Reset the file list
                    unset($v_header_list);
                    $v_temp_zip->privCloseFd();
                    $this->privCloseFd();
-                   @unlink($v_zip_temp_name);
+                   @\unlink($v_zip_temp_name);
 
                    // ----- Return
                    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
@@ -4559,7 +4559,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
                // ----- Delete the zip file
                // TBC : I should test the result ...
-               @unlink($this->zipname);
+               @\unlink($this->zipname);
 
                // ----- Rename the temporary file
                // TBC : I should test the result ...
@@ -4611,19 +4611,19 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::privDirCheck", "entry='$p_dir', is_dir='".($p_is_dir?"true":"false")."'");
 
            // ----- Remove the final '/'
-           if (($p_is_dir) && (substr($p_dir, -1)=='/')) {
-               $p_dir = substr($p_dir, 0, strlen($p_dir)-1);
+           if (($p_is_dir) && (\substr($p_dir, -1)=='/')) {
+               $p_dir = \substr($p_dir, 0, \strlen($p_dir)-1);
            }
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Looking for entry '$p_dir'");
 
            // ----- Check the directory availability
-           if ((is_dir($p_dir)) || ($p_dir == "")) {
+           if ((\is_dir($p_dir)) || ($p_dir == "")) {
                //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, "'$p_dir' is a directory");
                return 1;
            }
 
            // ----- Extract parent directory
-           $p_parent_dir = dirname($p_dir);
+           $p_parent_dir = \dirname($p_dir);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Parent directory is '$p_parent_dir'");
 
            // ----- Just a check
@@ -4639,7 +4639,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Create the directory
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Create directory '$p_dir'");
-           if (!@mkdir($p_dir, 0777)) {
+           if (!@\mkdir($p_dir, 0777)) {
                // ----- Error log
                PclZip::privErrorLog(PCLZIP_ERR_DIR_CREATE_FAIL, "Unable to create directory '$p_dir'");
 
@@ -4667,7 +4667,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_result=1;
 
            // ----- Look if the archive_to_add exists
-           if (!is_file($p_archive_to_add->zipname)) {
+           if (!\is_file($p_archive_to_add->zipname)) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Archive to add does not exist. End of merge.");
 
                // ----- Nothing to merge, so merge is a success
@@ -4679,7 +4679,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Look if the archive exists
-           if (!is_file($this->zipname)) {
+           if (!\is_file($this->zipname)) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Archive does not exist, duplicate the archive_to_add.");
 
                // ----- Do a duplicate
@@ -4708,7 +4708,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Go to beginning of File
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position in zip : ".ftell($this->zip_fd)."'");
-           @rewind($this->zip_fd);
+           @\rewind($this->zip_fd);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position in zip : ".ftell($this->zip_fd)."'");
 
            // ----- Open the archive_to_add file
@@ -4733,15 +4733,15 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Go to beginning of File
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position in archive_to_add : ".ftell($p_archive_to_add->zip_fd)."'");
-           @rewind($p_archive_to_add->zip_fd);
+           @\rewind($p_archive_to_add->zip_fd);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position in archive_to_add : ".ftell($p_archive_to_add->zip_fd)."'");
 
            // ----- Creates a temporay file
-           $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.uniqid('pclzip-').'.tmp';
+           $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.\uniqid('pclzip-').'.tmp';
 
            // ----- Open the temporary file in write mode
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Open file in binary read mode");
-           if (($v_zip_temp_fd = @fopen($v_zip_temp_name, 'wb')) == 0) {
+           if (($v_zip_temp_fd = @\fopen($v_zip_temp_name, 'wb')) == 0) {
                $this->privCloseFd();
                $p_archive_to_add->privCloseFd();
 
@@ -4758,8 +4758,8 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            while ($v_size != 0) {
                $v_read_size = ($v_size < PCLZIP_READ_BLOCK_SIZE ? $v_size : PCLZIP_READ_BLOCK_SIZE);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Read $v_read_size bytes");
-               $v_buffer = fread($this->zip_fd, $v_read_size);
-               @fwrite($v_zip_temp_fd, $v_buffer, $v_read_size);
+               $v_buffer = \fread($this->zip_fd, $v_read_size);
+               @\fwrite($v_zip_temp_fd, $v_buffer, $v_read_size);
                $v_size -= $v_read_size;
            }
 
@@ -4768,13 +4768,13 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            while ($v_size != 0) {
                $v_read_size = ($v_size < PCLZIP_READ_BLOCK_SIZE ? $v_size : PCLZIP_READ_BLOCK_SIZE);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Read $v_read_size bytes");
-               $v_buffer = fread($p_archive_to_add->zip_fd, $v_read_size);
-               @fwrite($v_zip_temp_fd, $v_buffer, $v_read_size);
+               $v_buffer = \fread($p_archive_to_add->zip_fd, $v_read_size);
+               @\fwrite($v_zip_temp_fd, $v_buffer, $v_read_size);
                $v_size -= $v_read_size;
            }
 
            // ----- Store the offset of the central dir
-           $v_offset = @ftell($v_zip_temp_fd);
+           $v_offset = @\ftell($v_zip_temp_fd);
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "New offset of central dir : $v_offset");
 
            // ----- Copy the block of file headers from the old archive
@@ -4782,8 +4782,8 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            while ($v_size != 0) {
                $v_read_size = ($v_size < PCLZIP_READ_BLOCK_SIZE ? $v_size : PCLZIP_READ_BLOCK_SIZE);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Read $v_read_size bytes");
-               $v_buffer = @fread($this->zip_fd, $v_read_size);
-               @fwrite($v_zip_temp_fd, $v_buffer, $v_read_size);
+               $v_buffer = @\fread($this->zip_fd, $v_read_size);
+               @\fwrite($v_zip_temp_fd, $v_buffer, $v_read_size);
                $v_size -= $v_read_size;
            }
 
@@ -4792,8 +4792,8 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            while ($v_size != 0) {
                $v_read_size = ($v_size < PCLZIP_READ_BLOCK_SIZE ? $v_size : PCLZIP_READ_BLOCK_SIZE);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Read $v_read_size bytes");
-               $v_buffer = @fread($p_archive_to_add->zip_fd, $v_read_size);
-               @fwrite($v_zip_temp_fd, $v_buffer, $v_read_size);
+               $v_buffer = @\fread($p_archive_to_add->zip_fd, $v_read_size);
+               @\fwrite($v_zip_temp_fd, $v_buffer, $v_read_size);
                $v_size -= $v_read_size;
            }
 
@@ -4801,7 +4801,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_comment = $v_central_dir['comment'].' '.$v_central_dir_to_add['comment'];
 
            // ----- Calculate the size of the (new) central header
-           $v_size = @ftell($v_zip_temp_fd)-$v_offset;
+           $v_size = @\ftell($v_zip_temp_fd)-$v_offset;
 
            // ----- Swap the file descriptor
            // Here is a trick : I swap the temporary fd with the zip fd, in order to use
@@ -4814,7 +4814,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            if (($v_result = $this->privWriteCentralHeader($v_central_dir['entries']+$v_central_dir_to_add['entries'], $v_size, $v_offset, $v_comment)) != 1) {
                $this->privCloseFd();
                $p_archive_to_add->privCloseFd();
-               @fclose($v_zip_temp_fd);
+               @\fclose($v_zip_temp_fd);
                $this->zip_fd = null;
 
                // ----- Reset the file list
@@ -4835,11 +4835,11 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $p_archive_to_add->privCloseFd();
 
            // ----- Close the temporary file
-           @fclose($v_zip_temp_fd);
+           @\fclose($v_zip_temp_fd);
 
            // ----- Delete the zip file
            // TBC : I should test the result ...
-           @unlink($this->zipname);
+           @\unlink($this->zipname);
 
            // ----- Rename the temporary file
            // TBC : I should test the result ...
@@ -4864,7 +4864,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_result=1;
 
            // ----- Look if the $p_archive_filename exists
-           if (!is_file($p_archive_filename)) {
+           if (!\is_file($p_archive_filename)) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Archive to duplicate does not exist. End of duplicate.");
 
                // ----- Nothing to duplicate, so duplicate is a success.
@@ -4885,7 +4885,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Open the temporary file in write mode
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Open file in binary read mode");
-           if (($v_zip_temp_fd = @fopen($p_archive_filename, 'rb')) == 0) {
+           if (($v_zip_temp_fd = @\fopen($p_archive_filename, 'rb')) == 0) {
                $this->privCloseFd();
 
                PclZip::privErrorLog(PCLZIP_ERR_READ_OPEN_FAIL, 'Unable to open archive file \''.$p_archive_filename.'\' in binary write mode');
@@ -4897,12 +4897,12 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
 
            // ----- Copy the files from the archive to the temporary file
            // TBC : Here I should better append the file and go back to erase the central dir
-           $v_size = filesize($p_archive_filename);
+           $v_size = \filesize($p_archive_filename);
            while ($v_size != 0) {
                $v_read_size = ($v_size < PCLZIP_READ_BLOCK_SIZE ? $v_size : PCLZIP_READ_BLOCK_SIZE);
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Read $v_read_size bytes");
-               $v_buffer = fread($v_zip_temp_fd, $v_read_size);
-               @fwrite($this->zip_fd, $v_buffer, $v_read_size);
+               $v_buffer = \fread($v_zip_temp_fd, $v_read_size);
+               @\fwrite($this->zip_fd, $v_buffer, $v_read_size);
                $v_size -= $v_read_size;
            }
 
@@ -4910,7 +4910,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $this->privCloseFd();
 
            // ----- Close the temporary file
-           @fclose($v_zip_temp_fd);
+           @\fclose($v_zip_temp_fd);
 
            // ----- Return
            //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
@@ -4990,8 +4990,8 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_result=1;
 
            // ----- Look if function exists
-           if ((!function_exists("get_magic_quotes_runtime"))
-        || (!function_exists("set_magic_quotes_runtime"))) {
+           if ((!\function_exists("get_magic_quotes_runtime"))
+        || (!\function_exists("set_magic_quotes_runtime"))) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Functions *et_magic_quotes_runtime are not supported");
                //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
                return $v_result;
@@ -5005,7 +5005,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            }
 
            // ----- Get and memorize the magic_quote value
-           $this->magic_quotes_status = @get_magic_quotes_runtime();
+           $this->magic_quotes_status = @\get_magic_quotes_runtime();
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Current magic_quotes_runtime status is '".($this->magic_quotes_status==0?'disable':'enable')."'");
 
            // ----- Disable magic_quotes
@@ -5032,8 +5032,8 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            $v_result=1;
 
            // ----- Look if function exists
-           if ((!function_exists("get_magic_quotes_runtime"))
-        || (!function_exists("set_magic_quotes_runtime"))) {
+           if ((!\function_exists("get_magic_quotes_runtime"))
+        || (!\function_exists("set_magic_quotes_runtime"))) {
                //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Functions *et_magic_quotes_runtime are not supported");
                //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
                return $v_result;
@@ -5075,11 +5075,11 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
       // ----- Look for not empty path
       if ($p_dir != "") {
           // ----- Explode path by directory names
-          $v_list = explode("/", $p_dir);
+          $v_list = \explode("/", $p_dir);
 
           // ----- Study directories from last to first
           $v_skip = 0;
-          for ($i=sizeof($v_list)-1; $i>=0; $i--) {
+          for ($i=\sizeof($v_list)-1; $i>=0; $i--) {
               // ----- Look for current path
               if ($v_list[$i] == ".") {
                   // ----- Ignore this directory
@@ -5099,7 +5099,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                       }
                   }
                   // ----- Last '/' i.e. indicates a directory
-                  elseif ($i == (sizeof($v_list)-1)) {
+                  elseif ($i == (\sizeof($v_list)-1)) {
                       $v_result = $v_list[$i];
                   }
                   // ----- Double '/' inside the path
@@ -5111,7 +5111,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
                   if ($v_skip > 0) {
                       $v_skip--;
                   } else {
-                      $v_result = $v_list[$i].($i!=(sizeof($v_list)-1)?"/".$v_result:"");
+                      $v_result = $v_list[$i].($i!=(\sizeof($v_list)-1)?"/".$v_result:"");
                   }
               }
           }
@@ -5152,10 +5152,10 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
       $v_result = 1;
 
       // ----- Explode dir and path by directory separator
-      $v_list_dir = explode("/", $p_dir);
-      $v_list_dir_size = sizeof($v_list_dir);
-      $v_list_path = explode("/", $p_path);
-      $v_list_path_size = sizeof($v_list_path);
+      $v_list_dir = \explode("/", $p_dir);
+      $v_list_dir_size = \sizeof($v_list_dir);
+      $v_list_path = \explode("/", $p_path);
+      $v_list_path_size = \sizeof($v_list_path);
 
       // ----- Study directories paths
       $i = 0;
@@ -5233,8 +5233,8 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
           while ($p_size != 0) {
               $v_read_size = ($p_size < PCLZIP_READ_BLOCK_SIZE ? $p_size : PCLZIP_READ_BLOCK_SIZE);
               //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Read $v_read_size bytes");
-              $v_buffer = @fread($p_src, $v_read_size);
-              @fwrite($p_dest, $v_buffer, $v_read_size);
+              $v_buffer = @\fread($p_src, $v_read_size);
+              @\fwrite($p_dest, $v_buffer, $v_read_size);
               $p_size -= $v_read_size;
           }
           //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Src offset after read :".(@ftell($p_src)));
@@ -5243,24 +5243,24 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
           while ($p_size != 0) {
               $v_read_size = ($p_size < PCLZIP_READ_BLOCK_SIZE ? $p_size : PCLZIP_READ_BLOCK_SIZE);
               //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Read $v_read_size bytes");
-              $v_buffer = @gzread($p_src, $v_read_size);
-              @fwrite($p_dest, $v_buffer, $v_read_size);
+              $v_buffer = @\gzread($p_src, $v_read_size);
+              @\fwrite($p_dest, $v_buffer, $v_read_size);
               $p_size -= $v_read_size;
           }
       } elseif ($p_mode==2) {
           while ($p_size != 0) {
               $v_read_size = ($p_size < PCLZIP_READ_BLOCK_SIZE ? $p_size : PCLZIP_READ_BLOCK_SIZE);
               //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Read $v_read_size bytes");
-              $v_buffer = @fread($p_src, $v_read_size);
-              @gzwrite($p_dest, $v_buffer, $v_read_size);
+              $v_buffer = @\fread($p_src, $v_read_size);
+              @\gzwrite($p_dest, $v_buffer, $v_read_size);
               $p_size -= $v_read_size;
           }
       } elseif ($p_mode==3) {
           while ($p_size != 0) {
               $v_read_size = ($p_size < PCLZIP_READ_BLOCK_SIZE ? $p_size : PCLZIP_READ_BLOCK_SIZE);
               //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Read $v_read_size bytes");
-              $v_buffer = @gzread($p_src, $v_read_size);
-              @gzwrite($p_dest, $v_buffer, $v_read_size);
+              $v_buffer = @\gzread($p_src, $v_read_size);
+              @\gzwrite($p_dest, $v_buffer, $v_read_size);
               $p_size -= $v_read_size;
           }
       }
@@ -5289,14 +5289,14 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
       $v_result = 1;
 
       // ----- Try to rename the files
-      if (!@rename($p_src, $p_dest)) {
+      if (!@\rename($p_src, $p_dest)) {
           //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Fail to rename file, try copy+unlink");
 
           // ----- Try to copy & unlink the src
-          if (!@copy($p_src, $p_dest)) {
+          if (!@\copy($p_src, $p_dest)) {
               //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Fail to copy file");
               $v_result = 0;
-          } elseif (!@unlink($p_src)) {
+          } elseif (!@\unlink($p_src)) {
               //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Fail to unlink old filename");
               $v_result = 0;
           }
@@ -5321,9 +5321,9 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
   {
       //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZipUtilOptionText", "option='".$p_option."'");
 
-      $v_list = get_defined_constants();
-      for (reset($v_list); $v_key = key($v_list); next($v_list)) {
-          $v_prefix = substr($v_key, 0, 10);
+      $v_list = \get_defined_constants();
+      for (\reset($v_list); $v_key = \key($v_list); \next($v_list)) {
+          $v_prefix = \substr($v_key, 0, 10);
           if ((($v_prefix == 'PCLZIP_OPT') || ($v_prefix == 'PCLZIP_CB_'))
           && ($v_list[$v_key] == $p_option)) {
               //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_key);
@@ -5351,14 +5351,14 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
   // --------------------------------------------------------------------------------
   function PclZipUtilTranslateWinPath($p_path, $p_remove_disk_letter=true)
   {
-      if (stristr(php_uname(), 'windows')) {
+      if (\stristr(\php_uname(), 'windows')) {
           // ----- Look for potential disk letter
-          if (($p_remove_disk_letter) && (($v_position = strpos($p_path, ':')) != false)) {
-              $p_path = substr($p_path, $v_position+1);
+          if (($p_remove_disk_letter) && (($v_position = \strpos($p_path, ':')) != false)) {
+              $p_path = \substr($p_path, $v_position+1);
           }
           // ----- Change potential windows directory separator
-          if ((strpos($p_path, '\\') > 0) || (substr($p_path, 0, 1) == '\\')) {
-              $p_path = strtr($p_path, '\\', '/');
+          if ((\strpos($p_path, '\\') > 0) || (\substr($p_path, 0, 1) == '\\')) {
+              $p_path = \strtr($p_path, '\\', '/');
           }
       }
       return $p_path;

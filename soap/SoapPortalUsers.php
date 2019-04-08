@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -84,26 +84,26 @@ function portal_login($portal_auth, $user_name, $application_name)
     global $current_user;
 
     if ($user_name == 'lead') {
-        session_start();
+        \session_start();
         $_SESSION['is_valid_session']= true;
         $_SESSION['ip_address'] = query_client_ip();
         $_SESSION['portal_id'] = $current_user->id;
         $_SESSION['type'] = 'lead';
         login_success();
-        return array('id'=>session_id(), 'error'=>$error->get_soap_array());
+        return array('id'=>\session_id(), 'error'=>$error->get_soap_array());
     } elseif ($user_name == 'portal') {
-        session_start();
+        \session_start();
         $_SESSION['is_valid_session']= true;
         $_SESSION['ip_address'] = query_client_ip();
         $_SESSION['portal_id'] = $current_user->id;
         $_SESSION['type'] = 'portal';
         $GLOBALS['log']->debug("Saving new session");
         login_success();
-        return array('id'=>session_id(), 'error'=>$error->get_soap_array());
+        return array('id'=>\session_id(), 'error'=>$error->get_soap_array());
     }
     $contact = $contact->retrieve_by_string_fields(array('portal_name'=>$user_name, 'portal_active'=>'1', 'deleted'=>0));
     if ($contact != null) {
-        session_start();
+        \session_start();
         $_SESSION['is_valid_session']= true;
         $_SESSION['ip_address'] = query_client_ip();
         $_SESSION['user_id'] = $contact->id;
@@ -113,7 +113,7 @@ function portal_login($portal_auth, $user_name, $application_name)
         $_SESSION['assigned_user_id'] = $contact->assigned_user_id;
         login_success();
         build_relationship_tree($contact);
-        return array('id'=>session_id(), 'error'=>$error->get_soap_array());
+        return array('id'=>\session_id(), 'error'=>$error->get_soap_array());
     }
 
     $error->set_error('invalid_login');
@@ -125,12 +125,12 @@ this validates the session and starts the session;
 */
 function portal_validate_authenticated($session_id)
 {
-    $old_error_reporting = error_reporting();
-    error_reporting(0);
-    session_id($session_id);
+    $old_error_reporting = \error_reporting();
+    \error_reporting(0);
+    \session_id($session_id);
 
     // This little construct checks to see if the session validated
-    if (session_start()) {
+    if (\session_start()) {
         $valid_session = true;
 
         if (!empty($_SESSION['is_valid_session']) && $_SESSION['ip_address'] == query_client_ip() && $valid_session != null && ($_SESSION['type'] == 'contact' || $_SESSION['type'] == 'lead' || $_SESSION['type'] == 'portal')) {
@@ -141,7 +141,7 @@ function portal_validate_authenticated($session_id)
             return true;
         }
     }
-    session_destroy();
+    \session_destroy();
     $GLOBALS['log']->fatal('SECURITY: The session ID is invalid');
     return false;
 }
@@ -157,7 +157,7 @@ function portal_logout($session)
 {
     $error = new SoapError();
     if (portal_validate_authenticated($session)) {
-        session_destroy();
+        \session_destroy();
         return $error->get_soap_array();
     }
     $error->set_error('invalid_session');
@@ -257,7 +257,7 @@ function portal_get_entry_list_filter($session, $module_name, $order_by, $select
     }
 
     if ($sugar != null) {
-        if (isset($filter) && is_array($filter)) {
+        if (isset($filter) && \is_array($filter)) {
             $where = "";
             foreach ($filter as $nvOp) {
                 $name = $nvOp['name'];
@@ -282,7 +282,7 @@ function portal_get_entry_list_filter($session, $module_name, $order_by, $select
                                 foreach ($value_array as $v) {
                                     $tmp[] = DBManagerFactory::getInstance()->quote($v);
                                 }
-                                $where .= "('" . implode("', '", $tmp) . "')";
+                                $where .= "('" . \implode("', '", $tmp) . "')";
                             } else {
                                 $where .= "'".DBManagerFactory::getInstance()->quote($value)."'";
                             }
@@ -382,7 +382,7 @@ function portal_set_entry($session, $module_name, $name_value_list)
         return array('id'=>-1, 'error'=>$error->get_soap_array());
     }
 
-    if ($_SESSION['type'] == 'contact' && !key_exists($module_name, $valid_modules_for_contact)) {
+    if ($_SESSION['type'] == 'contact' && !\key_exists($module_name, $valid_modules_for_contact)) {
         $error->set_error('no_access');
         return array('id'=>-1, 'error'=>$error->get_soap_array());
     }
@@ -417,10 +417,10 @@ function portal_set_entry($session, $module_name, $name_value_list)
     }
 
     if (!$is_update) {
-        if (isset($_SESSION['assigned_user_id']) && (!key_exists('assigned_user_id', $values_set) || empty($values_set['assigned_user_id']))) {
+        if (isset($_SESSION['assigned_user_id']) && (!\key_exists('assigned_user_id', $values_set) || empty($values_set['assigned_user_id']))) {
             $seed->assigned_user_id = $_SESSION['assigned_user_id'];
         }
-        if (isset($_SESSION['account_id']) && (!key_exists('account_id', $values_set) || empty($values_set['account_id']))) {
+        if (isset($_SESSION['account_id']) && (!\key_exists('account_id', $values_set) || empty($values_set['account_id']))) {
             $seed->account_id = $_SESSION['account_id'];
         }
         $seed->portal_flag = 1;
@@ -633,7 +633,7 @@ function portal_get_related_notes($session, $module_name, $module_id, $select_fi
     $field_list = filter_field_list($field_list, $select_fields, $module_name);
 
 
-    return array('result_count'=>sizeof($output_list), 'next_offset'=>0,'field_list'=>$field_list, 'entry_list'=>$output_list, 'error'=>$error->get_soap_array());
+    return array('result_count'=>\sizeof($output_list), 'next_offset'=>0,'field_list'=>$field_list, 'entry_list'=>$output_list, 'error'=>$error->get_soap_array());
 }
 
 $server->register(
@@ -709,7 +709,7 @@ function portal_get_module_fields($session, $module_name)
         return array('module_name'=>$module_name, 'module_fields'=>$module_fields, 'error'=>$error->get_soap_array());
     }
 
-    if (($_SESSION['type'] == 'portal'||$_SESSION['type'] == 'contact') &&  !key_exists($module_name, $valid_modules_for_contact)) {
+    if (($_SESSION['type'] == 'portal'||$_SESSION['type'] == 'contact') &&  !\key_exists($module_name, $valid_modules_for_contact)) {
         $error->set_error('no_module');
         return array('module_name'=>$module_name, 'module_fields'=>$module_fields, 'error'=>$error->get_soap_array());
     }
@@ -719,7 +719,7 @@ function portal_get_module_fields($session, $module_name)
     $seed = new $class_name();
     $seed->fill_in_additional_detail_fields();
     $returnFields = get_return_module_fields($seed, $module_name, $error->get_soap_array(), true);
-    if (is_subclass_of($seed, 'Person')) {
+    if (\is_subclass_of($seed, 'Person')) {
         $returnFields['module_fields']['email1'] = array('name'=>'email1', 'type'=>'email', 'required'=>0, 'label'=>translate('LBL_EMAIL_ADDRESS', $seed->module_dir));
         $returnFields['module_fields']['email_opt_out'] = array('name'=>'email_opt_out', 'type'=>'bool', 'required'=>0, 'label'=>translate('LBL_EMAIL_OPT_OUT', $seed->module_dir), 'options'=>array());
     } //if

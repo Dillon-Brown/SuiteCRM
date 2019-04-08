@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -72,7 +72,7 @@ if (isset($_REQUEST['edit']) && $_REQUEST['edit']=='true') {
     //Only allow admins to enter this screen
     if (!is_admin($current_user)&& !is_admin_for_module($GLOBALS['current_user'], 'Bugs')) {
         $GLOBALS['log']->error("Non-admin user ($current_user->user_name) attempted to enter the Releases edit screen");
-        session_destroy();
+        \session_destroy();
         include('modules/Users/Logout.php');
     }
 }
@@ -144,7 +144,7 @@ if ($is_edit) {
 
 
     if (empty($focus->list_order)) {
-        $xtpl->assign('LIST_ORDER', count($focus->get_releases(false, 'All'))+1);
+        $xtpl->assign('LIST_ORDER', \count($focus->get_releases(false, 'All'))+1);
     } else {
         $xtpl->assign('LIST_ORDER', $focus->list_order);
     }

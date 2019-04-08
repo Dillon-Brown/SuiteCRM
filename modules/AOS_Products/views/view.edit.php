@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -21,7 +21,7 @@ class AOS_ProductsViewEdit extends ViewEdit
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -34,7 +34,7 @@ class AOS_ProductsViewEdit extends ViewEdit
         isset($this->bean->product_image) ? $image = $this->bean->product_image : $image = '';
 
 
-        $temp = str_replace($sugar_config['site_url'].'/'.$sugar_config['upload_dir'], "", $image);
+        $temp = \str_replace($sugar_config['site_url'].'/'.$sugar_config['upload_dir'], "", $image);
         $html = '<span id=\'new_attachment\' style=\'display:';
         if (!empty($this->bean->product_image)) {
             $html .= 'none';

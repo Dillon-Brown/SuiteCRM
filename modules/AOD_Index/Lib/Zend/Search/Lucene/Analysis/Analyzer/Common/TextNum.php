@@ -55,7 +55,7 @@ class Zend_Search_Lucene_Analysis_Analyzer_Common_TextNum extends Zend_Search_Lu
 
         // convert input into ascii
         if (PHP_OS != 'AIX') {
-            $this->_input = iconv($this->_encoding, 'ASCII//TRANSLIT', $this->_input);
+            $this->_input = \iconv($this->_encoding, 'ASCII//TRANSLIT', $this->_input);
         }
         $this->_encoding = 'ASCII';
     }
@@ -74,7 +74,7 @@ class Zend_Search_Lucene_Analysis_Analyzer_Common_TextNum extends Zend_Search_Lu
         }
 
         do {
-            if (! preg_match('/[a-zA-Z0-9]+/', $this->_input, $match, PREG_OFFSET_CAPTURE, $this->_position)) {
+            if (! \preg_match('/[a-zA-Z0-9]+/', $this->_input, $match, PREG_OFFSET_CAPTURE, $this->_position)) {
                 // It covers both cases a) there are no matches (preg_match(...) === 0)
                 // b) error occurred (preg_match(...) === FALSE)
                 return null;
@@ -82,7 +82,7 @@ class Zend_Search_Lucene_Analysis_Analyzer_Common_TextNum extends Zend_Search_Lu
 
             $str = $match[0][0];
             $pos = $match[0][1];
-            $endpos = $pos + strlen($str);
+            $endpos = $pos + \strlen($str);
 
             $this->_position = $endpos;
 

@@ -45,7 +45,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -85,10 +85,10 @@ $subclasses = getListOfExtendingClasses("Person");
 
 $beanList = filterFieldsFromBeans($subclasses);
 
-$xtpl->assign("BEAN_LIST", json_encode($beanList));
+$xtpl->assign("BEAN_LIST", \json_encode($beanList));
 
 $personTypeList = "<select id='personTypeSelect'>";
-if (count($beanList) > 0) {
+if (\count($beanList) > 0) {
     $count=0;
     foreach ($beanList as $b) {
         $personTypeList.="<option value='".$count."'>".$b->name."</option>";
@@ -168,7 +168,7 @@ function getListOfExtendingClasses($superclass)
     $subclasses = array();
     foreach ($GLOBALS['moduleList'] as $mod) {
         $item = BeanFactory::getBean($mod);
-        if ($item && is_subclass_of($item, $superclass)) {
+        if ($item && \is_subclass_of($item, $superclass)) {
             $subclasses[] = $item;
         }
     }

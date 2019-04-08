@@ -8,4 +8,4 @@ return CustomLoader::mergeCustomArray([
     'Validation' => function () {
         return (new Symfony\Component\Validator\ValidatorBuilder())->getValidator();
     },
-], basename(__FILE__));
+], \basename(__FILE__));

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -86,7 +86,7 @@ if (isset($_REQUEST['guid'])) {
         $expired = '0';
         if ($pwd_settings['linkexpiration']) {
             $delay = $pwd_settings['linkexpirationtime'] * $pwd_settings['linkexpirationtype'];
-            $stim = strtotime($row['date_generated']) + date('Z');
+            $stim = \strtotime($row['date_generated']) + \date('Z');
             $expiretime = TimeDate::getInstance()->fromTimestamp($stim)->get("+$delay  minutes")->asDb();
             $timenow = TimeDate::getInstance()->nowDb();
             if ($timenow > $expiretime) {
@@ -136,7 +136,7 @@ if (isset($_REQUEST['guid'])) {
 }
 
 if ($redirect != '0') {
-    header('location:index.php?action=Login&module=Users');
+    \header('location:index.php?action=Login&module=Users');
     exit();
 }
 

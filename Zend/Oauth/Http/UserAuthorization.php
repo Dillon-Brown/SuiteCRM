@@ -70,7 +70,7 @@ class Zend_Oauth_Http_UserAuthorization extends Zend_Oauth_Http
         }
 
         if (!empty($this->_parameters)) {
-            $params = array_merge($params, $this->_parameters);
+            $params = \array_merge($params, $this->_parameters);
         }
 
         return $params;

@@ -40,7 +40,7 @@
 
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -51,9 +51,9 @@ function unzip($zip_archive, $zip_dir)
 
 function unzip_file($zip_archive, $archive_file, $zip_dir)
 {
-    if (!is_dir($zip_dir)) {
+    if (!\is_dir($zip_dir)) {
         $GLOBALS['log']->fatal("Specified directory for zip file extraction does not exist.");
-        if (defined('SUITE_PHPUNIT_RUNNER') || defined('SUGARCRM_INSTALL')) {
+        if (\defined('SUITE_PHPUNIT_RUNNER') || \defined('SUGARCRM_INSTALL')) {
             return false;
         }
     }
@@ -63,8 +63,8 @@ function unzip_file($zip_archive, $archive_file, $zip_dir)
     $res = $zip->open(UploadFile::realpath($zip_archive)); // we need realpath here for PHP streams support
 
     if ($res !== true) {
-        $GLOBALS['log']->fatal(sprintf(sprintf("ZIP Error(%d): Status(%s)", $res, $zip->status)));
-        if (defined('SUITE_PHPUNIT_RUNNER') || defined('SUGARCRM_INSTALL')) {
+        $GLOBALS['log']->fatal(\sprintf(\sprintf("ZIP Error(%d): Status(%s)", $res, $zip->status)));
+        if (\defined('SUITE_PHPUNIT_RUNNER') || \defined('SUGARCRM_INSTALL')) {
             return false;
         }
     }
@@ -76,8 +76,8 @@ function unzip_file($zip_archive, $archive_file, $zip_dir)
     }
     
     if ($res !== true) {
-        $GLOBALS['log']->fatal(sprintf(sprintf("ZIP Error(%d): Status(%s)", $res, $zip->status)));
-        if (defined('SUITE_PHPUNIT_RUNNER') || defined('SUGARCRM_INSTALL')) {
+        $GLOBALS['log']->fatal(\sprintf(\sprintf("ZIP Error(%d): Status(%s)", $res, $zip->status)));
+        if (\defined('SUITE_PHPUNIT_RUNNER') || \defined('SUGARCRM_INSTALL')) {
             return false;
         }
     }
@@ -86,14 +86,14 @@ function unzip_file($zip_archive, $archive_file, $zip_dir)
 
 function zip_dir($zip_dir, $zip_archive)
 {
-    if (!is_dir($zip_dir)) {
+    if (!\is_dir($zip_dir)) {
         $GLOBALS['log']->fatal("Specified directory for zip file extraction does not exist.");
         return false;
     }
     $zip = new ZipArchive();
     $zip->open(UploadFile::realpath($zip_archive), ZIPARCHIVE::CREATE|ZIPARCHIVE::OVERWRITE); // we need realpath here for PHP streams support
     $path = UploadFile::realpath($zip_dir);
-    $chop = strlen($path)+1;
+    $chop = \strlen($path)+1;
     $dir = new RecursiveDirectoryIterator($path);
     $it = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIRST);
     foreach ($it as $k => $fileinfo) {
@@ -104,7 +104,7 @@ function zip_dir($zip_dir, $zip_archive)
         if ($fileName == "." || $fileName == "..") {
             continue;
         }
-        $localname = str_replace("\\", "/", substr($fileinfo->getPathname(), $chop)); // ensure file
+        $localname = \str_replace("\\", "/", \substr($fileinfo->getPathname(), $chop)); // ensure file
         if ($fileinfo->isDir()) {
             $zip->addEmptyDir($localname."/");
         } else {
@@ -129,8 +129,8 @@ function zip_files_list($zip_file, $file_list, $prefix = '')
         return false;
     }
     foreach ($file_list as $file) {
-        if (!empty($prefix) && preg_match($prefix, $file, $matches) > 0) {
-            $zipname = substr($file, strlen($matches[0]));
+        if (!empty($prefix) && \preg_match($prefix, $file, $matches) > 0) {
+            $zipname = \substr($file, \strlen($matches[0]));
         } else {
             $zipname = $file;
         }

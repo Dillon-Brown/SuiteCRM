@@ -10,7 +10,7 @@ class ViewModulelistmenuTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstrac
 
         $this->assertInstanceOf('ViewModulelistmenu', $view);
         $this->assertInstanceOf('SugarView', $view);
-        $this->assertTrue(is_array($view->options));
+        $this->assertTrue(\is_array($view->options));
     }
 
     public function testdisplay()
@@ -24,13 +24,13 @@ class ViewModulelistmenuTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstrac
         $view = new ViewModulelistmenu();
         $view->ss = new Sugar_Smarty();
 
-        ob_start();
+        \ob_start();
         $view->display();
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
 
-        $this->assertGreaterThan(0, strlen($renderedContent));
-        $this->assertEquals(false, is_array($renderedContent));
+        $this->assertGreaterThan(0, \strlen($renderedContent));
+        $this->assertEquals(false, \is_array($renderedContent));
         
         if (isset($session)) {
             $_SESSION = $session;

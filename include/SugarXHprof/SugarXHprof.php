@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -120,24 +120,24 @@ class SugarXHprof
     {
         if (!empty($GLOBALS['sugar_config']['xhprof_config'])) {
             foreach ($GLOBALS['sugar_config']['xhprof_config'] as $k => $v) {
-                if (isset($v) && property_exists(__CLASS__, $k)) {
+                if (isset($v) && \property_exists(__CLASS__, $k)) {
                     self::${$k} = $v;
                 }
             }
         }
 
         // disabling profiler if XHprof extension is not loaded
-        if (extension_loaded('xhprof') == false) {
+        if (\extension_loaded('xhprof') == false) {
             self::$enable = false;
         }
 
         // using default directory for profiler if it is not set
         if (empty(self::$log_to)) {
-            self::$log_to = ini_get('xhprof.output_dir');
+            self::$log_to = \ini_get('xhprof.output_dir');
         }
 
         // disabling profiler if directory is not exist or is not writable
-        if (is_dir(self::$log_to) == false || is_writable(self::$log_to) == false) {
+        if (\is_dir(self::$log_to) == false || \is_writable(self::$log_to) == false) {
             self::$enable = false;
         }
     }
@@ -155,12 +155,12 @@ class SugarXHprof
 
         self::loadConfig();
 
-        if (is_file('custom/include/SugarXHprof/' . self::$manager . '.php')) {
+        if (\is_file('custom/include/SugarXHprof/' . self::$manager . '.php')) {
             require_once 'custom/include/SugarXHprof/' . self::$manager . '.php';
-        } elseif (is_file('include/SugarXHprof/' . self::$manager . '.php')) {
+        } elseif (\is_file('include/SugarXHprof/' . self::$manager . '.php')) {
             require_once 'include/SugarXHprof/' . self::$manager . '.php';
         }
-        if (class_exists(self::$manager) && is_subclass_of(self::$manager, __CLASS__)) {
+        if (\class_exists(self::$manager) && \is_subclass_of(self::$manager, __CLASS__)) {
             self::$instance = new self::$manager();
         } else {
             self::$instance = new self();
@@ -213,7 +213,7 @@ class SugarXHprof
         // service rest
         elseif (!empty($GLOBALS['service_object']) && $GLOBALS['service_object'] instanceof SugarRestService) {
             $action .= '.rest.' . $GLOBALS['service_object']->getRegisteredImplClass();
-            if (!empty($_REQUEST['method']) && method_exists($GLOBALS['service_object']->implementation, $_REQUEST['method'])) {
+            if (!empty($_REQUEST['method']) && \method_exists($GLOBALS['service_object']->implementation, $_REQUEST['method'])) {
                 $action .= '.' . $_REQUEST['method'];
             } elseif (empty($_REQUEST['method'])) {
                 $action .= '.index';
@@ -223,7 +223,7 @@ class SugarXHprof
         }
         // unknown
         else {
-            $action .= '.' . basename($_SERVER['SCRIPT_FILENAME']);
+            $action .= '.' . \basename($_SERVER['SCRIPT_FILENAME']);
         }
 
         return $action;
@@ -243,11 +243,11 @@ class SugarXHprof
         }
 
         $rate = 1 / self::$sample_rate * 100;
-        if (rand(0, 100) > $rate) {
+        if (\rand(0, 100) > $rate) {
             return;
         }
 
-        register_shutdown_function(array(
+        \register_shutdown_function(array(
             $this,
             'end'
         ));
@@ -273,7 +273,7 @@ class SugarXHprof
         }
 
         $data = xhprof_disable();
-        $namespace = microtime(1) . self::detectAction();
+        $namespace = \microtime(1) . self::detectAction();
 
         require_once 'include/SugarXHprof/xhprof_lib/utils/xhprof_runs.php';
         $xhprof_runs = new XHProfRuns_Default(self::$log_to);

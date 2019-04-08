@@ -51,7 +51,7 @@ class Zend_Search_Lucene_Analysis_TokenFilter_StopWords extends Zend_Search_Luce
      */
     public function __construct($stopwords = array())
     {
-        $this->_stopSet = array_flip($stopwords);
+        $this->_stopSet = \array_flip($stopwords);
     }
 
     /**
@@ -62,7 +62,7 @@ class Zend_Search_Lucene_Analysis_TokenFilter_StopWords extends Zend_Search_Luce
      */
     public function normalize(Zend_Search_Lucene_Analysis_Token $srcToken)
     {
-        if (array_key_exists($srcToken->getTermText(), $this->_stopSet)) {
+        if (\array_key_exists($srcToken->getTermText(), $this->_stopSet)) {
             return null;
         }
         return $srcToken;
@@ -79,22 +79,22 @@ class Zend_Search_Lucene_Analysis_TokenFilter_StopWords extends Zend_Search_Luce
      */
     public function loadFromFile($filepath = null)
     {
-        if (! $filepath || ! file_exists($filepath)) {
+        if (! $filepath || ! \file_exists($filepath)) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('You have to provide valid file path');
         }
-        $fd = fopen($filepath, "r");
+        $fd = \fopen($filepath, "r");
         if (! $fd) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('Cannot open file ' . $filepath);
         }
-        while (!feof($fd)) {
-            $buffer = trim(fgets($fd));
-            if (strlen($buffer) > 0 && $buffer[0] != '#') {
+        while (!\feof($fd)) {
+            $buffer = \trim(\fgets($fd));
+            if (\strlen($buffer) > 0 && $buffer[0] != '#') {
                 $this->_stopSet[$buffer] = 1;
             }
         }
-        if (!fclose($fd)) {
+        if (!\fclose($fd)) {
             require_once 'Zend/Search/Lucene/Exception.php';
             throw new Zend_Search_Lucene_Exception('Cannot close file ' . $filepath);
         }

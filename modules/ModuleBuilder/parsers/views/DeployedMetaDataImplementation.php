@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -81,11 +81,11 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
     {
         // BEGIN ASSERTIONS
         if (!isset($GLOBALS ['beanList'] [$moduleName])) {
-            sugar_die(get_class($this) . ': $moduleName '. $moduleName .' is not a Deployed Module');
+            sugar_die(\get_class($this) . ': $moduleName '. $moduleName .' is not a Deployed Module');
         }
         // END ASSERTIONS
 
-        $this->_view = strtolower($view);
+        $this->_view = \strtolower($view);
         $this->_moduleName = $moduleName;
 
         $module = StudioModuleFactory::getStudioModule($moduleName);
@@ -139,7 +139,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
                     ));
 
                     if ($loaded === null) {
-                        throw new Exception(get_class($this) . ": cannot convert from EditView to QuickCreate for Module $this->_moduleName - definitions for EditView are missing");
+                        throw new Exception(\get_class($this) . ": cannot convert from EditView to QuickCreate for Module $this->_moduleName - definitions for EditView are missing");
                     }
 
                     // Now change the array index
@@ -162,18 +162,18 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
                     $type = $module->getType();
                     $this->_sourceFilename = $this->getFileName($view, $moduleName, null, MB_CUSTOMMETADATALOCATION);
                     $needSave = false;
-                    if (file_exists("custom/modules/{$moduleName}/metadata/" . basename($this->_sourceFilename))) {
-                        $loaded = $this->_loadFromFile("custom/modules/{$moduleName}/metadata/" . basename($this->_sourceFilename));
-                    } elseif (file_exists(
+                    if (\file_exists("custom/modules/{$moduleName}/metadata/" . \basename($this->_sourceFilename))) {
+                        $loaded = $this->_loadFromFile("custom/modules/{$moduleName}/metadata/" . \basename($this->_sourceFilename));
+                    } elseif (\file_exists(
                         "modules/{$moduleName}/Dashlets/My{$moduleName}Dashlet/My{$moduleName}Dashlet.data.php"
                     )) {
                         $loaded = $this->_loadFromFile("modules/{$moduleName}/Dashlets/My{$moduleName}Dashlet/My{$moduleName}Dashlet.data.php");
                     } else {
-                        $loaded = $this->_loadFromFile("include/SugarObjects/templates/$type/metadata/" . basename($this->_sourceFilename));
+                        $loaded = $this->_loadFromFile("include/SugarObjects/templates/$type/metadata/" . \basename($this->_sourceFilename));
                         $needSave = true;
                     }
                     if ($loaded === null) {
-                        throw new Exception(get_class($this) . ": cannot create dashlet view for module $moduleName - definitions for $view are missing in the SugarObject template for type $type");
+                        throw new Exception(\get_class($this) . ": cannot create dashlet view for module $moduleName - definitions for $view are missing in the SugarObject template for type $type");
                     }
                     $loaded = $this->replaceVariables($loaded, $module);
                     $temp = $this->_moduleName;
@@ -197,13 +197,13 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
                     global $current_language;
                     $mod = return_module_language($current_language, $moduleName);
                     $loadedForWrite = $this->_loadFromPopupFile(
-                        "include/SugarObjects/templates/$type/metadata/" . basename($this->_sourceFilename),
+                        "include/SugarObjects/templates/$type/metadata/" . \basename($this->_sourceFilename),
                         $mod,
                         $view,
                         true
                     );
                     if ($loadedForWrite === null) {
-                        throw new Exception(get_class($this) . ": cannot create popup view for module $moduleName - definitions for $view are missing in the SugarObject template for type $type");
+                        throw new Exception(\get_class($this) . ": cannot create popup view for module $moduleName - definitions for $view are missing in the SugarObject template for type $type");
                     }
                     $loadedForWrite = $this->replaceVariables($loadedForWrite, $module);
                     $this->_saveToFile(
@@ -213,7 +213,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
                         true
                     ); // write out without the placeholder module_name and object
                     $loaded = $this->_loadFromPopupFile(
-                        "include/SugarObjects/templates/$type/metadata/" . basename($this->_sourceFilename),
+                        "include/SugarObjects/templates/$type/metadata/" . \basename($this->_sourceFilename),
                         $mod,
                         $view
                     );
@@ -223,7 +223,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
 
             }
             if ($loaded === null) {
-                throw new Exception(get_class($this) . ": view definitions for View $this->_view and Module $this->_moduleName are missing");
+                throw new Exception(\get_class($this) . ": view definitions for View $this->_view and Module $this->_moduleName are missing");
             }
         }
 
@@ -249,7 +249,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
         if ($view == MB_QUICKCREATE) {
             foreach (array(MB_QUICKCREATE, MB_EDITVIEW) as $v) {
                 $sourceFilename = $this->getFileName($v, $moduleName, null, MB_BASEMETADATALOCATION);
-                if (file_exists($sourceFilename)) {
+                if (\file_exists($sourceFilename)) {
                     $layout = $this->_loadFromFile($sourceFilename);
                     if (null !== $layout && isset($layout[GridLayoutMetaDataParser::$variableMap[$v]])) {
                         $layout = array(GridLayoutMetaDataParser::$variableMap[MB_QUICKCREATE] => $layout[GridLayoutMetaDataParser::$variableMap[$v]]);
@@ -296,7 +296,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
         )
         ) {
             foreach (array(MB_WORKINGMETADATALOCATION, MB_CUSTOMMETADATALOCATION, MB_BASEMETADATALOCATION) as $type) {
-                if (file_exists($this->getFileName($this->_view, $this->_moduleName, null, $type))) {
+                if (\file_exists($this->getFileName($this->_view, $this->_moduleName, null, $type))) {
                     $this->_history->append($this->getFileName($this->_view, $this->_moduleName, null, $type));
                     break;
                 }
@@ -305,7 +305,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
             $this->_history->append($this->_sourceFilename);
         }
 
-        $GLOBALS ['log']->debug(get_class($this) . "->save(): writing to " . $this->getFileName(
+        $GLOBALS ['log']->debug(\get_class($this) . "->save(): writing to " . $this->getFileName(
             $this->_view,
                 $this->_moduleName,
             null,
@@ -328,7 +328,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
         )
         ) {
             foreach (array(MB_WORKINGMETADATALOCATION, MB_CUSTOMMETADATALOCATION, MB_BASEMETADATALOCATION) as $type) {
-                if (file_exists($this->getFileName($this->_view, $this->_moduleName, null, $type))) {
+                if (\file_exists($this->getFileName($this->_view, $this->_moduleName, null, $type))) {
                     $this->_history->append($this->getFileName($this->_view, $this->_moduleName, null, $type));
                     break;
                 }
@@ -340,11 +340,11 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
         // this also simplifies manual editing of layouts. You can now switch back and forth between Studio and manual changes without having to keep these two locations in sync
         $workingFilename = $this->getFileName($this->_view, $this->_moduleName, null, MB_WORKINGMETADATALOCATION);
 
-        if (file_exists($workingFilename)) {
-            unlink($this->getFileName($this->_view, $this->_moduleName, null, MB_WORKINGMETADATALOCATION));
+        if (\file_exists($workingFilename)) {
+            \unlink($this->getFileName($this->_view, $this->_moduleName, null, MB_WORKINGMETADATALOCATION));
         }
         $filename = $this->getFileName($this->_view, $this->_moduleName, null, MB_CUSTOMMETADATALOCATION);
-        $GLOBALS ['log']->debug(get_class($this) . "->deploy(): writing to " . $filename);
+        $GLOBALS ['log']->debug(\get_class($this) . "->deploy(): writing to " . $filename);
         $this->_saveToFile($filename, $layoutDefinitions);
 
         // now clear the cache so that the results are immediately visible
@@ -369,7 +369,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
             MB_WORKINGMETADATALOCATION => 'custom/working/',
             MB_HISTORYMETADATALOCATION => 'custom/history/'
         );
-        $type = strtolower($type);
+        $type = \strtolower($type);
 
         $filenames = array(
             MB_DASHLETSEARCH => 'dashletviewdefs',
@@ -388,7 +388,7 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
         $sm = StudioModuleFactory::getStudioModule($moduleName);
         foreach ($sm->sources as $file => $def) {
             if (!empty($def['view'])) {
-                $filenames[$def['view']] = substr($file, 0, strlen($file) - 4);
+                $filenames[$def['view']] = \substr($file, 0, \strlen($file) - 4);
             }
         }
 
@@ -414,10 +414,10 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
     {
         $var_values = array(
             "<object_name>" => $module->seed->object_name,
-            "<_object_name>" => strtolower($module->seed->object_name),
-            "<OBJECT_NAME>" => strtoupper($module->seed->object_name),
+            "<_object_name>" => \strtolower($module->seed->object_name),
+            "<OBJECT_NAME>" => \strtoupper($module->seed->object_name),
             "<module_name>" => $module->seed->module_dir,
-            '<_module_name>' => strtolower($module->seed->module_dir)
+            '<_module_name>' => \strtolower($module->seed->module_dir)
         );
 
         return $this->recursiveVariableReplace($defs, $module, $var_values);
@@ -441,20 +441,20 @@ class DeployedMetaDataImplementation extends AbstractMetaDataImplementation impl
     {
         $ret = array();
         foreach ($arr as $key => $val) {
-            if (is_array($val)) {
+            if (\is_array($val)) {
                 $newkey = $key;
                 $val = $this->recursiveVariableReplace($val, $module, $replacements);
                 foreach ($replacements as $var => $rep) {
-                    $newkey = str_replace($var, $rep, $newkey);
+                    $newkey = \str_replace($var, $rep, $newkey);
                 }
                 $ret[$newkey] = $val;
             } else {
                 $newkey = $key;
                 $newval = $val;
-                if (is_string($val)) {
+                if (\is_string($val)) {
                     foreach ($replacements as $var => $rep) {
-                        $newkey = str_replace($var, $rep, $newkey);
-                        $newval = str_replace($var, $rep, $newval);
+                        $newkey = \str_replace($var, $rep, $newkey);
+                        $newval = \str_replace($var, $rep, $newval);
                     }
                 }
                 $ret[$newkey] = $newval;

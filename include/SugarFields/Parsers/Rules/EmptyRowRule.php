@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -68,18 +68,18 @@ class EmptyRowRule extends BaseRule
                 $emptyCount = 0;
 
                 foreach ($row as $key=>$column) {
-                    if (is_array($column) && (!isset($column['name']) || empty($column['name']))) {
+                    if (\is_array($column) && (!isset($column['name']) || empty($column['name']))) {
                         $emptyCount++;
-                    } elseif (!is_array($column) && (!isset($column) || empty($column))) {
+                    } elseif (!\is_array($column) && (!isset($column) || empty($column))) {
                         $emptyCount++;
                     }
                 } //foreach
 
                 // If we have unset everything, then just remove the whole row entirely
-                if ($emptyCount == count($row)) {
+                if ($emptyCount == \count($row)) {
                     unset($panels[$name][$rowCount]);
                     continue;
-                } elseif (count($row) > 2) {
+                } elseif (\count($row) > 2) {
                     foreach ($row as $key=>$column) {
                         if (empty($column) || $column == '') {
                             unset($panels[$name][$rowCount][$key]);

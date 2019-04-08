@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -124,6 +124,6 @@ $chartDefs = array(
 
 );
 
-if (file_exists('custom/Charts/chartDefs.ext.php')) {
+if (\file_exists('custom/Charts/chartDefs.ext.php')) {
     include_once('custom/Charts/chartDefs.ext.php');
 }

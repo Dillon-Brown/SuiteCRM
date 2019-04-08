@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -62,8 +62,8 @@ $selectedAppLanguages = return_application_language($tabGroupSelected_lang);
 require_once('include/GroupedTabs/GroupedTabStructure.php');
 $availableModules = $tg->getAvailableModules($tabGroupSelected_lang);
 $smarty->assign('availableModuleList', $availableModules);
-$modList = array_keys($availableModules);
-$modList = array_combine($modList, $modList); // Bug #48693 We need full list of modules here instead of displayed modules
+$modList = \array_keys($availableModules);
+$modList = \array_combine($modList, $modList); // Bug #48693 We need full list of modules here instead of displayed modules
 $groupedTabsClass = new GroupedTabStructure();
 $groupedTabStructure = $groupedTabsClass->get_tab_structure($modList, '', true, true);
 foreach ($groupedTabStructure as $mainTab => $subModules) {

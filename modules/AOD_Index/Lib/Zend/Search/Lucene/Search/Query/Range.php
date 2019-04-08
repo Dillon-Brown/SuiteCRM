@@ -186,10 +186,10 @@ class Zend_Search_Lucene_Search_Query_Range extends Zend_Search_Lucene_Search_Qu
 
                 while ($index->currentTerm() !== null          &&
                        $index->currentTerm()->field == $field  &&
-                       strcmp($index->currentTerm()->text, $upperTerm->text) < 0) {
+                       \strcmp($index->currentTerm()->text, $upperTerm->text) < 0) {
                     $this->_matches[] = $index->currentTerm();
 
-                    if ($maxTerms != 0  &&  count($this->_matches) > $maxTerms) {
+                    if ($maxTerms != 0  &&  \count($this->_matches) > $maxTerms) {
                         require_once 'Zend/Search/Lucene/Exception.php';
                         throw new Zend_Search_Lucene_Exception('Terms per query limit is reached.');
                     }
@@ -206,7 +206,7 @@ class Zend_Search_Lucene_Search_Query_Range extends Zend_Search_Lucene_Search_Qu
                 while ($index->currentTerm() !== null  &&  $index->currentTerm()->field == $field) {
                     $this->_matches[] = $index->currentTerm();
 
-                    if ($maxTerms != 0  &&  count($this->_matches) > $maxTerms) {
+                    if ($maxTerms != 0  &&  \count($this->_matches) > $maxTerms) {
                         require_once 'Zend/Search/Lucene/Exception.php';
                         throw new Zend_Search_Lucene_Exception('Terms per query limit is reached.');
                     }
@@ -218,12 +218,12 @@ class Zend_Search_Lucene_Search_Query_Range extends Zend_Search_Lucene_Search_Qu
             $index->closeTermsStream();
         }
 
-        if (count($this->_matches) == 0) {
+        if (\count($this->_matches) == 0) {
             require_once 'Zend/Search/Lucene/Search/Query/Empty.php';
             return new Zend_Search_Lucene_Search_Query_Empty();
-        } elseif (count($this->_matches) == 1) {
+        } elseif (\count($this->_matches) == 1) {
             require_once 'Zend/Search/Lucene/Search/Query/Term.php';
-            return new Zend_Search_Lucene_Search_Query_Term(reset($this->_matches));
+            return new Zend_Search_Lucene_Search_Query_Term(\reset($this->_matches));
         }
         require_once 'Zend/Search/Lucene/Search/Query/MultiTerm.php';
         $rewrittenQuery = new Zend_Search_Lucene_Search_Query_MultiTerm();
@@ -370,6 +370,6 @@ class Zend_Search_Lucene_Search_Query_Range extends Zend_Search_Lucene_Search_Qu
              . ' TO '
              . (($this->_upperTerm !== null)?  $this->_upperTerm->text : 'null')
              . (($this->_inclusive)? ']' : '}')
-             . (($this->getBoost() != 1)? '^' . round($this->getBoost(), 4) : '');
+             . (($this->getBoost() != 1)? '^' . \round($this->getBoost(), 4) : '');
     }
 }

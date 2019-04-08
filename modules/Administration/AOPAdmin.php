@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -71,7 +71,7 @@ $cfg = new Configurator();
 $sugar_smarty = new Sugar_Smarty();
 $errors = array();
 
-if (!array_key_exists('aop', $cfg->config)) {
+if (!\array_key_exists('aop', $cfg->config)) {
     $cfg->config['aop'] = array(
         'enable_aop' => 1,
         'enable_portal' => '',
@@ -87,17 +87,17 @@ if (!array_key_exists('aop', $cfg->config)) {
         'joomla_account_creation_email_template_id' => '',
         'support_from_address' => '',
         'support_from_name' => '',
-        'case_status_changes' => json_encode(array()),
+        'case_status_changes' => \json_encode(array()),
     );
 }
-if (!array_key_exists('enable_aop', $cfg->config['aop'])) {
+if (!\array_key_exists('enable_aop', $cfg->config['aop'])) {
     $cfg->config['aop']['enable_aop'] = 1;
 }
 if (isset($_REQUEST['do']) && $_REQUEST['do'] == 'save') {
-    $joomlaUrl = strtolower(trim($_REQUEST['joomla_url']));
+    $joomlaUrl = \strtolower(\trim($_REQUEST['joomla_url']));
     if (!empty($joomlaUrl)) {
         $cfg->config['aop']['joomla_url'] =
-            preg_match("@^https?://@", $joomlaUrl) ? $joomlaUrl : 'http://' . $joomlaUrl;
+            \preg_match("@^https?://@", $joomlaUrl) ? $joomlaUrl : 'http://' . $joomlaUrl;
     } else {
         $cfg->config['aop']['joomla_url'] = '';
     }
@@ -119,9 +119,9 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == 'save') {
      * We save the case_status_changes array as json since the way config changes are persisted to config.php
      * means that removing entries is tricky. json simplifies this.
      */
-    $cfg->config['aop']['case_status_changes'] = json_encode(array_combine($_POST['if_status'], $_POST['then_status']));
+    $cfg->config['aop']['case_status_changes'] = \json_encode(\array_combine($_POST['if_status'], $_POST['then_status']));
     $cfg->saveConfig();
-    header('Location: index.php?module=Administration&action=index');
+    \header('Location: index.php?module=Administration&action=index');
     exit();
 }
 $distribStrings = $app_list_strings['dom_email_distribution_for_auto_create'];
@@ -171,7 +171,7 @@ $statusDropdown = get_select_options($app_list_strings[$cBean->field_name_map['s
 $currentStatuses = '';
 
 if ($cfg->config['aop']['case_status_changes']) {
-    foreach (json_decode($cfg->config['aop']['case_status_changes'], true) as $if => $then) {
+    foreach (\json_decode($cfg->config['aop']['case_status_changes'], true) as $if => $then) {
         $ifDropdown = get_select_options($app_list_strings[$cBean->field_name_map['status']['options']], $if);
         $thenDropdown = get_select_options($app_list_strings[$cBean->field_name_map['status']['options']], $then);
         $currentStatuses .= getStatusRowTemplate($mod_strings, $ifDropdown, $thenDropdown) . "\n";

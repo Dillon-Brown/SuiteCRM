@@ -39,37 +39,37 @@ class Filter
         $operator = self::OP_AND;
         if (isset($params['operator'])) {
             $this->checkOperator($params['operator']);
-            $operator = strtoupper($params['operator']);
+            $operator = \strtoupper($params['operator']);
             unset($params['operator']);
         }
 
         $where = [];
         foreach ($params as $field => $expr) {
-            if (!property_exists($bean, $field)) {
-                throw new \InvalidArgumentException(sprintf(
+            if (!\property_exists($bean, $field)) {
+                throw new \InvalidArgumentException(\sprintf(
                     'Filter field %s in %s module is not found',
                     $field,
                     $bean->getObjectName()
                 ));
             }
 
-            if (!is_array($expr)) {
-                throw new \InvalidArgumentException(sprintf('Filter field %s must be an array', $field));
+            if (!\is_array($expr)) {
+                throw new \InvalidArgumentException(\sprintf('Filter field %s must be an array', $field));
             }
 
             foreach ($expr as $op => $value) {
                 $this->checkOperator($op);
-                $where[] = sprintf(
+                $where[] = \sprintf(
                     '%s.%s %s %s',
                     $bean->getTableName(),
                     $field,
-                    constant(sprintf('%s::OP_%s', self::class, strtoupper($op))),
+                    \constant(\sprintf('%s::OP_%s', self::class, \strtoupper($op))),
                     $this->db->quoted($value)
                 );
             }
         }
 
-        return implode(sprintf(' %s ', $operator), $where);
+        return \implode(\sprintf(' %s ', $operator), $where);
     }
 
     /**
@@ -79,10 +79,10 @@ class Filter
      */
     private function checkOperator($op)
     {
-        $operator = sprintf('%s::OP_%s', self::class, strtoupper($op));
-        if (!defined($operator)) {
+        $operator = \sprintf('%s::OP_%s', self::class, \strtoupper($op));
+        if (!\defined($operator)) {
             throw new \InvalidArgumentException(
-                sprintf('Filter operator %s is invalid', $op)
+                \sprintf('Filter operator %s is invalid', $op)
             );
         }
     }

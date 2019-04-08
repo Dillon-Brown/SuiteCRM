@@ -70,17 +70,17 @@ class Zend_Gdata_App_MediaFileSource extends Zend_Gdata_App_BaseMediaSource
     public function encode()
     {
         if ($this->getFilename() !== null &&
-            is_readable($this->getFilename())) {
+            \is_readable($this->getFilename())) {
 
             // Retrieves the file, using the include path
-            $fileHandle = fopen($this->getFilename(), 'r', true);
-            $result = fread($fileHandle, filesize($this->getFilename()));
+            $fileHandle = \fopen($this->getFilename(), 'r', true);
+            $result = \fread($fileHandle, \filesize($this->getFilename()));
             if ($result === false) {
                 require_once 'Zend/Gdata/App/IOException.php';
                 throw new Zend_Gdata_App_IOException("Error reading file - " .
                         $this->getFilename() . '. Read failed.');
             }
-            fclose($fileHandle);
+            \fclose($fileHandle);
             return $result;
         } else {
             require_once 'Zend/Gdata/App/IOException.php';

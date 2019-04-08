@@ -75,9 +75,9 @@ class ViewModule extends SugarView
         $types = (empty($module_name)) ? MBModule::getTypes() : $this->mbModule->mbvardefs->templates ;
         
         foreach ($types as $type=>$definition) {
-            $translated_type[$type]=translate('LBL_TYPE_'.strtoupper($type), 'ModuleBuilder');
+            $translated_type[$type]=translate('LBL_TYPE_'.\strtoupper($type), 'ModuleBuilder');
         }
-        natcasesort($translated_type);
+        \natcasesort($translated_type);
         $smarty->assign('types', $translated_type);
         
         $smarty->assign('package', $package);

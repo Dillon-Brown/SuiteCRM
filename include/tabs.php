@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -67,7 +67,7 @@ class SugarWidgetTabs
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($tabs, $current_key, $jscallback);
     }
@@ -77,7 +77,7 @@ class SugarWidgetTabs
     {
         $template = new Sugar_Smarty();
         $template->assign('subpanel_tabs', $this->tabs);
-        $template->assign('subpanel_tabs_count', count($this->tabs));
+        $template->assign('subpanel_tabs_count', \count($this->tabs));
         $template->assign('jscallback', $this->jscallback);
         $template->assign('subpanel_current_key', $this->current_key);
 

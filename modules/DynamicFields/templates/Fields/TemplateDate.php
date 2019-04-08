@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -84,15 +84,15 @@ class TemplateDate extends TemplateRange
         $name = $this->name;
         $returnXTPL = array();
         if (!empty($this->help)) {
-            $returnXTPL[strtoupper($this->name . '_help')] = translate($this->help, $this->bean->module_dir);
+            $returnXTPL[\strtoupper($this->name . '_help')] = translate($this->help, $this->bean->module_dir);
         }
         $returnXTPL['USER_DATEFORMAT'] = $timedate->get_user_date_format();
         $returnXTPL['CALENDAR_DATEFORMAT'] = $timedate->get_cal_date_format();
         if (isset($this->bean->$name)) {
-            $returnXTPL[strtoupper($this->name)] = $this->bean->$name;
+            $returnXTPL[\strtoupper($this->name)] = $this->bean->$name;
         } else {
             if (empty($this->bean->id) && !empty($this->default_value) && !empty($this->dateStrings[$this->default_value])) {
-                $returnXTPL[strtoupper($this->name)] = $timedate->asUserDate($timedate->getNow(true)->modify($this->dateStrings[$this->default_value]), false);
+                $returnXTPL[\strtoupper($this->name)] = $timedate->asUserDate($timedate->getNow(true)->modify($this->dateStrings[$this->default_value]), false);
             }
         }
         return $returnXTPL;

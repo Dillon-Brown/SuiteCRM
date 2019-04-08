@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -79,7 +79,7 @@ class DynamicField
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($module);
     }
@@ -330,7 +330,7 @@ class DynamicField
             $select = ",{$this->bean->table_name}_cstm.*";
         } else {
             $select = '';
-            $isList = is_array($expandedList);
+            $isList = \is_array($expandedList);
             foreach ($this->bean->field_defs as $name => $field) {
                 if (!empty($field['source']) && $field['source'] == 'custom_fields' && (!$isList || !empty($expandedList[$name]))) {
                     // assumption: that the column name in _cstm is the same as the field name. Currently true.
@@ -355,7 +355,7 @@ class DynamicField
                     if ($where) {
                         $pattern = '/' . $field['name'] . '\slike/i';
                         $replacement = $relateJoinInfo['name_field'] . ' like';
-                        $where = preg_replace($pattern, $replacement, $where);
+                        $where = \preg_replace($pattern, $replacement, $where);
                     }
                     ++$jtCount;
                 }
@@ -428,7 +428,7 @@ class DynamicField
                 if (empty($this->bean->$name)) { //Don't load the relationship twice
                     $id_name = $field['id_name'];
                     $mod = BeanFactory::getBean($related_module);
-                    if (is_object($mod) && isset($this->bean->$name)) {
+                    if (\is_object($mod) && isset($this->bean->$name)) {
                         $mod->relDepth = $this->bean->relDepth + 1;
                         $mod->retrieve($this->bean->$id_name);
                         $this->bean->$name = $mod->name;
@@ -463,9 +463,9 @@ class DynamicField
                 if (isset($this->bean->$name)) {
                     $quote = "'";
 
-                    if (in_array($field['type'], array('int', 'float', 'double', 'uint', 'ulong', 'long', 'short', 'tinyint', 'currency', 'decimal'))) {
+                    if (\in_array($field['type'], array('int', 'float', 'double', 'uint', 'ulong', 'long', 'short', 'tinyint', 'currency', 'decimal'))) {
                         $quote = '';
-                        if (!isset($this->bean->$name) || !is_numeric($this->bean->$name)) {
+                        if (!isset($this->bean->$name) || !\is_numeric($this->bean->$name)) {
                             if ($field['required']) {
                                 $this->bean->$name = 0;
                             } else {
@@ -604,7 +604,7 @@ class DynamicField
         $fmd = new FieldsMetaData();
         $id = $fmd->retrieve($object_name . $db_name, true, false);
         $is_update = false;
-        $label = strtoupper($field->label);
+        $label = \strtoupper($field->label);
         if (!empty($id)) {
             $is_update = true;
         } else {
@@ -668,7 +668,7 @@ class DynamicField
             }
             $fmd->save();
             $this->buildCache($this->module);
-            $this->saveExtendedAttributes($field, array_keys($fmd->field_defs));
+            $this->saveExtendedAttributes($field, \array_keys($fmd->field_defs));
         }
 
         return true;
@@ -688,15 +688,15 @@ class DynamicField
         $base_field = get_widget($field->type);
         foreach ($field->vardef_map as $property => $fmd_col) {
             //Skip over attributes that are either the default or part of the normal attributes stored in the DB
-            if (!isset($field->$property) || in_array($fmd_col, $column_fields) || in_array($property, $column_fields)
+            if (!isset($field->$property) || \in_array($fmd_col, $column_fields) || \in_array($property, $column_fields)
                 || $this->isDefaultValue($property, $field->$property, $base_field)
                 || $property == 'action' || $property == 'label_value' || $property == 'label'
-                || (substr($property, 0, 3) == 'ext' && strlen($property) == 4)
+                || (\substr($property, 0, 3) == 'ext' && \strlen($property) == 4)
             ) {
                 continue;
             }
             $to_save[$property] =
-                is_string($field->$property) ? htmlspecialchars_decode($field->$property, ENT_QUOTES) : $field->$property;
+                \is_string($field->$property) ? \htmlspecialchars_decode($field->$property, ENT_QUOTES) : $field->$property;
         }
         $bean_name = $beanList[$this->module];
 
@@ -750,20 +750,20 @@ class DynamicField
         $vBean = $bean_name == 'aCase' ? 'Case' : $bean_name;
         $file_loc = "$this->base_path/sugarfield_{$field->name}.php";
 
-        $out = "<?php\n // created: " . date('Y-m-d H:i:s') . "\n";
+        $out = "<?php\n // created: " . \date('Y-m-d H:i:s') . "\n";
         foreach ($def_override as $property => $val) {
             $out .= override_value_to_string_recursive(array($vBean, 'fields', $field->name, $property), 'dictionary', $val) . "\n";
         }
 
         $out .= "\n ?>";
 
-        if (!file_exists($this->base_path)) {
+        if (!\file_exists($this->base_path)) {
             mkdir_recursive($this->base_path);
         }
 
         if ($fh = @sugar_fopen($file_loc, 'w')) {
-            fputs($fh, $out);
-            fclose($fh);
+            \fputs($fh, $out);
+            \fclose($fh);
 
             return true;
         }
@@ -777,8 +777,8 @@ class DynamicField
     {
         $file_loc = "$this->base_path/sugarfield_{$field->name}.php";
 
-        if (is_file($file_loc)) {
-            unlink($file_loc);
+        if (\is_file($file_loc)) {
+            \unlink($file_loc);
         }
     }
 
@@ -875,7 +875,7 @@ class DynamicField
             }
             $out = $query . "\n";
             if (!empty($indicesArr)) {
-                $out .= implode("\n", $indicesArr) . "\n";
+                $out .= \implode("\n", $indicesArr) . "\n";
             }
 
             $out .= $this->add_existing_custom_fields($execute);
@@ -953,7 +953,7 @@ class DynamicField
              * force the name to be lower as it needs to be lower since that is how it's put into the key
              * in the get_columns() call above.
              */
-            if (!empty($compareFieldDefs[strtolower($name)])) {
+            if (!empty($compareFieldDefs[\strtolower($name)])) {
                 continue;
             }
             $out .= $this->add_existing_custom_field($data, $execute);
@@ -1011,8 +1011,8 @@ class DynamicField
         }
         $exclusions = array('parent_type', 'parent_id', 'currency_id', 'parent_name');
         // Remove any non-db friendly characters
-        $return_value = preg_replace("/[^\w]+/", '_', $name);
-        if ($_C == true && !in_array($return_value, $exclusions) && substr($return_value, -2) != '_c') {
+        $return_value = \preg_replace("/[^\w]+/", '_', $name);
+        if ($_C == true && !\in_array($return_value, $exclusions) && \substr($return_value, -2) != '_c') {
             $return_value .= '_c';
         }
         $cached_results[$name] = $return_value;
@@ -1076,12 +1076,12 @@ class DynamicField
         if ($this->bean->hasCustomFields()) {
             $results = $this->getAllFieldsView($view, 'xtpl');
             foreach ($results as $name => $value) {
-                if (is_array($value['xtpl'])) {
+                if (\is_array($value['xtpl'])) {
                     foreach ($value['xtpl'] as $xName => $xValue) {
-                        $xtpl->assign(strtoupper($xName), $xValue);
+                        $xtpl->assign(\strtoupper($xName), $xValue);
                     }
                 } else {
-                    $xtpl->assign(strtoupper($name), $value['xtpl']);
+                    $xtpl->assign(\strtoupper($name), $value['xtpl']);
                 }
             }
         }
@@ -1114,7 +1114,7 @@ class DynamicField
             $field->populateFromRow($data);
             $field->view = $view;
             $field->bean = $this->bean;
-            switch (strtolower($type)) {
+            switch (\strtolower($type)) {
                 case 'xtpl':
                     $results[$name] = array('xtpl' => $field->get_xtpl());
                     break;

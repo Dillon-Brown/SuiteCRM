@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -119,7 +119,7 @@ class Employee extends Person
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -147,7 +147,7 @@ class Employee extends Person
         $row = $this->db->fetchByAssoc($result);
 
         if ($row != null) {
-            $this->reports_to_name = stripslashes($locale->getLocaleFormattedName($row['first_name'], $row['last_name']));
+            $this->reports_to_name = \stripslashes($locale->getLocaleFormattedName($row['first_name'], $row['last_name']));
         } else {
             $this->reports_to_name = '';
         }

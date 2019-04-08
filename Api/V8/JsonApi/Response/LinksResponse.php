@@ -55,6 +55,6 @@ class LinksResponse implements \JsonSerializable
             'related' => $this->getRelated()
         ];
 
-        return array_filter($response);
+        return \array_filter($response);
     }
 }

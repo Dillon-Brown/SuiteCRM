@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -82,7 +82,7 @@ class ParserLabel
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($moduleName, $packageName);
     }
@@ -100,8 +100,8 @@ class ParserLabel
     {
         $labels = array();
         foreach ($params as $key => $value) {
-            if (preg_match('/^label_/', $key) && strcmp($value, 'no_change') != 0) {
-                $labels [ strtoupper(substr($key, 6)) ] = SugarCleaner::cleanHtml(from_html($value), false);
+            if (\preg_match('/^label_/', $key) && \strcmp($value, 'no_change') != 0) {
+                $labels [ \strtoupper(\substr($key, 6)) ] = SugarCleaner::cleanHtml(from_html($value), false);
             }
         }
         if (!empty($this->packageName)) {
@@ -125,13 +125,13 @@ class ParserLabel
     public static function removeLabel($language, $label, $labelvalue, $moduleName, $basepath = null, $forRelationshipLabel = false)
     {
         $GLOBALS [ 'log' ]->debug("ParserLabel::removeLabels($language, \$label, \$labelvalue, $moduleName, $basepath );");
-        if (is_null($basepath)) {
+        if (\is_null($basepath)) {
             $deployedModule = true;
             $basepath = "custom/modules/$moduleName/language";
             if ($forRelationshipLabel) {
                 $basepath = "custom/modules/$moduleName/Ext/Language";
             }
-            if (!is_dir($basepath)) {
+            if (!\is_dir($basepath)) {
                 $GLOBALS ['log']->debug("$basepath is not a directory.");
 
                 return false;
@@ -143,12 +143,12 @@ class ParserLabel
             $filename = "$basepath/$language.lang.ext.php";
         }
 
-        $dir_exists = is_dir($basepath);
+        $dir_exists = \is_dir($basepath);
 
         $mod_strings = array();
 
         if ($dir_exists) {
-            if (file_exists($filename)) {
+            if (\file_exists($filename)) {
                 // obtain $mod_strings
                 include $filename;
             } else {
@@ -198,7 +198,7 @@ class ParserLabel
     public static function addLabels($language, $labels, $moduleName, $basepath = null, $forRelationshipLabel = false)
     {
         $GLOBALS [ 'log' ]->debug("ParserLabel::addLabels($language, \$labels, $moduleName, $basepath );");
-        $GLOBALS [ 'log' ]->debug('$labels:'.print_r($labels, true));
+        $GLOBALS [ 'log' ]->debug('$labels:'.\print_r($labels, true));
 
         $deployedModule = false;
         if (null === $basepath) {
@@ -207,7 +207,7 @@ class ParserLabel
             if ($forRelationshipLabel) {
                 $basepath = "custom/modules/$moduleName/Ext/Language";
             }
-            if (!is_dir($basepath)) {
+            if (!\is_dir($basepath)) {
                 mkdir_recursive($basepath);
             }
         }
@@ -216,17 +216,17 @@ class ParserLabel
         if ($forRelationshipLabel) {
             $filename = "$basepath/$language.lang.ext.php";
         }
-        $dir_exists = is_dir($basepath);
+        $dir_exists = \is_dir($basepath);
 
         $mod_strings = array();
 
         if ($dir_exists) {
-            if (file_exists($filename)) {
+            if (\file_exists($filename)) {
                 // obtain $mod_strings
                 include $filename;
             } elseif ($forRelationshipLabel) {
-                $fh = fopen($filename, 'a');
-                fclose($fh);
+                $fh = \fopen($filename, 'a');
+                \fclose($fh);
             }
         } else {
             return false;
@@ -237,15 +237,15 @@ class ParserLabel
         //$charset = (isset($app_strings['LBL_CHARSET'])) ? $app_strings['LBL_CHARSET'] : $GLOBALS['sugar_config']['default_charset'] ;
 
         foreach ($labels as $key => $value) {
-            if (!isset($mod_strings [ $key ]) || strcmp($value, $mod_strings [ $key ]) != 0) {
-                $mod_strings [$key] = to_html(strip_tags(from_html($value))); // must match encoding used in view.labels.php
+            if (!isset($mod_strings [ $key ]) || \strcmp($value, $mod_strings [ $key ]) != 0) {
+                $mod_strings [$key] = to_html(\strip_tags(from_html($value))); // must match encoding used in view.labels.php
                 $changed = true;
             }
         }
 
         if ($changed) {
             $GLOBALS [ 'log' ]->debug("ParserLabel::addLabels: writing new mod_strings to $filename");
-            $GLOBALS [ 'log' ]->debug('ParserLabel::addLabels: mod_strings='.print_r($mod_strings, true));
+            $GLOBALS [ 'log' ]->debug('ParserLabel::addLabels: mod_strings='.\print_r($mod_strings, true));
             if (!write_array_to_file('mod_strings', $mod_strings, $filename)) {
                 $GLOBALS [ 'log' ]->fatal("Could not write $filename");
             } else {
@@ -281,15 +281,15 @@ class ParserLabel
                 $extension_filename = "$extension_basepath/$language.custom".$_POST[relationship_name].'.php';
 
                 $mod_strings = array();
-                if (file_exists($extension_filename)) {
+                if (\file_exists($extension_filename)) {
                     // obtain $mod_strings
                     include $extension_filename;
                 }
 
                 foreach ($labels as $key => $value) {
                     foreach ($mod_strings as $key_mod_string => $value_mod_string) {
-                        if (strpos($key_mod_string, strtoupper($_POST[relationship_name])) !== false) {
-                            $mod_strings[$key_mod_string] = to_html(strip_tags(from_html($_POST[rhs_label]))); // must match encoding used in view.labels.php
+                        if (\strpos($key_mod_string, \strtoupper($_POST[relationship_name])) !== false) {
+                            $mod_strings[$key_mod_string] = to_html(\strip_tags(from_html($_POST[rhs_label]))); // must match encoding used in view.labels.php
                         }
                     }
                 }
@@ -303,9 +303,9 @@ class ParserLabel
                 }
 
                 try {
-                    $file_contents = fopen($extension_filename, 'w');
-                    fputs($file_contents, $out, strlen($out));
-                    fclose($file_contents);
+                    $file_contents = \fopen($extension_filename, 'w');
+                    \fputs($file_contents, $out, \strlen($out));
+                    \fclose($file_contents);
                 } catch (Exception $e) {
                     $GLOBALS ['log']->fatal("Could not write $filename");
                     $GLOBALS ['log']->fatal('Exception '.$e->getMessage());
@@ -324,7 +324,7 @@ class ParserLabel
                 $relationships_filename = "$relationships_basepath/".$_POST[lhs_module].'.php';
 
                 $mod_strings = array();
-                if (file_exists($relationships_filename)) {
+                if (\file_exists($relationships_filename)) {
                     // obtain $mod_strings
                     include $relationships_filename;
                 }
@@ -332,8 +332,8 @@ class ParserLabel
                 $changed_mod_strings = false;
                 foreach ($labels as $key => $value) {
                     foreach ($mod_strings as $key_mod_string => $value_mod_string) {
-                        if (strpos($key_mod_string, strtoupper($_POST[relationship_name])) !== false) {
-                            $mod_strings[$key_mod_string] = to_html(strip_tags(from_html($_POST[rhs_label]))); // must match encoding used in view.labels.php
+                        if (\strpos($key_mod_string, \strtoupper($_POST[relationship_name])) !== false) {
+                            $mod_strings[$key_mod_string] = to_html(\strip_tags(from_html($_POST[rhs_label]))); // must match encoding used in view.labels.php
                             $changed_mod_strings = true;
                         }
                     }
@@ -349,9 +349,9 @@ class ParserLabel
 
                 $failed_to_write = false;
                 try {
-                    $file_contents = fopen($relationships_filename, 'w');
-                    fputs($file_contents, $out, strlen($out));
-                    fclose($file_contents);
+                    $file_contents = \fopen($relationships_filename, 'w');
+                    \fputs($file_contents, $out, \strlen($out));
+                    \fclose($file_contents);
                 } catch (Exception $e) {
                     $GLOBALS ['log']->fatal("Could not write $filename");
                     $GLOBALS ['log']->fatal('Exception '.$e->getMessage());

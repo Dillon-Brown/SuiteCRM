@@ -59,7 +59,7 @@ class MBLanguage
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($name, $path, $label, $key_name);
     }
@@ -73,21 +73,21 @@ class MBLanguage
 
     public function loadStrings($file)
     {
-        $module = strtoupper($this->name);
-        $object_name = strtoupper($this->key_name);
-        $_object_name = strtolower($this->name);
-        if (!file_exists($file)) {
+        $module = \strtoupper($this->name);
+        $object_name = \strtoupper($this->key_name);
+        $_object_name = \strtolower($this->name);
+        if (!\file_exists($file)) {
             return;
         }
 
-        $d = dir($file);
+        $d = \dir($file);
         while ($e = $d->read()) {
-            if (substr($e, 0, 1) != '.' && is_file($file . '/' . $e)) {
+            if (\substr($e, 0, 1) != '.' && \is_file($file . '/' . $e)) {
                 include($file.'/'. $e);
                 if (empty($this->strings[$e])) {
                     $this->strings[$e] = $mod_strings;
                 } else {
-                    $this->strings[$e] = array_merge($this->strings[$e], $mod_strings);
+                    $this->strings[$e] = \array_merge($this->strings[$e], $mod_strings);
                 }
             }
         }
@@ -95,21 +95,21 @@ class MBLanguage
 
     public function loadAppListStrings($file)
     {
-        if (!file_exists($file)) {
+        if (!\file_exists($file)) {
             return;
         }
         //we may not need this when loading in the app strings, but there is no harm
         //in setting it.
-        $object_name = strtolower($this->key_name);
+        $object_name = \strtolower($this->key_name);
 
-        $d = dir($file);
+        $d = \dir($file);
         while ($e = $d->read()) {
-            if (substr($e, 0, 1) != '.' && is_file($file . '/' . $e)) {
+            if (\substr($e, 0, 1) != '.' && \is_file($file . '/' . $e)) {
                 include($file.'/'. $e);
                 if (empty($this->appListStrings[$e])) {
                     $this->appListStrings[$e] = $app_list_strings;
                 } else {
-                    $this->appListStrings[$e] = array_merge($this->appListStrings[$e], $app_list_strings);
+                    $this->appListStrings[$e] = \array_merge($this->appListStrings[$e], $app_list_strings);
                 }
             }
         }
@@ -177,13 +177,13 @@ class MBLanguage
     }
     public function save($key_name, $duplicate=false, $rename=false)
     {
-        $header = file_get_contents('modules/ModuleBuilder/MB/header.php');
+        $header = \file_get_contents('modules/ModuleBuilder/MB/header.php');
         $save_path = $this->path . '/language';
         mkdir_recursive($save_path);
         foreach ($this->strings as $lang=>$values) {
             //Check if the module Label has changed.
             $renameLang = $rename || empty($values) || (isset($values['LBL_MODULE_NAME']) && $this->label != $values['LBL_MODULE_NAME']);
-            $mod_strings = return_module_language(str_replace('.lang.php', '', $lang), 'ModuleBuilder');
+            $mod_strings = return_module_language(\str_replace('.lang.php', '', $lang), 'ModuleBuilder');
             $required = array(
                 'LBL_LIST_FORM_TITLE'=>$this->label . " " . $mod_strings['LBL_LIST'],
                 'LBL_MODULE_NAME'=>$this->label,
@@ -192,11 +192,11 @@ class MBLanguage
                 //FOR GENERIC MENU
                 'LNK_NEW_RECORD'=>$mod_strings['LBL_CREATE'] ." ". $this->label,
                 'LNK_LIST'=>$mod_strings['LBL_VIEW'] ." ". $this->label,
-                'LNK_IMPORT_'.strtoupper($this->key_name)=>translate('LBL_IMPORT') ." ". $this->label,
+                'LNK_IMPORT_'.\strtoupper($this->key_name)=>translate('LBL_IMPORT') ." ". $this->label,
                 'LBL_SEARCH_FORM_TITLE'=>$mod_strings['LBL_SEARCH_BUTTON'] ." ". $this->label,
                 'LBL_HISTORY_SUBPANEL_TITLE'=>$mod_strings['LBL_HISTORY'],
                 'LBL_ACTIVITIES_SUBPANEL_TITLE'=>$mod_strings['LBL_ACTIVITIES'],
-                'LBL_'.strtoupper($this->key_name).'_SUBPANEL_TITLE'=>$this->label,
+                'LBL_'.\strtoupper($this->key_name).'_SUBPANEL_TITLE'=>$this->label,
                 'LBL_NEW_FORM_TITLE' => $mod_strings['LBL_NEW'] ." ". $this->label,
                 );
             foreach ($required as $k=>$v) {
@@ -214,7 +214,7 @@ class MBLanguage
             // Load previously created modules data
             // $app_list_strings = array (); --- fix for issue #305
             $neededFile = $app_save_path . '/'. $lang;
-            if (file_exists($neededFile)) {
+            if (\file_exists($neededFile)) {
                 include $neededFile;
             }
 
@@ -238,10 +238,10 @@ class MBLanguage
                 }
                 $okey = $key;
                 if ($key_changed) {
-                    $key = str_replace($this->key_name, $key_name, $key);
+                    $key = \str_replace($this->key_name, $key_name, $key);
                 }
                 if ($key_changed) {
-                    $key = str_replace(strtolower($this->key_name), strtolower($key_name), $key);
+                    $key = \str_replace(\strtolower($this->key_name), \strtolower($key_name), $key);
                 }
                 // if we aren't duplicating or the key has changed let's add it
                 if (!$duplicate || $okey != $key) {
@@ -250,8 +250,8 @@ class MBLanguage
             }
 
             $fp = sugar_fopen($app_save_path . '/'. $lang, 'w');
-            fwrite($fp, $appFile);
-            fclose($fp);
+            \fwrite($fp, $appFile);
+            \fclose($fp);
         }
     }
 
@@ -275,7 +275,7 @@ class MBLanguage
 
     public function build($path)
     {
-        if (file_exists($this->path.'/language/')) {
+        if (\file_exists($this->path.'/language/')) {
             copy_recursive($this->path.'/language/', $path . '/language/');
         }
     }
@@ -283,7 +283,7 @@ class MBLanguage
     public function loadTemplates()
     {
         if (empty($this->templates)) {
-            if (file_exists("$this->path/config.php")) {
+            if (\file_exists("$this->path/config.php")) {
                 include "$this->path/config.php";
                 $this->templates = $config['templates'];
                 $this->iTemplates = array();

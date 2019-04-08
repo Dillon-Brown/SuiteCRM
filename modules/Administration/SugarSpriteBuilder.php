@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -86,17 +86,17 @@ class SugarSpriteBuilder
     public function __construct()
     {
         // check if we have gd installed
-        if (function_exists('imagecreatetruecolor')) {
+        if (\function_exists('imagecreatetruecolor')) {
             $this->isAvailable = true;
             foreach ($this->supportedTypeMap as $gd_bit => $imagetype) {
-                if (imagetypes() & $gd_bit) {
+                if (\imagetypes() & $gd_bit) {
                     // swap gd_bit & imagetype
                     $this->imageTypes[$imagetype] = $gd_bit;
                 }
             }
         }
 
-        if (function_exists('logThis') && isset($GLOBALS['path'])) {
+        if (\function_exists('logThis') && isset($GLOBALS['path'])) {
             $this->writeToUpgradeLog = true;
         }
     }
@@ -113,7 +113,7 @@ class SugarSpriteBuilder
     {
 
         // sprite namespace
-        if (!array_key_exists($name, $this->spriteSrc)) {
+        if (!\array_key_exists($name, $this->spriteSrc)) {
             $this->spriteSrc[$name] = array();
         }
 
@@ -130,20 +130,20 @@ class SugarSpriteBuilder
     private function getFileList($dir)
     {
         $list = array();
-        if (is_dir($dir)) {
-            if ($dh = opendir($dir)) {
+        if (\is_dir($dir)) {
+            if ($dh = \opendir($dir)) {
 
                 // optional sprites_config.php file
                 $this->loadSpritesConfig($dir);
 
-                while (($file = readdir($dh)) !== false) {
+                while (($file = \readdir($dh)) !== false) {
                     if ($file != "." && $file != ".." && $file != "sprites_config.php") {
 
                         // file info & check supported image format
                         if ($info = $this->getFileInfo($dir, $file)) {
 
                             // skip excluded files
-                            if (isset($this->sprites_config[$dir]['exclude']) && array_search($file, $this->sprites_config[$dir]['exclude']) !== false) {
+                            if (isset($this->sprites_config[$dir]['exclude']) && \array_search($file, $this->sprites_config[$dir]['exclude']) !== false) {
                                 global $mod_strings;
                                 $msg = string_format($mod_strings['LBL_SPRITES_EXCLUDING_FILE'], array("{$dir}/{$file}"));
                                 $GLOBALS['log']->debug($msg);
@@ -155,7 +155,7 @@ class SugarSpriteBuilder
                                 if (isset($this->sprites_config[$dir]['repeat'])) {
                                     foreach ($this->sprites_config[$dir]['repeat'] as $repeat) {
                                         if ($info['x'] == $repeat['width'] && $info['y'] == $repeat['height']) {
-                                            $id = md5($repeat['width'].$repeat['height'].$repeat['direction']);
+                                            $id = \md5($repeat['width'].$repeat['height'].$repeat['direction']);
                                             $isRepeat = true;
                                             $this->spriteRepeat['repeat_'.$repeat['direction'].'_'.$id][$dir][$file] = $info;
                                         }
@@ -166,14 +166,14 @@ class SugarSpriteBuilder
                                     $list[$file] = $info;
                                 }
                             }
-                        } elseif (preg_match('/\.(jpg|jpeg|gif|png|bmp|ico)$/i', $file)) {
+                        } elseif (\preg_match('/\.(jpg|jpeg|gif|png|bmp|ico)$/i', $file)) {
                             $GLOBALS['log']->error('Unable to process image file ' . $file);
                             //$this->logMessage('Unable to process image file ' . $file);
                         }
                     }
                 }
             }
-            closedir($dh);
+            \closedir($dh);
         }
         return $list;
     }
@@ -191,10 +191,10 @@ class SugarSpriteBuilder
     private function loadSpritesConfig($dir)
     {
         $sprites_config = array();
-        if (file_exists("$dir/sprites_config.php")) {
+        if (\file_exists("$dir/sprites_config.php")) {
             include("$dir/sprites_config.php");
-            if (count($sprites_config)) {
-                $this->sprites_config = array_merge($this->sprites_config, $sprites_config);
+            if (\count($sprites_config)) {
+                $this->sprites_config = \array_merge($this->sprites_config, $sprites_config);
             }
         }
     }
@@ -211,7 +211,7 @@ class SugarSpriteBuilder
     private function getFileInfo($dir, $file)
     {
         $result = false;
-        $info = @getimagesize($dir.'/'.$file);
+        $info = @\getimagesize($dir.'/'.$file);
         if ($info) {
 
             // supported image type ?
@@ -266,8 +266,8 @@ class SugarSpriteBuilder
         }
 
         // add repeatable sprites
-        if (count($this->spriteRepeat)) {
-            $this->spriteSrc = array_merge($this->spriteSrc, $this->spriteRepeat);
+        if (\count($this->spriteRepeat)) {
+            $this->spriteSrc = \array_merge($this->spriteSrc, $this->spriteRepeat);
         }
 
         foreach ($this->spriteSrc as $name => $dirs) {
@@ -278,9 +278,9 @@ class SugarSpriteBuilder
             }
 
             // setup config for sprite placement algorithm
-            if (substr($name, 0, 6) == 'repeat') {
+            if (\substr($name, 0, 6) == 'repeat') {
                 $isRepeat = true;
-                $type = substr($name, 7, 10) == 'horizontal' ? 'horizontal' : 'vertical';
+                $type = \substr($name, 7, 10) == 'horizontal' ? 'horizontal' : 'vertical';
                 $config = array(
                     'type' => $type,
                 );
@@ -320,8 +320,8 @@ class SugarSpriteBuilder
                             $dst_x = $sp->spriteMatrix[$dir.'/'.$file]['x'];
                             $dst_y = $sp->spriteMatrix[$dir.'/'.$file]['y'];
 
-                            imagecopy($this->spriteImg, $im, $dst_x, $dst_y, 0, 0, $info['x'], $info['y']);
-                            imagedestroy($im);
+                            \imagecopy($this->spriteImg, $im, $dst_x, $dst_y, 0, 0, $info['x'], $info['y']);
+                            \imagedestroy($im);
 
                             if (!$this->silentRun) {
                                 $msg = string_format($mod_strings['LBL_SPRITES_ADDED'], array("{$dir}/{$file}"));
@@ -348,13 +348,13 @@ class SugarSpriteBuilder
                 }
 
                 // directory structure
-                if (!is_dir(sugar_cached("sprites/$nameSpace"))) {
+                if (!\is_dir(sugar_cached("sprites/$nameSpace"))) {
                     sugar_mkdir(sugar_cached("sprites/$nameSpace"), 0775, true);
                 }
 
                 // save sprite image
-                imagepng($this->spriteImg, "$outputDir/$spriteFileName", $this->pngCompression, $this->pngFilter);
-                imagedestroy($this->spriteImg);
+                \imagepng($this->spriteImg, "$outputDir/$spriteFileName", $this->pngCompression, $this->pngFilter);
+                \imagedestroy($this->spriteImg);
 
                 /* generate css & metadata */
 
@@ -364,7 +364,7 @@ class SugarSpriteBuilder
 
                 foreach ($sp->spriteSrc as $id => $info) {
                     // sprite id
-                    $hash_id = md5($id);
+                    $hash_id = \md5($id);
 
                     // header
                     $head .= "span.spr_{$hash_id},\n";
@@ -391,7 +391,7 @@ background-position: -{$offset_x}px -{$offset_y}px;
                 // common css header
                 require_once('include/utils.php');
                 $bg_path = getVersionedPath('index.php').'&entryPoint=getImage&imageName='.$spriteFileName.'&spriteNamespace='.$nameSpace;
-                $head = rtrim($head, "\n,")." {background: url('../../../{$bg_path}'); no-repeat;display:inline-block;}\n";
+                $head = \rtrim($head, "\n,")." {background: url('../../../{$bg_path}'); no-repeat;display:inline-block;}\n";
 
                 // append mode for repeatable sprites
                 $fileMode = $isRepeat ? 'a' : 'w';
@@ -401,19 +401,19 @@ background-position: -{$offset_x}px -{$offset_y}px;
                 if ($this->cssMinify) {
                     $css_content = cssmin::minify($css_content);
                 }
-                $fh = fopen("$outputDir/$cssFileName", $fileMode);
-                fwrite($fh, $css_content);
-                fclose($fh);
+                $fh = \fopen("$outputDir/$cssFileName", $fileMode);
+                \fwrite($fh, $css_content);
+                \fclose($fh);
 
                 /* save metadata */
-                $add_php_tag = (file_exists("$outputDir/$metaFileName") && $isRepeat) ? false : true;
-                $fh = fopen("$outputDir/$metaFileName", $fileMode);
+                $add_php_tag = (\file_exists("$outputDir/$metaFileName") && $isRepeat) ? false : true;
+                $fh = \fopen("$outputDir/$metaFileName", $fileMode);
                 if ($add_php_tag) {
-                    fwrite($fh, '<?php');
+                    \fwrite($fh, '<?php');
                 }
-                fwrite($fh, "\n/* sprites metadata - $name */\n");
-                fwrite($fh, $metadata."\n");
-                fclose($fh);
+                \fwrite($fh, "\n/* sprites metadata - $name */\n");
+                \fwrite($fh, $metadata."\n");
+                \fclose($fh);
 
             // if width & height
             } else {
@@ -437,11 +437,11 @@ background-position: -{$offset_x}px -{$offset_y}px;
      */
     private function initSpriteImg($w, $h)
     {
-        $this->spriteImg = imagecreatetruecolor($w, $h);
-        $transparent = imagecolorallocatealpha($this->spriteImg, 0, 0, 0, 127);
-        imagefill($this->spriteImg, 0, 0, $transparent);
-        imagealphablending($this->spriteImg, false);
-        imagesavealpha($this->spriteImg, true);
+        $this->spriteImg = \imagecreatetruecolor($w, $h);
+        $transparent = \imagecolorallocatealpha($this->spriteImg, 0, 0, 0, 127);
+        \imagefill($this->spriteImg, 0, 0, $transparent);
+        \imagealphablending($this->spriteImg, false);
+        \imagesavealpha($this->spriteImg, true);
     }
 
 
@@ -460,11 +460,11 @@ background-position: -{$offset_x}px -{$offset_y}px;
         $path_file = $dir.'/'.$file;
         switch ($type) {
             case IMAGETYPE_GIF:
-                return imagecreatefromgif($path_file);
+                return \imagecreatefromgif($path_file);
             case IMAGETYPE_JPEG:
-                return imagecreatefromjpeg($path_file);
+                return \imagecreatefromjpeg($path_file);
             case IMAGETYPE_PNG:
-                return imagecreatefrompng($path_file);
+                return \imagecreatefrompng($path_file);
             default:
                 return false;
         }
@@ -566,8 +566,8 @@ class SpritePlacement
 
                 $spriteX = $this->config['width'];
                 $spriteY = $this->config['height'];
-                $spriteCnt = count($this->spriteMatrix) + 1;
-                $y = ceil($spriteCnt / $this->config['rowcnt']);
+                $spriteCnt = \count($this->spriteMatrix) + 1;
+                $y = \ceil($spriteCnt / $this->config['rowcnt']);
                 $x = $spriteCnt - (($y - 1) * $this->config['rowcnt']);
                 $result = array(
                     'x' => ($x * $spriteX) + 1 - $spriteX,

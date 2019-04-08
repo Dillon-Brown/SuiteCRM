@@ -87,7 +87,7 @@ class AOR_Field extends Basic
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -97,7 +97,7 @@ class AOR_Field extends Basic
     {
         require_once('modules/AOW_WorkFlow/aow_utils.php');
 
-        $line_count = count($post_data[$key . 'field']);
+        $line_count = \count($post_data[$key . 'field']);
         for ($i = 0; $i < $line_count; ++$i) {
             if (!isset($post_data[$key . 'deleted'][$i])) {
                 LoggerManager::getLogger()->warn('AOR field save line error: Post data deleted key not found at index. Key and index were: [' . $key . '], [' . $i . ']');
@@ -124,25 +124,25 @@ class AOR_Field extends Basic
                 foreach ($this->field_defs as $field_def) {
                     $field_name = $field_def['name'];
                     $postField = isset($post_data[$key . $field_name]) ? $post_data[$key . $field_name] : null;
-                    if (is_array($postField)) {
+                    if (\is_array($postField)) {
                         if ($field_name != 'group_display' && isset($postField[$i])) {
-                            if (is_array($postField[$i])) {
-                                $postField[$i] = base64_encode(serialize($postField[$i]));
+                            if (\is_array($postField[$i])) {
+                                $postField[$i] = \base64_encode(\serialize($postField[$i]));
                             } elseif ($field_name == 'value') {
                                 $postField[$i] = fixUpFormatting($_REQUEST['report_module'], $field->field, $postField[$i]);
                             }
                             if ($field_name == 'module_path') {
-                                $postField[$i] = base64_encode(serialize(explode(":", $postField[$i])));
+                                $postField[$i] = \base64_encode(\serialize(\explode(":", $postField[$i])));
                             }
                             $field->$field_name = $postField[$i];
                         }
-                    } elseif (is_null($postField)) {
+                    } elseif (\is_null($postField)) {
                         // do nothing
                     } else {
-                        throw new Exception('illegal type in post data at key ' . $key . $field_name . ' ' . gettype($postField));
+                        throw new Exception('illegal type in post data at key ' . $key . $field_name . ' ' . \gettype($postField));
                     }
                 }
-                if (trim($field->field) != '') {
+                if (\trim($field->field) != '') {
                     $field->aor_report_id = $parent->id;
                     $field->save();
                 }

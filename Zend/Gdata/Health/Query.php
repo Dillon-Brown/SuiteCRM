@@ -84,7 +84,7 @@ class Zend_Gdata_Health_Query extends Zend_Gdata_Query
      */
     public function getDigest()
     {
-        if (array_key_exists('digest', $this->_params)) {
+        if (\array_key_exists('digest', $this->_params)) {
             return $this->_params['digest'];
         } else {
             return null;
@@ -102,7 +102,7 @@ class Zend_Gdata_Health_Query extends Zend_Gdata_Query
     public function setCategory($item, $name = null)
     {
         $this->_category = $item .
-            ($name ? '/' . urlencode('{' . self::ITEM_CATEGORY_NS . '}' . $name) : null);
+            ($name ? '/' . \urlencode('{' . self::ITEM_CATEGORY_NS . '}' . $name) : null);
         return $this;
     }
 
@@ -137,7 +137,7 @@ class Zend_Gdata_Health_Query extends Zend_Gdata_Query
      */
     public function getGrouped()
     {
-        if (array_key_exists('grouped', $this->_params)) {
+        if (\array_key_exists('grouped', $this->_params)) {
             return $this->_params['grouped'];
         } else {
             return null;
@@ -175,7 +175,7 @@ class Zend_Gdata_Health_Query extends Zend_Gdata_Query
      */
     public function getMaxResultsGroup()
     {
-        if (array_key_exists('max-results-group', $this->_params)) {
+        if (\array_key_exists('max-results-group', $this->_params)) {
             return $this->_params['max-results-group'];
         } else {
             return null;
@@ -213,7 +213,7 @@ class Zend_Gdata_Health_Query extends Zend_Gdata_Query
      */
     public function getMaxResultsInGroup()
     {
-        if (array_key_exists('max-results-in-group', $this->_params)) {
+        if (\array_key_exists('max-results-in-group', $this->_params)) {
             return $this->_params['max-results-in-group'];
         } else {
             return null;
@@ -248,7 +248,7 @@ class Zend_Gdata_Health_Query extends Zend_Gdata_Query
      */
     public function getStartIndexGroup()
     {
-        if (array_key_exists('start-index-group', $this->_params)) {
+        if (\array_key_exists('start-index-group', $this->_params)) {
             return $this->_params['start-index-group'];
         } else {
             return null;
@@ -279,7 +279,7 @@ class Zend_Gdata_Health_Query extends Zend_Gdata_Query
      */
     public function getStartIndexInGroup()
     {
-        if (array_key_exists('start-index-in-group', $this->_params)) {
+        if (\array_key_exists('start-index-in-group', $this->_params)) {
             return $this->_params['start-index-in-group'];
         } else {
             return null;

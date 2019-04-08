@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -67,7 +67,7 @@ $cfg = new Configurator();
 $sugar_smarty = new Sugar_Smarty();
 $errors = array();
 
-if (!array_key_exists('aod', $cfg->config)) {
+if (!\array_key_exists('aod', $cfg->config)) {
     $cfg->config['aod'] = array(
         'enable_aod' => '',
     );
@@ -75,7 +75,7 @@ if (!array_key_exists('aod', $cfg->config)) {
 if (isset($_REQUEST['do']) && $_REQUEST['do'] == 'save') {
     $cfg->config['aod']['enable_aod'] = !empty($_REQUEST['enable_aod']);
     $cfg->saveConfig();
-    header('Location: index.php?module=Administration&action=index');
+    \header('Location: index.php?module=Administration&action=index');
     exit();
 }
 $sugar_smarty->assign('MOD', $mod_strings);

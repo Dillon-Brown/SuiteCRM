@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -47,8 +47,8 @@ if (!isset($_SESSION['SHOW_DUPLICATES'])) {
 }
 // retrieve $_POST values out of the $_SESSION variable - placed in there by ContactFormBase to avoid the length limitations on URLs implicit with GETS
 //$GLOBALS['log']->debug('ShowDuplicates.php: _POST = '.print_r($_SESSION['SHOW_DUPLICATES'],true));
-parse_str($_SESSION['SHOW_DUPLICATES'], $_POST);
-$post = array_map("securexss", $_POST);
+\parse_str($_SESSION['SHOW_DUPLICATES'], $_POST);
+$post = \array_map("securexss", $_POST);
 foreach ($post as $k => $v) {
     $_POST[$k] = $v;
 }
@@ -87,7 +87,7 @@ $GLOBALS['check_notify'] = false;
 
 $query = 'select id, first_name, last_name, title from contacts where deleted=0 ';
 $duplicates = $_POST['duplicate'];
-$count = count($duplicates);
+$count = \count($duplicates);
 $db = DBManagerFactory::getInstance();
 if ($count > 0) {
     $query .= "and (";

@@ -353,6 +353,6 @@ class jjwg_MapsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     public function testgetProspectLists()
     {
         $result = getProspectLists();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 }

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -238,10 +238,10 @@ class SugarAuthenticateUser
         $min = 10000;
         $max = 99999;
 
-        if (function_exists('random_int')) {
-            $token = random_int($min, $max);
+        if (\function_exists('random_int')) {
+            $token = \random_int($min, $max);
         } else {
-            $token = rand($min, $max);
+            $token = \rand($min, $max);
         }
 
         $emailTemplate = new EmailTemplate();
@@ -294,8 +294,8 @@ class SugarAuthenticateUser
     public function redirectToLogout()
     {
         $GLOBALS['log']->debug('Session destroy and redirect to logout.....');
-        session_destroy();
-        header('Location: index.php?action=Logout&module=Users');
+        \session_destroy();
+        \header('Location: index.php?action=Logout&module=Users');
         sugar_cleanup(true);
         die();
     }

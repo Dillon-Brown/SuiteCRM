@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -95,4 +95,4 @@ if (!empty($_REQUEST['edit'])) {
 
 $GLOBALS['log']->debug("Saved record with id of ".$return_id);
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id$edit");
+\header("Location: index.php?action=$return_action&module=$return_module&record=$return_id$edit");

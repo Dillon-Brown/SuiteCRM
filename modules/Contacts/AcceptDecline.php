@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -50,7 +50,7 @@ if (!empty($_REQUEST['user_id'])) {
     $current_user = new User();
     $result = $current_user->retrieve($_REQUEST['user_id']);
     if ($result == null) {
-        session_destroy();
+        \session_destroy();
         sugar_cleanup();
         die("The user id doesn't exist");
     }
@@ -60,7 +60,7 @@ if (!empty($_REQUEST['user_id'])) {
     $current_entity->disable_row_level_security = true;
     $result = $current_entity->retrieve($_REQUEST['contact_id']);
     if ($result == null) {
-        session_destroy();
+        \session_destroy();
         sugar_cleanup();
         die("The contact id doesn't exist");
     }
@@ -69,7 +69,7 @@ if (!empty($_REQUEST['user_id'])) {
     $current_entity->disable_row_level_security = true;
     $result = $current_entity->retrieve($_REQUEST['lead_id']);
     if ($result == null) {
-        session_destroy();
+        \session_destroy();
         sugar_cleanup();
         die("The lead id doesn't exist");
     }
@@ -82,7 +82,7 @@ $focus->disable_row_level_security = true;
 $result = $focus->retrieve($_REQUEST['record']);
 
 if ($result == null) {
-    session_destroy();
+    \session_destroy();
     sugar_cleanup();
     die("The focus id doesn't exist");
 }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -55,7 +55,7 @@ class AORReportsDashlet extends Dashlet
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id, $def);
     }
@@ -71,7 +71,7 @@ class AORReportsDashlet extends Dashlet
         $dashletSmarty->assign('report_id', $this->report->id);
         $dashletSmarty->assign('chartHTML', $this->getChartHTML());
         $dashletSmarty->assign('onlyCharts', $this->onlyCharts);
-        $dashletSmarty->assign('parameters', json_encode(array(
+        $dashletSmarty->assign('parameters', \json_encode(array(
             'ids' => isset($this->def['parameter_id']) ? $this->def['parameter_id'] : null,
             'operators' => isset($this->def['parameter_operator']) ? $this->def['parameter_operator'] : null,
             'types' => isset($this->def['parameter_type']) ? $this->def['parameter_type'] : null,
@@ -96,7 +96,7 @@ class AORReportsDashlet extends Dashlet
 
     public function displayOptions()
     {
-        ob_start();
+        \ob_start();
         global $current_language, $app_list_strings, $datetime,$mod_strings;
         $mod_strings = return_module_language($current_language, 'AOR_Reports');
         $optionsSmarty = new Sugar_Smarty();
@@ -123,7 +123,7 @@ class AORReportsDashlet extends Dashlet
         foreach ($conditions as $condition) {
             if ($condition["value_type"] == "Date") {
                 if ($condition["additionalConditions"][0] == "now") {
-                    $conditions[$i]["value"] = date("d/m/Y");
+                    $conditions[$i]["value"] = \date("d/m/Y");
                 }
             }
 
@@ -133,14 +133,14 @@ class AORReportsDashlet extends Dashlet
         $chartOptions = get_select_options_with_id($charts, $this->charts);
         $optionsSmarty->assign('chartOptions', $chartOptions);
         $optionsTemplate = get_custom_file_if_exists('modules/AOR_Reports/Dashlets/AORReportsDashlet/dashletConfigure.tpl');
-        ob_clean();
+        \ob_clean();
 
         return $optionsSmarty->fetch($optionsTemplate);
     }
 
     public function saveOptions($req)
     {
-        $allowedKeys = array_flip(array(
+        $allowedKeys = \array_flip(array(
             'aor_report_id',
             'dashletTitle',
             'charts',
@@ -152,7 +152,7 @@ class AORReportsDashlet extends Dashlet
         ));
 
         // Fix for issue #1700 - save value as db type
-        for ($i = 0; $i < count($req['parameter_value']); $i++) {
+        for ($i = 0; $i < \count($req['parameter_value']); $i++) {
             if (isset($req['parameter_value'][$i]) && $req['parameter_value'][$i] != '') {
                 global $current_user, $timedate;
                 $user_date_format = $timedate->get_date_format($current_user);
@@ -165,7 +165,7 @@ class AORReportsDashlet extends Dashlet
             }
         }
 
-        $intersected = array_intersect_key($req, $allowedKeys);
+        $intersected = \array_intersect_key($req, $allowedKeys);
 
         return $intersected;
     }

@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /*
@@ -79,7 +79,7 @@ class BeanFactory
     {
 
         // Check if params is an array, if not use old arguments
-        if (isset($params) && !is_array($params)) {
+        if (isset($params) && !\is_array($params)) {
             $params = array('encode' => $params);
         }
 
@@ -94,7 +94,7 @@ class BeanFactory
 
         $beanClass = self::getBeanName($module);
 
-        if (empty($beanClass) || !class_exists($beanClass)) {
+        if (empty($beanClass) || !\class_exists($beanClass)) {
             return false;
         }
 
@@ -191,7 +191,7 @@ class BeanFactory
         $index = 'i'.(self::$total % self::$maxLoaded);
         //We should only hold a limited number of beans in memory at a time.
         //Once we have the max, unload the oldest bean.
-        if (count(self::$loadOrder) >= self::$maxLoaded - 1) {
+        if (\count(self::$loadOrder) >= self::$maxLoaded - 1) {
             for ($i = 0; $i < self::$maxLoaded; ++$i) {
                 if (isset(self::$loadOrder[$index])) {
                     $info = self::$loadOrder[$index];

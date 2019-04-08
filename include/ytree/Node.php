@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -92,7 +92,7 @@ class Node
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id, $label, $show_expanded);
     }
@@ -138,7 +138,7 @@ class Node
         $ret = array();
 
         $ret['data'] = $this->_properties;
-        if (count($this->_params) > 0) {
+        if (\count($this->_params) > 0) {
             $ret['data']['param'] = $this->_params;
         }
 

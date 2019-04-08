@@ -51,7 +51,7 @@ class SugarFieldPassword extends SugarFieldBase
         $focus,
         ImportFieldSanitize $settings
         ) {
-        $value = md5($value);
+        $value = \md5($value);
         
         return $value;
     }

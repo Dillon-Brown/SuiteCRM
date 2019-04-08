@@ -47,9 +47,9 @@ class ACLRoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $aclRole = new ACLRole();
 
         //take count of relationship initially and then after method execution and test if relationship count increases
-        $initial_count = count($aclRole->retrieve_relationships('acl_roles_actions', array('role_id' => '1', 'action_id' => '1', 'access_override' => '90'), 'role_id'));
+        $initial_count = \count($aclRole->retrieve_relationships('acl_roles_actions', array('role_id' => '1', 'action_id' => '1', 'access_override' => '90'), 'role_id'));
         $aclRole->setAction('1', '1', '90');
-        $final_count = count($aclRole->retrieve_relationships('acl_roles_actions', array('role_id' => '1', 'action_id' => '1', 'access_override' => '90'), 'role_id'));
+        $final_count = \count($aclRole->retrieve_relationships('acl_roles_actions', array('role_id' => '1', 'action_id' => '1', 'access_override' => '90'), 'role_id'));
 
         $this->assertGreaterThanOrEqual($initial_count, $final_count, "values were: [$initial_count], [$final_count]");
         
@@ -67,9 +67,9 @@ class ACLRoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $aclRole = new ACLRole();
 
         //take count of relationship initially and then after method execution and test if relationship count decreases
-        $initial_count = count($aclRole->retrieve_relationships('acl_roles_actions', array('role_id' => '1', 'action_id' => '1', 'access_override' => '90'), 'role_id'));
+        $initial_count = \count($aclRole->retrieve_relationships('acl_roles_actions', array('role_id' => '1', 'action_id' => '1', 'access_override' => '90'), 'role_id'));
         $aclRole->mark_relationships_deleted('1');
-        $final_count = count($aclRole->retrieve_relationships('acl_roles_actions', array('role_id' => '1', 'action_id' => '1', 'access_override' => '90'), 'role_id'));
+        $final_count = \count($aclRole->retrieve_relationships('acl_roles_actions', array('role_id' => '1', 'action_id' => '1', 'access_override' => '90'), 'role_id'));
 
         $this->assertLessThanOrEqual($initial_count, $final_count, "values were: [$initial_count], [$final_count]");
         
@@ -87,11 +87,11 @@ class ACLRoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test with default/true getAsNameArray param value
         $result = $aclRole->getUserRoles('1');
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         //test with flase getAsNameArray param value
         $result = $aclRole->getUserRoles('1', false);
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
     }
@@ -102,11 +102,11 @@ class ACLRoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test with empty value
         $result = $aclRole->getUserRoleNames('');
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         //test with non empty but non existing role id value
         $result = $aclRole->getUserRoleNames('1');
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testgetAllRoles()
@@ -115,11 +115,11 @@ class ACLRoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test with returnAsArray default/flase
         $result = $aclRole->getAllRoles();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         //test with returnAsArray true
         $result = $aclRole->getAllRoles(true);
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testgetRoleActions()
@@ -128,7 +128,7 @@ class ACLRoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test with empty value
         $result = $aclRole->getRoleActions('');
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         $exp = [
           'Accounts',
           'Alerts',
@@ -187,12 +187,12 @@ class ACLRoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
           'Users',
           'AOW_WorkFlow',
         ];
-        $this->assertEquals($exp, array_keys($result));
+        $this->assertEquals($exp, \array_keys($result));
 
         //test with non empty but non existing role id value, initially no roles exist.
         $result = $aclRole->getRoleActions('1');
-        $this->assertTrue(is_array($result));
-        $this->assertEquals($exp, array_keys($result));
+        $this->assertTrue(\is_array($result));
+        $this->assertEquals($exp, \array_keys($result));
     }
 
     public function testtoArray()

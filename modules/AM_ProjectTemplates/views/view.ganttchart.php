@@ -19,7 +19,7 @@
  * @author Andrew Mclaughlan <andrew@mclaughlan.info>
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -50,7 +50,7 @@ class AM_ProjectTemplatesViewGanttChart extends ViewDetail
 
         $project_template = new AM_ProjectTemplates();
 
-        if (!isset($_REQUEST["record"]) || trim($_REQUEST["record"]) == "") {
+        if (!isset($_REQUEST["record"]) || \trim($_REQUEST["record"]) == "") {
             $_REQUEST["record"] = $_REQUEST["project_id"];
         }
 
@@ -77,8 +77,8 @@ class AM_ProjectTemplatesViewGanttChart extends ViewDetail
 
 
         //Get the start and end date of the project in database format
-        $start_date =  Date('Y-m-d');
-        $end_date = Date('Y-m-d', strtotime("+30 days"));
+        $start_date =  \Date('Y-m-d');
+        $end_date = \Date('Y-m-d', \strtotime("+30 days"));
 
         parent::display(); ?>
         <!--Create task pop-up-->

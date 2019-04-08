@@ -95,7 +95,7 @@ class AM_ProjectTemplates extends AM_ProjectTemplates_sugar
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -112,14 +112,14 @@ class AM_ProjectTemplates extends AM_ProjectTemplates_sugar
             $return_id = $focus->id;
         } else {
             if (!empty($_POST['user_invitees'])) {
-                $userInvitees = explode(',', trim($_POST['user_invitees'], ','));
+                $userInvitees = \explode(',', \trim($_POST['user_invitees'], ','));
             } else {
                 $userInvitees = array();
             }
 
 
             if (!empty($_POST['contact_invitees'])) {
-                $contactInvitees = explode(',', trim($_POST['contact_invitees'], ','));
+                $contactInvitees = \explode(',', \trim($_POST['contact_invitees'], ','));
             } else {
                 $contactInvitees = array();
             }
@@ -141,19 +141,19 @@ class AM_ProjectTemplates extends AM_ProjectTemplates_sugar
                 $focus->load_relationship('users');
                 $users = $focus->get_linked_beans('am_projecttemplates_users_1', 'User');
                 foreach ($users as $a) {
-                    if (!in_array($a->id, $userInvitees)) {
+                    if (!\in_array($a->id, $userInvitees)) {
                         $deleteUsers[$a->id] = $a->id;
                     } else {
                         $existingUsers[$a->id] = $a->id;
                     }
                 }
 
-                if (count($deleteUsers) > 0) {
+                if (\count($deleteUsers) > 0) {
                     $sql = '';
                     foreach ($deleteUsers as $u) {
                         $sql .= ",'" . $u . "'";
                     }
-                    $sql = substr($sql, 1);
+                    $sql = \substr($sql, 1);
                     // We could run a delete SQL statement here, but will just mark as deleted instead
                     $sql = "UPDATE am_projecttemplates_users_1_c set deleted = 1 where users_idb in ($sql) AND am_projecttemplates_ida = '". $focus->id . "'";
                     $focus->db->query($sql);
@@ -164,19 +164,19 @@ class AM_ProjectTemplates extends AM_ProjectTemplates_sugar
                 $focus->load_relationship('contacts');
                 $contacts = $focus->get_linked_beans('am_projecttemplates_contacts_1', 'Contact');
                 foreach ($contacts as $a) {
-                    if (!in_array($a->id, $contactInvitees)) {
+                    if (!\in_array($a->id, $contactInvitees)) {
                         $deleteContacts[$a->id] = $a->id;
                     } else {
                         $existingContacts[$a->id] = $a->id;
                     }
                 }
 
-                if (count($deleteContacts) > 0) {
+                if (\count($deleteContacts) > 0) {
                     $sql = '';
                     foreach ($deleteContacts as $u) {
                         $sql .= ",'" . $u . "'";
                     }
-                    $sql = substr($sql, 1);
+                    $sql = \substr($sql, 1);
                     // We could run a delete SQL statement here, but will just mark as deleted instead
                     $sql = "UPDATE am_projecttemplates_contacts_1_c set deleted = 1 where contacts_idb in ($sql) AND am_projecttemplates_ida = '". $focus->id . "'";
                     $focus->db->query($sql);

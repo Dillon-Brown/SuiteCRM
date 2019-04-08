@@ -57,7 +57,7 @@ class SugarFieldHandler
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -88,7 +88,7 @@ class SugarFieldHandler
                     break;
             }
 
-        return ucfirst($field);
+        return \ucfirst($field);
     }
 
     /**
@@ -102,22 +102,22 @@ class SugarFieldHandler
         static $sugarFieldObjects = array();
 
         $field = self::fixupFieldType($field);
-        $field = ucfirst($field);
+        $field = \ucfirst($field);
 
         if (!isset($sugarFieldObjects[$field])) {
             //check custom directory
-            if (file_exists('custom/include/SugarFields/Fields/' . $field . '/SugarField' . $field. '.php')) {
+            if (\file_exists('custom/include/SugarFields/Fields/' . $field . '/SugarField' . $field. '.php')) {
                 $file = 'custom/include/SugarFields/Fields/' . $field . '/SugarField' . $field. '.php';
                 $type = $field;
             //else check the fields directory
-            } elseif (file_exists('include/SugarFields/Fields/' . $field . '/SugarField' . $field. '.php')) {
+            } elseif (\file_exists('include/SugarFields/Fields/' . $field . '/SugarField' . $field. '.php')) {
                 $file = 'include/SugarFields/Fields/' . $field . '/SugarField' . $field. '.php';
                 $type = $field;
             } else {
                 // No direct class, check the directories to see if they are defined
                 if ($returnNullIfBase &&
-                    !is_dir('custom/include/SugarFields/Fields/'.$field) &&
-                    !is_dir('include/SugarFields/Fields/'.$field)) {
+                    !\is_dir('custom/include/SugarFields/Fields/'.$field) &&
+                    !\is_dir('include/SugarFields/Fields/'.$field)) {
                     return null;
                 }
                 $file = 'include/SugarFields/Fields/Base/SugarFieldBase.php';
@@ -128,7 +128,7 @@ class SugarFieldHandler
             $class = 'SugarField' . $type;
             //could be a custom class check it
             $customClass = 'Custom' . $class;
-            if (class_exists($customClass)) {
+            if (\class_exists($customClass)) {
                 $sugarFieldObjects[$field] = new $customClass($field);
             } else {
                 $sugarFieldObjects[$field] = new $class($field);

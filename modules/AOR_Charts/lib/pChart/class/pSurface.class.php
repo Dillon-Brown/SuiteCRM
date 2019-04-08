@@ -13,13 +13,13 @@
      You can find the whole class documentation on the pChart web site.
  */
 
- define("UNKNOWN", 0.123456789);
- define("IGNORED", -1);
+ \define("UNKNOWN", 0.123456789);
+ \define("IGNORED", -1);
 
- define("LABEL_POSITION_LEFT", 880001);
- define("LABEL_POSITION_RIGHT", 880002);
- define("LABEL_POSITION_TOP", 880003);
- define("LABEL_POSITION_BOTTOM", 880004);
+ \define("LABEL_POSITION_LEFT", 880001);
+ \define("LABEL_POSITION_RIGHT", 880002);
+ \define("LABEL_POSITION_TOP", 880003);
+ \define("LABEL_POSITION_BOTTOM", 880004);
 
  /* pStock class definition */
  class pSurface
@@ -82,7 +82,7 @@
          $Labels		= isset($Format["Labels"]) ? $Format["Labels"] : null;
          $CountOffset	= isset($Format["CountOffset"]) ? $Format["CountOffset"] : 0;
 
-         if ($Labels != null && !is_array($Labels)) {
+         if ($Labels != null && !\is_array($Labels)) {
              $Label = $Labels;
              $Labels = "";
              $Labels[] = $Label;
@@ -113,7 +113,7 @@
          }
 
          for ($X=0;$X<=$this->GridSizeX;$X++) {
-             $XPos = floor($X0+$X*$XSize + $XSize/2);
+             $XPos = \floor($X0+$X*$XSize + $XSize/2);
 
              if ($Labels == null || !isset($Labels[$X])) {
                  $Value = $X+$CountOffset;
@@ -138,7 +138,7 @@
          $Labels		= isset($Format["Labels"]) ? $Format["Labels"] : null;
          $CountOffset	= isset($Format["CountOffset"]) ? $Format["CountOffset"] : 0;
 
-         if ($Labels != null && !is_array($Labels)) {
+         if ($Labels != null && !\is_array($Labels)) {
              $Label = $Labels;
              $Labels = "";
              $Labels[] = $Label;
@@ -159,7 +159,7 @@
          }
 
          for ($Y=0;$Y<=$this->GridSizeY;$Y++) {
-             $YPos = floor($Y0+$Y*$YSize + $YSize/2);
+             $YPos = \floor($Y0+$Y*$YSize + $YSize/2);
 
              if ($Labels == null || !isset($Labels[$Y])) {
                  $Value = $Y+$CountOffset;
@@ -193,10 +193,10 @@
                  $Value = $this->Points[$X][$Y];
 
                  if ($Value != UNKNOWN && $Value != IGNORED && $Value >= $Threshold) {
-                     $X1 = floor($X0+$X*$XSize)+$Padding;
-                     $Y1 = floor($Y0+$Y*$YSize)+$Padding;
-                     $X2 = floor($X0+$X*$XSize+$XSize);
-                     $Y2 = floor($Y0+$Y*$YSize+$YSize);
+                     $X1 = \floor($X0+$X*$XSize)+$Padding;
+                     $Y1 = \floor($Y0+$Y*$YSize)+$Padding;
+                     $X2 = \floor($X0+$X*$XSize+$XSize);
+                     $Y2 = \floor($Y0+$Y*$YSize+$YSize);
 
                      if ($X > 0 && $this->Points[$X-1][$Y] != UNKNOWN && $this->Points[$X-1][$Y] != IGNORED && $this->Points[$X-1][$Y] < $Threshold) {
                          $this->pChartObject->drawLine($X1, $Y1, $X1, $Y2, $Color);
@@ -244,10 +244,10 @@
                  $Value = $this->Points[$X][$Y];
 
                  if ($Value != UNKNOWN && $Value != IGNORED) {
-                     $X1 = floor($X0+$X*$XSize)+$Padding;
-                     $Y1 = floor($Y0+$Y*$YSize)+$Padding;
-                     $X2 = floor($X0+$X*$XSize+$XSize);
-                     $Y2 = floor($Y0+$Y*$YSize+$YSize);
+                     $X1 = \floor($X0+$X*$XSize)+$Padding;
+                     $Y1 = \floor($Y0+$Y*$YSize)+$Padding;
+                     $X2 = \floor($X0+$X*$XSize+$XSize);
+                     $Y2 = \floor($Y0+$Y*$YSize+$YSize);
 
                      if ($Palette != null) {
                          if (isset($Palette[$Value]) && isset($Palette[$Value]["R"])) {
@@ -306,10 +306,10 @@
                  }
              }
          }
-         shuffle($Missing);
+         \shuffle($Missing);
      
          foreach ($Missing as $Key => $Pos) {
-             $Pos = preg_split("/,/", $Pos);
+             $Pos = \preg_split("/,/", $Pos);
              $X   = $Pos[0];
              $Y   = $Pos[1];
 
@@ -341,9 +341,9 @@
          for ($X=0;$X<=$this->GridSizeX;$X++) {
              for ($Y=0;$Y<=$this->GridSizeY;$Y++) {
                  if ($this->Points[$X][$Y] != UNKNOWN && $this->Points[$X][$Y] != IGNORED) {
-                     $DistanceX = max($Xp, $X)-min($Xp, $X);
-                     $DistanceY = max($Yp, $Y)-min($Yp, $Y);
-                     $Distance  = max($DistanceX, $DistanceY);
+                     $DistanceX = \max($Xp, $X)-\min($Xp, $X);
+                     $DistanceY = \max($Yp, $Y)-\min($Yp, $Y);
+                     $Distance  = \max($DistanceX, $DistanceY);
                      if ($Distance < $Nearest || $Nearest == UNKNOWN) {
                          $Nearest = $Distance;
                      }

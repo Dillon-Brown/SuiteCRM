@@ -62,7 +62,7 @@
          if (isset($GLOBALS['log'])) {
              $GLOBALS['log']->deprecated($deprecatedMessage);
          } else {
-             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+             \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
          }
          self::__construct();
      }
@@ -74,10 +74,10 @@
          $search_term = '';
          $node_id = '';
          if (isset($_REQUEST['search_term'])) {
-             $search_term = nl2br($_REQUEST['search_term']);
+             $search_term = \nl2br($_REQUEST['search_term']);
          }
          if (isset($_REQUEST['node_id'])) {
-             $node_id = nl2br($_REQUEST['node_id']);
+             $node_id = \nl2br($_REQUEST['node_id']);
          }
          $xml = PackageManager::getPackages($node_id);
          echo 'result = ' . $json->encode(array('packages' => $xml));
@@ -97,7 +97,7 @@
          $category_id = '';
 
          if (isset($_REQUEST['category_id'])) {
-             $category_id = nl2br($_REQUEST['category_id']);
+             $category_id = \nl2br($_REQUEST['category_id']);
          }
          $xml = PackageManager::getPackages($category_id);
          echo 'result = ' . $json->encode(array('package_output' => $xml));
@@ -114,18 +114,18 @@
          $package_id = '';
          $types = '';
          if (isset($_REQUEST['category_id'])) {
-             $category_id = nl2br($_REQUEST['category_id']);
+             $category_id = \nl2br($_REQUEST['category_id']);
          }
          if (isset($_REQUEST['package_id'])) {
-             $package_id = nl2br($_REQUEST['package_id']);
+             $package_id = \nl2br($_REQUEST['package_id']);
          }
          if (isset($_REQUEST['types'])) {
-             $types = nl2br($_REQUEST['types']);
+             $types = \nl2br($_REQUEST['types']);
          }
-         $types = explode(',', $types);
+         $types = \explode(',', $types);
 
          $filter = array();
-         $count = count($types);
+         $count = \count($types);
          $index = 1;
          $type_str = '';
          foreach ($types as $type) {
@@ -178,19 +178,19 @@
          $category_id  = '';
          $release_id = '';
          if (isset($_REQUEST['package_id'])) {
-             $package_id = nl2br($_REQUEST['package_id']);
+             $package_id = \nl2br($_REQUEST['package_id']);
          }
          if (isset($_REQUEST['category_id'])) {
-             $category_id = nl2br($_REQUEST['category_id']);
+             $category_id = \nl2br($_REQUEST['category_id']);
          }
          if (isset($_REQUEST['release_id'])) {
-             $release_id = nl2br($_REQUEST['release_id']);
+             $release_id = \nl2br($_REQUEST['release_id']);
          }
          $GLOBALS['log']->debug("PACKAGE ID: ".$package_id);
          $GLOBALS['log']->debug("CATEGORY ID: ".$category_id);
          $GLOBALS['log']->debug("RELEASE ID: ".$release_id);
          $result = $this->_pm->download($category_id, $package_id, $release_id);
-         $GLOBALS['log']->debug("RESULT: ".print_r($result, true));
+         $GLOBALS['log']->debug("RESULT: ".\print_r($result, true));
          $success = 'false';
          if ($result != null) {
              $GLOBALS['log']->debug("Performing Setup");
@@ -212,7 +212,7 @@
          $json = getJSONobj();
          $node_id = '';
          if (isset($_REQUEST['category_id'])) {
-             $node_id = nl2br($_REQUEST['category_id']);
+             $node_id = \nl2br($_REQUEST['category_id']);
          }
          $GLOBALS['log']->debug("NODE ID: ".$node_id);
          $nodes = PackageManager::getCategories($node_id);
@@ -224,11 +224,11 @@
          $json = getJSONobj();
          $category_id = '';
          if (isset($_REQUEST['category_id'])) {
-             $category_id = nl2br($_REQUEST['category_id']);
+             $category_id = \nl2br($_REQUEST['category_id']);
          }
          $GLOBALS['log']->debug("CATEGORY ID: ".$category_id);
          $nodes = PackageManager::getModuleLoaderCategoryPackages($category_id);
-         $GLOBALS['log']->debug(var_export($nodes, true));
+         $GLOBALS['log']->debug(\var_export($nodes, true));
          echo 'result = ' . $json->encode(array('nodes' => $nodes));
      }
 
@@ -242,7 +242,7 @@
          $json = getJSONobj();
          $type = '';
          if (isset($_REQUEST['type'])) {
-             $type = nl2br($_REQUEST['type']);
+             $type = \nl2br($_REQUEST['type']);
          }
          $pm = new PackageManager();
          $updates = $pm->checkForUpdates();
@@ -316,10 +316,10 @@
          $servername = '';
          $terms_checked = '';
          if (isset($_REQUEST['username'])) {
-             $username = nl2br($_REQUEST['username']);
+             $username = \nl2br($_REQUEST['username']);
          }
          if (isset($_REQUEST['password'])) {
-             $password = nl2br($_REQUEST['password']);
+             $password = \nl2br($_REQUEST['password']);
          }
          if (isset($_REQUEST['servername'])) {
              $servername = $_REQUEST['servername'];
@@ -332,9 +332,9 @@
          }
 
          if (!empty($username) && !empty($password)) {
-             $password = md5($password);
+             $password = \md5($password);
              $result = PackageManager::authenticate($username, $password, $servername, $terms_checked);
-             if (!is_array($result) && $result == true) {
+             if (!\is_array($result) && $result == true) {
                  $status  = 'success';
              } else {
                  $status  = $result['faultstring'];
@@ -353,14 +353,14 @@
          $release_id = '';
 
          if (isset($_REQUEST['package_id'])) {
-             $package_id = nl2br($_REQUEST['package_id']);
+             $package_id = \nl2br($_REQUEST['package_id']);
          }
          if (isset($_REQUEST['release_id'])) {
-             $release_id = nl2br($_REQUEST['release_id']);
+             $release_id = \nl2br($_REQUEST['release_id']);
          }
 
          $documents = PackageManager::getDocumentation($package_id, $release_id);
-         $GLOBALS['log']->debug("DOCUMENTS: ".var_export($documents, true));
+         $GLOBALS['log']->debug("DOCUMENTS: ".\var_export($documents, true));
          echo 'result = ' . $json->encode(array('documents' => $documents));
      }
 
@@ -370,7 +370,7 @@
          $document_id = '';
 
          if (isset($_REQUEST['document_id'])) {
-             $document_id = nl2br($_REQUEST['document_id']);
+             $document_id = \nl2br($_REQUEST['document_id']);
          }
          $GLOBALS['log']->debug("Downloading Document: ".$document_id);
          PackageManagerComm::downloadedDocumentation($document_id);
@@ -385,9 +385,9 @@
       */
      protected function rmMetaFile($file, $meta)
      {
-         $metafile = pathinfo($file, PATHINFO_DIRNAME)."/". pathinfo($file, PATHINFO_FILENAME)."-$meta.php";
-         if (file_exists($metafile)) {
-             unlink($metafile);
+         $metafile = \pathinfo($file, PATHINFO_DIRNAME)."/". \pathinfo($file, PATHINFO_FILENAME)."-$meta.php";
+         if (\file_exists($metafile)) {
+             \unlink($metafile);
          }
      }
 
@@ -397,11 +397,11 @@
          $file = '';
 
          if (isset($_REQUEST['file'])) {
-             $file = urldecode(hashToFile($_REQUEST['file']));
+             $file = \urldecode(hashToFile($_REQUEST['file']));
          }
          $GLOBALS['log']->debug("FILE TO REMOVE: ".$file);
          if (!empty($file)) {
-             unlink($file);
+             \unlink($file);
              foreach (array("manifest", "icon") as $meta) {
                  $this->rmMetaFile($file, $meta);
              }

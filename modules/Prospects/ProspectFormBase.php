@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -57,7 +57,7 @@ class ProspectFormBase
         require_once('include/formbase.php');
     
         $focus = new Prospect();
-        if (!checkRequired($prefix, array_keys($focus->required_fields))) {
+        if (!checkRequired($prefix, \array_keys($focus->required_fields))) {
             return null;
         }
         $query = '';
@@ -90,7 +90,7 @@ class ProspectFormBase
             while ($row = $db->fetchByAssoc($result)) {
                 $rows[] = $row;
             }
-            if (count($rows) > 0) {
+            if (\count($rows) > 0) {
                 return $rows;
             }
         }
@@ -108,7 +108,7 @@ class ProspectFormBase
             global $mod_strings;
         }
         global $app_strings;
-        $cols = sizeof($rows[0]) * 2 + 1;
+        $cols = \sizeof($rows[0]) * 2 + 1;
         if ($action != 'ShowDuplicates') {
             $form = '<table width="100%"><tr><td>'.$mod_strings['MSG_DUPLICATE']. '</td></tr><tr><td height="20"></td></tr></table>';
             $form .= "<form action='index.php' method='post' name='dupProspects'><input type='hidden' name='selectedProspect' value=''>";
@@ -411,7 +411,7 @@ EOQ;
     
     
         $focus = new Prospect();
-        if ($useRequired &&  !checkRequired($prefix, array_keys($focus->required_fields))) {
+        if ($useRequired &&  !checkRequired($prefix, \array_keys($focus->required_fields))) {
             return null;
         }
         $focus = populateFromPost($prefix, $focus);
@@ -509,7 +509,7 @@ EOQ;
             $get .= '&first_name=' . $focus->first_name;
             $get .= '&last_name=' . $focus->last_name;
             $get .= '&query=true';
-            header("Location: index.php?$get");
+            \header("Location: index.php?$get");
             return;
         }
         if ($redirect) {

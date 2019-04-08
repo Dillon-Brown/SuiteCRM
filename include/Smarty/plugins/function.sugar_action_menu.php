@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -128,7 +128,7 @@ function smarty_function_sugar_action_menu($params, &$smarty)
     if (!empty($params['params'])) {
         $addition_params = $params['params'];
         unset($params['params']);
-        $params = array_merge_recursive($params, $addition_params);
+        $params = \array_merge_recursive($params, $addition_params);
     }
     $flat = isset($params['flat']) ? $params['flat'] : (isset($sugar_config['enable_action_menu']) ? !$sugar_config['enable_action_menu'] : false);
     //if buttons have not implemented, it returns empty string;
@@ -136,41 +136,41 @@ function smarty_function_sugar_action_menu($params, &$smarty)
         return '';
     }
 
-    if (is_array($params['buttons']) && !$flat) {
+    if (\is_array($params['buttons']) && !$flat) {
         $menus = array(
-            'html' => array_shift($params['buttons']),
+            'html' => \array_shift($params['buttons']),
             'items' => array()
         );
 
         foreach ($params['buttons'] as $item) {
-            if (is_array($item)) {
+            if (\is_array($item)) {
                 $sub = array();
-                $sub_first = array_shift($item);
+                $sub_first = \array_shift($item);
                 foreach ($item as $subitem) {
                     $sub[] = array(
                         'html' => $subitem
                     );
                 }
-                array_push($menus['items'], array(
+                \array_push($menus['items'], array(
                     'html' => $sub_first,
                     'items' => $sub,
                     'submenuHtmlOptions' => array(
                         'class' => 'subnav-sub'
                     )
                 ));
-            } elseif (strlen($item)) {
-                array_push($menus['items'], array(
+            } elseif (\strlen($item)) {
+                \array_push($menus['items'], array(
                     'html' => $item
                 ));
             }
         }
         $action_menu = array(
-            'id' => !empty($params['id']) ? (is_array($params['id']) ? $params['id'][0] : $params['id']) : '',
+            'id' => !empty($params['id']) ? (\is_array($params['id']) ? $params['id'][0] : $params['id']) : '',
             'htmlOptions' => array(
-                'class' => !empty($params['class']) && strpos($params['class'], 'clickMenu') !== false  ? $params['class'] : 'clickMenu '. (!empty($params['class']) ? $params['class'] : ''),
+                'class' => !empty($params['class']) && \strpos($params['class'], 'clickMenu') !== false  ? $params['class'] : 'clickMenu '. (!empty($params['class']) ? $params['class'] : ''),
             ),
             'itemOptions' => array(
-                'class' => (count($menus['items']) == 0) ? 'single' : 'sugar_action_button'
+                'class' => (\count($menus['items']) == 0) ? 'single' : 'sugar_action_button'
             ),
             'submenuHtmlOptions' => array(
                 'class' => 'subnav'
@@ -188,9 +188,9 @@ function smarty_function_sugar_action_menu($params, &$smarty)
         return smarty_function_sugar_menu($action_menu, $smarty);
     }
 
-    if (is_array($params['buttons'])) {
+    if (\is_array($params['buttons'])) {
         return '<div class="action_buttons">' . implode_r(' ', $params['buttons'], true).'<div class="clear"></div></div>';
-    } elseif (is_array($params)) {
+    } elseif (\is_array($params)) {
         return '<div class="action_buttons">' . implode_r(' ', $params, true).'<div class="clear"></div></div>';
     }
 
@@ -199,12 +199,12 @@ function smarty_function_sugar_action_menu($params, &$smarty)
 
 function implode_r($glue, $pieces, $extract_first_item = false)
 {
-    $result = array_shift($pieces);
-    if (is_array($result)) {
+    $result = \array_shift($pieces);
+    if (\is_array($result)) {
         $result = implode_r($glue, $result);
     }
     foreach ($pieces as $item) {
-        if (is_array($item)) {
+        if (\is_array($item)) {
             $result .= empty($extract_first_item) ? implode_r($glue, $item) : $glue.$item[0];
         } else {
             $result .= $glue.$item;

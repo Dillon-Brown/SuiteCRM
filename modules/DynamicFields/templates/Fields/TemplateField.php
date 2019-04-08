@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -261,8 +261,8 @@ class TemplateField
     {
         $GLOBALS['log']->debug('get_db_default(): default_value='.$this->default_value);
         if (!$modify or empty($this->new_field_definition['default_value']) or $this->new_field_definition['default_value'] != $this->default_value) {
-            if (!is_null($this->default_value)) { // add a default value if it is not null - we want to set a default even if default_value is '0', which is not null, but which is empty()
-                if (null == trim($this->default_value)) {
+            if (!\is_null($this->default_value)) { // add a default value if it is not null - we want to set a default even if default_value is '0', which is not null, but which is empty()
+                if (null == \trim($this->default_value)) {
                     return " DEFAULT NULL";
                 }
                 return " DEFAULT '$this->default_value'";
@@ -442,7 +442,7 @@ class TemplateField
         }
 
         //If duplicate merge is numeric rather than a string, it is probably what duplicate_merge_dom_value was set to.
-        if (is_numeric($this->duplicate_merge)) {
+        if (\is_numeric($this->duplicate_merge)) {
             return $this->duplicate_merge;
         }
 
@@ -488,7 +488,7 @@ class TemplateField
     {
         $fmd_to_dyn_map = array('comments' => 'comment', 'require_option' => 'required', 'label' => 'vname',
                                 'mass_update' => 'massupdate', 'max_size' => 'len', 'default_value' => 'default', 'id_name' => 'ext3');
-        if (!is_array($row)) {
+        if (!\is_array($row)) {
             $GLOBALS['log']->error("Error: TemplateField->populateFromRow expecting Array");
         }
         //Bug 24189: Copy fields from FMD format to Field objects and vice versa
@@ -513,18 +513,18 @@ class TemplateField
 
                 //  Bug #48826. Some fields are allowed to have special characters and must be decoded from the request
                 // Bug 49774, 49775: Strip html tags from 'formula' and 'dependency'.
-                if (is_string($this->$vardef) && in_array($vardef, $this->decode_from_request_fields_map)) {
-                    $this->$vardef = html_entity_decode(strip_tags(from_html($this->$vardef)));
+                if (\is_string($this->$vardef) && \in_array($vardef, $this->decode_from_request_fields_map)) {
+                    $this->$vardef = \html_entity_decode(\strip_tags(from_html($this->$vardef)));
                 }
 
 
                 //Remove potential xss code from help field
                 if ($field == 'help' && !empty($this->$vardef)) {
-                    $help = htmlspecialchars_decode($this->$vardef, ENT_QUOTES);
+                    $help = \htmlspecialchars_decode($this->$vardef, ENT_QUOTES);
 
                     // Fix for issue #1170 - text in studio can't accept the special language characters.
                     //$this->$vardef = htmlentities(remove_xss($help));
-                    $this->$vardef = htmlspecialchars(remove_xss($help));
+                    $this->$vardef = \htmlspecialchars(remove_xss($help));
                 }
 
 
@@ -534,7 +534,7 @@ class TemplateField
             }
         }
         $this->applyVardefRules();
-        $GLOBALS['log']->debug('populate: '.print_r($this, true));
+        $GLOBALS['log']->debug('populate: '.\print_r($this, true));
     }
 
     protected function applyVardefRules()
@@ -564,7 +564,7 @@ class TemplateField
     protected function get_field_name($module, $name)
     {
         $bean = loadBean($module);
-        if (empty($bean) || is_null($bean)) {
+        if (empty($bean) || \is_null($bean)) {
             return $name;
         }
 

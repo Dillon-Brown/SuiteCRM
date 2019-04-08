@@ -71,12 +71,12 @@ class ViewPopupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         // Create mock file
         // @TODO set up vfsStream and test get_custom_file_if_exists
 
-        $dirname = dirname($customPath);
-        if (!is_dir($dirname)) {
-            mkdir($dirname, 0755, true);
+        $dirname = \dirname($customPath);
+        if (!\is_dir($dirname)) {
+            \mkdir($dirname, 0755, true);
         }
 
-        file_put_contents($customPath, '');
+        \file_put_contents($customPath, '');
 
         $this->assertFileExists($customPath);
 
@@ -85,8 +85,8 @@ class ViewPopupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $this->assertSame($customPath, $result);
 
         // Cleanup
-        unlink($customPath);
-        rmdir($dirname);
+        \unlink($customPath);
+        \rmdir($dirname);
     }
 
     public function testdisplayGetCustomDefaultPopupPickerIdNoModulePopupPicker()
@@ -103,7 +103,7 @@ class ViewPopupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         // test no custom default Popup picker exists
 
         $result1 = get_custom_file_if_exists($modulePath);
-        $result2 = file_exists($result1);
+        $result2 = \file_exists($result1);
 
         $this->assertFalse($result2);
 
@@ -119,12 +119,12 @@ class ViewPopupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         // Create mock file
         // @TODO set up vfsStream and test get_custom_file_if_exists
 
-        $dirname = dirname($customPath);
-        if (!is_dir($dirname)) {
-            mkdir($dirname, 0755, true);
+        $dirname = \dirname($customPath);
+        if (!\is_dir($dirname)) {
+            \mkdir($dirname, 0755, true);
         }
 
-        file_put_contents($customPath, '');
+        \file_put_contents($customPath, '');
 
         $this->assertFileExists($customPath);
 
@@ -133,7 +133,7 @@ class ViewPopupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $this->assertSame($customPath, $result);
 
         // Cleanup
-        unlink($customPath);
-        rmdir($dirname);
+        \unlink($customPath);
+        \rmdir($dirname);
     }
 }

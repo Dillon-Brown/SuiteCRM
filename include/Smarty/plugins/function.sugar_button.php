@@ -294,10 +294,10 @@ function smarty_function_sugar_button($params, &$smarty)
     $type = $params['id'];
     $location = (empty($params['location'])) ? "" : "_".$params['location'];
 
-    if (!is_array($type)) {
+    if (!\is_array($type)) {
         $module = $params['module'];
         $view = $params['view'];
-        switch (strtoupper($type)) {
+        switch (\strtoupper($type)) {
             case "SEARCH":
                 $output = '<input tabindex="2" title="{$APP.LBL_SEARCH_BUTTON_TITLE}" onclick="SUGAR.savedViews.setChooser();" class="button" type="submit" name="button" value="{$APP.LBL_SEARCH_BUTTON_LABEL}" id="search_form_submit"/>&nbsp;';
             break;
@@ -360,7 +360,7 @@ function smarty_function_sugar_button($params, &$smarty)
             break;
 
             case "SUBPANELSAVE":
-                if ($view == 'QuickCreate' || (isset($_REQUEST['target_action']) && strtolower($_REQUEST['target_action']) == 'quickcreate')) {
+                if ($view == 'QuickCreate' || (isset($_REQUEST['target_action']) && \strtolower($_REQUEST['target_action']) == 'quickcreate')) {
                     $view =  "form_SubpanelQuickCreate_{$module}";
                 }
 
@@ -442,7 +442,7 @@ function smarty_function_sugar_button($params, &$smarty)
             return;
         }
         return $output;
-    } elseif (is_array($type) && isset($type['sugar_html'])) {
+    } elseif (\is_array($type) && isset($type['sugar_html'])) {
         require_once('include/SugarHtml/SugarHtml.php');
 
         $dom_tree = SugarHtml::parseSugarHtml($type['sugar_html']);
@@ -454,7 +454,7 @@ function smarty_function_sugar_button($params, &$smarty)
             return;
         }
         return $output;
-    } elseif (is_array($type) && isset($type['customCode'])) {
+    } elseif (\is_array($type) && isset($type['customCode'])) {
         require_once('include/SugarHtml/SugarHtml.php');
 
         $dom_tree = SugarHtml::parseHtmlTag($type['customCode']);
@@ -509,13 +509,13 @@ function replaceFormClick(&$dom_tree = array(), $js_form = '', &$hidden_field_ex
 
     //Replace the JS syntax where the sugar_button contains the event handler for this.form
     if (isset($dom_tree['onclick'])) {
-        if (strpos($dom_tree['onclick'], "this.form") !== false) {
-            $dom_tree['onclick'] = str_replace("this.form", "_form", $dom_tree['onclick']);
-            if (substr($dom_tree['onclick'], -1) != ';') {
+        if (\strpos($dom_tree['onclick'], "this.form") !== false) {
+            $dom_tree['onclick'] = \str_replace("this.form", "_form", $dom_tree['onclick']);
+            if (\substr($dom_tree['onclick'], -1) != ';') {
                 $dom_tree['onclick'] .= ";";
             }
             //Onclick handler contains returning a variable, for example it prompts a confirm message.
-            if (strpos($dom_tree['onclick'], "return ") !== false) {
+            if (\strpos($dom_tree['onclick'], "return ") !== false) {
                 $dom_tree['onclick'] = $js_form.' var _onclick=(function(){ldelim}'.$dom_tree['onclick']."{rdelim}()); if(_onclick!==false) _form.submit();";
             } else {
                 $dom_tree['onclick'] = $js_form.$dom_tree['onclick']."_form.submit();";
@@ -525,7 +525,7 @@ function replaceFormClick(&$dom_tree = array(), $js_form = '', &$hidden_field_ex
         }
     }
     foreach ($dom_tree as $key => $sub_tree) {
-        if (is_array($sub_tree)) {
+        if (\is_array($sub_tree)) {
             list($_submit, $_hidden) = replaceFormClick($dom_tree[$key], $js_form, $hidden_field_exists);
             $set_submit = ($set_submit) ? $set_submit : $_submit;
             $is_hidden_field = ($is_hidden_field) ? $is_hidden_field : $_hidden;
@@ -558,16 +558,16 @@ function extractHiddenInputs(&$dom_tree = array())
         $dom_tree = array();
     }
     foreach ($dom_tree as $key => $sub_tree) {
-        if (is_numeric($key) && isset($sub_tree['tag']) && $sub_tree['tag'] == 'input') {
-            if (!isset($sub_tree['type']) || in_array($sub_tree['type'], $allow_types) === false) {
+        if (\is_numeric($key) && isset($sub_tree['tag']) && $sub_tree['tag'] == 'input') {
+            if (!isset($sub_tree['type']) || \in_array($sub_tree['type'], $allow_types) === false) {
                 unset($dom_tree[$key]);
             }
-        } elseif (is_array($sub_tree)) {
+        } elseif (\is_array($sub_tree)) {
             extractHiddenInputs($dom_tree[$key]);
         }
     }
     if (isset($dom_tree['tag']) && $dom_tree['tag'] == 'input') {
-        if (!isset($dom_tree['type']) || in_array($dom_tree['type'], $allow_types) === false) {
+        if (!isset($dom_tree['type']) || \in_array($dom_tree['type'], $allow_types) === false) {
             $dom_tree = array();
         }
     }

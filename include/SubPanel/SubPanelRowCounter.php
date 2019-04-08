@@ -126,7 +126,7 @@ class SubPanelRowCounter
         }
 
         if ($row = $db->fetchByAssoc($result)) {
-            return (int)array_shift($row);
+            return (int)\array_shift($row);
         }
 
         return 0;
@@ -142,7 +142,7 @@ class SubPanelRowCounter
             throw new \Exception('relationship name can not be empty');
         }
 
-        if (0 === strpos($relationshipName, 'function:')) {
+        if (0 === \strpos($relationshipName, 'function:')) {
             return $this->makeFunctionCountQuery($relationshipName);
         }
 
@@ -162,13 +162,13 @@ class SubPanelRowCounter
     public function makeFunctionCountQuery($relationshipName)
     {
         include_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'utils.php';
-        $functionName = substr($relationshipName, 9);
+        $functionName = \substr($relationshipName, 9);
         $qry = [];
         $functionParameters = isset($this->subPanelDef['function_parameters']) && $this->subPanelDef['function_parameters'] ? $this->subPanelDef['function_parameters'] : null;
         if (null === $functionParameters) {
             \LoggerManager::getLogger()->warn('Function parameters is empty');
         }
-        if (method_exists($this->focus, $functionName)) {
+        if (\method_exists($this->focus, $functionName)) {
             $qry = $this->focus->$functionName($functionParameters);
         } elseif (\function_exists($functionName)) {
             $qry = $functionName($functionParameters);
@@ -189,29 +189,29 @@ class SubPanelRowCounter
             return '';
         }
 
-        $selectQuery = trim(str_replace(["\n", "\t", "\r", '  '], ' ', $selectQuery));
+        $selectQuery = \trim(\str_replace(["\n", "\t", "\r", '  '], ' ', $selectQuery));
 
-        if (0 !== stripos($selectQuery, 'SELECT')) {
+        if (0 !== \stripos($selectQuery, 'SELECT')) {
             return '';
         }
 
-        $fromPos = strpos($selectQuery, ' FROM');
+        $fromPos = \strpos($selectQuery, ' FROM');
         if ($fromPos === false) {
             return '';
         }
 
-        $selectPart = trim(substr($selectQuery, 7, $fromPos - 7));
-        if (false !== strpos($selectPart, ',')) {
+        $selectPart = \trim(\substr($selectQuery, 7, $fromPos - 7));
+        if (false !== \strpos($selectPart, ',')) {
             return '';
         }
 
-        $selectArr = explode(' ', $selectPart);
+        $selectArr = \explode(' ', $selectPart);
         $selectPartFirst = $selectArr[0];
 
-        if (strpos($selectPartFirst, '*') !== false) {
+        if (\strpos($selectPartFirst, '*') !== false) {
             $selectPartFirst = \str_replace('*', 'id', $selectPartFirst);
         }
 
-        return 'SELECT COUNT(' . $selectPartFirst . ')' . substr($selectQuery, $fromPos) . ' LIMIT 1';
+        return 'SELECT COUNT(' . $selectPartFirst . ')' . \substr($selectQuery, $fromPos) . ' LIMIT 1';
     }
 }

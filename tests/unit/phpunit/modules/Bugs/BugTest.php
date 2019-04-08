@@ -226,7 +226,7 @@ class BugTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($bug->id));
-        $this->assertEquals(36, strlen($bug->id));
+        $this->assertEquals(36, \strlen($bug->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $bug->mark_deleted($bug->id);
@@ -247,6 +247,6 @@ class BugTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $result = getReleaseDropDown();
 
         //execute the method and verify it returns an array
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 }

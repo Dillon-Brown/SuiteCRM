@@ -112,7 +112,7 @@ $dictionary['Spots'] = array(
     'optimistic_locking' => true,
     'unified_search' => false,
 );
-if (!class_exists('VardefManager')) {
+if (!\class_exists('VardefManager')) {
     require_once 'include/SugarObjects/VardefManager.php';
 }
 VardefManager::createVardef('Spots', 'Spots', array('basic', 'assignable', 'security_groups'));

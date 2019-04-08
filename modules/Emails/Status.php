@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -61,14 +61,14 @@ if (!empty($_REQUEST['record'])) {
         sugar_die($app_strings['ERROR_NO_RECORD']);
     }
 } else {
-    header("Location: index.php?module=Emails&action=index");
+    \header("Location: index.php?module=Emails&action=index");
 }
 
 //needed when creating a new email with default values passed in
-if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) {
+if (isset($_REQUEST['contact_name']) && \is_null($focus->contact_name)) {
     $focus->contact_name = $_REQUEST['contact_name'];
 }
-if (isset($_REQUEST['contact_id']) && is_null($focus->contact_id)) {
+if (isset($_REQUEST['contact_id']) && \is_null($focus->contact_id)) {
     $focus->contact_id = $_REQUEST['contact_id'];
 }
 echo getClassicModuleTitle($mod_strings['LBL_SEND'], array($mod_strings['LBL_SEND']), true);

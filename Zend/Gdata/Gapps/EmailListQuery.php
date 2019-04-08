@@ -128,7 +128,7 @@ class Zend_Gdata_Gapps_EmailListQuery extends Zend_Gdata_Gapps_Query
      */
     public function getRecipient()
     {
-        if (array_key_exists('recipient', $this->_params)) {
+        if (\array_key_exists('recipient', $this->_params)) {
             return $this->_params['recipient'];
         } else {
             return null;
@@ -160,7 +160,7 @@ class Zend_Gdata_Gapps_EmailListQuery extends Zend_Gdata_Gapps_Query
      */
     public function getStartEmailListName()
     {
-        if (array_key_exists('startEmailListName', $this->_params)) {
+        if (\array_key_exists('startEmailListName', $this->_params)) {
             return $this->_params['startEmailListName'];
         } else {
             return null;

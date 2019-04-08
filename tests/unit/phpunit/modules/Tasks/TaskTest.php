@@ -67,7 +67,7 @@ class TaskTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($task->id));
-        $this->assertEquals(36, strlen($task->id));
+        $this->assertEquals(36, \strlen($task->id));
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $task->mark_deleted($task->id);

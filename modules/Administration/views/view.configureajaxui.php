@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -86,7 +86,7 @@ class ViewConfigureAjaxUI extends SugarView
         $banned = ajaxBannedModules();
 
         foreach ($moduleList as $module) {
-            if (!in_array($module, $banned)) {
+            if (!\in_array($module, $banned)) {
                 $enabled[] = array("module" => $module, 'label' => translate($module));
             }
         }
@@ -96,8 +96,8 @@ class ViewConfigureAjaxUI extends SugarView
             }
         }
 
-        $this->ss->assign('enabled_mods', json_encode($enabled));
-        $this->ss->assign('disabled_mods', json_encode($disabled));
+        $this->ss->assign('enabled_mods', \json_encode($enabled));
+        $this->ss->assign('disabled_mods', \json_encode($disabled));
         $this->ss->assign('title', $this->getModuleTitle(false));
 
         echo $this->ss->fetch('modules/Administration/templates/ConfigureAjaxUI.tpl');

@@ -108,15 +108,15 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
     {
         if ($config instanceof Zend_Config) {
             $config = $config->toArray();
-        } elseif (! is_array($config)) {
+        } elseif (! \is_array($config)) {
             require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception(
-                'Array or Zend_Config object expected, got ' . gettype($config)
+                'Array or Zend_Config object expected, got ' . \gettype($config)
             );
         }
 
         foreach ($config as $k => $v) {
-            $this->config[strtolower($k)] = $v;
+            $this->config[\strtolower($k)] = $v;
         }
     }
 
@@ -152,7 +152,7 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
     public function write($method, $uri, $http_ver = '1.1', $headers = array(), $body = '')
     {
         $host = $uri->getHost();
-        $host = (strtolower($uri->getScheme()) == 'https' ? 'sslv2://' . $host : $host);
+        $host = (\strtolower($uri->getScheme()) == 'https' ? 'sslv2://' . $host : $host);
 
         // Build request headers
         $path = $uri->getPath();
@@ -161,8 +161,8 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
         }
         $request = "{$method} {$path} HTTP/{$http_ver}\r\n";
         foreach ($headers as $k => $v) {
-            if (is_string($k)) {
-                $v = ucfirst($k) . ": $v";
+            if (\is_string($k)) {
+                $v = \ucfirst($k) . ": $v";
             }
             $request .= "$v\r\n";
         }
@@ -182,7 +182,7 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
      */
     public function read()
     {
-        if ($this->responseIndex >= count($this->responses)) {
+        if ($this->responseIndex >= \count($this->responses)) {
             $this->responseIndex = 0;
         }
         return $this->responses[$this->responseIndex++];
@@ -233,7 +233,7 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
      */
     public function setResponseIndex($index)
     {
-        if ($index < 0 || $index >= count($this->responses)) {
+        if ($index < 0 || $index >= \count($this->responses)) {
             require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception(
                 'Index out of range of response buffer size'

@@ -121,7 +121,7 @@ abstract class Zend_Gdata_App_Base
     public function getText($trim = true)
     {
         if ($trim) {
-            return trim($this->_text);
+            return \trim($this->_text);
         } else {
             return $this->_text;
         }
@@ -212,7 +212,7 @@ abstract class Zend_Gdata_App_Base
         if ($this->_rootNamespaceURI != null) {
             $element = $doc->createElementNS($this->_rootNamespaceURI, $this->_rootElement);
         } elseif ($this->_rootNamespace !== null) {
-            if (strpos($this->_rootElement, ':') === false) {
+            if (\strpos($this->_rootElement, ':') === false) {
                 $elementName = $this->_rootNamespace . ':' . $this->_rootElement;
             } else {
                 $elementName = $this->_rootElement;
@@ -300,10 +300,10 @@ abstract class Zend_Gdata_App_Base
     {
         if ($xml) {
             // Load the feed as an XML DOMDocument object
-            @ini_set('track_errors', 1);
+            @\ini_set('track_errors', 1);
             $doc = new DOMDocument();
             $success = @$doc->loadXML($xml);
-            @ini_restore('track_errors');
+            @\ini_restore('track_errors');
             if (!$success) {
                 require_once 'Zend/Gdata/App/Exception.php';
                 throw new Zend_Gdata_App_Exception("DOMDocument cannot parse XML: $php_errormsg");
@@ -377,9 +377,9 @@ abstract class Zend_Gdata_App_Base
     ) {
         // Check for a memoized result
         $key = $prefix . ' ' .
-               (is_null($majorVersion) ? 'NULL' : $majorVersion) .
-               ' '. (is_null($minorVersion) ? 'NULL' : $minorVersion);
-        if (array_key_exists($key, self::$_namespaceLookupCache)) {
+               (\is_null($majorVersion) ? 'NULL' : $majorVersion) .
+               ' '. (\is_null($minorVersion) ? 'NULL' : $minorVersion);
+        if (\array_key_exists($key, self::$_namespaceLookupCache)) {
             return self::$_namespaceLookupCache[$key];
         }
         // If no match, return the prefix by default
@@ -486,10 +486,10 @@ abstract class Zend_Gdata_App_Base
      */
     public function __get($name)
     {
-        $method = 'get'.ucfirst($name);
-        if (method_exists($this, $method)) {
-            return call_user_func(array(&$this, $method));
-        } elseif (property_exists($this, "_${name}")) {
+        $method = 'get'.\ucfirst($name);
+        if (\method_exists($this, $method)) {
+            return \call_user_func(array(&$this, $method));
+        } elseif (\property_exists($this, "_${name}")) {
             return $this->{'_' . $name};
         } else {
             require_once 'Zend/Gdata/App/InvalidArgumentException.php';
@@ -513,9 +513,9 @@ abstract class Zend_Gdata_App_Base
      */
     public function __set($name, $val)
     {
-        $method = 'set'.ucfirst($name);
-        if (method_exists($this, $method)) {
-            return call_user_func(array(&$this, $method), $val);
+        $method = 'set'.\ucfirst($name);
+        if (\method_exists($this, $method)) {
+            return \call_user_func(array(&$this, $method), $val);
         } elseif (isset($this->{'_' . $name}) || ($this->{'_' . $name} === null)) {
             $this->{'_' . $name} = $val;
         } else {
@@ -533,7 +533,7 @@ abstract class Zend_Gdata_App_Base
      */
     public function __isset($name)
     {
-        $rc = new ReflectionClass(get_class($this));
+        $rc = new ReflectionClass(\get_class($this));
         $privName = '_' . $name;
         if (!($rc->hasProperty($privName))) {
             require_once 'Zend/Gdata/App/InvalidArgumentException.php';
@@ -542,8 +542,8 @@ abstract class Zend_Gdata_App_Base
             );
         } else {
             if (isset($this->{$privName})) {
-                if (is_array($this->{$privName})) {
-                    if (count($this->{$privName}) > 0) {
+                if (\is_array($this->{$privName})) {
+                    if (\count($this->{$privName}) > 0) {
                         return true;
                     } else {
                         return false;
@@ -565,7 +565,7 @@ abstract class Zend_Gdata_App_Base
     public function __unset($name)
     {
         if (isset($this->{'_' . $name})) {
-            if (is_array($this->{'_' . $name})) {
+            if (\is_array($this->{'_' . $name})) {
                 $this->{'_' . $name} = array();
             } else {
                 $this->{'_' . $name} = null;

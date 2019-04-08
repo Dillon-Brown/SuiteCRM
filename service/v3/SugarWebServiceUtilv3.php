@@ -43,7 +43,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
 {
     public function get_name_value($field, $value)
     {
-        if ($value instanceof Link2 && !method_exists($value, '__toString')) {
+        if ($value instanceof Link2 && !\method_exists($value, '__toString')) {
             $value = '';
         }
         return array('name'=>$field, 'value'=>$value);
@@ -55,8 +55,8 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
         global $invalid_contact_fields;
         $filterFields = array();
         foreach ($fields as $field) {
-            if (is_array($invalid_contact_fields)) {
-                if (in_array($field, $invalid_contact_fields)) {
+            if (\is_array($invalid_contact_fields)) {
+                if (\in_array($field, $invalid_contact_fields)) {
                     continue;
                 }
             }
@@ -121,7 +121,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
                     }
                 }
                 //Users can't see other user's hashes
-                if (is_a($bean, 'User') && $current_user->id != $bean->id && isset($row['user_hash'])) {
+                if (\is_a($bean, 'User') && $current_user->id != $bean->id && isset($row['user_hash'])) {
                     $row['user_hash'] = "";
                 }
                 $row = clean_sensitive_data($bean->field_defs, $row);
@@ -142,7 +142,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
         $link_fields = array();
         if (!empty($value->field_defs)) {
             foreach ($value->field_defs as $var) {
-                if (!empty($fields) && !in_array($var['name'], $fields)) {
+                if (!empty($fields) && !\in_array($var['name'], $fields)) {
                     continue;
                 }
                 if (isset($var['source']) && ($var['source'] != 'db' && $var['source'] != 'non-db' &&$var['source'] != 'custom_fields') && $var['name'] != 'email1' && $var['name'] != 'email2' && (!isset($var['type'])|| $var['type'] != 'relate')) {
@@ -162,7 +162,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
 
                 if (isset($var['options'])) {
                     $options_dom = translate($var['options'], $value->module_dir);
-                    if (!is_array($options_dom)) {
+                    if (!\is_array($options_dom)) {
                         $options_dom = array();
                     }
                     foreach ($options_dom as $key=>$oneOption) {
@@ -252,10 +252,10 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
         switch ($type) {
             case 'default':
             default:
-                if (file_exists('modules/'.$module.'/metadata/subpaneldefs.php')) {
+                if (\file_exists('modules/'.$module.'/metadata/subpaneldefs.php')) {
                     require('modules/'.$module.'/metadata/subpaneldefs.php');
                 }
-                if (file_exists('custom/modules/'.$module.'/Ext/Layoutdefs/layoutdefs.ext.php')) {
+                if (\file_exists('custom/modules/'.$module.'/Ext/Layoutdefs/layoutdefs.ext.php')) {
                     require('custom/modules/'.$module.'/Ext/Layoutdefs/layoutdefs.ext.php');
                 }
         }
@@ -281,8 +281,8 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
         require_once('include/MVC/View/SugarView.php');
         $metadataFile = null;
         $results = array();
-        $view = strtolower($view);
-        switch (strtolower($type)) {
+        $view = \strtolower($view);
+        switch (\strtolower($type)) {
             case 'default':
             default:
                 if ($view == 'subpanel') {
@@ -291,7 +291,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
                     $v = new SugarView(null, array());
                     $v->module = $module_name;
                     $v->type = $view;
-                    $fullView = ucfirst($view) . 'View';
+                    $fullView = \ucfirst($view) . 'View';
                     $metadataFile = $v->getMetaDataFile();
                     require_once($metadataFile);
                     if ($view == 'list') {
@@ -317,7 +317,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
         $controller = new TabController();
         $tabs = $controller->get_tabs_system();
         $enabled_modules= array();
-        $availModulesKey = array_flip($availModules);
+        $availModulesKey = \array_flip($availModules);
         foreach ($tabs[0] as $key=>$value) {
             if (isset($availModulesKey[$key])) {
                 $enabled_modules[] = $key;
@@ -366,14 +366,14 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
                 $result = $this->format_upcoming_activities_entries($response['list'], $meta['date_field']);
             }
 
-            $results = array_merge($results, $result);
+            $results = \array_merge($results, $result);
         }
 
         //Sort the result list by the date due flag in ascending order
-        usort($results, array( $this , "cmp_datedue" )) ;
+        \usort($results, array( $this , "cmp_datedue" )) ;
 
         //Only return a subset of the results.
-        $results = array_slice($results, 0, $maxCount);
+        $results = \array_slice($results, 0, $maxCount);
 
         return $results;
     }
@@ -384,7 +384,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
         $query_date = TimeDate::getInstance()->nowDb();
         $query[] = " {$seed->table_name}.{$meta['date_field']} > '$query_date'"; //Add date filter
         $query[] = "{$seed->table_name}.assigned_user_id = '{$GLOBALS['current_user']->id}' "; //Add assigned user filter
-        if (is_array($meta['status_field'])) {
+        if (\is_array($meta['status_field'])) {
             foreach ($meta['status'] as $field) {
                 $query[] = "{$seed->table_name}.{$meta['status_field']} {$meta['status_opp']} '".$GLOBALS['db']->quote($field)."' ";
             }
@@ -392,7 +392,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
             $query[] = "{$seed->table_name}.{$meta['status_field']} {$meta['status_opp']} '".$GLOBALS['db']->quote($meta['status'])."' ";
         }
 
-        return implode(" AND ", $query);
+        return \implode(" AND ", $query);
     }
     /**
      * Given a list of bean entries, format the expected response.
@@ -421,8 +421,8 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
      */
     public static function cmp_datedue($a, $b)
     {
-        $a_date = strtotime($a['date_due']) ;
-        $b_date = strtotime($b['date_due']) ;
+        $a_date = \strtotime($a['date_due']) ;
+        $b_date = \strtotime($b['date_due']) ;
 
         if ($a_date == $b_date) {
             return 0 ;

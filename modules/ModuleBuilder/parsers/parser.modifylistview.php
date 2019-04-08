@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -105,7 +105,7 @@ class ParserModifyListView extends ModuleBuilderParser
         $this->_variables = $loaded['variables'];
         //		_pp($loaded);
         $this->customFile = 'custom/modules/' . $this->module_name . '/metadata/listviewdefs.php';
-        if (file_exists($this->customFile)) {
+        if (\file_exists($this->customFile)) {
             $loaded = $this->_loadFromFile('ListView', $this->customFile, $this->module_name);
             $this->listViewDefs = $loaded['viewdefs'] [$this->module_name];
             $this->_variables = $loaded['variables'];
@@ -133,7 +133,7 @@ class ParserModifyListView extends ModuleBuilderParser
     {
         $temp = array();
         foreach ($defs as $key => $value) {
-            if (!is_array($value)) {
+            if (!\is_array($value)) {
                 $key = $value;
                 $def = array();
                 $def ['name'] = (isset($this->module->field_defs [$key])) ? $this->module->field_defs [$key] ['name'] : $key;
@@ -142,7 +142,7 @@ class ParserModifyListView extends ModuleBuilderParser
             if (isset($value ['name'])) {
                 $key = $value ['name']; // override key with name, needed when the entry lacks a key
             }
-            $temp [strtolower($key)] = $value;
+            $temp [\strtolower($key)] = $value;
         }
         $defs = $temp;
     }
@@ -177,7 +177,7 @@ class ParserModifyListView extends ModuleBuilderParser
         $this->additional = array();
         foreach ($this->listViewDefs as $key => $def) {
             if (empty($def ['default'])) {
-                $key = strtolower($key);
+                $key = \strtolower($key);
                 $this->additional [$key] = $def;
             }
         }
@@ -191,20 +191,20 @@ class ParserModifyListView extends ModuleBuilderParser
     public function getAvailableFields()
     {
         $this->availableFields = array();
-        $lowerFieldList = array_change_key_case($this->listViewDefs);
+        $lowerFieldList = \array_change_key_case($this->listViewDefs);
         foreach ($this->originalListViewDefs as $key => $def) {
-            $key = strtolower($key);
+            $key = \strtolower($key);
             if (!isset($lowerFieldList [$key])) {
                 $this->availableFields [$key] = $def;
             }
         }
-        $GLOBALS['log']->debug('parser.modifylistview.php->getAvailableFields(): field_defs=' . print_r(
+        $GLOBALS['log']->debug('parser.modifylistview.php->getAvailableFields(): field_defs=' . \print_r(
             $this->availableFields,
                 true
         ));
         $modFields = !empty($this->module->field_name_map) ? $this->module->field_name_map : $this->module->field_defs;
         foreach ($modFields as $key => $def) {
-            $fieldName = strtolower($key);
+            $fieldName = \strtolower($key);
             if ($fieldName == 'currency_id') {
                 continue;
             }
@@ -251,7 +251,7 @@ class ParserModifyListView extends ModuleBuilderParser
         }
 
         //Dont ever show the "deleted" fields or "_name" fields
-        if (strcmp($key, 'deleted') == 0 || (isset($def ['name']) && strpos($def ['name'], "_name") !== false)) {
+        if (\strcmp($key, 'deleted') == 0 || (isset($def ['name']) && \strpos($def ['name'], "_name") !== false)) {
             return false;
         }
 
@@ -266,15 +266,15 @@ class ParserModifyListView extends ModuleBuilderParser
      */
     public function getField($fieldName)
     {
-        $fieldName = strtolower($fieldName);
+        $fieldName = \strtolower($fieldName);
         foreach ($this->listViewDefs as $key => $def) {
-            $key = strtolower($key);
+            $key = \strtolower($key);
             if ($key == $fieldName) {
                 return $def;
             }
         }
         foreach ($this->module->field_defs as $key => $def) {
-            $key = strtolower($key);
+            $key = \strtolower($key);
             if ($key == $fieldName) {
                 return $def;
             }
@@ -290,12 +290,12 @@ class ParserModifyListView extends ModuleBuilderParser
      */
     public function addRelateData($fieldname, $listfielddef)
     {
-        $modFieldDef = $this->module->field_defs [strtolower($fieldname)];
+        $modFieldDef = $this->module->field_defs [\strtolower($fieldname)];
         if (!empty($modFieldDef['module']) && !empty($modFieldDef['id_name'])) {
             $listfielddef['module'] = $modFieldDef['module'];
-            $listfielddef['id'] = strtoupper($modFieldDef['id_name']);
+            $listfielddef['id'] = \strtoupper($modFieldDef['id_name']);
             $listfielddef['link'] = true;
-            $listfielddef['related_fields'] = array(strtolower($modFieldDef['id_name']));
+            $listfielddef['related_fields'] = array(\strtolower($modFieldDef['id_name']));
         }
 
         return $listfielddef;
@@ -312,16 +312,16 @@ class ParserModifyListView extends ModuleBuilderParser
         for ($i = 0; isset($_POST ['group_' . $i]) && $i < 2; $i++) {
             //echo "\n***group-$i Size:".sizeof($_POST['group_' . $i])."\n";
             foreach ($_POST ['group_' . $i] as $field) {
-                $fieldname = strtoupper($field);
+                $fieldname = \strtoupper($field);
                 //originalListViewDefs are all lower case
-                $lowerFieldName = strtolower($field);
+                $lowerFieldName = \strtolower($field);
                 if (isset($this->originalListViewDefs [$lowerFieldName])) {
                     $fields [$fieldname] = $this->originalListViewDefs [$lowerFieldName];
                 } else {
                     //check if we have the case wrong for custom fields
                     if (!isset($this->module->field_defs [$fieldname])) {
                         foreach ($this->module->field_defs as $key => $value) {
-                            if (strtoupper($key) == $fieldname) {
+                            if (\strtoupper($key) == $fieldname) {
                                 $fields [$fieldname] = array(
                                     'width' => 10,
                                     'label' => $this->module->field_defs [$key] ['vname']
@@ -337,22 +337,22 @@ class ParserModifyListView extends ModuleBuilderParser
                     }
                     // sorting fields of certain types will cause a database engine problems
                     // we only check this for custom fields, as we assume that OOB fields have been independently confirmed as ok
-                    if (isset($this->module->field_defs [strtolower($fieldname)]) && (in_array(
-                        $this->module->field_defs [strtolower($fieldname)] ['type'],
+                    if (isset($this->module->field_defs [\strtolower($fieldname)]) && (\in_array(
+                        $this->module->field_defs [\strtolower($fieldname)] ['type'],
                                 $rejectTypes
-                    ) || isset($this->module->field_defs [strtolower($fieldname)]['custom_module']))
+                    ) || isset($this->module->field_defs [\strtolower($fieldname)]['custom_module']))
                     ) {
                         $fields [$fieldname] ['sortable'] = false;
                     }
                     // Bug 23728 - Make adding a currency type field default to setting the 'currency_format' to true
-                    if (isset($this->module->field_defs [strtolower($fieldname)] ['type ']) && $this->module->field_defs [strtolower($fieldname)] ['type'] == 'currency') {
+                    if (isset($this->module->field_defs [\strtolower($fieldname)] ['type ']) && $this->module->field_defs [\strtolower($fieldname)] ['type'] == 'currency') {
                         $fields [$fieldname] ['currency_format'] = true;
                     }
                 }
-                if (isset($_REQUEST [strtolower($fieldname) . 'width'])) {
-                    $width = substr($_REQUEST [strtolower($fieldname) . 'width'], 6, 3);
-                    if (strpos($width, "%") !== false) {
-                        $width = substr($width, 0, 2);
+                if (isset($_REQUEST [\strtolower($fieldname) . 'width'])) {
+                    $width = \substr($_REQUEST [\strtolower($fieldname) . 'width'], 6, 3);
+                    if (\strpos($width, "%") !== false) {
+                        $width = \substr($width, 0, 2);
                     }
                     if ($width < 101 && $width > 0) {
                         $fields [$fieldname] ['width'] = $width;
@@ -363,7 +363,7 @@ class ParserModifyListView extends ModuleBuilderParser
                     }
                 }
                 //Get additional Data for relate fields
-                if (isset($this->module->field_defs [strtolower($fieldname)] ['type']) && $this->module->field_defs [strtolower($fieldname)] ['type'] == 'relate') {
+                if (isset($this->module->field_defs [\strtolower($fieldname)] ['type']) && $this->module->field_defs [\strtolower($fieldname)] ['type'] == 'relate') {
                     $fields [$fieldname] = $this->addRelateData($field, $fields [$fieldname]);
                 }
                 $fields [$fieldname] ['default'] = ($i == 0);

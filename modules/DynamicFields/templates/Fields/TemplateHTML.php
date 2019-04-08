@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -65,7 +65,7 @@ class TemplateHTML extends TemplateField
     
     public function get_html_detail()
     {
-        return '<div title="' . strtoupper($this->name . '_HELP'). '" >{'.strtoupper($this->name) . '}</div>';
+        return '<div title="' . \strtoupper($this->name . '_HELP'). '" >{'.\strtoupper($this->name) . '}</div>';
     }
     
     public function get_html_edit()
@@ -85,7 +85,7 @@ class TemplateHTML extends TemplateField
     
     public function get_xtpl_detail()
     {
-        return from_html(nl2br($this->ext4));
+        return from_html(\nl2br($this->ext4));
     }
     
     public function get_xtpl_edit()
@@ -128,6 +128,6 @@ class TemplateHTML extends TemplateField
         $def['studio'] = 'visible';
         $def['source'] = 'non-db';
         $def['dbType'] = isset($this->ext3) ? $this->ext3 : 'text' ;
-        return array_merge($def, $this->get_additional_defs());
+        return \array_merge($def, $this->get_additional_defs());
     }
 }

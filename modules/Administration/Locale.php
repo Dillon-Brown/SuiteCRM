@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -67,7 +67,7 @@ $errors			= array();
 if (isset($_REQUEST['process']) && $_REQUEST['process'] == 'true') {
     if (isset($_REQUEST['collation']) && !empty($_REQUEST['collation'])) {
         //kbrill Bug #14922
-        if (array_key_exists('collation', $sugar_config['dbconfigoption']) && $_REQUEST['collation'] != $sugar_config['dbconfigoption']['collation']) {
+        if (\array_key_exists('collation', $sugar_config['dbconfigoption']) && $_REQUEST['collation'] != $sugar_config['dbconfigoption']['collation']) {
             DBManagerFactory::getInstance()->disconnect();
             DBManagerFactory::getInstance()->connect();
         }
@@ -79,7 +79,7 @@ if (isset($_REQUEST['process']) && $_REQUEST['process'] == 'true') {
     if ($locale->invalidLocaleNameFormatUpgrade()) {
         $locale->removeInvalidLocaleNameFormatUpgradeNotice();
     }
-    header('Location: index.php?module=Administration&action=index');
+    \header('Location: index.php?module=Administration&action=index');
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ if (!empty($collationOptions)) {
     if (!isset($sugar_config['dbconfigoption']['collation'])) {
         $sugar_config['dbconfigoption']['collation'] = DBManagerFactory::getInstance()->getDefaultCollation();
     }
-    $sugar_smarty->assign('collationOptions', get_select_options_with_id(array_combine($collationOptions, $collationOptions), $sugar_config['dbconfigoption']['collation']));
+    $sugar_smarty->assign('collationOptions', get_select_options_with_id(\array_combine($collationOptions, $collationOptions), $sugar_config['dbconfigoption']['collation']));
 }
 ////	END DB COLLATION
 ///////////////////////////////////////////////////////////////////////////////

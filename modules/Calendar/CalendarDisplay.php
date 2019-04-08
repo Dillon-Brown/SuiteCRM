@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -91,8 +91,8 @@ class CalendarDisplay
     public function __construct(Calendar $cal, $dashlet_id = "", $views = array())
     {
         global $sugar_config;
-        if (isset($sugar_config['CalendarColors']) && is_array($sugar_config['CalendarColors'])) {
-            $this->activity_colors = array_merge($this->activity_colors, $sugar_config['CalendarColors']);
+        if (isset($sugar_config['CalendarColors']) && \is_array($sugar_config['CalendarColors'])) {
+            $this->activity_colors = \array_merge($this->activity_colors, $sugar_config['CalendarColors']);
         }
         $this->cal = $cal;
         $this->dashlet_id = $dashlet_id;
@@ -123,9 +123,9 @@ class CalendarDisplay
         $ss->assign('items_draggable', SugarConfig::getInstance()->get('calendar.items_draggable', true));
         $ss->assign('items_resizable', SugarConfig::getInstance()->get('calendar.items_resizable', true));
         $ss->assign('cells_per_day', $cal->cells_per_day);
-        $ss->assign('activityColors', json_encode($this->checkActivity($this->activity_colors)));
+        $ss->assign('activityColors', \json_encode($this->checkActivity($this->activity_colors)));
         $ss->assign('dashlet', $cal->dashlet);
-        $ss->assign('grid_start_ts', intval($cal->grid_start_ts));
+        $ss->assign('grid_start_ts', \intval($cal->grid_start_ts));
         
         $ss->assign('year', $cal->date_time->format('Y'));
         $ss->assign('month', $cal->date_time->format('m'));
@@ -141,9 +141,9 @@ class CalendarDisplay
         $ss->assign('isPrint', $this->cal->isPrint() ? 'true': 'false');
 
 
-        if (count($cal->shared_ids)) {
+        if (\count($cal->shared_ids)) {
             $ss->assign('shared_ids', $cal->shared_ids);
-            $ss->assign('shared_users_count', count($cal->shared_ids));
+            $ss->assign('shared_users_count', \count($cal->shared_ids));
         }
 
 
@@ -153,16 +153,16 @@ class CalendarDisplay
         $ss->assign('editview_width', SugarConfig::getInstance()->get('calendar.editview_width', 800));
         $ss->assign('editview_height', SugarConfig::getInstance()->get('calendar.editview_height', 600));
 
-        $ss->assign('a_str', json_encode($cal->items));
+        $ss->assign('a_str', \json_encode($cal->items));
 
         $start = $current_user->getPreference('day_start_time');
-        if (is_null($start)) {
+        if (\is_null($start)) {
             $start = SugarConfig::getInstance()->get('calendar.default_day_start', "08:00");
         }
         $ss->assign('day_start_time', $start);
 
         $end = $current_user->getPreference('day_end_time');
-        if (is_null($end)) {
+        if (\is_null($end)) {
             $end = SugarConfig::getInstance()->get('calendar.default_day_end', "19:00");
         }
         $ss->assign('day_end_time', $end);
@@ -182,7 +182,7 @@ class CalendarDisplay
         foreach ($this->views as $view) {
             $location_array[] = $view;
         }
-        $current_language = explode("_", $GLOBALS['current_language']);
+        $current_language = \explode("_", $GLOBALS['current_language']);
         $ss->assign("langprefix", $current_language[0]);
 
         $ss->assign('custom_views', $location_array);
@@ -228,9 +228,9 @@ class CalendarDisplay
         if (empty($activity)) {
             $activity = $this->activity_colors;
         }
-        $newActivities = unserialize(base64_decode($current_user->getPreference("CalendarActivities")));
+        $newActivities = \unserialize(\base64_decode($current_user->getPreference("CalendarActivities")));
         if ($newActivities) {
-            $activity = array_merge($activity, $newActivities);
+            $activity = \array_merge($activity, $newActivities);
         }
         foreach ($activity as $key => $activityItem) {
             if (isset($GLOBALS['app_list_strings']['moduleList'][ $key ]) && !empty($GLOBALS['app_list_strings']['moduleList'][ $key ]) && !empty($this->cal->activityList[ $key ])) {
@@ -258,8 +258,8 @@ class CalendarDisplay
      */
     protected function load_settings_template(&$ss)
     {
-        list($d_start_hour, $d_start_min) =  explode(":", $this->cal->day_start_time);
-        list($d_end_hour, $d_end_min) =  explode(":", $this->cal->day_end_time);
+        list($d_start_hour, $d_start_min) =  \explode(":", $this->cal->day_start_time);
+        list($d_end_hour, $d_end_min) =  \explode(":", $this->cal->day_end_time);
 
         require_once("include/utils.php");
         global $app_strings,$app_list_strings,$beanList;
@@ -272,7 +272,7 @@ class CalendarDisplay
         $date_format = $timedate->get_cal_date_format();
         $time_format = $timedate->get_user_time_format();
         $TIME_FORMAT = $time_format;
-        $t23 = strpos($time_format, '23') !== false ? '%H' : '%I';
+        $t23 = \strpos($time_format, '23') !== false ? '%H' : '%I';
         if (!isset($match[2]) || $match[2] == '') {
             $CALENDAR_FORMAT = $date_format . ' ' . $t23 . $time_separator . "%M";
         } else {
@@ -285,7 +285,7 @@ class CalendarDisplay
         $TIME_MERIDIEM = "";
         $time_pref = $timedate->get_time_format();
         $start_m = "";
-        if (strpos($time_pref, 'a') || strpos($time_pref, 'A')) {
+        if (\strpos($time_pref, 'a') || \strpos($time_pref, 'A')) {
             $num_of_hours = 12;
             $start_at = 1;
             $start_m = 'am';
@@ -311,11 +311,11 @@ class CalendarDisplay
                 $d_end_hour = $d_end_hour - 12;
                 $end_m = 'pm';
             }
-            if (strpos($time_pref, 'A')) {
-                $start_m = strtoupper($start_m);
-                $end_m = strtoupper($end_m);
+            if (\strpos($time_pref, 'A')) {
+                $start_m = \strtoupper($start_m);
+                $end_m = \strtoupper($end_m);
             }
-            $options = strpos($time_pref, 'a') ? $app_list_strings['dom_meridiem_lowercase'] : $app_list_strings['dom_meridiem_uppercase'];
+            $options = \strpos($time_pref, 'a') ? $app_list_strings['dom_meridiem_lowercase'] : $app_list_strings['dom_meridiem_uppercase'];
             $TIME_START_MERIDIEM = get_select_options_with_id($options, $start_m);
             $TIME_END_MERIDIEM = get_select_options_with_id($options, $end_m);
             $TIME_START_MERIDIEM = "<select id='day_start_meridiem' name='day_start_meridiem' tabindex='2'>".$TIME_START_MERIDIEM."</select>";
@@ -325,7 +325,7 @@ class CalendarDisplay
         }
         for ($i = $start_at; $i <= $num_of_hours; $i ++) {
             $i = $i."";
-            if (strlen($i) == 1) {
+            if (\strlen($i) == 1) {
                 $i = "0".$i;
             }
             $hours_arr[$i] = $i;
@@ -336,12 +336,12 @@ class CalendarDisplay
         $TIME_END_MINUTES_OPTIONS = get_select_options_with_id(array('0'=>'00','15'=>'15','30'=>'30','45'=>'45'), $d_end_min);
 
         $displayTimeslots = $GLOBALS['current_user']->getPreference('calendar_display_timeslots');
-        if (is_null($displayTimeslots)) {
+        if (\is_null($displayTimeslots)) {
             $displayTimeslots = SugarConfig::getInstance()->get('calendar.display_timeslots', true);
         }
 
         $shared_calendar_separate = $GLOBALS['current_user']->getPreference('calendar_display_shared_separate');
-        if (is_null($shared_calendar_separate)) {
+        if (\is_null($shared_calendar_separate)) {
             $shared_calendar_separate = SugarConfig::getInstance()->get('calendar.calendar_display_shared_separate', true);
         }
         $ss->assign('week', $_REQUEST['week']);
@@ -371,7 +371,7 @@ class CalendarDisplay
         $dateFormat = $current_user->getUserDateTimePreferences();
 
         if ($view == 'month' || $view == 'sharedMonth') {
-            for ($i=0; $i<strlen($dateFormat['date']); $i++) {
+            for ($i=0; $i<\strlen($dateFormat['date']); $i++) {
                 switch ($dateFormat['date']{$i}) {
                     case "Y":
                         $str .= " ".$date_time->year;
@@ -387,7 +387,7 @@ class CalendarDisplay
             $first_day = CalendarUtils::get_first_day_of_week($date_time);
             $last_day = $first_day->get("+6 days");
 
-            for ($i=0; $i<strlen($dateFormat['date']); $i++) {
+            for ($i=0; $i<\strlen($dateFormat['date']); $i++) {
                 switch ($dateFormat['date']{$i}) {
                         case "Y":
                             $str .= " ".$first_day->year;
@@ -401,7 +401,7 @@ class CalendarDisplay
                     }
             }
             $str .= " - ";
-            for ($i=0; $i<strlen($dateFormat['date']); $i++) {
+            for ($i=0; $i<\strlen($dateFormat['date']); $i++) {
                 switch ($dateFormat['date']{$i}) {
                         case "Y":
                             $str .= " ".$last_day->year;
@@ -417,7 +417,7 @@ class CalendarDisplay
         } elseif ($view == 'agendaDay') {
             $str .= $date_time->get_day_of_week()." ";
 
-            for ($i=0; $i<strlen($dateFormat['date']); $i++) {
+            for ($i=0; $i<\strlen($dateFormat['date']); $i++) {
                 switch ($dateFormat['date']{$i}) {
                             case "Y":
                                 $str .= " ".$date_time->year;
@@ -433,7 +433,7 @@ class CalendarDisplay
         } elseif ($view == 'mobile') {
             $str .= $date_time->get_day_of_week()." ";
 
-            for ($i=0; $i<strlen($dateFormat['date']); $i++) {
+            for ($i=0; $i<\strlen($dateFormat['date']); $i++) {
                 switch ($dateFormat['date']{$i}) {
                         case "Y":
                             $str .= " ".$date_time->year;
@@ -455,7 +455,7 @@ class CalendarDisplay
             $first_day = CalendarUtils::get_first_day_of_week($date_time);
             $last_day = $first_day->get("+6 days");
 
-            for ($i=0; $i<strlen($dateFormat['date']); $i++) {
+            for ($i=0; $i<\strlen($dateFormat['date']); $i++) {
                 switch ($dateFormat['date']{$i}) {
                         case "Y":
                             $str .= " ".$first_day->year;
@@ -469,7 +469,7 @@ class CalendarDisplay
                     }
             }
             $str .= " - ";
-            for ($i=0; $i<strlen($dateFormat['date']); $i++) {
+            for ($i=0; $i<\strlen($dateFormat['date']); $i++) {
                 switch ($dateFormat['date']{$i}) {
                         case "Y":
                             $str .= " ".$last_day->year;
@@ -537,13 +537,13 @@ class CalendarDisplay
         $ss->assign('print', $this->cal->isPrint());
 
         if ($controls) {
-            $current_date = str_pad($this->cal->date_time->month, 2, '0', STR_PAD_LEFT)."/".str_pad($this->cal->date_time->day, 2, '0', STR_PAD_LEFT)."/".$this->cal->date_time->year;
+            $current_date = \str_pad($this->cal->date_time->month, 2, '0', STR_PAD_LEFT)."/".\str_pad($this->cal->date_time->day, 2, '0', STR_PAD_LEFT)."/".$this->cal->date_time->year;
 
             $tabs = $this->views;
             $tabs_params = array();
             foreach ($tabs as $key => $tab) {
                 if (($key != "basicDay") and ($key != "basicWeek")) {
-                    $tabs_params[$key]['title'] = $cal_strings["LBL_" . strtoupper($key)];
+                    $tabs_params[$key]['title'] = $cal_strings["LBL_" . \strtoupper($key)];
                     $tabs_params[$key]['id'] = $key . "-tab";
                     $tabs_params[$key]['link'] = "window.location.href='" . ajaxLink("index.php?module=Calendar&action=index&view=" . $key . $this->cal->date_time->get_date_str()) . "'";
                 } else {
@@ -626,7 +626,7 @@ class CalendarDisplay
             'r' => '', // no equivalent
             'U' => 'X',
         );
-        $momentFormat = strtr($format, $replacements);
+        $momentFormat = \strtr($format, $replacements);
         return $momentFormat;
     }
     /**

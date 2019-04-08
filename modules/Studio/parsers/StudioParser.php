@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -80,10 +80,10 @@ class StudioParser
 
     public function getParsers($file)
     {
-        if (substr_count($file, 'DetailView.html') > 0 || substr_count($file, 'EditView.html') > 0) {
+        if (\substr_count($file, 'DetailView.html') > 0 || \substr_count($file, 'EditView.html') > 0) {
             return array('default'=>'StudioParser', array('StudioParser', 'StudioRowParser'));
         }
-        if (substr_count($file, 'ListView.html') > 0) {
+        if (\substr_count($file, 'ListView.html') > 0) {
             return array('default'=>'XTPLListViewParser', array('XTPLListViewParser'));
         }
         return array('default'=>'StudioParser', array('StudioParser'));
@@ -92,13 +92,13 @@ class StudioParser
 
     public function parseRows($str)
     {
-        preg_match_all("'(<tr[^>]*)>(.*?)(</tr[^>]*>)'si", $str, $this->rows, PREG_SET_ORDER);
+        \preg_match_all("'(<tr[^>]*)>(.*?)(</tr[^>]*>)'si", $str, $this->rows, PREG_SET_ORDER);
     }
 
     public function parseNames($str)
     {
         $results = array();
-        preg_match_all("'name[ ]*=[ ]*[\'\"]+([a-zA-Z0-9\_]+)[\'\"]+'si", $str, $results, PREG_SET_ORDER);
+        \preg_match_all("'name[ ]*=[ ]*[\'\"]+([a-zA-Z0-9\_]+)[\'\"]+'si", $str, $results, PREG_SET_ORDER);
         return $results;
     }
 
@@ -106,15 +106,15 @@ class StudioParser
     {
         $mod = array();
         $app = array();
-        preg_match_all("'\{MOD\.([a-zA-Z0-9\_]+)\}'si", $str, $mod, PREG_SET_ORDER);
-        preg_match_all("'\{APP\.([a-zA-Z0-9\_]+)\}'si", $str, $app, PREG_SET_ORDER);
-        return array_merge($app, $mod);
+        \preg_match_all("'\{MOD\.([a-zA-Z0-9\_]+)\}'si", $str, $mod, PREG_SET_ORDER);
+        \preg_match_all("'\{APP\.([a-zA-Z0-9\_]+)\}'si", $str, $app, PREG_SET_ORDER);
+        return \array_merge($app, $mod);
     }
 
     public function getMaxPosition()
     {
         $max = 0;
-        for ($i = 0; $i < count($this->positions) ; $i++) {
+        for ($i = 0; $i < \count($this->positions) ; $i++) {
             if ($this->positions[$i][2] >= $max) {
                 $max = $this->positions[$i][2] + 1;
             }
@@ -124,7 +124,7 @@ class StudioParser
     public function parsePositions($str, $output= false)
     {
         $results = array();
-        preg_match_all("'<span[^>]*sugar=[\'\"]+([a-zA-Z\_]*)([0-9]+)([b]*)[\'\"]+[^>]*>(.*?)</span[ ]*sugar=[\'\"]+[a-zA-Z0-9\_]*[\'\"]+>'si", $str, $results, PREG_SET_ORDER);
+        \preg_match_all("'<span[^>]*sugar=[\'\"]+([a-zA-Z\_]*)([0-9]+)([b]*)[\'\"]+[^>]*>(.*?)</span[ ]*sugar=[\'\"]+[a-zA-Z0-9\_]*[\'\"]+>'si", $str, $results, PREG_SET_ORDER);
         if ($output) {
             return $results;
         }
@@ -132,7 +132,7 @@ class StudioParser
     }
     public function parseCols($str)
     {
-        preg_match_all("'(<td[^>]*?)>(.*?)(</td[^>]*?>)'si", $str, $this->cols, PREG_SET_ORDER);
+        \preg_match_all("'(<td[^>]*?)>(.*?)(</td[^>]*?>)'si", $str, $this->cols, PREG_SET_ORDER);
     }
     public function parse($str)
     {
@@ -141,18 +141,18 @@ class StudioParser
     public function positionCount($str)
     {
         $result = array();
-        return preg_match_all("'<span[^>]*sugar=[\'\"]+([a-zA-Z\_]*)([0-9]+)([b]*)[\'\"]+[^>]*>(.*?)</span[ ]*sugar=[\'\"]+[a-zA-Z0-9\_]*[\'\"]+>'si", $str, $result, PREG_SET_ORDER)/2;
+        return \preg_match_all("'<span[^>]*sugar=[\'\"]+([a-zA-Z\_]*)([0-9]+)([b]*)[\'\"]+[^>]*>(.*?)</span[ ]*sugar=[\'\"]+[a-zA-Z0-9\_]*[\'\"]+>'si", $str, $result, PREG_SET_ORDER)/2;
     }
     public function rowCount($str)
     {
         $result = array();
-        return preg_match_all("'(<tr[^>]*>)(.*?)(</tr[^>]*>)'si", $str, $result);
+        return \preg_match_all("'(<tr[^>]*>)(.*?)(</tr[^>]*>)'si", $str, $result);
     }
 
     public function loadFile($file)
     {
         $this->curFile = $file;
-        $this->curText = file_get_contents($file);
+        $this->curText = \file_get_contents($file);
         $this->form = <<<EOQ
 		</form>
 		<form name='studio'  method='POST'>
@@ -243,8 +243,8 @@ EOQ;
     {
         $workingFile = 'working/' . $file;
         $customFile = create_custom_directory($workingFile);
-        if ($refresh || !file_exists($customFile)) {
-            copy($file, $customFile);
+        if ($refresh || !\file_exists($customFile)) {
+            \copy($file, $customFile);
         }
         return $customFile;
     }
@@ -267,7 +267,7 @@ EOQ;
         $return_view = '';
         $slotCount = 0;
         $slotLookup = array();
-        for ($i = 0; $i < sizeof($this->positions); $i ++) {
+        for ($i = 0; $i < \sizeof($this->positions); $i ++) {
             //used for reverse lookups to figure out where the associated slot is
             $slotLookup[$this->positions[$i][2]][$this->positions[$i][3]] = array('position'=>$i, 'value'=>$this->positions[$i][4]);
         }
@@ -276,7 +276,7 @@ EOQ;
 
         //now we set it to the new values
 
-        for ($i = 0; $i < sizeof($this->positions); $i ++) {
+        for ($i = 0; $i < \sizeof($this->positions); $i ++) {
             $slot = $this->positions[$i];
 
             if (empty($slot[3])) {
@@ -286,7 +286,7 @@ EOQ;
                 if (isset($_REQUEST['slot_'.$slotCount]) && $_REQUEST['slot_'.$slotCount] != $slotCount) {
                     $swapValue = $_REQUEST['slot_'.$slotCount] ;
                     //if its an int then its a simple swap
-                    if (is_numeric($swapValue)) {
+                    if (\is_numeric($swapValue)) {
                         $swapWith = $this->positions[$this->getSwapWith($swapValue)];
 
                         //label
@@ -295,7 +295,7 @@ EOQ;
                         $slotLookup[$slot[2]]['b']['value'] = $this->positions[ $slotLookup[$swapWith[2]]['b']['position']][4];
                     }
                     //now check if its a delete action
-                    if (strcmp('add:delete', $swapValue) == 0) {
+                    if (\strcmp('add:delete', $swapValue) == 0) {
                         //label
                         $slotLookup[$slot[2]][$slot[3]]['value'] = '&nbsp;';
                         //html
@@ -303,8 +303,8 @@ EOQ;
                     } else {
 
                         //now handle the adding of custom fields
-                        if (substr_count($swapValue, 'add:')) {
-                            $addfield = explode('add:', $_REQUEST['slot_'.$slotCount], 2);
+                        if (\substr_count($swapValue, 'add:')) {
+                            $addfield = \explode('add:', $_REQUEST['slot_'.$slotCount], 2);
 
                             //label
                             $slotLookup[$slot[2]][$slot[3]]['value'] = $customFields[$addfield[1]]['label'] ;
@@ -327,9 +327,9 @@ EOQ;
             }
         }
 
-        for ($i = 0; $i < sizeof($this->positions); $i ++) {
+        for ($i = 0; $i < \sizeof($this->positions); $i ++) {
             $slot = $this->positions[$i];
-            $explode = explode($slot[0], $view, 2);
+            $explode = \explode($slot[0], $view, 2);
             $explode[0] .= "<span sugar='". $slot[1] . $slot[2]. $slot[3]. "'>";
             $explode[1] = "</span sugar='" .$slot[1] ."'>".$explode[1];
 
@@ -351,18 +351,18 @@ EOQ;
 
         $fp = sugar_fopen($file, 'w');
         $output = $contents ? $contents : $this->curText;
-        if (strpos($file, 'SearchForm.html') > 0) {
-            $fileparts = preg_split("'<!--\s*(BEGIN|END)\s*:\s*main\s*-->'", $output);
-            if (!empty($fileparts) && count($fileparts) > 1) {
+        if (\strpos($file, 'SearchForm.html') > 0) {
+            $fileparts = \preg_split("'<!--\s*(BEGIN|END)\s*:\s*main\s*-->'", $output);
+            if (!empty($fileparts) && \count($fileparts) > 1) {
                 $function = function ($matches) {
-                    $name = str_replace(array("[", "]"), "", $matches[1]);
-                    if ((strpos($name, "LBL_") === 0) && (strpos($name, "_basic") === 0)) {
-                        return str_replace($name, $name . "_basic", $matches[0]);
+                    $name = \str_replace(array("[", "]"), "", $matches[1]);
+                    if ((\strpos($name, "LBL_") === 0) && (\strpos($name, "_basic") === 0)) {
+                        return \str_replace($name, $name . "_basic", $matches[0]);
                     }
                     return  $matches[0];
                 };
                 //preg_replace_callback doesn't seem to work w/o anonymous method
-                $output = preg_replace_callback(
+                $output = \preg_replace_callback(
                     "/name\s*=\s*[\"']([^\"']*)[\"']/Us",
                 $function,
                                                           $fileparts[1]
@@ -374,8 +374,8 @@ EOQ;
             }
         }
 
-        fwrite($fp, $output);
-        fclose($fp);
+        \fwrite($fp, $output);
+        \fclose($fp);
     }
 
     public function handleSaveLabels($module_name, $language)
@@ -398,7 +398,7 @@ EOQ;
      "'(<select)([^>]*)'si" => "\$1 disabled readonly $2",
         // "'<a .*>(.*)</a[^>]*>'siU"=>"\$1",
 "'(href[\ ]*=[\ ]*)([\'])([^\']*)([\'])'si" => "href=\$2javascript:void(0);\$2 alt=\$2\$3\$2", "'(href[\ ]*=[\ ]*)([\"])([^\"]*)([\"])'si" => "href=\$2javascript:void(0)\$2 title=\$2\$3\$2");
-        return preg_replace(array_keys($match), array_values($match), $str);
+        return \preg_replace(\array_keys($match), \array_values($match), $str);
     }
 
     public function enableLabelEditor($str)
@@ -406,21 +406,21 @@ EOQ;
         global $mod_strings;
         $image = SugarThemeRegistry::current()->getImage('edit_inline', "onclick='studiojs.handleLabelClick(\"$2\", 1);' onmouseover='this.style.cursor=\"default\"'", null, null, '.gif', $mod_strings['LBL_EDIT']);
         $match = array("'>[^<]*\{(MOD.)([^\}]*)\}'si" => "$image<span id='label$2' onclick='studiojs.handleLabelClick(\"$2\", 2);' >{".'$1$2' . "}</span><span id='span$2' style='display:none'><input type='text' id='$2' name='$2' msi='label' value='{".'$1$2' . "}' onblur='studiojs.endLabelEdit(\"$2\")'></span>");
-        $keys = array_keys($match);
+        $keys = \array_keys($match);
         $matches = array();
-        preg_match_all($keys[0], $str, $matches, PREG_SET_ORDER);
+        \preg_match_all($keys[0], $str, $matches, PREG_SET_ORDER);
         foreach ($matches as $labelmatch) {
             $label_name = 'label_' . $labelmatch[2];
             $this->form .= "\n<input type='hidden' name='$label_name'  id='$label_name' value='no_change'>";
         }
-        return preg_replace(array_keys($match), array_values($match), $str);
+        return \preg_replace(\array_keys($match), \array_values($match), $str);
     }
 
 
 
     public function writeToCache($file, $view, $preview_file=false)
     {
-        if (!is_writable($file)) {
+        if (!\is_writable($file)) {
             echo "<br><span style='color:red'>Warning: $file is not writeable. Please make sure it is writeable before continuing</span><br><br>";
         }
 
@@ -434,8 +434,8 @@ EOQ;
         if (!$preview_file) {
             $view = $this->enableLabelEditor($view);
         }
-        fwrite($fp, $view);
-        fclose($fp);
+        \fwrite($fp, $view);
+        \fclose($fp);
         return $this->cacheXTPL($file, $file_cache, $preview_file);
     }
 
@@ -443,12 +443,12 @@ EOQ;
     {
         $results = array();
         $temp = sugar_file_get_contents($file);
-        preg_match_all("'name[\ ]*=[\ ]*[\']([^\']*)\''si", $buffer, $results);
+        \preg_match_all("'name[\ ]*=[\ ]*[\']([^\']*)\''si", $buffer, $results);
         $res = $results[1];
         foreach ($res as $r) {
             $_REQUEST[$r] = $r;
         }
-        preg_match_all("'name[\ ]*=[\ ]*[\"]([^\"]*)\"'si", $buffer, $results);
+        \preg_match_all("'name[\ ]*=[\ ]*[\"]([^\"]*)\"'si", $buffer, $results);
         $res = $results[1];
         foreach ($res as $r) {
             $_REQUEST[$r] = $r;
@@ -482,13 +482,13 @@ EOQ;
 
         if ($type == 'edit' || $type == 'detail') {
             if (empty($_REQUEST['record'])) {
-                $buffer = preg_replace('(\$xtpl[\ ]*=)', "\$focus->assign_display_fields('$module'); \$0", $buffer);
+                $buffer = \preg_replace('(\$xtpl[\ ]*=)', "\$focus->assign_display_fields('$module'); \$0", $buffer);
             } else {
-                $buffer = preg_replace('(\$xtpl[\ ]*=)', "\$focus->retrieve('".$_REQUEST['record']."');\n\$focus->assign_display_fields('$module');\n \$0", $buffer);
+                $buffer = \preg_replace('(\$xtpl[\ ]*=)', "\$focus->retrieve('".$_REQUEST['record']."');\n\$focus->assign_display_fields('$module');\n \$0", $buffer);
             }
         }
         $_REQUEST['query'] = true;
-        if (substr_count($file, 'SearchForm') > 0) {
+        if (\substr_count($file, 'SearchForm') > 0) {
             $temp_xtpl = new XTemplate($file);
             if ($temp_xtpl->exists('advanced')) {
                 global $current_language, $beanFiles, $beanList;
@@ -499,23 +499,23 @@ EOQ;
 
                 $this->populateRequestFromBuffer($file);
                 $mod->assign_display_fields($module);
-                $buffer = str_replace(array('echo $lv->display();','$search_form->parse("advanced");', '$search_form->out("advanced");', '$search_form->parse("main");', '$search_form->out("main");'), '', $buffer);
-                $buffer = str_replace('echo get_form_footer();', '$search_form->parse("main");'."\n".'$search_form->out("main");'."\necho '<br><b>".translate('LBL_ADVANCED', 'DynamicLayout')."</b><br>';".'$search_form->parse("advanced");'."\n".'$search_form->out("advanced");'."\n \$sugar_config['list_max_entries_per_page'] = 1;", $buffer);
+                $buffer = \str_replace(array('echo $lv->display();','$search_form->parse("advanced");', '$search_form->out("advanced");', '$search_form->parse("main");', '$search_form->out("main");'), '', $buffer);
+                $buffer = \str_replace('echo get_form_footer();', '$search_form->parse("main");'."\n".'$search_form->out("main");'."\necho '<br><b>".translate('LBL_ADVANCED', 'DynamicLayout')."</b><br>';".'$search_form->parse("advanced");'."\n".'$search_form->out("advanced");'."\n \$sugar_config['list_max_entries_per_page'] = 1;", $buffer);
             }
         } else {
             if ($type == 'detail') {
-                $buffer = str_replace('header(', 'if(false) header(', $buffer);
+                $buffer = \str_replace('header(', 'if(false) header(', $buffer);
             }
         }
 
-        $buffer = str_replace($originalFile, $cache_file, $buffer);
+        $buffer = \str_replace($originalFile, $cache_file, $buffer);
         $buffer = "<?php\n\$sugar_config['list_max_entries_per_page'] = 1;\n ?>".$buffer;
 
-        $buffer = str_replace($form_string, '', $buffer);
+        $buffer = \str_replace($form_string, '', $buffer);
         $buffer = $this->disableInputs($buffer);
         $xtpl_fp_cache = sugar_fopen($xtpl_cache, 'w');
-        fwrite($xtpl_fp_cache, $buffer);
-        fclose($xtpl_fp_cache);
+        \fwrite($xtpl_fp_cache, $buffer);
+        \fclose($xtpl_fp_cache);
         return $xtpl_cache;
     }
 
@@ -595,7 +595,7 @@ EOQ;
         $counter = 0;
         $return_view = '';
         $slotCount = 0;
-        for ($i = 0; $i < sizeof($this->positions); $i ++) {
+        for ($i = 0; $i < \sizeof($this->positions); $i ++) {
             $slot = $this->positions[$i];
             $class = '';
 
@@ -609,7 +609,7 @@ EOQ;
             }
 
 
-            $explode = explode($slot[0], $view, 2);
+            $explode = \explode($slot[0], $view, 2);
             $style = '';
             $explode[0] .= "<div id = 'slot$displayCount'  $class style='cursor: move$style'>";
             $explode[1] = "</div>".$explode[1];
@@ -619,25 +619,25 @@ EOQ;
         }
         $this->yahooSlotCount = $slotCount;
         $newView = $return_view.$view;
-        $newView = str_replace(array('<span>', '</span>'), array('', ''), $newView);
+        $newView = \str_replace(array('<span>', '</span>'), array('', ''), $newView);
 
         return $newView;
     }
 
     public function parseOldestFile($file)
     {
-        ob_clean();
+        \ob_clean();
         require_once('modules/Studio/SugarBackup.php');
-        $file = str_replace('custom/working/', '', $file);
+        $file = \str_replace('custom/working/', '', $file);
 
         $filebk = SugarBackup::oldestBackup($file);
         $oldMatches = array();
         $oldLabels = array();
         // echo $filebk;
         if ($filebk) {
-            $content = file_get_contents($filebk);
+            $content = \file_get_contents($filebk);
             $positions = $this->parsePositions($content, true);
-            for ($i = 0; $i < sizeof($positions); $i ++) {
+            for ($i = 0; $i < \sizeof($positions); $i ++) {
                 $position = $positions[$i];
                 //used for reverse lookups to figure out where the associated slot is
                 $slotLookup[$position[2]][$position[3]] = array('position'=>$i, 'value'=>$position[4]);
@@ -664,7 +664,7 @@ EOQ;
     public function clearWorkingDirectory()
     {
         $file = 'custom/working/';
-        if (file_exists($file)) {
+        if (\file_exists($file)) {
             rmdir_recursive($file);
         }
 
@@ -676,6 +676,6 @@ EOQ;
      */
     public function upgradeToSmarty()
     {
-        return str_replace('{', '{$', $this->curText);
+        return \str_replace('{', '{$', $this->curText);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -94,15 +94,15 @@ if (!empty($_REQUEST['assigned_user_id']) && ($marketing->assigned_user_id != $_
 }
 
     foreach ($_REQUEST as $key => $val) {
-        if ((strstr($key, $prefix)) && (strpos($key, $prefix)== 0)) {
-            $newkey  =substr($key, strlen($prefix)) ;
+        if ((\strstr($key, $prefix)) && (\strpos($key, $prefix)== 0)) {
+            $newkey  =\substr($key, \strlen($prefix)) ;
             $_REQUEST[$newkey] = $val;
         }
     }
 
     foreach ($_REQUEST as $key => $val) {
-        if ((strstr($key, $prefix)) && (strpos($key, $prefix)== 0)) {
-            $newkey  =substr($key, strlen($prefix)) ;
+        if ((\strstr($key, $prefix)) && (\strpos($key, $prefix)== 0)) {
+            $newkey  =\substr($key, \strlen($prefix)) ;
             $_REQUEST[$newkey] = $val;
         }
     }
@@ -127,7 +127,7 @@ foreach ($marketing->column_fields as $field) {
     } else {
         if (isset($_REQUEST[$field])) {
             $value = $_REQUEST[$field];
-            $marketing->$field = trim($value);
+            $marketing->$field = \trim($value);
         }
     }
 }
@@ -151,16 +151,16 @@ if ($marketing->all_prospect_lists==1) {
         $marketing->prospectlists->delete($marketing->id);
     }
 } else {
-    if (isset($_REQUEST['message_for']) && is_array($_REQUEST['message_for'])) {
+    if (isset($_REQUEST['message_for']) && \is_array($_REQUEST['message_for'])) {
         foreach ($_REQUEST['message_for'] as $prospect_list_id) {
-            $key=array_search($prospect_list_id, $prospectlists);
+            $key=\array_search($prospect_list_id, $prospectlists);
             if ($key === null or $key === false) {
                 $marketing->prospectlists->add($prospect_list_id);
             } else {
                 unset($prospectlists[$key]);
             }
         }
-        if (count($prospectlists) != 0) {
+        if (\count($prospectlists) != 0) {
             foreach ($prospectlists as $key=>$list_id) {
                 $marketing->prospectlists->delete($marketing->id, $list_id);
             }
@@ -207,7 +207,7 @@ if (isset($_REQUEST['show_wizard_summary']) && $_REQUEST['show_wizard_summary'])
         }
 
         //$_POST['SUBMIT'] = 'Send Test';
-        $_REQUEST = array_merge($_REQUEST, $_POST);
+        $_REQUEST = \array_merge($_REQUEST, $_POST);
         include 'modules/Campaigns/QueueCampaign.php';
         exit;
     }

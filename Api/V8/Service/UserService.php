@@ -48,7 +48,7 @@ use Api\V8\JsonApi\Response\DataResponse;
 use Api\V8\JsonApi\Response\DocumentResponse;
 use Slim\Http\Request;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 

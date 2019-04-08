@@ -36,7 +36,7 @@
  * SugarCRM" logo and "Supercharged by SuiteCRM" logo. If the display of the logos is not
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
- */if (!defined('sugarEntry') || !sugarEntry) {
+ */if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -54,7 +54,7 @@ class SugarFieldParent extends SugarFieldRelate
     public function getDetailViewSmarty($parentFieldArray, $vardef, $displayParams, $tabindex)
     {
         $nolink = array('Users', 'Teams');
-        if (in_array($vardef['module'], $nolink)) {
+        if (\in_array($vardef['module'], $nolink)) {
             $this->ss->assign('nolink', true);
         } else {
             $this->ss->assign('nolink', false);
@@ -96,7 +96,7 @@ class SugarFieldParent extends SugarFieldRelate
         );
 
         if (isset($displayParams['field_to_name_array']) && !empty($displayParams['field_to_name_array'])) {
-            $popup_request_data['field_to_name_array'] = array_merge(
+            $popup_request_data['field_to_name_array'] = \array_merge(
                 $popup_request_data['field_to_name_array'],
                 $displayParams['field_to_name_array']
             );
@@ -110,7 +110,7 @@ class SugarFieldParent extends SugarFieldRelate
                 unset($parent_types[$disabled_parent_type]);
             }
         }
-        asort($parent_types);
+        \asort($parent_types);
         $json = getJSONobj();
         $displayParams['popupData'] = '{literal}' . $json::encode($popup_request_data) . '{/literal}';
         $displayParams['disabled_parent_types'] = '<script>var disabledModules=' . $json::encode($disabled_parent_types) . ';</script>';
@@ -147,7 +147,7 @@ class SugarFieldParent extends SugarFieldRelate
             $form_name = $displayParams['formName'];
         }
 
-        if (preg_match('/(_basic|_advanced)$/', $vardef['name'], $match)) {
+        if (\preg_match('/(_basic|_advanced)$/', $vardef['name'], $match)) {
             $vardef['type_name'] .= $match[1];
         }
 
@@ -231,7 +231,7 @@ class SugarFieldParent extends SugarFieldRelate
         //Build the javascript
         $quicksearch_js = '<script language="javascript">';
         $quicksearch_js .= "if(typeof sqs_objects == 'undefined'){var sqs_objects = new Array;}";
-        $quicksearch_js .= "sqs_objects['$qsFieldName']=" . str_replace(
+        $quicksearch_js .= "sqs_objects['$qsFieldName']=" . \str_replace(
             $dynamicParentTypePlaceHolder,
                 $dynamicParentType,
             $json::encode($sqsFieldArray)

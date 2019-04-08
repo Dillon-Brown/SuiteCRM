@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -48,7 +48,7 @@ global $current_user, $sugar_version, $sugar_config, $beanFiles;
 require_once('include/MySugar/MySugar.php');
 
 // build dashlet cache file if not found
-if (!is_file($cachefile = sugar_cached('dashlets/dashlets.php'))) {
+if (!\is_file($cachefile = sugar_cached('dashlets/dashlets.php'))) {
     require_once('include/Dashlets/DashletCacheBuilder.php');
 
     $dc = new DashletCacheBuilder();
@@ -115,7 +115,7 @@ if (!$hasUserPreferences) {
             $displayDashlet = $myDashlet->checkDashletDisplay();
             if (isset($dashletsFiles[$dashletName]) && $displayDashlet) {
                 $options = array();
-                $prefsforthisdashlet = array_keys($prefstomove, $dashletName);
+                $prefsforthisdashlet = \array_keys($prefstomove, $dashletName);
                 foreach ($prefsforthisdashlet as $pref) {
                     $options[$pref] = $current_user->getPreference($pref);
                 }
@@ -138,9 +138,9 @@ if (!$hasUserPreferences) {
 
         foreach ($dashlets as $guid=>$dashlet) {
             if ($dashlet['forceColumn'] == 0) {
-                array_push($columns[0]['dashlets'], $guid);
+                \array_push($columns[0]['dashlets'], $guid);
             } else {
-                array_push($columns[1]['dashlets'], $guid);
+                \array_push($columns[1]['dashlets'], $guid);
             }
             $count++;
         }
@@ -162,11 +162,11 @@ if (!empty($pagesDashboard)) {
             $pages[0]['columns'][$dashboardColumnKey]['dashlets'][] = $dashletItem;
         }
     }
-    $pages = array_merge($pages, $pagesDashboard);
+    $pages = \array_merge($pages, $pagesDashboard);
     $current_user->setPreference('pages', $pages, 0, 'Home');
 }
 if (!empty($dashletsDashboard)) {
-    $dashlets = array_merge($dashlets, $dashletsDashboard);
+    $dashlets = \array_merge($dashlets, $dashletsDashboard);
     $current_user->setPreference('dashlets', $dashlets, 0, 'Home');
 }
 if (!empty($pagesDashboard) || !empty($dashletsDashboard)) {
@@ -206,7 +206,7 @@ foreach ($pages[$activePage]['columns'] as $colNum => $column) {
     foreach ($column['dashlets'] as $num => $id) {
         // clint - fixes bug #20398
         // only display dashlets that are from visibile modules and that the user has permission to list
-        if (!empty($id) && isset($dashlets[$id]) && is_file($dashlets[$id]['fileLocation'])) {
+        if (!empty($id) && isset($dashlets[$id]) && \is_file($dashlets[$id]['fileLocation'])) {
             $module = 'Home';
             if (!empty($dashletsFiles[$dashlets[$id]['className']]['module'])) {
                 $module = $dashletsFiles[$dashlets[$id]['className']]['module'];
@@ -226,14 +226,14 @@ foreach ($pages[$activePage]['columns'] as $colNum => $column) {
                 $dashlet = new $dashlets[$id]['className']($id, (isset($dashlets[$id]['options']) ? $dashlets[$id]['options'] : array()));
                 // Need to add support to dynamically display/hide dashlets
                 // If it has a method 'shouldDisplay' we will call it to see if we should display it or not
-                if (method_exists($dashlet, 'shouldDisplay')) {
+                if (\method_exists($dashlet, 'shouldDisplay')) {
                     if (!$dashlet->shouldDisplay()) {
                         // This dashlet doesn't want us to show it, skip it.
                         continue;
                     }
                 }
 
-                array_push($dashletIds, $id);
+                \array_push($dashletIds, $id);
 
                 $dashlets = $current_user->getPreference('dashlets', 'Home'); // Using hardcoded 'Home' because DynamicAction.php $_REQUEST['module'] value is always Home
                 $lvsParams = array();
@@ -261,7 +261,7 @@ foreach ($pages[$activePage]['columns'] as $colNum => $column) {
 
 
 $i = 0;
-    while ($i < count($pages)) {
+    while ($i < \count($pages)) {
         if ($i == 0) {
             $pageTabs[$i]['pageTitle'] = $GLOBALS['app_strings']['LBL_SUITE_DASHBOARD'];
 //            $pageTabs[$i]['active'] = 'current';
@@ -286,7 +286,7 @@ $sugar_smarty->assign('imagePath', $GLOBALS['image_path']);
 
 $sugar_smarty->assign('maxCount', empty($sugar_config['max_dashlets_homepage']) ? 15 : $sugar_config['max_dashlets_homepage']);
 $sugar_smarty->assign('dashletCount', $count);
-$sugar_smarty->assign('dashletIds', '["' . implode('","', $dashletIds) . '"]');
+$sugar_smarty->assign('dashletIds', '["' . \implode('","', $dashletIds) . '"]');
 $sugar_smarty->assign('columns', $display);
 
 global $theme;
@@ -318,15 +318,15 @@ $mySugarResources = $sugarChart->getMySugarChartResources();
 $sugar_smarty->assign('chartResources', $resources);
 $sugar_smarty->assign('mySugarChartResources', $mySugarResources);
 
-if (file_exists("custom/themes/" . $theme ."/tpls/MySugar.tpl")) {
+if (\file_exists("custom/themes/" . $theme ."/tpls/MySugar.tpl")) {
     echo $sugar_smarty->fetch('custom/themes/' . $theme . '/tpls/MySugar.tpl');
-} elseif (file_exists('custom/include/MySugar/tpls/MySugar.tpl')) {
+} elseif (\file_exists('custom/include/MySugar/tpls/MySugar.tpl')) {
     echo $sugar_smarty->fetch('custom/include/MySugar/tpls/MySugar.tpl');
-} elseif (file_exists("themes/" . $theme ."/tpls/MySugar.tpl")) {
+} elseif (\file_exists("themes/" . $theme ."/tpls/MySugar.tpl")) {
     echo $sugar_smarty->fetch("themes/" . $theme ."/tpls/MySugar.tpl");
-} elseif (file_exists('include/MySugar/tpls/MySugar.tpl')) {
+} elseif (\file_exists('include/MySugar/tpls/MySugar.tpl')) {
     echo $sugar_smarty->fetch('include/MySugar/tpls/MySugar.tpl');
-} elseif (file_exists("custom/themes/" . $theme .'include/MySugar/tpls/MySugar.tpl')) {
+} elseif (\file_exists("custom/themes/" . $theme .'include/MySugar/tpls/MySugar.tpl')) {
     echo $sugar_smarty->fetch('custom/themes/' . $theme . 'include/MySugar/tpls/MySugar.tpl');
 } else {
     $GLOBALS['log']->fatal('MySugar.tpl not found');

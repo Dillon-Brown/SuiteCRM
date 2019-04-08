@@ -22,7 +22,7 @@ function install_aos()
         $sugar_config['aos']['quotes']['initialNumber'] = '1';
     }
     
-    ksort($sugar_config);
+    \ksort($sugar_config);
     write_array_to_file('sugar_config', $sugar_config, 'config.php');
 }
 
@@ -48,7 +48,7 @@ function upgrade_aos()
         );
 
         foreach ($old_files as $old_file) {
-            if (file_exists($old_file)) {
+            if (\file_exists($old_file)) {
                 create_custom_directory('bak_aos/'.$old_file);
                 sugar_rename($old_file, 'custom/bak_aos/'.$old_file);
             }

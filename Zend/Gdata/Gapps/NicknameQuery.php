@@ -128,7 +128,7 @@ class Zend_Gdata_Gapps_NicknameQuery extends Zend_Gdata_Gapps_Query
      */
     public function getUsername()
     {
-        if (array_key_exists('username', $this->_params)) {
+        if (\array_key_exists('username', $this->_params)) {
             return $this->_params['username'];
         } else {
             return null;
@@ -160,7 +160,7 @@ class Zend_Gdata_Gapps_NicknameQuery extends Zend_Gdata_Gapps_Query
      */
     public function getStartNickname()
     {
-        if (array_key_exists('startNickname', $this->_params)) {
+        if (\array_key_exists('startNickname', $this->_params)) {
             return $this->_params['startNickname'];
         } else {
             return null;

@@ -44,7 +44,7 @@ namespace SuiteCRM;
 use DBManagerFactory;
 use LoggerManager;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -92,13 +92,13 @@ class StateSaver
         if (!empty($this->stack)) {
             $info = "\nNeeds to restore:\n";
             
-            $namespaces = array_keys($this->stack);
+            $namespaces = \array_keys($this->stack);
             foreach ($namespaces as $namespace) {
-                $keys = array_keys($this->stack[$namespace]);
+                $keys = \array_keys($this->stack[$namespace]);
                 foreach ($keys as $key) {
                     $value = (string)$key;
-                    if (strlen($value) > 30) {
-                        $value = substr($value, 0, 28) . '..';
+                    if (\strlen($value) > 30) {
+                        $value = \substr($value, 0, 28) . '..';
                     }
                     $info .= "\t[$namespace.$key] => '$value'\n";
                 }
@@ -188,12 +188,12 @@ class StateSaver
         } elseif (!isset($this->stack[$namespace][$key])) {
             $this->error('Trying to pop form stack at key but stack is unset: ' . $namespace . '.' . $key);
             $ok = false;
-        } elseif (!count($this->stack[$namespace][$key])) {
+        } elseif (!\count($this->stack[$namespace][$key])) {
             $this->error('Trying to pop from state stack but stack is empty: ' . $namespace . '.' . $key);
             $ok = false;
         }
         
-        $value = $ok ? array_pop($this->stack[$namespace][$key]) : self::UNDEFINED;
+        $value = $ok ? \array_pop($this->stack[$namespace][$key]) : self::UNDEFINED;
         
         if (empty($this->stack[$namespace][$key])) {
             unset($this->stack[$namespace][$key]);
@@ -272,7 +272,7 @@ class StateSaver
      */
     public function pushGlobalKeys()
     {
-        $keys = array_keys($GLOBALS);
+        $keys = \array_keys($GLOBALS);
         $this->push($keys, 'keys', 'globalsArrayKeys');
     }
     
@@ -306,7 +306,7 @@ class StateSaver
         if ($doLogging) {
             LoggerManager::getLogger()->warn('Saving error level. Try to remove the error_reporting() function from your code.');
         }
-        $level = error_reporting();
+        $level = \error_reporting();
         $this->push($level, $key, $namespace);
     }
 
@@ -324,7 +324,7 @@ class StateSaver
             LoggerManager::getLogger()->error('Pop error level. Try to remove the error_reporting() function from your code.');
         }
         $level = $this->pop($key, $namespace);
-        error_reporting($level);
+        \error_reporting($level);
     }
     
     /**
@@ -361,17 +361,17 @@ class StateSaver
         
         DBManagerFactory::getInstance()->query("TRUNCATE TABLE " . DBManagerFactory::getInstance()->quote($table));
         
-        if (!is_array($rows)) {
+        if (!\is_array($rows)) {
             throw new StateSaverException('Table information is not an array. Are you sure you pushed this table "' . $table . '" previously?');
         }
         foreach ($rows as $row) {
             $query = "INSERT INTO $table (";
-            $query .= (implode(', ', array_keys($row)) . ') VALUES (');
+            $query .= (\implode(', ', \array_keys($row)) . ') VALUES (');
             $quoteds = [];
             foreach ($row as $value) {
                 $quoteds[] = (null === $value) ? 'NULL' : "'$value'";
             }
-            $query .= (implode(', ', $quoteds)) . ')';
+            $query .= (\implode(', ', $quoteds)) . ')';
             DBManagerFactory::getInstance()->query($query);
         }
         
@@ -388,18 +388,18 @@ class StateSaver
      */
     public function pushFile($filename)
     {
-        clearstatcache(true);
-        $exists = file_exists($filename);
-        $realpath = realpath($filename);
+        \clearstatcache(true);
+        $exists = \file_exists($filename);
+        $realpath = \realpath($filename);
         if (!$realpath && $exists) {
             throw new StateSaverException('Could not resolve real path for file for push: ' . $filename);
         }
         if ($exists) {
-            $contents = file_get_contents($realpath);
+            $contents = \file_get_contents($realpath);
             if (false === $contents) {
                 throw new StateSaverException('Can not read file: ' . $realpath);
             }
-            $size = filesize($realpath);
+            $size = \filesize($realpath);
             if (false === $size) {
                 throw new StateSaverException('Can not get file size: ' . $realpath);
             }
@@ -419,19 +419,19 @@ class StateSaver
      */
     public function popFile($filename)
     {
-        clearstatcache(true);
-        $exists = file_exists($filename);
-        $realpath = realpath($filename);
+        \clearstatcache(true);
+        $exists = \file_exists($filename);
+        $realpath = \realpath($filename);
         if (!$realpath && $exists) {
             throw new StateSaverException('Could not resolve real path for file for pop: ' . $filename);
         }
         if (isset($this->files[$realpath]['contents'])) {
             $contents = $this->files[$realpath]['contents'];
-            $ok = file_put_contents($realpath, $contents);
+            $ok = \file_put_contents($realpath, $contents);
             if (false === $ok) {
                 throw new StateSaverException('Can not write file: ' . $realpath);
             }
-            $size = filesize($realpath);
+            $size = \filesize($realpath);
             if (false === $size) {
                 throw new StateSaverException('Unable to get file size: ' . $realpath);
             }
@@ -439,7 +439,7 @@ class StateSaver
                 throw new StateSaverException('File size is incorrect: ' . $realpath . ' ' . $size . ' != ' . $this->files[$realpath]['size']);
             }
         } else {
-            if (file_exists($realpath) && false === unlink($realpath)) {
+            if (\file_exists($realpath) && false === \unlink($realpath)) {
                 return false;
             }
         }
@@ -459,7 +459,7 @@ class StateSaver
         $configOptions = [];
         $configOptionKeys = StateCheckerConfig::get('phpConfigOptionKeys');
         foreach ($configOptionKeys as $name) {
-            $configOptions[$name] = ini_get($name);
+            $configOptions[$name] = \ini_get($name);
         }
         
         return $configOptions;
@@ -476,7 +476,7 @@ class StateSaver
     {
         $configOptionKeys = StateCheckerConfig::get('phpConfigOptionKeys');
         foreach ($configOptionKeys as $name) {
-            if (ini_set($name, $configOptions[$name]) === false) {
+            if (\ini_set($name, $configOptions[$name]) === false) {
                 throw new StateSaverException('Error to restore PHP Configuration Option: "' . $name . '"');
             }
         }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -42,9 +42,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 //Bug 30094, If zlib is enabled, it can break the calls to header() due to output buffering. This will only work php5.2+
-ini_set('zlib.output_compression', 'Off');
+\ini_set('zlib.output_compression', 'Off');
 
-ob_start();
+\ob_start();
 require_once('include/export_utils.php');
 global $sugar_config;
 global $locale;
@@ -75,7 +75,7 @@ if (!empty($app_list_strings['moduleList'][$_REQUEST['module']])) {
 }
 
 //strip away any blank spaces
-$filename = str_replace(' ', '', $filename);
+$filename = \str_replace(' ', '', $filename);
 
 $transContent = $GLOBALS['locale']->translateCharset($content, 'UTF-8', $GLOBALS['locale']->getExportCharset());
 
@@ -84,18 +84,18 @@ if (!empty($_REQUEST['members'])) {
 }
 ///////////////////////////////////////////////////////////////////////////////
 ////	BUILD THE EXPORT FILE
-ob_clean();
-header("Pragma: cache");
-header("Content-type: application/octet-stream; charset=".$GLOBALS['locale']->getExportCharset());
-header("Content-Disposition: attachment; filename={$filename}.csv");
-header("Content-transfer-encoding: binary");
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-header("Last-Modified: " . TimeDate::httpTime());
-header("Cache-Control: post-check=0, pre-check=0", false);
+\ob_clean();
+\header("Pragma: cache");
+\header("Content-type: application/octet-stream; charset=".$GLOBALS['locale']->getExportCharset());
+\header("Content-Disposition: attachment; filename={$filename}.csv");
+\header("Content-transfer-encoding: binary");
+\header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+\header("Last-Modified: " . TimeDate::httpTime());
+\header("Cache-Control: post-check=0, pre-check=0", false);
 if (!empty($sugar_config['export_excel_compatible'])) {
-    $transContent=chr(255) . chr(254) . mb_convert_encoding($transContent, 'UTF-16LE', 'UTF-8');
+    $transContent=\chr(255) . \chr(254) . \mb_convert_encoding($transContent, 'UTF-16LE', 'UTF-8');
 }
-header("Content-Length: ".mb_strlen($transContent, '8bit'));
+\header("Content-Length: ".\mb_strlen($transContent, '8bit'));
 print $transContent;
 
 sugar_cleanup(true);

@@ -151,7 +151,7 @@ class Zend_Gdata extends Zend_Gdata_App
      */
     public function getFeed($location, $className='Zend_Gdata_Feed')
     {
-        if (is_string($location)) {
+        if (\is_string($location)) {
             $uri = $location;
         } elseif ($location instanceof Zend_Gdata_Query) {
             $uri = $location->getQueryUrl();
@@ -177,7 +177,7 @@ class Zend_Gdata extends Zend_Gdata_App
      */
     public function getEntry($location, $className='Zend_Gdata_Entry')
     {
-        if (is_string($location)) {
+        if (\is_string($location)) {
             $uri = $location;
         } elseif ($location instanceof Zend_Gdata_Query) {
             $uri = $location->getQueryUrl();

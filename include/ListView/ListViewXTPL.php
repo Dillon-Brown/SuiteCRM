@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -71,7 +71,7 @@ class ListViewXTPL extends ListViewDisplay
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -92,7 +92,7 @@ class ListViewXTPL extends ListViewDisplay
 
         parent::process($file, $data, $html_var);
         $this->data = $data;
-        $html_var = strtoupper($html_var);
+        $html_var = \strtoupper($html_var);
         $this->xtpl = new XTemplate($file);
         $this->xtpl->assign('MOD', $GLOBALS['mod_strings']);
         $this->xtpl->assign('APP', $GLOBALS['app_strings']);
@@ -140,13 +140,13 @@ class ListViewXTPL extends ListViewDisplay
      */
     public function processArrows($ordering)
     {
-        $pathParts = pathinfo(SugarThemeRegistry::current()->getImageURL('arrow.gif', false));
+        $pathParts = \pathinfo(SugarThemeRegistry::current()->getImageURL('arrow.gif', false));
 
-        list($width, $height) = getimagesize($pathParts['dirname'].'/'.$pathParts['basename']);
+        list($width, $height) = \getimagesize($pathParts['dirname'].'/'.$pathParts['basename']);
 
         $this->xtpl->assign('arrow_start', "&nbsp;<!--not_in_theme!--><img border='0' src='".getJSPath($pathParts['dirname'].'/'.$pathParts['filename']));
         $this->xtpl->assign('arrow_end', "' width='$width' height='$height' align='absmiddle' alt=".translate('LBL_SORT').">");
-        $arrow_order = (strcmp($ordering['sortOrder'], 'ASC'))?'_up': '_down';
+        $arrow_order = (\strcmp($ordering['sortOrder'], 'ASC'))?'_up': '_down';
         $this->xtpl->assign($ordering['orderBy'].'_arrow', $arrow_order);
     }
 

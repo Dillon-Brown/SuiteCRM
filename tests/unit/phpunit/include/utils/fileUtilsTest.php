@@ -51,18 +51,18 @@ class file_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         //execute the method and test if it created file/dir exists
 
-        $cache_dir = rtrim($GLOBALS['sugar_config']['cache_dir'], '/\\');
+        $cache_dir = \rtrim($GLOBALS['sugar_config']['cache_dir'], '/\\');
         $file = 'Test/';
 
         if ($this->rootFs->hasChild($file)  == true) {
-            rmdir($cache_dir.'/'.$file);
+            \rmdir($cache_dir.'/'.$file);
         }
 
         $actual = create_cache_directory($file);
         $this->assertFileExists($actual);
 
         if ($this->rootFs->hasChild($file)  == true) {
-            rmdir($cache_dir.'/'.$file);
+            \rmdir($cache_dir.'/'.$file);
         }
     }
 
@@ -191,8 +191,8 @@ class file_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
                 );
 
         $actual = get_module_dir_list();
-        sort($actual);
-        sort($expected);
+        \sort($actual);
+        \sort($expected);
         $this->assertSame($expected, $actual);
     }
 
@@ -239,20 +239,20 @@ class file_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $tempArray = array('Key1' => array('Key2' => 'value2', 'Key3' => 'value3'));
 
         //without header
-        $expected = "<?php\n// created: ".date('Y-m-d H:i:s')."\n\$tempArray = array (\n  'Key1' => \n  array (\n    'Key2' => 'value2',\n    'Key3' => 'value3',\n  ),\n);";
+        $expected = "<?php\n// created: ".\date('Y-m-d H:i:s')."\n\$tempArray = array (\n  'Key1' => \n  array (\n    'Key2' => 'value2',\n    'Key3' => 'value3',\n  ),\n);";
         $actual = write_array_to_file('tempArray', $tempArray, $cache_dir.'\tempArray.txt');
         $this->assertTrue($actual);
-        $actual_contents = file_get_contents($cache_dir.'\tempArray.txt');
+        $actual_contents = \file_get_contents($cache_dir.'\tempArray.txt');
         $this->assertSame($expected, $actual_contents);
-        unlink($cache_dir.'\tempArray.txt');
+        \unlink($cache_dir.'\tempArray.txt');
 
         //with header
         $expected = "test header \$tempArray = array (\n  'Key1' => \n  array (\n    'Key2' => 'value2',\n    'Key3' => 'value3',\n  ),\n);";
         $actual = write_array_to_file('tempArray', $tempArray, $cache_dir.'\tempArray.txt', 'w', 'test header ');
         $this->assertTrue($actual);
-        $actual_contents = file_get_contents($cache_dir.'\tempArray.txt');
+        $actual_contents = \file_get_contents($cache_dir.'\tempArray.txt');
         $this->assertSame($expected, $actual_contents);
-        unlink($cache_dir.'\tempArray.txt');
+        \unlink($cache_dir.'\tempArray.txt');
     }
 
     public function testwrite_encoded_file()
@@ -265,13 +265,13 @@ class file_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $tempArray = array('filename' => 'soap_array.txt', 'md5' => '523ef67de860fc54794f27117dba4fac', 'data' => 'some soap data');
         $actual = write_encoded_file($tempArray, $cache_dir, '');
         $this->assertFileExists($actual);
-        unlink($actual);
+        \unlink($actual);
 
         //with filename
         $tempArray = array('md5' => '523ef67de860fc54794f27117dba4fac', 'data' => 'some soap data');
         $actual = write_encoded_file($tempArray, $cache_dir, 'soap_array.txt');
         $this->assertFileExists($actual);
-        unlink($actual);
+        \unlink($actual);
     }
 
     public function testcreate_custom_directory()
@@ -282,14 +282,14 @@ class file_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $vfs = $this->rootFs;
         if ($vfs->hasChild($file)  == true) {
-            rmdir('custom/'.$file);
+            \rmdir('custom/'.$file);
         }
 
         $actual = create_custom_directory($file);
         $this->assertFileExists($actual);
 
         if ($vfs->hasChild($file)  == true) {
-            rmdir('custom/'.$file);
+            \rmdir('custom/'.$file);
         }
     }
 
@@ -339,8 +339,8 @@ class file_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         );
         $actual = array();
         getFiles($actual, 'include/MVC/Controller');
-        sort($actual);
-        sort($expected);
+        \sort($actual);
+        \sort($expected);
         $this->assertSame($expected, $actual);
 
         //test with pattern
@@ -376,8 +376,8 @@ class file_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         );
         $actual = array();
         getFiles($actual, 'include/MVC', '@view@');
-        sort($expected);
-        sort($actual);
+        \sort($expected);
+        \sort($actual);
         $this->assertEquals($expected, $actual);
     }
 
@@ -385,24 +385,24 @@ class file_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
     {
         //execute the method and test if it returns expected values
 
-        $expected = file_get_contents('config.php');
+        $expected = \file_get_contents('config.php');
 
         //retbytes parameter false
-        ob_start();
+        \ob_start();
         $actual = readfile_chunked('config.php', false);
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
 
         $this->assertTrue($actual);
         $this->assertSame($expected, $renderedContent);
 
         //retbytes parameter true/default
-        ob_start();
+        \ob_start();
         $actual = readfile_chunked('config.php');
-        $renderedContent = ob_get_contents();
-        ob_end_clean();
+        $renderedContent = \ob_get_contents();
+        \ob_end_clean();
 
-        $this->assertEquals($actual, strlen($renderedContent));
+        $this->assertEquals($actual, \strlen($renderedContent));
         $this->assertSame($expected, $renderedContent);
     }
 
@@ -425,7 +425,7 @@ class file_utilsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $actual = sugar_rename($dir.'/'.$file, $dir.'/'.'newtest.txt');
         $this->assertTrue($actual);
 
-        unlink($dir.'/'.'newtest.txt');
+        \unlink($dir.'/'.'newtest.txt');
     }
 
     public function testfileToHash()

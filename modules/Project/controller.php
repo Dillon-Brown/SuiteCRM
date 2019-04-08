@@ -19,7 +19,7 @@
  */
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -93,7 +93,7 @@ class ProjectController extends SugarController
 
         $task_name = $_POST['task_name'];
         $project_id = $_POST['project_id'];
-        $override_business_hours = intval($_POST['override_business_hours']);
+        $override_business_hours = \intval($_POST['override_business_hours']);
         $task_id = $_POST['task_id'];
         $predecessor = $_POST['predecessor'];
         $rel_type = $_POST['rel_type'];
@@ -239,9 +239,9 @@ class ProjectController extends SugarController
         $query = "SELECT date_finish FROM project_task WHERE id = '{$id}'";
         $end_date = $db->getOne($query);
         //Add 1 day onto end date for first day of new task
-        $start_date = date('Y-m-d', strtotime($end_date. ' + 1 days'));
+        $start_date = \date('Y-m-d', \strtotime($end_date. ' + 1 days'));
         //Add lag onto start date
-        $start_date = date('Y-m-d', strtotime($start_date. ' + '.$lag.' days'));
+        $start_date = \date('Y-m-d', \strtotime($start_date. ' + '.$lag.' days'));
 
         echo $timeDate->to_display_date($start_date, true);
         die();
@@ -253,10 +253,10 @@ class ProjectController extends SugarController
     {
 
        //convert quotes in json string back to normal
-        $jArray = htmlspecialchars_decode($_POST['orderArray']);
+        $jArray = \htmlspecialchars_decode($_POST['orderArray']);
 
         //create object/array from json data
-        $orderArray = json_decode($jArray, true);
+        $orderArray = \json_decode($jArray, true);
 
         foreach ($orderArray as $id => $order_number) {
             $task = new ProjectTask();
@@ -344,9 +344,9 @@ class ProjectController extends SugarController
         //Get  specified dates and users
         $start = $_POST['start'];
         //$end = $_POST['end'];
-        $projects = explode(',', $_POST['projects']);
-        $users = explode(',', $_POST['users']);
-        $contacts = explode(',', $_POST['contacts']);
+        $projects = \explode(',', $_POST['projects']);
+        $users = \explode(',', $_POST['users']);
+        $contacts = \explode(',', $_POST['contacts']);
         $month = $_POST['month'];
         $flag = $_POST['flag'];
         $chart_type = $_POST['chart_type'];
@@ -385,20 +385,20 @@ class ProjectController extends SugarController
         $project_where = "";
         $project_user_where = "";
         $project_contact_where = "";
-        if (count($projects) > 1 || $projects[0] != '') {
-            $project_where = " AND project_id IN( '" . implode("','", $projects) . "' )";
-            $project_user_where = " AND project_users_1project_ida IN( '" . implode("','", $projects) . "' )";
-            $project_contact_where = " AND project_contacts_1project_ida IN( '" . implode("','", $projects) . "' )";
+        if (\count($projects) > 1 || $projects[0] != '') {
+            $project_where = " AND project_id IN( '" . \implode("','", $projects) . "' )";
+            $project_user_where = " AND project_users_1project_ida IN( '" . \implode("','", $projects) . "' )";
+            $project_contact_where = " AND project_contacts_1project_ida IN( '" . \implode("','", $projects) . "' )";
         }
 
         $user_where = "";
-        if (count($users) > 1 || $users[0] != '') {
-            $user_where = " AND project_users_1users_idb IN( '" . implode("','", $users) . "' )";
+        if (\count($users) > 1 || $users[0] != '') {
+            $user_where = " AND project_users_1users_idb IN( '" . \implode("','", $users) . "' )";
         }
 
         $contacts_where = "";
-        if (count($contacts) > 1 || $contacts[0] != '') {
-            $contacts_where = " AND project_contacts_1contacts_idb IN( '" . implode("','", $contacts) . "' )";
+        if (\count($contacts) > 1 || $contacts[0] != '') {
+            $contacts_where = " AND project_contacts_1contacts_idb IN( '" . \implode("','", $contacts) . "' )";
         }
 
         //Get the users data from the database
@@ -438,7 +438,7 @@ class ProjectController extends SugarController
             $taskarr = array();
             $t = 0;
             $skipped = 0;
-            if (!is_null($tasks)) {
+            if (!\is_null($tasks)) {
                 foreach ($tasks as $task) {
                     if ($this->count_days($start, $task->date_start) == -1 && $this->count_days($start, $task->date_finish) == -1) {
                         $skipped++;
@@ -487,10 +487,10 @@ class ProjectController extends SugarController
         $end_date = $_REQUEST['end_date'];
         $resource_id = $_REQUEST['resource_id'];
 
-        $projects = explode(",", $_REQUEST['projects']);
+        $projects = \explode(",", $_REQUEST['projects']);
         $project_where = "";
-        if (count($projects) > 1 || $projects[0] != '') {
-            $project_where = " AND project_id IN( '" . implode("','", $projects) . "' )";
+        if (\count($projects) > 1 || $projects[0] != '') {
+            $project_where = " AND project_id IN( '" . \implode("','", $projects) . "' )";
         }
 
         $Task = BeanFactory::getBean('ProjectTask');
@@ -499,7 +499,7 @@ class ProjectController extends SugarController
 
         echo '<table class="qtip_table">';
         echo '<tr><th>'.$mod_strings['LBL_TOOLTIP_PROJECT_NAME'].'</th><th>'.$mod_strings['LBL_TOOLTIP_TASK_NAME'].'</th><th>'.$mod_strings['LBL_TOOLTIP_TASK_DURATION'].'</th></tr>';
-        if (is_array($tasks)) {
+        if (\is_array($tasks)) {
             foreach ($tasks as $task) {
                 echo '<tr><td><a target="_blank" href="index.php?module=Project&action=DetailView&record='.$task->project_id.'">'.$task->project_name.'</a></td><td>'.$task->name.'</td><td>'.$task->duration.' '.$task->duration_unit.'</td></tr>';
             }
@@ -528,6 +528,6 @@ class ProjectController extends SugarController
     // Function for basic field validation (present and neither empty nor only white space
     public function IsNullOrEmptyString($question)
     {
-        return (!isset($question) || trim($question)==='');
+        return (!isset($question) || \trim($question)==='');
     }
 }

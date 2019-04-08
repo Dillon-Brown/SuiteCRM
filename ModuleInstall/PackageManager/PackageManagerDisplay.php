@@ -196,7 +196,7 @@ class PackageManagerDisplay
         $releases = array();
         if ($isAlive) {
             $filter = array();
-            $count = count($types);
+            $count = \count($types);
             $index = 1;
             $type_str = '"';
             foreach ($types as $type) {
@@ -216,7 +216,7 @@ class PackageManagerDisplay
             	$releases = $pm->getReleases('', '', $filter);
             }*/
         }
-        if ($form_action == 'install.php' && (empty($releases) || count($releases['packages']) == 0)) {
+        if ($form_action == 'install.php' && (empty($releases) || \count($releases['packages']) == 0)) {
             //return false;
         }
         $tree = PackageManagerDisplay::buildTreeView('treeview', $isAlive);
@@ -348,7 +348,7 @@ class PackageManagerDisplay
         global $current_language;
         $mod_strings = return_module_language($current_language, "Administration");
         $contents = sugar_file_get_contents($license_file);
-        $div_id = urlencode($zipFile);
+        $div_id = \urlencode($zipFile);
         $display = "<form name='delete{$zipFile}' action='{$form_action}' method='POST'>";
         $display .= "<input type='hidden' name='current_step' value='{$next_step}'>";
         $display .= "<input type='hidden' name='languagePackAction' value='{$type}'>";
@@ -409,7 +409,7 @@ class PackageManagerDisplay
             $ss->assign('module_load', 'false');
             $patches = PackageManagerDisplay::createJavascriptPackageArray($releases);
             $ss->assign('PATCHES', $patches);
-            $ss->assign('GRID_TYPE', implode(',', $types));
+            $ss->assign('GRID_TYPE', \implode(',', $types));
         } else {
             $pm = new PackageManager();
             $releases = $pm->getPackagesInStaging();
@@ -472,7 +472,7 @@ class PackageManagerDisplay
     public function createJavascriptPackageArray($releases)
     {
         $output = "var mti_data = [";
-        $count = count($releases);
+        $count = \count($releases);
         $index = 1;
         if (!empty($releases['packages'])) {
             foreach ($releases['packages'] as $release) {
@@ -493,7 +493,7 @@ class PackageManagerDisplay
     public static function createJavascriptModuleArray($modules, $variable_name = 'mti_data')
     {
         $output = "var ".$variable_name." = [";
-        $count = count($modules);
+        $count = \count($modules);
         $index = 1;
         if (!empty($modules)) {
             foreach ($modules as $module) {
@@ -544,7 +544,7 @@ class PackageManagerDisplay
         $header_text = '';
         $isAlive = false;
         $show_login = false;
-        if (!function_exists('curl_init') && $show_login) {
+        if (!\function_exists('curl_init') && $show_login) {
             $header_text = "<font color='red'><b>".$mod_strings['ERR_ENABLE_CURL']."</b></font>";
             $show_login = false;
         } else {
@@ -553,7 +553,7 @@ class PackageManagerDisplay
                 //$header_text = "<font color='red'><b>".$mod_strings['ERR_CREDENTIALS_MISSING']."</b></font>";
             } else {
                 $result = PackageManagerComm::login();
-                if ((is_array($result) && !empty($result['faultcode'])) || $result == false) {
+                if ((\is_array($result) && !empty($result['faultcode'])) || $result == false) {
                     $header_text = "<font color='red'><b>".$result['faultstring']."</b></font>";
                 } else {
                     $header_text = PackageManager::getPromotion();
@@ -589,8 +589,8 @@ class PackageManagerDisplay
                 $name = empty($manifest['name']) ? $filename : $manifest['name'];
                 $description = empty($manifest['description']) ? $mod_strings['LBL_UW_NONE'] : $manifest['description'];
                 if (($upgrades_installed==0 || $uh->UninstallAvailable($installeds, $installed))
-                    && is_file($filename) && !empty($manifest['is_uninstallable'])) {
-                    $link = urlencode($filename);
+                    && \is_file($filename) && !empty($manifest['is_uninstallable'])) {
+                    $link = \urlencode($filename);
                 } else {
                     $link = 'false';
                 }
@@ -616,7 +616,7 @@ class PackageManagerDisplay
                 $manifest_copy_files_to_dir = isset($manifest['copy_files']['to_dir']) ? clean_path($manifest['copy_files']['to_dir']) : "";
                 $manifest_copy_files_from_dir = isset($manifest['copy_files']['from_dir']) ? clean_path($manifest['copy_files']['from_dir']) : "";
                 $manifest_icon = clean_path($manifest['icon']);
-                $icon = "<img src=\"" . $manifest_copy_files_to_dir . ($manifest_copy_files_from_dir != "" ? substr($manifest_icon, strlen($manifest_copy_files_from_dir)+1) : $manifest_icon) . "\">";
+                $icon = "<img src=\"" . $manifest_copy_files_to_dir . ($manifest_copy_files_from_dir != "" ? \substr($manifest_icon, \strlen($manifest_copy_files_from_dir)+1) : $manifest_icon) . "\">";
             } else {
                 $icon = getImageForType($manifest['type']);
             }

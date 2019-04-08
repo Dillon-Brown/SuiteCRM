@@ -47,7 +47,7 @@ class AOR_ReportsController extends SugarController
     {
         if ($_REQUEST['aor_module']) {
             $bean = BeanFactory::getBean($_REQUEST['aor_module']);
-            echo json_encode((array)$bean->field_defs[$_REQUEST['aor_request']]);
+            echo \json_encode((array)$bean->field_defs[$_REQUEST['aor_request']]);
             die();
         }
     }
@@ -55,9 +55,9 @@ class AOR_ReportsController extends SugarController
     protected function action_getModuleTreeData()
     {
         if (!empty($_REQUEST['aor_module']) && $_REQUEST['aor_module'] != '') {
-            ob_start();
+            \ob_start();
             $data = getModuleTreeData($_REQUEST['aor_module']);
-            ob_clean();
+            \ob_clean();
             echo $data;
         }
         die;
@@ -86,35 +86,35 @@ class AOR_ReportsController extends SugarController
     protected function action_getParametersForReport()
     {
         if (empty($_REQUEST['record'])) {
-            echo json_encode(array());
+            echo \json_encode(array());
 
             return;
         }
         $report = BeanFactory::getBean('AOR_Reports', $_REQUEST['record']);
         if (!$report) {
-            echo json_encode(array());
+            echo \json_encode(array());
 
             return;
         }
         if (empty($report->id)) {
-            echo json_encode(array());
+            echo \json_encode(array());
 
             return;
         }
         $conditions = getConditionsAsParameters($report);
-        echo json_encode($conditions);
+        echo \json_encode($conditions);
     }
 
     protected function action_getChartsForReport()
     {
         if (empty($_REQUEST['record'])) {
-            echo json_encode(array());
+            echo \json_encode(array());
 
             return;
         }
         $report = BeanFactory::getBean('AOR_Reports', $_REQUEST['record']);
         if (!$report) {
-            echo json_encode(array());
+            echo \json_encode(array());
 
             return;
         }
@@ -122,7 +122,7 @@ class AOR_ReportsController extends SugarController
         foreach ($report->get_linked_beans('aor_charts', 'AOR_Charts') as $chart) {
             $charts[$chart->id] = $chart->name;
         }
-        echo json_encode($charts);
+        echo \json_encode($charts);
     }
 
     protected function action_addToProspectList()
@@ -169,7 +169,7 @@ class AOR_ReportsController extends SugarController
 
     protected function action_export()
     {
-        set_time_limit(0);
+        \set_time_limit(0);
         if (!$this->bean->ACLAccess('Export')) {
             SugarApplication::appendErrorMessage(translate('LBL_NO_ACCESS', 'ACL'));
             SugarApplication::redirect("index.php?module=AOR_Reports&action=DetailView&record=".$this->bean->id);
@@ -190,16 +190,16 @@ class AOR_ReportsController extends SugarController
 
         $state = new \SuiteCRM\StateSaver();
         $state->pushErrorLevel();
-        error_reporting(0);
+        \error_reporting(0);
         require_once('modules/AOS_PDF_Templates/PDF_Lib/mpdf.php');
         $state->popErrorLevel();
 
-        $d_image = explode('?', SugarThemeRegistry::current()->getImageURL('company_logo.png'));
+        $d_image = \explode('?', SugarThemeRegistry::current()->getImageURL('company_logo.png'));
         $graphs = $_POST["graphsForPDF"];
         $graphHtml = "<div class='reportGraphs' style='width:100%; text-align:center;'>";
 
         $chartsPerRow = $this->bean->graphs_per_row;
-        $countOfCharts = count($graphs);
+        $countOfCharts = \count($graphs);
         if ($countOfCharts > 0) {
             $width = ((int)100 / $chartsPerRow);
 
@@ -212,7 +212,7 @@ class AOR_ReportsController extends SugarController
 
 
             for ($x = 0; $x < $countOfCharts; $x++) {
-                if (is_null($itemsWithModulus) || $x < $itemsWithModulus) {
+                if (\is_null($itemsWithModulus) || $x < $itemsWithModulus) {
                     $graphHtml .= "<img src='.$graphs[$x].' style='width:$width%;' />";
                 } else {
                     $graphHtml .= "<img src='.$graphs[$x].' style='width:$modulusWidth%;' />";
@@ -243,7 +243,7 @@ class AOR_ReportsController extends SugarController
                 </tr>
                 <tr style="text-align: left;">
                 <td style="text-align: left;">
-                <b>' . strtoupper($this->bean->name) . '</b>
+                <b>' . \strtoupper($this->bean->name) . '</b>
                 </td>
                 </tr>
                 </tbody>
@@ -252,8 +252,8 @@ class AOR_ReportsController extends SugarController
         $this->bean->user_parameters = requestToUserParameters($this->bean);
 
         $printable = $this->bean->build_group_report(-1, false);
-        $stylesheet = file_get_contents(SugarThemeRegistry::current()->getCSSURL('style.css', false));
-        ob_clean();
+        $stylesheet = \file_get_contents(SugarThemeRegistry::current()->getCSSURL('style.css', false));
+        \ob_clean();
         try {
             $pdf = new mPDF('en', 'A4', '', 'DejaVuSansCondensed');
             $pdf->SetAutoFont();
@@ -373,7 +373,7 @@ class AOR_ReportsController extends SugarController
         }
 
         foreach ($app_list_strings['aor_operator_list'] as $key => $keyValue) {
-            if (!in_array($key, $valid_opp)) {
+            if (!\in_array($key, $valid_opp)) {
                 unset($app_list_strings['aor_operator_list'][$key]);
             }
         }
@@ -457,7 +457,7 @@ class AOR_ReportsController extends SugarController
         }
 
         foreach ($app_list_strings['aor_condition_type_list'] as $key => $keyValue) {
-            if (!in_array($key, $valid_opp)) {
+            if (!\in_array($key, $valid_opp)) {
                 unset($app_list_strings['aor_condition_type_list'][$key]);
             }
         }
@@ -539,7 +539,7 @@ class AOR_ReportsController extends SugarController
         }
 
         foreach ($app_list_strings['aor_action_type_list'] as $key => $keyValue) {
-            if (!in_array($key, $valid_opp)) {
+            if (!\in_array($key, $valid_opp)) {
                 unset($app_list_strings['aor_action_type_list'][$key]);
             }
         }
@@ -776,7 +776,7 @@ class AOR_ReportsController extends SugarController
         $valid_opp = array('Value');
 
         foreach ($app_list_strings['aor_rel_action_type_list'] as $key => $keyValue) {
-            if (!in_array($key, $valid_opp)) {
+            if (!\in_array($key, $valid_opp)) {
                 unset($app_list_strings['aor_rel_action_type_list'][$key]);
             }
         }

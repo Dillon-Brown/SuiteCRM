@@ -59,7 +59,7 @@ class SoapResourceObserver extends ResourceObserver
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($module);
     }
@@ -85,8 +85,8 @@ class SoapResourceObserver extends ResourceObserver
      */
     public function notify($msg = '')
     {
-        header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
-        header('Content-Type: text/xml; charset="ISO-8859-1"');
+        \header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+        \header('Content-Type: text/xml; charset="ISO-8859-1"');
         $error = new SoapError();
         $error->set_error('resource_management_error');
         //Override the description

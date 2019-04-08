@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -42,49 +42,49 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 require_once('include/Sugarpdf/sugarpdf_default.php');
-if (file_exists('custom/include/Sugarpdf/sugarpdf_default.php')) {
+if (\file_exists('custom/include/Sugarpdf/sugarpdf_default.php')) {
     require_once('custom/include/Sugarpdf/sugarpdf_default.php');
 }
 // set alternative config file
-if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
+if (!\defined('K_TCPDF_EXTERNAL_CONFIG')) {
     
     /*
      *  Installation path of TCPDF
      */
-    define("K_PATH_MAIN", $sugarpdf_default["K_PATH_MAIN"]);
+    \define("K_PATH_MAIN", $sugarpdf_default["K_PATH_MAIN"]);
     /**
      * URL path to tcpdf installation folder
      */
-    define("K_PATH_URL", $sugarpdf_default["K_PATH_URL"]);
+    \define("K_PATH_URL", $sugarpdf_default["K_PATH_URL"]);
     /**
      * custom path for PDF fonts (Use for non core added fonts)
      */
-    define("K_PATH_CUSTOM_FONTS", $sugarpdf_default["K_PATH_CUSTOM_FONTS"]);
+    \define("K_PATH_CUSTOM_FONTS", $sugarpdf_default["K_PATH_CUSTOM_FONTS"]);
     /**
     * path for PDF fonts
     */
-    define("K_PATH_FONTS", $sugarpdf_default["K_PATH_FONTS"]);
+    \define("K_PATH_FONTS", $sugarpdf_default["K_PATH_FONTS"]);
     /**
      * cache directory for temporary files (full path)
      */
-    define("K_PATH_CACHE", $sugarpdf_default["K_PATH_CACHE"]);
+    \define("K_PATH_CACHE", $sugarpdf_default["K_PATH_CACHE"]);
     /**
      * cache directory for temporary files (url path)
      */
-    define("K_PATH_URL_CACHE", $sugarpdf_default["K_PATH_URL_CACHE"]);
+    \define("K_PATH_URL_CACHE", $sugarpdf_default["K_PATH_URL_CACHE"]);
 
     /*
      * Custom path for images (use for loaded logos)
      */
-    define("K_PATH_CUSTOM_IMAGES", $sugarpdf_default["K_PATH_CUSTOM_IMAGES"]);
+    \define("K_PATH_CUSTOM_IMAGES", $sugarpdf_default["K_PATH_CUSTOM_IMAGES"]);
     /*
      * Default path for images
      */
-    define("K_PATH_IMAGES", $sugarpdf_default["K_PATH_IMAGES"]);
+    \define("K_PATH_IMAGES", $sugarpdf_default["K_PATH_IMAGES"]);
     /*
      * Blank image
      */
-    define("K_BLANK_IMAGE", $sugarpdf_default["K_BLANK_IMAGE"]);
+    \define("K_BLANK_IMAGE", $sugarpdf_default["K_BLANK_IMAGE"]);
     /*
      * The format used for pages.
      * It can be either one of the following values (case insensitive)
@@ -96,12 +96,12 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
      * SRA2, SRA3, SRA4, LETTER, LEGAL, EXECUTIVE, FOLIO.
      */
     defineFromUserPreference("PDF_PAGE_FORMAT", $sugarpdf_default["PDF_PAGE_FORMAT"]);
-    define("PDF_PAGE_FORMAT_LIST", $sugarpdf_default["PDF_PAGE_FORMAT_LIST"]);
+    \define("PDF_PAGE_FORMAT_LIST", $sugarpdf_default["PDF_PAGE_FORMAT_LIST"]);
     /*
      * page orientation. Possible values are (case insensitive):P or Portrait (default), L or Landscape.
      */
     defineFromUserPreference("PDF_PAGE_ORIENTATION", $sugarpdf_default["PDF_PAGE_ORIENTATION"]);
-    define("PDF_PAGE_ORIENTATION_LIST", $sugarpdf_default["PDF_PAGE_ORIENTATION_LIST"]);
+    \define("PDF_PAGE_ORIENTATION_LIST", $sugarpdf_default["PDF_PAGE_ORIENTATION_LIST"]);
     /*
      * Defines the creator of the document. This is typically the name of the application that generates the PDF.
      */
@@ -281,15 +281,15 @@ defineFromConfig("PDF_ACL_ACCESS", $sugarpdf_default["PDF_ACL_ACCESS"]);
 /**
  * Available encoding tables when adding a new font
  */
-define("PDF_ENCODING_TABLE_LIST", $sugarpdf_default["PDF_ENCODING_TABLE_LIST"]);
+\define("PDF_ENCODING_TABLE_LIST", $sugarpdf_default["PDF_ENCODING_TABLE_LIST"]);
 
 /**
  * Available encoding tables when adding a new font (Label)
  */
-define("PDF_ENCODING_TABLE_LABEL_LIST", $sugarpdf_default["PDF_ENCODING_TABLE_LABEL_LIST"]);
+\define("PDF_ENCODING_TABLE_LABEL_LIST", $sugarpdf_default["PDF_ENCODING_TABLE_LABEL_LIST"]);
 
-if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
-    define("K_TCPDF_EXTERNAL_CONFIG", true);
+if (!\defined('K_TCPDF_EXTERNAL_CONFIG')) {
+    \define("K_TCPDF_EXTERNAL_CONFIG", true);
 }
 
 /**
@@ -300,14 +300,14 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
  */
 function defineFromConfig($value, $default)
 {
-    $lowerValue = strtolower($value);
+    $lowerValue = \strtolower($value);
     require_once("modules/Administration/Administration.php");
     $focus = new Administration();
     $focus->retrieveSettings();
     if (isset($focus->settings["sugarpdf_".$lowerValue])) {
-        define($value, $focus->settings["sugarpdf_".$lowerValue]);
+        \define($value, $focus->settings["sugarpdf_".$lowerValue]);
     } else {
-        define($value, $default);
+        \define($value, $default);
     }
 }
 
@@ -325,13 +325,13 @@ function defineFromConfig($value, $default)
 function defineFromUserPreference($value, $default)
 {
     global $focus_user, $current_user;
-    $lowerValue = strtolower($value);
-    if (defined('SUGARPDF_USE_FOCUS')) {
+    $lowerValue = \strtolower($value);
+    if (\defined('SUGARPDF_USE_FOCUS')) {
         $pref = $focus_user->getPreference("sugarpdf_".$lowerValue);
     } else {
         $pref = $current_user->getPreference("sugarpdf_".$lowerValue);
     }
-    if (strpos($value, "PDF_FONT_NAME_") !== false) {
+    if (\strpos($value, "PDF_FONT_NAME_") !== false) {
         require_once('include/Sugarpdf/FontManager.php');
         $fontManager = new FontManager();
         $fontManager->listFontFiles();
@@ -339,9 +339,9 @@ function defineFromUserPreference($value, $default)
             $pref = $default;
         }
     }
-    if (isset($pref) && !defined('SUGARPDF_USE_DEFAULT_SETTINGS')) {
-        define($value, $pref);
+    if (isset($pref) && !\defined('SUGARPDF_USE_DEFAULT_SETTINGS')) {
+        \define($value, $pref);
     } else {
-        define($value, $default);
+        \define($value, $default);
     }
 }

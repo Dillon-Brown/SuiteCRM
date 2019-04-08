@@ -179,7 +179,7 @@ class MergeRecordTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $mergeRecord->get_list_view_data();
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testbuild_generic_where_clause()

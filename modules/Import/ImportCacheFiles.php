@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -97,7 +97,7 @@ class ImportCacheFiles
      */
     public static function convertFileNameToUrl($fileName)
     {
-        $fileName = str_replace(self::getImportDir() . "/", "", $fileName);
+        $fileName = \str_replace(self::getImportDir() . "/", "", $fileName);
         $fileName = "index.php?entryPoint=download&id=ImportErrors&type=import&tempName=" . $fileName . "&isTempFile=1";
         return $fileName;
     }
@@ -128,9 +128,9 @@ class ImportCacheFiles
     {
         foreach (self::$all_files as $type) {
             $filename = self::_createFileName($type);
-            if (file_exists($filename) && !is_writable($filename)) {
+            if (\file_exists($filename) && !\is_writable($filename)) {
                 return false;
-            } elseif (!is_writable(dirname($filename))) {
+            } elseif (!\is_writable(\dirname($filename))) {
                 return false;
             }
         }
@@ -204,11 +204,11 @@ class ImportCacheFiles
     {
         global $sugar_config;
         $importdir = self::getImportDir();
-        if (is_dir($importdir)) {
-            $files = dir($importdir);
+        if (\is_dir($importdir)) {
+            $files = \dir($importdir);
             while (false !== ($file = $files->read())) {
-                if (!is_dir($file) && stristr($file, '.csv')) {
-                    unlink("$importdir/$file");
+                if (!\is_dir($file) && \stristr($file, '.csv')) {
+                    \unlink("$importdir/$file");
                 }
             }
         }

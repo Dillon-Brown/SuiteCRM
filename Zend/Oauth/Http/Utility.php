@@ -61,7 +61,7 @@ class Zend_Oauth_Http_Utility
 
 
         if ($serviceProviderParams !== null) {
-            $params = array_merge($params, $serviceProviderParams);
+            $params = \array_merge($params, $serviceProviderParams);
         }
 
         $params['oauth_signature'] = $this->sign(
@@ -89,7 +89,7 @@ class Zend_Oauth_Http_Utility
     {
         if ($customParamsOnly) {
             foreach ($params as $key=>$value) {
-                if (preg_match("/^oauth_/", $key)) {
+                if (\preg_match("/^oauth_/", $key)) {
                     unset($params[$key]);
                 }
             }
@@ -100,7 +100,7 @@ class Zend_Oauth_Http_Utility
                              . '='
                              . self::urlEncode($value);
         }
-        return implode('&', $encodedParams);
+        return \implode('&', $encodedParams);
     }
 
     /**
@@ -119,7 +119,7 @@ class Zend_Oauth_Http_Utility
 
         foreach ($params as $key => $value) {
             if ($excludeCustomParams) {
-                if (!preg_match("/^oauth_/", $key)) {
+                if (!\preg_match("/^oauth_/", $key)) {
                     continue;
                 }
             }
@@ -127,7 +127,7 @@ class Zend_Oauth_Http_Utility
                            . '="'
                            . self::urlEncode($value) . '"';
         }
-        return implode(",", $headerValue);
+        return \implode(",", $headerValue);
     }
 
     /**
@@ -151,15 +151,15 @@ class Zend_Oauth_Http_Utility
     ) {
         $className = '';
         $hashAlgo  = null;
-        $parts     = explode('-', $signatureMethod);
-        if (count($parts) > 1) {
-            $className = 'Zend_Oauth_Signature_' . ucfirst(strtolower($parts[0]));
+        $parts     = \explode('-', $signatureMethod);
+        if (\count($parts) > 1) {
+            $className = 'Zend_Oauth_Signature_' . \ucfirst(\strtolower($parts[0]));
             $hashAlgo  = $parts[1];
         } else {
-            $className = 'Zend_Oauth_Signature_' . ucfirst(strtolower($signatureMethod));
+            $className = 'Zend_Oauth_Signature_' . \ucfirst(\strtolower($signatureMethod));
         }
 
-        require_once str_replace('_', '/', $className) . '.php';
+        require_once \str_replace('_', '/', $className) . '.php';
         $signatureObject = new $className($consumerSecret, $tokenSecret, $hashAlgo);
         return $signatureObject->sign($params, $method, $url);
     }
@@ -179,10 +179,10 @@ class Zend_Oauth_Http_Utility
 
         // Not remotely perfect but beats parse_str() which converts
         // periods and uses urldecode, not rawurldecode.
-        $parts = explode('&', $query);
+        $parts = \explode('&', $query);
         foreach ($parts as $pair) {
-            $kv = explode('=', $pair);
-            $params[rawurldecode($kv[0])] = rawurldecode($kv[1]);
+            $kv = \explode('=', $pair);
+            $params[\rawurldecode($kv[0])] = \rawurldecode($kv[1]);
         }
         return $params;
     }
@@ -194,7 +194,7 @@ class Zend_Oauth_Http_Utility
      */
     public function generateNonce()
     {
-        return md5(uniqid(rand(), true));
+        return \md5(\uniqid(\rand(), true));
     }
 
     /**
@@ -204,7 +204,7 @@ class Zend_Oauth_Http_Utility
      */
     public function generateTimestamp()
     {
-        return time();
+        return \time();
     }
 
     /**
@@ -215,8 +215,8 @@ class Zend_Oauth_Http_Utility
      */
     public static function urlEncode($value)
     {
-        $encoded = rawurlencode($value);
-        $encoded = str_replace('%7E', '~', $encoded);
+        $encoded = \rawurlencode($value);
+        $encoded = \str_replace('%7E', '~', $encoded);
         return $encoded;
     }
 }

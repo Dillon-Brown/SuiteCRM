@@ -45,15 +45,15 @@
 //// php.exe -f silentUpgrade.php [Path to Upgrade Package zip] [Path to Log file] [Path to Instance]
 //// See below the Usage for more details.
 /////////////////////////////////////////////////////////////////////////////////////////
-ini_set('memory_limit', -1);
+\ini_set('memory_limit', -1);
 ///////////////////////////////////////////////////////////////////////////////
 ////	UTILITIES THAT MUST BE LOCAL :(
  //Bug 24890, 24892. default_permissions not written to config.php. Following function checks and if
  //no found then adds default_permissions to the config file.
  function checkConfigForPermissions()
  {
-     if (file_exists(getcwd().'/config.php')) {
-         require(getcwd().'/config.php');
+     if (\file_exists(\getcwd().'/config.php')) {
+         require(\getcwd().'/config.php');
      }
      global $sugar_config;
      if (!isset($sugar_config['default_permissions'])) {
@@ -63,8 +63,8 @@ ini_set('memory_limit', -1);
                      'user' => '',
                      'group' => '',
              );
-         ksort($sugar_config);
-         if (is_writable('config.php') && write_array_to_file("sugar_config", $sugar_config, 'config.php')) {
+         \ksort($sugar_config);
+         if (\is_writable('config.php') && write_array_to_file("sugar_config", $sugar_config, 'config.php')) {
              //writing to the file
          }
      }
@@ -72,8 +72,8 @@ ini_set('memory_limit', -1);
 
 function checkLoggerSettings()
 {
-    if (file_exists(getcwd().'/config.php')) {
-        require(getcwd().'/config.php');
+    if (\file_exists(\getcwd().'/config.php')) {
+        require(\getcwd().'/config.php');
     }
     global $sugar_config;
     if (!isset($sugar_config['logger'])) {
@@ -89,8 +89,8 @@ function checkLoggerSettings()
               'suffix' => '', // bug51583, change default suffix to blank for backwards comptability
             ),
           );
-        ksort($sugar_config);
-        if (is_writable('config.php') && write_array_to_file("sugar_config", $sugar_config, 'config.php')) {
+        \ksort($sugar_config);
+        if (\is_writable('config.php') && write_array_to_file("sugar_config", $sugar_config, 'config.php')) {
             //writing to the file
         }
     }
@@ -98,8 +98,8 @@ function checkLoggerSettings()
 
 function checkResourceSettings()
 {
-    if (file_exists(getcwd().'/config.php')) {
-        require(getcwd().'/config.php');
+    if (\file_exists(\getcwd().'/config.php')) {
+        require(\getcwd().'/config.php');
     }
     global $sugar_config;
     if (!isset($sugar_config['resource_management'])) {
@@ -116,8 +116,8 @@ function checkResourceSettings()
             ),
             'default_limit' => 1000,
           );
-        ksort($sugar_config);
-        if (is_writable('config.php') && write_array_to_file("sugar_config", $sugar_config, 'config.php')) {
+        \ksort($sugar_config);
+        if (\is_writable('config.php') && write_array_to_file("sugar_config", $sugar_config, 'config.php')) {
             //writing to the file
         }
     }
@@ -127,11 +127,11 @@ function checkResourceSettings()
 function verifyArguments($argv, $usage_regular)
 {
     $upgradeType = '';
-    $cwd = getcwd(); // default to current, assumed to be in a valid SugarCRM root dir.
+    $cwd = \getcwd(); // default to current, assumed to be in a valid SugarCRM root dir.
     if (isset($argv[3])) {
-        if (is_dir($argv[3])) {
+        if (\is_dir($argv[3])) {
             $cwd = $argv[3];
-            chdir($cwd);
+            \chdir($cwd);
         } else {
             echo "*******************************************************************************\n";
             echo "*** ERROR: 3rd parameter must be a valid directory.  Tried to cd to [ {$argv[3]} ].\n";
@@ -140,20 +140,20 @@ function verifyArguments($argv, $usage_regular)
     }
 
     //check if this is an instance
-    if (is_file("{$cwd}/include/entryPoint.php")) {
+    if (\is_file("{$cwd}/include/entryPoint.php")) {
         //this should be a regular sugar install
-        $upgradeType = constant('SUGARCRM_INSTALL');
+        $upgradeType = \constant('SUGARCRM_INSTALL');
         //check if this is a valid zip file
-        if (!is_file($argv[1])) { // valid zip?
+        if (!\is_file($argv[1])) { // valid zip?
             echo "*******************************************************************************\n";
             echo "*** ERROR: First argument must be a full path to the patch file. Got [ {$argv[1]} ].\n";
             echo $usage_regular;
             echo "FAILURE\n";
             exit(1);
         }
-        if (count($argv) < 5) {
+        if (\count($argv) < 5) {
             echo "*******************************************************************************\n";
-            echo "*** ERROR: Missing required parameters.  Received ".count($argv)." argument(s), require 5.\n";
+            echo "*** ERROR: Missing required parameters.  Received ".\count($argv)." argument(s), require 5.\n";
             echo $usage_regular;
             echo "FAILURE\n";
             exit(1);
@@ -165,7 +165,7 @@ function verifyArguments($argv, $usage_regular)
         exit(1);
     }
 
-    if (isset($argv[7]) && file_exists($argv[7].'SugarTemplateUtilties.php')) {
+    if (isset($argv[7]) && \file_exists($argv[7].'SugarTemplateUtilties.php')) {
         require_once($argv[7].'SugarTemplateUtilties.php');
     }
 
@@ -184,15 +184,15 @@ function rebuildRelations($pre_path = '')
 }
 
 //Bug 52872. Dies if the request does not come from CLI.
-$sapi_type = php_sapi_name();
-if (substr($sapi_type, 0, 3) != 'cli') {
+$sapi_type = \php_sapi_name();
+if (\substr($sapi_type, 0, 3) != 'cli') {
     die("This is command-line only script");
 }
 //End of #52872
 
 // only run from command line
 if (isset($_SERVER['HTTP_USER_AGENT'])) {
-    fwrite(STDERR, 'This utility may only be run from the command line or command prompt.');
+    \fwrite(STDERR, 'This utility may only be run from the command line or command prompt.');
     exit(1);
 }
 //Clean_string cleans out any file  passed in as a parameter
@@ -223,8 +223,8 @@ eoq2;
 
 ///////////////////////////////////////////////////////////////////////////////
 ////	STANDARD REQUIRED SUGAR INCLUDES AND PRESETS
-if (!defined('sugarEntry')) {
-    define('sugarEntry', true);
+if (!\defined('sugarEntry')) {
+    \define('sugarEntry', true);
 }
 
 $_SESSION = array();
@@ -236,11 +236,11 @@ $_REQUEST = array();
 $_REQUEST['addTaskReminder'] = 'remind';
 
 
-define('SUGARCRM_INSTALL', 'SugarCRM_Install');
-define('DCE_INSTANCE', 'DCE_Instance');
+\define('SUGARCRM_INSTALL', 'SugarCRM_Install');
+\define('DCE_INSTANCE', 'DCE_Instance');
 
 global $cwd;
-$cwd = getcwd(); // default to current, assumed to be in a valid SugarCRM root dir.
+$cwd = \getcwd(); // default to current, assumed to be in a valid SugarCRM root dir.
 
 $upgradeType = verifyArguments($argv, $usage_regular);
 
@@ -258,9 +258,9 @@ $errors = array();
 
     require('config.php');
     if (isset($argv[3])) {
-        if (is_dir($argv[3])) {
+        if (\is_dir($argv[3])) {
             $cwd = $argv[3];
-            chdir($cwd);
+            \chdir($cwd);
         }
     }
 
@@ -270,18 +270,18 @@ $errors = array();
     $configOptions = $sugar_config['dbconfig'];
 
     $GLOBALS['log']	= LoggerManager::getLogger();
-    $patchName		= basename($argv[1]);
-    $zip_from_dir	= substr($patchName, 0, strlen($patchName) - 4); // patch folder name (minus ".zip")
+    $patchName		= \basename($argv[1]);
+    $zip_from_dir	= \substr($patchName, 0, \strlen($patchName) - 4); // patch folder name (minus ".zip")
     $path			= $argv[2]; // custom log file, if blank will use ./upgradeWizard.log
     $db				= &DBManagerFactory::getInstance();
     $UWstrings		= return_module_language('en_us', 'UpgradeWizard', true);
     $adminStrings	= return_module_language('en_us', 'Administration', true);
     $app_list_strings = return_app_list_strings_language('en_us');
-    $mod_strings	= array_merge($adminStrings, $UWstrings);
+    $mod_strings	= \array_merge($adminStrings, $UWstrings);
     $subdirs		= array('full', 'langpack', 'module', 'patch', 'theme', 'temp');
     global $unzip_dir;
     $license_accepted = false;
-    if (isset($argv[5]) && (strtolower($argv[5])=='yes' || strtolower($argv[5])=='y')) {
+    if (isset($argv[5]) && (\strtolower($argv[5])=='yes' || \strtolower($argv[5])=='y')) {
         $license_accepted = true;
     }
     //////////////////////////////////////////////////////////////////////////////
@@ -312,7 +312,7 @@ $errors = array();
 /////retrieve admin user
 
 $unzip_dir = sugar_cached("upgrades/temp");
-$install_file = $sugar_config['upload_dir']."/upgrades/patch/".basename($argv[1]);
+$install_file = $sugar_config['upload_dir']."/upgrades/patch/".\basename($argv[1]);
 sugar_mkdir($sugar_config['upload_dir']."/upgrades/patch", 0775, true);
 
 $_SESSION['unzip_dir'] = $unzip_dir;
@@ -320,25 +320,25 @@ $_SESSION['install_file'] = $install_file;
 $_SESSION['zip_from_dir'] = $zip_from_dir;
 
 mkdir_recursive($unzip_dir);
-if (!is_dir($unzip_dir)) {
-    fwrite(STDERR, "\n{$unzip_dir} is not an available directory\nFAILURE\n");
+if (!\is_dir($unzip_dir)) {
+    \fwrite(STDERR, "\n{$unzip_dir} is not an available directory\nFAILURE\n");
     exit(1);
 }
 unzip($argv[1], $unzip_dir);
 // mimic standard UW by copy patch zip to appropriate dir
-copy($argv[1], $install_file);
+\copy($argv[1], $install_file);
 ////	END UPGRADE PREP
 ///////////////////////////////////////////////////////////////////////////////
 
 
-if (function_exists('set_upgrade_vars')) {
+if (\function_exists('set_upgrade_vars')) {
     set_upgrade_vars();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ////	RUN SILENT UPGRADE
-ob_start();
-set_time_limit(0);
+\ob_start();
+\set_time_limit(0);
 
 ///    RELOAD NEW DEFINITIONS
 global $ACLActions, $beanList, $beanFiles;
@@ -355,30 +355,30 @@ require_once('modules/Administration/upgrade_custom_relationships.php');
 upgrade_custom_relationships();
 
 logThis('Upgrading user preferences start .', $path);
-if (function_exists('upgradeUserPreferences')) {
+if (\function_exists('upgradeUserPreferences')) {
     upgradeUserPreferences();
 }
 logThis('Upgrading user preferences finish .', $path);
 
 // clear out the theme cache
-if (is_dir($GLOBALS['sugar_config']['cache_dir'].'themes')) {
+if (\is_dir($GLOBALS['sugar_config']['cache_dir'].'themes')) {
     $allModFiles = array();
     $allModFiles = findAllFiles($GLOBALS['sugar_config']['cache_dir'].'themes', $allModFiles);
     foreach ($allModFiles as $file) {
         //$file_md5_ref = str_replace(clean_path(getcwd()),'',$file);
-        if (file_exists($file)) {
-            unlink($file);
+        if (\file_exists($file)) {
+            \unlink($file);
         }
     }
 }
 
 // re-minify the JS source files
-$_REQUEST['root_directory'] = getcwd();
+$_REQUEST['root_directory'] = \getcwd();
 $_REQUEST['js_rebuild_concat'] = 'rebuild';
 require_once('jssource/minify.php');
 
 //Add the cache cleaning here.
-if (function_exists('deleteCache')) {
+if (\function_exists('deleteCache')) {
     logThis('Call deleteCache', $path);
     @deleteCache();
 }
@@ -416,13 +416,13 @@ $rac = new RepairAndClear();
 $rac->clearVardefs();
 $rac->rebuildExtensions();
 //bug: 44431 - defensive check to ensure the method exists since upgrades to 6.2.0 may not have this method define yet.
-if (method_exists($rac, 'clearExternalAPICache')) {
+if (\method_exists($rac, 'clearExternalAPICache')) {
     $rac->clearExternalAPICache();
 }
 
 $repairedTables = array();
 foreach ($beanFiles as $bean => $file) {
-    if (file_exists($file)) {
+    if (\file_exists($file)) {
         unset($GLOBALS['dictionary'][$bean]);
         require_once($file);
         $focus = new $bean();
@@ -433,7 +433,7 @@ foreach ($beanFiles as $bean => $file) {
         if (($focus instanceof SugarBean)) {
             if (!isset($repairedTables[$focus->table_name])) {
                 $sql = DBManagerFactory::getInstance()->repairTable($focus, true);
-                if (trim($sql) != '') {
+                if (\trim($sql) != '') {
                     logThis('Running sql:' . $sql, $path);
                 }
                 $repairedTables[$focus->table_name] = true;
@@ -477,7 +477,7 @@ $ce_to_pro_ent = isset($manifest['name']) && ($manifest['name'] == 'SugarCE to S
 $sugar_version = getSilentUpgradeVar('origVersion');
 if (!$sugar_version) {
     global $silent_upgrade_vars_loaded;
-    logThis("Error retrieving silent upgrade var for sugar_version: cache dir is {$GLOBALS['sugar_config']['cache_dir']} -- full cache for \$silent_upgrade_vars_loaded is ".var_export($silent_upgrade_vars_loaded, true), $path);
+    logThis("Error retrieving silent upgrade var for sugar_version: cache dir is {$GLOBALS['sugar_config']['cache_dir']} -- full cache for \$silent_upgrade_vars_loaded is ".\var_export($silent_upgrade_vars_loaded, true), $path);
 }
 
 
@@ -523,16 +523,16 @@ logThis('End upgrade_connectors', $path);
 
 
 //Unlink files that have been removed
-if (function_exists('unlinkUpgradeFiles')) {
+if (\function_exists('unlinkUpgradeFiles')) {
     unlinkUpgradeFiles($sugar_version);
 }
 
-if (function_exists('rebuildSprites') && function_exists('imagecreatetruecolor')) {
+if (\function_exists('rebuildSprites') && \function_exists('imagecreatetruecolor')) {
     rebuildSprites(true);
 }
 
 //Run repairUpgradeHistoryTable
-if (version_compare($sugar_version, '6.5.0', '<') && function_exists('repairUpgradeHistoryTable')) {
+if (\version_compare($sugar_version, '6.5.0', '<') && \function_exists('repairUpgradeHistoryTable')) {
     repairUpgradeHistoryTable();
 }
 
@@ -549,11 +549,11 @@ if (empty($errors)) {
 ///////////////////////////////////////////////////////////////////////////////
 ////	RECORD ERRORS
 
-$phpErrors = ob_get_contents();
-ob_end_clean();
+$phpErrors = \ob_get_contents();
+\ob_end_clean();
 logThis("**** Potential PHP generated error messages: {$phpErrors}", $path);
 
-if (count($errors) > 0) {
+if (\count($errors) > 0) {
     foreach ($errors as $error) {
         logThis("****** SilentUpgrade ERROR: {$error}", $path);
     }

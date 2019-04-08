@@ -87,14 +87,14 @@ class ResourceManager
     public function setup($module)
     {
         //Check if config.php exists
-        if (!file_exists('config.php') || empty($module)) {
+        if (!\file_exists('config.php') || empty($module)) {
             return false;
         }
 
         if ($module == 'Soap') {
             require_once('include/resource/Observers/SoapResourceObserver.php');
             $observer = new SoapResourceObserver('Soap');
-        } elseif (defined('SUITE_PHPUNIT_RUNNER')) {
+        } elseif (\defined('SUITE_PHPUNIT_RUNNER')) {
             return;
         } else {
             require_once('include/resource/Observers/WebResourceObserver.php');
@@ -108,14 +108,14 @@ class ResourceManager
             if (isset($GLOBALS['sugar_config']['resource_management'])) {
                 $res = $GLOBALS['sugar_config']['resource_management'];
                 if (!empty($res['special_query_modules']) &&
-                    in_array($observer->module, $res['special_query_modules']) &&
+                    \in_array($observer->module, $res['special_query_modules']) &&
                     !empty($res['special_query_limit']) &&
-                    is_int($res['special_query_limit']) &&
+                    \is_int($res['special_query_limit']) &&
                     $res['special_query_limit'] > 0
                 ) {
                     $limit = $res['special_query_limit'];
                 } else {
-                    if (!empty($res['default_limit']) && is_int($res['default_limit']) && $res['default_limit'] > 0) {
+                    if (!empty($res['default_limit']) && \is_int($res['default_limit']) && $res['default_limit'] > 0) {
                         $limit = $res['default_limit'];
                     }
                 }
@@ -153,8 +153,8 @@ class ResourceManager
         foreach ($this->_observers as $observer) {
             $limit = $observer->limit;
             $module = $observer->module;
-            $limitMsg = str_replace('$limit', $limit, $limitMsg);
-            $limitMsg = str_replace('$module', $module, $limitMsg);
+            $limitMsg = \str_replace('$limit', $limit, $limitMsg);
+            $limitMsg = \str_replace('$module', $module, $limitMsg);
             $GLOBALS['log']->fatal($limitMsg);
             $observer->notify($limitMsg);
         }

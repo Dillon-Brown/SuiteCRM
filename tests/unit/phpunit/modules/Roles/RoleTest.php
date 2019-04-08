@@ -75,7 +75,7 @@ class RoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //get the related records count
         $result = $role->query_modules();
-        $this->assertGreaterThanOrEqual(2, count((array)$result));
+        $this->assertGreaterThanOrEqual(2, \count((array)$result));
 
         //test clear_module_relationship method
         $this->clear_module_relationship($role->id);
@@ -90,7 +90,7 @@ class RoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //get related records count and verify that records are removed
         $result = $role->query_modules();
-        $this->assertEquals(0, count((array)$result));
+        $this->assertEquals(0, \count((array)$result));
     }
 
     public function testSet_user_relationshipAndCheck_user_role_count()
@@ -113,11 +113,11 @@ class RoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //get the related records count
         $result = $role->check_user_role_count('1');
-        $this->assertGreaterThanOrEqual(1, count((array)$result));
+        $this->assertGreaterThanOrEqual(1, \count((array)$result));
 
         //get the related records count
         $result = $role->check_user_role_count('2');
-        $this->assertGreaterThanOrEqual(1, count((array)$result));
+        $this->assertGreaterThanOrEqual(1, \count((array)$result));
 
         //test get_users method
         $this->get_users($role->id);
@@ -138,7 +138,7 @@ class RoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $role->id = $id;
         $result = $role->get_users();
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function clear_user_relationship($role_id, $user_id)
@@ -147,7 +147,7 @@ class RoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //get related records count and verify that records are removed
         $result = $role->clear_user_relationship($role_id, $user_id);
-        $this->assertEquals(0, count((array)$result));
+        $this->assertEquals(0, \count((array)$result));
     }
 
     public function testquery_user_allowed_modules()
@@ -155,7 +155,7 @@ class RoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $role = new Role();
 
         $result = $role->query_user_allowed_modules('1');
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testquery_user_disallowed_modules()
@@ -165,6 +165,6 @@ class RoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $allowed = array('Accounts' => 'Accounts', 'Leads' => 'Leads');
         $result = $role->query_user_disallowed_modules(null, $allowed);
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 }

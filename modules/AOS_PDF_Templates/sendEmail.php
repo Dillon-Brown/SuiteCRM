@@ -107,7 +107,7 @@ class sendEmail
         $email->assigned_user_id = $current_user->id;
         // Save the email object
         global $timedate;
-        $email->date_start = $timedate->to_display_date_time(gmdate($GLOBALS['timedate']->get_db_date_time_format()));
+        $email->date_start = $timedate->to_display_date_time(\gmdate($GLOBALS['timedate']->get_db_date_time_format()));
         $email->save(false);
         $email_id = $email->id;
 
@@ -123,7 +123,7 @@ class sendEmail
             $noteId = $note->save();
 
             if ($noteID !== false && !empty($noteId)) {
-                rename($sugar_config['upload_dir'] . 'attachfile.pdf', $sugar_config['upload_dir'] . $note->id);
+                \rename($sugar_config['upload_dir'] . 'attachfile.pdf', $sugar_config['upload_dir'] . $note->id);
                 $email->attachNote($note);
             } else {
                 $GLOBALS['log']->error('AOS_PDF_Templates: Unable to save note');
@@ -135,7 +135,7 @@ class sendEmail
             echo "Unable to initiate Email Client";
             exit;
         } else {
-            header('Location: index.php?action=ComposeViewWithPdfTemplate&module=Emails&return_module=' . $module_type . '&return_action=DetailView&return_id=' . $module->id . '&record=' . $email_id);
+            \header('Location: index.php?action=ComposeViewWithPdfTemplate&module=Emails&return_module=' . $module_type . '&return_action=DetailView&return_id=' . $module->id . '&record=' . $email_id);
         }
     }
 }

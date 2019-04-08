@@ -38,8 +38,8 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
- define('VCREND', '50');
- define('VCRSTART', '10');
+ \define('VCREND', '50');
+ \define('VCRSTART', '10');
  /**
   * @api
   */
@@ -143,7 +143,7 @@
                  }
              }
 
-             if (is_file('custom/include/EditView/SugarVCR.tpl')) {
+             if (\is_file('custom/include/EditView/SugarVCR.tpl')) {
                  $html_text .= $ss->fetch('custom/include/EditView/SugarVCR.tpl');
              } else {
                  $html_text .= $ss->fetch('include/EditView/SugarVCR.tpl');
@@ -155,7 +155,7 @@
      public static function record($module, $offset)
      {
          $GLOBALS['log']->debug('SUGARVCR is recording more records');
-         $start = max(0, $offset - VCRSTART);
+         $start = \max(0, $offset - VCRSTART);
          $index = $start;
          $db = DBManagerFactory::getInstance();
 

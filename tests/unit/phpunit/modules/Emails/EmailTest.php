@@ -41,7 +41,7 @@
 use SuiteCRM\StateCheckerPHPUnitTestCaseAbstract;
 use SuiteCRM\StateSaver;
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -360,7 +360,7 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
     {
         $email = new Email();
         $result = $email->email2saveAttachment();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
     }
 
     public function testsafeAttachmentName()
@@ -443,7 +443,7 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
         $email = new Email();
 
         $result = $email->getNamePlusEmailAddressesForCompose('Users', array(1));
-        $this->assertGreaterThanOrEqual(0, strlen($result));
+        $this->assertGreaterThanOrEqual(0, \strlen($result));
     }
 
     public function test_arrayToDelimitedString()
@@ -546,7 +546,7 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($email->id));
-        $this->assertEquals(36, strlen($email->id));
+        $this->assertEquals(36, \strlen($email->id));
 
         //test retrieve method
         $this->retrieve($email->id);
@@ -587,7 +587,7 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
         $result = $email->retrieve($id);
 
         $this->assertTrue(isset($result->id));
-        $this->assertEquals(36, strlen($result->id));
+        $this->assertEquals(36, \strlen($result->id));
 
         $this->assertTrue(isset($result->from_addr_name));
         $this->assertTrue(isset($result->to_addrs_names));
@@ -613,10 +613,10 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
         //retrieve and verify that email addresses were saved properly
         $email->retrieveEmailAddresses();
 
-        $this->assertNotSame(false, strpos($email->from_addr, 'from_test@email.com'));
-        $this->assertNotSame(false, strpos($email->to_addrs, 'to_test@email.com'));
-        $this->assertNotSame(false, strpos($email->cc_addrs, 'cc_test@email.com'));
-        $this->assertNotSame(false, strpos($email->bcc_addrs, 'bcc_test@email.com'));
+        $this->assertNotSame(false, \strpos($email->from_addr, 'from_test@email.com'));
+        $this->assertNotSame(false, \strpos($email->to_addrs, 'to_test@email.com'));
+        $this->assertNotSame(false, \strpos($email->cc_addrs, 'cc_test@email.com'));
+        $this->assertNotSame(false, \strpos($email->bcc_addrs, 'bcc_test@email.com'));
     }
 
     public function retrieveEmailAddresses($id)
@@ -641,7 +641,7 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
         $result = $email->linkEmailToAddress(1, 'from');
 
         $this->assertTrue(isset($result));
-        $this->assertEquals(36, strlen($result));
+        $this->assertEquals(36, \strlen($result));
     }
 
     public function retrieveEmailText($id)
@@ -674,7 +674,7 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
 
         $email->handleAttachments();
 
-        $this->assertTrue(is_array($email->attachments));
+        $this->assertTrue(\is_array($email->attachments));
     }
 
     public function delete($id)
@@ -702,7 +702,7 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
 
         //test getNotes method and verify that it retrieves the created note.
         $email->getNotes($email->id);
-        $this->assertTrue(is_array($email->attachments));
+        $this->assertTrue(\is_array($email->attachments));
         foreach ($email->attachments as $note) {
             $this->assertTrue(isset($note));
             $this->assertInstanceOf('Note', $note);
@@ -833,7 +833,7 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
         $email = new Email();
 
         $actual = $email->js_set_archived();
-        $this->assertGreaterThan(0, strlen($actual));
+        $this->assertGreaterThan(0, \strlen($actual));
     }
 
     public function testu_get_clear_form_js()
@@ -852,12 +852,12 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
 			}
 		//  End --></script>";
         $actual = $email->u_get_clear_form_js('', '', '');
-        $this->assertSame($expected, $actual, "exp:[" . print_r($expected, true) . "] act:[" . print_r($actual, true) . "]");
+        $this->assertSame($expected, $actual, "exp:[" . \print_r($expected, true) . "] act:[" . \print_r($actual, true) . "]");
 
         //with valid params
         $expected = "\n		<script type=\"text/javascript\" language=\"JavaScript\"><!-- Begin\n			function clear_form(form) {\n				var newLoc = \"index.php?action=\" + form.action.value + \"&module=\" + form.module.value + \"&query=true&clear_query=true&type=out&assigned_user_id=1\";\n				if(typeof(form.advanced) != \"undefined\"){\n					newLoc += \"&advanced=\" + form.advanced.value;\n				}\n				document.location.href= newLoc;\n			}\n		//  End --></script>";
         $actual = $email->u_get_clear_form_js('out', '', '1');
-        $this->assertSame($expected, $actual, "exp:[" . print_r($expected, true) . "] act:[" . print_r($actual, true) . "]");
+        $this->assertSame($expected, $actual, "exp:[" . \print_r($expected, true) . "] act:[" . \print_r($actual, true) . "]");
     }
 
     public function testpickOneButton()
@@ -1063,7 +1063,7 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
         $email = new Email();
 
         $expected = array('email', 'name');
-        $actual = array_keys($email->getSystemDefaultEmail());
+        $actual = \array_keys($email->getSystemDefaultEmail());
 
         $this->assertSame($expected, $actual);
     }
@@ -1186,7 +1186,7 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
         $email = new Email();
 
         $actual = $email->searchImportedEmails();
-        $this->assertTrue(is_array($actual));
+        $this->assertTrue(\is_array($actual));
     }
 
     public function test_genereateSearchImportedEmailsQuery()
@@ -1286,11 +1286,11 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
 
         //test with empty string
         $result = $email->distributionForm('');
-        $this->assertGreaterThan(0, strlen($result));
+        $this->assertGreaterThan(0, \strlen($result));
 
         //test with valid string
         $result = $email->distributionForm('test');
-        $this->assertGreaterThan(0, strlen($result));
+        $this->assertGreaterThan(0, \strlen($result));
 
         // clean up
         
@@ -1302,7 +1302,7 @@ class EmailTest extends StateCheckerPHPUnitTestCaseAbstract
         $email = new Email();
 
         $result = $email->userSelectTable();
-        $this->assertGreaterThan(0, strlen($result));
+        $this->assertGreaterThan(0, \strlen($result));
     }
 
     public function testcheckInbox()

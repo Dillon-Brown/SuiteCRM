@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -270,7 +270,7 @@ function validate_user($user_name, $password)
 
         return true;
     }
-    if (function_exists('openssl_decrypt')) {
+    if (\function_exists('openssl_decrypt')) {
         $password = decrypt_string($password);
         if ($authController->login($user_name, $password) && isset($_SESSION['authenticated_user_id'])) {
             $user->retrieve($_SESSION['authenticated_user_id']);
@@ -300,7 +300,7 @@ function validate_user($user_name, $password)
 function add_contacts_matching_email_address(&$output_list, $email_address, &$seed_contact, &$msi_id)
 {
     // escape the email address
-    $safe_email_address = addslashes($email_address);
+    $safe_email_address = \addslashes($email_address);
     global $current_user;
 
     // Verify that the user has permission to see Contact list views
@@ -311,7 +311,7 @@ function add_contacts_matching_email_address(&$output_list, $email_address, &$se
     $contactList = $seed_contact->emailAddress->getBeansByEmailAddress($safe_email_address);
     // create a return array of names and email addresses.
     foreach ($contactList as $contact) {
-        if (!is_a($contact, 'Contact')) {
+        if (!\is_a($contact, 'Contact')) {
             continue;
         }
 
@@ -373,7 +373,7 @@ function add_leads_matching_email_address(&$output_list, $email_address, &$seed_
 
     // create a return array of names and email addresses.
     foreach ($leadList as $lead) {
-        if (!is_a($lead, 'Lead')) {
+        if (!\is_a($lead, 'Lead')) {
             continue;
         }
 
@@ -477,7 +477,7 @@ function contact_by_email($user_name, $password, $email_address)
     $seed_contact = new Contact();
     $seed_lead = new Lead();
     $output_list = array();
-    $email_address_list = explode("; ", $email_address);
+    $email_address_list = \explode("; ", $email_address);
 
     // remove duplicate email addresses
     $non_duplicate_email_address_list = array();
@@ -485,14 +485,14 @@ function contact_by_email($user_name, $password, $email_address)
         // Check to see if the current address is a match of an existing address
         $found_match = false;
         foreach ($non_duplicate_email_address_list as $non_dupe_single) {
-            if (strtolower($single_address) == $non_dupe_single) {
+            if (\strtolower($single_address) == $non_dupe_single) {
                 $found_match = true;
                 break;
             }
         }
 
         if ($found_match == false) {
-            $non_duplicate_email_address_list[] = strtolower($single_address);
+            $non_duplicate_email_address_list[] = \strtolower($single_address);
         }
     }
 
@@ -857,7 +857,7 @@ function track_email($user_name, $password, $parent_id, $contact_ids, $date_sent
     // translate date sent from VB format 7/22/2004 9:36:31 AM
     // to yyyy-mm-dd 9:36:31 AM
 
-    $date_sent_received = preg_replace("@([0-9]*)/([0-9]*)/([0-9]*)( .*$)@", "\\3-\\1-\\2\\4", $date_sent_received);
+    $date_sent_received = \preg_replace("@([0-9]*)/([0-9]*)/([0-9]*)( .*$)@", "\\3-\\1-\\2\\4", $date_sent_received);
 
 
     $seed_user = new User();
@@ -879,8 +879,8 @@ function track_email($user_name, $password, $parent_id, $contact_ids, $date_sent
     $email->date_start = $date_sent_received;
 
     // Save one copy of the email message
-    $parent_id_list = explode(";", $parent_id);
-    $parent_id = explode(':', $parent_id_list[0]);
+    $parent_id_list = \explode(";", $parent_id);
+    $parent_id = \explode(':', $parent_id_list[0]);
 
     // Having a parent object is optional.  If it is set, then associate it.
     if (isset($parent_id[0]) && isset($parent_id[1])) {
@@ -890,7 +890,7 @@ function track_email($user_name, $password, $parent_id, $contact_ids, $date_sent
 
     $email->save();
     // for each contact, add a link between the contact and the email message
-    $id_list = explode(";", $contact_ids);
+    $id_list = \explode(";", $contact_ids);
 
     foreach ($id_list as $id) {
         if (!empty($id)) {
@@ -1025,15 +1025,15 @@ function search($user_name, $password, $name)
     if (!validate_user($user_name, $password)) {
         return array();
     }
-    $name_list = explode("; ", $name);
+    $name_list = \explode("; ", $name);
     $list = array();
     foreach ($name_list as $single_name) {
-        $list = array_merge($list, contact_by_search($single_name));
-        $list = array_merge($list, lead_by_search($single_name));
-        $list = array_merge($list, account_by_search($single_name));
-        $list = array_merge($list, case_by_search($single_name));
-        $list = array_merge($list, opportunity_by_search($single_name));
-        $list = array_merge($list, bug_by_search($single_name));
+        $list = \array_merge($list, contact_by_search($single_name));
+        $list = \array_merge($list, lead_by_search($single_name));
+        $list = \array_merge($list, account_by_search($single_name));
+        $list = \array_merge($list, case_by_search($single_name));
+        $list = \array_merge($list, opportunity_by_search($single_name));
+        $list = \array_merge($list, bug_by_search($single_name));
     }
 
     return $list;

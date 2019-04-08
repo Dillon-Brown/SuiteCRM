@@ -78,13 +78,13 @@ function smarty_function_sugar_translate($params, &$smarty)
         $value = translate($params['label'], $module);
     }
     if (!empty($params['for_js']) && $params['for_js']) {
-        $value = addslashes($value);
-        $value = str_replace(array('&#039;', '&#39;'), "\'", $value);
+        $value = \addslashes($value);
+        $value = \str_replace(array('&#039;', '&#39;'), "\'", $value);
     }
     if (isset($params['trimColon']) && !$params['trimColon']) {
         return $value;
     } elseif ($params['label'] == '0') {
         return translate("DEFAULT", $module);
     }
-    return preg_replace("/([:]|\xEF\xBC\x9A)[\\s]*$/", "", $value);
+    return \preg_replace("/([:]|\xEF\xBC\x9A)[\\s]*$/", "", $value);
 }

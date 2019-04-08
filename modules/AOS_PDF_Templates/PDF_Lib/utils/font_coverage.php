@@ -19,8 +19,8 @@ $checkdir = '';
 //////////////////////////////////
 
 
-set_time_limit(600);
-ini_set("memory_limit","256M");
+\set_time_limit(600);
+\ini_set("memory_limit","256M");
 
 //==============================================================
 //==============================================================
@@ -38,37 +38,37 @@ else { $ttfdir = _MPDF_TTFONTPATH; }
 
 
 
-$mqr=ini_get("magic_quotes_runtime");
+$mqr=\ini_get("magic_quotes_runtime");
 if ($mqr) { set_magic_quotes_runtime(0); }
-if (!class_exists('TTFontFile_Analysis', false)) { include(_MPDF_PATH .'classes/ttfontsuni_analysis.php'); }
+if (!\class_exists('TTFontFile_Analysis', false)) { include(_MPDF_PATH .'classes/ttfontsuni_analysis.php'); }
 
 //==============================================================
 	$smp = true;
 	$maxt = 131071;
 //==============================================================
 //==============================================================
-$unifile = file('UnicodeData.txt');
+$unifile = \file('UnicodeData.txt');
 $unichars = array();
 foreach($unifile AS $line) {
-	if (preg_match('/<control>/',$line,$m)) { 
+	if (\preg_match('/<control>/',$line,$m)) { 
 	  $rangename = '';
 	  continue;
 	}
-	elseif (preg_match('/^([12]{0,1}[0-9A-Za-z]{4});<(.*?), Last>/',$line,$m)) { 
+	elseif (\preg_match('/^([12]{0,1}[0-9A-Za-z]{4});<(.*?), Last>/',$line,$m)) { 
 	  if ($rangename && $rangename == $m[2]) {
-		$endrange = hexdec($m[1]);
+		$endrange = \hexdec($m[1]);
 		for ($i=$startrange;$i<=$endrange; $i++) {
 			$unichars[$i] = $i;
 		}
 	  }
 	  $rangename = '';
 	}
-	elseif (preg_match('/^([12]{0,1}[0-9A-Za-z]{4});<(.*?), First>/',$line,$m)) { 
-	  $startrange = hexdec($m[1]);
+	elseif (\preg_match('/^([12]{0,1}[0-9A-Za-z]{4});<(.*?), First>/',$line,$m)) { 
+	  $startrange = \hexdec($m[1]);
 	  $rangename = $m[2];
 	}
-	elseif (preg_match('/^([12]{0,1}[0-9A-Za-z]{4});/',$line,$m)) { 
-	  $unichars[hexdec($m[1])] = hexdec($m[1]);
+	elseif (\preg_match('/^([12]{0,1}[0-9A-Za-z]{4});/',$line,$m)) { 
+	  $unichars[\hexdec($m[1])] = \hexdec($m[1]);
 	  $rangename = '';
 	}
 }
@@ -82,22 +82,22 @@ td { font-family: helvetica;font-size:8pt; vertical-align: top;}
 </style></head><body>';
 
 //==============================================================
-$ff = scandir($ttfdir);
+$ff = \scandir($ttfdir);
 $tempfontdata = array();
 foreach($ff AS $f) {
 	$ttf = new TTFontFile_Analysis();
 	$ret = array();
 	$isTTC = false;
-	if (strtolower(substr($f,-4,4))=='.ttf' || strtolower(substr($f,-4,4))=='.otf') {
+	if (\strtolower(\substr($f,-4,4))=='.ttf' || \strtolower(\substr($f,-4,4))=='.otf') {
 		$ret[] = $ttf->extractCoreInfo($ttfdir.$f);
 	}
-	for ($i=0; $i<count($ret); $i++) {
-	   if (is_array($ret[$i])) { 
+	for ($i=0; $i<\count($ret); $i++) {
+	   if (\is_array($ret[$i])) { 
 		$tfname = $ret[$i][0];
 		$bold = $ret[$i][1];
 		$italic = $ret[$i][2];
-		$fname = strtolower($tfname );
-		$fname = preg_replace('/[ ()]/','',$fname );
+		$fname = \strtolower($tfname );
+		$fname = \preg_replace('/[ ()]/','',$fname );
 		//$tempfonttrans[$tfname] = $fname;
 		$style = '';
 		if ($bold) { $style .= 'B'; }
@@ -116,9 +116,9 @@ foreach($ff AS $f) {
 
 $fullcovers = array();
 $nearlycovers = array();
-ksort($tempfontdata);
+\ksort($tempfontdata);
 $ningroup = 14;
-$nofgroups = ceil(count($unicode_ranges)/$ningroup);
+$nofgroups = \ceil(\count($unicode_ranges)/$ningroup);
 
 //==============================================================
 
@@ -135,7 +135,7 @@ for ($urgp = 0; $urgp < $nofgroups; $urgp++) {
 				$range = $ur['range'];
 				$rangestart = $ur['starthex'];
 				$rangeend = $ur['endhex'];
-				$html .= '<td style="font-family:helvetica;font-size:8pt;font-weight:bold;">'.strtoupper($range).' (U+'.$rangestart .'-U+'.$rangeend.')</td>';
+				$html .= '<td style="font-family:helvetica;font-size:8pt;font-weight:bold;">'.\strtoupper($range).' (U+'.$rangestart .'-U+'.$rangeend.')</td>';
 	   }
    }
    $html .= '</tr></thead>';
@@ -143,11 +143,11 @@ for ($urgp = 0; $urgp < $nofgroups; $urgp++) {
 
   foreach ($tempfontdata AS $fname => $v) {
 	$cw = '';
-	if (file_exists((_MPDF_TTFONTDATAPATH.$fname.'.cw.dat'))) { $cw = file_get_contents(_MPDF_TTFONTDATAPATH.$fname.'.cw.dat'); }
+	if (\file_exists((_MPDF_TTFONTDATAPATH.$fname.'.cw.dat'))) { $cw = \file_get_contents(_MPDF_TTFONTDATAPATH.$fname.'.cw.dat'); }
 	else {
 		$mpdf->fontdata[$fname]['R'] = $tempfontdata[$fname]['file']; 
 		$mpdf->AddFont($fname);
-		$cw = file_get_contents(_MPDF_TTFONTDATAPATH.$fname.'.cw.dat'); 
+		$cw = \file_get_contents(_MPDF_TTFONTDATAPATH.$fname.'.cw.dat'); 
 	}
 	if (!$cw) {
 		continue;
@@ -231,11 +231,11 @@ foreach($unicode_ranges AS $urk => $ur) {
 	if ($ur['special']) { $ext = 'background-color:#FFDDDD;'; $ext2 = '<br /><span style="color:#AA0000">Special processing required</span>'; }
 
 
-	$html .= '<tr><td style="font-family:helvetica;font-size:8pt;font-weight:bold;'.$ext.'">'.strtoupper($range).' (U+'.$rangestart .'-U+'.$rangeend.')'.$ext2.'</td>';
+	$html .= '<tr><td style="font-family:helvetica;font-size:8pt;font-weight:bold;'.$ext.'">'.\strtoupper($range).' (U+'.$rangestart .'-U+'.$rangeend.')'.$ext2.'</td>';
 	$arr = $fullcovers[$urk];
 	$narr = $nearlycovers[$urk];
-	if (is_array($arr)) { $html .= '<td>'. implode(', ',$arr). '</td></tr>'; }
-	elseif (is_array($narr)) { $html .= '<td style="background-color: #AAAAAA;">'. implode(', ',$narr). ' (>90%)</td></tr>'; }
+	if (\is_array($arr)) { $html .= '<td>'. \implode(', ',$arr). '</td></tr>'; }
+	elseif (\is_array($narr)) { $html .= '<td style="background-color: #AAAAAA;">'. \implode(', ',$narr). ' (>90%)</td></tr>'; }
 	else { $html .= '<td style="background-color: #555555;"> </td></tr>'; }
 }
 $html.= '</table>';

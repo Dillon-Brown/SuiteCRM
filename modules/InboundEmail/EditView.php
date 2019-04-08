@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -115,7 +115,7 @@ $novalidate_cert = '';
 $ssl = '';
 if (!empty($focus->service)) {
     // will always have 2 values: /tls || /notls and /validate-cert || /novalidate-cert
-    $exServ = explode('::', $focus->service);
+    $exServ = \explode('::', $focus->service);
     if ($exServ[0] == 'tls') {
         $tls = "CHECKED";
     } elseif ($exServ[5] == 'notls') {
@@ -138,7 +138,7 @@ if ($focus->delete_seen == 0 || empty($focus->delete_seen)) {
 // mailbox type
 
 if ($focus->is_personal) {
-    array_splice($domMailBoxType, 1, 1);
+    \array_splice($domMailBoxType, 1, 1);
 } // if
 $mailbox_type = get_select_options_with_id($domMailBoxType, $focus->mailbox_type);
 
@@ -146,7 +146,7 @@ $mailbox_type = get_select_options_with_id($domMailBoxType, $focus->mailbox_type
 $email_templates_arr = get_bean_select_array(true, 'EmailTemplate', 'name', '', 'name', true);
 
 if (!empty($focus->stored_options)) {
-    $storedOptions = unserialize(base64_decode($focus->stored_options));
+    $storedOptions = \unserialize(\base64_decode($focus->stored_options));
     $from_name = $storedOptions['from_name'];
     $from_addr = $storedOptions['from_addr'];
     isValidEmailAddress($from_addr);

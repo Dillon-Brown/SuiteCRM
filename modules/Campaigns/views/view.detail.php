@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -73,7 +73,7 @@ class CampaignsViewDetail extends ViewDetail
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -83,7 +83,7 @@ class CampaignsViewDetail extends ViewDetail
     public function preDisplay()
     {
         global $mod_strings;
-        if (isset($this->bean->campaign_type) && strtolower($this->bean->campaign_type) == 'newsletter') {
+        if (isset($this->bean->campaign_type) && \strtolower($this->bean->campaign_type) == 'newsletter') {
             $mod_strings['LBL_MODULE_NAME'] = $mod_strings['LBL_NEWSLETTERS'];
         }
         parent::preDisplay();

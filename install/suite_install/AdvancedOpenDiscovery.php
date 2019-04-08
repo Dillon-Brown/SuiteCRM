@@ -7,7 +7,7 @@ function install_aod()
 
     $sugar_config['aod']['enable_aod'] = true;
 
-    ksort($sugar_config);
+    \ksort($sugar_config);
     write_array_to_file('sugar_config', $sugar_config, 'config.php');
 
     installAODHooks();

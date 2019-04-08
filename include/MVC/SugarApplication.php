@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -75,7 +75,7 @@ class SugarApplication
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -127,16 +127,16 @@ class SugarApplication
 
         $authController = new AuthenticationController();
 
-        if (($user_unique_key != $server_unique_key) && (!in_array($this->controller->action, $allowed_actions)) &&
+        if (($user_unique_key != $server_unique_key) && (!\in_array($this->controller->action, $allowed_actions)) &&
                 (!isset($_SESSION['login_error']))) {
-            session_destroy();
+            \session_destroy();
 
             if (!empty($this->controller->action)) {
-                if (strtolower($this->controller->action) == 'delete') {
+                if (\strtolower($this->controller->action) == 'delete') {
                     $this->controller->action = 'DetailView';
-                } elseif (strtolower($this->controller->action) == 'save') {
+                } elseif (\strtolower($this->controller->action) == 'save') {
                     $this->controller->action = 'EditView';
-                } elseif (strtolower($this->controller->action) == 'quickcreate') {
+                } elseif (\strtolower($this->controller->action) == 'quickcreate') {
                     $this->controller->action = 'index';
                     $this->controller->module = 'home';
                 } elseif (isset($_REQUEST['massupdate']) || isset($_GET['massupdate']) || isset($_POST['massupdate'])) {
@@ -146,9 +146,9 @@ class SugarApplication
                 } elseif ($this->controller->action == $this->default_action && $this->controller->module == $this->default_module) {
                     $this->controller->action = '';
                     $this->controller->module = '';
-                } elseif (strtolower($this->controller->module) == 'alerts' && strtolower($this->controller->action) == 'get') {
+                } elseif (\strtolower($this->controller->module) == 'alerts' && \strtolower($this->controller->action) == 'get') {
                     echo 'lost password';
-                    if (preg_match('/\bentryPoint=Changenewpassword\b/', $_SERVER['HTTP_REFERER'])) {
+                    if (\preg_match('/\bentryPoint=Changenewpassword\b/', $_SERVER['HTTP_REFERER'])) {
                         echo ' - change new password';
                     }
                     exit();
@@ -164,12 +164,12 @@ class SugarApplication
             if (!$authController->sessionAuthenticate()) {
                 // if the object we get back is null for some reason, this will break - like user prefs are corrupted
                 $GLOBALS['log']->fatal('User retrieval for ID: (' . $_SESSION['authenticated_user_id'] . ') does not exist in database or retrieval failed catastrophically.  Calling session_destroy() and sending user to Login page.');
-                session_destroy();
+                \session_destroy();
                 SugarApplication::redirect('index.php?action=Login&module=Users');
                 die();
             }//fi
-        } elseif (!($this->controller->module == 'Users' && in_array($this->controller->action, $allowed_actions))) {
-            session_destroy();
+        } elseif (!($this->controller->module == 'Users' && \in_array($this->controller->action, $allowed_actions))) {
+            \session_destroy();
             SugarApplication::redirect('index.php?action=Login&module=Users');
             die();
         }
@@ -178,23 +178,23 @@ class SugarApplication
         //set cookies
         if (isset($_SESSION['authenticated_user_id'])) {
             $GLOBALS['log']->debug("setting cookie ck_login_id_20 to " . $_SESSION['authenticated_user_id']);
-            self::setCookie('ck_login_id_20', $_SESSION['authenticated_user_id'], time() + 86400 * 90);
+            self::setCookie('ck_login_id_20', $_SESSION['authenticated_user_id'], \time() + 86400 * 90);
         }
         if (isset($_SESSION['authenticated_user_theme'])) {
             $GLOBALS['log']->debug("setting cookie ck_login_theme_20 to " . $_SESSION['authenticated_user_theme']);
-            self::setCookie('ck_login_theme_20', $_SESSION['authenticated_user_theme'], time() + 86400 * 90);
+            self::setCookie('ck_login_theme_20', $_SESSION['authenticated_user_theme'], \time() + 86400 * 90);
         }
         if (isset($_SESSION['authenticated_user_theme_color'])) {
             $GLOBALS['log']->debug("setting cookie ck_login_theme_color_20 to " . $_SESSION['authenticated_user_theme_color']);
-            self::setCookie('ck_login_theme_color_20', $_SESSION['authenticated_user_theme_color'], time() + 86400 * 90);
+            self::setCookie('ck_login_theme_color_20', $_SESSION['authenticated_user_theme_color'], \time() + 86400 * 90);
         }
         if (isset($_SESSION['authenticated_user_theme_font'])) {
             $GLOBALS['log']->debug("setting cookie ck_login_theme_font_20 to " . $_SESSION['authenticated_user_theme_font']);
-            self::setCookie('ck_login_theme_font_20', $_SESSION['authenticated_user_theme_font'], time() + 86400 * 90);
+            self::setCookie('ck_login_theme_font_20', $_SESSION['authenticated_user_theme_font'], \time() + 86400 * 90);
         }
         if (isset($_SESSION['authenticated_user_language'])) {
             $GLOBALS['log']->debug("setting cookie ck_login_language_20 to " . $_SESSION['authenticated_user_language']);
-            self::setCookie('ck_login_language_20', $_SESSION['authenticated_user_language'], time() + 86400 * 90);
+            self::setCookie('ck_login_language_20', $_SESSION['authenticated_user_language'], \time() + 86400 * 90);
         }
         //check if user can access
     }
@@ -224,19 +224,19 @@ class SugarApplication
         // merge _GET and _POST, but keep the results local
         // this handles the issues where values come in one way or the other
         // without affecting the main super globals
-        $merged = array_merge($_GET, $_POST);
+        $merged = \array_merge($_GET, $_POST);
         foreach ($merged as $key => $val) {
-            if (is_array($val)) {
+            if (\is_array($val)) {
                 foreach ($val as $k => $v) {
                     //If an array, then skip the urlencoding. This should be handled with stringify instead.
-                    if (is_array($v)) {
+                    if (\is_array($v)) {
                         continue;
                     }
 
-                    $GLOBALS['request_string'] .= urlencode($key) . '[' . $k . ']=' . urlencode($v) . '&';
+                    $GLOBALS['request_string'] .= \urlencode($key) . '[' . $k . ']=' . \urlencode($v) . '&';
                 }
             } else {
-                $GLOBALS['request_string'] .= urlencode($key) . '=' . urlencode($val) . '&';
+                $GLOBALS['request_string'] .= \urlencode($key) . '=' . \urlencode($val) . '&';
             }
         }
         $GLOBALS['request_string'] .= 'print=true';
@@ -275,7 +275,7 @@ class SugarApplication
     {
         if (isset($GLOBALS['sugar_config']['disc_client']) && $GLOBALS['sugar_config']['disc_client']) {
             if (isset($_REQUEST['action']) && $_REQUEST['action'] != 'SaveTimezone') {
-                if (!file_exists('modules/Sync/file_config.php')) {
+                if (!\file_exists('modules/Sync/file_config.php')) {
                     if ($_REQUEST['action'] != 'InitialSync' && $_REQUEST['action'] != 'Logout' &&
                             ($_REQUEST['action'] != 'Popup' && $_REQUEST['module'] != 'Sync')) {
                         //echo $_REQUEST['action'];
@@ -319,7 +319,7 @@ class SugarApplication
         // Bug 20916 - Special case for check ACL access rights for Subpanel QuickCreates
         if (isset($_POST['action']) && $_POST['action'] == 'SubpanelCreates') {
             $actual_module = $_POST['target_module'];
-            if (!empty($GLOBALS['modListHeader']) && !in_array($actual_module, $GLOBALS['modListHeader'])) {
+            if (!empty($GLOBALS['modListHeader']) && !\in_array($actual_module, $GLOBALS['modListHeader'])) {
                 $this->controller->hasAccess = false;
             }
             return;
@@ -330,10 +330,10 @@ class SugarApplication
             $GLOBALS['modListHeader'] = query_module_access_list($GLOBALS['current_user']);
         }
 
-        if (in_array($this->controller->module, $GLOBALS['modInvisList']) &&
-                ((in_array('Activities', $GLOBALS['moduleList']) &&
-                in_array('Calendar', $GLOBALS['moduleList'])) &&
-                in_array($this->controller->module, $GLOBALS['modInvisListActivities']))
+        if (\in_array($this->controller->module, $GLOBALS['modInvisList']) &&
+                ((\in_array('Activities', $GLOBALS['moduleList']) &&
+                \in_array('Calendar', $GLOBALS['moduleList'])) &&
+                \in_array($this->controller->module, $GLOBALS['modInvisListActivities']))
         ) {
             $this->controller->hasAccess = false;
             return;
@@ -425,7 +425,7 @@ class SugarApplication
         // load the user's default theme
         $theme = $GLOBALS['current_user']->getPreference('user_theme');
 
-        if (is_null($theme)) {
+        if (\is_null($theme)) {
             $theme = $GLOBALS['sugar_config']['default_theme'];
             if (!empty($_SESSION['authenticated_user_theme'])) {
                 $theme = $_SESSION['authenticated_user_theme'];
@@ -443,14 +443,14 @@ class SugarApplication
             $theme = $GLOBALS['sugar_config']['default_theme'];
         }
 
-        if (!is_null($theme) && !headers_sent()) {
-            setcookie('sugar_user_theme', $theme, time() + 31536000, null, null, isSSL(), true); // expires in a year
+        if (!\is_null($theme) && !\headers_sent()) {
+            \setcookie('sugar_user_theme', $theme, \time() + 31536000, null, null, isSSL(), true); // expires in a year
         }
 
         SugarThemeRegistry::set($theme);
         require_once('include/utils/layout_utils.php');
         $GLOBALS['image_path'] = SugarThemeRegistry::current()->getImagePath() . '/';
-        if (defined('TEMPLATE_URL')) {
+        if (\defined('TEMPLATE_URL')) {
             $GLOBALS['image_path'] = TEMPLATE_URL . '/' . $GLOBALS['image_path'];
         }
 
@@ -517,22 +517,22 @@ class SugarApplication
 
     protected function isModifyAction()
     {
-        $action = strtolower($this->controller->action);
-        if (substr($action, 0, 4) == "save" || substr($action, 0, 6) == "delete") {
+        $action = \strtolower($this->controller->action);
+        if (\substr($action, 0, 4) == "save" || \substr($action, 0, 6) == "delete") {
             return true;
         }
         if (isset($this->modifyModules[$this->controller->module])) {
             if ($this->modifyModules[$this->controller->module] === true) {
                 return true;
             }
-            if (in_array($this->controller->action, $this->modifyModules[$this->controller->module])) {
+            if (\in_array($this->controller->action, $this->modifyModules[$this->controller->module])) {
                 return true;
             }
         }
-        if (in_array($this->controller->action, $this->globalModifyActions)) {
+        if (\in_array($this->controller->action, $this->globalModifyActions)) {
             return true;
         }
-        if (in_array($this->controller->action, $this->modifyActions)) {
+        if (\in_array($this->controller->action, $this->modifyActions)) {
             return true;
         }
         return false;
@@ -552,7 +552,7 @@ class SugarApplication
     {
         global $sugar_config;
         if (!empty($sugar_config['http_referer']['actions'])) {
-            $this->whiteListActions = array_merge($sugar_config['http_referer']['actions'], $this->whiteListActions);
+            $this->whiteListActions = \array_merge($sugar_config['http_referer']['actions'], $this->whiteListActions);
         }
 
         $strong = empty($sugar_config['http_referer']['weak']);
@@ -563,16 +563,16 @@ class SugarApplication
             $whiteListReferers[] = $_SERVER['SERVER_ADDR'];
         }
         if (!empty($sugar_config['http_referer']['list'])) {
-            $whiteListReferers = array_merge($whiteListReferers, $sugar_config['http_referer']['list']);
+            $whiteListReferers = \array_merge($whiteListReferers, $sugar_config['http_referer']['list']);
         }
 
-        if ($strong && empty($_SERVER['HTTP_REFERER']) && !in_array($this->controller->action, $this->whiteListActions) && $this->isModifyAction()) {
-            $http_host = explode(':', $_SERVER['HTTP_HOST']);
+        if ($strong && empty($_SERVER['HTTP_REFERER']) && !\in_array($this->controller->action, $this->whiteListActions) && $this->isModifyAction()) {
+            $http_host = \explode(':', $_SERVER['HTTP_HOST']);
             $whiteListActions = $this->whiteListActions;
             $whiteListActions[] = $this->controller->action;
-            $whiteListString = "'" . implode("', '", $whiteListActions) . "'";
+            $whiteListString = "'" . \implode("', '", $whiteListActions) . "'";
             if ($dieIfInvalid) {
-                header("Cache-Control: no-cache, must-revalidate");
+                \header("Cache-Control: no-cache, must-revalidate");
                 $ss = new Sugar_Smarty;
                 $ss->assign('host', $http_host[0]);
                 $ss->assign('action', $this->controller->action);
@@ -582,14 +582,14 @@ class SugarApplication
             }
             return false;
         } elseif (!empty($_SERVER['HTTP_REFERER']) && !empty($_SERVER['SERVER_NAME'])) {
-            $http_ref = parse_url($_SERVER['HTTP_REFERER']);
-            if ($http_ref['host'] !== $_SERVER['SERVER_NAME'] && !in_array($this->controller->action, $this->whiteListActions) &&
-                    (empty($whiteListReferers) || !in_array($http_ref['host'], $whiteListReferers))) {
+            $http_ref = \parse_url($_SERVER['HTTP_REFERER']);
+            if ($http_ref['host'] !== $_SERVER['SERVER_NAME'] && !\in_array($this->controller->action, $this->whiteListActions) &&
+                    (empty($whiteListReferers) || !\in_array($http_ref['host'], $whiteListReferers))) {
                 if ($dieIfInvalid) {
-                    header("Cache-Control: no-cache, must-revalidate");
+                    \header("Cache-Control: no-cache, must-revalidate");
                     $whiteListActions = $this->whiteListActions;
                     $whiteListActions[] = $this->controller->action;
-                    $whiteListString = "'" . implode("', '", $whiteListActions) . "'";
+                    $whiteListString = "'" . \implode("', '", $whiteListActions) . "'";
 
                     $ss = new Sugar_Smarty;
                     $ss->assign('host', $http_ref['host']);
@@ -608,19 +608,19 @@ class SugarApplication
     {
         $sessionIdCookie = isset($_COOKIE['PHPSESSID']) ? $_COOKIE['PHPSESSID'] : null;
         if (isset($_REQUEST['MSID'])) {
-            session_id($_REQUEST['MSID']);
-            session_start();
+            \session_id($_REQUEST['MSID']);
+            \session_start();
             if (!isset($_SESSION['user_id'])) {
                 if (isset($_COOKIE['PHPSESSID'])) {
-                    self::setCookie('PHPSESSID', '', time() - 42000, '/');
+                    self::setCookie('PHPSESSID', '', \time() - 42000, '/');
                 }
                 sugar_cleanup(false);
-                session_destroy();
+                \session_destroy();
                 exit('Not a valid entry method');
             }
         } else {
             if (can_start_session()) {
-                session_start();
+                \session_start();
             }
         }
 
@@ -630,8 +630,8 @@ class SugarApplication
         //set session expired message if login module and action are set to a non login default
         //AND session id in cookie is set but super global session array is empty
         if (isset($_REQUEST['login_module']) && isset($_REQUEST['login_action']) && !($_REQUEST['login_module'] == $default_module && $_REQUEST['login_action'] == 'index')) {
-            if (!is_null($sessionIdCookie) && empty($_SESSION)) {
-                self::setCookie('loginErrorMessage', 'LBL_SESSION_EXPIRED', time() + 30, '/');
+            if (!\is_null($sessionIdCookie) && empty($_SESSION)) {
+                self::setCookie('loginErrorMessage', 'LBL_SESSION_EXPIRED', \time() + 30, '/');
             }
         }
 
@@ -641,7 +641,7 @@ class SugarApplication
 
     public function endSession()
     {
-        session_destroy();
+        \session_destroy();
     }
 
     /**
@@ -659,7 +659,7 @@ class SugarApplication
          */
         
         if (!empty($_REQUEST['ajax_load'])) {
-            ob_get_clean();
+            \ob_get_clean();
             $ajax_ret = array(
                 'content' => "<script>SUGAR.ajaxUI.loadContent('$url');</script>\n",
                 'menu' => array(
@@ -670,13 +670,13 @@ class SugarApplication
             $json = getJSONobj();
             echo $json->encode($ajax_ret);
         } else {
-            if (headers_sent()) {
+            if (\headers_sent()) {
                 echo "<script>SUGAR.ajaxUI.loadContent('$url');</script>\n";
             } else {
                 //@ob_end_clean(); // clear output buffer
-                session_write_close();
-                header('HTTP/1.1 301 Moved Permanently');
-                header("Location: " . $url);
+                \session_write_close();
+                \header('HTTP/1.1 301 Moved Permanently');
+                \header("Location: " . $url);
             }
         }
         exit();
@@ -688,11 +688,11 @@ class SugarApplication
      */
     public static function headerRedirect($header_URL)
     {
-        if (preg_match('/\s*Location:\s*(.*)$/', $header_URL, $matches)) {
+        if (\preg_match('/\s*Location:\s*(.*)$/', $header_URL, $matches)) {
             $href = $matches[1];
             SugarApplication::redirect($href);
         } else {
-            header($header_URL);
+            \header($header_URL);
         }
     }
 
@@ -746,10 +746,10 @@ class SugarApplication
     {
         self::validateMessageType($type);
 
-        if (empty($_SESSION[$type]) || !is_array($_SESSION[$type])) {
+        if (empty($_SESSION[$type]) || !\is_array($_SESSION[$type])) {
             $_SESSION[$type] = array();
         }
-        if (!in_array($message, $_SESSION[$type])) {
+        if (!\in_array($message, $_SESSION[$type])) {
             $_SESSION[$type][] = $message;
         }
     }
@@ -762,7 +762,7 @@ class SugarApplication
     {
         self::validateMessageType($type);
 
-        if (isset($_SESSION[$type]) && is_array($_SESSION[$type])) {
+        if (isset($_SESSION[$type]) && \is_array($_SESSION[$type])) {
             $msgs = $_SESSION[$type];
             unset($_SESSION[$type]);
             return $msgs;
@@ -777,7 +777,7 @@ class SugarApplication
      */
     protected static function validateMessageType($type)
     {
-        if (!in_array($type, array('user_error_message', 'user_success_message'))) {
+        if (!\in_array($type, array('user_error_message', 'user_success_message'))) {
             throw new Exception('Incorrect application message type: ' . $type);
         }
     }
@@ -798,7 +798,7 @@ class SugarApplication
         if(isSSL()){
 	        $secure = true;
         }
-        if (is_null($domain)) {
+        if (\is_null($domain)) {
             if (isset($_SERVER["HTTP_HOST"])) {
                 $domain = $_SERVER["HTTP_HOST"];
             } else {
@@ -806,8 +806,8 @@ class SugarApplication
             }
         }
 
-        if (!headers_sent()) {
-            setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+        if (!\headers_sent()) {
+            \setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
         }
 
         $_COOKIE[$name] = $value;
@@ -840,7 +840,7 @@ class SugarApplication
         if (empty($ret)) {
             return '';
         }
-        return "&" . http_build_query($ret);
+        return "&" . \http_build_query($ret);
     }
 
     /**
@@ -881,6 +881,6 @@ class SugarApplication
         if (empty($vars)) {
             return "index.php?module=Home&action=index";
         }
-        return "index.php?" . http_build_query($vars);
+        return "index.php?" . \http_build_query($vars);
     }
 }

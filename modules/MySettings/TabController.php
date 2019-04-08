@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -73,14 +73,14 @@ class TabController
             $administration->retrieveSettings('MySettings');
             if (isset($administration->settings) && isset($administration->settings['MySettings_tab'])) {
                 $tabs= $administration->settings['MySettings_tab'];
-                $trimmed_tabs = trim($tabs);
+                $trimmed_tabs = \trim($tabs);
                 //make sure serialized string is not empty
                 if (!empty($trimmed_tabs)) {
-                    $tabs = base64_decode($tabs);
-                    $tabs = unserialize($tabs);
+                    $tabs = \base64_decode($tabs);
+                    $tabs = \unserialize($tabs);
                     //Ensure modules saved in the prefences exist.
                     foreach ($tabs as $id => $tab) {
-                        if (!in_array($tab, $moduleList)) {
+                        if (!\in_array($tab, $moduleList)) {
                             unset($tabs[$id]);
                         }
                     }
@@ -108,7 +108,7 @@ class TabController
             unset($unsetTabs[$tab]);
         }
     
-        $should_hide_iframes = !file_exists('modules/iFrames/iFrame.php');
+        $should_hide_iframes = !\file_exists('modules/iFrames/iFrame.php');
         if ($should_hide_iframes) {
             if (isset($unsetTabs['iFrames'])) {
                 unset($unsetTabs['iFrames']);
@@ -126,7 +126,7 @@ class TabController
     public function set_system_tabs($tabs)
     {
         $administration = new Administration();
-        $serialized = base64_encode(serialize($tabs));
+        $serialized = \base64_encode(\serialize($tabs));
         $administration->saveSetting('MySettings', 'tab', $serialized);
         self::$isCacheValid = false;
     }

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -97,13 +97,13 @@ class DeployedSubpanelImplementation extends AbstractMetaDataImplementation impl
      */
     public function __construct($subpanelName, $moduleName)
     {
-        $GLOBALS ['log']->debug(get_class($this) . "->__construct($subpanelName , $moduleName)");
+        $GLOBALS ['log']->debug(\get_class($this) . "->__construct($subpanelName , $moduleName)");
         $this->_subpanelName = $subpanelName;
         $this->_moduleName = $moduleName;
 
         // BEGIN ASSERTIONS
         if (!isset($GLOBALS ['beanList'] [$moduleName])) {
-            sugar_die(get_class($this) . ": Modulename $moduleName is not a Deployed Module");
+            sugar_die(\get_class($this) . ": Modulename $moduleName is not a Deployed Module");
         }
         // END ASSERTIONS
 
@@ -122,7 +122,7 @@ class DeployedSubpanelImplementation extends AbstractMetaDataImplementation impl
         $this->_fielddefs = array();
         $this->_language = '';
         if (!empty($spd->layout_defs)) {
-            if (array_key_exists(strtolower($subpanelName), $spd->layout_defs ['subpanel_setup'])) {
+            if (\array_key_exists(\strtolower($subpanelName), $spd->layout_defs ['subpanel_setup'])) {
                 //First load the original defs from the module folder
                 $originalSubpanel = $spd->load_subpanel($subpanelName, false, true);
                 $this->_fullFielddefs = $originalSubpanel->get_list_fields();
@@ -130,9 +130,9 @@ class DeployedSubpanelImplementation extends AbstractMetaDataImplementation impl
 
                 $this->_aSubPanelObject = $spd->load_subpanel($subpanelName);
                 // now check if there is a restored subpanel in the history area - if there is, then go ahead and use it
-                if (file_exists($this->historyPathname)) {
+                if (\file_exists($this->historyPathname)) {
                     // load in the subpanelDefOverride from the history file
-                    $GLOBALS ['log']->debug(get_class($this) . ": loading from history");
+                    $GLOBALS ['log']->debug(\get_class($this) . ": loading from history");
                     require $this->historyPathname;
                     $this->_viewdefs = $layout_defs;
                 } else {
@@ -146,13 +146,13 @@ class DeployedSubpanelImplementation extends AbstractMetaDataImplementation impl
 
                 // Retrieve a copy of the bean for the parent module of this subpanel - so we can find additional fields for the layout
                 $subPanelParentModuleName = $this->_aSubPanelObject->get_module_name();
-                $beanListLower = array_change_key_case($GLOBALS ['beanList']);
-                if (!empty($subPanelParentModuleName) && isset($beanListLower [strtolower($subPanelParentModuleName)])) {
+                $beanListLower = \array_change_key_case($GLOBALS ['beanList']);
+                if (!empty($subPanelParentModuleName) && isset($beanListLower [\strtolower($subPanelParentModuleName)])) {
                     $subPanelParentModule = get_module_info($subPanelParentModuleName);
 
                     // Run through the preliminary list, keeping only those fields that are valid to include in a layout
                     foreach ($subPanelParentModule->field_defs as $key => $def) {
-                        $key = strtolower($key);
+                        $key = \strtolower($key);
 
                         if (AbstractMetaDataParser::validField($def)) {
                             if (!isset($def ['label'])) {
@@ -214,7 +214,7 @@ class DeployedSubpanelImplementation extends AbstractMetaDataImplementation impl
             MB_WORKINGMETADATALOCATION => 'custom/working/',
             MB_HISTORYMETADATALOCATION => 'custom/history/'
         );
-        $type = strtolower($type);
+        $type = \strtolower($type);
 
         $filenames = array(
             MB_DASHLETSEARCH => 'dashletviewdefs',
@@ -233,7 +233,7 @@ class DeployedSubpanelImplementation extends AbstractMetaDataImplementation impl
         $sm = StudioModuleFactory::getStudioModule($moduleName);
         foreach ($sm->sources as $file => $def) {
             if (!empty($def['view'])) {
-                $filenames[$def['view']] = substr($file, 0, strlen($file) - 4);
+                $filenames[$def['view']] = \substr($file, 0, \strlen($file) - 4);
             }
         }
 

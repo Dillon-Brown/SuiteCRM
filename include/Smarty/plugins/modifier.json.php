@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -44,5 +44,5 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 function smarty_modifier_json($value)
 {
-    return json_encode($value);
+    return \json_encode($value);
 }

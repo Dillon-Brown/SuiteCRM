@@ -95,7 +95,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
         if ($tidy !== null) {
             $this->_tidy = $tidy;
         }
-        $html = preg_replace_callback('#<style(?:\s.*)?>(.+)</style>#isU', array($this, 'styleCallback'), $html);
+        $html = \preg_replace_callback('#<style(?:\s.*)?>(.+)</style>#isU', array($this, 'styleCallback'), $html);
         $style_blocks = $this->_styleMatches;
         $this->_styleMatches = array(); // reset
         $context->register('StyleBlocks', $style_blocks); // $context must not be reused
@@ -121,22 +121,22 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
         // prepare scope
         $scope = $config->get('Filter.ExtractStyleBlocks.Scope');
         if ($scope !== null) {
-            $scopes = array_map('trim', explode(',', $scope));
+            $scopes = \array_map('trim', \explode(',', $scope));
         } else {
             $scopes = array();
         }
         // remove comments from CSS
-        $css = trim($css);
-        if (strncmp('<!--', $css, 4) === 0) {
-            $css = substr($css, 4);
+        $css = \trim($css);
+        if (\strncmp('<!--', $css, 4) === 0) {
+            $css = \substr($css, 4);
         }
-        if (strlen($css) > 3 && substr($css, -3) == '-->') {
-            $css = substr($css, 0, -3);
+        if (\strlen($css) > 3 && \substr($css, -3) == '-->') {
+            $css = \substr($css, 0, -3);
         }
-        $css = trim($css);
-        set_error_handler('htmlpurifier_filter_extractstyleblocks_muteerrorhandler');
+        $css = \trim($css);
+        \set_error_handler('htmlpurifier_filter_extractstyleblocks_muteerrorhandler');
         $this->_tidy->parse($css);
-        restore_error_handler();
+        \restore_error_handler();
         $css_definition = $config->getDefinition('CSS');
         $html_definition = $config->getDefinition('HTML');
         $new_css = array();
@@ -144,7 +144,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
             // $decls are all CSS declarations inside an @ selector
             $new_decls = array();
             foreach ($decls as $selector => $style) {
-                $selector = trim($selector);
+                $selector = \trim($selector);
                 if ($selector === '') {
                     continue;
                 } // should not happen
@@ -210,17 +210,17 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
                 //        :visited, :active, :hover, :focus
 
                 // handle ruleset
-                $selectors = array_map('trim', explode(',', $selector));
+                $selectors = \array_map('trim', \explode(',', $selector));
                 $new_selectors = array();
                 foreach ($selectors as $sel) {
                     // split on +, > and spaces
-                    $basic_selectors = preg_split('/\s*([+> ])\s*/', $sel, -1, PREG_SPLIT_DELIM_CAPTURE);
+                    $basic_selectors = \preg_split('/\s*([+> ])\s*/', $sel, -1, PREG_SPLIT_DELIM_CAPTURE);
                     // even indices are chunks, odd indices are
                     // delimiters
                     $nsel = null;
                     $delim = null; // guaranteed to be non-null after
                     // two loop iterations
-                    for ($i = 0, $c = count($basic_selectors); $i < $c; $i++) {
+                    for ($i = 0, $c = \count($basic_selectors); $i < $c; $i++) {
                         $x = $basic_selectors[$i];
                         if ($i % 2) {
                             // delimiter
@@ -231,13 +231,13 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
                             }
                         } else {
                             // simple selector
-                            $components = preg_split('/([#.:])/', $x, -1, PREG_SPLIT_DELIM_CAPTURE);
+                            $components = \preg_split('/([#.:])/', $x, -1, PREG_SPLIT_DELIM_CAPTURE);
                             $sdelim = null;
                             $nx = null;
-                            for ($j = 0, $cc = count($components); $j < $cc; $j++) {
+                            for ($j = 0, $cc = \count($components); $j < $cc; $j++) {
                                 $y = $components[$j];
                                 if ($j === 0) {
-                                    if ($y === '*' || isset($html_definition->info[$y = strtolower($y)])) {
+                                    if ($y === '*' || isset($html_definition->info[$y = \strtolower($y)])) {
                                         $nx = $y;
                                     }
                                     // $nx stays null; this matters
@@ -295,7 +295,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
                 if (empty($new_selectors)) {
                     continue;
                 }
-                $selector = implode(', ', $new_selectors);
+                $selector = \implode(', ', $new_selectors);
                 foreach ($style as $name => $value) {
                     if (!isset($css_definition->info[$name])) {
                         unset($style[$name]);
@@ -323,7 +323,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
         // we are going to escape any special characters <>& to ensure
         // that no funny business occurs (i.e. </style> in a font-family prop).
         if ($config->get('Filter.ExtractStyleBlocks.Escaping')) {
-            $css = str_replace(
+            $css = \str_replace(
                 array('<', '>', '&'),
                 array('\3C ', '\3E ', '\26 '),
                 $css

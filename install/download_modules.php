@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -95,7 +95,7 @@ if (isset($_REQUEST['languagePackAction']) && !empty($_REQUEST['languagePackActi
             $file = new UploadFile('language_pack');
             if ($file->confirm_upload()) {
                 $perform = true;
-                if (strpos($file->mime_type, 'zip') !== false) { // only .zip files
+                if (\strpos($file->mime_type, 'zip') !== false) { // only .zip files
                     $tempFile = $file->get_stored_filename();
                     if ($file->final_move($tempFile)) {
                         $perform = true;
@@ -116,7 +116,7 @@ if (isset($_REQUEST['languagePackAction']) && !empty($_REQUEST['languagePackActi
                 $errors[] = $mod_strings['ERR_LANG_UPLOAD_1'];
             }
 
-            if (count($errors) > 0) {
+            if (\count($errors) > 0) {
                 foreach ($errors as $error) {
                     $uploadResult .= $error."<br />";
                 }
@@ -141,14 +141,14 @@ if (isset($_REQUEST['languagePackAction']) && !empty($_REQUEST['languagePackActi
 
 ///////////////////////////////////////////////////////////////////////////////
 ////    PRELOAD DISPLAY DATA
-$upload_max_filesize = ini_get('upload_max_filesize');
+$upload_max_filesize = \ini_get('upload_max_filesize');
 $upload_max_filesize_bytes = return_bytes($upload_max_filesize);
 $fileMaxSize ='';
-if (!defined('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
-    define('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES', 6 * 1024 * 1024);
+if (!\defined('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
+    \define('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES', 6 * 1024 * 1024);
 }
 
-if ($upload_max_filesize_bytes < constant('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
+if ($upload_max_filesize_bytes < \constant('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
     $GLOBALS['log']->debug("detected upload_max_filesize: $upload_max_filesize");
     $fileMaxSize = '<p class="error">'.$mod_strings['ERR_UPLOAD_MAX_FILESIZE']."</p>\n";
 }
@@ -156,7 +156,7 @@ $availablePatches = getLangPacks(true);
 $installedLanguagePacks = getInstalledLangPacks();
 $errs = '';
 if (isset($validation_errors)) {
-    if (count($validation_errors) > 0) {
+    if (\count($validation_errors) > 0) {
         $errs  = '<div id="errorMsgs">';
         $errs .= "<p>{$mod_strings['LBL_SYSOPTS_ERRS_TITLE']}</p>";
         $errs .= '<ul>';

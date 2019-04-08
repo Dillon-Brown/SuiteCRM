@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -46,8 +46,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
     $bean = BeanFactory::getBean($_REQUEST['module'], $_REQUEST[$field . "_record_id"]);
 
 
-if (file_exists($removeFile)) {
-    if (!unlink($removeFile)) {
+if (\file_exists($removeFile)) {
+    if (!\unlink($removeFile)) {
         $GLOBALS['log']->error("*** Could not unlink() file: [ {$removeFile} ]");
     } else {
         $bean->$field = '';

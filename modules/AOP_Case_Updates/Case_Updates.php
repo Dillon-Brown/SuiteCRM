@@ -153,7 +153,7 @@ function caseUpdates(record){
 A;
 
     $updates = $focus->get_linked_beans('aop_case_updates', 'AOP_Case_Updates');
-    if (!$updates || is_null($focus->id)) {
+    if (!$updates || \is_null($focus->id)) {
         $html .= quick_edit_case_updates($focus);
 
         return $html;
@@ -174,7 +174,7 @@ $(document).ready(function(){
 <div>
 EOD;
 
-    usort(
+    \usort(
         $updates,
         function ($a, $b) {
             $aDate = $a->fetched_row['date_entered'];
@@ -266,14 +266,14 @@ function display_single_update(AOP_Case_Updates $update)
         if ($update->internal) {
             $html = "<div id='caseStyleInternal'>" . getUpdateDisplayHead($update);
             $html .= "<div id='caseUpdate" . $update->id . "' class='caseUpdate'>";
-            $html .= nl2br(html_entity_decode($update->description));
+            $html .= \nl2br(\html_entity_decode($update->description));
             $html .= '</div></div>';
 
             return $html;
         } /*if standard update*/
         $html = "<div id='lessmargin'><div id='caseStyleUser'>" . getUpdateDisplayHead($update);
         $html .= "<div id='caseUpdate" . $update->id . "' class='caseUpdate'>";
-        $html .= nl2br(html_entity_decode($update->description));
+        $html .= \nl2br(\html_entity_decode($update->description));
         $html .= '</div></div></div>';
 
         return $html;
@@ -283,7 +283,7 @@ function display_single_update(AOP_Case_Updates $update)
     if ($update->contact_id) {
         $html = "<div id='extramargin'><div id='caseStyleContact'>" . getUpdateDisplayHead($update);
         $html .= "<div id='caseUpdate" . $update->id . "' class='caseUpdate'>";
-        $html .= nl2br(html_entity_decode($update->description));
+        $html .= \nl2br(\html_entity_decode($update->description));
         $html .= '</div></div></div>';
 
         return $html;
@@ -342,7 +342,7 @@ function quick_edit_case_updates($case)
     $roles = $acl->getUserRoles($id);
 
     //Return if user cannot edit cases
-    if ($roles === 'no edit cases' || in_array('no edit cases', $roles)) {
+    if ($roles === 'no edit cases' || \in_array('no edit cases', $roles)) {
         return '';
     }
     $internalChecked = '';

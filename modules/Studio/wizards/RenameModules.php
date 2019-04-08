@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -386,7 +386,7 @@ class RenameModules
         global $beanList;
 
         foreach ($beanList as $moduleName => $beanName) {
-            if (class_exists($beanName)) {
+            if (\class_exists($beanName)) {
                 $this->renameModuleSubpanel($moduleName, $beanName, $this->changedModules);
             } else {
                 $GLOBALS['log']->error("Class $beanName does not exist, unable to rename.");
@@ -434,10 +434,10 @@ class RenameModules
                     //At this point we don't know if we should replace the string with the plural or singular version of the new
                     //strings so we'll try both but with the plural version first since it should be longer than the singular.
                     // The saved old strings are html decoded, so we need to decode the new string first before str_replace.
-                    $replacedString = str_replace(html_entity_decode_utf8($renameFields['prev_plural'], ENT_QUOTES), $renameFields['plural'], $oldStringValue);
+                    $replacedString = \str_replace(html_entity_decode_utf8($renameFields['prev_plural'], ENT_QUOTES), $renameFields['plural'], $oldStringValue);
                     if ($replacedString == $oldStringValue) {
                         // continue to replace singular only if nothing been replaced yet
-                        $replacedString = str_replace(html_entity_decode_utf8($renameFields['prev_singular'], ENT_QUOTES), $renameFields['singular'], $replacedString);
+                        $replacedString = \str_replace(html_entity_decode_utf8($renameFields['prev_singular'], ENT_QUOTES), $renameFields['singular'], $replacedString);
                     }
                     $replacementStrings[$replaceKey] = $replacedString;
                 }
@@ -445,8 +445,8 @@ class RenameModules
         }
 
         //Now we can write out the replaced language strings for each module
-        if (count($replacementStrings) > 0) {
-            $GLOBALS['log']->debug("Writing out labels for subpanel changes for module $moduleName, labels: " . var_export($replacementStrings, true));
+        if (\count($replacementStrings) > 0) {
+            $GLOBALS['log']->debug("Writing out labels for subpanel changes for module $moduleName, labels: " . \var_export($replacementStrings, true));
             ParserLabel::addLabels($this->selectedLanguage, $replacementStrings, $moduleName);
             $this->renamedModules[$moduleName] = true;
         }
@@ -467,11 +467,11 @@ class RenameModules
 
         $layout_defs = array();
 
-        if (file_exists('modules/' . $bean->module_dir . '/metadata/subpaneldefs.php')) {
+        if (\file_exists('modules/' . $bean->module_dir . '/metadata/subpaneldefs.php')) {
             require('modules/' . $bean->module_dir . '/metadata/subpaneldefs.php');
         }
 
-        if (file_exists('custom/modules/' . $bean->module_dir . '/Ext/Layoutdefs/layoutdefs.ext.php')) {
+        if (\file_exists('custom/modules/' . $bean->module_dir . '/Ext/Layoutdefs/layoutdefs.ext.php')) {
             require('custom/modules/' . $bean->module_dir . '/Ext/Layoutdefs/layoutdefs.ext.php');
         }
 
@@ -488,7 +488,7 @@ class RenameModules
         global $beanList;
 
         foreach ($beanList as $moduleName => $beanName) {
-            if (class_exists($beanName)) {
+            if (\class_exists($beanName)) {
                 $this->renameModuleRelatedLinks($moduleName, $beanName);
             } else {
                 $GLOBALS['log']->fatal("Class $beanName does not exist, unable to rename.");
@@ -518,11 +518,11 @@ class RenameModules
         $arrayToRename = array();
         $replacementStrings = array();
         $mod_strings = return_module_language($this->selectedLanguage, $moduleName);
-        $changedModules = array_keys($this->changedModules);
+        $changedModules = \array_keys($this->changedModules);
 
         $relatedFields = $bean->get_related_fields();
         foreach ($relatedFields as $field => $defs) {
-            if (isset($defs['module']) && in_array($defs['module'], $changedModules)) {
+            if (isset($defs['module']) && \in_array($defs['module'], $changedModules)) {
                 $arrayToRename[$field] = $defs;
             }
         }
@@ -531,7 +531,7 @@ class RenameModules
             $fieldName = $defs['name'];
             if ($bean->load_relationship($fieldName)) {
                 $relModule = $bean->$fieldName->getRelatedModuleName();
-                if (in_array($relModule, $changedModules)) {
+                if (\in_array($relModule, $changedModules)) {
                     $defs['module'] = $relModule;
                     $arrayToRename[$field] = $defs;
                 }
@@ -550,18 +550,18 @@ class RenameModules
             $oldStringValue = translate($replaceKey, $moduleName);
             $renameFields = $this->changedModules[$linkEntry['module']];
 
-            if (strlen($renameFields['prev_plural']) > strlen($renameFields['prev_singular']) && strpos($oldStringValue, $renameFields['prev_plural']) !== false) {
+            if (\strlen($renameFields['prev_plural']) > \strlen($renameFields['prev_singular']) && \strpos($oldStringValue, $renameFields['prev_plural']) !== false) {
                 $key = 'plural';
             } else {
                 $key = 'singular';
             }
-            $replacedString = str_replace(html_entity_decode_utf8($renameFields['prev_' . $key], ENT_QUOTES), $renameFields[$key], $oldStringValue);
+            $replacedString = \str_replace(html_entity_decode_utf8($renameFields['prev_' . $key], ENT_QUOTES), $renameFields[$key], $oldStringValue);
             $replacementStrings[$replaceKey] = $replacedString;
         }
 
         //Now we can write out the replaced language strings for each module
-        if (count($replacementStrings) > 0) {
-            $GLOBALS['log']->debug("Writing out labels for link changes for module $moduleName, labels: " . var_export($replacementStrings, true));
+        if (\count($replacementStrings) > 0) {
+            $GLOBALS['log']->debug("Writing out labels for link changes for module $moduleName, labels: " . \var_export($replacementStrings, true));
             ParserLabel::addLabels($this->selectedLanguage, $replacementStrings, $moduleName);
             $this->renamedModules[$moduleName] = true;
         }
@@ -589,7 +589,7 @@ class RenameModules
     private function renameAllDashlets()
     {
         //Load the Dashlet metadata so we know what needs to be changed
-        if (!is_file(sugar_cached('dashlets/dashlets.php'))) {
+        if (!\is_file(sugar_cached('dashlets/dashlets.php'))) {
             require_once('include/Dashlets/DashletCacheBuilder.php');
             $dc = new DashletCacheBuilder();
             $dc->buildCache();
@@ -614,15 +614,15 @@ class RenameModules
         $replacementStrings = array();
 
         foreach ($dashletsFiles as $dashletName => $dashletData) {
-            if (isset($dashletData['module']) && $dashletData['module'] == $moduleName && file_exists($dashletData['meta'])) {
+            if (isset($dashletData['module']) && $dashletData['module'] == $moduleName && \file_exists($dashletData['meta'])) {
                 require($dashletData['meta']);
                 $dashletTitle = $dashletMeta[$dashletName]['title'];
                 $currentModuleStrings = return_module_language($this->selectedLanguage, $moduleName);
-                $modStringKey = array_search($dashletTitle, $currentModuleStrings);
+                $modStringKey = \array_search($dashletTitle, $currentModuleStrings);
                 if ($modStringKey !== false) {
-                    $replacedString = str_replace(html_entity_decode_utf8($replacementLabels['prev_plural'], ENT_QUOTES), $replacementLabels['plural'], $dashletTitle);
+                    $replacedString = \str_replace(html_entity_decode_utf8($replacementLabels['prev_plural'], ENT_QUOTES), $replacementLabels['plural'], $dashletTitle);
                     if ($replacedString == $dashletTitle) {
-                        $replacedString = str_replace(html_entity_decode_utf8($replacementLabels['prev_singular'], ENT_QUOTES), $replacementLabels['singular'], $replacedString);
+                        $replacedString = \str_replace(html_entity_decode_utf8($replacementLabels['prev_singular'], ENT_QUOTES), $replacementLabels['singular'], $replacedString);
                     }
                     $replacementStrings[$modStringKey] = $replacedString;
                 }
@@ -630,8 +630,8 @@ class RenameModules
         }
 
         //Now we can write out the replaced language strings for each module
-        if (count($replacementStrings) > 0) {
-            $GLOBALS['log']->debug("Writing out labels for dashlet changes for module $moduleName, labels: " . var_export($replacementStrings, true));
+        if (\count($replacementStrings) > 0) {
+            $GLOBALS['log']->debug("Writing out labels for dashlet changes for module $moduleName, labels: " . \var_export($replacementStrings, true));
             ParserLabel::addLabels($this->selectedLanguage, $replacementStrings, $moduleName);
         }
     }
@@ -760,8 +760,8 @@ class RenameModules
      */
     private function formatModuleLanguageKey($unformatedKey, $replacementStrings)
     {
-        $unformatedKey = str_replace('###MODULE_SINGULAR###', strtoupper($replacementStrings['key_singular']), $unformatedKey);
-        return str_replace('###MODULE_PLURAL###', strtoupper($replacementStrings['key_plural']), $unformatedKey);
+        $unformatedKey = \str_replace('###MODULE_SINGULAR###', \strtoupper($replacementStrings['key_singular']), $unformatedKey);
+        return \str_replace('###MODULE_PLURAL###', \strtoupper($replacementStrings['key_plural']), $unformatedKey);
     }
 
     /**
@@ -778,19 +778,19 @@ class RenameModules
         $search = html_entity_decode_utf8($replacementLabels[$replaceKey], ENT_QUOTES);
         $replace = $replacementLabels[$replacementMetaData['type']];
         if (!empty($modifier)) {
-            $search = call_user_func($modifier, $search);
-            $replace = call_user_func($modifier, $replace);
+            $search = \call_user_func($modifier, $search);
+            $replace = \call_user_func($modifier, $replace);
         }
         
         // Bug 47957
         // If nothing was replaced - try to replace original string
         $result = '';
         $replaceCount = 0;
-        $result = str_replace($search, $replace, $oldStringValue, $replaceCount);
+        $result = \str_replace($search, $replace, $oldStringValue, $replaceCount);
         if (!$replaceCount) {
             $replaceKey = 'key_' . $replacementMetaData['type'];
             $search = html_entity_decode_utf8($replacementLabels[$replaceKey], ENT_QUOTES);
-            $result = str_replace($search, $replace, $oldStringValue, $replaceCount);
+            $result = \str_replace($search, $replace, $oldStringValue, $replaceCount);
         }
         return $result;
     }
@@ -819,7 +819,7 @@ class RenameModules
         
         $typeDisplayList = getTypeDisplayList();
         
-        foreach (array_keys($this->changedModules)as $moduleName) {
+        foreach (\array_keys($this->changedModules)as $moduleName) {
             foreach ($typeDisplayList as $typeDisplay) {
                 if (isset($app_list_strings[$typeDisplay]) && isset($app_list_strings[$typeDisplay][$moduleName])) {
                     $newParams['dropdown_name'] = $typeDisplay;
@@ -881,9 +881,9 @@ class RenameModules
                 $key = '';
             }
 
-            $key = trim($key);
-            $value = trim($value);
-            $svalue = trim($svalue);
+            $key = \trim($key);
+            $value = \trim($value);
+            $svalue = \trim($svalue);
 
             //If the module key dne then do not continue with this rename.
             if (isset($current_app_list_string['moduleList'][$key])) {
@@ -902,7 +902,7 @@ class RenameModules
             $pvalue = $e['p'];
             $prev_plural = $current_app_list_string['moduleList'][$k];
             $prev_singular = isset($current_app_list_string['moduleListSingular'][$k]) ? $current_app_list_string['moduleListSingular'][$k] : $prev_plural;
-            if (strcmp($prev_plural, $pvalue) != 0 || (strcmp($prev_singular, $svalue) != 0)) {
+            if (\strcmp($prev_plural, $pvalue) != 0 || (\strcmp($prev_singular, $svalue) != 0)) {
                 $results[$k] = array('singular' => $svalue, 'plural' => $pvalue, 'prev_singular' => $prev_singular, 'prev_plural' => $prev_plural,
                                      'key_plural' => $k, 'key_singular' => $this->getModuleSingularKey($k)
                 );
@@ -924,13 +924,13 @@ class RenameModules
     private function getModuleSingularKey($moduleName)
     {
         $className = isset($GLOBALS['beanList'][$moduleName]) ? $GLOBALS['beanList'][$moduleName] : null;
-        if (is_null($className) || ! class_exists($className)) {
+        if (\is_null($className) || ! \class_exists($className)) {
             $GLOBALS['log']->error("Unable to get module singular key for class: $className");
             return $moduleName;
         }
 
         $tmp = new $className();
-        if (property_exists($tmp, 'object_name')) {
+        if (\property_exists($tmp, 'object_name')) {
             return $tmp->object_name;
         }
         return $moduleName;

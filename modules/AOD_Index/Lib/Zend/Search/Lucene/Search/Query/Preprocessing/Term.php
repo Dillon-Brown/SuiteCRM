@@ -113,7 +113,7 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
                 }
             }
 
-            if (count($query->getTerms()) == 0) {
+            if (\count($query->getTerms()) == 0) {
                 $this->_matches = array();
                 if ($hasInsignificantSubqueries) {
                     require_once 'Zend/Search/Lucene/Search/Query/Insignificant.php';
@@ -146,8 +146,8 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
         // Recognize wildcard queries
 
         /** @todo check for PCRE unicode support may be performed through Zend_Environment in some future */
-        if (@preg_match('/\pL/u', 'a') == 1) {
-            $word = iconv($this->_encoding, 'UTF-8', $this->_word);
+        if (@\preg_match('/\pL/u', 'a') == 1) {
+            $word = \iconv($this->_encoding, 'UTF-8', $this->_word);
             $wildcardsPattern = '/[*?]/u';
             $subPatternsEncoding = 'UTF-8';
         } else {
@@ -156,9 +156,9 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
             $subPatternsEncoding = $this->_encoding;
         }
 
-        $subPatterns = preg_split($wildcardsPattern, $word, -1, PREG_SPLIT_OFFSET_CAPTURE);
+        $subPatterns = \preg_split($wildcardsPattern, $word, -1, PREG_SPLIT_OFFSET_CAPTURE);
 
-        if (count($subPatterns) > 1) {
+        if (\count($subPatterns) > 1) {
             // Wildcard query is recognized
 
             $pattern = '';
@@ -172,7 +172,7 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
 
                 // Check if each subputtern is a single word in terms of current analyzer
                 $tokens = Zend_Search_Lucene_Analysis_Analyzer::getDefault()->tokenize($subPattern[0], $subPatternsEncoding);
-                if (count($tokens) > 1) {
+                if (\count($tokens) > 1) {
                     require_once 'Zend/Search/Lucene/Search/QueryParserException.php';
                     throw new Zend_Search_Lucene_Search_QueryParserException('Wildcard search is supported only for non-multiple word terms');
                 }
@@ -200,13 +200,13 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
         require_once 'Zend/Search/Lucene/Analysis/Analyzer.php';
         $tokens = Zend_Search_Lucene_Analysis_Analyzer::getDefault()->tokenize($this->_word, $this->_encoding);
 
-        if (count($tokens) == 0) {
+        if (\count($tokens) == 0) {
             $this->_matches = array();
             require_once 'Zend/Search/Lucene/Search/Query/Insignificant.php';
             return new Zend_Search_Lucene_Search_Query_Insignificant();
         }
 
-        if (count($tokens) == 1) {
+        if (\count($tokens) == 1) {
             require_once 'Zend/Search/Lucene/Index/Term.php';
             $term  = new Zend_Search_Lucene_Index_Term($tokens[0]->getTermText(), $this->_field);
             require_once 'Zend/Search/Lucene/Search/Query/Term.php';
@@ -251,8 +251,8 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
         // -------------------------------------
         // Recognize wildcard queries
         /** @todo check for PCRE unicode support may be performed through Zend_Environment in some future */
-        if (@preg_match('/\pL/u', 'a') == 1) {
-            $word = iconv($this->_encoding, 'UTF-8', $this->_word);
+        if (@\preg_match('/\pL/u', 'a') == 1) {
+            $word = \iconv($this->_encoding, 'UTF-8', $this->_word);
             $wildcardsPattern = '/[*?]/u';
             $subPatternsEncoding = 'UTF-8';
         } else {
@@ -260,8 +260,8 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
             $wildcardsPattern = '/[*?]/';
             $subPatternsEncoding = $this->_encoding;
         }
-        $subPatterns = preg_split($wildcardsPattern, $word, -1, PREG_SPLIT_OFFSET_CAPTURE);
-        if (count($subPatterns) > 1) {
+        $subPatterns = \preg_split($wildcardsPattern, $word, -1, PREG_SPLIT_OFFSET_CAPTURE);
+        if (\count($subPatterns) > 1) {
             // Wildcard query is recognized
 
             $pattern = '';
@@ -275,7 +275,7 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
 
                 // Check if each subputtern is a single word in terms of current analyzer
                 $tokens = Zend_Search_Lucene_Analysis_Analyzer::getDefault()->tokenize($subPattern[0], $subPatternsEncoding);
-                if (count($tokens) > 1) {
+                if (\count($tokens) > 1) {
                     // Do nothing (nothing is highlighted)
                     return;
                 }
@@ -299,12 +299,12 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
         require_once 'Zend/Search/Lucene/Analysis/Analyzer.php';
         $tokens = Zend_Search_Lucene_Analysis_Analyzer::getDefault()->tokenize($this->_word, $this->_encoding);
 
-        if (count($tokens) == 0) {
+        if (\count($tokens) == 0) {
             // Do nothing
             return;
         }
 
-        if (count($tokens) == 1) {
+        if (\count($tokens) == 1) {
             $highlighter->highlight($tokens[0]->getTermText());
             return;
         }
@@ -334,7 +334,7 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
         $query .= $this->_word;
 
         if ($this->getBoost() != 1) {
-            $query .= '^' . round($this->getBoost(), 4);
+            $query .= '^' . \round($this->getBoost(), 4);
         }
 
         return $query;

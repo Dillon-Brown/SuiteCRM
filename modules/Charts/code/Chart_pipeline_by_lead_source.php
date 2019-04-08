@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -62,7 +62,7 @@ class Chart_pipeline_by_lead_source
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -86,11 +86,11 @@ class Chart_pipeline_by_lead_source
         //get list of sales stage keys to display
         global $current_user;
         $user_tempx = $current_user->getPreference('pbls_lead_sources');
-        if (!empty($user_tempx) && count($user_tempx) > 0 && !isset($_REQUEST['pbls_lead_sources'])) {
+        if (!empty($user_tempx) && \count($user_tempx) > 0 && !isset($_REQUEST['pbls_lead_sources'])) {
             $tempx = $user_tempx;
             $GLOBALS['log']->debug("USER PREFERENCES['pbls_lead_sources'] is:");
             $GLOBALS['log']->debug($user_tempx);
-        } elseif (isset($_REQUEST['pbls_lead_sources']) && count($_REQUEST['pbls_lead_sources']) > 0) {
+        } elseif (isset($_REQUEST['pbls_lead_sources']) && \count($_REQUEST['pbls_lead_sources']) > 0) {
             $tempx = $_REQUEST['pbls_lead_sources'];
             $current_user->setPreference('pbls_lead_sources', $_REQUEST['pbls_lead_sources']);
             $GLOBALS['log']->debug("_REQUEST['pbls_lead_sources'] is:");
@@ -100,14 +100,14 @@ class Chart_pipeline_by_lead_source
         }
 
         //set $datax using selected sales stage keys
-        if (count($tempx) > 0) {
+        if (\count($tempx) > 0) {
             foreach ($tempx as $key) {
                 $datax[$key] = $app_list_strings['lead_source_dom'][$key];
-                array_push($selected_datax, $key);
+                \array_push($selected_datax, $key);
             }
         } else {
             $datax = $app_list_strings['lead_source_dom'];
-            $selected_datax = array_keys($app_list_strings['lead_source_dom']);
+            $selected_datax = \array_keys($app_list_strings['lead_source_dom']);
         }
         $GLOBALS['log']->debug("datax is:");
         $GLOBALS['log']->debug($datax);
@@ -115,13 +115,13 @@ class Chart_pipeline_by_lead_source
         $ids = array();
         $user_ids = $current_user->getPreference('pbls_ids');
         //get list of user ids for which to display data
-        if (!empty($user_ids) && count($user_ids) != 0 && !isset($_REQUEST['pbls_ids'])) {
+        if (!empty($user_ids) && \count($user_ids) != 0 && !isset($_REQUEST['pbls_ids'])) {
             if (isset($_SESSION['pbls_ids'])) {
                 $ids = $_SESSION['pbls_ids'];
             }
             $GLOBALS['log']->debug("USER PREFERENCES['pbls_ids'] is:");
             $GLOBALS['log']->debug($user_ids);
-        } elseif (isset($_REQUEST['pbls_ids']) && count($_REQUEST['pbls_ids']) > 0) {
+        } elseif (isset($_REQUEST['pbls_ids']) && \count($_REQUEST['pbls_ids']) > 0) {
             $ids = $_REQUEST['pbls_ids'];
             $current_user->setPreference('pbls_ids', $ids);
             $GLOBALS['log']->debug("_REQUEST['pbls_ids'] is:");
@@ -130,26 +130,26 @@ class Chart_pipeline_by_lead_source
             $GLOBALS['log']->debug($current_user->getPreference('pbls_ids'));
         } else {
             $ids = get_user_array(false);
-            $ids = array_keys($ids);
+            $ids = \array_keys($ids);
         }
 
         //create unique prefix based on selected users for image files
         $id_hash = '1';
-        if (isset($ids) && is_array($ids)) {
-            sort($ids);
-            $id_hash = crc32(implode('', $ids));
+        if (isset($ids) && \is_array($ids)) {
+            \sort($ids);
+            $id_hash = \crc32(\implode('', $ids));
             if ($id_hash < 0) {
                 $id_hash = $id_hash * -1;
             }
         }
         $GLOBALS['log']->debug("ids is:");
         $GLOBALS['log']->debug($ids);
-        $id_md5 = substr(md5($current_user->id), 0, 9);
+        $id_md5 = \substr(\md5($current_user->id), 0, 9);
 
 
         $seps				= array("-", "/");
-        $dates				= array(date($GLOBALS['timedate']->dbDayFormat), $GLOBALS['timedate']->dbDayFormat);
-        $dateFileNameSafe	= str_replace($seps, "_", $dates);
+        $dates				= array(\date($GLOBALS['timedate']->dbDayFormat), $GLOBALS['timedate']->dbDayFormat);
+        $dateFileNameSafe	= \str_replace($seps, "_", $dates);
         $cache_file_name	= sugar_cached("xml/").$current_user->getUserPrivGuid()."_pipeline_by_lead_source_".$dateFileNameSafe[0]."_".$dateFileNameSafe[1].".xml";
 
         $GLOBALS['log']->debug("cache file name is: $cache_file_name");
@@ -191,9 +191,9 @@ global $app_strings; ?>
 echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refresh, $current_module_strings)."</p>";
         echo "<P align='center'><span class='chartFootnote'>".$current_module_strings['LBL_LEAD_SOURCE_FORM_DESC']."</span></P>";
 
-        if (file_exists($cache_file_name)) {
+        if (\file_exists($cache_file_name)) {
             global $timedate;
-            $file_date = $timedate->asUser($timedate->fromTimestamp(filemtime($cache_file_name)));
+            $file_date = $timedate->asUser($timedate->fromTimestamp(\filemtime($cache_file_name)));
         } else {
             $file_date = '';
         } ?>
@@ -230,7 +230,7 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
 
         $kDelim = $current_user->getPreference('num_grp_sep');
 
-        if (!file_exists($cache_file_name) || $refresh == true) {
+        if (!\file_exists($cache_file_name) || $refresh == true) {
             ;
             $GLOBALS['log']->debug("starting pipeline chart");
             $GLOBALS['log']->debug("legends is:");
@@ -245,26 +245,26 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
             $where="";
             //build the where clause for the query that matches $user
 
-            $count = count($user_id);
+            $count = \count($user_id);
             $id = array();
             if ($count > 0 && !empty($user_id)) {
                 foreach ($user_id as $the_id) {
                     $id[] = "'".$the_id."'";
                 }
-                $ids = join(",", $id);
+                $ids = \join(",", $id);
                 $where .= "opportunities.assigned_user_id IN ($ids) ";
             }
             if (!empty($where)) {
                 $where .= 'AND';
             }
             //build the where clause for the query that matches $datax
-            $count = count($legends);
+            $count = \count($legends);
             $legendItem = array();
             if ($count > 0 && !empty($legends)) {
                 foreach ($legends as $key=>$value) {
                     $legendItem[] = "'".$key."'";
                 }
-                $legendItems = join(",", $legendItem);
+                $legendItems = \join(",", $legendItem);
                 $where .= " opportunities.lead_source IN	($legendItems) ";
             }
             $query = "SELECT lead_source,sum(amount_usdollar/1000) as total,count(*) as opp_count FROM opportunities ";
@@ -295,9 +295,9 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
                     $leadSource = $row['lead_source'];
                 }
                 if ($row['total']*$div<=100) {
-                    $sum = round($row['total']*$div, 2);
+                    $sum = \round($row['total']*$div, 2);
                 } else {
-                    $sum = round($row['total']*$div);
+                    $sum = \round($row['total']*$div);
                 }
 
                 $leadSourceArr[$leadSource]['opp_count'] = $row['opp_count'];
@@ -314,7 +314,7 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
                     $leadSourceArr[$lead_source_key]['sum'] = 0;
                 }
                 $color = generate_graphcolor($lead_source_key, $i);
-                $fileContents .= '          <wedge title="'.$translation.'" kDelim="'.$kDelim.'" value="'.$leadSourceArr[$lead_source_key]['sum'].'" color="'.$color.'" labelText="'.currency_format_number($leadSourceArr[$lead_source_key]['sum'], array('currency_symbol' => true)).'" url="index.php?module=Opportunities&action=index&lead_source='.urlencode($lead_source_key).'&query=true&searchFormTab=advanced_search" altText="'.format_number($leadSourceArr[$lead_source_key]['opp_count'], 0, 0).' '.$current_module_strings['LBL_OPPS_IN_LEAD_SOURCE'].' '.$translation.'"/>'."\n";
+                $fileContents .= '          <wedge title="'.$translation.'" kDelim="'.$kDelim.'" value="'.$leadSourceArr[$lead_source_key]['sum'].'" color="'.$color.'" labelText="'.currency_format_number($leadSourceArr[$lead_source_key]['sum'], array('currency_symbol' => true)).'" url="index.php?module=Opportunities&action=index&lead_source='.\urlencode($lead_source_key).'&query=true&searchFormTab=advanced_search" altText="'.format_number($leadSourceArr[$lead_source_key]['opp_count'], 0, 0).' '.$current_module_strings['LBL_OPPS_IN_LEAD_SOURCE'].' '.$translation.'"/>'."\n";
                 if (isset($leadSourceArr[$lead_source_key])) {
                     $total += $leadSourceArr[$lead_source_key]['sum'];
                 }
@@ -331,7 +331,7 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
             }
             $fileContents .= ' />'."\n";
             $fileContents .= '</graphData>'."\n";
-            $total = round($total, 2);
+            $total = \round($total, 2);
             $title = $current_module_strings['LBL_TOTAL_PIPELINE'].currency_format_number($total, array('currency_symbol' => true)).$app_strings['LBL_THOUSANDS_SYMBOL'];
             $fileContents = '<graphData title="'.$title.'" subtitle="'.$subtitle.'">'."\n" . $fileContents;
             $GLOBALS['log']->debug("total is: $total");
@@ -357,11 +357,11 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
         //get list of sales stage keys to display
         global $current_user;
         $user_tempx = $current_user->getPreference('pbls_lead_sources');
-        if (!empty($user_tempx) && count($user_tempx) > 0 && !isset($_REQUEST['pbls_lead_sources'])) {
+        if (!empty($user_tempx) && \count($user_tempx) > 0 && !isset($_REQUEST['pbls_lead_sources'])) {
             $tempx = $user_tempx;
             $GLOBALS['log']->debug("USER PREFERENCES['pbls_lead_sources'] is:");
             $GLOBALS['log']->debug($user_tempx);
-        } elseif (isset($_REQUEST['pbls_lead_sources']) && count($_REQUEST['pbls_lead_sources']) > 0) {
+        } elseif (isset($_REQUEST['pbls_lead_sources']) && \count($_REQUEST['pbls_lead_sources']) > 0) {
             $tempx = $_REQUEST['pbls_lead_sources'];
             $current_user->setPreference('pbls_lead_sources', $_REQUEST['pbls_lead_sources']);
             $GLOBALS['log']->debug("_REQUEST['pbls_lead_sources'] is:");
@@ -371,14 +371,14 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
         }
 
         //set $datax using selected sales stage keys
-        if (count($tempx) > 0) {
+        if (\count($tempx) > 0) {
             foreach ($tempx as $key) {
                 $datax[$key] = $app_list_strings['lead_source_dom'][$key];
-                array_push($selected_datax, $key);
+                \array_push($selected_datax, $key);
             }
         } else {
             $datax = $app_list_strings['lead_source_dom'];
-            $selected_datax = array_keys($app_list_strings['lead_source_dom']);
+            $selected_datax = \array_keys($app_list_strings['lead_source_dom']);
         }
 
         $legends = $datax;
@@ -386,13 +386,13 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
         $ids = array();
         $user_ids = $current_user->getPreference('pbls_ids');
         //get list of user ids for which to display data
-        if (!empty($user_ids) && count($user_ids) != 0 && !isset($_REQUEST['pbls_ids'])) {
+        if (!empty($user_ids) && \count($user_ids) != 0 && !isset($_REQUEST['pbls_ids'])) {
             if (isset($_SESSION['pbls_ids'])) {
                 $ids = $_SESSION['pbls_ids'];
             }
             $GLOBALS['log']->debug("USER PREFERENCES['pbls_ids'] is:");
             $GLOBALS['log']->debug($user_ids);
-        } elseif (isset($_REQUEST['pbls_ids']) && count($_REQUEST['pbls_ids']) > 0) {
+        } elseif (isset($_REQUEST['pbls_ids']) && \count($_REQUEST['pbls_ids']) > 0) {
             $ids = $_REQUEST['pbls_ids'];
             $current_user->setPreference('pbls_ids', $ids);
             $GLOBALS['log']->debug("_REQUEST['pbls_ids'] is:");
@@ -401,7 +401,7 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
             $GLOBALS['log']->debug($current_user->getPreference('pbls_ids'));
         } else {
             $ids = get_user_array(false);
-            $ids = array_keys($ids);
+            $ids = \array_keys($ids);
         }
 
         $user_id = $ids;
@@ -412,26 +412,26 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
         $where="";
         //build the where clause for the query that matches $user
 
-        $count = count($user_id);
+        $count = \count($user_id);
         $id = array();
         if ($count > 0 && !empty($user_id)) {
             foreach ($user_id as $the_id) {
                 $id[] = "'".$the_id."'";
             }
-            $ids = join(",", $id);
+            $ids = \join(",", $id);
             $where .= "opportunities.assigned_user_id IN ($ids) ";
         }
         if (!empty($where)) {
             $where .= 'AND';
         }
         //build the where clause for the query that matches $datax
-        $count = count($legends);
+        $count = \count($legends);
         $legendItem = array();
         if ($count > 0 && !empty($legends)) {
             foreach ($legends as $key=>$value) {
                 $legendItem[] = "'".$key."'";
             }
-            $legendItems = join(",", $legendItem);
+            $legendItems = \join(",", $legendItem);
             $where .= " opportunities.lead_source IN	($legendItems) ";
         }
         $query = "SELECT lead_source,sum(amount_usdollar/1000) as total,count(*) as opp_count FROM opportunities ";

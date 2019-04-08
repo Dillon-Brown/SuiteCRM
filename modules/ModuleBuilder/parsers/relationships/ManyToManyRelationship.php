@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -95,13 +95,13 @@ class ManyToManyRelationship extends AbstractRelationship
             $this->lhs_module,
             $this->relationship_name,
             false,
-            'LBL_' . strtoupper($this->relationship_name . '_FROM_' . $this->getLeftModuleSystemLabel()) . '_TITLE'
+            'LBL_' . \strtoupper($this->relationship_name . '_FROM_' . $this->getLeftModuleSystemLabel()) . '_TITLE'
         ) ;
         $vardefs [ $this->lhs_module ] [] = $this->getLinkFieldDefinition(
             $this->rhs_module,
             $this->relationship_name,
             false,
-            'LBL_' . strtoupper($this->relationship_name . '_FROM_' . $this->getRightModuleSystemLabel()) . '_TITLE'
+            'LBL_' . \strtoupper($this->relationship_name . '_FROM_' . $this->getRightModuleSystemLabel()) . '_TITLE'
         ) ;
         return $vardefs ;
     }

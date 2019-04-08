@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -88,7 +88,7 @@ $current_date = $campaign->db->now();
 foreach ($_POST['mass'] as $message_id) {
 
     //fetch email marketing definition.
-    if (!class_exists('EmailMarketing')) {
+    if (!\class_exists('EmailMarketing')) {
         require_once('modules/EmailMarketing/EmailMarketing.php');
     }
 
@@ -208,9 +208,9 @@ if ($action=='WizardMarketingSave') {
 }
 $GLOBALS['log']->debug("about to post header URL of: $header_URL");
 
-if (preg_match('/\s*Location:\s*(.*)$/', $header_URL, $matches)) {
+if (\preg_match('/\s*Location:\s*(.*)$/', $header_URL, $matches)) {
     $href = $matches[1];
     SugarApplication::redirect($href);
 } else {
-    header($header_URL);
+    \header($header_URL);
 }

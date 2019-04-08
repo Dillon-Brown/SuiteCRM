@@ -22,7 +22,7 @@ class facebook_helper
             // Proceed knowing you have a logged in user who's authenticated.
             return $this->facebook->api('/me');
         } catch (FacebookApiException $e) {
-            error_log($e);
+            \error_log($e);
             $user = null;
         }
     }

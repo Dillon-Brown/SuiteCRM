@@ -1,7 +1,7 @@
 <?php
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -109,7 +109,7 @@ function retrieve_relationships($module_name, $related_module, $relationship_que
     require_once($beanFiles[$class_name]);
     $mod = new $class_name();
 
-    $count_query = str_replace('rt.*', 'count(*)', $query);
+    $count_query = \str_replace('rt.*', 'count(*)', $query);
     $result = $mod->db->query($count_query);
     $row = $mod->db->fetchByAssoc($result);
     $total_count = $row['count(*)'];
@@ -203,12 +203,12 @@ function retrieve_modified_relationships($module_name, $related_module, $relatio
             if ($field == "id") {
                 $field_select .= "DISTINCT m1.id";
             } else {
-                $parts = explode(' ', $field);
+                $parts = \explode(' ', $field);
                 $alias = '';
-                if (count($parts) > 1) {
+                if (\count($parts) > 1) {
                     // have aliases: something like "blah.blah blah"
-                    $alias = array_pop($parts);
-                    $field = array_pop($parts); // will check for . further down
+                    $alias = \array_pop($parts);
+                    $field = \array_pop($parts); // will check for . further down
                 }
                 if ($alias == "email1") {
                     // special case for primary emails
@@ -227,12 +227,12 @@ function retrieve_modified_relationships($module_name, $related_module, $relatio
                     		AND email_addr_bean_rel.primary_address!=1
                     	LEFT JOIN email_addresses ON email_addresses.id = email_addr_bean_rel.email_address_id Where {$mod->table_name}.id = m1.ID limit 1) email2";
                 } else {
-                    if (strpos($field, ".") == false) {
+                    if (\strpos($field, ".") == false) {
                         // no dot - field for m1
                         $fieldname = "m1.".$mod->db->getValidDBName($field);
                     } else {
                         // There is a dot in here somewhere.
-                        list($table_part, $field_part) = explode('.', $field);
+                        list($table_part, $field_part) = \explode('.', $field);
                         $fieldname = $mod->db->getValidDBName($table_part).".".$mod->db->getValidDBName($field_part);
                     }
                     $field_select .= $fieldname;
@@ -241,7 +241,7 @@ function retrieve_modified_relationships($module_name, $related_module, $relatio
                     }
                 }
             }
-            if ($index < (count($select_fields) - 1)) {
+            if ($index < (\count($select_fields) - 1)) {
                 $field_select .= ",";
                 $index++;
             }
@@ -271,7 +271,7 @@ function retrieve_modified_relationships($module_name, $related_module, $relatio
         $result_list[] = $row;
     }
 
-    $total_count = !empty($result_list) ? count($result_list) : 0;
+    $total_count = !empty($result_list) ? \count($result_list) : 0;
     return array('table_name'=>$table, 'result'=>$result_list, 'total_count'=>$total_count, 'error'=>$error->get_soap_array());
 }
 
@@ -381,11 +381,11 @@ function server_save_relationships($list, $from_date, $to_date)
  */
 function get_from_statement($query)
 {
-    $query = explode('FROM', $query);
-    if (sizeof($query) == 1) {
-        $query = explode('from', $query[0]);
+    $query = \explode('FROM', $query);
+    if (\sizeof($query) == 1) {
+        $query = \explode('from', $query[0]);
     }
-    $query = explode('ORDER BY', $query[1]);
+    $query = \explode('ORDER BY', $query[1]);
 
     return ' FROM ' . $query[0];
 }

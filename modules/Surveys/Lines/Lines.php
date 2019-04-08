@@ -19,7 +19,7 @@ function survey_questions_display_detail(Surveys $focus, $field, $value, $view)
     foreach ($questionBeans as $questionBean) {
         $questions[] = $questionBean->toArray();
     }
-    usort(
+    \usort(
         $questions,
         function ($a, $b) {
             return $a['sort_order'] - $b['sort_order'];
@@ -71,7 +71,7 @@ function survey_questions_display_edit(Surveys $focus, $field, $value, $view)
     $questionBean = BeanFactory::getBean('SurveyQuestions');
     $options = $questionBean->field_defs['type']['options'];
     $typeSelect = get_select_options_with_id($app_list_strings[$options], '');
-    $typeSelect = str_replace("\n", '', $typeSelect);
+    $typeSelect = \str_replace("\n", '', $typeSelect);
     $smarty->assign('question_type_options', $typeSelect);
     $html = $smarty->fetch(get_custom_file_if_exists('modules/Surveys/tpls/editsurveyquestions.tpl'));
 

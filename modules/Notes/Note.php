@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -107,7 +107,7 @@ class Note extends File
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -118,17 +118,17 @@ class Note extends File
         global $sugar_config;
 
         //get position of last "." in file name
-        $file_ext_beg = strrpos($this->filename, ".");
+        $file_ext_beg = \strrpos($this->filename, ".");
         $file_ext = "";
 
         //get file extension
         if ($file_ext_beg !== false) {
-            $file_ext = substr($this->filename, $file_ext_beg + 1);
+            $file_ext = \substr($this->filename, $file_ext_beg + 1);
         }
 
         //check to see if this is a file with extension located in "badext"
         foreach ($sugar_config['upload_badext'] as $badExt) {
-            if (strtolower($file_ext) == strtolower($badExt)) {
+            if (\strtolower($file_ext) == \strtolower($badExt)) {
                 //if found, then append with .txt and break out of lookup
                 $this->name = $this->name . ".txt";
                 $this->file_mime_type = 'text/';
@@ -151,8 +151,8 @@ class Note extends File
         if ($this->parent_type == 'Emails') {
             if (isset($sugar_config['email_default_delete_attachments']) && $sugar_config['email_default_delete_attachments'] == true) {
                 $removeFile = "upload://$id";
-                if (file_exists($removeFile)) {
-                    if (!unlink($removeFile)) {
+                if (\file_exists($removeFile)) {
+                    if (!\unlink($removeFile)) {
                         $GLOBALS['log']->error("*** Could not unlink() file: [ {$removeFile} ]");
                     }
                 }
@@ -174,8 +174,8 @@ class Note extends File
             $removeFile = "upload://{$this->id}";
         }
 
-        if (file_exists($removeFile)) {
-            if (!unlink($removeFile)) {
+        if (\file_exists($removeFile)) {
+            if (!\unlink($removeFile)) {
                 $GLOBALS['log']->error("*** Could not unlink() file: [ {$removeFile} ]");
             } else {
                 $this->uploadfile = '';
@@ -276,7 +276,7 @@ class Note extends File
         }
 
         if (!empty($this->filename)) {
-            if (file_exists("upload://{$this->id}")) {
+            if (\file_exists("upload://{$this->id}")) {
                 $note_fields['FILENAME'] = $this->filename;
                 $note_fields['FILE_URL'] = UploadFile::get_upload_url($this);
             }

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -50,7 +50,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  ********************************************************************************/
 
 if (isset($_REQUEST['uid'])) {
-    $merge_ids = explode(',', $_REQUEST['uid']);
+    $merge_ids = \explode(',', $_REQUEST['uid']);
     // Bug 18852 - Check to make sure we have ACL Edit privledges on both records involved in the merge before proceeding
     if (($bean1 = SugarModule::get($_REQUEST['action_module'])->loadBean()) !== false
             && ($bean2 = SugarModule::get($_REQUEST['action_module'])->loadBean()) !== false) {
@@ -77,11 +77,11 @@ if (isset($_REQUEST['uid'])) {
     
     if (isset($_SESSION['export_where']) && !empty($_SESSION['export_where'])) { // bug 4679
         $where = $_SESSION['export_where'];
-        $whereArr = explode(" ", trim($where));
-        if ($whereArr[0] == trim('where')) {
-            $whereClean = array_shift($whereArr);
+        $whereArr = \explode(" ", \trim($where));
+        if ($whereArr[0] == \trim('where')) {
+            $whereClean = \array_shift($whereArr);
         }
-        $where = implode(" ", $whereArr);
+        $where = \implode(" ", $whereArr);
     } else {
         $where = '';
     }
@@ -99,7 +99,7 @@ if (isset($_REQUEST['uid'])) {
     
     while ($row != null) {
         //$beanObj = new $bean;
-        array_push($merge_ids, $row['id']);
+        \array_push($merge_ids, $row['id']);
         $row = $focus->db->fetchByAssoc($result);
     }
     $_REQUEST['record']=$merge_ids[0];

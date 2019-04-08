@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -172,7 +172,7 @@ class json_config
         $module_arr['users_arr'] = array();
 
         foreach ($users as $user) {
-            array_push($module_arr['users_arr'], $this->populateBean($user));
+            \array_push($module_arr['users_arr'], $this->populateBean($user));
         }
 
         $module_arr['orig_users_arr_hash'] = array();
@@ -194,7 +194,7 @@ class json_config
         }
 
         foreach ($contacts as $contact) {
-            array_push($module_arr['users_arr'], $this->populateBean($contact));
+            \array_push($module_arr['users_arr'], $this->populateBean($contact));
         }
 
         $module_arr['leads_arr'] = array();
@@ -203,7 +203,7 @@ class json_config
             $focus->load_relationships('leads');
             $leads=$focus->get_linked_beans('leads', 'Lead');
             foreach ($leads as $lead) {
-                array_push($module_arr['users_arr'], $this->populateBean($lead));
+                \array_push($module_arr['users_arr'], $this->populateBean($lead));
             }
         }
         return $module_arr;
@@ -231,7 +231,7 @@ class json_config
         require_once('include/utils/db_utils.php');
         $all_fields = $focus->column_fields;
         // MEETING SPECIFIC
-        $all_fields = array_merge($all_fields, array('required','accept_status','name')); // need name field for contacts and users
+        $all_fields = \array_merge($all_fields, array('required','accept_status','name')); // need name field for contacts and users
         $all_fields = $this->listFilter($focus->module_dir, $all_fields);
         //$all_fields = array_merge($focus->column_fields,$focus->additional_column_fields);
 
@@ -242,10 +242,10 @@ class json_config
         $module_arr['fields'] = array();
 
         foreach ($all_fields as $field) {
-            if (isset($focus->$field) && !is_object($focus->$field)) {
+            if (isset($focus->$field) && !\is_object($focus->$field)) {
                 $focus->$field =  from_html($focus->$field);
-                $focus->$field =  preg_replace("/\r\n/", "<BR>", $focus->$field);
-                $focus->$field =  preg_replace("/\n/", "<BR>", $focus->$field);
+                $focus->$field =  \preg_replace("/\r\n/", "<BR>", $focus->$field);
+                $focus->$field =  \preg_replace("/\n/", "<BR>", $focus->$field);
                 $module_arr['fields'][$field] = $focus->$field;
             }
         }
@@ -286,7 +286,7 @@ class json_config
             ),
         );
         if (!empty($noAccessFields[$module])) {
-            $fields = array_diff($fields, array_keys($noAccessFields[$module]));
+            $fields = \array_diff($fields, \array_keys($noAccessFields[$module]));
         }
         return $fields;
     }

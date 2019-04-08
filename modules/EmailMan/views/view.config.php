@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -266,7 +266,7 @@ class ViewConfig extends SugarView
             $sugar_config['email_xss'] = getDefaultXssTags();
         }
 
-        foreach (unserialize(base64_decode($sugar_config['email_xss'])) as $k => $v) {
+        foreach (\unserialize(\base64_decode($sugar_config['email_xss'])) as $k => $v) {
             $this->ss->assign($k."Checked", 'CHECKED');
         }
 

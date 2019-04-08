@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -90,7 +90,7 @@ class UpgradeHistory extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -153,12 +153,12 @@ class UpgradeHistory extends SugarBean
         $temp_version = 0;
         $id = '';
         while ($row = $this->db->fetchByAssoc($result)) {
-            if (!$this->is_right_version_greater(explode('.', $row['version']), explode('.', $temp_version))) {
+            if (!$this->is_right_version_greater(\explode('.', $row['version']), \explode('.', $temp_version))) {
                 $temp_version = $row['version'];
                 $id = $row['id'];
             }
         }//end while
-        if ($this->is_right_version_greater(explode('.', $temp_version), explode('.', $version), false)) {
+        if ($this->is_right_version_greater(\explode('.', $temp_version), \explode('.', $version), false)) {
             return array('id' => $id, 'version' => $temp_version);
         }
         return null;
@@ -186,10 +186,10 @@ class UpgradeHistory extends SugarBean
         //before we even go through the list, let us try to see if we find a match.
         $history_object = $this->checkForExisting($patch_to_check);
         if ($history_object != null) {
-            if ((!empty($history_object->id_name) && !empty($patch_to_check->id_name) && strcmp($history_object->id_name, $patch_to_check->id_name) == 0) || strcmp($history_object->name, $patch_to_check->name) == 0) {
+            if ((!empty($history_object->id_name) && !empty($patch_to_check->id_name) && \strcmp($history_object->id_name, $patch_to_check->id_name) == 0) || \strcmp($history_object->name, $patch_to_check->name) == 0) {
                 //we have found a match
                 //if the patch_to_check version is greater than the found version
-                return ($this->is_right_version_greater(explode('.', $history_object->version), explode('.', $patch_to_check->version)));
+                return ($this->is_right_version_greater(\explode('.', $history_object->version), \explode('.', $patch_to_check->version)));
             }
             return true;
         }
@@ -219,15 +219,15 @@ class UpgradeHistory extends SugarBean
 
     public function foundConflict($check_path, $recent_path)
     {
-        if (is_file($check_path)) {
-            if (file_exists($recent_path)) {
+        if (\is_file($check_path)) {
+            if (\file_exists($recent_path)) {
                 return true;
             }
             return false;
-        } elseif (is_dir($check_path)) {
+        } elseif (\is_dir($check_path)) {
             $status = false;
 
-            $d = dir($check_path);
+            $d = \dir($check_path);
             while ($f = $d->read()) {
                 if ($f == "." || $f == "..") {
                     continue;
@@ -258,13 +258,13 @@ class UpgradeHistory extends SugarBean
      */
     public function is_right_version_greater($left, $right, $equals_is_greater = true)
     {
-        if (count($left) == 0 && count($right) == 0) {
+        if (\count($left) == 0 && \count($right) == 0) {
             return $equals_is_greater;
-        } elseif (count($left) == 0 || count($right) == 0) {
+        } elseif (\count($left) == 0 || \count($right) == 0) {
             return true;
         } elseif ($left[0] == $right[0]) {
-            array_shift($left);
-            array_shift($right);
+            \array_shift($left);
+            \array_shift($right);
             return $this->is_right_version_greater($left, $right, $equals_is_greater);
         } elseif ($left[0] < $right[0]) {
             return true;
@@ -287,9 +287,9 @@ class UpgradeHistory extends SugarBean
             $found = false;
             $query = "SELECT id FROM $this->table_name WHERE id_name = '".$dependent['id_name']."'";
             $matches = $this->getList($query);
-            if (0 != sizeof($matches)) {
+            if (0 != \sizeof($matches)) {
                 foreach ($matches as $match) {
-                    if ($this->is_right_version_greater(explode('.', $match->version), explode('.', $dependent['version']))) {
+                    if ($this->is_right_version_greater(\explode('.', $match->version), \explode('.', $dependent['version']))) {
                         $found = true;
                         break;
                     }//fi

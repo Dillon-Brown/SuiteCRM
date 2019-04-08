@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -79,14 +79,14 @@ class ConnectorFactory
      */
     public static function loadClass($class, $type)
     {
-        $dir = str_replace('_', '/', $class);
-        $parts = explode("/", $dir);
-        $file = $parts[count($parts)-1] . '.php';
-        if (file_exists("custom/modules/Connectors/connectors/{$type}/{$dir}/$file")) {
+        $dir = \str_replace('_', '/', $class);
+        $parts = \explode("/", $dir);
+        $file = $parts[\count($parts)-1] . '.php';
+        if (\file_exists("custom/modules/Connectors/connectors/{$type}/{$dir}/$file")) {
             require_once("custom/modules/Connectors/connectors/{$type}/{$dir}/$file");
-        } elseif (file_exists("modules/Connectors/connectors/{$type}/{$dir}/$file")) {
+        } elseif (\file_exists("modules/Connectors/connectors/{$type}/{$dir}/$file")) {
             require_once("modules/Connectors/connectors/{$type}/{$dir}/$file");
-        } elseif (file_exists("connectors/{$type}/{$dir}/$file")) {
+        } elseif (\file_exists("connectors/{$type}/{$dir}/$file")) {
             require_once("connectors/{$type}/{$dir}/$file");
         }
     }

@@ -77,7 +77,7 @@ class fpdi_pdf_parser extends pdf_parser
         if ($this->success == false) { return false; }
 
         // count pages;
-        $this->page_count = count($this->pages);
+        $this->page_count = \count($this->pages);
     }
     
     
@@ -184,7 +184,7 @@ class fpdi_pdf_parser extends pdf_parser
             }
         } elseif ($content_ref[0] == PDF_TYPE_ARRAY) {
             foreach ($content_ref[1] AS $tmp_content_ref) {
-                $contents = array_merge($contents,$this->_getPageContent($tmp_content_ref));
+                $contents = \array_merge($contents,$this->_getPageContent($tmp_content_ref));
             }
         }
 
@@ -216,10 +216,10 @@ class fpdi_pdf_parser extends pdf_parser
         foreach ($filters AS $_filter) {
             switch ($_filter[1]) {
                 case "/FlateDecode":
-			if (function_exists('gzuncompress')) {
-                        $stream = (strlen($stream) > 0) ? @gzuncompress($stream) : '';                        
+			if (\function_exists('gzuncompress')) {
+                        $stream = (\strlen($stream) > 0) ? @\gzuncompress($stream) : '';                        
 			} else {
-                        $this->fpdi->error(sprintf("To handle %s filter, please compile php with zlib support.",$_filter[1]));
+                        $this->fpdi->error(\sprintf("To handle %s filter, please compile php with zlib support.",$_filter[1]));
 			}
 			if ($stream === false) { 
                         $this->fpdi->error("Error while decompressing stream.");
@@ -242,7 +242,7 @@ class fpdi_pdf_parser extends pdf_parser
 			$stream = $stream;
 			break;
                 default:
-			$this->fpdi->error(sprintf("Unsupported Filter: %s",$_filter[1]));
+			$this->fpdi->error(\sprintf("Unsupported Filter: %s",$_filter[1]));
             }
         }
         
@@ -264,17 +264,17 @@ class fpdi_pdf_parser extends pdf_parser
         if (isset($page[1][1][$box_index]))
             $box =& $page[1][1][$box_index];
         
-        if (!is_null($box) && $box[0] == PDF_TYPE_OBJREF) {
+        if (!\is_null($box) && $box[0] == PDF_TYPE_OBJREF) {
             $tmp_box = $this->pdf_resolve_object($this->c,$box);
             $box = $tmp_box[1];
         }
             
-        if (!is_null($box) && $box[0] == PDF_TYPE_ARRAY) {
+        if (!\is_null($box) && $box[0] == PDF_TYPE_ARRAY) {
             $b =& $box[1];
             return array("x" => $b[0][1]/_MPDFK,
                          "y" => $b[1][1]/_MPDFK,
-                         "w" => abs($b[0][1]-$b[2][1])/_MPDFK,
-                         "h" => abs($b[1][1]-$b[3][1])/_MPDFK);	// mPDF 5.3.90
+                         "w" => \abs($b[0][1]-$b[2][1])/_MPDFK,
+                         "h" => \abs($b[1][1]-$b[3][1])/_MPDFK);	// mPDF 5.3.90
         } elseif (!isset ($page[1][1]['/Parent'])) {
             return false;
         } else {
@@ -338,10 +338,10 @@ class fpdi_pdf_parser extends pdf_parser
         // Get the kids dictionary
     	$kids = $this->pdf_resolve_object ($c, $pages[1][1]['/Kids']);
 
-        if (!is_array($kids)) {
+        if (!\is_array($kids)) {
 	 		// mPDF 4.0
            		$this->success = false;
-            	$this->errormsg = sprintf("Cannot find /Kids in current /Page-Dictionary");
+            	$this->errormsg = \sprintf("Cannot find /Kids in current /Page-Dictionary");
 			return false;
 	  }
         foreach ($kids[1] as $v) {

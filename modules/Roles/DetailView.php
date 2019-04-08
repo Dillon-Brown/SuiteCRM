@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -76,7 +76,7 @@ if (isset($_REQUEST['offset']) or isset($_REQUEST['record'])) {
     }
     $focus=$result;
 } else {
-    header("Location: index.php?module=Accounts&action=index");
+    \header("Location: index.php?module=Accounts&action=index");
 }
 echo getClassicModuleTitle($mod_strings['LBL_MODULE_NAME'], array($mod_strings['LBL_MODULE_NAME'],$focus->get_summary_text()), true);
 
@@ -94,7 +94,7 @@ $xtpl->assign("RETURN_ACTION", "DetailView");
 $xtpl->assign("ACTION", "EditView");
 
 $xtpl->assign("NAME", $focus->name);
-$xtpl->assign("DESCRIPTION", nl2br(url2html($focus->description)));
+$xtpl->assign("DESCRIPTION", \nl2br(url2html($focus->description)));
 
 $detailView->processListNavigation($xtpl, "ROLE", $offset);
 
@@ -141,9 +141,9 @@ $xtpl->parse("main");
 $xtpl->out("main");
 
 $sub_xtpl = $xtpl;
-$old_contents = ob_get_contents();
-ob_end_clean();
-ob_start();
+$old_contents = \ob_get_contents();
+\ob_end_clean();
+\ob_start();
 echo $old_contents;
 
 require_once('include/SubPanel/SubPanelTiles.php');

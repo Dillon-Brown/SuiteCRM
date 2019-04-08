@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -213,8 +213,8 @@ abstract class ImportDataSource implements Iterator
     public function writeError($error, $fieldName, $fieldValue)
     {
         $fp = sugar_fopen(ImportCacheFiles::getErrorFileName(), 'a');
-        fputcsv($fp, array($error,$fieldName,$fieldValue,$this->_rowsCount));
-        fclose($fp);
+        \fputcsv($fp, array($error,$fieldName,$fieldValue,$this->_rowsCount));
+        \fclose($fp);
 
         if (!$this->_rowCountedForErrors) {
             $this->_errorCount++;
@@ -244,8 +244,8 @@ abstract class ImportDataSource implements Iterator
         $fp = sugar_fopen(ImportCacheFiles::getStatusFileName(), 'a');
         $statusData = array($this->_rowsCount,$this->_errorCount,$this->_dupeCount,
                             $this->_createdCount,$this->_updatedCount,$this->_sourcename);
-        fputcsv($fp, $statusData);
-        fclose($fp);
+        \fputcsv($fp, $statusData);
+        \fclose($fp);
     }
 
     /**
@@ -254,8 +254,8 @@ abstract class ImportDataSource implements Iterator
     public function markRowAsDuplicate($field_names=array())
     {
         $fp = sugar_fopen(ImportCacheFiles::getDuplicateFileName(), 'a');
-        fputcsv($fp, $this->_currentRow);
-        fclose($fp);
+        \fputcsv($fp, $this->_currentRow);
+        \fclose($fp);
 
         //if available, grab the column number based on passed in field_name
         if (!empty($field_names)) {
@@ -265,12 +265,12 @@ abstract class ImportDataSource implements Iterator
             //REQUEST should have the field names in order as they appear in the row to be written, get the key values
             //of passed in fields into an array
             foreach ($field_names as $fv) {
-                $fv = trim($fv);
+                $fv = \trim($fv);
                 if (empty($fv) || $fv == 'delete') {
                     continue;
                 }
-                $new_keys = array_keys($_REQUEST, $fv);
-                $colnums = array_merge($colnums, $new_keys);
+                $new_keys = \array_keys($_REQUEST, $fv);
+                $colnums = \array_merge($colnums, $new_keys);
             }
 
 
@@ -278,8 +278,8 @@ abstract class ImportDataSource implements Iterator
             if (!empty($colnums)) {
                 //foreach column, strip the 'colnum_' prefix to the get the column key value
                 foreach ($colnums as $column_key) {
-                    if (strpos($column_key, 'colnum_') === 0) {
-                        $colkey = substr($column_key, 7);
+                    if (\strpos($column_key, 'colnum_') === 0) {
+                        $colkey = \substr($column_key, 7);
                     }
 
                     //if we have the column key, then lets add a span tag with styling reference to the original value
@@ -293,8 +293,8 @@ abstract class ImportDataSource implements Iterator
 
         //add the row (with or without stylings) to the list view, this will get displayed to the user as a list of duplicates
         $fdp = sugar_fopen(ImportCacheFiles::getDuplicateFileDisplayName(), 'a');
-        fputcsv($fdp, $this->_currentRow);
-        fclose($fdp);
+        \fputcsv($fdp, $this->_currentRow);
+        \fclose($fdp);
 
         //increment dupecount
         $this->_dupeCount++;
@@ -324,14 +324,14 @@ abstract class ImportDataSource implements Iterator
         $fpNoErrors = sugar_fopen(ImportCacheFiles::getErrorRecordsWithoutErrorFileName(), 'a');
 
         //Write records only for download without error message.
-        fputcsv($fpNoErrors, $rowData);
+        \fputcsv($fpNoErrors, $rowData);
 
         //Add the error message to the first column
-        array_unshift($rowData, $errorMessage);
-        fputcsv($fp, $rowData);
+        \array_unshift($rowData, $errorMessage);
+        \fputcsv($fp, $rowData);
         
-        fclose($fp);
-        fclose($fpNoErrors);
+        \fclose($fp);
+        \fclose($fpNoErrors);
     }
 
     public function __get($var)

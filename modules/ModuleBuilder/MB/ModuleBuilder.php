@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -49,8 +49,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
  ********************************************************************************/
  
 
-define('MB_PACKAGE_PATH', 'custom/modulebuilder/packages') ;
-define('MB_PACKAGE_BUILD', 'custom' . DIRECTORY_SEPARATOR . 'modulebuilder' . DIRECTORY_SEPARATOR . 'builds');
+\define('MB_PACKAGE_PATH', 'custom/modulebuilder/packages') ;
+\define('MB_PACKAGE_BUILD', 'custom' . DIRECTORY_SEPARATOR . 'modulebuilder' . DIRECTORY_SEPARATOR . 'builds');
 require_once('modules/ModuleBuilder/MB/MBPackage.php') ;
 
 class ModuleBuilder
@@ -60,16 +60,16 @@ class ModuleBuilder
     public function getPackageList()
     {
         static $list = array( ) ;
-        if (! empty($list) || ! file_exists(MB_PACKAGE_PATH)) {
+        if (! empty($list) || ! \file_exists(MB_PACKAGE_PATH)) {
             return $list ;
         }
-        $d = dir(MB_PACKAGE_PATH) ;
+        $d = \dir(MB_PACKAGE_PATH) ;
         while ($e = $d->read()) {
-            if (file_exists(MB_PACKAGE_PATH . '/' . $e . '/manifest.php')) {
+            if (\file_exists(MB_PACKAGE_PATH . '/' . $e . '/manifest.php')) {
                 $list [] = $e ;
             }
         }
-        sort($list) ; // order important as generate_nodes_array in Tree.php later loops over this by foreach to generate the package list
+        \sort($list) ; // order important as generate_nodes_array in Tree.php later loops over this by foreach to generate the package list
         return $list ;
     }
 
@@ -89,7 +89,7 @@ class ModuleBuilder
     public function getPackageKey($name)
     {
         $manifestPath = MB_PACKAGE_PATH . '/' . $name . '/manifest.php' ;
-        if (file_exists($manifestPath)) {
+        if (\file_exists($manifestPath)) {
             require($manifestPath) ;
             if (!empty($manifest)) {
                 return $manifest['key'];
@@ -112,7 +112,7 @@ class ModuleBuilder
 
     public function save()
     {
-        $packages = array_keys($this->packages) ;
+        $packages = \array_keys($this->packages) ;
         foreach ($packages as $package) {
             $this->packages [ $package ]->save() ;
         }
@@ -120,9 +120,9 @@ class ModuleBuilder
 
     public function build()
     {
-        $packages = array_keys($this->packages) ;
+        $packages = \array_keys($this->packages) ;
         foreach ($packages as $package) {
-            if (count($packages) == 1) {
+            if (\count($packages) == 1) {
                 $this->packages [ $package ]->build(true) ;
             } else {
                 $this->packages [ $package ]->build(false) ;
@@ -147,7 +147,7 @@ class ModuleBuilder
     {
         $this->getPackages() ;
         $nodes = array( ) ;
-        foreach (array_keys($this->packages) as $name) {
+        foreach (\array_keys($this->packages) as $name) {
             $nodes [] = $this->packages [ $name ]->getNodes() ;
         }
         return $nodes ;

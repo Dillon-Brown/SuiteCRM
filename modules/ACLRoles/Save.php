@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -65,11 +65,11 @@ if (!empty($_REQUEST['name'])) {
         }
     }
 } else {
-    ob_clean();
+    \ob_clean();
     $flc_module = 'All';
     foreach ($_POST as $name=>$value) {
-        if (substr_count($name, 'act_guid') > 0) {
-            $name = str_replace('act_guid', '', $name);
+        if (\substr_count($name, 'act_guid') > 0) {
+            $name = \str_replace('act_guid', '', $name);
     
             $role->setAction($role->id, $name, $value);
         }
@@ -78,4 +78,4 @@ if (!empty($_REQUEST['name'])) {
     sugar_cleanup(true);
 }
 
-header("Location: index.php?module=ACLRoles&action=DetailView&record=". $role->id);
+\header("Location: index.php?module=ACLRoles&action=DetailView&record=". $role->id);

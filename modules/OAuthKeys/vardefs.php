@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -86,7 +86,7 @@ $dictionary['OAuthKey'] = array('table' => 'oauth_consumer',
        array('name' =>'ckey', 'type' =>'unique', 'fields'=>array('c_key')),
     )
 );
-if (!class_exists('VardefManager')) {
+if (!\class_exists('VardefManager')) {
     require_once('include/SugarObjects/VardefManager.php');
 }
 VardefManager::createVardef('OAuthKeys', 'OAuthKey', array('basic','assignable'));

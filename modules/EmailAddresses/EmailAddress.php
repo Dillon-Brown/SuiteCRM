@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -85,7 +85,7 @@ class EmailAddress extends SugarEmailAddress
         $optOut = '',
         $in_workflow = false
     ) {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             return parent::saveEmail($id, $module, $new_addrs, $primary, $replyTo, $invalid, $optOut, $in_workflow);
         }
         return SugarBean::save($id);

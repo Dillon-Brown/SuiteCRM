@@ -340,10 +340,10 @@ class Zend_Search_Lucene_Proxy implements Zend_Search_Lucene_Interface
     public function find($query)
     {
         // actual parameter list
-        $parameters = func_get_args();
+        $parameters = \func_get_args();
 
         // invoke $this->_index->find() method with specified parameters
-        return call_user_func_array(array(&$this->_index, 'find'), $parameters);
+        return \call_user_func_array(array(&$this->_index, 'find'), $parameters);
     }
 
     /**

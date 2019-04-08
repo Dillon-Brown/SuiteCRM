@@ -46,7 +46,7 @@ class AOD_IndexTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //execute the method with parameters and verify that it returns true
         $hits = $aod_index->find('/');
-        $this->assertTrue(is_array($hits));
+        $this->assertTrue(\is_array($hits));
     }
 
     public function testoptimise()
@@ -91,7 +91,7 @@ class AOD_IndexTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $result = $aod_index->getDocumentForBean($user);
 
         //execute the method and verify that it returns an array
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         //verify that returned array has a valid Zend_Search_Lucene_Document instance
         $this->assertInstanceOf('Zend_Search_Lucene_Document', $result['document']);

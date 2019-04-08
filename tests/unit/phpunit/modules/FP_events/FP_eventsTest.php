@@ -32,7 +32,7 @@ class FP_eventsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $fpEvents = new FP_events();
 
         $fpEvents->email_templates();
-        $this->assertTrue(is_array($app_list_strings['email_templet_list']));
+        $this->assertTrue(\is_array($app_list_strings['email_templet_list']));
         
         // clean up
         

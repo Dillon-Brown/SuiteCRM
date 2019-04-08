@@ -27,7 +27,7 @@
 
 function requireLucene()
 {
-    set_include_path(get_include_path() . PATH_SEPARATOR . "modules/AOD_Index/Lib");
+    \set_include_path(\get_include_path() . PATH_SEPARATOR . "modules/AOD_Index/Lib");
     require_once('Zend/Search/Lucene.php');
 }
 
@@ -44,7 +44,7 @@ function getDocumentRevisionPath($revisionId)
 function createPPTXDocument($path)
 {
     $doc = Zend_Search_Lucene_Document_Pptx::loadPptxFile($path);
-    $doc->addField(Zend_Search_Lucene_Field::Text('filename', basename($path)));
+    $doc->addField(Zend_Search_Lucene_Field::Text('filename', \basename($path)));
     return $doc;
 }
 
@@ -56,7 +56,7 @@ function createPPTXDocument($path)
 function createXLSXDocument($path)
 {
     $doc = Zend_Search_Lucene_Document_Xlsx::loadXlsxFile($path);
-    $doc->addField(Zend_Search_Lucene_Field::Text('filename', basename($path)));
+    $doc->addField(Zend_Search_Lucene_Field::Text('filename', \basename($path)));
     return $doc;
 }
 /**
@@ -67,7 +67,7 @@ function createXLSXDocument($path)
 function createHTMLDocument($path)
 {
     $doc = Zend_Search_Lucene_Document_Html::loadHTMLFile($path);
-    $doc->addField(Zend_Search_Lucene_Field::Text('filename', basename($path)));
+    $doc->addField(Zend_Search_Lucene_Field::Text('filename', \basename($path)));
     return $doc;
 }
 /**
@@ -78,7 +78,7 @@ function createHTMLDocument($path)
 function createDocXDocument($path)
 {
     $doc = Zend_Search_Lucene_Document_Docx::loadDocxFile($path);
-    $doc->addField(Zend_Search_Lucene_Field::Text('filename', basename($path)));
+    $doc->addField(Zend_Search_Lucene_Field::Text('filename', \basename($path)));
     return $doc;
 }
 
@@ -89,23 +89,23 @@ function createDocXDocument($path)
  */
 function createDocDocument($path)
 {
-    $fileHandle = fopen($path, "r");
-    $line = @fread($fileHandle, filesize($path));
-    $lines = explode(chr(0x0D), $line);
+    $fileHandle = \fopen($path, "r");
+    $line = @\fread($fileHandle, \filesize($path));
+    $lines = \explode(\chr(0x0D), $line);
     $outtext = "";
     foreach ($lines as $thisline) {
-        $pos = strpos($thisline, chr(0x00));
-        if (($pos !== false)||(strlen($thisline)==0)) {
+        $pos = \strpos($thisline, \chr(0x00));
+        if (($pos !== false)||(\strlen($thisline)==0)) {
         } else {
             $outtext .= $thisline." ";
         }
     }
-    $outtext = preg_replace("/[^a-zA-Z0-9\s\,\.\-\n\r\t@\/\_\(\)]/", "", $outtext);
+    $outtext = \preg_replace("/[^a-zA-Z0-9\s\,\.\-\n\r\t@\/\_\(\)]/", "", $outtext);
 
     $doc = new Zend_Search_Lucene_Document();
-    $doc->addField(Zend_Search_Lucene_Field::Text('filename', basename($path)));
+    $doc->addField(Zend_Search_Lucene_Field::Text('filename', \basename($path)));
     $doc->addField(Zend_Search_Lucene_Field::UnStored('contents', $outtext));
-    fclose($fileHandle);
+    \fclose($fileHandle);
     return $doc;
 }
 
@@ -119,7 +119,7 @@ function createPDFDocument($path)
     require_once('PdfParser.php');
     $text = PdfParser::parseFile($path);
     $doc = new Zend_Search_Lucene_Document();
-    $doc->addField(Zend_Search_Lucene_Field::Text('filename', basename($path)));
+    $doc->addField(Zend_Search_Lucene_Field::Text('filename', \basename($path)));
     $doc->addField(Zend_Search_Lucene_Field::UnStored('contents', $text));
     return $doc;
 }
@@ -131,7 +131,7 @@ function createPDFDocument($path)
  */
 function createOdtDocument($path)
 {
-    if (!is_file($path)) {
+    if (!\is_file($path)) {
         return false;
     }
     $doc = new Zend_Search_Lucene_Document();
@@ -139,7 +139,7 @@ function createOdtDocument($path)
     $coreProperties = array();
     $package = new ZipArchive();
     $package->open($path);
-    $contents = simplexml_load_string($package->getFromName("content.xml"));
+    $contents = \simplexml_load_string($package->getFromName("content.xml"));
     $paragraphs = $contents->xpath('//text:*');
     foreach ($paragraphs as $paragraph) {
         $documentBody[] = (string)$paragraph;
@@ -147,8 +147,8 @@ function createOdtDocument($path)
     }
     // Close file
     $package->close();
-    $doc->addField(Zend_Search_Lucene_Field::UnStored('contents', implode(' ', $documentBody), 'UTF-8'));
-    $doc->addField(Zend_Search_Lucene_Field::Text('filename', basename($path)));
+    $doc->addField(Zend_Search_Lucene_Field::UnStored('contents', \implode(' ', $documentBody), 'UTF-8'));
+    $doc->addField(Zend_Search_Lucene_Field::Text('filename', \basename($path)));
     return $doc;
 }
 
@@ -160,8 +160,8 @@ function createOdtDocument($path)
 function createTextDocument($path)
 {
     $doc = new Zend_Search_Lucene_Document();
-    $doc->addField(Zend_Search_Lucene_Field::Text('filename', basename($path)));
-    $doc->addField(Zend_Search_Lucene_Field::UnStored('contents', file_get_contents($path)));
+    $doc->addField(Zend_Search_Lucene_Field::Text('filename', \basename($path)));
+    $doc->addField(Zend_Search_Lucene_Field::UnStored('contents', \file_get_contents($path)));
     return $doc;
 }
 
@@ -174,7 +174,7 @@ function createTextDocument($path)
 function createRTFDocument($path)
 {
     $doc = new Zend_Search_Lucene_Document();
-    $doc->addField(Zend_Search_Lucene_Field::Text('filename', basename($path)));
+    $doc->addField(Zend_Search_Lucene_Field::Text('filename', \basename($path)));
     $contents = rtf2text($path);
     //print_r($contents);
     $doc->addField(Zend_Search_Lucene_Field::UnStored('contents', $contents));
@@ -184,7 +184,7 @@ function createRTFDocument($path)
 function rtf_isPlainText($s)
 {
     $arrfailAt = array("*", "fonttbl", "colortbl", "datastore", "themedata");
-    for ($i = 0; $i < count($arrfailAt); $i++) {
+    for ($i = 0; $i < \count($arrfailAt); $i++) {
         if (!empty($s[$arrfailAt[$i]])) {
             return false;
         }
@@ -195,8 +195,8 @@ function rtf_isPlainText($s)
 function rtf2text($filename)
 {
     // Read the data from the input file.
-    $text = file_get_contents($filename);
-    if (!strlen($text)) {
+    $text = \file_get_contents($filename);
+    if (!\strlen($text)) {
         return "";
     }
 
@@ -205,7 +205,7 @@ function rtf2text($filename)
     $stack = array();
     $j = -1;
     // Read the data character-by- character…
-    for ($i = 0, $len = strlen($text); $i < $len; $i++) {
+    for ($i = 0, $len = \strlen($text); $i < $len; $i++) {
         $c = $text[$i];
 
         // Depending on current character select the further actions.
@@ -231,9 +231,9 @@ function rtf2text($filename)
                 // If it is a single quote, read next two characters that are the hexadecimal notation
                 // of a character we should add to the output stream.
                 elseif ($nc == "'") {
-                    $hex = substr($text, $i + 2, 2);
+                    $hex = \substr($text, $i + 2, 2);
                     if (rtf_isPlainText($stack[$j])) {
-                        $document .= html_entity_decode("&#".hexdec($hex).";");
+                        $document .= \html_entity_decode("&#".\hexdec($hex).";");
                     }
                     //Shift the pointer.
                     $i += 2;
@@ -244,7 +244,7 @@ function rtf2text($filename)
                     $param = null;
 
                     // Start reading characters after the backslash.
-                    for ($k = $i + 1, $m = 0; $k < strlen($text); $k++, $m++) {
+                    for ($k = $i + 1, $m = 0; $k < \strlen($text); $k++, $m++) {
                         $nc = $text[$k];
                         // If the current character is a letter and there were no digits before it,
                         // then we’re still reading the control word. If there were digits, we should stop
@@ -276,13 +276,13 @@ function rtf2text($filename)
 
                     // Start analyzing what we’ve read. We are interested mostly in control words.
                     $toText = "";
-                    switch (strtolower($word)) {
+                    switch (\strtolower($word)) {
                         // If the control word is "u", then its parameter is the decimal notation of the
                         // Unicode character that should be added to the output stream.
                         // We need to check whether the stack contains \ucN control word. If it does,
                         // we should remove the N characters from the output stream.
                         case "u":
-                            $toText .= html_entity_decode("&#x".dechex($param).";");
+                            $toText .= \html_entity_decode("&#x".\dechex($param).";");
                             $ucDelta = @$stack[$j]["uc"];
                             if ($ucDelta > 0) {
                                 $i += $ucDelta;
@@ -297,22 +297,22 @@ function rtf2text($filename)
                         break;
                         case "tab": $toText .= "\t"; break;
                         // Add current date and time instead of corresponding labels.
-                        case "chdate": $toText .= date("m.d.Y"); break;
-                        case "chdpl": $toText .= date("l, j F Y"); break;
-                        case "chdpa": $toText .= date("D, j M Y"); break;
-                        case "chtime": $toText .= date("H:i:s"); break;
+                        case "chdate": $toText .= \date("m.d.Y"); break;
+                        case "chdpl": $toText .= \date("l, j F Y"); break;
+                        case "chdpa": $toText .= \date("D, j M Y"); break;
+                        case "chtime": $toText .= \date("H:i:s"); break;
                         // Replace some reserved characters to their html analogs.
-                        case "emdash": $toText .= html_entity_decode("&mdash;"); break;
-                        case "endash": $toText .= html_entity_decode("&ndash;"); break;
-                        case "bullet": $toText .= html_entity_decode("&#149;"); break;
-                        case "lquote": $toText .= html_entity_decode("&lsquo;"); break;
-                        case "rquote": $toText .= html_entity_decode("&rsquo;"); break;
-                        case "ldblquote": $toText .= html_entity_decode("&laquo;"); break;
-                        case "rdblquote": $toText .= html_entity_decode("&raquo;"); break;
+                        case "emdash": $toText .= \html_entity_decode("&mdash;"); break;
+                        case "endash": $toText .= \html_entity_decode("&ndash;"); break;
+                        case "bullet": $toText .= \html_entity_decode("&#149;"); break;
+                        case "lquote": $toText .= \html_entity_decode("&lsquo;"); break;
+                        case "rquote": $toText .= \html_entity_decode("&rsquo;"); break;
+                        case "ldblquote": $toText .= \html_entity_decode("&laquo;"); break;
+                        case "rdblquote": $toText .= \html_entity_decode("&raquo;"); break;
                         // Add all other to the control words stack. If a control word
                         // does not include parameters, set &param to true.
                         default:
-                            $stack[$j][strtolower($word)] = empty($param) ? true : $param;
+                            $stack[$j][\strtolower($word)] = empty($param) ? true : $param;
                             break;
                     }
                     // Add data to the output stream if required.
@@ -326,12 +326,12 @@ function rtf2text($filename)
             // If we read the opening brace {, then new subgroup starts and we add
             // new array stack element and write the data from previous stack element to it.
             case "{":
-                array_push($stack, $stack[$j++]);
+                \array_push($stack, $stack[$j++]);
                 break;
             // If we read the closing brace }, then we reach the end of subgroup and should remove
             // the last stack element.
             case "}":
-                array_pop($stack);
+                \array_pop($stack);
                 $j--;
                 break;
             // Skip “trash”.

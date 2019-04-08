@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -84,9 +84,9 @@ class AuthenticationController
         }
 
         // check in custom dir first, in case someone want's to override an auth controller
-        if (file_exists('custom/modules/Users/authentication/'.$type.'/' . $type . '.php')) {
+        if (\file_exists('custom/modules/Users/authentication/'.$type.'/' . $type . '.php')) {
             require_once('custom/modules/Users/authentication/'.$type.'/' . $type . '.php');
-        } elseif (file_exists('modules/Users/authentication/'.$type.'/' . $type . '.php')) {
+        } elseif (\file_exists('modules/Users/authentication/'.$type.'/' . $type . '.php')) {
             require_once('modules/Users/authentication/'.$type.'/' . $type . '.php');
         } else {
             require_once('modules/Users/authentication/SugarAuthenticate/SugarAuthenticate.php');
@@ -95,8 +95,8 @@ class AuthenticationController
 
         if (!empty($_REQUEST['no_saml'])
             && (
-                (is_subclass_of($type, 'SAMLAuthenticate') || 'SAMLAuthenticate' == $type) ||
-                (is_subclass_of($type, 'SAML2Authenticate') || 'SAML2Authenticate' == $type)
+                (\is_subclass_of($type, 'SAMLAuthenticate') || 'SAMLAuthenticate' == $type) ||
+                (\is_subclass_of($type, 'SAML2Authenticate') || 'SAML2Authenticate' == $type)
             )) {
             $type = 'SugarAuthenticate';
         }
@@ -165,21 +165,21 @@ class AuthenticationController
             if ((is_admin($GLOBALS['current_user']) && empty($config->settings['system_adminwizard']) && $_REQUEST['action'] != 'AdminWizard') ||($postSilentInstallAdminWizardCompleted !== null && !$postSilentInstallAdminWizardCompleted)) {
                 $GLOBALS['module'] = 'Configurator';
                 $GLOBALS['action'] = 'AdminWizard';
-                ob_clean();
-                header("Location: index.php?module=Configurator&action=AdminWizard");
+                \ob_clean();
+                \header("Location: index.php?module=Configurator&action=AdminWizard");
                 sugar_cleanup(true);
             }
 
             $ut = $GLOBALS['current_user']->getPreference('ut');
             $checkTimeZone = true;
-            if (is_array($PARAMS) && !empty($PARAMS) && isset($PARAMS['passwordEncrypted'])) {
+            if (\is_array($PARAMS) && !empty($PARAMS) && isset($PARAMS['passwordEncrypted'])) {
                 $checkTimeZone = false;
             } // if
             if (empty($ut) && $checkTimeZone && $_REQUEST['action'] != 'SetTimezone' && $_REQUEST['action'] != 'SaveTimezone') {
                 $GLOBALS['module'] = 'Users';
                 $GLOBALS['action'] = 'Wizard';
-                ob_clean();
-                header("Location: index.php?module=Users&action=Wizard");
+                \ob_clean();
+                \header("Location: index.php?module=Users&action=Wizard");
                 sugar_cleanup(true);
             }
         } else {
@@ -209,10 +209,10 @@ class AuthenticationController
         }
         if ($this->authenticated) {
             if (!isset($_SESSION['userStats']['pages'])) {
-                $_SESSION['userStats']['loginTime'] = time();
+                $_SESSION['userStats']['loginTime'] = \time();
                 $_SESSION['userStats']['pages'] = 0;
             }
-            $_SESSION['userStats']['lastTime'] = time();
+            $_SESSION['userStats']['lastTime'] = \time();
             $_SESSION['userStats']['pages']++;
         }
         return $this->authenticated;

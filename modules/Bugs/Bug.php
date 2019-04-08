@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -142,7 +142,7 @@ class Bug extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -193,7 +193,7 @@ class Bug extends SugarBean
         } else {
             $query .= "where ".$where_auto;
         }
-        if (substr_count($order_by, '.') > 0) {
+        if (\substr_count($order_by, '.') > 0) {
             $query .= " ORDER BY $order_by";
         } elseif ($order_by != "") {
             $query .= " ORDER BY $order_by";
@@ -350,9 +350,9 @@ class Bug extends SugarBean
     {
         $where_clauses = array();
         $the_query_string = $this->db->quote($the_query_string);
-        array_push($where_clauses, "bugs.name like '$the_query_string%'");
-        if (is_numeric($the_query_string)) {
-            array_push($where_clauses, "bugs.bug_number like '$the_query_string%'");
+        \array_push($where_clauses, "bugs.name like '$the_query_string%'");
+        if (\is_numeric($the_query_string)) {
+            \array_push($where_clauses, "bugs.bug_number like '$the_query_string%'");
         }
 
         $the_where = "";

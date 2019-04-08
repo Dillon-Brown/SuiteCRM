@@ -105,20 +105,20 @@ if ($twitter_enabled) {
     */
 
     if (empty($tweets['errors'])) {
-        while ($i < count($tweets)) {
+        while ($i < \count($tweets)) {
             $limit = 104;
 
             $tweets[$i]['text'] = format_feed_tweets($db, $tweets[$i], $limit);
 
-            if (count($tweets[$i]['entities']['hashtags']) > 0) {
+            if (\count($tweets[$i]['entities']['hashtags']) > 0) {
                 $tweets[$i]['text'] = replace_hashtags($db, $tweets[$i]);
             }
-            if (count($tweets[$i]['entities']['user_mentions']) > 0) {
+            if (\count($tweets[$i]['entities']['user_mentions']) > 0) {
                 $tweets[$i]['text'] = replace_users($db, $tweets[$i]);
             }
 
 
-            $date = date("Y-m-d H:i:s", strtotime($tweets[$i]['created_at']));
+            $date = \date("Y-m-d H:i:s", \strtotime($tweets[$i]['created_at']));
             $image = "<img src=" . $tweets[$i]['user']['profile_image_url_https'] . " style=float:left;padding-right:5px;padding-bottom:5px;/>";
             $duplicate_found = duplicate_check($db, $tweets[$i]['text'], $date);
 
@@ -213,7 +213,7 @@ if ($facebook_enabled) {
         $message = $db->quote($temp[1]);
         $name = $db->quote($temp[0]);
         $assigned_user = '1';
-        $date = date("Y-m-d H:i:s", strtotime($single['created_time']));
+        $date = \date("Y-m-d H:i:s", \strtotime($single['created_time']));
 
 
         $sql_check = "SELECT * FROM sugarfeed WHERE description = '" . $message . "' AND date_entered = '" . $date . "'";
@@ -248,19 +248,19 @@ if ($facebook_enabled) {
 
     function guid_maker()
     {
-        if (function_exists('com_create_guid')) {
+        if (\function_exists('com_create_guid')) {
             return com_create_guid();
         }
-        mt_srand((double)microtime() * 10000); //optional for php 4.2.0 and up.
-        $charid = strtoupper(md5(uniqid(rand(), true)));
-        $hyphen = chr(45);
-        $uuid = chr(123)
-                . substr($charid, 0, 8) . $hyphen
-                . substr($charid, 8, 4) . $hyphen
-                . substr($charid, 12, 4) . $hyphen
-                . substr($charid, 16, 4) . $hyphen
-                . substr($charid, 20, 12)
-                . chr(125);
+        \mt_srand((double)\microtime() * 10000); //optional for php 4.2.0 and up.
+        $charid = \strtoupper(\md5(\uniqid(\rand(), true)));
+        $hyphen = \chr(45);
+        $uuid = \chr(123)
+                . \substr($charid, 0, 8) . $hyphen
+                . \substr($charid, 8, 4) . $hyphen
+                . \substr($charid, 12, 4) . $hyphen
+                . \substr($charid, 16, 4) . $hyphen
+                . \substr($charid, 20, 12)
+                . \chr(125);
         return $uuid;
     }
 
@@ -274,7 +274,7 @@ if ($facebook_enabled) {
         //if simple post
         switch ($stream['type']) {
             case "":
-                $string[1] = "<a href=http://www.facebook.com/" . $stream['from']['id'] . ">" . $stream['from']['name'] . "<a/> - " . substr($stream['message'], 0, 100);
+                $string[1] = "<a href=http://www.facebook.com/" . $stream['from']['id'] . ">" . $stream['from']['name'] . "<a/> - " . \substr($stream['message'], 0, 100);
                 break;
             case "link":
                 $string[0] = "<img style=float:left;padding-right:5px;padding-bottom:5px; src=http://graph.facebook.com/" . $stream['from']['id'] . "/picture />";
@@ -289,10 +289,10 @@ if ($facebook_enabled) {
                 //
                 $string[0] = "<img style=float:left;padding-right:5px;padding-bottom:5px; src=http://graph.facebook.com/" . $stream['from']['id'] . "/picture />";
                 if (!empty($stream['story'])) {
-                    $string[1] = '<b>' . $stream['from']['name']. '</b><p style=line-height:30px;>' . substr($stream['story'], 0, 100) . "</p><a href=" . $stream['actions']['0']['link'] . ">View post on Facebook</a>";
+                    $string[1] = '<b>' . $stream['from']['name']. '</b><p style=line-height:30px;>' . \substr($stream['story'], 0, 100) . "</p><a href=" . $stream['actions']['0']['link'] . ">View post on Facebook</a>";
                 } else {
                     //wall post.
-                    $string[1] = '<b>' . $stream['from']['name'] . '</b><p style=line-height:30px;>' . substr($stream['message'], 0, 100) . "</p><a href=" . $stream['actions']['0']['link'] .">View post on Facebook</a>";
+                    $string[1] = '<b>' . $stream['from']['name'] . '</b><p style=line-height:30px;>' . \substr($stream['message'], 0, 100) . "</p><a href=" . $stream['actions']['0']['link'] .">View post on Facebook</a>";
                 }
                 break;
             case "photos":

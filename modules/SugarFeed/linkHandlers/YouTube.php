@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -53,7 +53,7 @@ class FeedLinkHandlerYoutube extends FeedLinkHandlerLink
     public function handleInput($feed, $link_type, $link_url)
     {
         $match = array();
-        preg_match('/v=([^\&]+)/', $link_url, $match);
+        \preg_match('/v=([^\&]+)/', $link_url, $match);
         
         if (!empty($match[1])) {
             $feed->link_type = $link_type;

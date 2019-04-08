@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -87,7 +87,7 @@ class ConfiguratorViewAddFontView extends SugarView
                 "bold"=>$mod_strings["LBL_FONT_BOLD"],
                 "boldItalic"=>$mod_strings["LBL_FONT_BOLDITALIC"]
          ));
-        $this->ss->assign("ENCODING_TABLE", array_combine(explode(",", PDF_ENCODING_TABLE_LIST), explode(",", PDF_ENCODING_TABLE_LABEL_LIST)));
+        $this->ss->assign("ENCODING_TABLE", \array_combine(\explode(",", PDF_ENCODING_TABLE_LIST), \explode(",", PDF_ENCODING_TABLE_LABEL_LIST)));
         
         //display
         $this->ss->display('modules/Configurator/tpls/addFontView.tpl');

@@ -79,7 +79,7 @@ class Zend_Gdata_Contacts_Extension_PhoneNumber extends Zend_Gdata_Extension
     {
         switch ($attribute->localName) {
             case 'primary':
-                if (strtolower($attribute->nodeValue) == 'true') {
+                if (\strtolower($attribute->nodeValue) == 'true') {
                     $this->_isPrimaryNumber = true;
                 } else {
                     $this->_isPrimaryNumber = false;
@@ -98,7 +98,7 @@ class Zend_Gdata_Contacts_Extension_PhoneNumber extends Zend_Gdata_Extension
 
     public function getPhoneType()
     {
-        return str_replace($this->lookupNamespace('gd') . '#', '', $this->_phoneType);
+        return \str_replace($this->lookupNamespace('gd') . '#', '', $this->_phoneType);
     }
     
     public function getNumber()

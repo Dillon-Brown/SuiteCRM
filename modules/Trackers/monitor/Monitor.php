@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -45,7 +45,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once('modules/Trackers/Metric.php');
 require_once('modules/Trackers/Trackable.php');
 
-define('MAX_SESSION_LENGTH', 36);
+\define('MAX_SESSION_LENGTH', 36);
 
 class Monitor implements Trackable
 {
@@ -71,7 +71,7 @@ class Monitor implements Trackable
      */
     public function __construct($name='', $monitorId='', $metadata='', $store='')
     {
-        if (empty($metadata) || !file_exists($metadata)) {
+        if (empty($metadata) || !\file_exists($metadata)) {
             $GLOBALS['log']->error($GLOBALS['app_strings']['ERR_MONITOR_FILE_MISSING'] . "($metadata)");
             throw new Exception($GLOBALS['app_strings']['ERR_MONITOR_FILE_MISSING'] . "($metadata)");
         }
@@ -116,7 +116,7 @@ class Monitor implements Trackable
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($name, $monitorId, $metadata, $store);
     }
@@ -134,7 +134,7 @@ class Monitor implements Trackable
             $GLOBALS['log']->error($GLOBALS['app_strings']['ERR_UNDEFINED_METRIC'] . "($name)");
             throw new Exception($GLOBALS['app_strings']['ERR_UNDEFINED_METRIC'] . "($name)");
         } elseif ($this->metrics[$name]->isMutable()) {
-            $this->$name = is_object($value) ? get_class($value) : $value;
+            $this->$name = \is_object($value) ? \get_class($value) : $value;
             $this->dirty = true;
         }
     }
@@ -231,7 +231,7 @@ class Monitor implements Trackable
             return $this->cachedStores[$store];
         }
 
-        if (!file_exists("modules/Trackers/store/$store.php")) {
+        if (!\file_exists("modules/Trackers/store/$store.php")) {
             $GLOBALS['log']->error($GLOBALS['app_strings']['ERR_STORE_FILE_MISSING'] . "($store)");
             throw new Exception($GLOBALS['app_strings']['ERR_STORE_FILE_MISSING'] . "($store)");
         }
@@ -244,9 +244,9 @@ class Monitor implements Trackable
 
     public function getSessionId()
     {
-        $sessionid = session_id();
-        if (!empty($sessionid) && strlen($sessionid) > MAX_SESSION_LENGTH) {
-            $sessionid = md5($sessionid);
+        $sessionid = \session_id();
+        if (!empty($sessionid) && \strlen($sessionid) > MAX_SESSION_LENGTH) {
+            $sessionid = \md5($sessionid);
         }
         return $sessionid;
     }

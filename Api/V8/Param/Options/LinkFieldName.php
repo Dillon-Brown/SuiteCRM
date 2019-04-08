@@ -30,7 +30,7 @@ class LinkFieldName extends BaseOption
 
                 if (!$bean->load_relationship($value)) {
                     throw new \RuntimeException(
-                        sprintf('Cannot load relationship %s for %s module', $value, $bean->getObjectName())
+                        \sprintf('Cannot load relationship %s for %s module', $value, $bean->getObjectName())
                     );
                 }
 

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -79,7 +79,7 @@ class SugarModule
             return false;
         }
 
-        return is_a($focus, $template);
+        return \is_a($focus, $template);
     }
 
     /**
@@ -106,7 +106,7 @@ class SugarModule
                 if (!$returnObject) {
                     return true;
                 }
-                if (!is_file($beanFiles[$bean])) {
+                if (!\is_file($beanFiles[$bean])) {
                     return false;
                 }
                 require_once($beanFiles[$bean]);

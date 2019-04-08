@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -80,14 +80,14 @@ class EmployeesViewList extends ViewList
 
         $theTitle = "<div class='moduleTitle'>\n<h2>";
 
-        $module = preg_replace("/ /", "", $this->module);
+        $module = \preg_replace("/ /", "", $this->module);
 
         $params = $this->_getModuleTitleParams();
-        $count = count($params);
+        $count = \count($params);
         $index = 0;
 
         if (SugarThemeRegistry::current()->directionality == "rtl") {
-            $params = array_reverse($params);
+            $params = \array_reverse($params);
         }
 
         $paramString = '';

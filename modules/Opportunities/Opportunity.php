@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -114,7 +114,7 @@ class Opportunity extends SugarBean
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -259,7 +259,7 @@ class Opportunity extends SugarBean
         $this->load_relationship('contacts');
         $query_array=$this->contacts->getQuery(true);
 
-        if (is_string($query_array)) {
+        if (\is_string($query_array)) {
             LoggerManager::getLogger()->warn("Illegal string offset 'select' (\$query_array) value id: $query_array");
         } else {
             //update the select clause in the retruned query.
@@ -338,8 +338,8 @@ class Opportunity extends SugarBean
     {
         $where_clauses = array();
         $the_query_string = DBManagerFactory::getInstance()->quote($the_query_string);
-        array_push($where_clauses, "opportunities.name like '$the_query_string%'");
-        array_push($where_clauses, "accounts.name like '$the_query_string%'");
+        \array_push($where_clauses, "opportunities.name like '$the_query_string%'");
+        \array_push($where_clauses, "accounts.name like '$the_query_string%'");
 
         $the_where = "";
         foreach ($where_clauses as $clause) {
@@ -384,7 +384,7 @@ class Opportunity extends SugarBean
         //if account_id was replaced unlink the previous account_id.
         //this rel_fields_before_value is populated by sugarbean during the retrieve call.
         if (!empty($this->account_id) and !empty($this->rel_fields_before_value['account_id']) and
-                (trim($this->account_id) != trim($this->rel_fields_before_value['account_id']))) {
+                (\trim($this->account_id) != \trim($this->rel_fields_before_value['account_id']))) {
             //unlink the old record.
             $this->load_relationship('accounts');
             $this->accounts->delete($this->id, $this->rel_fields_before_value['account_id']);

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -90,7 +90,7 @@ class MyMeetingsDashlet extends DashletGeneric
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id, $def);
     }
@@ -123,7 +123,7 @@ class MyMeetingsDashlet extends DashletGeneric
 
         // grab meeting status
         if (!empty($keys)) {
-            $query = "SELECT meeting_id, accept_status FROM meetings_users WHERE deleted = 0 AND user_id = '" . $current_user->id . "' AND meeting_id IN ('" . implode("','", $keys) . "')";
+            $query = "SELECT meeting_id, accept_status FROM meetings_users WHERE deleted = 0 AND user_id = '" . $current_user->id . "' AND meeting_id IN ('" . \implode("','", $keys) . "')";
             $result = DBManagerFactory::getInstance()->query($query);
             while ($row = DBManagerFactory::getInstance()->fetchByAssoc($result)) {
                 $rowNums = $this->lvs->data['pageData']['idIndex'][$row['meeting_id']]; // figure out which rows have this guid

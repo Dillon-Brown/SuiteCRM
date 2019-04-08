@@ -48,7 +48,7 @@ r354 - 2004-08-02 23:00:37 -0700 (Mon, 02 Aug 2004) - sugarjacob - Adding Soap
 */
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -333,7 +333,7 @@ class nusoap_base
     public function debug($string)
     {
         if ($this->debugLevel > 0) {
-            $this->appendDebug($this->getmicrotime().' '.get_class($this).": $string\n");
+            $this->appendDebug($this->getmicrotime().' '.\get_class($this).": $string\n");
         }
     }
 
@@ -388,8 +388,8 @@ class nusoap_base
     {
         // it would be nice to use a memory stream here to use
         // memory more efficiently
-        while (strpos($this->debug_str, '--')) {
-            $this->debug_str = str_replace('--', '- -', $this->debug_str);
+        while (\strpos($this->debug_str, '--')) {
+            $this->debug_str = \str_replace('--', '- -', $this->debug_str);
         }
         $ret = "<!--\n" . $this->debug_str . "\n-->";
         return $ret;
@@ -404,11 +404,11 @@ class nusoap_base
     public function expandEntities($val)
     {
         if ($this->charencoding) {
-            $val = str_replace('&', '&amp;', $val);
-            $val = str_replace("'", '&apos;', $val);
-            $val = str_replace('"', '&quot;', $val);
-            $val = str_replace('<', '&lt;', $val);
-            $val = str_replace('>', '&gt;', $val);
+            $val = \str_replace('&', '&amp;', $val);
+            $val = \str_replace("'", '&apos;', $val);
+            $val = \str_replace('"', '&quot;', $val);
+            $val = \str_replace('<', '&lt;', $val);
+            $val = \str_replace('>', '&gt;', $val);
         }
         return $val;
     }
@@ -447,9 +447,9 @@ class nusoap_base
     */
     public function isArraySimpleOrStruct($val)
     {
-        $keyList = array_keys($val);
+        $keyList = \array_keys($val);
         foreach ($keyList as $keyListValue) {
-            if (!is_int($keyListValue)) {
+            if (!\is_int($keyListValue)) {
                 return 'arrayStruct';
             }
         }
@@ -477,7 +477,7 @@ class nusoap_base
         $this->appendDebug('value=' . $this->varDump($val));
         $this->appendDebug('attributes=' . $this->varDump($attributes));
         
-        if (is_object($val) && get_class($val) == 'soapval' && (! $soapval)) {
+        if (\is_object($val) && \get_class($val) == 'soapval' && (! $soapval)) {
             $this->debug("serialize_val: serialize soapval");
             $xml = $val->serialize($use);
             $this->appendDebug($val->getDebug());
@@ -486,7 +486,7 @@ class nusoap_base
             return $xml;
         }
         // force valid name if necessary
-        if (is_numeric($name)) {
+        if (\is_numeric($name)) {
             $name = '__numeric_' . $name;
         } elseif (! $name) {
             $name = 'noname';
@@ -494,7 +494,7 @@ class nusoap_base
         // if name has ns, add ns prefix to name
         $xmlns = '';
         if ($name_ns) {
-            $prefix = 'nu'.rand(1000, 9999);
+            $prefix = 'nu'.\rand(1000, 9999);
             $name = $prefix.':'.$name;
             $xmlns .= " xmlns:$prefix=\"$name_ns\"";
         }
@@ -504,7 +504,7 @@ class nusoap_base
             // w/o checking against typemap
             $type_prefix = 'xsd';
         } elseif ($type_ns) {
-            $type_prefix = 'ns'.rand(1000, 9999);
+            $type_prefix = 'ns'.\rand(1000, 9999);
             $xmlns .= " xmlns:$type_prefix=\"$type_ns\"";
         }
         // serialize attributes if present
@@ -515,7 +515,7 @@ class nusoap_base
             }
         }
         // serialize null value
-        if (is_null($val)) {
+        if (\is_null($val)) {
             $this->debug("serialize_val: serialize null");
             if ($use == 'literal') {
                 // TODO: depends on minOccurs
@@ -535,13 +535,13 @@ class nusoap_base
         // serialize if an xsd built-in primitive type
         if ($type != '' && isset($this->typemap[$this->XMLSchemaVersion][$type])) {
             $this->debug("serialize_val: serialize xsd built-in primitive type");
-            if (is_bool($val)) {
+            if (\is_bool($val)) {
                 if ($type == 'boolean') {
                     $val = $val ? 'true' : 'false';
                 } elseif (! $val) {
                     $val = 0;
                 }
-            } elseif (is_string($val)) {
+            } elseif (\is_string($val)) {
                 $val = $this->expandEntities($val);
             }
             if ($use == 'literal') {
@@ -556,7 +556,7 @@ class nusoap_base
         // detect type and serialize
         $xml = '';
         switch (true) {
-            case (is_bool($val) || $type == 'boolean'):
+            case (\is_bool($val) || $type == 'boolean'):
                 $this->debug("serialize_val: serialize boolean");
                 if ($type == 'boolean') {
                     $val = $val ? 'true' : 'false';
@@ -569,7 +569,7 @@ class nusoap_base
                     $xml .= "<$name$xmlns xsi:type=\"xsd:boolean\"$atts>$val</$name>";
                 }
                 break;
-            case (is_int($val) || is_long($val) || $type == 'int'):
+            case (\is_int($val) || \is_long($val) || $type == 'int'):
                 $this->debug("serialize_val: serialize int");
                 if ($use == 'literal') {
                     $xml .= "<$name$xmlns$atts>$val</$name>";
@@ -577,7 +577,7 @@ class nusoap_base
                     $xml .= "<$name$xmlns xsi:type=\"xsd:int\"$atts>$val</$name>";
                 }
                 break;
-            case (is_float($val)|| is_double($val) || $type == 'float'):
+            case (\is_float($val)|| \is_double($val) || $type == 'float'):
                 $this->debug("serialize_val: serialize float");
                 if ($use == 'literal') {
                     $xml .= "<$name$xmlns$atts>$val</$name>";
@@ -585,7 +585,7 @@ class nusoap_base
                     $xml .= "<$name$xmlns xsi:type=\"xsd:float\"$atts>$val</$name>";
                 }
                 break;
-            case (is_string($val) || $type == 'string'):
+            case (\is_string($val) || $type == 'string'):
                 $this->debug("serialize_val: serialize string");
                 $val = $this->expandEntities($val);
                 if ($use == 'literal') {
@@ -594,21 +594,21 @@ class nusoap_base
                     $xml .= "<$name$xmlns xsi:type=\"xsd:string\"$atts>$val</$name>";
                 }
                 break;
-            case is_object($val):
+            case \is_object($val):
                 $this->debug("serialize_val: serialize object");
-                if (get_class($val) == 'soapval') {
+                if (\get_class($val) == 'soapval') {
                     $this->debug("serialize_val: serialize soapval object");
                     $pXml = $val->serialize($use);
                     $this->appendDebug($val->getDebug());
                     $val->clearDebug();
                 } else {
                     if (! $name) {
-                        $name = get_class($val);
+                        $name = \get_class($val);
                         $this->debug("In serialize_val, used class name $name as element name");
                     } else {
-                        $this->debug("In serialize_val, do not override name $name for element name for class " . get_class($val));
+                        $this->debug("In serialize_val, do not override name $name for element name for class " . \get_class($val));
                     }
-                    foreach (get_object_vars($val) as $k => $v) {
+                    foreach (\get_object_vars($val) as $k => $v) {
                         $pXml = isset($pXml) ? $pXml.$this->serialize_val($v, $k, false, false, false, false, $use) : $this->serialize_val($v, $k, false, false, false, false, $use);
                     }
                 }
@@ -624,28 +624,28 @@ class nusoap_base
                 }
                 break;
             break;
-            case (is_array($val) || $type):
+            case (\is_array($val) || $type):
                 // detect if struct or array
                 $valueType = $this->isArraySimpleOrStruct($val);
-                if ($valueType=='arraySimple' || preg_match('/^ArrayOf/', $type)) {
+                if ($valueType=='arraySimple' || \preg_match('/^ArrayOf/', $type)) {
                     $this->debug("serialize_val: serialize array");
                     $i = 0;
-                    if (is_array($val) && count($val)> 0) {
+                    if (\is_array($val) && \count($val)> 0) {
                         foreach ($val as $v) {
-                            if (is_object($v) && get_class($v) ==  'soapval') {
+                            if (\is_object($v) && \get_class($v) ==  'soapval') {
                                 $tt_ns = $v->type_ns;
                                 $tt = $v->type;
-                            } elseif (is_array($v)) {
+                            } elseif (\is_array($v)) {
                                 $tt = $this->isArraySimpleOrStruct($v);
                             } else {
-                                $tt = gettype($v);
+                                $tt = \gettype($v);
                             }
                             $array_types[$tt] = 1;
                             // TODO: for literal, the name should be $name
                             $xml .= $this->serialize_val($v, 'item', false, false, false, false, $use);
                             ++$i;
                         }
-                        if (count($array_types) > 1) {
+                        if (\count($array_types) > 1) {
                             $array_typename = 'xsd:anyType';
                         } elseif (isset($tt) && isset($this->typemap[$this->XMLSchemaVersion][$tt])) {
                             if ($tt == 'integer') {
@@ -661,7 +661,7 @@ class nusoap_base
                             if ($tt_ns != '' && $tt_ns == $this->namespaces['xsd']) {
                                 $array_typename = 'xsd:' . $tt;
                             } elseif ($tt_ns) {
-                                $tt_prefix = 'ns' . rand(1000, 9999);
+                                $tt_prefix = 'ns' . \rand(1000, 9999);
                                 $array_typename = "$tt_prefix:$tt";
                                 $xmlns .= " xmlns:$tt_prefix=\"$tt_ns\"";
                             } else {
@@ -717,7 +717,7 @@ class nusoap_base
                 break;
             default:
                 $this->debug("serialize_val: serialize unknown");
-                $xml .= 'not detected, got '.gettype($val).' for '.$val;
+                $xml .= 'not detected, got '.\gettype($val).' for '.$val;
                 break;
         }
         $this->debug("serialize_val returning $xml");
@@ -742,7 +742,7 @@ class nusoap_base
         // if $this->soap_defencoding is UTF-8.  Not doing this automatically allows
         // one to send arbitrary UTF-8 characters, not just characters that map to ISO-8859-1
 
-        $this->debug("In serializeEnvelope length=" . strlen($body) . " body (max 1000 characters)=" . substr($body, 0, 1000) . " style=$style use=$use encodingStyle=$encodingStyle");
+        $this->debug("In serializeEnvelope length=" . \strlen($body) . " body (max 1000 characters)=" . \substr($body, 0, 1000) . " style=$style use=$use encodingStyle=$encodingStyle");
         $this->debug("headers:");
         $this->appendDebug($this->varDump($headers));
         $this->debug("namespaces:");
@@ -750,7 +750,7 @@ class nusoap_base
 
         // serialize namespaces
         $ns_string = '';
-        foreach (array_merge($this->namespaces, $namespaces) as $k => $v) {
+        foreach (\array_merge($this->namespaces, $namespaces) as $k => $v) {
             $ns_string .= " xmlns:$k=\"$v\"";
         }
         if ($encodingStyle) {
@@ -759,10 +759,10 @@ class nusoap_base
 
         // serialize headers
         if ($headers) {
-            if (is_array($headers)) {
+            if (\is_array($headers)) {
                 $xml = '';
                 foreach ($headers as $k => $v) {
-                    if (is_object($v) && get_class($v) == 'soapval') {
+                    if (\is_object($v) && \get_class($v) == 'soapval') {
                         $xml .= $this->serialize_val($v, false, false, false, false, false, $use);
                     } else {
                         $xml .= $this->serialize_val($v, $k, false, false, false, false, $use);
@@ -794,8 +794,8 @@ class nusoap_base
      */
     public function formatDump($str)
     {
-        $str = htmlspecialchars($str);
-        return nl2br($str);
+        $str = \htmlspecialchars($str);
+        return \nl2br($str);
     }
 
     /**
@@ -809,11 +809,11 @@ class nusoap_base
     {
         // get element namespace
         //$this->xdebug("Contract $qname");
-        if (strrpos($qname, ':')) {
+        if (\strrpos($qname, ':')) {
             // get unqualified name
-            $name = substr($qname, strrpos($qname, ':') + 1);
+            $name = \substr($qname, \strrpos($qname, ':') + 1);
             // get ns
-            $ns = substr($qname, 0, strrpos($qname, ':'));
+            $ns = \substr($qname, 0, \strrpos($qname, ':'));
             $p = $this->getPrefixFromNamespace($ns);
             if ($p) {
                 return $p . ':' . $name;
@@ -833,11 +833,11 @@ class nusoap_base
     public function expandQname($qname)
     {
         // get element prefix
-        if (strpos($qname, ':') && !preg_match('/^http:\/\//', $qname)) {
+        if (\strpos($qname, ':') && !\preg_match('/^http:\/\//', $qname)) {
             // get unqualified name
-            $name = substr(strstr($qname, ':'), 1);
+            $name = \substr(\strstr($qname, ':'), 1);
             // get ns prefix
-            $prefix = substr($qname, 0, strpos($qname, ':'));
+            $prefix = \substr($qname, 0, \strpos($qname, ':'));
             if (isset($this->namespaces[$prefix])) {
                 return $this->namespaces[$prefix].':'.$name;
             }
@@ -856,9 +856,9 @@ class nusoap_base
     */
     public function getLocalPart($str)
     {
-        if ($sstr = strrchr($str, ':')) {
+        if ($sstr = \strrchr($str, ':')) {
             // get unqualified name
-            return substr($sstr, 1);
+            return \substr($sstr, 1);
         }
         return $str;
     }
@@ -873,9 +873,9 @@ class nusoap_base
     */
     public function getPrefix($str)
     {
-        if ($pos = strrpos($str, ':')) {
+        if ($pos = \strrpos($str, ':')) {
             // get prefix
-            return substr($str, 0, $pos);
+            return \substr($str, 0, $pos);
         }
         return false;
     }
@@ -923,15 +923,15 @@ class nusoap_base
     */
     public function getmicrotime()
     {
-        if (function_exists('gettimeofday')) {
-            $tod = gettimeofday();
+        if (\function_exists('gettimeofday')) {
+            $tod = \gettimeofday();
             $sec = $tod['sec'];
             $usec = $tod['usec'];
         } else {
-            $sec = time();
+            $sec = \time();
             $usec = 0;
         }
-        return strftime('%Y-%m-%d %H:%M:%S', $sec) . '.' . sprintf('%06d', $usec);
+        return \strftime('%Y-%m-%d %H:%M:%S', $sec) . '.' . \sprintf('%06d', $usec);
     }
 
     /**
@@ -943,10 +943,10 @@ class nusoap_base
      */
     public function varDump($data)
     {
-        ob_start();
-        var_dump($data);
-        $ret_val = ob_get_contents();
-        ob_end_clean();
+        \ob_start();
+        \var_dump($data);
+        $ret_val = \ob_get_contents();
+        \ob_end_clean();
         return $ret_val;
     }
 
@@ -976,14 +976,14 @@ class nusoap_base
 */
 function timestamp_to_iso8601($timestamp, $utc=true)
 {
-    $datestr = date('Y-m-d\TH:i:sO', $timestamp);
-    $pos = strrpos($datestr, "+");
+    $datestr = \date('Y-m-d\TH:i:sO', $timestamp);
+    $pos = \strrpos($datestr, "+");
     if ($pos === false) {
-        $pos = strrpos($datestr, "-");
+        $pos = \strrpos($datestr, "-");
     }
     if ($pos !== false) {
-        if (strlen($datestr) == $pos + 5) {
-            $datestr = substr($datestr, 0, $pos + 3) . ':' . substr($datestr, -2);
+        if (\strlen($datestr) == $pos + 5) {
+            $datestr = \substr($datestr, 0, $pos + 3) . ':' . \substr($datestr, -2);
         }
     }
     if ($utc) {
@@ -998,8 +998,8 @@ function timestamp_to_iso8601($timestamp, $utc=true)
         '(Z|[+\-][0-9]{2}:?[0-9]{2})?'. // Z to indicate UTC, -/+HH:MM:SS.SS... for local tz's
         '/';
 
-        if (preg_match($pattern, $datestr, $regs)) {
-            return sprintf('%04d-%02d-%02dT%02d:%02d:%02dZ', $regs[1], $regs[2], $regs[3], $regs[4], $regs[5], $regs[6]);
+        if (\preg_match($pattern, $datestr, $regs)) {
+            return \sprintf('%04d-%02d-%02dT%02d:%02d:%02dZ', $regs[1], $regs[2], $regs[3], $regs[4], $regs[5], $regs[6]);
         }
         return false;
     }
@@ -1025,12 +1025,12 @@ function iso8601_to_timestamp($datestr)
     '([0-9]{2})(\.[0-9]+)?'. // seconds ss.ss...
     '(Z|[+\-][0-9]{2}:?[0-9]{2})?'. // Z to indicate UTC, -/+HH:MM:SS.SS... for local tz's
     '/';
-    if (preg_match($pattern, $datestr, $regs)) {
+    if (\preg_match($pattern, $datestr, $regs)) {
         // not utc
         if ($regs[8] != 'Z') {
-            $op = substr($regs[8], 0, 1);
-            $h = substr($regs[8], 1, 2);
-            $m = substr($regs[8], strlen($regs[8])-2, 2);
+            $op = \substr($regs[8], 0, 1);
+            $h = \substr($regs[8], 1, 2);
+            $m = \substr($regs[8], \strlen($regs[8])-2, 2);
             if ($op == '-') {
                 $regs[4] = $regs[4] + $h;
                 $regs[5] = $regs[5] + $m;
@@ -1039,7 +1039,7 @@ function iso8601_to_timestamp($datestr)
                 $regs[5] = $regs[5] - $m;
             }
         }
-        return gmmktime($regs[4], $regs[5], $regs[6], $regs[2], $regs[3], $regs[1]);
+        return \gmmktime($regs[4], $regs[5], $regs[6], $regs[2], $regs[3], $regs[1]);
         //		return strtotime("$regs[1]-$regs[2]-$regs[3] $regs[4]:$regs[5]:$regs[6]Z");
     }
     return false;
@@ -1054,10 +1054,10 @@ function iso8601_to_timestamp($datestr)
 */
 function usleepWindows($usec)
 {
-    $start = gettimeofday();
+    $start = \gettimeofday();
     
     do {
-        $stop = gettimeofday();
+        $stop = \gettimeofday();
         $timePassed = 1000000 * ($stop['sec'] - $start['sec'])
         + $stop['usec'] - $start['usec'];
     } while ($timePassed < $usec);

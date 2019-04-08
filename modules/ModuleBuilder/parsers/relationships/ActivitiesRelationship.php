@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -105,7 +105,7 @@ class ActivitiesRelationship extends OneToManyRelationship
                         'module' => 'application',
                         'system_label' => $typeDisplay,
                         'display_label' => array(
-                            $this->lhs_module => $this->lhs_label ? $this->lhs_label : ucfirst($this->lhs_module)
+                            $this->lhs_module => $this->lhs_label ? $this->lhs_label : \ucfirst($this->lhs_module)
                         ),
                     );
                 }
@@ -125,12 +125,12 @@ class ActivitiesRelationship extends OneToManyRelationship
 
             $labelDefinitions[] = array(
                 'module' => $this->lhs_module ,
-                'system_label' => 'LBL_' . strtoupper($this->relationship_name . '_FROM_' . $this->getRightModuleSystemLabel()) . '_TITLE',
+                'system_label' => 'LBL_' . \strtoupper($this->relationship_name . '_FROM_' . $this->getRightModuleSystemLabel()) . '_TITLE',
                 'display_label' => $rhs_display_label
             );
             $labelDefinitions[] = array(
                 'module' => $this->rhs_module,
-                'system_label' => 'LBL_' . strtoupper($this->relationship_name . '_FROM_' . $this->getLeftModuleSystemLabel()) . '_TITLE',
+                'system_label' => 'LBL_' . \strtoupper($this->relationship_name . '_FROM_' . $this->getLeftModuleSystemLabel()) . '_TITLE',
                 'display_label' => $lhs_display_label
             );
 
@@ -163,7 +163,7 @@ class ActivitiesRelationship extends OneToManyRelationship
         $vardef [ 'source' ] = 'non-db' ;
         $vardef [ 'module' ] = $sourceModule ;
         $vardef [ 'bean_name' ] = BeanFactory::getObjectName($sourceModule) ;
-        $vardef [ 'vname' ] = strtoupper("LBL_{$relationshipName}_FROM_{$sourceModule}_TITLE");
+        $vardef [ 'vname' ] = \strtoupper("LBL_{$relationshipName}_FROM_{$sourceModule}_TITLE");
         return $vardef ;
     }
 
@@ -187,7 +187,7 @@ class ActivitiesRelationship extends OneToManyRelationship
         }
 
         ActivitiesRelationship::$subpanelsAdded[$this->lhs_module] = true;
-        $relationshipName = substr($this->relationship_name, 0, strrpos($this->relationship_name, '_'));
+        $relationshipName = \substr($this->relationship_name, 0, \strrpos($this->relationship_name, '_'));
         return array( $this->lhs_module => array(
                       'activities' => $this->buildActivitiesSubpanelDefinition($relationshipName),
                       'history' => $this->buildHistorySubpanelDefinition($relationshipName) ,

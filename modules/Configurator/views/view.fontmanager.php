@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -67,7 +67,7 @@ class ConfiguratorViewFontManager extends SugarView
         }
         $fontManager = new FontManager();
         if (!$fontManager->listFontFiles()) {
-            $error = implode("<br>", $fontManager->errors);
+            $error = \implode("<br>", $fontManager->errors);
         }
 
         $this->ss->assign(
@@ -207,7 +207,7 @@ BSOFR;
     {
         global $mod_strings;
         $return = "";
-        if (count($style) == 2) {
+        if (\count($style) == 2) {
             $return .= "<b><i>".$mod_strings['LBL_FONT_BOLDITALIC']."</b></i>";
         } else {
             switch ($style[0]) {

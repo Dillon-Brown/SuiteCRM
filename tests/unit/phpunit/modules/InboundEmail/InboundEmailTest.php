@@ -58,8 +58,8 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $str = ['nope', '%foo', 'bar%', '%bazz%'];
         $ret = this_callback($str);
         $result = [];
-        for ($i = 0; $i < strlen($ret); $i++) {
-            $result[] = ord($ret[$i]);
+        for ($i = 0; $i < \strlen($ret); $i++) {
+            $result[] = \ord($ret[$i]);
         }
         $this->assertEquals([14, 15, 186, 186], $result);
     }
@@ -80,7 +80,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $fake->add('setTimeout', [3, 60], [true]);
         $fake->add('getErrors', null, [false]);
         $fake->add('getConnection', null, [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('close', null, [null]);
         $fake->add('ping', null, [true]);
@@ -106,7 +106,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $fake->add('setTimeout', [3, 60], [true]);
         $fake->add('getErrors', null, [false]);
         $fake->add('getConnection', null, [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('close', null, [null]);
         $fake->add('ping', null, [true]);
@@ -131,7 +131,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $fake->add('setTimeout', [3, 60], [true]);
         $fake->add('getErrors', null, [false]);
         $fake->add('getConnection', null, [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('close', null, [null]);
         $fake->add('ping', null, [true]);
@@ -155,7 +155,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $fake->add('setTimeout', [3, 60], [true]);
         $fake->add('getErrors', null, [false]);
         $fake->add('getConnection', null, [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('close', null, [null]);
         $fake->add('ping', null, [true]);
@@ -183,12 +183,12 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $fake->add('setTimeout', [2, 15], [true]);
         $fake->add('setTimeout', [3, 15], [true]);
         $fake->add('open', ["{:/service=/ssl/tls/validate-cert/secure}", null, null, 0, 0, []], [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('getLastError', null, ['Too many login failures']);
         $fake->add('getAlerts', null, [null]);
         $fake->add('getConnection', null, [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('getMailboxes', ['{:/service=/ssl/tls/validate-cert/secure}', '*'], [[]]);
         $fake->add('close', null, [null]);
@@ -215,7 +215,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $fake->add('setTimeout', [3, 60], [true]);
         $fake->add('getErrors', null, [false]);
         $fake->add('getConnection', null, [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('getMailboxes', ['{:/service=/notls/novalidate-cert/secure}', '*'], [[]]);
         $fake->add('ping', null, [true]);
@@ -254,12 +254,12 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $fake->add('setTimeout', [3, 60], [true]);
         $fake->add('getErrors', null, [false]);
         $fake->add('open', ["{:/service=/notls/novalidate-cert/secure}", null, null, 0, 0, []], [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('getLastError', null, ["SECURITY PROBLEM: insecure server advertised AUTH=PLAIN"]);
         $fake->add('getAlerts', null, [false]);
         $fake->add('getConnection', null, [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('getMailboxes', ['{:/service=/notls/novalidate-cert/secure}', '*'], [[]]);
         $fake->add('close', null, [null]);
@@ -292,12 +292,12 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $fake->add('setTimeout', [3, 60], [true]);
         $fake->add('getErrors', null, [false]);
         $fake->add('open', ["{:/service=/notls/novalidate-cert/secure}", null, null, 0, 0, []], [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('getLastError', null, ['Too many login failures']);
         $fake->add('getAlerts', null, [false]);
         $fake->add('getConnection', null, [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('getMailboxes', ['{:/service=/notls/novalidate-cert/secure}', '*'], [[]]);
         $fake->add('close', null, [null]);
@@ -340,12 +340,12 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $fake->add('setTimeout', [3, 60], [true]);
         $fake->add('getErrors', null, [false]);
         $fake->add('open', ["{:/service=/notls/novalidate-cert/secure}", null, null, 0, 0, []], [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('getLastError', null, [false]);
         $fake->add('getAlerts', null, [false]);
         $fake->add('getConnection', null, [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('getMailboxes', ['{:/service=/notls/novalidate-cert/secure}', '*'], [[]]);
         $fake->add('close', null, [null]);
@@ -388,12 +388,12 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $fake->add('setTimeout', [3, 60], [true]);
         $fake->add('getErrors', null, [false]);
         $fake->add('open', ["{:/service=/ssl/tls/validate-cert/secure}", null, null, 0, 0, []], [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('getLastError', null, [false]);
         $fake->add('getAlerts', null, [false]);
         $fake->add('getConnection', null, [function () {
-            return fopen('fakeImapResource', 'w+');
+            return \fopen('fakeImapResource', 'w+');
         }]);
         $fake->add('getMailboxes', ['{:/service=/ssl/tls/validate-cert/secure}', '*'], [[]]);
         $fake->add('close', null, [null]);
@@ -487,7 +487,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($inboundEmail->id));
-        $this->assertEquals(36, strlen($inboundEmail->id));
+        $this->assertEquals(36, \strlen($inboundEmail->id));
 
         //test getCorrectMessageNoForPop3 method
         $this->getCorrectMessageNoForPop3($inboundEmail->id);
@@ -621,7 +621,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->retrieveByGroupId($group_id);
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         foreach ($result as $ie) {
             $this->assertInstanceOf('InboundEmail', $ie);
@@ -646,7 +646,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->retrieveAllByGroupId($group_id);
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         foreach ($result as $ie) {
             $this->assertInstanceOf('InboundEmail', $ie);
@@ -671,7 +671,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->retrieveAllByGroupIdWithGroupAccounts($group_id);
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
 
         foreach ($result as $ie) {
             $this->assertInstanceOf('InboundEmail', $ie);
@@ -702,7 +702,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $success = $inboundEmail->renameFolder('mailbox1', 'new_mailbox');
             $this->assertFalse((bool)$success);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -726,7 +726,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->search($id);
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         $this->assertEquals('Search Results', $result['mbox']);
         $this->assertEquals($id, $result['ieId']);
         
@@ -955,7 +955,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test getCacheTimestamp method
         $result = $inboundEmail->getCacheTimestamp('INBOX');
-        $this->assertGreaterThan(0, strlen($result));
+        $this->assertGreaterThan(0, \strlen($result));
         
         // clean up
         
@@ -996,7 +996,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //retrieve back to verify the records created
         $result = $inboundEmail->getCacheValue('INBOX');
 
-        $this->assertGreaterThan(0, count((array)$result['retArr'][0]));
+        $this->assertGreaterThan(0, \count((array)$result['retArr'][0]));
         $this->assertEquals(1, $result['retArr'][0]->message_id);
         
         // clean up
@@ -1018,17 +1018,17 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test wih default protocol
         $result = $inboundEmail->getCacheValueForUIDs('INBOX', array(1, 2, 3, 4, 5));
 
-        $this->assertTrue(is_array($result));
-        $this->assertTrue(is_array($result['uids']));
-        $this->assertTrue(is_array($result['retArr']));
+        $this->assertTrue(\is_array($result));
+        $this->assertTrue(\is_array($result['uids']));
+        $this->assertTrue(\is_array($result['retArr']));
 
         //test wih pop3 protocol
         $inboundEmail->protocol = 'pop3';
         $result = $inboundEmail->getCacheValueForUIDs('INBOX', array(1, 2, 3, 4, 5));
 
-        $this->assertTrue(is_array($result));
-        $this->assertTrue(is_array($result['uids']));
-        $this->assertTrue(is_array($result['retArr']));
+        $this->assertTrue(\is_array($result));
+        $this->assertTrue(\is_array($result['uids']));
+        $this->assertTrue(\is_array($result['retArr']));
         
         // clean up
         
@@ -1049,17 +1049,17 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test wih default protocol
         $result = $inboundEmail->getCacheValue('INBOX');
 
-        $this->assertTrue(is_array($result));
-        $this->assertTrue(is_array($result['uids']));
-        $this->assertTrue(is_array($result['retArr']));
+        $this->assertTrue(\is_array($result));
+        $this->assertTrue(\is_array($result['uids']));
+        $this->assertTrue(\is_array($result['retArr']));
 
         //test wih pop3 protocol
         $inboundEmail->protocol = 'pop3';
         $result = $inboundEmail->getCacheValue('INBOX');
 
-        $this->assertTrue(is_array($result));
-        $this->assertTrue(is_array($result['uids']));
-        $this->assertTrue(is_array($result['retArr']));
+        $this->assertTrue(\is_array($result));
+        $this->assertTrue(\is_array($result['uids']));
+        $this->assertTrue(\is_array($result['retArr']));
         
         // clean up
         
@@ -1108,7 +1108,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //use the cache values array as parameter and verify that it returns an array
         $result = $inboundEmail->displayFetchedSortedListXML($ret, 'INBOX');
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -1381,7 +1381,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $inboundEmail->emptyTrash();
 
         $result = $inboundEmail->getCacheValue('INBOX.Trash');
-        $this->assertEquals(0, count($result['retArr']));
+        $this->assertEquals(0, \count($result['retArr']));
         
         // clean up
         
@@ -1404,7 +1404,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $inboundEmail->deleteCache();
 
         $result = $inboundEmail->getCacheValue('INBOX');
-        $this->assertEquals(0, count($result['retArr']));
+        $this->assertEquals(0, \count($result['retArr']));
         
         // clean up
         
@@ -1429,7 +1429,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->deletePop3Cache();
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -1477,7 +1477,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->pop3_cleanUp();
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -1522,7 +1522,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->getPop3NewMessagesToDownload();
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -1544,7 +1544,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->getPop3NewMessagesToDownloadForCron();
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -1567,7 +1567,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->getPop3NewMessagesToDownloadForCron();
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -1595,7 +1595,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -1624,7 +1624,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -1651,7 +1651,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $result = $inboundEmail->getMessagesInEmailCache(0, 1);
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
 
         //test for pop3
@@ -1661,7 +1661,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $result = $inboundEmail->getMessagesInEmailCache(1, 0);
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -1729,7 +1729,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->getCachedIMAPSearch('test');
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -1751,7 +1751,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->checkEmailIMAPPartial();
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -1773,7 +1773,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->checkEmail2_meta();
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         $this->assertEquals(array('mailboxes' => array('INBOX' => 0), 'processCount' => 0), $result);
         
         // clean up
@@ -1818,7 +1818,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->checkEmail('INBOX');
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
 
         //test for pop3
@@ -1829,7 +1829,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->checkEmail('INBOX');
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -1856,7 +1856,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->syncEmail();
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -1882,7 +1882,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->deleteCachedMessages('1,2', 'test');
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -1903,7 +1903,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->getOverviewsFromCacheFile('1,2', 'INBOX');
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -2020,7 +2020,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -2043,7 +2043,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         $result = $inboundEmail->deleteFolder('INBOX');
 
-        $this->assertSame(['status', 'errorMessage'], array_keys($result));
+        $this->assertSame(['status', 'errorMessage'], \array_keys($result));
         $this->assertFalse($result['status']);
         
         // clean up
@@ -2160,7 +2160,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $result = $inboundEmail->savePersonalEmailAccount(1, 'admin', true);
 
         $this->assertTrue(isset($inboundEmail->id));
-        $this->assertEquals(36, strlen($inboundEmail->id));
+        $this->assertEquals(36, \strlen($inboundEmail->id));
 
         //test handleIsPersonal method
         $this->handleIsPersonal($inboundEmail->id);
@@ -2248,13 +2248,13 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         //test with invalid groupfolder id
         $result = $inboundEmail->retrieveByGroupFolderId('1');
 
-        $this->assertTrue(is_array($result));
-        $this->assertEquals(0, count($result));
+        $this->assertTrue(\is_array($result));
+        $this->assertEquals(0, \count($result));
 
         //test with valid groupfolder id
         $result = $inboundEmail->retrieveByGroupFolderId('');
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         foreach ($result as $ie) {
             $this->assertInstanceOf('InboundEmail', $ie);
         }
@@ -2326,7 +2326,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $inboundEmail = new InboundEmail();
 
         $result = $inboundEmail->getFoldersListForMailBox();
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         
         // clean up
         
@@ -2581,7 +2581,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $result = $inboundEmail->handleAutoresponse($email, $contactAddr);
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -2644,7 +2644,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->handleMailboxType($email, $header);
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -2710,7 +2710,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->handleCreateCase($email, 1);
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -2951,7 +2951,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $result = $inboundEmail->buildBreadCrumbs(array(), 'ALTERNATIVE', '1');
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -2981,7 +2981,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->buildBreadCrumbsHTML(array());
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -3089,7 +3089,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->saveAttachments('1', array(), '1', '0', true);
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -3176,7 +3176,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->saveAttachmentBinaries(new Note(), '1', '1.1', $part, 1);
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -3309,7 +3309,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $result = $inboundEmail->getDuplicateEmailId('1', '1');
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -3336,7 +3336,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $result = $inboundEmail->importOneEmail('1', '1');
             $this->assertEquals(false, $result);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -3705,7 +3705,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->disconnectMailserver();
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -3753,7 +3753,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->checkImap();
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -3836,7 +3836,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
                         'GLOBAL_PERSONAL_STRING' => null,
                     );
 
-        $this->assertTrue(is_array($result));
+        $this->assertTrue(\is_array($result));
         $this->assertEquals($expected, $result);
 
         $result = $inboundEmail->get_list_view_data();
@@ -3939,7 +3939,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->cleanOutCache();
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -4064,7 +4064,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->deleteMessageOnMailServerForPop3('1');
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -4319,7 +4319,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test for record ID to verify that record is saved
         $this->assertTrue(isset($result));
-        $this->assertEquals(36, strlen($result));
+        $this->assertEquals(36, \strlen($result));
         
         // clean up
         
@@ -4417,7 +4417,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->insertMailBoxFolders(array('INBOX', 'OUTBOX'));
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up
@@ -4575,7 +4575,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
             $inboundEmail->getNewEmailsForSyncedMailbox();
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         
@@ -4602,7 +4602,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
             $this->assertTrue(true);
         } catch (Exception $e) {
-            $this->fail("\nException: " . get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
+            $this->fail("\nException: " . \get_class($e) . ": " . $e->getMessage() . "\nin " . $e->getFile() . ':' . $e->getLine() . "\nTrace:\n" . $e->getTraceAsString() . "\n");
         }
         
         // clean up

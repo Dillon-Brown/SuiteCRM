@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -60,7 +60,7 @@ if (is_admin($current_user)) {
         $module_entries[$row['custom_module']] = true;
 
         //Only run database SQL where the name or id casing does is not lowercased
-        if ($name != strtolower($row['name'])) {
+        if ($name != \strtolower($row['name'])) {
             $database_entries[$row['custom_module']][$name] = $row;
         }
     }
@@ -68,23 +68,23 @@ if (is_admin($current_user)) {
     //If we have database entries to process
     if (!empty($database_entries)) {
         foreach ($database_entries as $module=>$entries) {
-            $table_name = strtolower($module) . '_cstm';
+            $table_name = \strtolower($module) . '_cstm';
 
             foreach ($entries as $original_col_name=>$entry) {
                 echo '<br>'. string_format($mod_strings['LBL_REPAIR_FIELD_CASING_SQL_FIELD_META_DATA'], array($entry['name']));
-                $update_sql = "UPDATE fields_meta_data SET id = '" . $entry['custom_module'] . strtolower($entry['name']) . "', name = '" . strtolower($entry['name']) . "' WHERE id = '" . $entry['id'] . "'";
+                $update_sql = "UPDATE fields_meta_data SET id = '" . $entry['custom_module'] . \strtolower($entry['name']) . "', name = '" . \strtolower($entry['name']) . "' WHERE id = '" . $entry['id'] . "'";
                 DBManagerFactory::getInstance()->query($update_sql);
 
                 echo '<br>'. string_format($mod_strings['LBL_REPAIR_FIELD_CASING_SQL_CUSTOM_TABLE'], array($entry['name'], $table_name));
 
-                DBManagerFactory::getInstance()->query(DBManagerFactory::getInstance()->renameColumnSQL($table_name, $entry['name'], strtolower($entry['name'])));
+                DBManagerFactory::getInstance()->query(DBManagerFactory::getInstance()->renameColumnSQL($table_name, $entry['name'], \strtolower($entry['name'])));
             }
         }
     }
 
     //If we have metadata files to alter
     if (!empty($module_entries)) {
-        $modules = array_keys($module_entries);
+        $modules = \array_keys($module_entries);
         $views = array('basic_search', 'advanced_search', 'detailview', 'editview', 'quickcreate');
         $class_names = array();
 
@@ -108,8 +108,8 @@ if (is_admin($current_user)) {
                     foreach ($parser->_viewdefs['panels'] as $panel_id=>$panel) {
                         foreach ($panel as $row_id=>$row) {
                             foreach ($row as $entry_id=>$entry) {
-                                if (is_array($entry) && isset($entry['name'])) {
-                                    $parser->_viewdefs['panels'][$panel_id][$row_id][$entry_id]['name'] = strtolower($entry['name']);
+                                if (\is_array($entry) && isset($entry['name'])) {
+                                    $parser->_viewdefs['panels'][$panel_id][$row_id][$entry_id]['name'] = \strtolower($entry['name']);
                                 }
                             }
                         }
@@ -117,8 +117,8 @@ if (is_admin($current_user)) {
                 } else {
                     //For basic_search and advanced_search views, just process the fields
                     foreach ($parser->_viewdefs as $entry_id=>$entry) {
-                        if (is_array($entry) && isset($entry['name'])) {
-                            $parser->_viewdefs[$entry_id]['name'] = strtolower($entry['name']);
+                        if (\is_array($entry) && isset($entry['name'])) {
+                            $parser->_viewdefs[$entry_id]['name'] = \strtolower($entry['name']);
                         }
                     }
                 }

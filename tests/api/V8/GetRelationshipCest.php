@@ -38,7 +38,7 @@ class GetRelationshipCest
         $accountId = $I->createAccount();
         $contactId = $I->createContact();
 
-        $endpoint = str_replace('{id}', $accountId, $iterator->offsetGet('endPoint'));
+        $endpoint = \str_replace('{id}', $accountId, $iterator->offsetGet('endPoint'));
 
         $I->sendGET($I->getInstanceURL() . $endpoint);
         $I->seeResponseCodeIs(200);
@@ -61,7 +61,7 @@ class GetRelationshipCest
     {
         $id = $I->createAccount();
         $endpoint = '/Api/V8/module/Accounts/{id}/relationships/invalidLinkName';
-        $endpoint = str_replace('{id}', $id, $endpoint);
+        $endpoint = \str_replace('{id}', $id, $endpoint);
         $expectedResult = [
             'errors' => [
                 'status' => 400,
@@ -73,7 +73,7 @@ class GetRelationshipCest
         $I->sendGET($I->getInstanceURL() . $endpoint);
         $I->seeResponseCodeIs(400);
         $I->seeResponseIsJson();
-        $I->seeResponseEquals(json_encode($expectedResult, JSON_PRETTY_PRINT));
+        $I->seeResponseEquals(\json_encode($expectedResult, JSON_PRETTY_PRINT));
 
         $I->deleteBean('accounts', $id);
     }

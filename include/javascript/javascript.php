@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -74,7 +74,7 @@ class javascript
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -130,10 +130,10 @@ class javascript
                         $min = false;
                         $max = false;
                         if (isset($this->sugarbean->field_name_map[$field]['validation']['min'])) {
-                            $min = filter_var($this->sugarbean->field_name_map[$field]['validation']['min'], FILTER_VALIDATE_INT);
+                            $min = \filter_var($this->sugarbean->field_name_map[$field]['validation']['min'], FILTER_VALIDATE_INT);
                         }
                         if (isset($this->sugarbean->field_name_map[$field]['validation']['max'])) {
-                            $max = filter_var($this->sugarbean->field_name_map[$field]['validation']['max'], FILTER_VALIDATE_INT);
+                            $max = \filter_var($this->sugarbean->field_name_map[$field]['validation']['max'], FILTER_VALIDATE_INT);
                         }
                         if ($min !== false && $max !== false && $min > $max) {
                             $max = $min;
@@ -195,11 +195,11 @@ class javascript
 
     public function stripEndColon($modString)
     {
-        if (substr($modString, -1, 1) == ":") {
-            $modString = substr($modString, 0, (strlen($modString) - 1));
+        if (\substr($modString, -1, 1) == ":") {
+            $modString = \substr($modString, 0, (\strlen($modString) - 1));
         }
-        if (substr($modString, -2, 2) == ": ") {
-            $modString = substr($modString, 0, (strlen($modString) - 2));
+        if (\substr($modString, -2, 2) == ": ") {
+            $modString = \substr($modString, 0, (\strlen($modString) - 2));
         }
         return $modString;
     }
@@ -334,7 +334,7 @@ class javascript
     public function buildStringToTranslateInSmarty(
         $string
         ) {
-        if (is_array($string)) {
+        if (\is_array($string)) {
             $returnstring = '';
             foreach ($string as $astring) {
                 $returnstring .= $this->buildStringToTranslateInSmarty($astring);
@@ -346,7 +346,7 @@ class javascript
 
     protected function getRequiredString($required)
     {
-        if (is_string($required) && strtolower($required) == "false") {
+        if (\is_string($required) && \strtolower($required) == "false") {
             return "false";
         }
         return empty($required) ? "false" : "true";

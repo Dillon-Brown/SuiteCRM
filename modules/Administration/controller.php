@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -57,34 +57,34 @@ class AdministrationController extends SugarController
         }
 
         // handle the tabs listing
-        $toDecode = html_entity_decode($_REQUEST['enabled_tabs'], ENT_QUOTES);
-        $enabled_tabs = json_decode($toDecode);
+        $toDecode = \html_entity_decode($_REQUEST['enabled_tabs'], ENT_QUOTES);
+        $enabled_tabs = \json_decode($toDecode);
         $tabs = new TabController();
         $tabs->set_system_tabs($enabled_tabs);
         $tabs->set_users_can_edit(isset($_REQUEST['user_edit_tabs']) && $_REQUEST['user_edit_tabs'] == 1);
 
         // handle the subpanels
         if (isset($_REQUEST['disabled_tabs'])) {
-            $disabledTabs = json_decode(html_entity_decode($_REQUEST['disabled_tabs'], ENT_QUOTES));
+            $disabledTabs = \json_decode(\html_entity_decode($_REQUEST['disabled_tabs'], ENT_QUOTES));
             $disabledTabsKeyArray = TabController::get_key_array($disabledTabs);
             SubPanelDefinitions::set_hidden_subpanels($disabledTabsKeyArray);
         }
 
-        header("Location: index.php?module=Administration&action=ConfigureTabs");
+        \header("Location: index.php?module=Administration&action=ConfigureTabs");
     }
 
     public function action_savelanguages()
     {
         global $sugar_config;
-        $toDecode = html_entity_decode($_REQUEST['disabled_langs'], ENT_QUOTES);
-        $disabled_langs = json_decode($toDecode);
-        $toDecode = html_entity_decode($_REQUEST['enabled_langs'], ENT_QUOTES);
-        $enabled_langs = json_decode($toDecode);
+        $toDecode = \html_entity_decode($_REQUEST['disabled_langs'], ENT_QUOTES);
+        $disabled_langs = \json_decode($toDecode);
+        $toDecode = \html_entity_decode($_REQUEST['enabled_langs'], ENT_QUOTES);
+        $enabled_langs = \json_decode($toDecode);
         $cfg = new Configurator();
-        $cfg->config['disabled_languages'] = join(',', $disabled_langs);
+        $cfg->config['disabled_languages'] = \join(',', $disabled_langs);
         // TODO: find way to enforce order
         $cfg->handleOverride();
-        header("Location: index.php?module=Administration&action=Languages");
+        \header("Location: index.php?module=Administration&action=Languages");
     }
 
 
@@ -130,14 +130,14 @@ class AdministrationController extends SugarController
     protected function mergeFtsConfig($type, $newConfig)
     {
         $currentConfig = SugarConfig::getInstance()->get("full_text_engine.{$type}", array());
-        return array_merge($currentConfig, $newConfig);
+        return \array_merge($currentConfig, $newConfig);
     }
 
     public function action_UpdateAjaxUI()
     {
         require_once('modules/Configurator/Configurator.php');
         $cfg = new Configurator();
-        $disabled = json_decode(html_entity_decode($_REQUEST['disabled_modules'], ENT_QUOTES));
+        $disabled = \json_decode(\html_entity_decode($_REQUEST['disabled_modules'], ENT_QUOTES));
         $cfg->config['addAjaxBannedModules'] = empty($disabled) ? false : $disabled;
         $cfg->addKeyToIgnoreOverride('addAjaxBannedModules', $disabled);
         $cfg->handleOverride();
@@ -155,7 +155,7 @@ class AdministrationController extends SugarController
     {
         global $current_user;
         $this->view = 'ajax';
-        if (function_exists('imagecreatetruecolor')) {
+        if (\function_exists('imagecreatetruecolor')) {
             if (is_admin($current_user)) {
                 require_once('modules/UpgradeWizard/uw_utils.php');
                 rebuildSprites(false);

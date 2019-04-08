@@ -57,7 +57,7 @@ class SugarCachesMash extends SugarCacheAbstract
             return false;
         }
         
-        if (function_exists("zget")
+        if (\function_exists("zget")
                 && empty($GLOBALS['sugar_config']['external_cache_disabled_smash'])) {
             return true;
         }

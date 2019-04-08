@@ -29,8 +29,8 @@
 /**
 * Required classes
 */
-if (!defined('XML_HTMLSAX3')) {
-    define('XML_HTMLSAX3', 'include/Pear/XML_HTMLSax3/');
+if (!\defined('XML_HTMLSAX3')) {
+    \define('XML_HTMLSAX3', 'include/Pear/XML_HTMLSax3/');
 }
 require_once(XML_HTMLSAX3 . 'HTMLSax3/States.php');
 require_once(XML_HTMLSAX3 . 'HTMLSax3/Decorators.php');
@@ -180,7 +180,7 @@ class XML_HTMLSax3_StateParser
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($htmlsax);
     }
@@ -228,11 +228,11 @@ class XML_HTMLSax3_StateParser
     public function scanUntilString($string)
     {
         $start = $this->position;
-        $this->position = strpos($this->rawtext, $string, $start);
+        $this->position = \strpos($this->rawtext, $string, $start);
         if ($this->position === false) {
             $this->position = $this->length;
         }
-        return substr($this->rawtext, $start, $this->position - $start);
+        return \substr($this->rawtext, $start, $this->position - $start);
     }
 
     /**
@@ -326,7 +326,7 @@ class XML_HTMLSax3_StateParser
             $this->handler_method_escape = 'strip';
         }
         $this->rawtext = $data;
-        $this->length = strlen($data);
+        $this->length = \strlen($data);
         $this->position = 0;
         $this->_parse();
     }
@@ -384,10 +384,10 @@ class XML_HTMLSax3_StateParser_Lt430 extends XML_HTMLSax3_StateParser
     public function scanUntilCharacters($string)
     {
         $startpos = $this->position;
-        while ($this->position < $this->length && strpos($string, $this->rawtext{$this->position}) === false) {
+        while ($this->position < $this->length && \strpos($string, $this->rawtext{$this->position}) === false) {
             $this->position++;
         }
-        return substr($this->rawtext, $startpos, $this->position - $startpos);
+        return \substr($this->rawtext, $startpos, $this->position - $startpos);
     }
 
     /**
@@ -398,7 +398,7 @@ class XML_HTMLSax3_StateParser_Lt430 extends XML_HTMLSax3_StateParser
     public function ignoreWhitespace()
     {
         while ($this->position < $this->length &&
-            strpos(" \n\r\t", $this->rawtext{$this->position}) !== false) {
+            \strpos(" \n\r\t", $this->rawtext{$this->position}) !== false) {
             $this->position++;
         }
     }
@@ -452,9 +452,9 @@ class XML_HTMLSax3_StateParser_Gtet430 extends XML_HTMLSax3_StateParser
     public function scanUntilCharacters($string)
     {
         $startpos = $this->position;
-        $length = strcspn($this->rawtext, $string, $startpos);
+        $length = \strcspn($this->rawtext, $string, $startpos);
         $this->position += $length;
-        return substr($this->rawtext, $startpos, $length);
+        return \substr($this->rawtext, $startpos, $length);
     }
 
     /**
@@ -464,7 +464,7 @@ class XML_HTMLSax3_StateParser_Gtet430 extends XML_HTMLSax3_StateParser
     */
     public function ignoreWhitespace()
     {
-        $this->position += strspn($this->rawtext, " \n\r\t", $this->position);
+        $this->position += \strspn($this->rawtext, " \n\r\t", $this->position);
     }
 
     /**
@@ -530,7 +530,7 @@ class XML_HTMLSax3
     */
     public function XML_HTMLSax3()
     {
-        if (version_compare(phpversion(), '4.3', 'ge')) {
+        if (\version_compare(\phpversion(), '4.3', 'ge')) {
             $this->state_parser = new XML_HTMLSax3_StateParser_Gtet430($this);
         } else {
             $this->state_parser = new XML_HTMLSax3_StateParser_Lt430($this);
@@ -553,7 +553,7 @@ class XML_HTMLSax3
     */
     public function set_object(&$object)
     {
-        if (is_object($object)) {
+        if (\is_object($object)) {
             $this->state_parser->handler_default =& $object;
             return true;
         }
@@ -590,7 +590,7 @@ class XML_HTMLSax3
     */
     public function set_option($name, $value=1)
     {
-        if (array_key_exists($name, $this->state_parser->parser_options)) {
+        if (\array_key_exists($name, $this->state_parser->parser_options)) {
             $this->state_parser->parser_options[$name] = $value;
             return true;
         }

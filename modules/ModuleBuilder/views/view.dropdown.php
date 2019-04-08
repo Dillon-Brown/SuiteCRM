@@ -105,7 +105,7 @@ class ViewDropdown extends SugarView
             
             $vardef = (!empty($module->mbvardefs->fields[$_REQUEST['dropdown_name']]))? $module->mbvardefs->fields[$_REQUEST['dropdown_name']]: array();
             $module->mblanguage->generateAppStrings(false) ;
-            $my_list_strings = array_merge($my_list_strings, $module->mblanguage->appListStrings[$selected_lang.'.lang.php']);
+            $my_list_strings = \array_merge($my_list_strings, $module->mblanguage->appListStrings[$selected_lang.'.lang.php']);
             $smarty->assign('module_name', $module->name);
         }
 
@@ -113,14 +113,14 @@ class ViewDropdown extends SugarView
         $module_name = (empty($module_name) && !empty($_REQUEST['view_module'])) ?  $_REQUEST['view_module'] : $module_name;
 
         foreach ($my_list_strings as $key=>$value) {
-            if (!is_array($value)) {
+            if (!\is_array($value)) {
                 unset($my_list_strings[$key]);
             }
         }
         
-        $dropdowns = array_keys($my_list_strings);
-        asort($dropdowns);
-        $keys = array_keys($dropdowns);
+        $dropdowns = \array_keys($my_list_strings);
+        \asort($dropdowns);
+        $keys = \array_keys($dropdowns);
         $first_string = $my_list_strings[$dropdowns[$keys[0]]];
 
         $name = '';
@@ -138,7 +138,7 @@ class ViewDropdown extends SugarView
             }
  
             $selected_dropdown = (!empty($vardef['options']) && !empty($my_list_strings[$vardef['options']])) ? $my_list_strings[$vardef['options']] : $my_list_strings[$name];
-            $smarty->assign('ul_list', 'list = '.$json->encode(array_keys($selected_dropdown)));
+            $smarty->assign('ul_list', 'list = '.$json->encode(\array_keys($selected_dropdown)));
             $smarty->assign('dropdown_name', (!empty($vardef['options']) ? $vardef['options'] : $_REQUEST['dropdown_name']));
             $smarty->assign('name', $_REQUEST['dropdown_name']);
             $smarty->assign('options', $selected_dropdown);

@@ -84,45 +84,45 @@ class _parse_lockinfo
         $had_input = false;
 
         // open stream
-        $f_in = fopen($path, "r");
+        $f_in = \fopen($path, "r");
         if (!$f_in) {
             $this->success = false;
             return;
         }
 
         // create namespace aware parser
-        $xml_parser = xml_parser_create_ns("UTF-8", " ");
+        $xml_parser = \xml_parser_create_ns("UTF-8", " ");
 
         // set tag and data handlers
-        xml_set_element_handler(
+        \xml_set_element_handler(
             $xml_parser,
                                 array(&$this, "_startElement"),
                                 array(&$this, "_endElement")
         );
-        xml_set_character_data_handler(
+        \xml_set_character_data_handler(
             $xml_parser,
                                        array(&$this, "_data")
         );
 
         // we want a case sensitive parser
-        xml_parser_set_option(
+        \xml_parser_set_option(
             $xml_parser,
                               XML_OPTION_CASE_FOLDING,
             false
         );
 
         // parse input
-        while ($this->success && !feof($f_in)) {
-            $line = fgets($f_in);
-            if (is_string($line)) {
+        while ($this->success && !\feof($f_in)) {
+            $line = \fgets($f_in);
+            if (\is_string($line)) {
                 $had_input = true;
-                $this->success &= xml_parse($xml_parser, $line, false);
+                $this->success &= \xml_parse($xml_parser, $line, false);
             }
         }
 
         // finish parsing
         if ($had_input) {
-            $this->success &= xml_parse($xml_parser, "", true);
+            $this->success &= \xml_parse($xml_parser, "", true);
         }
 
         // check if required tags where found
@@ -130,10 +130,10 @@ class _parse_lockinfo
         $this->success &= !empty($this->lockscope);
 
         // free parser resource
-        xml_parser_free($xml_parser);
+        \xml_parser_free($xml_parser);
 
         // close input stream
-        fclose($f_in);
+        \fclose($f_in);
     }
 
 
@@ -149,8 +149,8 @@ class _parse_lockinfo
     public function _startElement($parser, $name, $attrs)
     {
         // namespace handling
-        if (strstr($name, " ")) {
-            list($ns, $tag) = explode(" ", $name);
+        if (\strstr($name, " ")) {
+            list($ns, $tag) = \explode(" ", $name);
         } else {
             $ns = "";
             $tag = $name;
@@ -213,8 +213,8 @@ class _parse_lockinfo
     public function _endElement($parser, $name)
     {
         // namespace handling
-        if (strstr($name, " ")) {
-            list($ns, $tag) = explode(" ", $name);
+        if (\strstr($name, " ")) {
+            list($ns, $tag) = \explode(" ", $name);
         } else {
             $ns = "";
             $tag = $name;

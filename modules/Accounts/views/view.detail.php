@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -56,7 +56,7 @@ class AccountsViewDetail extends ViewDetail
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -111,7 +111,7 @@ class AccountsViewDetail extends ViewDetail
 
         foreach ($address_fields as $value) {
             $field_name = $param.'_address_'.$value;
-            $html .= '&primary_address_'.$value.'='.str_replace(array("\rn", "\r", "\n"), array('','','<br>'), urlencode($this->bean->$field_name)) ;
+            $html .= '&primary_address_'.$value.'='.\str_replace(array("\rn", "\r", "\n"), array('','','<br>'), \urlencode($this->bean->$field_name)) ;
         }
 
         $html .= '", true, false);\' value="' . $mod_strings['LBL_PUSH_CONTACTS_BUTTON_TITLE']. '">';

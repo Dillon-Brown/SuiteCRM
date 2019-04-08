@@ -18,10 +18,10 @@ $checkdir = '';
 //////////////////////////////////
 //////////////////////////////////
 
-ini_set("memory_limit","256M");
+\ini_set("memory_limit","256M");
 
 
-define('_MPDF_PATH','../');
+\define('_MPDF_PATH','../');
 
 include("../mpdf.php");
 $mpdf=new mPDF('');
@@ -32,17 +32,17 @@ else { $ttfdir = _MPDF_TTFONTPATH; }
 
 
 
-$mqr=ini_get("magic_quotes_runtime");
+$mqr=\ini_get("magic_quotes_runtime");
 if ($mqr) { set_magic_quotes_runtime(0); }
-if (!class_exists('TTFontFile_Analysis', false)) { include(_MPDF_PATH .'classes/ttfontsuni_analysis.php'); }
+if (!\class_exists('TTFontFile_Analysis', false)) { include(_MPDF_PATH .'classes/ttfontsuni_analysis.php'); }
 $ttf = new TTFontFile_Analysis();
 
-$ff = scandir($ttfdir);
+$ff = \scandir($ttfdir);
 
 echo '<h3>Font collection files found in '.$ttfdir.' directory</h3>';
 foreach($ff AS $f) {
 	$ret = array();
-	if (strtolower(substr($f,-4,4))=='.ttc' || strtolower(substr($f,-4,4))=='.ttcf') {	// Mac ttcf
+	if (\strtolower(\substr($f,-4,4))=='.ttc' || \strtolower(\substr($f,-4,4))=='.ttcf') {	// Mac ttcf
 		$ttf->getTTCFonts($ttfdir.$f);
 		$nf = $ttf->numTTCFonts;
 		echo '<p>Font collection file ('.$f.') contains the following fonts:</p>';
@@ -51,8 +51,8 @@ foreach($ff AS $f) {
 			$tfname = $ret[0];
 			$bold = $ret[1];
 			$italic = $ret[2];
-			$fname = strtolower($tfname );
-			$fname = preg_replace('/[ ()]/','',$fname );
+			$fname = \strtolower($tfname );
+			$fname = \preg_replace('/[ ()]/','',$fname );
 			$style = '';
 			if ($bold) { $style .= 'Bold'; }
 			if ($italic) { $style .= 'Italic'; }

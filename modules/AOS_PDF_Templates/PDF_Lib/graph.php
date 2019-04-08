@@ -2,7 +2,7 @@
 
 
 // mPDF 4.5.009
-define("FF_USERFONT", 15);	// See jpgraph_ttf.inc.php for font IDs
+\define("FF_USERFONT", 15);	// See jpgraph_ttf.inc.php for font IDs
 global $JpgUseSVGFormat;
 $JpgUseSVGFormat = true;
 
@@ -10,13 +10,13 @@ $JpgUseSVGFormat = true;
 // DELETE OLD GRAPH FILES FIRST - Housekeeping
 // First clear any files in directory that are >1 hrs old
 	$interval = 3600;
-	if ($handle = opendir(_MPDF_PATH.'graph_cache')) {
-	   while (false !== ($file = readdir($handle))) { 
-		if (((filemtime(_MPDF_PATH.'graph_cache/'.$file)+$interval) < time()) && ($file != "..") && ($file != ".")) { 
-			@unlink(_MPDF_PATH.'graph_cache/'.$file); 	// mPDF 4.0
+	if ($handle = \opendir(_MPDF_PATH.'graph_cache')) {
+	   while (false !== ($file = \readdir($handle))) { 
+		if (((\filemtime(_MPDF_PATH.'graph_cache/'.$file)+$interval) < \time()) && ($file != "..") && ($file != ".")) { 
+			@\unlink(_MPDF_PATH.'graph_cache/'.$file); 	// mPDF 4.0
 		}
 	   }
-	   closedir($handle); 
+	   \closedir($handle); 
 	}
 //==============================================================================================================
 // LOAD GRAPHS
@@ -57,8 +57,8 @@ function print_graph($g,$pgwidth) {
 	$hide_grid = false;
 	$hide_y_axis = false;
 
-	if (isset($g['attr']['TYPE']) && $g['attr']['TYPE']) { $type = strtolower($g['attr']['TYPE']); }
-	if (!in_array($type,array('bar','horiz_bar','line','radar','pie','pie3d','xy','scatter'))) { $type = 'bar'; } // Default=bar
+	if (isset($g['attr']['TYPE']) && $g['attr']['TYPE']) { $type = \strtolower($g['attr']['TYPE']); }
+	if (!\in_array($type,array('bar','horiz_bar','line','radar','pie','pie3d','xy','scatter'))) { $type = 'bar'; } // Default=bar
 
 	if (isset($g['attr']['STACKED']) && $g['attr']['STACKED']) { $stacked = true; }	// stacked for bar or horiz_bar
 	if (isset($g['attr']['SPLINES']) && $g['attr']['SPLINES'] && $type=='xy') { $splines = true; }	// splines for XY line graphs
@@ -77,7 +77,7 @@ function print_graph($g,$pgwidth) {
 	elseif ($type=='line' || $type=='radar') { $antialias = false; }
 	else { $antialias = true; }
 
-	if ($g['attr']['DPI']) { $dpi = intval($g['attr']['DPI']); }
+	if ($g['attr']['DPI']) { $dpi = \intval($g['attr']['DPI']); }
 	if (!$dpi || $dpi < 50 || $dpi > 2400) { $dpi = 150; } 	// Default dpi 150
 	$k = (0.2645/25.4 * $dpi); 
 
@@ -96,12 +96,12 @@ function print_graph($g,$pgwidth) {
 	if (isset($g['attr']['LABEL-X']) && $g['attr']['LABEL-X']) { $xlabel = $g['attr']['LABEL-X']; }		// NOT IMPLEMENTED??????
 	if (isset($g['attr']['LABEL-Y']) && $g['attr']['LABEL-Y']) { $ylabel = $g['attr']['LABEL-Y']; }
 
-	if (isset($g['attr']['AXIS-X']) && $g['attr']['AXIS-X']) { $xaxis = strtolower($g['attr']['AXIS-X']); }
-	if (!in_array($xaxis,array('text','lin','linear','log'))) { $xaxis = 'text'; }	// Default=text
+	if (isset($g['attr']['AXIS-X']) && $g['attr']['AXIS-X']) { $xaxis = \strtolower($g['attr']['AXIS-X']); }
+	if (!\in_array($xaxis,array('text','lin','linear','log'))) { $xaxis = 'text'; }	// Default=text
 	if ($xaxis == 'linear') { $xaxis = 'lin'; }
 
-	if (isset($g['attr']['AXIS-Y']) && $g['attr']['AXIS-Y']) { $yaxis = strtolower($g['attr']['AXIS-Y']); }
-	if (!in_array($yaxis,array('lin','linear','log','percent'))) { $yaxis = 'lin'; }			// Default=lin
+	if (isset($g['attr']['AXIS-Y']) && $g['attr']['AXIS-Y']) { $yaxis = \strtolower($g['attr']['AXIS-Y']); }
+	if (!\in_array($yaxis,array('lin','linear','log','percent'))) { $yaxis = 'lin'; }			// Default=lin
 	if ($yaxis == 'percent') { $show_percent = true; $yaxis = 'lin'; }	// Show percent sign on scales
 	if ($yaxis == 'linear') { $yaxis = 'lin'; }
 
@@ -113,7 +113,7 @@ function print_graph($g,$pgwidth) {
 	if (isset($g['attr']['cHEIGHT']) && $g['attr']['cHEIGHT']) { $h=($g['attr']['cHEIGHT'] / 0.2645); }
 
 
-	if (isset($g['attr']['SERIES']) && strtolower($g['attr']['SERIES']) == 'rows') { $dataseries = 'rows'; }
+	if (isset($g['attr']['SERIES']) && \strtolower($g['attr']['SERIES']) == 'rows') { $dataseries = 'rows'; }
 	else { $dataseries = 'cols'; }
 
 	// Defaults - define data
@@ -133,12 +133,12 @@ function print_graph($g,$pgwidth) {
 	if (isset($g['attr']['DATA-ROW-END']) && ($g['attr']['DATA-ROW-END'] === '0' || $g['attr']['DATA-ROW-END'] <> 0)) { $rowend = $g['attr']['DATA-ROW-END']; }
 	if (isset($g['attr']['DATA-COL-END']) && ($g['attr']['DATA-COL-END'] === '0' || $g['attr']['DATA-COL-END'] <> 0)) { $colend = $g['attr']['DATA-COL-END']; }
 
-	$nr = count($g['data']);
+	$nr = \count($g['data']);
 	$nc = 0;
 	foreach($g['data'] AS $r) {
 		$cc=0;
 		foreach($r AS $c) { $cc++; }
-		$nc = max($nc,$cc);
+		$nc = \max($nc,$cc);
 	}
 	if ($colend == 0) { $colend = $nc; }
 	elseif ($colend < 0) { $colend = $nc+$colend; }
@@ -156,7 +156,7 @@ function print_graph($g,$pgwidth) {
 	$totals = array();
 	for ($r=($rowbegin-1);$r<$rowend;$r++) {
 		for ($c=($colbegin-1);$c<$colend;$c++) {
-		    if (isset($g['data'][$r][$c])) { $g['data'][$r][$c] = floatval($g['data'][$r][$c] ); }
+		    if (isset($g['data'][$r][$c])) { $g['data'][$r][$c] = \floatval($g['data'][$r][$c] ); }
 		    else { $g['data'][$r][$c] = 0; }
 		    if ($dataseries=='rows') { 
 			$data[($r+1-$rowbegin)][($c+1-$colbegin)] = $g['data'][$r][$c] ; 
@@ -171,8 +171,8 @@ function print_graph($g,$pgwidth) {
 	}
 	// PERCENT
 	if ($percent && $type != 'pie' && $type != 'pie3d') {
-		for ($r=0;$r<count($data);$r++) {
-			for ($c=0;$c<count($data[$r]);$c++) {
+		for ($r=0;$r<\count($data);$r++) {
+			for ($c=0;$c<\count($data[$r]);$c++) {
 		    		$data[$r][$c] = $data[$r][$c]/$totals[$r]  * 100;
 			}
 		}
@@ -186,13 +186,13 @@ function print_graph($g,$pgwidth) {
 		if ($colbegin>1) {
 			for ($r=($rowbegin-1);$r<$rowend;$r++) { 
 				$legends[($r+1-$rowbegin)] = $g['data'][$r][0] ;
-				$longestlegend = max($longestlegend, strlen( $g['data'][$r][0] ));
+				$longestlegend = \max($longestlegend, \strlen( $g['data'][$r][0] ));
 			}
 		}
 		if ($rowbegin>1) {
 			for ($c=($colbegin-1);$c<$colend;$c++) { 
 				$labels[($c+1-$colbegin)] = $g['data'][0][$c] ; 
-				$longestlabel = max($longestlabel , strlen( $g['data'][0][$c] ));
+				$longestlabel = \max($longestlabel , \strlen( $g['data'][0][$c] ));
 			}
 		}
 	}
@@ -200,13 +200,13 @@ function print_graph($g,$pgwidth) {
 		if ($colbegin>1) {
 			for ($r=($rowbegin-1);$r<$rowend;$r++) { 
 				$labels[($r+1-$rowbegin)] = $g['data'][$r][0] ; 
-				$longestlabel = max($longestlabel , strlen( $g['data'][$r][0] ));
+				$longestlabel = \max($longestlabel , \strlen( $g['data'][$r][0] ));
 			}
 		}
 		if ($rowbegin>1) {
 			for ($c=($colbegin-1);$c<$colend;$c++) { 
 				$legends[($c+1-$colbegin)] = $g['data'][0][$c] ; 
-				$longestlegend = max($longestlegend, strlen( $g['data'][0][$c] ));
+				$longestlegend = \max($longestlegend, \strlen( $g['data'][0][$c] ));
 			}
 		}
 	}
@@ -228,8 +228,8 @@ function print_graph($g,$pgwidth) {
    if (!$h && !$w) { $w = $defsize[$type]['w']; $h = $defsize[$type]['h']; }
 
 
-   if (count($data)>0 && $type) {
-	$figure_file = "graph_cache/".rand(11111,999999999).".".$img_type;
+   if (\count($data)>0 && $type) {
+	$figure_file = "graph_cache/".\rand(11111,999999999).".".$img_type;
 	if ($bandw) { $colours = array('snow1','black','snow4','snow3','snow2','cadetblue4','cadetblue3','cadetblue1','bisque4','bisque2','beige'); }
 	else { $colours = array('cyan','darkorchid4','cadetblue3','khaki1','darkolivegreen2','cadetblue4','coral','cyan4','rosybrown3','wheat1'); }
 	$fills = array('navy','orange','red','yellow','purple','navy','orange','red','yellow','purple');
@@ -299,8 +299,8 @@ function print_graph($g,$pgwidth) {
 		$pmb = 50;
 		$xlangle = 0;
 		$ll = ($longestlegend * 5);	// 45 degrees 8pt fontsize
-		if ($ll > 5 || ($ll>3 && count($data)>10)) {
-			$pmb = max($pmb, $ll + 30);
+		if ($ll > 5 || ($ll>3 && \count($data)>10)) {
+			$pmb = \max($pmb, $ll + 30);
 			$xlangle = 50;
 		}
 		$xaxislblmargin = $pmb - 30;
@@ -316,7 +316,7 @@ function print_graph($g,$pgwidth) {
 		$pmt = 50;
 		$pmb = 45;
 		$ll = ($longestlegend * 6.5);	// 8pt fontsize
-		$pml = max($pml, $ll + 20);
+		$pml = \max($pml, $ll + 20);
 		$xaxislblmargin = $pml - 20;
 		$yaxislblmargin = $pmb - 15;
 		if ($longestlabel && !$overlap) {	// if legend showing
@@ -396,7 +396,7 @@ function print_graph($g,$pgwidth) {
 			foreach($data AS $series => $dat) { 
 				$rdata = array();
 				foreach($data[$series] AS $row) { $rdata[] = $row;  }
-				if (count($rdata)<3) { die("ERROR::Graph::Cannot create a Radar Plot with less than 3 data points."); }
+				if (\count($rdata)<3) { die("ERROR::Graph::Cannot create a Radar Plot with less than 3 data points."); }
 				// Create the radar plot
 				$bplot = new RadarPlot($rdata);
 				$bplot->mark->SetType($markers[$series]);
@@ -606,7 +606,7 @@ function print_graph($g,$pgwidth) {
 
 				$group[] = $bplot;
 			}
-			if (count($data)==1) {
+			if (\count($data)==1) {
 				$graph->Add($group[0]);
 			}
 			else {
@@ -690,7 +690,7 @@ function print_graph($g,$pgwidth) {
 
 				$group[] = $bplot;
 			}
-			if (count($data)==1) {
+			if (\count($data)==1) {
 				$graph->Add($group[0]);
 			}
 			else {
@@ -706,7 +706,7 @@ function print_graph($g,$pgwidth) {
 	}
 	if ($graph) {
 		$graph->Stroke( _MPDF_PATH.$figure_file);
-		$srcpath = str_replace("\\","/",dirname(__FILE__)) . "/";
+		$srcpath = \str_replace("\\","/",\dirname(__FILE__)) . "/";
 		$srcpath .= $figure_file;
 		return array('file'=>$srcpath, 'w'=>$w, 'h'=>$h);
 	}

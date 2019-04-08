@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -49,7 +49,7 @@ class TemplateIFrame extends TemplateURL
     public function get_html_edit()
     {
         $this->prepare();
-        return "<input type='text' name='". $this->name. "' id='".$this->name."' size='".$this->size."' title='{" . strtoupper($this->name) ."_HELP}' value='{". strtoupper($this->name). "}'>";
+        return "<input type='text' name='". $this->name. "' id='".$this->name."' size='".$this->size."' title='{" . \strtoupper($this->name) ."_HELP}' value='{". \strtoupper($this->name). "}'>";
     }
     
     public function get_html_label()

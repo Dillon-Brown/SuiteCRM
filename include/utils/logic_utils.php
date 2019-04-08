@@ -40,7 +40,7 @@
 
 
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -49,7 +49,7 @@ function get_hook_array($module_name)
     $hook_array = null;
     // This will load an array of the hooks to process
     $file = "custom/modules/$module_name/logic_hooks.php";
-    if (file_exists($file)) {
+    if (\file_exists($file)) {
         include($file);
     } else {
         LoggerManager::getLogger()->warn('File not found: ' . $file);
@@ -91,8 +91,8 @@ function write_logic_file($module_name, $contents)
     $file = "modules/".$module_name . '/logic_hooks.php';
     $file = create_custom_directory($file);
     $fp = sugar_fopen($file, 'wb');
-    fwrite($fp, $contents);
-    fclose($fp);
+    \fwrite($fp, $contents);
+    \fclose($fp);
 
     //end function write_logic_file
 }

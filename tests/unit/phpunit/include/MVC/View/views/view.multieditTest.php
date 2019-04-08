@@ -18,11 +18,11 @@
 
         //test without action value and modules list in REQUEST object
          $view = new ViewMultiedit();
-         ob_start();
+         \ob_start();
          $view->display();
-         $renderedContent = ob_get_contents();
-         ob_end_clean();
-         $this->assertEquals(0, strlen($renderedContent));
+         $renderedContent = \ob_get_contents();
+         \ob_end_clean();
+         $this->assertEquals(0, \strlen($renderedContent));
 
          //test with valid action value to get link in return
          $view = new ViewMultiedit();
@@ -30,11 +30,11 @@
          $view->module = 'Users';
          $view->bean = new User();
          $view->bean->id = 1;
-         ob_start();
+         \ob_start();
          $view->display();
-         $renderedContent = ob_get_contents();
-         ob_end_clean();
-         $this->assertGreaterThan(0, strlen($renderedContent));
+         $renderedContent = \ob_get_contents();
+         \ob_end_clean();
+         $this->assertGreaterThan(0, \strlen($renderedContent));
 
          //Fails with a fatal error, method creates editview without properly setting it up causing fatal errors.
         /*

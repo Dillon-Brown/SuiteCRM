@@ -61,7 +61,7 @@ function smarty_function_html_radios($params, &$smarty)
 
             case 'checked':
             case 'selected':
-                if (is_array($_val)) {
+                if (\is_array($_val)) {
                     $smarty->trigger_error('html_radios: the "' . $_key . '" attribute cannot be an array', E_USER_WARNING);
                 } else {
                     $selected = (string)$_val;
@@ -79,7 +79,7 @@ function smarty_function_html_radios($params, &$smarty)
 
             case 'values':
             case 'output':
-                $$_key = array_values((array)$_val);
+                $$_key = \array_values((array)$_val);
                 break;
 
             case 'radios':
@@ -91,7 +91,7 @@ function smarty_function_html_radios($params, &$smarty)
                 break;
 
             default:
-                if (!is_array($_val)) {
+                if (!\is_array($_val)) {
                     $extra .= ' '.$_key.'="'.smarty_function_escape_special_chars($_val).'"';
                 } else {
                     $smarty->trigger_error("html_radios: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
@@ -120,7 +120,7 @@ function smarty_function_html_radios($params, &$smarty)
     if (!empty($params['assign'])) {
         $smarty->assign($params['assign'], $_html_result);
     } else {
-        return implode("\n", $_html_result);
+        return \implode("\n", $_html_result);
     }
 }
 
@@ -129,7 +129,7 @@ function smarty_function_html_radios_output($name, $value, $output, $selected, $
     $_output = '';
     if ($labels) {
         if ($label_ids) {
-            $_id = smarty_function_escape_special_chars(preg_replace('![^\w\-\.]!', '_', $name . '_' . $value));
+            $_id = smarty_function_escape_special_chars(\preg_replace('![^\w\-\.]!', '_', $name . '_' . $value));
             $_output .= '<label for="' . $_id . '">';
         } else {
             $_output .= '<label>';

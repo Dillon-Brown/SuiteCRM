@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -85,8 +85,8 @@ class CalendarController extends SugarController
             $repeatArr = CalendarUtils::build_repeat_sequence($_REQUEST['date_start'], $params);
             $limit = SugarConfig::getInstance()->get('calendar.max_repeat_count', 1000);
             
-            if (count($repeatArr) > ($limit - 1)) {
-                ob_clean();
+            if (\count($repeatArr) > ($limit - 1)) {
+                \ob_clean();
                 $jsonData = array(
                     'access' => 'yes',
                     'limit_error' => 'true',
@@ -100,7 +100,7 @@ class CalendarController extends SugarController
         
         
         $path = "modules/{$bean->module_dir}/{$bean->object_name}FormBase.php";
-        if (!file_exists($path)) {
+        if (!\file_exists($path)) {
             $GLOBALS['log']->fatal("File {$bean->object_name}FormBase.php doesn't exist");
             sugar_cleanup(true);
         }
@@ -109,7 +109,7 @@ class CalendarController extends SugarController
         
         $FBObjectName = "{$bean->object_name}FormBase";
         
-        if (!class_exists($FBObjectName)) {
+        if (!\class_exists($FBObjectName)) {
             $GLOBALS['log']->fatal("Class {$bean->object_name}FormBase doesn't exist");
             sugar_cleanup(true);
         }
@@ -123,7 +123,7 @@ class CalendarController extends SugarController
                 if (!empty($_REQUEST['edit_all_recurrences'])) {
                     CalendarUtils::markRepeatDeleted($bean);
                 }
-                if (isset($repeatArr) && is_array($repeatArr) && count($repeatArr) > 0) {
+                if (isset($repeatArr) && \is_array($repeatArr) && \count($repeatArr) > 0) {
                     $repeatCreated = CalendarUtils::save_repeat_activities($bean, $repeatArr);
                 }
             }
@@ -131,8 +131,8 @@ class CalendarController extends SugarController
             $bean->retrieve($record);
             $jsonData = CalendarUtils::get_sendback_array($bean);
                     
-            if (isset($repeatCreated) && is_array($repeatCreated)) {
-                $jsonData = array_merge($jsonData, array('repeat' => $repeatCreated));
+            if (isset($repeatCreated) && \is_array($repeatCreated)) {
+                $jsonData = \array_merge($jsonData, array('repeat' => $repeatCreated));
             }
             
             if (!empty($_REQUEST['edit_all_recurrences'])) {
@@ -169,7 +169,7 @@ class CalendarController extends SugarController
     protected function action_getUser()
     {
         $bean = BeanFactory::getBean("Users", $_REQUEST['record']);
-        echo json_encode(array("user_name" => $bean->user_name, "full_name" =>  $bean->full_name));
+        echo \json_encode(array("user_name" => $bean->user_name, "full_name" =>  $bean->full_name));
         die();
     }
     /**
@@ -194,15 +194,15 @@ class CalendarController extends SugarController
         }
         if ($_REQUEST['allDay'] == true) {
             $endDateField = "date_end";
-            list($tmp, $time) = explode(" ", $this->currentBean->$endDateField);
-            list($date, $tmp) = explode(" ", $_REQUEST['enddatetime']);
+            list($tmp, $time) = \explode(" ", $this->currentBean->$endDateField);
+            list($date, $tmp) = \explode(" ", $_REQUEST['enddatetime']);
             $_REQUEST[ $endDateField ] = $date . " " . $tmp;
             $_POST[$endDateField] = $_REQUEST[ $endDateField ];
         }
 
         if (!empty($_REQUEST['calendar_style']) && $_REQUEST['calendar_style'] == "basic") {
-            list($tmp, $time) = explode(" ", $this->currentBean->$dateField);
-            list($date, $tmp) = explode(" ", $_REQUEST['datetime']);
+            list($tmp, $time) = \explode(" ", $this->currentBean->$dateField);
+            list($date, $tmp) = \explode(" ", $_REQUEST['datetime']);
             $_POST['datetime'] = $date . " " . $tmp;
         }
         $_POST[$dateField] = $_REQUEST['datetime'];
@@ -315,7 +315,7 @@ class CalendarController extends SugarController
         require_once('modules/Calendar/Calendar.php');
         $cal = new Calendar($_REQUEST['view']);
         
-        if (in_array($cal->view, array('day', 'week', 'month'))) {
+        if (\in_array($cal->view, array('day', 'week', 'month'))) {
             $cal->add_activities($GLOBALS['current_user']);
         } elseif ($cal->view == 'shared') {
             $cal->init_shared();

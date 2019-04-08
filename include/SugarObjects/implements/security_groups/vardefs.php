@@ -45,7 +45,7 @@ $vardefs = array(
         'SecurityGroups' => array(
             'name' => 'SecurityGroups',
             'type' => 'link',
-            'relationship' => 'securitygroups_' . strtolower($module),
+            'relationship' => 'securitygroups_' . \strtolower($module),
             'module' => 'SecurityGroups',
             'bean_name' => 'SecurityGroup',
             'source' => 'non-db',
@@ -54,7 +54,7 @@ $vardefs = array(
     ),
 
     'relationships' => array(
-        'securitygroups_' . strtolower($module) =>
+        'securitygroups_' . \strtolower($module) =>
             array(
                 'lhs_module' => 'SecurityGroups',
                 'lhs_table' => 'securitygroups',

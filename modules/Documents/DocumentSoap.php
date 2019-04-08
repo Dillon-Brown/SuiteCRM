@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -63,7 +63,7 @@ class DocumentSoap
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -87,12 +87,12 @@ class DocumentSoap
         }
 
         if (!empty($document['file'])) {
-            $decodedFile = base64_decode($document['file']);
+            $decodedFile = \base64_decode($document['file']);
             $this->upload_file->set_for_soap($document['filename'], $decodedFile);
 
-            $ext_pos = strrpos($this->upload_file->stored_file_name, ".");
-            $this->upload_file->file_ext = substr($this->upload_file->stored_file_name, $ext_pos + 1);
-            if (in_array($this->upload_file->file_ext, $sugar_config['upload_badext'])) {
+            $ext_pos = \strrpos($this->upload_file->stored_file_name, ".");
+            $this->upload_file->file_ext = \substr($this->upload_file->stored_file_name, $ext_pos + 1);
+            if (\in_array($this->upload_file->file_ext, $sugar_config['upload_badext'])) {
                 $this->upload_file->stored_file_name .= ".txt";
                 $this->upload_file->file_ext = "txt";
             }

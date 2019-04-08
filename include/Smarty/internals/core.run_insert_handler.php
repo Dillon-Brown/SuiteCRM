@@ -20,7 +20,7 @@ function smarty_core_run_insert_handler($params, &$smarty)
     }
 
     if ($smarty->caching) {
-        $_arg_string = serialize($params['args']);
+        $_arg_string = \serialize($params['args']);
         $_name = $params['args']['name'];
         if (!isset($smarty->_cache_info['insert_tags'][$_name])) {
             $smarty->_cache_info['insert_tags'][$_name] = array('insert',

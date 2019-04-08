@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -101,7 +101,7 @@ class SugarWidgetSubPanelRemoveButtonProjects extends SugarWidgetField
         }
         $return_url = "index.php?module=$return_module&action=$return_action&subpanel=$subpanel&record=$return_id&sugar_body_only=1&inline=1";
 
-        $icon_remove_text = strtolower($app_strings['LBL_ID_FF_REMOVE']);
+        $icon_remove_text = \strtolower($app_strings['LBL_ID_FF_REMOVE']);
         $icon_remove_html = SugarThemeRegistry::current()->getImage('delete_inline', 'align="absmiddle" border="0"', null, null, '.gif', '');//setting alt to blank on purpose on subpanels for 508
         $remove_url = $layout_def['start_link_wrapper']
             . "index.php?module=$parent_module"
@@ -109,7 +109,7 @@ class SugarWidgetSubPanelRemoveButtonProjects extends SugarWidgetField
             . "&record=$parent_record_id"
             . "&linked_field=$linked_field"
             . "&linked_id=$record"
-            . "&return_url=" . urlencode(urlencode($return_url))
+            . "&return_url=" . \urlencode(\urlencode($return_url))
             . "&refresh_page=1"
             . $layout_def['end_link_wrapper'];
         $remove_confirmation_text = $app_strings['NTC_REMOVE_CONFIRMATION'];

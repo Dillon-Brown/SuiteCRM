@@ -177,8 +177,8 @@ class AOR_ChartTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $aorChart->y_field = 'y';
 
         $fields = array();
-        $fields['x'] = json_decode('{"label": "x"}');
-        $fields['y'] = json_decode('{"label": "y"}');
+        $fields['x'] = \json_decode('{"label": "x"}');
+        $fields['y'] = \json_decode('{"label": "y"}');
 
         $reportData = array(array('xx' => 10, 'yy' => 10), array('xx' => 20, 'yy' => 20));
 
@@ -213,8 +213,8 @@ class AOR_ChartTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $aorChart->y_field = 'y';
 
         $fields = array();
-        $fields['x'] = json_decode('{"label": "x"}');
-        $fields['y'] = json_decode('{"label": "y"}');
+        $fields['x'] = \json_decode('{"label": "x"}');
+        $fields['y'] = \json_decode('{"label": "y"}');
 
         $reportData = array(array('xx' => 10, 'yy' => 10), array('xx' => 20, 'yy' => 20));
 

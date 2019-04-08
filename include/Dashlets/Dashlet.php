@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -113,7 +113,7 @@ class Dashlet
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($id);
     }
@@ -215,7 +215,7 @@ class Dashlet
         $keywords = array("/class=\"button\"/","/class='button'/","/class=button/","/<\/form>/");
         $match = false;
         foreach ($keywords as $left) {
-            if (preg_match($left, $title)) {
+            if (\preg_match($left, $title)) {
                 $match = true;
             }
         }
@@ -250,7 +250,7 @@ class Dashlet
         $template->assign('REFRESH_ICON', $this->setRefreshIcon());
         $template->assign('DELETE_ICON', $this->setDeleteIcon());
         $moduleName = '';
-        if (!is_object($this->seedBean)) {
+        if (!\is_object($this->seedBean)) {
             $GLOBALS['log']->warn('incorrect seed bean');
         } else {
             $moduleName = $this->seedBean->module_name;
@@ -341,8 +341,8 @@ class Dashlet
         if (empty($dashletOffset)) {
             $dashletOffset = 0;
             $module = $_REQUEST['module'];
-            if (isset($_REQUEST[$module.'2_'.strtoupper($this->seedBean->object_name).'_offset'])) {
-                $dashletOffset = $_REQUEST[$module.'2_'.strtoupper($this->seedBean->object_name).'_offset'];
+            if (isset($_REQUEST[$module.'2_'.\strtoupper($this->seedBean->object_name).'_offset'])) {
+                $dashletOffset = $_REQUEST[$module.'2_'.\strtoupper($this->seedBean->object_name).'_offset'];
             }
         }
 
@@ -355,7 +355,7 @@ class Dashlet
         $autoRefreshSS = new Sugar_Smarty();
         $autoRefreshSS->assign('dashletOffset', $dashletOffset);
         $autoRefreshSS->assign('dashletId', $this->id);
-        $autoRefreshSS->assign('strippedDashletId', str_replace("-", "", $this->id)); //javascript doesn't like "-" in function names
+        $autoRefreshSS->assign('strippedDashletId', \str_replace("-", "", $this->id)); //javascript doesn't like "-" in function names
         $autoRefreshSS->assign('dashletRefreshInterval', $this->getAutoRefresh());
         $tpl = 'include/Dashlets/DashletGenericAutoRefresh.tpl';
         if ($_REQUEST['action'] == "DynamicAction") {
@@ -386,8 +386,8 @@ class Dashlet
            We should consider a limit of 2**31 -1
            https://stackoverflow.com/questions/12633405/what-is-the-maximum-delay-for-setinterval/12633556#comment78208539_12633488
          */
-        if ($ret > (pow(2, 31) - 1)) {
-            $ret = pow(2, 31) - 1;
+        if ($ret > (\pow(2, 31) - 1)) {
+            $ret = \pow(2, 31) - 1;
             LoggerManager::getLogger()->warn(
                 "The value of autoRefresh key in Dashlet: {$this->title} must be less than 2.147.483 seconds."
                 ."{$autoRefresh} was configured. Using 2.147.483 seconds instead."
@@ -420,19 +420,19 @@ class Dashlet
 
         if (!isset($dashletStrings[$dashletClassname])) {
             // load current language strings for current language, else default to english
-            if (is_file($dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.' . $current_language . '.lang.php')
-                || is_file('custom/' . $dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.' . $current_language . '.lang.php')) {
-                if (is_file($dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.' . $current_language . '.lang.php')) {
+            if (\is_file($dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.' . $current_language . '.lang.php')
+                || \is_file('custom/' . $dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.' . $current_language . '.lang.php')) {
+                if (\is_file($dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.' . $current_language . '.lang.php')) {
                     require($dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.' . $current_language . '.lang.php');
                 }
-                if (is_file('custom/' . $dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.' . $current_language . '.lang.php')) {
+                if (\is_file('custom/' . $dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.' . $current_language . '.lang.php')) {
                     require('custom/' . $dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.' . $current_language . '.lang.php');
                 }
             } else {
-                if (is_file($dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.en_us.lang.php')) {
+                if (\is_file($dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.en_us.lang.php')) {
                     require($dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.en_us.lang.php');
                 }
-                if (is_file('custom/' . $dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.en_us.lang.php')) {
+                if (\is_file('custom/' . $dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.en_us.lang.php')) {
                     require('custom/' . $dashletDirectory . $dashletClassname . '/' . $dashletClassname . '.en_us.lang.php');
                 }
             }

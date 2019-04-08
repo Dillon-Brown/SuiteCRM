@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -72,7 +72,7 @@ class ext_rest_twitter extends ext_rest
         // InsideView currently has no ability to talk to modules other than these four
         $outModuleList = array();
         foreach ($moduleList as $module) {
-            if (!in_array($module, $this->allowedModuleList)) {
+            if (!\in_array($module, $this->allowedModuleList)) {
                 continue;
             }
             $outModuleList[$module] = $module;

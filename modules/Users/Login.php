@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -66,7 +66,7 @@ global $app_language, $sugar_config;
 global $current_language;
 
 // Get the login page image
-$login_image = is_file('custom/include/images/sugar_md.png') ?
+$login_image = \is_file('custom/include/images/sugar_md.png') ?
     '<IMG src="custom/include/images/sugar_md.png" alt="Sugar" width="340" height="25">' :
     '<IMG src="include/images/sugar_md_open.png" alt="Sugar" width="340" height="25" style="margin: 5px 0;">';
 
@@ -81,7 +81,7 @@ if (isset($_COOKIE['loginErrorMessage'])) {
     if (!isset($_REQUEST['loginErrorMessage'])) {
         $_REQUEST['loginErrorMessage'] = $_COOKIE['loginErrorMessage'];
     }
-    SugarApplication::setCookie('loginErrorMessage', '', time() - 42000);
+    SugarApplication::setCookie('loginErrorMessage', '', \time() - 42000);
 }
 if (isset($_REQUEST['loginErrorMessage'])) {
     if (isset($mod_strings[$_REQUEST['loginErrorMessage']])) {
@@ -96,7 +96,7 @@ if (isset($_REQUEST['loginErrorMessage'])) {
 $lvars = $GLOBALS['app']->getLoginVars();
 $sugar_smarty->assign('LOGIN_VARS', $lvars);
 foreach ((array)$lvars as $k => $v) {
-    $sugar_smarty->assign(strtoupper($k), $v);
+    $sugar_smarty->assign(\strtoupper($k), $v);
 }
 
 // Retrieve username from the session if possible.
@@ -150,7 +150,7 @@ if (empty($GLOBALS['sugar_config']['passwordsetting']['forgotpasswordON'])) {
 }
 
 $the_languages = get_languages();
-if (count($the_languages) > 1) {
+if (\count($the_languages) > 1) {
     $sugar_smarty->assign('SELECT_LANGUAGE', get_select_options_with_id($the_languages, $display_language));
 }
 $the_themes = SugarThemeRegistry::availableThemes();
@@ -162,13 +162,13 @@ if (!empty($logindisplay)) {
 require_once __DIR__.'/../../include/utils/recaptcha_utils.php';
 $sugar_smarty->assign('CAPTCHA', displayRecaptcha());
 
-if (file_exists('custom/themes/' . SugarThemeRegistry::current() . '/login.tpl')) {
+if (\file_exists('custom/themes/' . SugarThemeRegistry::current() . '/login.tpl')) {
     $sugar_smarty->display('custom/themes/' . SugarThemeRegistry::current() . '/login.tpl');
-} elseif (file_exists('custom/modules/Users/login.tpl')) {
+} elseif (\file_exists('custom/modules/Users/login.tpl')) {
     $sugar_smarty->display('custom/modules/Users/login.tpl');
-} elseif (file_exists('themes/' . SugarThemeRegistry::current() . '/tpls/login.tpl')) {
+} elseif (\file_exists('themes/' . SugarThemeRegistry::current() . '/tpls/login.tpl')) {
     $sugar_smarty->display('themes/' . SugarThemeRegistry::current() . '/tpls/login.tpl');
-} elseif (file_exists('modules/Users/login.tpl')) {
+} elseif (\file_exists('modules/Users/login.tpl')) {
     $sugar_smarty->display('modules/Users/login.tpl');
 } else {
     echo "<span class='error'>" . $mod_strings['LBL_MISSING_TEMPLATE'] . '</span>';

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -57,7 +57,7 @@ $stop = true; // flag to show "next"
 $run = isset($_REQUEST['run']) ? $_REQUEST['run'] : '';
 $out = '';
 
-if (file_exists('ModuleInstall/PackageManager/PackageManagerDisplay.php')) {
+if (\file_exists('ModuleInstall/PackageManager/PackageManagerDisplay.php')) {
     require_once('ModuleInstall/PackageManager/PackageManagerDisplay.php');
 }
 
@@ -81,12 +81,12 @@ switch ($run) {
                     $perform = true;
                     if ($release_map['type'] != 'patch') {
                         $pm->performSetup($tempFile, $release_map['type'], false);
-                        header('Location: index.php?module=Administration&action=UpgradeWizard&view=module');
+                        \header('Location: index.php?module=Administration&action=UpgradeWizard&view=module');
                     }
                 }
             }
 
-            $base_filename = urldecode($tempFile);
+            $base_filename = \urldecode($tempFile);
         } else {
             $upload = new UploadFile('upgrade_zip');
             /* Bug 51722 - Cannot Upload Upgrade File if System Settings Are Not Sufficient, Just Make sure that we can
@@ -111,7 +111,7 @@ switch ($run) {
                     $out = "<b><span class='error'>{$mod_strings['ERR_UW_NOT_VALID_UPLOAD']}</span></b><br />";
                 } else {
                     logThis('File uploaded to '.$tempFile);
-                    $base_filename = urldecode(basename($tempFile));
+                    $base_filename = \urldecode(\basename($tempFile));
                     $perform = true;
                 }
             }
@@ -122,7 +122,7 @@ switch ($run) {
         if ($perform) {
             $manifest_file = extractManifest($tempFile);
 
-            if (is_file($manifest_file)) {
+            if (\is_file($manifest_file)) {
                 require_once($manifest_file);
                 $error = validate_manifest($manifest);
                 if (!empty($error)) {
@@ -146,13 +146,13 @@ switch ($run) {
                 if (isset($manifest['icon']) && $manifest['icon'] != "") {
                     logThis('extracting icons.');
                     $icon_location = extractFile($tempFile, $manifest['icon']);
-                    $path_parts = pathinfo($icon_location);
-                    copy($icon_location, remove_file_extension($target_path) . "-icon." . pathinfo($icon_location, PATHINFO_EXTENSION));
+                    $path_parts = \pathinfo($icon_location);
+                    \copy($icon_location, remove_file_extension($target_path) . "-icon." . \pathinfo($icon_location, PATHINFO_EXTENSION));
                 }
 
-                if (rename($tempFile, $target_path)) {
+                if (\rename($tempFile, $target_path)) {
                     logThis('copying manifest.php to final destination.');
-                    copy($manifest_file, $target_manifest);
+                    \copy($manifest_file, $target_manifest);
                     $out .= "<b>{$base_filename} {$mod_strings['LBL_UW_FILE_UPLOADED']}.</b><br>\n";
                 } else {
                     logThis('ERROR: cannot copy manifest.php to final destination.');
@@ -165,14 +165,14 @@ switch ($run) {
                 $out = "<b><span class='error'>{$mod_strings['ERR_UW_NO_MANIFEST']}</span></b><br />";
                 break;
             }
-            $_SESSION['install_file'] = basename($tempFile);
+            $_SESSION['install_file'] = \basename($tempFile);
             logThis('zip file moved to ['.$_SESSION['install_file'].']');
             //rrs serialize manifest for saving in the db
             $serial_manifest = array();
             $serial_manifest['manifest'] = (isset($manifest) ? $manifest : '');
             $serial_manifest['installdefs'] = (isset($installdefs) ? $installdefs : '');
             $serial_manifest['upgrade_manifest'] = (isset($upgrade_manifest) ? $upgrade_manifest : '');
-            $_SESSION['install_manifest'] = base64_encode(serialize($serial_manifest));
+            $_SESSION['install_manifest'] = \base64_encode(\serialize($serial_manifest));
         }
 
         if (!empty($tempFile)) {
@@ -192,10 +192,10 @@ switch ($run) {
         }
 
         // delete file in upgrades/patch
-        $delete_me = 'upload://upgrades/patch/'.basename(urldecode($_REQUEST['install_file']));
-        if (@unlink($delete_me)) {
+        $delete_me = 'upload://upgrades/patch/'.\basename(\urldecode($_REQUEST['install_file']));
+        if (@\unlink($delete_me)) {
             logThis('unlinking: '.$delete_me);
-            $out = basename($delete_me).$mod_strings['LBL_UW_FILE_DELETED'];
+            $out = \basename($delete_me).$mod_strings['LBL_UW_FILE_DELETED'];
         } else {
             logThis('ERROR: could not delete ['.$delete_me.']');
             $error = $mod_strings['ERR_UW_FILE_NOT_DELETED'].$delete_me;
@@ -223,7 +223,7 @@ $disabled = $validReturn['disabled'];
 ////	END READY TO INSTALL UPGRADES
 ///////////////////////////////////////////////////////////////////////////////
 
-if (isset($_SESSION['install_file']) && !empty($_SESSION['install_file']) && is_file($_SESSION['install_file'])) {
+if (isset($_SESSION['install_file']) && !empty($_SESSION['install_file']) && \is_file($_SESSION['install_file'])) {
     $stop = false;
 } else {
     $stop = true;

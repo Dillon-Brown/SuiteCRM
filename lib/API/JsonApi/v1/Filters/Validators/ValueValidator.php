@@ -95,7 +95,7 @@ class ValueValidator implements ValidatorInterface
      */
     public function isValid($value)
     {
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             throw new InvalidArgumentException(
                 '[JsonApi][v1][Filters][Validators][ValueValidator][isValid][expected type to be string] $value'
             );
@@ -103,7 +103,7 @@ class ValueValidator implements ValidatorInterface
 
         // $fieldKey should not contain reserved words
         foreach (self::$BANNED_RESERVED_CHARACTERS as $reservedCharacter) {
-            if (strpos($value, $reservedCharacter) !== false) {
+            if (\strpos($value, $reservedCharacter) !== false) {
                 return false;
             }
         }

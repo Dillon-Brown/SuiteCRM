@@ -109,7 +109,7 @@ class TwitterOAuth
      */
     public function getAuthorizeURL($token, $sign_in_with_twitter = true)
     {
-        if (is_array($token)) {
+        if (\is_array($token)) {
             $token = $token['oauth_token'];
         }
         if (empty($sign_in_with_twitter)) {
@@ -165,7 +165,7 @@ class TwitterOAuth
     {
         $response = $this->oAuthRequest($url, 'GET', $parameters);
         if ($this->format === 'json' && $this->decode_json) {
-            return json_decode($response, true);
+            return \json_decode($response, true);
         }
         return $response;
     }
@@ -177,7 +177,7 @@ class TwitterOAuth
     {
         $response = $this->oAuthRequest($url, 'POST', $parameters);
         if ($this->format === 'json' && $this->decode_json) {
-            return json_decode($response);
+            return \json_decode($response);
         }
         return $response;
     }
@@ -189,7 +189,7 @@ class TwitterOAuth
     {
         $response = $this->oAuthRequest($url, 'DELETE', $parameters);
         if ($this->format === 'json' && $this->decode_json) {
-            return json_decode($response);
+            return \json_decode($response);
         }
         return $response;
     }
@@ -199,7 +199,7 @@ class TwitterOAuth
      */
     public function oAuthRequest($url, $method, $parameters)
     {
-        if (strrpos($url, 'https://') !== 0 && strrpos($url, 'http://') !== 0) {
+        if (\strrpos($url, 'https://') !== 0 && \strrpos($url, 'http://') !== 0) {
             $url = "{$this->host}{$url}.{$this->format}";
         }
         $request = OAuthRequest::from_consumer_and_token($this->consumer, $this->token, $method, $url, $parameters);
@@ -220,37 +220,37 @@ class TwitterOAuth
     public function http($url, $method, $postfields = null)
     {
         $this->http_info = array();
-        $ci = curl_init();
+        $ci = \curl_init();
         /* Curl settings */
-        curl_setopt($ci, CURLOPT_USERAGENT, $this->useragent);
-        curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, $this->connecttimeout);
-        curl_setopt($ci, CURLOPT_TIMEOUT, $this->timeout);
-        curl_setopt($ci, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ci, CURLOPT_HTTPHEADER, array('Expect:'));
-        curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->ssl_verifypeer);
-        curl_setopt($ci, CURLOPT_HEADERFUNCTION, array($this, 'getHeader'));
-        curl_setopt($ci, CURLOPT_HEADER, false);
+        \curl_setopt($ci, CURLOPT_USERAGENT, $this->useragent);
+        \curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, $this->connecttimeout);
+        \curl_setopt($ci, CURLOPT_TIMEOUT, $this->timeout);
+        \curl_setopt($ci, CURLOPT_RETURNTRANSFER, true);
+        \curl_setopt($ci, CURLOPT_HTTPHEADER, array('Expect:'));
+        \curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->ssl_verifypeer);
+        \curl_setopt($ci, CURLOPT_HEADERFUNCTION, array($this, 'getHeader'));
+        \curl_setopt($ci, CURLOPT_HEADER, false);
 
         switch ($method) {
       case 'POST':
-        curl_setopt($ci, CURLOPT_POST, true);
+        \curl_setopt($ci, CURLOPT_POST, true);
         if (!empty($postfields)) {
-            curl_setopt($ci, CURLOPT_POSTFIELDS, $postfields);
+            \curl_setopt($ci, CURLOPT_POSTFIELDS, $postfields);
         }
         break;
       case 'DELETE':
-        curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        \curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'DELETE');
         if (!empty($postfields)) {
             $url = "{$url}?{$postfields}";
         }
     }
 
-        curl_setopt($ci, CURLOPT_URL, $url);
-        $response = curl_exec($ci);
-        $this->http_code = curl_getinfo($ci, CURLINFO_HTTP_CODE);
-        $this->http_info = array_merge($this->http_info, curl_getinfo($ci));
+        \curl_setopt($ci, CURLOPT_URL, $url);
+        $response = \curl_exec($ci);
+        $this->http_code = \curl_getinfo($ci, CURLINFO_HTTP_CODE);
+        $this->http_info = \array_merge($this->http_info, \curl_getinfo($ci));
         $this->url = $url;
-        curl_close($ci);
+        \curl_close($ci);
         return $response;
     }
 
@@ -259,12 +259,12 @@ class TwitterOAuth
      */
     public function getHeader($ch, $header)
     {
-        $i = strpos($header, ':');
+        $i = \strpos($header, ':');
         if (!empty($i)) {
-            $key = str_replace('-', '_', strtolower(substr($header, 0, $i)));
-            $value = trim(substr($header, $i + 2));
+            $key = \str_replace('-', '_', \strtolower(\substr($header, 0, $i)));
+            $value = \trim(\substr($header, $i + 2));
             $this->http_header[$key] = $value;
         }
-        return strlen($header);
+        return \strlen($header);
     }
 }

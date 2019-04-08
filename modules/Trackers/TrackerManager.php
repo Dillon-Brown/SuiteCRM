@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -74,7 +74,7 @@ class TrackerManager
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct();
     }
@@ -177,16 +177,16 @@ class TrackerManager
 
     private function _getMonitor($name='', $monitorId='', $metadata='', $store='')
     {
-        $class = strtolower($name.'_monitor');
+        $class = \strtolower($name.'_monitor');
         $monitor = null;
-        if (file_exists('custom/modules/Trackers/monitor/'.$class.'.php')) {
+        if (\file_exists('custom/modules/Trackers/monitor/'.$class.'.php')) {
             require_once('custom/modules/Trackers/monitor/'.$class.'.php');
-            if (class_exists($class)) {
+            if (\class_exists($class)) {
                 $monitor = new $class($name, $monitorId, $metadata, $store);
             }
-        } elseif (file_exists('modules/Trackers/monitor/'.$class.'.php')) {
+        } elseif (\file_exists('modules/Trackers/monitor/'.$class.'.php')) {
             require_once('modules/Trackers/monitor/'.$class.'.php');
-            if (class_exists($class)) {
+            if (\class_exists($class)) {
                 $monitor = new $class($name, $monitorId, $metadata, $store);
             }
         } else {
@@ -213,7 +213,7 @@ class TrackerManager
 
         if (!$this->isPaused()) {
             foreach ($this->monitors as $monitor) {
-                if (array_key_exists('Trackable', class_implements($monitor))) {
+                if (\array_key_exists('Trackable', \class_implements($monitor))) {
                     $monitor->save();
                 }
             }
@@ -228,12 +228,12 @@ class TrackerManager
     public function saveMonitor($monitor, $flush=true, $ignoreDisabled = false)
     {
         if (!$this->isPaused() && !empty($monitor)) {
-            if ((empty($this->disabledMonitors[$monitor->name]) || $ignoreDisabled) && array_key_exists('Trackable', class_implements($monitor))) {
+            if ((empty($this->disabledMonitors[$monitor->name]) || $ignoreDisabled) && \array_key_exists('Trackable', \class_implements($monitor))) {
                 $monitor->save($flush);
 
                 if ($flush) {
                     $monitor->clear();
-                    unset($this->monitors[strtolower($monitor->name)]);
+                    unset($this->monitors[\strtolower($monitor->name)]);
                 }
             }
         }
@@ -246,7 +246,7 @@ class TrackerManager
     public function unsetMonitor($monitor)
     {
         if (!empty($monitor)) {
-            unset($this->monitors[strtolower($monitor->name)]);
+            unset($this->monitors[\strtolower($monitor->name)]);
         }
     }
 

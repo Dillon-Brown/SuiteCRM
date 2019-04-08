@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -59,30 +59,30 @@ class SugarHttpClient
      */
     public function callRest($url, $postArgs)
     {
-        if (!function_exists("curl_init")) {
+        if (!\function_exists("curl_init")) {
             $this->last_error = 'ERROR_NO_CURL';
             $GLOBALS['log']->fatal("REST call failed - no cURL!");
             return false;
         }
-        $curl = curl_init($url);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_HEADER, false);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $postArgs);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        $curl = \curl_init($url);
+        \curl_setopt($curl, CURLOPT_POST, true);
+        \curl_setopt($curl, CURLOPT_HEADER, false);
+        \curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        \curl_setopt($curl, CURLOPT_POSTFIELDS, $postArgs);
+        \curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+        \curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        \curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         $GLOBALS['log']->debug("HTTP client call: $url -> $postArgs");
-        $response = curl_exec($curl);
+        $response = \curl_exec($curl);
         if ($response === false) {
             $this->last_error = 'ERROR_REQUEST_FAILED';
-            $curl_errno = curl_errno($curl);
-            $curl_error = curl_error($curl);
+            $curl_errno = \curl_errno($curl);
+            $curl_error = \curl_error($curl);
             $GLOBALS['log']->error("HTTP client: cURL call failed: error $curl_errno: $curl_error");
             return false;
         }
         $GLOBALS['log']->debug("HTTP client response: $response");
-        curl_close($curl);
+        \curl_close($curl);
         return $response;
     }
 

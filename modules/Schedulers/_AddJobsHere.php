@@ -41,7 +41,7 @@ use SuiteCRM\Utility\SuiteValidator;
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -124,7 +124,7 @@ function pollMonitoredInboxes()
             if ($ieX->isPop3Protocol()) {
                 $msgNoToUIDL = $ieX->getPop3NewMessagesToDownloadForCron();
                 // get all the keys which are msgnos;
-                $newMsgs = array_keys($msgNoToUIDL);
+                $newMsgs = \array_keys($msgNoToUIDL);
             }
             if ($ieX->connectMailserver() == 'true') {
                 $connectToMailServer = true;
@@ -139,9 +139,9 @@ function pollMonitoredInboxes()
 
                 $isGroupFolderExists = false;
 
-                if (is_array($newMsgs)) {
+                if (\is_array($newMsgs)) {
                     $current = 1;
-                    $total = count($newMsgs);
+                    $total = \count($newMsgs);
                     require_once("include/SugarFolders/SugarFolders.php");
                     $sugarFolder = new SugarFolder();
                     $groupFolderId = $ieX->groupfolder_id;
@@ -180,11 +180,11 @@ function pollMonitoredInboxes()
                                 if ($ieX->isMailBoxTypeCreateCase()) {
                                     $userId = "";
                                     if ($distributionMethod == 'roundRobin') {
-                                        if (sizeof($users) == 1) {
+                                        if (\sizeof($users) == 1) {
                                             $userId = $users[0];
                                             $lastRobin = $users[0];
                                         } else {
-                                            $userIdsKeys = array_flip($users); // now keys are values
+                                            $userIdsKeys = \array_flip($users); // now keys are values
                                             $thisRobinKey = $userIdsKeys[$lastRobin] + 1;
                                             if (!empty($users[$thisRobinKey])) {
                                                 $userId = $users[$thisRobinKey];
@@ -195,14 +195,14 @@ function pollMonitoredInboxes()
                                             }
                                         } // else
                                     } else {
-                                        if (sizeof($users) == 1) {
+                                        if (\sizeof($users) == 1) {
                                             foreach ($users as $k => $value) {
                                                 $userId = $value;
                                             } // foreach
                                         } else {
-                                            asort($counts); // lowest to highest
-                                            $countsKeys = array_flip($counts); // keys now the 'count of items'
-                                            $leastBusy = array_shift($countsKeys); // user id of lowest item count
+                                            \asort($counts); // lowest to highest
+                                            $countsKeys = \array_flip($counts); // keys now the 'count of items'
+                                            $leastBusy = \array_shift($countsKeys); // user id of lowest item count
                                             $userId = $leastBusy;
                                             $counts[$leastBusy] = $counts[$leastBusy] + 1;
                                         }
@@ -247,9 +247,9 @@ function pollMonitoredInboxes()
                     $leaveMessagesOnMailServer = $ieX->get_stored_options("leaveMessagesOnMailServer", 0);
                     if (!$leaveMessagesOnMailServer) {
                         if ($ieX->isPop3Protocol()) {
-                            $ieX->deleteMessageOnMailServerForPop3(implode(",", $messagesToDelete));
+                            $ieX->deleteMessageOnMailServerForPop3(\implode(",", $messagesToDelete));
                         } else {
-                            $ieX->deleteMessageOnMailServer(implode($app_strings['LBL_EMAIL_DELIMITER'], $messagesToDelete));
+                            $ieX->deleteMessageOnMailServer(\implode($app_strings['LBL_EMAIL_DELIMITER'], $messagesToDelete));
                         }
                     }
                 }
@@ -269,12 +269,12 @@ function pollMonitoredInboxes()
  */
 function runMassEmailCampaign()
 {
-    if (!class_exists('LoggerManager')) {
+    if (!\class_exists('LoggerManager')) {
     }
     $GLOBALS['log'] = LoggerManager::getLogger('emailmandelivery');
     $GLOBALS['log']->debug('Called:runMassEmailCampaign');
 
-    if (!class_exists('DBManagerFactory')) {
+    if (!\class_exists('DBManagerFactory')) {
         require('include/database/DBManagerFactory.php');
     }
 
@@ -282,7 +282,7 @@ function runMassEmailCampaign()
     global $beanFiles;
     require("config.php");
     require('include/modules.php');
-    if (!class_exists('AclController')) {
+    if (!\class_exists('AclController')) {
         require('modules/ACL/ACLController.php');
     }
 
@@ -297,7 +297,7 @@ function pruneDatabase()
 {
     $GLOBALS['log']->info('----->Scheduler fired job of type pruneDatabase()');
     $backupDir = sugar_cached('backups');
-    $backupFile = 'backup-pruneDatabase-GMT0_' . gmdate('Y_m_d-H_i_s', strtotime('now')) . '.php';
+    $backupFile = 'backup-pruneDatabase-GMT0_' . \gmdate('Y_m_d-H_i_s', \strtotime('now')) . '.php';
 
     $db = DBManagerFactory::getInstance();
     $tables = $db->getTablesArray();
@@ -313,7 +313,7 @@ function pruneDatabase()
             }
 
             $custom_columns = array();
-            if (array_search($table . '_cstm', $tables)) {
+            if (\array_search($table . '_cstm', $tables)) {
                 $custom_columns = $db->get_columns($table . '_cstm');
                 if (empty($custom_columns['id_c'])) {
                     $custom_columns = array();
@@ -345,7 +345,7 @@ function pruneDatabase()
             $db->query('DELETE FROM ' . $table . ' WHERE deleted = 1');
         } // foreach() tables
 
-        if (!file_exists($backupDir) || !file_exists($backupDir . '/' . $backupFile)) {
+        if (!\file_exists($backupDir) || !\file_exists($backupDir . '/' . $backupFile)) {
             // create directory if not existent
             mkdir_recursive($backupDir, false);
         }
@@ -456,12 +456,12 @@ function removeDocumentsFromFS()
             $isSuccess = true;
             $bean->id = $row['bean_id'];
             $directory = $bean->deleteFileDirectory();
-            if (!empty($directory) && is_dir('upload://deleted/' . $directory)) {
+            if (!empty($directory) && \is_dir('upload://deleted/' . $directory)) {
                 if ($isSuccess = rmdir_recursive('upload://deleted/' . $directory)) {
-                    $directory = explode('/', $directory);
+                    $directory = \explode('/', $directory);
                     while (!empty($directory)) {
-                        $path = 'upload://deleted/' . implode('/', $directory);
-                        if (is_dir($path)) {
+                        $path = 'upload://deleted/' . \implode('/', $directory);
+                        if (\is_dir($path)) {
                             $directoryIterator = new DirectoryIterator($path);
                             $empty = true;
                             foreach ($directoryIterator as $item) {
@@ -472,10 +472,10 @@ function removeDocumentsFromFS()
                                 break;
                             }
                             if ($empty) {
-                                rmdir($path);
+                                \rmdir($path);
                             }
                         }
-                        array_pop($directory);
+                        \array_pop($directory);
                     }
                 }
             }
@@ -505,7 +505,7 @@ function trimSugarFeeds()
     $db = DBManagerFactory::getInstance();
 
     //get the pruning interval from globals if it's specified
-    $prune_interval = !empty($GLOBALS['sugar_config']['sugarfeed_prune_interval']) && is_numeric($GLOBALS['sugar_config']['sugarfeed_prune_interval']) ? $GLOBALS['sugar_config']['sugarfeed_prune_interval'] : 30;
+    $prune_interval = !empty($GLOBALS['sugar_config']['sugarfeed_prune_interval']) && \is_numeric($GLOBALS['sugar_config']['sugarfeed_prune_interval']) ? $GLOBALS['sugar_config']['sugarfeed_prune_interval'] : 30;
 
 
     //create and run the query to delete the records
@@ -578,7 +578,7 @@ function pollMonitoredInboxesAOP()
             if ($aopInboundEmailX->isPop3Protocol()) {
                 $msgNoToUIDL = $aopInboundEmailX->getPop3NewMessagesToDownloadForCron();
                 // get all the keys which are msgnos;
-                $newMsgs = array_keys($msgNoToUIDL);
+                $newMsgs = \array_keys($msgNoToUIDL);
             }
 
             if ($aopInboundEmailX->connectMailserver() == 'true') {
@@ -593,9 +593,9 @@ function pollMonitoredInboxesAOP()
                     $newMsgs = $aopInboundEmailX->getNewMessageIds();
                 }
 
-                if (is_array($newMsgs)) {
+                if (\is_array($newMsgs)) {
                     $current = 1;
-                    $total = count($newMsgs);
+                    $total = \count($newMsgs);
                     require_once("include/SugarFolders/SugarFolders.php");
                     $sugarFolder = new SugarFolder();
                     $groupFolderId = $aopInboundEmailX->groupfolder_id;
@@ -680,9 +680,9 @@ function pollMonitoredInboxesAOP()
                     $leaveMessagesOnMailServer = $aopInboundEmailX->get_stored_options("leaveMessagesOnMailServer", 0);
                     if (!$leaveMessagesOnMailServer) {
                         if ($aopInboundEmailX->isPop3Protocol()) {
-                            $aopInboundEmailX->deleteMessageOnMailServerForPop3(implode(",", $messagesToDelete));
+                            $aopInboundEmailX->deleteMessageOnMailServerForPop3(\implode(",", $messagesToDelete));
                         } else {
-                            $aopInboundEmailX->deleteMessageOnMailServer(implode($app_strings['LBL_EMAIL_DELIMITER'], $messagesToDelete));
+                            $aopInboundEmailX->deleteMessageOnMailServer(\implode($app_strings['LBL_EMAIL_DELIMITER'], $messagesToDelete));
                         }
                     }
                 }
@@ -737,7 +737,7 @@ function performLuceneIndexing()
     $total = 0;
     foreach ($beanList as $beanModule => $beanName) {
         $bean = BeanFactory::getBean($beanModule);
-        if (!$bean || !method_exists($bean, "getTableName") || !$bean->getTableName()) {
+        if (!$bean || !\method_exists($bean, "getTableName") || !$bean->getTableName()) {
             continue;
         }
         $query = "SELECT b.id FROM ".$bean->getTableName()." b LEFT JOIN aod_indexevent ie ON (ie.record_id = b.id AND ie.record_module = '".$beanModule."') WHERE b.deleted = 0 AND (ie.id IS NULL OR ie.date_modified < b.date_modified) ORDER BY b.date_modified ASC";
@@ -864,10 +864,10 @@ EOF;
     }
 }
 
-if (file_exists('custom/modules/Schedulers/_AddJobsHere.php')) {
+if (\file_exists('custom/modules/Schedulers/_AddJobsHere.php')) {
     require('custom/modules/Schedulers/_AddJobsHere.php');
 }
 
-if (file_exists('custom/modules/Schedulers/Ext/ScheduledTasks/scheduledtasks.ext.php')) {
+if (\file_exists('custom/modules/Schedulers/Ext/ScheduledTasks/scheduledtasks.ext.php')) {
     require('custom/modules/Schedulers/Ext/ScheduledTasks/scheduledtasks.ext.php');
 }

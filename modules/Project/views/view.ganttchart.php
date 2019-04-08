@@ -19,7 +19,7 @@
  * @author Andrew Mclaughlan <andrew@mclaughlan.info>
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -48,7 +48,7 @@ class ProjectViewGanttChart extends ViewDetail
 
         $project = new Project();
 
-        if (!isset($_REQUEST["project_id"]) || trim($_REQUEST["project_id"]) == "") {
+        if (!isset($_REQUEST["project_id"]) || \trim($_REQUEST["project_id"]) == "") {
             $_REQUEST["project_id"] = $_REQUEST["record"];
         }
 

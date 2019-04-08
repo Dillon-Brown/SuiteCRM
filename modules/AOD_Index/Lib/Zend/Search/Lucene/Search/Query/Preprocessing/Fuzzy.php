@@ -131,7 +131,7 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Fuzzy extends Zend_Search_Lu
 
             $subqueries = $query->getSubqueries();
 
-            if (count($subqueries) == 0) {
+            if (\count($subqueries) == 0) {
                 $this->_matches = array();
                 if ($hasInsignificantSubqueries) {
                     require_once 'Zend/Search/Lucene/Search/Query/Insignificant.php';
@@ -141,8 +141,8 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Fuzzy extends Zend_Search_Lu
                 return new Zend_Search_Lucene_Search_Query_Empty();
             }
 
-            if (count($subqueries) == 1) {
-                $query = reset($subqueries);
+            if (\count($subqueries) == 1) {
+                $query = \reset($subqueries);
             }
 
             $query->setBoost($this->getBoost());
@@ -173,12 +173,12 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Fuzzy extends Zend_Search_Lu
         // Recognize wildcard queries
 
         /** @todo check for PCRE unicode support may be performed through Zend_Environment in some future */
-        if (@preg_match('/\pL/u', 'a') == 1) {
-            $subPatterns = preg_split('/[*?]/u', iconv($this->_encoding, 'UTF-8', $this->_word));
+        if (@\preg_match('/\pL/u', 'a') == 1) {
+            $subPatterns = \preg_split('/[*?]/u', \iconv($this->_encoding, 'UTF-8', $this->_word));
         } else {
-            $subPatterns = preg_split('/[*?]/', $this->_word);
+            $subPatterns = \preg_split('/[*?]/', $this->_word);
         }
-        if (count($subPatterns) > 1) {
+        if (\count($subPatterns) > 1) {
             require_once 'Zend/Search/Lucene/Search/QueryParserException.php';
             throw new Zend_Search_Lucene_Search_QueryParserException('Fuzzy search doesn\'t support wildcards (except within Keyword fields).');
         }
@@ -189,13 +189,13 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Fuzzy extends Zend_Search_Lu
         require_once 'Zend/Search/Lucene/Analysis/Analyzer.php';
         $tokens = Zend_Search_Lucene_Analysis_Analyzer::getDefault()->tokenize($this->_word, $this->_encoding);
 
-        if (count($tokens) == 0) {
+        if (\count($tokens) == 0) {
             $this->_matches = array();
             require_once 'Zend/Search/Lucene/Search/Query/Insignificant.php';
             return new Zend_Search_Lucene_Search_Query_Insignificant();
         }
 
-        if (count($tokens) == 1) {
+        if (\count($tokens) == 1) {
             require_once 'Zend/Search/Lucene/Index/Term.php';
             $term  = new Zend_Search_Lucene_Index_Term($tokens[0]->getTermText(), $this->_field);
             require_once 'Zend/Search/Lucene/Search/Query/Fuzzy.php';
@@ -229,12 +229,12 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Fuzzy extends Zend_Search_Lu
         // Recognize wildcard queries
 
         /** @todo check for PCRE unicode support may be performed through Zend_Environment in some future */
-        if (@preg_match('/\pL/u', 'a') == 1) {
-            $subPatterns = preg_split('/[*?]/u', iconv($this->_encoding, 'UTF-8', $this->_word));
+        if (@\preg_match('/\pL/u', 'a') == 1) {
+            $subPatterns = \preg_split('/[*?]/u', \iconv($this->_encoding, 'UTF-8', $this->_word));
         } else {
-            $subPatterns = preg_split('/[*?]/', $this->_word);
+            $subPatterns = \preg_split('/[*?]/', $this->_word);
         }
-        if (count($subPatterns) > 1) {
+        if (\count($subPatterns) > 1) {
             // Do nothing
             return;
         }
@@ -244,11 +244,11 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Fuzzy extends Zend_Search_Lu
         // Recognize one-term multi-term and "insignificant" queries
         require_once 'Zend/Search/Lucene/Analysis/Analyzer.php';
         $tokens = Zend_Search_Lucene_Analysis_Analyzer::getDefault()->tokenize($this->_word, $this->_encoding);
-        if (count($tokens) == 0) {
+        if (\count($tokens) == 0) {
             // Do nothing
             return;
         }
-        if (count($tokens) == 1) {
+        if (\count($tokens) == 1) {
             require_once 'Zend/Search/Lucene/Index/Term.php';
             $term  = new Zend_Search_Lucene_Index_Term($tokens[0]->getTermText(), $this->_field);
             require_once 'Zend/Search/Lucene/Search/Query/Fuzzy.php';
@@ -280,7 +280,7 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Fuzzy extends Zend_Search_Lu
         $query .= $this->_word;
 
         if ($this->getBoost() != 1) {
-            $query .= '^' . round($this->getBoost(), 4);
+            $query .= '^' . \round($this->getBoost(), 4);
         }
 
         return $query;

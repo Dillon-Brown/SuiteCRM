@@ -83,7 +83,7 @@ class ViewModulefield extends SugarView
 
         $isClone = false;
         if (!empty($this->view_object_map['is_clone']) && $this->view_object_map['is_clone']
-            && (strcmp($field_name, "name") != 0)   // bug #35767, do not allow cloning of name field
+            && (\strcmp($field_name, "name") != 0)   // bug #35767, do not allow cloning of name field
             ) {
             $isClone = true;
         }
@@ -139,11 +139,11 @@ class ViewModulefield extends SugarView
 
         //C.L. - Add support to mark related module id columns as reserved keywords
         require_once 'modules/ModuleBuilder/parsers/relationships/DeployedRelationships.php';
-        $relatedModules = array_keys(DeployedRelationships::findRelatableModules()) ;
+        $relatedModules = \array_keys(DeployedRelationships::findRelatableModules()) ;
         global $beanList, $current_language;
         foreach ($relatedModules as $relModule) {
             if (isset($beanList[$relModule])) {
-                $field_name_exceptions[] = strtoupper($beanList[$relModule]) . '_ID';
+                $field_name_exceptions[] = \strtoupper($beanList[$relModule]) . '_ID';
             }
         }
 
@@ -157,7 +157,7 @@ class ViewModulefield extends SugarView
 
             // Fix for issue #1177 - when trying to add or edit fields in a module an error message is shown:
             // "Warning: Creating default object from empty value"
-            if (!isset($module->mbvardefs) || is_null($module->mbvardefs)) {
+            if (!isset($module->mbvardefs) || \is_null($module->mbvardefs)) {
                 $module->mbvardefs = new stdClass();
             }
             $module->mbvardefs->vardefs =  $dictionary[$objectName];
@@ -190,7 +190,7 @@ class ViewModulefield extends SugarView
             $tf = get_widget(empty($vardef [ 'type' ]) ?  "" : $vardef [ 'type' ]) ;
             $tf->module = $module;
             $tf->populateFromRow($vardef);
-            $vardef = array_merge($vardef, $tf->get_field_def());
+            $vardef = \array_merge($vardef, $tf->get_field_def());
 
             //          $GLOBALS['log']->debug('vardefs after loading = '.print_r($vardef,true));
            
@@ -208,16 +208,16 @@ class ViewModulefield extends SugarView
                         continue;
                     } //bug51866
                     $enumFields[$field] = translate($def['vname'], $moduleName);
-                    if (substr($enumFields[$field], -1) == ":") {
-                        $enumFields[$field] = substr($enumFields[$field], 0, strlen($enumFields[$field]) - 1);
+                    if (\substr($enumFields[$field], -1) == ":") {
+                        $enumFields[$field] = \substr($enumFields[$field], 0, \strlen($enumFields[$field]) - 1);
                     }
                 }
             }
             $fv->ss->assign('allowAutoInc', $allowAutoInc);
 
-            $GLOBALS['log']->warn('view.modulefield: hidelevel '.$fv->ss->get_template_vars('hideLevel')." ".print_r($vardef, true));
+            $GLOBALS['log']->warn('view.modulefield: hidelevel '.$fv->ss->get_template_vars('hideLevel')." ".\print_r($vardef, true));
             if (!empty($vardef['vname'])) {
-                $fv->ss->assign('lbl_value', htmlentities(translate($vardef['vname'], $moduleName), ENT_QUOTES, 'UTF-8'));
+                $fv->ss->assign('lbl_value', \htmlentities(translate($vardef['vname'], $moduleName), ENT_QUOTES, 'UTF-8'));
             }
             $fv->ss->assign('module', $module);
             if (empty($module->mbvardefs->vardefs['fields']['parent_name']) || (isset($vardef['type']) && $vardef['type'] == 'parent')) {
@@ -260,7 +260,7 @@ class ViewModulefield extends SugarView
             $tf = get_widget(empty($vardef [ 'type' ]) ?  "" : $vardef [ 'type' ]) ;
             $tf->module = $module;
             $tf->populateFromRow($vardef);
-            $vardef = array_merge($vardef, $tf->get_field_def());
+            $vardef = \array_merge($vardef, $tf->get_field_def());
             
             
 
@@ -269,7 +269,7 @@ class ViewModulefield extends SugarView
             $fv->ss->assign('MB', '1');
 
             if (isset($vardef['vname'])) {
-                $fv->ss->assign('lbl_value', htmlentities($module->getLabel('en_us', $vardef['vname']), ENT_QUOTES, 'UTF-8'));
+                $fv->ss->assign('lbl_value', \htmlentities($module->getLabel('en_us', $vardef['vname']), ENT_QUOTES, 'UTF-8'));
             }
             if (empty($module->mbvardefs->vardefs['fields']['parent_name']) || (isset($vardef['type']) && $vardef['type'] == 'parent')) {
                 $field_types['parent'] = $GLOBALS['mod_strings']['parent'];
@@ -281,8 +281,8 @@ class ViewModulefield extends SugarView
                     if (!empty($def['type']) && $def['type'] == "enum" && $field != $vardef['name']) {
                         $enumFields[$field] = isset($module->mblanguage->strings[$current_language][$def['vname']]) ?
                             $this->mbModule->mblanguage->strings[$current_language][$def['vname']] : translate($field);
-                        if (substr($enumFields[$field], -1) == ":") {
-                            $enumFields[$field] = substr($enumFields[$field], 0, strlen($enumFields[$field]) -1);
+                        if (\substr($enumFields[$field], -1) == ":") {
+                            $enumFields[$field] = \substr($enumFields[$field], 0, \strlen($enumFields[$field]) -1);
                         }
                     }
                 }
@@ -297,17 +297,17 @@ class ViewModulefield extends SugarView
             $field->populateFromPost();
             $vardef = $field->get_field_def();
             $vardef['options'] = $_REQUEST['new_dropdown'];
-            $fv->ss->assign('lbl_value', htmlentities($_REQUEST['labelValue'], ENT_QUOTES, 'UTF-8'));
+            $fv->ss->assign('lbl_value', \htmlentities($_REQUEST['labelValue'], ENT_QUOTES, 'UTF-8'));
         }
 
         foreach (array("formula", "default", "comments", "help", "visiblityGrid") as $toEscape) {
-            if (!empty($vardef[$toEscape]) && is_string($vardef[$toEscape])) {
-                $vardef[$toEscape] = htmlentities($vardef[$toEscape], ENT_QUOTES, 'UTF-8');
+            if (!empty($vardef[$toEscape]) && \is_string($vardef[$toEscape])) {
+                $vardef[$toEscape] = \htmlentities($vardef[$toEscape], ENT_QUOTES, 'UTF-8');
             }
         }
         
-        if ((!empty($vardef['studio']) && is_array($vardef['studio']) && !empty($vardef['studio']['no_duplicate']) && $vardef['studio']['no_duplicate'] == true)
-           || (strcmp($field_name, "name") == 0) || (isset($vardef['type']) && $vardef['type'] == 'name')) { // bug #35767, do not allow cloning of name field
+        if ((!empty($vardef['studio']) && \is_array($vardef['studio']) && !empty($vardef['studio']['no_duplicate']) && $vardef['studio']['no_duplicate'] == true)
+           || (\strcmp($field_name, "name") == 0) || (isset($vardef['type']) && $vardef['type'] == 'name')) { // bug #35767, do not allow cloning of name field
             $fv->ss->assign('no_duplicate', true);
         }
 
@@ -317,7 +317,7 @@ class ViewModulefield extends SugarView
         $json = getJSONobj();
 
         $fv->ss->assign('field_name_exceptions', $json->encode($field_name_exceptions));
-        ksort($field_types);
+        \ksort($field_types);
         $fv->ss->assign('field_types', $field_types);
 
 
@@ -332,8 +332,8 @@ class ViewModulefield extends SugarView
             }
             
             if (!isset($field['source']) || $field['source'] != 'non-db') {
-                if (preg_match('/^(.*?)(_c)?$/', $field['name'], $matches)) {
-                    $existing_field_names [] = strtoupper($matches[1]);
+                if (\preg_match('/^(.*?)(_c)?$/', $field['name'], $matches)) {
+                    $existing_field_names [] = \strtoupper($matches[1]);
                 }
             }
         }
@@ -385,7 +385,7 @@ class ViewModulefield extends SugarView
      */
     protected function fetchTemplate($fv/*, $template*/)
     {
-        $template = func_get_arg(1);
+        $template = \func_get_arg(1);
         return $fv->ss->fetch($this->getCustomFilePathIfExists($template));
     }
 }

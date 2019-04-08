@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -106,7 +106,7 @@ class SugarWidgetSubPanelRemoveButtonMeetings extends SugarWidgetField
             . "&record=$parent_record_id"
             . "&linked_field=$linked_field"
             . "&linked_id=$record"
-            . "&return_url=" . urlencode(urlencode($return_url))
+            . "&return_url=" . \urlencode(\urlencode($return_url))
             . "&refresh_page=$refresh_page"
             . $layout_def['end_link_wrapper'];
         $remove_confirmation_text = $app_strings['NTC_REMOVE_CONFIRMATION'];

@@ -37,7 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 include 'suitecrm_version.php';
@@ -49,7 +49,7 @@ global $sugar_config, $mod_strings;
     <br>
     <b>
         <?php echo $mod_strings['LBL_VERSION'] . ' ' . $suitecrm_version;
-        if (is_file('custom_version.php')) {
+        if (\is_file('custom_version.php')) {
             include 'custom_version.php';
             echo '&nbsp;&nbsp;&nbsp;' . $custom_version;
         } ?>

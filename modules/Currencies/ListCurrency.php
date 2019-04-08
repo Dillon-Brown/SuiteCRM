@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -52,8 +52,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
          $this->focus = new Currency();
          $this->list = $this->focus->get_full_list('name');
          $this->focus->retrieve('-99');
-         if (is_array($this->list)) {
-             $this->list = array_merge(array($this->focus), $this->list);
+         if (\is_array($this->list)) {
+             $this->list = \array_merge(array($this->focus), $this->list);
          } else {
              $this->list = array($this->focus);
          }
@@ -88,8 +88,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
                  $symbols= $_POST['symbol'];
                  $rates  = $_POST['rate'];
                  $isos  = $_POST['iso'];
-                 $size = sizeof($ids);
-                 if ($size != sizeof($names)|| $size != sizeof($isos) || $size != sizeof($symbols) || $size != sizeof($rates)) {
+                 $size = \sizeof($ids);
+                 if ($size != \sizeof($names)|| $size != \sizeof($isos) || $size != \sizeof($symbols) || $size != \sizeof($rates)) {
                      return;
                  }
             

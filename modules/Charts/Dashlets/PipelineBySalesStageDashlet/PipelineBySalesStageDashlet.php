@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -92,12 +92,12 @@ class PipelineBySalesStageDashlet extends DashletGenericChart
     {
         global $app_list_strings;
 
-        if (!empty($this->pbss_sales_stages) && count($this->pbss_sales_stages) > 0) {
+        if (!empty($this->pbss_sales_stages) && \count($this->pbss_sales_stages) > 0) {
             foreach ($this->pbss_sales_stages as $key) {
                 $selected_datax[] = $key;
             }
         } else {
-            $selected_datax = array_keys($app_list_strings['sales_stage_dom']);
+            $selected_datax = \array_keys($app_list_strings['sales_stage_dom']);
         }
 
         $this->_searchFields['pbss_sales_stages']['options'] = $app_list_strings['sales_stage_dom'];
@@ -129,10 +129,10 @@ class PipelineBySalesStageDashlet extends DashletGenericChart
         $data = $this->getChartData($this->constructQuery());
         $chartReadyData = $this->prepareChartData($data, $currency_symbol, $thousands_symbol);
 
-        $jsonData = json_encode($chartReadyData['data']);
-        $jsonLabels = json_encode($chartReadyData['labels']);
-        $jsonKeys = json_encode($chartReadyData['keys']);
-        $jsonLabelsAndValues = json_encode($chartReadyData['labelsAndValues']);
+        $jsonData = \json_encode($chartReadyData['data']);
+        $jsonLabels = \json_encode($chartReadyData['labels']);
+        $jsonKeys = \json_encode($chartReadyData['keys']);
+        $jsonLabelsAndValues = \json_encode($chartReadyData['labelsAndValues']);
 
         $total = $chartReadyData['total'];
 
@@ -140,7 +140,7 @@ class PipelineBySalesStageDashlet extends DashletGenericChart
         $endDate = $this->pbss_date_end;
 
         //TODO find a better way of doing this
-        $canvasId = 'rGraphFunnel'.uniqid();
+        $canvasId = 'rGraphFunnel'.\uniqid();
 
         //These are taken in the same fashion as the hard-coded array above
         $module = 'Opportunities';
@@ -158,7 +158,7 @@ class PipelineBySalesStageDashlet extends DashletGenericChart
         //<canvas id='test123'  width='$chartWidth' height='$chartHeight'>[No canvas support]</canvas>
 
         //Check for an empty array
-        if (!is_array($chartReadyData['data'])||count($chartReadyData['data']) < 1) {
+        if (!\is_array($chartReadyData['data'])||\count($chartReadyData['data']) < 1) {
             return "<h3 class='noGraphDataPoints'>$this->noDataMessage</h3>";
         }
 
@@ -269,14 +269,14 @@ EOD;
         $tempx = $user_sales_stage;
 
         //set $datax using selected sales stage keys
-        if (count($tempx) > 0) {
+        if (\count($tempx) > 0) {
             foreach ($tempx as $key) {
                 $datax[$key] = $app_list_strings['sales_stage_dom'][$key];
                 $selected_datax[] = $key;
             }
         } else {
             $datax = $app_list_strings['sales_stage_dom'];
-            $selected_datax = array_keys($app_list_strings['sales_stage_dom']);
+            $selected_datax = \array_keys($app_list_strings['sales_stage_dom']);
         }
 
         $result = $db->query($query);
@@ -356,9 +356,9 @@ EOD;
 
     protected function resizeLabel($label)
     {
-        if (strlen($label) < $this->maxLabelSizeBeforeTotal) {
+        if (\strlen($label) < $this->maxLabelSizeBeforeTotal) {
             return $label;
         }
-        return substr($label, 0, $this->maxLabelSizeBeforeTotal).$this->labelReplacementString;
+        return \substr($label, 0, $this->maxLabelSizeBeforeTotal).$this->labelReplacementString;
     }
 }

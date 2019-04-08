@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -111,12 +111,12 @@ class ViewWizard extends SugarView
         }
 
         // get javascript
-        ob_start();
+        \ob_start();
         $this->options['show_javascript'] = true;
         $this->renderJavascript();
         $this->options['show_javascript'] = false;
-        $this->ss->assign("SUGAR_JS", ob_get_contents().$themeObject->getJS());
-        ob_end_clean();
+        $this->ss->assign("SUGAR_JS", \ob_get_contents().$themeObject->getJS());
+        \ob_end_clean();
 
         $messenger_type = '<select tabindex="5" name="messenger_type">';
         $messenger_type .= get_select_options_with_id($app_list_strings['messenger_type_dom'], $current_user->messenger_type);
@@ -213,7 +213,7 @@ eoq;
         $this->ss->assign('EDITOR_TYPE', get_select_options_with_id($app_list_strings['dom_editor_type'], $current_user->getPreference('editor_type')));
 
         $selectedLocaleNameFormat = $current_user->_userPreferenceFocus->getDefaultPreference('default_locale_name_format');
-        if (array_key_exists($selectedLocaleNameFormat, $sugar_config['name_formats'])) {
+        if (\array_key_exists($selectedLocaleNameFormat, $sugar_config['name_formats'])) {
             $selectedLocaleNameFormat = $sugar_config['default_locale_name_format'];
         }
         $this->ss->assign('NAMEOPTIONS', get_select_options_with_id($locale->getUsableLocaleNameOptions($sugar_config['name_formats']), $selectedLocaleNameFormat));
@@ -268,7 +268,7 @@ eoq;
         $newCurrenciesArray = array();
 
         $newCurrenciesArray[] = $currenciesArray[$baseCurrencyId]['symbol'];
-        array_shift($currenciesArray);
+        \array_shift($currenciesArray);
         $currenciesArray = array_csort($currenciesArray);
         foreach ($currenciesArray as $value) {
             $newCurrenciesArray[] = $value['symbol'];

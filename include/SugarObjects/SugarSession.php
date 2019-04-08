@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -61,15 +61,15 @@ class SugarSession
 
     public function setSessionId($sessionId)
     {
-        self::$sessionId = session_id($sessionId);
+        self::$sessionId = \session_id($sessionId);
     }
 
     public function start()
     {
-        $session_id = session_id();
+        $session_id = \session_id();
         if (empty($session_id)) {
-            session_start();
-            self::$sessionId = session_id();
+            \session_start();
+            self::$sessionId = \session_id();
         } else {
             self::$sessionId = $session_id;
         }
@@ -90,7 +90,7 @@ class SugarSession
         foreach ($_SESSION as $var => $val) {
             $_SESSION[$var] = null;
         }
-        session_destroy();
+        \session_destroy();
     }
 
     public function __clone()
@@ -109,6 +109,6 @@ class SugarSession
 
     public function __destruct()
     {
-        session_write_close();
+        \session_write_close();
     }
 }

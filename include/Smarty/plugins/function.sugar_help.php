@@ -71,11 +71,11 @@ Pushed code for help popups into smarty function sugar_help.
  */
 function smarty_function_sugar_help($params, &$smarty)
 {
-    $text = str_replace("'", "\'", htmlspecialchars($params['text']));
+    $text = \str_replace("'", "\'", \htmlspecialchars($params['text']));
     //append any additional parameters.
     $click  = "return SUGAR.util.showHelpTips(this,'$text'";
 
-    if (count($params) > 1) {
+    if (\count($params) > 1) {
         $click .=",'".$params['myPos']."','".$params['atPos']."'";
     }
     $helpImage = SugarThemeRegistry::current()->getImageURL('helpInline.png');

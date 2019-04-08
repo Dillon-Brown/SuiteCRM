@@ -26,7 +26,7 @@ class ModulesMetaCest
     {
         if (!$this->fakeData) {
             $this->fakeData = Faker\Factory::create();
-            $this->fakeDataSeed = rand(0, 2048);
+            $this->fakeDataSeed = \rand(0, 2048);
         }
         $this->fakeData->seed($this->fakeDataSeed);
     }
@@ -52,7 +52,7 @@ class ModulesMetaCest
         $I->seeResponseCodeIs(200);
 
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('meta', $decodedResponse);
@@ -85,7 +85,7 @@ class ModulesMetaCest
         $I->seeJsonApiContentNegotiation();
 
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('meta', $decodedResponse);
@@ -117,7 +117,7 @@ class ModulesMetaCest
         $I->seeResponseCodeIs(200);
 
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('meta', $decodedResponse);
@@ -158,7 +158,7 @@ class ModulesMetaCest
         $I->sendGET($url);
         $I->seeResponseCodeIs(200);
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('meta', $decodedResponse);
@@ -202,7 +202,7 @@ class ModulesMetaCest
 
         $I->seeResponseCodeIs(201);
         $I->seeJsonApiContentNegotiation();
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $response);
         $I->assertArrayHasKey('type', $response['data']);
         $I->assertArrayHasKey('id', $response['data']);
@@ -231,7 +231,7 @@ class ModulesMetaCest
         $I->seeResponseCodeIs(201);
         $I->seeJsonApiContentNegotiation();
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('data', $decodedResponse);
@@ -245,7 +245,7 @@ class ModulesMetaCest
         $I->sendGET($url);
         $I->seeResponseCodeIs(200);
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('data', $decodedResponse);
@@ -297,7 +297,7 @@ class ModulesMetaCest
 
         $I->seeResponseCodeIs(201);
         $I->seeJsonApiContentNegotiation();
-        $response = json_decode($I->grabResponse(), true);
+        $response = \json_decode($I->grabResponse(), true);
         $I->assertArrayHasKey('data', $response);
         $I->assertArrayHasKey('type', $response['data']);
         $I->assertArrayHasKey('id', $response['data']);
@@ -326,7 +326,7 @@ class ModulesMetaCest
         $I->seeResponseCodeIs(201);
         $I->seeJsonApiContentNegotiation();
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('data', $decodedResponse);
@@ -340,7 +340,7 @@ class ModulesMetaCest
         $I->sendGET($url);
         $I->seeResponseCodeIs(200);
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('data', $decodedResponse);
@@ -376,7 +376,7 @@ class ModulesMetaCest
         $I->sendGET($url);
         $I->seeResponseCodeIs(200);
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('data', $decodedResponse);
@@ -414,7 +414,7 @@ class ModulesMetaCest
         $I->sendGET($url);
         $I->seeResponseCodeIs(200);
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('data', $decodedResponse);
@@ -451,7 +451,7 @@ class ModulesMetaCest
         $I->sendGET($url);
         $I->seeResponseCodeIs(200);
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('meta', $decodedResponse);
@@ -480,7 +480,7 @@ class ModulesMetaCest
         $I->sendGET($url);
         $I->seeResponseCodeIs(200);
         $response = $I->grabResponse();
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = \json_decode($response, true);
 
         $I->assertNotEmpty($decodedResponse);
         $I->assertArrayHasKey('meta', $decodedResponse);

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -64,7 +64,7 @@ class MySugar
         if (isset($GLOBALS['log'])) {
             $GLOBALS['log']->deprecated($deprecatedMessage);
         } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+            \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
         self::__construct($type);
     }
@@ -72,9 +72,9 @@ class MySugar
 
     public function checkDashletDisplay()
     {
-        if ((!in_array($this->type, $GLOBALS['moduleList'])
-                && !in_array($this->type, $GLOBALS['modInvisList']))
-                && (!in_array('Activities', $GLOBALS['moduleList']))) {
+        if ((!\in_array($this->type, $GLOBALS['moduleList'])
+                && !\in_array($this->type, $GLOBALS['modInvisList']))
+                && (!\in_array('Activities', $GLOBALS['moduleList']))) {
             $displayDashlet = false;
         } elseif (ACLController::moduleSupportsACL($this->type)) {
             $bean = SugarModule::get($this->type)->loadBean();
@@ -95,7 +95,7 @@ class MySugar
             return;
         }
 
-        if (!is_file(sugar_cached('dashlets/dashlets.php'))) {
+        if (!\is_file(sugar_cached('dashlets/dashlets.php'))) {
             require_once('include/Dashlets/DashletCacheBuilder.php');
 
             $dc = new DashletCacheBuilder();
@@ -132,11 +132,11 @@ class MySugar
                                          'fileLocation' => $dashletsFiles[$_REQUEST['id']]['file']);
 
 
-            if (!array_key_exists('current_tab', $_SESSION)) {
+            if (!\array_key_exists('current_tab', $_SESSION)) {
                 $_SESSION["current_tab"] = '0';
             }
 
-            array_unshift($pages[$_SESSION['current_tab']]['columns'][0]['dashlets'], $guid);
+            \array_unshift($pages[$_SESSION['current_tab']]['columns'][0]['dashlets'], $guid);
 
             $current_user->setPreference('dashlets', $dashlets, 0, $this->type);
 
@@ -160,7 +160,7 @@ class MySugar
             foreach ($_REQUEST as $k => $v) {
                 if ($k == 'lvso') {
                     $sortOrder = $v;
-                } elseif (preg_match('/Home2_.+_ORDER_BY/', $k)) {
+                } elseif (\preg_match('/Home2_.+_ORDER_BY/', $k)) {
                     $orderBy = $v;
                 }
             }
@@ -191,7 +191,7 @@ class MySugar
                 echo $dashlet->getFooter();
             }
         } else {
-            header("Location: index.php?action=index&module=". $this->type);
+            \header("Location: index.php?action=index&module=". $this->type);
         }
     }
 
@@ -208,7 +208,7 @@ class MySugar
             $dashlet->process();
             echo $dashlet->displayScript();
         } else {
-            header("Location: index.php?action=index&module=". $this->type);
+            \header("Location: index.php?action=index&module=". $this->type);
         }
     }
 
@@ -320,8 +320,8 @@ EOJS;
         $searchResult[$dashletIndex] = array();
 
         foreach ($allDashlets[$dashletIndex] as $dashlet) {
-            if (stripos($dashlet['title'], $searchStr) !== false) {
-                array_push($searchResult[$dashletIndex], $dashlet);
+            if (\stripos($dashlet['title'], $searchStr) !== false) {
+                \array_push($searchResult[$dashletIndex], $dashlet);
             }
         }
 
@@ -354,8 +354,8 @@ EOJS;
         foreach ($allDashlets as $category=>$dashlets) {
             $searchResult[$category] = array();
             foreach ($dashlets as $dashlet) {
-                if (stripos($dashlet['title'], $searchStr) !== false) {
-                    array_push($searchResult[$category], $dashlet);
+                if (\stripos($dashlet['title'], $searchStr) !== false) {
+                    \array_push($searchResult[$category], $dashlet);
                 }
             }
         }
@@ -420,13 +420,13 @@ EOJS;
         if (!empty($_POST['layout'])) {
             $newColumns = array();
 
-            $newLayout = explode('|', $_POST['layout']);
+            $newLayout = \explode('|', $_POST['layout']);
 
             $pages = $current_user->getPreference('pages', $this->type);
 
             $newColumns = $pages[$_REQUEST['selectedPage']]['columns'];
             foreach ($newLayout as $col => $ids) {
-                $newColumns[$col]['dashlets'] = explode(',', $ids);
+                $newColumns[$col]['dashlets'] = \explode(',', $ids);
             }
 
             $pages[$_REQUEST['selectedPage']]['columns'] = $newColumns;

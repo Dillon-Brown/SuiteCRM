@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -55,17 +55,17 @@ if (isset($GLOBALS['sugar_config']['hide_admin_diagnostics']) && $GLOBALS['sugar
 if (!isset($_REQUEST['guid']) || !isset($_REQUEST['time'])) {
     die('Did not receive a filename to download');
 }
-$time = str_replace(array('.', '/', '\\'), '', $_REQUEST['time']);
-$guid = str_replace(array('.', '/', '\\'), '', $_REQUEST['guid']);
+$time = \str_replace(array('.', '/', '\\'), '', $_REQUEST['time']);
+$guid = \str_replace(array('.', '/', '\\'), '', $_REQUEST['guid']);
 $path = sugar_cached("diagnostic/{$guid}/diagnostic{$time}.zip");
-$filesize = filesize($path);
-ob_clean();
-header('Content-Description: File Transfer');
-header('Content-type: application/octet-stream');
-header("Pragma: public");
-header("Expires: 0");
-header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-header("Content-Disposition: attachment; filename=$guid.zip");
-header("Content-Transfer-Encoding: binary");
-header("Content-Length: $filesize");
-readfile($path);
+$filesize = \filesize($path);
+\ob_clean();
+\header('Content-Description: File Transfer');
+\header('Content-type: application/octet-stream');
+\header("Pragma: public");
+\header("Expires: 0");
+\header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+\header("Content-Disposition: attachment; filename=$guid.zip");
+\header("Content-Transfer-Encoding: binary");
+\header("Content-Length: $filesize");
+\readfile($path);

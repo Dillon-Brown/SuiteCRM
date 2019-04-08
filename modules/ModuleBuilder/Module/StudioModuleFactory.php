@@ -61,10 +61,10 @@ class StudioModuleFactory
         }
 
         $studioModClass = "{$module}StudioModule";
-        if (file_exists("custom/modules/{$module}/{$studioModClass}.php")) {
+        if (\file_exists("custom/modules/{$module}/{$studioModClass}.php")) {
             require_once "custom/modules/{$module}/{$studioModClass}.php";
             $sm = new $studioModClass($module);
-        } elseif (file_exists("modules/{$module}/{$studioModClass}.php")) {
+        } elseif (\file_exists("modules/{$module}/{$studioModClass}.php")) {
             require_once "modules/{$module}/{$studioModClass}.php";
             $sm = new $studioModClass($module);
         } else {

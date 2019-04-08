@@ -189,12 +189,12 @@ class SurveyResponses extends Basic
         $ret['subject'] = from_html(aop_parse_template($template->subject, $beans));
         $ret['body'] =
             from_html(
-                aop_parse_template(str_replace("\$sugarurl", $sugar_config['site_url'], $template->body_html), $beans)
+                aop_parse_template(\str_replace("\$sugarurl", $sugar_config['site_url'], $template->body_html), $beans)
             );
         $ret['body_alt'] =
-            strip_tags(
+            \strip_tags(
                 from_html(
-                    aop_parse_template(str_replace("\$sugarurl", $sugar_config['site_url'], $template->body), $beans)
+                    aop_parse_template(\str_replace("\$sugarurl", $sugar_config['site_url'], $template->body), $beans)
                 )
             );
 

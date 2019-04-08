@@ -33,7 +33,7 @@ class DayOfMonthField extends AbstractField
      */
     private static function getNearestWeekday($currentYear, $currentMonth, $targetDay)
     {
-        $tday = str_pad($targetDay, 2, '0', STR_PAD_LEFT);
+        $tday = \str_pad($targetDay, 2, '0', STR_PAD_LEFT);
         $target = \DateTime::createFromFormat('Y-m-d', "$currentYear-$currentMonth-$tday");
         $currentWeekday = (int) $target->format('N');
 
@@ -69,9 +69,9 @@ class DayOfMonthField extends AbstractField
         }
 
         // Check to see if this is the nearest weekday to a particular value
-        if (strpos($value, 'W')) {
+        if (\strpos($value, 'W')) {
             // Parse the target day
-            $targetDay = substr($value, 0, strpos($value, 'W'));
+            $targetDay = \substr($value, 0, \strpos($value, 'W'));
             // Find out if the current day is the nearest day of the week
             return $date->format('j') == self::getNearestWeekday(
                 $date->format('Y'),
@@ -98,6 +98,6 @@ class DayOfMonthField extends AbstractField
 
     public function validate($value)
     {
-        return (bool) preg_match('/^[\*,\/\-\?LW0-9A-Za-z]+$/', $value);
+        return (bool) \preg_match('/^[\*,\/\-\?LW0-9A-Za-z]+$/', $value);
     }
 }

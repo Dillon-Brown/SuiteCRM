@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -63,7 +63,7 @@ class QuickCreate extends EditView
 
         $this->ss->assign('ASSIGNED_USER_ID', $current_user->id);
 
-        $this->ss->assign('REQUEST', array_merge($_GET, $_POST));
+        $this->ss->assign('REQUEST', \array_merge($_GET, $_POST));
         $this->ss->assign('CALENDAR_LANG', "en");
 
         $date_format = $timedate->get_cal_date_format();
@@ -72,10 +72,10 @@ class QuickCreate extends EditView
 
         $time_format = $timedate->get_user_time_format();
         $time_separator = ":";
-        if (preg_match('/\d+([^\d])\d+([^\d]*)/s', $time_format, $match)) {
+        if (\preg_match('/\d+([^\d])\d+([^\d]*)/s', $time_format, $match)) {
             $time_separator = $match[1];
         }
-        $t23 = strpos($time_format, '23') !== false ? '%H' : '%I';
+        $t23 = \strpos($time_format, '23') !== false ? '%H' : '%I';
         if (!isset($match[2]) || $match[2] == '') {
             $this->ss->assign('CALENDAR_FORMAT', $date_format . ' ' . $t23 . $time_separator . "%M");
         } else {

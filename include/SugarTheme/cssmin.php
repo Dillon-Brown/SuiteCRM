@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -50,27 +50,27 @@ class cssmin
      */
     public static function minify($css, $options = "remove-last-semicolon")
     {
-        $options = ($options == "") ? array() : (is_array($options) ? $options : explode(",", $options));
-        if (in_array("preserve-urls", $options)) {
+        $options = ($options == "") ? array() : (\is_array($options) ? $options : \explode(",", $options));
+        if (\in_array("preserve-urls", $options)) {
             // Encode url() to base64
-            $css = preg_replace_callback("/url\s*\((.*)\)/siU", "cssmin_encode_url", $css);
+            $css = \preg_replace_callback("/url\s*\((.*)\)/siU", "cssmin_encode_url", $css);
         }
         // Remove comments
-        $css = preg_replace("/\/\*[\d\D]*?\*\/|\t+/", " ", $css);
+        $css = \preg_replace("/\/\*[\d\D]*?\*\/|\t+/", " ", $css);
         // Replace CR, LF and TAB to spaces
-        $css = str_replace(array("\n", "\r", "\t"), " ", $css);
+        $css = \str_replace(array("\n", "\r", "\t"), " ", $css);
         // Replace multiple to single space
-        $css = preg_replace("/\s\s+/", " ", $css);
+        $css = \preg_replace("/\s\s+/", " ", $css);
         // Remove unneeded spaces
-        $css = preg_replace("/\s*({|}|\[|=|~|\+|>|\||;|:|,)\s*/", "$1", $css);
-        if (in_array("remove-last-semicolon", $options)) {
+        $css = \preg_replace("/\s*({|}|\[|=|~|\+|>|\||;|:|,)\s*/", "$1", $css);
+        if (\in_array("remove-last-semicolon", $options)) {
             // Removes the last semicolon of every style definition
-            $css = str_replace(";}", "}", $css);
+            $css = \str_replace(";}", "}", $css);
         }
-        $css = trim($css);
-        if (in_array("preserve-urls", $options)) {
+        $css = \trim($css);
+        if (\in_array("preserve-urls", $options)) {
             // Decode url()
-            $css = preg_replace_callback("/url\s*\((.*)\)/siU", "cssmin_encode_url", $css);
+            $css = \preg_replace_callback("/url\s*\((.*)\)/siU", "cssmin_encode_url", $css);
         }
         return $css;
     }
@@ -90,14 +90,14 @@ class cssmin
         $r = array();
         $css = cssmin::minify($css, $options);
         $items = array();
-        preg_match_all("/(.+){(.+:.+);}/U", $css, $items);
-        if (count($items[0]) > 0) {
-            for ($i = 0; $i < count($items[0]); $i++) {
-                $keys		= explode(",", $items[1][$i]);
-                $styles_tmp	= explode(";", $items[2][$i]);
+        \preg_match_all("/(.+){(.+:.+);}/U", $css, $items);
+        if (\count($items[0]) > 0) {
+            for ($i = 0; $i < \count($items[0]); $i++) {
+                $keys		= \explode(",", $items[1][$i]);
+                $styles_tmp	= \explode(";", $items[2][$i]);
                 $styles = array();
                 foreach ($styles_tmp as $style) {
-                    $style_tmp = explode(":", $style);
+                    $style_tmp = \explode(":", $style);
                     $styles[$style_tmp[0]] = $style_tmp[1];
                 }
                 $r[] = array(
@@ -122,7 +122,7 @@ class cssmin
     {
         $r = "";
         foreach ($array as $item) {
-            $r .= implode(",", $item["keys"]) . "{";
+            $r .= \implode(",", $item["keys"]) . "{";
             foreach ($item["styles"] as $key => $value) {
                 $r .= $key . ":" . $value . ";";
             }
@@ -143,12 +143,12 @@ function cssmin_array_clean(array $array)
     $r = array();
     if (cssmin_array_is_assoc($array)) {
         foreach ($array as $key => $value) {
-            $r[$key] = trim($value);
+            $r[$key] = \trim($value);
         }
     } else {
         foreach ($array as $value) {
-            if (trim($value) != "") {
-                $r[] = trim($value);
+            if (\trim($value) != "") {
+                $r[] = \trim($value);
             }
         }
     }
@@ -162,11 +162,11 @@ function cssmin_array_clean(array $array)
  */
 function cssmin_array_is_assoc($array)
 {
-    if (!is_array($array)) {
+    if (!\is_array($array)) {
         return false;
     }
-    krsort($array, SORT_STRING);
-    return !is_numeric(key($array));
+    \krsort($array, SORT_STRING);
+    return !\is_numeric(\key($array));
 }
 /**
  * Encodes a url() expression.
@@ -176,7 +176,7 @@ function cssmin_array_is_assoc($array)
  */
 function cssmin_encode_url($match)
 {
-    return "url(" . base64_encode(trim($match[1])) . ")";
+    return "url(" . \base64_encode(\trim($match[1])) . ")";
 }
 /**
  * Decodes a url() expression.
@@ -186,5 +186,5 @@ function cssmin_encode_url($match)
  */
 function cssmin_decode_url($match)
 {
-    return "url(" . base64_decode($match[1]) . ")";
+    return "url(" . \base64_decode($match[1]) . ")";
 }

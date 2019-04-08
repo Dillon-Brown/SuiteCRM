@@ -136,13 +136,13 @@ class FilterParser
      */
     protected function parseFieldKey($fieldKey)
     {
-        if (is_string($fieldKey) === false) {
+        if (\is_string($fieldKey) === false) {
             throw new Exception(
                 '[JsonApi][v1][FilterParser][parseFieldKey][expected type to be string] $fieldKey'
             );
         }
 
-        if (strpos($fieldKey, '.') !== false) {
+        if (\strpos($fieldKey, '.') !== false) {
             $parsedKey = $this->splitFieldKeys($fieldKey);
         } else {
             $parsedKey = array(
@@ -167,22 +167,22 @@ class FilterParser
     {
         $response = array();
         //
-        if (is_string($fieldKey) === false) {
+        if (\is_string($fieldKey) === false) {
             throw new InvalidArgumentException(
                 '[JsonApi][v1][Filters][Parsers][FilterParser]' .
                 '[splitFieldKeys][expected type to be string] $fieldKey'
             );
         }
 
-        if (strpos($fieldKey, $delimiter) === false) {
+        if (\strpos($fieldKey, $delimiter) === false) {
             throw new Exception(
                 '[JsonApi][v1][Filters][Parsers][FilterParser]' .
                 '[splitFieldKeys][InvalidValue] expected period "' . $fieldKey . '"'
             );
         }
 
-        $flatDataStructure = explode('.', $fieldKey);
-        if (is_array($flatDataStructure)) {
+        $flatDataStructure = \explode('.', $fieldKey);
+        if (\is_array($flatDataStructure)) {
             //
             // convert the flat data structure
             $treeDataStructure = array();
@@ -230,7 +230,7 @@ class FilterParser
         $filterValidator = new FilterValidator($this->containers);
         $parsedValues =  array();
         // Parse values handle single filter vs an array of filters
-        if (strpos($filters, ',')) {
+        if (\strpos($filters, ',')) {
             $values = $this->splitValues($filters);
         } else {
             $values =  array(
@@ -255,7 +255,7 @@ class FilterParser
                 $operators = '';
                 $operatorsMatches= array();
                 $operatorsArray= array();
-                if (preg_match_all('/\[+[A-Za-z0-9\_\-\.]+\]+/', $value, $operatorsMatches) !== false) {
+                if (\preg_match_all('/\[+[A-Za-z0-9\_\-\.]+\]+/', $value, $operatorsMatches) !== false) {
                     // split operators in from their operands
                     foreach ($operatorsMatches[0] as $operator) {
                         // Field Operators [field.fieldname]
@@ -301,21 +301,21 @@ class FilterParser
      */
     protected function splitValues($fieldKey, $delimiter = ',')
     {
-        if (is_string($fieldKey) === false) {
+        if (\is_string($fieldKey) === false) {
             throw new InvalidArgumentException(
                 '[JsonApi][v1][Filters][Parsers][FilterParser]' .
                 '[splitValues][expected type to be string] $fieldKey'
             );
         }
 
-        if (strpos($fieldKey, $delimiter) === false) {
+        if (\strpos($fieldKey, $delimiter) === false) {
             throw new Exception(
                 '[JsonApi][v1][Filters][Parsers][FilterParser]' .
                 '[splitValues][InvalidValue] expected delimiter "' . $fieldKey . '"'
             );
         }
 
-        return explode($delimiter, $fieldKey);
+        return \explode($delimiter, $fieldKey);
     }
 
     /**
@@ -341,10 +341,10 @@ class FilterParser
      */
     private function stringDifference($a, $b)
     {
-        $aArray = str_split($a);
-        $bArray = str_split($b);
-        $arrayDiff = array_diff($aArray, $bArray);
-        return implode('', $arrayDiff);
+        $aArray = \str_split($a);
+        $bArray = \str_split($b);
+        $arrayDiff = \array_diff($aArray, $bArray);
+        return \implode('', $arrayDiff);
     }
 
     /**
@@ -362,8 +362,8 @@ class FilterParser
         $nodeReference = &$filterStructure;
         $isLeaf = false;
         do {
-            if (is_array(current($nodeReference))) {
-                $nodeReference = & $nodeReference[key($nodeReference)];
+            if (\is_array(\current($nodeReference))) {
+                $nodeReference = & $nodeReference[\key($nodeReference)];
             } else {
                 $isLeaf = true;
                 $nodeReference = $filterValueArray;

@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -75,7 +75,7 @@ $params[] = $mod_strings['LBL_STEP2_FORM_TITLE'];
 $params[] = $focus->merge_bean->name;
 echo getClassicModuleTitle($focus->merge_bean->module_dir, $params, true);
 
-       $order_by_name = $focus->merge_module.'2_'.strtoupper($focus->merge_bean->object_name).'_ORDER_BY' ;
+       $order_by_name = $focus->merge_module.'2_'.\strtoupper($focus->merge_bean->object_name).'_ORDER_BY' ;
        $lvso = isset($_REQUEST['lvso'])?$_REQUEST['lvso']:"";
        $request_order_by_name = isset($_REQUEST[$order_by_name])?$_REQUEST[$order_by_name]:"";
 
@@ -103,17 +103,17 @@ $ListView->delete = false;
 $module = $_REQUEST['merge_module'];
 $metadataFile = null;
 $foundViewDefs = false;
-if (file_exists('custom/modules/' . $module. '/metadata/listviewdefs.php')) {
+if (\file_exists('custom/modules/' . $module. '/metadata/listviewdefs.php')) {
     $metadataFile = 'custom/modules/' . $module . '/metadata/listviewdefs.php';
     $foundViewDefs = true;
 } else {
-    if (file_exists('custom/modules/'.$module.'/metadata/metafiles.php')) {
+    if (\file_exists('custom/modules/'.$module.'/metadata/metafiles.php')) {
         require_once('custom/modules/'.$module.'/metadata/metafiles.php');
         if (!empty($metafiles[$module]['listviewdefs'])) {
             $metadataFile = $metafiles[$module]['listviewdefs'];
             $foundViewDefs = true;
         }
-    } elseif (file_exists('modules/'.$module.'/metadata/metafiles.php')) {
+    } elseif (\file_exists('modules/'.$module.'/metadata/metafiles.php')) {
         require_once('modules/'.$module.'/metadata/metafiles.php');
         if (!empty($metafiles[$module]['listviewdefs'])) {
             $metadataFile = $metafiles[$module]['listviewdefs'];
@@ -121,13 +121,13 @@ if (file_exists('custom/modules/' . $module. '/metadata/listviewdefs.php')) {
         }
     }
 }
-if (!$foundViewDefs && file_exists('modules/'.$module.'/metadata/listviewdefs.php')) {
+if (!$foundViewDefs && \file_exists('modules/'.$module.'/metadata/listviewdefs.php')) {
     $metadataFile = 'modules/'.$module.'/metadata/listviewdefs.php';
 }
 require_once($metadataFile);
 $displayColumns = array();
 if (!empty($_REQUEST['displayColumns'])) {
-    foreach (explode('|', $_REQUEST['displayColumns']) as $num => $col) {
+    foreach (\explode('|', $_REQUEST['displayColumns']) as $num => $col) {
         if (!empty($listViewDefs[$module][$col])) {
             $displayColumns[$col] = $listViewDefs[$module][$col];
         }

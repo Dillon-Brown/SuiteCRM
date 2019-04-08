@@ -78,7 +78,7 @@ class ResourceServer
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
         try {
-            if (!in_array($request->getUri()->getPath(), self::$ROUTES_EXEMPT_FROM_AUTH)) {
+            if (!\in_array($request->getUri()->getPath(), self::$ROUTES_EXEMPT_FROM_AUTH)) {
                 $request = $this->server->validateAuthenticatedRequest($request);
 
                 $this->setCurrentUserGlobal($request);

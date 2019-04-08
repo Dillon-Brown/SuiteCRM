@@ -1,5 +1,5 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 /**
@@ -52,7 +52,7 @@ function display_conflict_between_objects($object_1, $object_2, $field_defs, $mo
     foreach ($field_defs as  $name=>$ignore) {
         $value = $object_1[$name];
         // FIXME: Replace the comparison here with a function from SugarWidgets
-        if (!is_scalar($value) || $name == 'team_name') {
+        if (!\is_scalar($value) || $name == 'team_name') {
             continue;
         }
         if ($value != $object_2->$name && !($object_2->$name instanceof Link)) {

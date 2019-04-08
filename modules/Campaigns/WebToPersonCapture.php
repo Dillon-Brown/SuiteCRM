@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 use SuiteCRM\Utility\SuiteValidator;
@@ -135,12 +135,12 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
                 //Skip the admin items that are not part of the bean
                 if ($k === 'client_id_address' || $k === 'req_id' || $k === 'moduleDir' || $k === 'dup_checked') {
                     continue;
-                } elseif (preg_match('/^' . $optInPrefix . '/', $k)) {
-                    $optInEmailFields[] = substr($k, strlen($optInPrefix));
+                } elseif (\preg_match('/^' . $optInPrefix . '/', $k)) {
+                    $optInEmailFields[] = \substr($k, \strlen($optInPrefix));
                 } else {
-                    if (array_key_exists($k, $person) || array_key_exists($k, $person->field_defs)) {
-                        if (in_array($k, $possiblePersonCaptureFields)) {
-                            if (is_array($v)) {
+                    if (\array_key_exists($k, $person) || \array_key_exists($k, $person->field_defs)) {
+                        if (\in_array($k, $possiblePersonCaptureFields)) {
+                            if (\is_array($v)) {
                                 $v = encodeMultienumValue($v);
                             }
                             $person->$k = $v;
@@ -159,7 +159,7 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
             $camplog->campaign_id = $campaign_id;
             $camplog->related_id = $person->id;
             $camplog->related_type = $person->module_dir;
-            $camplog->activity_type = strtolower($person->object_name);
+            $camplog->activity_type = \strtolower($person->object_name);
             $camplog->target_type = $person->module_dir;
             $camplog->activity_date = $timedate->now();
             $camplog->target_id = $person->id;
@@ -215,10 +215,10 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
             // Look for opted out
             $optedOut = array();
             foreach ($optInEmailFields as $i => $optInEmailField) {
-                if (stristr($optInEmailField, '_default') !== false) {
-                    $emailField = str_replace('_default', '', $optInEmailField);
+                if (\stristr($optInEmailField, '_default') !== false) {
+                    $emailField = \str_replace('_default', '', $optInEmailField);
 
-                    if (!in_array($emailField, $optInEmailFields)) {
+                    if (!\in_array($emailField, $optInEmailFields)) {
                         $optedOut[] = $emailField;
                     }
 
@@ -226,14 +226,14 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
                 }
             }
 
-            $optInEmailFields = array_unique($optInEmailFields);
+            $optInEmailFields = \array_unique($optInEmailFields);
 
             foreach ($optInEmailFields as $optInEmailField) {
                 if (isset($person->$optInEmailField) && !empty($person->$optInEmailField)) {
                     $sea = new EmailAddress();
                     $emailId = $sea->AddUpdateEmailAddress($person->$optInEmailField);
                     if ($sea->retrieve($emailId)) {
-                        if (in_array($optInEmailField, $optedOut)) {
+                        if (\in_array($optInEmailField, $optedOut)) {
                             $sea->resetOptIn();
                             continue;
                         }
@@ -268,7 +268,7 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
                         throw new RuntimeException($msg);
                     }
                 } else {
-                    $personClass = get_class($person);
+                    $personClass = \get_class($person);
                     $msg = "Incorrect email field for Opt In at person. Person type: $personClass, field: $optInEmailField.";
                     LoggerManager::getLogger()->fatal($msg);
                     throw new RuntimeException($msg);
@@ -282,11 +282,11 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
             $redirect_url = $_POST['redirect_url'];
             $query_string = '';
             $first_char = '&';
-            if (strpos($redirect_url, '?') === false) {
+            if (\strpos($redirect_url, '?') === false) {
                 $first_char = '?';
             }
             $first_iteration = true;
-            $get_and_post = array_merge($_GET, $_POST);
+            $get_and_post = \array_merge($_GET, $_POST);
             foreach ($get_and_post as $param => $value) {
                 if ($param == 'redirect_url' && $param == 'submit') {
                     continue;
@@ -298,7 +298,7 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
                 } else {
                     $query_string .= '&';
                 }
-                $query_string .= "{$param}=".urlencode($value);
+                $query_string .= "{$param}=".\urlencode($value);
             }
             if (empty($person)) {
                 if ($first_iteration) {
@@ -313,7 +313,7 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
 
             // Check if the headers have been sent, or if the redirect url is greater than 2083 characters (IE max URL length)
             //   and use a javascript form submission if that is the case.
-            if (headers_sent() || strlen($redirect_url) > 2083) {
+            if (\headers_sent() || \strlen($redirect_url) > 2083) {
                 echo '<html '.get_language_header().'><head><title>SugarCRM</title></head><body>';
                 echo '<form name="redirect" action="'.$_POST['redirect_url'].'" method="GET">';
 
@@ -340,13 +340,13 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
             } else {
                 if (isset($errors) && $errors) {
                     $log = LoggerManager::getLogger();
-                    $log->error('Success but some error occurred: ' . implode(', ', $errors));
+                    $log->error('Success but some error occurred: ' . \implode(', ', $errors));
                 }
                 
                 //If the custom module does not have a LBL_THANKS_FOR_SUBMITTING label, default to this general one
                 echo $app_strings['LBL_THANKS_FOR_SUBMITTING'];
             }
-            header($_SERVER['SERVER_PROTOCOL'].'201', true, 201);
+            \header($_SERVER['SERVER_PROTOCOL'].'201', true, 201);
         }
         sugar_cleanup();
         // die to keep code from running into redirect case below
@@ -356,7 +356,7 @@ if (isset($_POST['campaign_id']) && !empty($_POST['campaign_id'])) {
 }
 
 if (!empty($_POST['redirect'])) {
-    if (headers_sent()) {
+    if (\headers_sent()) {
         echo '<html '.get_language_header().'><head><title>SugarCRM</title></head><body>';
         echo '<form name="redirect" action="'.$_POST['redirect'].'" method="GET">';
         echo '</form><script language="javascript" type="text/javascript">document.redirect.submit();</script>';

@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -114,11 +114,11 @@ class DashletMetaDataParser extends ListLayoutMetaDataParser
                     }
                 }
             }
-            $viewDefinitions = array_change_key_case($viewDefinitions['searchfields']);
+            $viewDefinitions = \array_change_key_case($viewDefinitions['searchfields']);
             $viewDefinitions = $this->_viewdefs = $this->ConvertSearchToDashletDefs($viewDefinitions);
         } else {
             if ($this->_view == MB_DASHLET && isset($viewDefinitions['columns'])) {
-                $viewDefinitions = $this->_viewdefs = array_change_key_case($viewDefinitions['columns']);
+                $viewDefinitions = $this->_viewdefs = \array_change_key_case($viewDefinitions['columns']);
                 $viewDefinitions = $this->_viewdefs = $this->convertSearchToListDefs($viewDefinitions);
             }
         }
@@ -170,18 +170,18 @@ class DashletMetaDataParser extends ListLayoutMetaDataParser
         if (empty($this->_packageName)) {
             foreach (array(MB_CUSTOMMETADATALOCATION, MB_BASEMETADATALOCATION) as $value) {
                 $file = $this->implementation->getFileName(MB_DASHLET, $this->_moduleName, null, $value);
-                if (file_exists($file)) {
+                if (\file_exists($file)) {
                     break;
                 }
             }
             $writeTodashletName = $dashletName = $this->implementation->getLanguage() . 'Dashlet';
-            if (!file_exists($file)) {
+            if (!\file_exists($file)) {
                 $file = "modules/{$this->_moduleName}/Dashlets/My{$this->_moduleName}Dashlet/My{$this->_moduleName}Dashlet.data.php";
                 $dashletName = 'My' . $this->implementation->getLanguage() . 'Dashlet';
             }
             $writeFile = $this->implementation->getFileName(MB_DASHLET, $this->_moduleName, null);
-            if (!file_exists($writeFile)) {
-                mkdir_recursive(dirname($writeFile));
+            if (!\file_exists($writeFile)) {
+                mkdir_recursive(\dirname($writeFile));
             }
         } else {
             $writeFile = $file = $this->implementation->getFileName(
@@ -210,8 +210,8 @@ class DashletMetaDataParser extends ListLayoutMetaDataParser
             }
             $out .= "\$dashletData['$writeTodashletName']['searchFields'] = " . var_export_helper($dashletData[$dashletName]['searchFields']) . ";\n";
             $out .= "\$dashletData['$writeTodashletName']['columns'] = " . var_export_helper($dashletData[$dashletName]['columns']) . ";\n";
-            fputs($fh, $out);
-            fclose($fh);
+            \fputs($fh, $out);
+            \fclose($fh);
         }
     }
 }

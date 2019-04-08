@@ -78,13 +78,13 @@ class ViewRelationships extends SugarView
             $relationships = new DeployedRelationships($moduleName) ;
             $ajaxRelationships = $this->getAjaxRelationships($relationships) ;
             $smarty->assign('relationships', $json->encode($ajaxRelationships)) ;
-            $smarty->assign('empty', (sizeof($ajaxRelationships) == 0)) ;
+            $smarty->assign('empty', (\sizeof($ajaxRelationships) == 0)) ;
             $smarty->assign('studio', true) ;
 
             //crumb
             global $app_list_strings ;
-            $moduleNames = array_change_key_case($app_list_strings [ 'moduleList' ]) ;
-            $translatedModule = $moduleNames [ strtolower($moduleName) ] ;
+            $moduleNames = \array_change_key_case($app_list_strings [ 'moduleList' ]) ;
+            $translatedModule = $moduleNames [ \strtolower($moduleName) ] ;
             $ajax->addCrumb(translate('LBL_STUDIO'), 'ModuleBuilder.main("studio")') ;
             $ajax->addCrumb($translatedModule, 'ModuleBuilder.getContent("module=ModuleBuilder&action=wizard&view_module=' . $moduleName . '")') ;
             $ajax->addCrumb(translate('LBL_RELATIONSHIPS'), '') ;
@@ -99,7 +99,7 @@ class ViewRelationships extends SugarView
             $relationships = new UndeployedRelationships($module->getModuleDir()) ;
             $ajaxRelationships = $this->getAjaxRelationships($relationships) ;
             $smarty->assign('relationships', $json->encode($ajaxRelationships)) ;
-            $smarty->assign('empty', (sizeof($ajaxRelationships) == 0)) ;
+            $smarty->assign('empty', (\sizeof($ajaxRelationships) == 0)) ;
 
             $module->help [ 'default' ] = (empty($_REQUEST [ 'view_module' ])) ? 'create' : 'modify' ;
             $module->help [ 'group' ] = 'module' ;
@@ -159,7 +159,7 @@ class ViewRelationships extends SugarView
      */
     protected function fetchTemplate($smarty/*, $template*/)
     {
-        $template = func_get_arg(1);
+        $template = \func_get_arg(1);
         return $smarty->fetch($this->getCustomFilePathIfExists($template));
     }
 }

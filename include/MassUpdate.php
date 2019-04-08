@@ -38,7 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-if (!defined('sugarEntry') || !sugarEntry) {
+if (!\defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
@@ -109,9 +109,9 @@ class MassUpdate
         global $current_user;
 
         unset($_REQUEST['current_query_by_page']);
-        unset($_REQUEST[session_name()]);
+        unset($_REQUEST[\session_name()]);
         unset($_REQUEST['PHPSESSID']);
-        $query = json_encode($_REQUEST);
+        $query = \json_encode($_REQUEST);
 
         if (!isset($_REQUEST['module'])) {
             LoggerManager::getLogger()->warn('Undefined index: module');
@@ -126,7 +126,7 @@ class MassUpdate
             LoggerManager::getLogger()->warn('object_name is not set for bean');
         }
 
-        $order_by_name = (isset($bean->module_dir) ? $bean->module_dir : null).'2_'.strtoupper(isset($bean->object_name) ? $bean->object_name : null).'_ORDER_BY' ;
+        $order_by_name = (isset($bean->module_dir) ? $bean->module_dir : null).'2_'.\strtoupper(isset($bean->object_name) ? $bean->object_name : null).'_ORDER_BY' ;
         $lvso = isset($_REQUEST['lvso'])?$_REQUEST['lvso']:"";
         $request_order_by_name = isset($_REQUEST[$order_by_name])?$_REQUEST[$order_by_name]:"";
         $action = isset($_REQUEST['action'])?$_REQUEST['action']:"";
@@ -180,11 +180,11 @@ eoq;
         global $current_user, $db, $disable_date_format, $timedate, $app_list_strings;
 
         foreach ($_POST as $post => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 if (empty($value)) {
                     unset($_POST[$post]);
                 }
-            } elseif (strlen($value) == 0) {
+            } elseif (\strlen($value) == 0) {
                 if (isset($this->sugarbean->field_defs[$post]) && $this->sugarbean->field_defs[$post]['type'] == 'radioenum' && isset($_POST[$post])) {
                     $_POST[$post] = '';
                 } else {
@@ -192,30 +192,30 @@ eoq;
                 }
             }
 
-            if (is_string($value) && isset($this->sugarbean->field_defs[$post])) {
+            if (\is_string($value) && isset($this->sugarbean->field_defs[$post])) {
                 if (($this->sugarbean->field_defs[$post]['type'] == 'bool'
                     || (
                         !empty($this->sugarbean->field_defs[$post]['custom_type']) && $this->sugarbean->field_defs[$post]['custom_type'] == 'bool'
                     ))
                 ) {
-                    if (strcmp($value, '2') == 0) {
+                    if (\strcmp($value, '2') == 0) {
                         $_POST[$post] = 0;
                     }
-                    if (!empty($this->sugarbean->field_defs[$post]['dbType']) && strcmp(
+                    if (!empty($this->sugarbean->field_defs[$post]['dbType']) && \strcmp(
                             $this->sugarbean->field_defs[$post]['dbType'],
                             'varchar'
                         ) == 0
                     ) {
-                        if (strcmp($value, '1') == 0) {
+                        if (\strcmp($value, '1') == 0) {
                             $_POST[$post] = 'on';
                         }
-                        if (strcmp($value, '2') == 0) {
+                        if (\strcmp($value, '2') == 0) {
                             $_POST[$post] = 'off';
                         }
                     }
                 }
 
-                if (($this->sugarbean->field_defs[$post]['type'] == 'radioenum' && isset($_POST[$post]) && strlen($value) == 0)
+                if (($this->sugarbean->field_defs[$post]['type'] == 'radioenum' && isset($_POST[$post]) && \strlen($value) == 0)
                     || ($this->sugarbean->field_defs[$post]['type'] == 'enum' && $value == '__SugarMassUpdateClearField__') // Set to '' if it's an explicit clear
                 ) {
                     $_POST[$post] = '';
@@ -243,7 +243,7 @@ eoq;
         $disable_date_format = true;
 
         if (!empty($_REQUEST['uid'])) {
-            $_POST['mass'] = explode(',', $_REQUEST['uid']);
+            $_POST['mass'] = \explode(',', $_REQUEST['uid']);
         } // coming from listview
         elseif (isset($_REQUEST['entire']) && empty($_POST['mass'])) {
             if (empty($order_by)) {
@@ -267,12 +267,12 @@ eoq;
             $result = $db->query($query, true);
             $new_arr = array();
             while ($val = $db->fetchByAssoc($result, false)) {
-                array_push($new_arr, $val['id']);
+                \array_push($new_arr, $val['id']);
             }
             $_POST['mass'] = $new_arr;
         }
 
-        if (isset($_POST['mass']) && is_array($_POST['mass']) && $_REQUEST['massupdate'] == 'true') {
+        if (isset($_POST['mass']) && \is_array($_POST['mass']) && $_REQUEST['massupdate'] == 'true') {
             $count = 0;
 
 
@@ -311,7 +311,7 @@ eoq;
 
                     if ($count++ != 0) {
                         //Create a new instance to clear values and handle additional updates to bean's 2,3,4...
-                        $className = get_class($this->sugarbean);
+                        $className = \get_class($this->sugarbean);
                         $this->sugarbean = new $className();
                     }
 
@@ -394,14 +394,14 @@ eoq;
 
                                     $dynamic_field_name = $field_name['name'];
                                     // Dynamic field set value.
-                                    list($dynamic_field_value) = explode('_', $newbean->$dynamic_field_name);
+                                    list($dynamic_field_value) = \explode('_', $newbean->$dynamic_field_name);
 
                                     if ($parentenum_value != $dynamic_field_value) {
 
                                         // Change to the default value of the correct value set.
                                         $defaultValue = '';
                                         foreach ($app_list_strings[$field_name['options']] as $key => $value) {
-                                            if (strpos($key, $parentenum_value) === 0) {
+                                            if (\strpos($key, $parentenum_value) === 0) {
                                                 $defaultValue = $key;
                                                 break;
                                             }
@@ -430,7 +430,7 @@ eoq;
                             $primaryEmailAddress->save();
                         } // if
 
-                        if (!empty($old_reports_to_id) && method_exists($newbean, 'update_team_memberships')) {
+                        if (!empty($old_reports_to_id) && \method_exists($newbean, 'update_team_memberships')) {
                             $old_id = $old_reports_to_id == 'null' ? '' : $old_reports_to_id;
                         }
                     }
@@ -620,7 +620,7 @@ eoq;
 
                 $field_count++;
 
-                if (!in_array($newhtml, array('<tr>', '</tr>', '<tr></tr>', '<tr><td></td></tr>'))) {
+                if (!\in_array($newhtml, array('<tr>', '</tr>', '<tr></tr>', '<tr><td></td></tr>'))) {
                     $html .= $newhtml;
                 }
             }
@@ -711,7 +711,7 @@ EOJS;
     public function getFunctionValue($focus, $vardef)
     {
         $function = $vardef['function'];
-        if (is_array($function) && isset($function['name'])) {
+        if (\is_array($function) && isset($function['name'])) {
             $function = $vardef['function']['name'];
         } else {
             $function = $vardef['function'];
@@ -721,10 +721,10 @@ EOJS;
                 require_once($vardef['function']['include']);
             }
 
-            return call_user_func($function, $focus, $vardef['name'], '', 'MassUpdate');
+            return \call_user_func($function, $focus, $vardef['name'], '', 'MassUpdate');
         }
 
-        return call_user_func($function, $focus, $vardef['name'], '', 'MassUpdate');
+        return \call_user_func($function, $focus, $vardef['name'], '', 'MassUpdate');
     }
 
     /**
@@ -834,7 +834,7 @@ EOJS;
         $types = get_select_options_with_id($parent_types, '');
         //BS Fix Bug 17110
         $pattern = "/\n<OPTION.*" . $app_strings['LBL_NONE'] . "<\/OPTION>/";
-        $types = preg_replace($pattern, "", $types);
+        $types = \preg_replace($pattern, "", $types);
         // End Fix
 
         $json = getJSONobj();
@@ -901,7 +901,7 @@ EOHTML;
     public function addInputType($displayname, $varname)
     {
         //letrium ltd
-        $displayname = addslashes($displayname);
+        $displayname = \addslashes($displayname);
         $html = <<<EOQ
 	<td scope="row" width="20%">$displayname</td>
 	<td class='dataField' width="30%"><input type="text" name='$varname' size="12" id='{$varname}' maxlength='10' value=""></td>
@@ -924,7 +924,7 @@ EOQ;
         global $app_strings;
 
         if (empty($id_name)) {
-            $id_name = strtolower($mod_type) . "_id";
+            $id_name = \strtolower($mod_type) . "_id";
         }
 
         ///////////////////////////////////////
@@ -996,7 +996,7 @@ EOHTML;
         global $app_strings;
 
         if (empty($id_name)) {
-            $id_name = strtolower($mod_type) . "_id";
+            $id_name = \strtolower($mod_type) . "_id";
         }
 
         ///////////////////////////////////////
@@ -1172,7 +1172,7 @@ EOQ;
 
         // cn: added "mass_" to the id tag to differentiate from the status id in StoreQuery
         $html = '<td scope="row" width="15%">' . $displayname . '</td><td>';
-        if (is_array($options)) {
+        if (\is_array($options)) {
             if (!isset($options['']) && !isset($options['0'])) {
                 $new_options = array();
                 $new_options[''] = '';
@@ -1240,7 +1240,7 @@ EOQ;
     {
         global $timedate;
         //letrium ltd
-        $displayname = addslashes($displayname);
+        $displayname = \addslashes($displayname);
         $userformat = '(' . $timedate->get_user_date_format() . ')';
         $cal_dateformat = $timedate->get_cal_date_format();
         global $app_strings, $app_list_strings, $theme;
@@ -1284,7 +1284,7 @@ EOQ;
         }
 
         $html = '<td scope="row" width="15%">' . $displayname . '</td>
-			 <td>' . implode("\n", $_html_result) . '</td>';
+			 <td>' . \implode("\n", $_html_result) . '</td>';
 
         return $html;
     }
@@ -1372,19 +1372,19 @@ EOQ;
         }
 
         $oldDateTime = $this->sugarbean->$field;
-        $oldTime = explode(" ", $oldDateTime);
+        $oldTime = \explode(" ", $oldDateTime);
         if (isset($oldTime[1])) {
             $oldTime = $oldTime[1];
         } else {
             $oldTime = $timedate->now();
         }
-        $oldTime = explode(" ", $oldTime);
+        $oldTime = \explode(" ", $oldTime);
         if (isset($oldTime[1])) {
             $oldTime = $oldTime[1];
         } else {
             $oldTime = $oldTime[0];
         }
-        $value = explode(" ", $value);
+        $value = \explode(" ", $value);
         $value = $value[0];
 
         return $value . " " . $oldTime;
@@ -1392,8 +1392,8 @@ EOQ;
 
     public function checkClearField($field, $value)
     {
-        if ($value == 1 && strpos($field, '_flag')) {
-            $fName = substr($field, -5);
+        if ($value == 1 && \strpos($field, '_flag')) {
+            $fName = \substr($field, -5);
             if (isset($this->sugarbean->field_defs[$field]['group'])) {
                 $group = $this->sugarbean->field_defs[$field]['group'];
                 if (isset($this->sugarbean->field_defs[$group])) {
@@ -1407,18 +1407,18 @@ EOQ;
     {//this function is similar with function prepareSearchForm() in view.list.php
         $seed = loadBean($module);
         $this->use_old_search = true;
-        if (file_exists('modules/' . $module . '/SearchForm.html')) {
-            if (file_exists('modules/' . $module . '/metadata/SearchFields.php')) {
+        if (\file_exists('modules/' . $module . '/SearchForm.html')) {
+            if (\file_exists('modules/' . $module . '/metadata/SearchFields.php')) {
                 require_once('include/SearchForm/SearchForm.php');
                 $searchForm = new SearchForm($module, $seed);
             } elseif (!empty($_SESSION['export_where'])) { //bug 26026, sometimes some module doesn't have a metadata/SearchFields.php, the searchfrom is generated in the ListView.php.
                 //So currently massupdate will not gernerate the where sql. It will use the sql stored in the SESSION. But this will cause bug 24722, and it cannot be avoided now.
                 $where = $_SESSION['export_where'];
-                $whereArr = explode(" ", trim($where));
-                if ($whereArr[0] == trim('where')) {
-                    $whereClean = array_shift($whereArr);
+                $whereArr = \explode(" ", \trim($where));
+                if ($whereArr[0] == \trim('where')) {
+                    $whereClean = \array_shift($whereArr);
                 }
-                $this->where_clauses = implode(" ", $whereArr);
+                $this->where_clauses = \implode(" ", $whereArr);
 
                 return;
             } else {
@@ -1430,9 +1430,9 @@ EOQ;
             $this->use_old_search = false;
             require_once('include/SearchForm/SearchForm2.php');
 
-            if (file_exists('custom/modules/' . $module . '/metadata/metafiles.php')) {
+            if (\file_exists('custom/modules/' . $module . '/metadata/metafiles.php')) {
                 require('custom/modules/' . $module . '/metadata/metafiles.php');
-            } elseif (file_exists('modules/' . $module . '/metadata/metafiles.php')) {
+            } elseif (\file_exists('modules/' . $module . '/metadata/metafiles.php')) {
                 require('modules/' . $module . '/metadata/metafiles.php');
             }
 
@@ -1450,12 +1450,12 @@ EOQ;
         }
         /* bug 31271: using false to not add all bean fields since some beans - like SavedReports
            can have fields named 'module' etc. which may break the query */
-        $query = json_decode(html_entity_decode($query), true);
+        $query = \json_decode(\html_entity_decode($query), true);
         $searchForm->populateFromArray($query, null, true);
         $this->searchFields = $searchForm->searchFields;
         $where_clauses = $searchForm->generateSearchWhere(true, $module);
-        if (count($where_clauses) > 0) {
-            $this->where_clauses = '(' . implode(' ) AND ( ', $where_clauses) . ')';
+        if (\count($where_clauses) > 0) {
+            $this->where_clauses = '(' . \implode(' ) AND ( ', $where_clauses) . ')';
             $GLOBALS['log']->info("MassUpdate Where Clause: {$this->where_clauses}");
         } else {
             $this->where_clauses = '';
@@ -1464,11 +1464,11 @@ EOQ;
 
     protected function getSearchDefs($module, $metafiles = array())
     {
-        if (file_exists('custom/modules/' . $module . '/metadata/searchdefs.php')) {
+        if (\file_exists('custom/modules/' . $module . '/metadata/searchdefs.php')) {
             require('custom/modules/' . $module . '/metadata/searchdefs.php');
         } elseif (!empty($metafiles[$module]['searchdefs'])) {
             require($metafiles[$module]['searchdefs']);
-        } elseif (file_exists('modules/' . $module . '/metadata/searchdefs.php')) {
+        } elseif (\file_exists('modules/' . $module . '/metadata/searchdefs.php')) {
             require('modules/' . $module . '/metadata/searchdefs.php');
         }
 
@@ -1477,11 +1477,11 @@ EOQ;
 
     protected function getSearchFields($module, $metafiles = array())
     {
-        if (file_exists('custom/modules/' . $module . '/metadata/SearchFields.php')) {
+        if (\file_exists('custom/modules/' . $module . '/metadata/SearchFields.php')) {
             require('custom/modules/' . $module . '/metadata/SearchFields.php');
         } elseif (!empty($metafiles[$module]['searchfields'])) {
             require($metafiles[$module]['searchfields']);
-        } elseif (file_exists('modules/' . $module . '/metadata/SearchFields.php')) {
+        } elseif (\file_exists('modules/' . $module . '/metadata/SearchFields.php')) {
             require('modules/' . $module . '/metadata/SearchFields.php');
         }
 

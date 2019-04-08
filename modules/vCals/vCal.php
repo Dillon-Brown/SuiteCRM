@@ -1,5 +1,5 @@
 <?php
-    if (!defined('sugarEntry') || !sugarEntry) {
+    if (!\defined('sugarEntry') || !sugarEntry) {
         die('Not A Valid Entry Point');
     }
 /**
@@ -89,7 +89,7 @@
             if (isset($GLOBALS['log'])) {
                 $GLOBALS['log']->deprecated($deprecatedMessage);
             } else {
-                trigger_error($deprecatedMessage, E_USER_DEPRECATED);
+                \trigger_error($deprecatedMessage, E_USER_DEPRECATED);
             }
             self::__construct();
         }
@@ -128,7 +128,7 @@
                 }
 
                 $ical_arr = self::create_ical_array_from_string($focus->content);
-                $ical_array = array_merge($ical_array, $ical_arr);
+                $ical_array = \array_merge($ical_array, $ical_arr);
             }
 
             return self::create_ical_string_from_array($ical_array);
@@ -166,7 +166,7 @@
                 $endTimeUTC = $act->end_time->format(self::UTC_FORMAT);
                 $ical_array[] = array("FREEBUSY", $startTimeUTC . "/" . $endTimeUTC);
                 $ical_array[] = array("X-FREEBUSY-ID", $ID);
-                $ical_array[] = array("X-FREEBUSY-TYPE", get_class($act->sugar_bean));
+                $ical_array[] = array("X-FREEBUSY-TYPE", \get_class($act->sugar_bean));
                 //$ical_array[] = array(array("X-FREEBUSYID", $ID), array("FREEBUSY", $startTimeUTC ."/". $endTimeUTC));
             }
 
@@ -273,18 +273,18 @@
         {
             $iCalValue = $key . ":" . $value;
 
-            if (strlen($iCalValue) <= self::CHARSPERLINE) {
+            if (\strlen($iCalValue) <= self::CHARSPERLINE) {
                 return $iCalValue;
             }
 
-            $firstchars = substr($iCalValue, 0, self::CHARSPERLINE);
-            $remainingchars = substr($iCalValue, self::CHARSPERLINE);
+            $firstchars = \substr($iCalValue, 0, self::CHARSPERLINE);
+            $remainingchars = \substr($iCalValue, self::CHARSPERLINE);
             $end = self::EOL . self::TAB;
 
-            $remainingchars = substr(
-                chunk_split($end . $remainingchars, self::CHARSPERLINE + strlen(self::EOL), $end),
+            $remainingchars = \substr(
+                \chunk_split($end . $remainingchars, self::CHARSPERLINE + \strlen(self::EOL), $end),
                 0,
-                -strlen($end) // exclude last EOL and TAB chars
+                -\strlen($end) // exclude last EOL and TAB chars
             );
 
             return $firstchars . $remainingchars;
@@ -295,14 +295,14 @@
          */
         public static function create_ical_array_from_string($ical_string)
         {
-            $ical_string = preg_replace("/\r\n\s+/", "", $ical_string);
-            $lines = preg_split("/\r?\n/", $ical_string);
+            $ical_string = \preg_replace("/\r\n\s+/", "", $ical_string);
+            $lines = \preg_split("/\r?\n/", $ical_string);
             $ical_array = array();
 
             foreach ($lines as $line) {
                 $line = self::unescape_ical_chars($line);
-                $line = explode(":", $line, 2);
-                if (count($line) != 2) {
+                $line = \explode(":", $line, 2);
+                if (\count($line) != 2) {
                     continue;
                 }
                 $ical_array[] = array($line[0], $line[1]);
@@ -337,7 +337,7 @@
          */
         public static function escape_ical_chars($string)
         {
-            $string = str_replace(array("\\", "\r", "\n", ";", ","), array("\\\\", "\\r", "\\n", "\\;", "\\,"), $string);
+            $string = \str_replace(array("\\", "\r", "\n", ";", ","), array("\\\\", "\\r", "\\n", "\\;", "\\,"), $string);
 
             return $string;
         }
@@ -351,7 +351,7 @@
          */
         public static function unescape_ical_chars($string)
         {
-            $string = str_replace(array("\\r", "\\n", "\\;", "\\,", "\\\\"), array("\r", "\n", ";", ",", "\\"), $string);
+            $string = \str_replace(array("\\r", "\\n", "\\;", "\\,", "\\\\"), array("\r", "\n", ";", ",", "\\"), $string);
 
             return $string;
         }
