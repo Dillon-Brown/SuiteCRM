@@ -2335,7 +2335,7 @@ class Smarty_Compiler extends Smarty
             return '';
         }
         if (!isset($this->_cache_serial)) {
-            $this->_cache_serial = md5(uniqid('Smarty'));
+            $this->_cache_serial = md5(uniqid('Smarty', true));
         }
         $_ret = 'if ($this->caching && !$this->_cache_including): echo \'{nocache:'
             . $this->_cache_serial . '#' . $this->_nocache_count

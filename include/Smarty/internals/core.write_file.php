@@ -27,7 +27,7 @@ function smarty_core_write_file($params, &$smarty)
     $_tmp_file = tempnam($_dirname, 'wrt');
 
     if (!($fd = @fopen($_tmp_file, 'wb'))) {
-        $_tmp_file = $_dirname . DIRECTORY_SEPARATOR . uniqid('wrt');
+        $_tmp_file = $_dirname . DIRECTORY_SEPARATOR . uniqid('wrt', true);
         if (!($fd = @fopen($_tmp_file, 'wb'))) {
             $smarty->trigger_error("problem writing temporary file '$_tmp_file'");
             return false;

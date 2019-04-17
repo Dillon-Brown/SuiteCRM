@@ -98,7 +98,7 @@ class CampaignROIChartDashlet extends DashletGenericChart
         }
         $thousands_symbol = translate('LBL_OPP_THOUSANDS', 'Charts');
 
-        $canvasId = 'rGraphCampaignROI'.uniqid();
+        $canvasId = 'rGraphCampaignROI'.uniqid('', true);
         $chartWidth     = 900;
         $chartHeight    = 500;
         $autoRefresh = $this->processAutoRefresh();

@@ -3658,7 +3658,7 @@ function is_windows()
 function is_writable_windows($file)
 {
     if ($file{strlen($file) - 1} == '/') {
-        return is_writable_windows($file . uniqid(mt_rand()) . '.tmp');
+        return is_writable_windows($file . uniqid(mt_rand(), true) . '.tmp');
     }
 
     // the assumption here is that Windows has an inherited permissions scheme

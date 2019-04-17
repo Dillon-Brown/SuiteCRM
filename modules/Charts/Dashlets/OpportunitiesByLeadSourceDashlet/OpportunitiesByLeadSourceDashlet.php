@@ -99,7 +99,7 @@ class OpportunitiesByLeadSourceDashlet extends DashletGenericChart
         $thousands_symbol = translate('LBL_OPP_THOUSANDS', 'Charts');
         $data = $this->getChartData($this->constructQuery());
         $chartReadyData = $this->prepareChartData($data, $currency_symbol, $thousands_symbol);
-        $canvasId = 'rGraphLeadSource'.uniqid();
+        $canvasId = 'rGraphLeadSource'.uniqid('', true);
         $chartWidth     = 900;
         $chartHeight    = 500;
 

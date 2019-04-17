@@ -228,7 +228,7 @@ class nusoapclientmime extends nusoapclient
     public function addAttachment($data, $filename = '', $contenttype = 'application/octet-stream', $cid = false)
     {
         if (! $cid) {
-            $cid = md5(uniqid(time()));
+            $cid = md5(uniqid(time(), true));
         }
 
         $info['data'] = $data;
@@ -451,7 +451,7 @@ class nusoapservermime extends soap_server
     public function addAttachment($data, $filename = '', $contenttype = 'application/octet-stream', $cid = false)
     {
         if (! $cid) {
-            $cid = md5(uniqid(time()));
+            $cid = md5(uniqid(time(), true));
         }
 
         $info['data'] = $data;

@@ -116,7 +116,7 @@ class OutcomeByMonthDashlet extends DashletGenericChart
         $data = $this->sortData($data, 'm', false, 'sales_stage', true, true);
 
         $chartReadyData = $this->prepareChartData($data, $currency_symbol, $thousands_symbol);
-        $canvasId = 'rGraphOutcomeByMonth'.uniqid();
+        $canvasId = 'rGraphOutcomeByMonth'.uniqid('', true);
         $chartWidth     = 900;
         $chartHeight    = 500;
         $autoRefresh = $this->processAutoRefresh();

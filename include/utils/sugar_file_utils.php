@@ -177,7 +177,7 @@ function sugar_file_put_contents_atomic($filename, $data, $mode = 'wb')
     $temp = tempnam($dir, 'temp');
 
     if (!($f = @fopen($temp, $mode))) {
-        $temp = $dir . DIRECTORY_SEPARATOR . uniqid('temp');
+        $temp = $dir . DIRECTORY_SEPARATOR . uniqid('temp', true);
         if (!($f = @fopen($temp, $mode))) {
             trigger_error("sugar_file_put_contents_atomic() : error writing temporary file '$temp'", E_USER_WARNING);
 
