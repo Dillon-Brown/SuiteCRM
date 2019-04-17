@@ -4569,7 +4569,7 @@ class InboundEmail extends SugarBean
         $uploadDir = ($forDisplay) ? "{$this->EmailCachePath}/{$this->id}/attachments/" : "upload://";
 
         // decide what name to save file as
-        $fileName = htmlspecialchars($attach->id);
+        $fileName = htmlspecialchars($attach->id, ENT_QUOTES | ENT_HTML5);
 
         // download the attachment if we didn't do it yet
         if (!file_exists($uploadDir . $fileName)) {

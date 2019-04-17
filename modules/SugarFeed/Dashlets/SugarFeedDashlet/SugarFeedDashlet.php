@@ -387,7 +387,7 @@ class SugarFeedDashlet extends DashletGeneric
     public function pushUserFeed()
     {
         if (!empty($_REQUEST['text']) || (!empty($_REQUEST['link_url']) && !empty($_REQUEST['link_type']))) {
-            $text = htmlspecialchars($_REQUEST['text']);
+            $text = htmlspecialchars($_REQUEST['text'], ENT_QUOTES | ENT_HTML5);
             //allow for bold and italic user tags
             $text = preg_replace('/&amp;lt;(\/*[bi])&amp;gt;/i', '<$1>', $text);
             SugarFeed::pushFeed(
@@ -404,7 +404,7 @@ class SugarFeedDashlet extends DashletGeneric
     public function pushUserFeedReply()
     {
         if (!empty($_REQUEST['text'])&&!empty($_REQUEST['parentFeed'])) {
-            $text = htmlspecialchars($_REQUEST['text']);
+            $text = htmlspecialchars($_REQUEST['text'], ENT_QUOTES | ENT_HTML5);
             //allow for bold and italic user tags
             $text = preg_replace('/&amp;lt;(\/*[bi])&amp;gt;/i', '<$1>', $text);
             SugarFeed::pushFeed(

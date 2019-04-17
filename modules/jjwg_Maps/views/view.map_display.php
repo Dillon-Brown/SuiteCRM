@@ -83,7 +83,7 @@ class Jjwg_MapsViewMap_Display extends SugarView
     if (empty($_REQUEST['uid']) && empty($_REQUEST['current_post'])) {
         ?>
 <p>IFrame:
-    <a href="<?php echo htmlspecialchars($url); ?>"><?php echo $GLOBALS['mod_strings']['LBL_MAP']; ?> URL</a>
+    <a href="<?php echo htmlspecialchars($url, ENT_QUOTES | ENT_HTML5); ?>"><?php echo $GLOBALS['mod_strings']['LBL_MAP']; ?> URL</a>
     <a href="#" id="resizeMapDisplayIframe" style="display: none;">.</a>
 </p>
 <?php

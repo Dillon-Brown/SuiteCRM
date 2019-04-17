@@ -1639,7 +1639,7 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             // emit errors
             foreach ($allowed_properties as $name => $d) {
                 // :TODO: Is this htmlspecialchars() call really necessary?
-                $name = htmlspecialchars($name);
+                $name = htmlspecialchars($name, ENT_QUOTES | ENT_HTML5);
                 trigger_error("Style attribute '$name' is not supported $support", E_USER_WARNING);
             }
         }
@@ -1895,7 +1895,7 @@ class HTMLPurifier_Config
         if (!isset($this->def->info[$key])) {
             // can't add % due to SimpleTest bug
             $this->triggerError(
-                'Cannot retrieve value of undefined directive ' . htmlspecialchars($key),
+                'Cannot retrieve value of undefined directive ' . htmlspecialchars($key, ENT_QUOTES | ENT_HTML5),
                 E_USER_WARNING
             );
             return;
@@ -1940,7 +1940,7 @@ class HTMLPurifier_Config
         if (!isset($full[$namespace])) {
             $this->triggerError(
                 'Cannot retrieve undefined namespace ' .
-                htmlspecialchars($namespace),
+                htmlspecialchars($namespace, ENT_QUOTES | ENT_HTML5),
                 E_USER_WARNING
             );
             return;
@@ -2023,7 +2023,7 @@ class HTMLPurifier_Config
         }
         if (!isset($this->def->info[$key])) {
             $this->triggerError(
-                'Cannot set undefined directive ' . htmlspecialchars($key) . ' to value',
+                'Cannot set undefined directive ' . htmlspecialchars($key, ENT_QUOTES | ENT_HTML5) . ' to value',
                 E_USER_WARNING
             );
             return;
@@ -3464,7 +3464,7 @@ class HTMLPurifier_DoctypeRegistry
             $doctype = $this->aliases[$doctype];
         }
         if (!isset($this->doctypes[$doctype])) {
-            trigger_error('Doctype ' . htmlspecialchars($doctype) . ' does not exist', E_USER_ERROR);
+            trigger_error('Doctype ' . htmlspecialchars($doctype, ENT_QUOTES | ENT_HTML5) . ' does not exist', E_USER_ERROR);
             $anon = new HTMLPurifier_Doctype($doctype);
             return $anon;
         }
@@ -5522,7 +5522,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             }
             // emit errors
             foreach ($allowed_elements as $element => $d) {
-                $element = htmlspecialchars($element); // PHP doesn't escape errors, be careful!
+                $element = htmlspecialchars($element, ENT_QUOTES | ENT_HTML5); // PHP doesn't escape errors, be careful!
                 trigger_error("Element '$element' is not supported $support", E_USER_WARNING);
             }
         }
@@ -5581,8 +5581,8 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                 switch ($c) {
                     case 2:
                         if ($bits[0] !== '*') {
-                            $element = htmlspecialchars($bits[0]);
-                            $attribute = htmlspecialchars($bits[1]);
+                            $element = htmlspecialchars($bits[0], ENT_QUOTES | ENT_HTML5);
+                            $attribute = htmlspecialchars($bits[1], ENT_QUOTES | ENT_HTML5);
                             if (!isset($this->info[$element])) {
                                 trigger_error(
                                     "Cannot allow attribute '$attribute' if element " .
@@ -5599,7 +5599,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                         // otherwise fall through
                         // no break
                     case 1:
-                        $attribute = htmlspecialchars($bits[0]);
+                        $attribute = htmlspecialchars($bits[0], ENT_QUOTES | ENT_HTML5);
                         trigger_error(
                             "Global attribute '$attribute' is not ".
                             "supported in any elements $support",
@@ -7494,7 +7494,7 @@ class HTMLPurifier_Lexer
                 default:
                     throw new HTMLPurifier_Exception(
                         "Cannot instantiate unrecognized Lexer type " .
-                        htmlspecialchars($lexer)
+                        htmlspecialchars($lexer, ENT_QUOTES | ENT_HTML5)
                     );
             }
         }
@@ -13543,7 +13543,7 @@ class HTMLPurifier_AttrTransform_ImgSpace extends HTMLPurifier_AttrTransform
     {
         $this->attr = $attr;
         if (!isset($this->css[$attr])) {
-            trigger_error(htmlspecialchars($attr) . ' is not valid space attribute');
+            trigger_error(htmlspecialchars($attr, ENT_QUOTES | ENT_HTML5) . ' is not valid space attribute');
         }
     }
 
@@ -17035,7 +17035,7 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
         }
         if ($i == $c) {
             trigger_error(
-                'Tidy level ' . htmlspecialchars($level) . ' not recognized',
+                'Tidy level ' . htmlspecialchars($level, ENT_QUOTES | ENT_HTML5) . ' not recognized',
                 E_USER_WARNING
             );
             return array();

@@ -67,7 +67,7 @@ class SugarWidgetFieldRelate extends SugarWidgetReportField
             if (in_array($row['id'], $values)) {
                 $html .= ' selected="selected"';
             }
-            $html .= '>' . htmlspecialchars($row['title']) . '</option>';
+            $html .= '>' . htmlspecialchars($row['title'], ENT_QUOTES | ENT_HTML5) . '</option>';
         }
 
         $html .= '</select>';

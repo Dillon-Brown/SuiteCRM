@@ -1019,9 +1019,11 @@ $(document).ready(function(){
       ?>
 <br clear="all" />
 <div>
-    <form id="tagetList" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="get">
-        <input type="hidden" name="module" value="<?php echo htmlspecialchars($GLOBALS['currentModule']); ?>">
-        <input type="hidden" name="display_module" value="<?php echo htmlspecialchars($this->bean->display_object->module_name); ?>">
+    <form id="tagetList" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'], ENT_QUOTES | ENT_HTML5); ?>" method="get">
+        <input type="hidden" name="module" value="<?php echo htmlspecialchars($GLOBALS['currentModule'],
+            ENT_QUOTES | ENT_HTML5); ?>">
+        <input type="hidden" name="display_module" value="<?php echo htmlspecialchars($this->bean->display_object->module_name,
+            ENT_QUOTES | ENT_HTML5); ?>">
         <input type="hidden" name="action" value="add_to_target_list" />
         <input type="hidden" name="to_pdf" value="1" />
         <?php if (array_key_exists('uid', $_GET)) {
@@ -1032,7 +1034,8 @@ $(document).ready(function(){
         <select id="list_id" tabindex="3" name="list_id" title="">
             <?php foreach ($this->bean->list_array as $key=>$value) {
           ?>
-                <option value="<?php echo htmlspecialchars($key); ?>"><?php echo htmlspecialchars($value); ?></option>
+                <option value="<?php echo htmlspecialchars($key,
+                    ENT_QUOTES | ENT_HTML5); ?>"><?php echo htmlspecialchars($value, ENT_QUOTES | ENT_HTML5); ?></option>
             <?php
       } ?>
         </select>

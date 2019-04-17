@@ -58,12 +58,12 @@ class Jjwg_MapsViewGeocoded_Counts extends SugarView
             $reset_url = './index.php?module=jjwg_Maps&action=reset_geocoding&display_module='.$module;
 
             echo '<tr>';
-            echo '<td><strong><a href="'.htmlspecialchars($geocode_url).'">'.$GLOBALS['app_list_strings']['moduleList'][$module].'</a></strong></td>';
+            echo '<td><strong><a href="'. htmlspecialchars($geocode_url, ENT_QUOTES | ENT_HTML5) .'">'.$GLOBALS['app_list_strings']['moduleList'][$module].'</a></strong></td>';
             foreach ($this->bean->geocoded_headings as $heading) {
                 echo '<td>'.$this->bean->geocoded_counts[$module][$heading].'</td>';
             }
             echo '<td><strong>'.$this->bean->geocoded_module_totals[$module].'</strong></td>';
-            echo '<td><strong><a href="'.htmlspecialchars($reset_url).'">'.$GLOBALS['mod_strings']['LBL_MODULE_RESET_HEADING'].'</a.</strong></td>';
+            echo '<td><strong><a href="'. htmlspecialchars($reset_url, ENT_QUOTES | ENT_HTML5) .'">'.$GLOBALS['mod_strings']['LBL_MODULE_RESET_HEADING'].'</a.</strong></td>';
             echo '</tr>'."\n";
         }
 
@@ -96,13 +96,13 @@ class Jjwg_MapsViewGeocoded_Counts extends SugarView
 
         $export_url = './index.php?module=jjwg_Maps&action=export_geocoding_addresses&display_module=';
 
-        echo '<a target="_blank" href="'.htmlspecialchars($export_url).$GLOBALS['app_strings']['LBL_ACCOUNTS'].'">'.$GLOBALS['app_strings']['LBL_EXPORT'].' '.$GLOBALS['app_strings']['LBL_ACCOUNTS'].'</a>';
+        echo '<a target="_blank" href="'. htmlspecialchars($export_url, ENT_QUOTES | ENT_HTML5) .$GLOBALS['app_strings']['LBL_ACCOUNTS'].'">'.$GLOBALS['app_strings']['LBL_EXPORT'].' '.$GLOBALS['app_strings']['LBL_ACCOUNTS'].'</a>';
         echo '<br /><br />';
-        echo '<a target="_blank" href="'.htmlspecialchars($export_url).$GLOBALS['app_strings']['LBL_CONTACTS'].'">'.$GLOBALS['app_strings']['LBL_EXPORT'].' '.$GLOBALS['app_strings']['LBL_CONTACTS'].'</a>';
+        echo '<a target="_blank" href="'. htmlspecialchars($export_url, ENT_QUOTES | ENT_HTML5) .$GLOBALS['app_strings']['LBL_CONTACTS'].'">'.$GLOBALS['app_strings']['LBL_EXPORT'].' '.$GLOBALS['app_strings']['LBL_CONTACTS'].'</a>';
         echo '<br /><br />';
-        echo '<a target="_blank" href="'.htmlspecialchars($export_url).$GLOBALS['app_strings']['LBL_LEADS'].'">'.$GLOBALS['app_strings']['LBL_EXPORT'].' '.$GLOBALS['app_strings']['LBL_LEADS'].'</a>';
+        echo '<a target="_blank" href="'. htmlspecialchars($export_url, ENT_QUOTES | ENT_HTML5) .$GLOBALS['app_strings']['LBL_LEADS'].'">'.$GLOBALS['app_strings']['LBL_EXPORT'].' '.$GLOBALS['app_strings']['LBL_LEADS'].'</a>';
         echo '<br /><br />';
-        echo '<a target="_blank" href="'.htmlspecialchars($export_url).$GLOBALS['app_strings']['LBL_PROSPECTS'].'">'.$GLOBALS['app_strings']['LBL_EXPORT'].' '.$GLOBALS['app_strings']['LBL_PROSPECTS'].'</a>';
+        echo '<a target="_blank" href="'. htmlspecialchars($export_url, ENT_QUOTES | ENT_HTML5) .$GLOBALS['app_strings']['LBL_PROSPECTS'].'">'.$GLOBALS['app_strings']['LBL_EXPORT'].' '.$GLOBALS['app_strings']['LBL_PROSPECTS'].'</a>';
         echo '<br /><br />';
 
         echo '<br /><br />';
@@ -110,6 +110,6 @@ class Jjwg_MapsViewGeocoded_Counts extends SugarView
         echo '<br /><br />';
 
         $delete_url = './index.php?module=jjwg_Maps&action=delete_all_address_cache';
-        echo '<a href="'.htmlspecialchars($delete_url).'">'.$GLOBALS['app_strings']['LBL_DELETE'].' - '.$GLOBALS['mod_strings']['LBL_ADDRESS_CACHE'].'</a>';
+        echo '<a href="'. htmlspecialchars($delete_url, ENT_QUOTES | ENT_HTML5) .'">'.$GLOBALS['app_strings']['LBL_DELETE'].' - '.$GLOBALS['mod_strings']['LBL_ADDRESS_CACHE'].'</a>';
     }
 }

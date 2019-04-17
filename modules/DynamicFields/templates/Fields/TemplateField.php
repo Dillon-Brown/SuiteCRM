@@ -524,7 +524,7 @@ class TemplateField
 
                     // Fix for issue #1170 - text in studio can't accept the special language characters.
                     //$this->$vardef = htmlentities(remove_xss($help));
-                    $this->$vardef = htmlspecialchars(remove_xss($help));
+                    $this->$vardef = htmlspecialchars(remove_xss($help), ENT_QUOTES | ENT_HTML5);
                 }
 
 

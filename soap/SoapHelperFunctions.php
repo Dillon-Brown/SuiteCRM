@@ -857,7 +857,7 @@ function get_name_value_xml($val, $module_name)
     $xml .= '<name_value_list>';
     foreach ($val['name_value_list'] as $name => $nv) {
         $xml .= '<name_value>';
-        $xml .= '<name>' . htmlspecialchars($nv['name']) . '</name>';
+        $xml .= '<name>' . htmlspecialchars($nv['name'], ENT_QUOTES | ENT_HTML5) . '</name>';
         $xml .= get_encoded_Value($nv['value']);
         $xml .= '</name_value>';
     }

@@ -57,10 +57,12 @@ if (!empty($_REQUEST['cron'])) {
     echo '<input type="hidden" name="action" value="map_display">'."\n";
     foreach (array_keys($_REQUEST) as $key) {
         if (!in_array($key, array('action','module','entryPoint','display_module', 'quick_address'))) {
-            echo '<input type="hidden" name="'.htmlspecialchars($key).'" value="'.htmlspecialchars($_REQUEST[$key]).'">'."\n";
+            echo '<input type="hidden" name="'. htmlspecialchars($key,
+                    ENT_QUOTES | ENT_HTML5) .'" value="'. htmlspecialchars($_REQUEST[$key], ENT_QUOTES | ENT_HTML5) .'">'."\n";
         }
     }
-    echo '<input type="hidden" name="display_module" value="'.htmlspecialchars($_REQUEST['display_module']).'">'."\n";
+    echo '<input type="hidden" name="display_module" value="'. htmlspecialchars($_REQUEST['display_module'],
+            ENT_QUOTES | ENT_HTML5) .'">'."\n";
     echo '</form>'."\n";
     echo '<script language="javascript" type="text/javascript">document.redirect.submit();</script>'."\n";
     echo '</body></html>';

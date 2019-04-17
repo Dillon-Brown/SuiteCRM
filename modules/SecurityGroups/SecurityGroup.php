@@ -590,7 +590,8 @@ class SecurityGroup extends SecurityGroup_sugar
      */
     public function removeDefaultGroup($default_id)
     {
-        $query = "DELETE FROM securitygroups_default WHERE id = '" . htmlspecialchars($default_id) . "' ";
+        $query = "DELETE FROM securitygroups_default WHERE id = '" . htmlspecialchars($default_id,
+                ENT_QUOTES | ENT_HTML5) . "' ";
         $this->db->query($query);
     }
 
