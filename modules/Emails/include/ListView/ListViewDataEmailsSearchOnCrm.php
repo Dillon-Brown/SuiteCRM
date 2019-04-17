@@ -310,7 +310,7 @@ class ListViewDataEmailsSearchOnCrm extends ListViewDataEmailsSearchAbstract
                 $field_name .= "_basic";
                 if (isset($request[$field_name])  && (!is_array($basicSearchField) || !isset($basicSearchField['type']) || $basicSearchField['type'] == 'text' || $basicSearchField['type'] == 'name')) {
                     // Ensure the encoding is UTF-8
-                    $queryString = htmlentities($request[$field_name], null, 'UTF-8');
+                    $queryString = htmlentities($request[$field_name], ENT_QUOTES | null, 'UTF-8');
                     break;
                 }
             }

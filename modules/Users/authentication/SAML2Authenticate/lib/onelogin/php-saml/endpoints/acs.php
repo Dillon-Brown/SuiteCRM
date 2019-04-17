@@ -36,9 +36,9 @@ if (!empty($attributes)) {
     echo '<h1>'._('User attributes:').'</h1>';
     echo '<table><thead><th>'._('Name').'</th><th>'._('Values').'</th></thead><tbody>';
     foreach ($attributes as $attributeName => $attributeValues) {
-        echo '<tr><td>'.htmlentities($attributeName).'</td><td><ul>';
+        echo '<tr><td>'. htmlentities($attributeName, ENT_QUOTES | ENT_HTML5) .'</td><td><ul>';
         foreach ($attributeValues as $attributeValue) {
-            echo '<li>'.htmlentities($attributeValue).'</li>';
+            echo '<li>'. htmlentities($attributeValue, ENT_QUOTES | ENT_HTML5) .'</li>';
         }
         echo '</ul></td></tr>';
     }

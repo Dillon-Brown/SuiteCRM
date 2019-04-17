@@ -3578,7 +3578,9 @@ eoq;
             $hiddenCount = $totalCount - $defaultNum;
             $frontStr = substr($tempStr, 0, $position);
             $backStr = substr($tempStr, $position, -1);
-            $str = htmlentities($frontStr) . '<a class="utilsLink" onclick="javascript: SUGAR.email2.detailView.displayAllAddrs(this);">...[' . $mod_strings['LBL_EMAIL_DETAIL_VIEW_SHOW'] . $hiddenCount . $mod_strings['LBL_EMAIL_DETAIL_VIEW_MORE'] . ']</a><span style="display: none;">' . htmlentities($backStr) . '</span>';
+            $str = htmlentities($frontStr,
+                    ENT_QUOTES | ENT_HTML5) . '<a class="utilsLink" onclick="javascript: SUGAR.email2.detailView.displayAllAddrs(this);">...[' . $mod_strings['LBL_EMAIL_DETAIL_VIEW_SHOW'] . $hiddenCount . $mod_strings['LBL_EMAIL_DETAIL_VIEW_MORE'] . ']</a><span style="display: none;">' . htmlentities($backStr,
+                    ENT_QUOTES | ENT_HTML5) . '</span>';
         }
 
         return $str;
