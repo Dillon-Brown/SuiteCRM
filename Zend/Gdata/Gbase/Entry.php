@@ -139,7 +139,7 @@ class Zend_Gdata_Gbase_Entry extends Zend_Gdata_Entry
     public function getGbaseAttribute($name)
     {
         $matches = array();
-        for ($i = 0; $i < count($this->_baseAttributes); $i++) {
+        for ($i = 0, $iMax = count($this->_baseAttributes); $i < $iMax; $i++) {
             $baseAttribute = $this->_baseAttributes[$i];
             if ($baseAttribute->rootElement == $name &&
                 $baseAttribute->rootNamespaceURI == $this->lookupNamespace('g')) {

@@ -221,7 +221,7 @@ class XMLSecurityKey
             /* Make sure that the generated key has the proper parity bits set.
              * Mcrypt doesn't care about the parity bits, but others may care.
             */
-            for ($i = 0; $i < strlen($key); $i++) {
+            for ($i = 0, $iMax = strlen($key); $i < $iMax; $i++) {
                 $byte = ord($key[$i]) & 0xfe;
                 $parity = 1;
                 for ($j = 1; $j < 8; $j++) {

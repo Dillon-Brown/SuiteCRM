@@ -346,7 +346,7 @@
                  }
 
                  $PointsArray = "";
-                 for ($i=0; $i<count($Points);$i++) {
+                 for ($i = 0, $iMax = count($Points); $i < $iMax; $i++) {
                      $PointsArray[] = $Points[$i][0];
                      $PointsArray[] = $Points[$i][1];
                  }
@@ -370,7 +370,7 @@
              }
 
              /* Draw the lines & points */
-             for ($i=0; $i<count($Points);$i++) {
+             for ($i = 0, $iMax = count($Points); $i < $iMax; $i++) {
                  if ($DrawLines && $i < count($Points)-1) {
                      $Object->drawLine($Points[$i][0], $Points[$i][1], $Points[$i+1][0], $Points[$i+1][1], $Color);
                  }
@@ -647,7 +647,7 @@
                  }
 
                  $PointsArray = "";
-                 for ($i=0; $i<count($Points);$i++) {
+                 for ($i = 0, $iMax = count($Points); $i < $iMax; $i++) {
                      $PointsArray[] = $Points[$i][0];
                      $PointsArray[] = $Points[$i][1];
                  }
@@ -672,7 +672,7 @@
              }
        
              /* Draw the lines & points */
-             for ($i=0; $i<count($Points);$i++) {
+             for ($i = 0, $iMax = count($Points); $i < $iMax; $i++) {
                  if ($DrawLines && $i < count($Points)-1) {
                      $Object->drawLine($Points[$i][0], $Points[$i][1], $Points[$i+1][0], $Points[$i+1][1], $Color);
                  }

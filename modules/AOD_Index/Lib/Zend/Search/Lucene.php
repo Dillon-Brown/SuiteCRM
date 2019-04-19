@@ -1009,7 +1009,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
             $sortFieldValues = array();
 
             require_once 'Zend/Search/Lucene/Exception.php';
-            for ($count = 1; $count < count($argList); $count++) {
+            for ($count = 1, $countMax = count($argList); $count < $countMax; $count++) {
                 $fieldName = $argList[$count];
 
                 if (!is_string($fieldName)) {

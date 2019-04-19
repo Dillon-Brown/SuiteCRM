@@ -463,7 +463,7 @@ var $kerninfo;
 			if (!$psName)
 				die("Could not find PostScript font name: ".$this->filename);
 			if ($debug) {
-			   for ($i=0;$i<count($psName);$i++) {
+                for ($i = 0, $iMax = count($psName); $i < $iMax; $i++) {
 				$c = $psName[$i];
 				$oc = ord($c);
 				if ($oc>126 || strpos(' [](){}<>/%',$c)!==false)
@@ -547,7 +547,9 @@ var $kerninfo;
 			$this->_pos += 10;  //PANOSE = 10 byte length
 			$panose = fread($this->fh,10);
 			$this->panose = array();
-			for ($p=0;$p<strlen($panose);$p++) { $this->panose[] = ord($panose[$p]); }
+            for ($p = 0, $pMax = strlen($panose); $p < $pMax; $p++) {
+                $this->panose[] = ord($panose[$p]);
+            }
 			$this->skip(26);
 			$sTypoAscender = $this->read_short();
 			$sTypoDescender = $this->read_short();

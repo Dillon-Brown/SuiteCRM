@@ -516,7 +516,7 @@ class Localization
                 }
 
                 $tic = 0;
-                for ($i=$offset; $i<strlen($exNum[0]); $i++) {
+                for ($i = $offset, $iMax = strlen($exNum[0]); $i < $iMax; $i++) {
                     if ($tic % 3 == 0 && $i != 0) {
                         $majorDigits .= $thou; // add separator
                     }
@@ -692,7 +692,7 @@ eoq;
 
         // parse localeNameFormat
         $formattedName = '';
-        for ($i=0; $i<strlen($this->localeNameFormat); $i++) {
+        for ($i = 0, $iMax = strlen($this->localeNameFormat); $i < $iMax; $i++) {
             $formattedName .= array_key_exists($this->localeNameFormat{$i}, $names) ? $names[$this->localeNameFormat{$i}] : $this->localeNameFormat{$i};
         }
 

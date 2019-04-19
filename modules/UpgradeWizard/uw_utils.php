@@ -2749,7 +2749,7 @@ function parseAndExecuteSqlFile($sqlScript, $forStepQuery='', $resumeFromQuery='
                             if (!$resumeAfterFound) {
                                 if (strpos($query, ",") != false) {
                                     $queArray = explode(",", $query);
-                                    for ($i=0;$i<sizeof($resumeFromQuery);$i++) {
+                                    for ($i = 0, $iMax = sizeof($resumeFromQuery); $i < $iMax; $i++) {
                                         if (strcasecmp(trim($resumeFromQuery[$i]), trim($queArray[$i]))==0) {
                                             $resumeAfterFound = true;
                                         } else {
@@ -3037,7 +3037,7 @@ function didThisStepRunBefore($step, $SubStep='')
     if (file_exists($upgrade_progress_file)) {
         include($upgrade_progress_file);
         if (isset($upgrade_config) && $upgrade_config != null && is_array($upgrade_config) && sizeof($upgrade_config) >0) {
-            for ($i=1;$i<=sizeof($upgrade_config);$i++) {
+            for ($i = 1, $iMax = sizeof($upgrade_config); $i <= $iMax; $i++) {
                 if (is_array($upgrade_config[$i])) {
                     foreach ($upgrade_config[$i] as $key=>$val) {
                         if ($key==$step) {

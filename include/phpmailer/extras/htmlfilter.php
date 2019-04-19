@@ -443,7 +443,7 @@ function tln_deent(&$attvalue, $regex, $hex = false)
     preg_match_all($regex, $attvalue, $matches);
     if (is_array($matches) && sizeof($matches[0]) > 0) {
         $repl = array();
-        for ($i = 0; $i < sizeof($matches[0]); $i++) {
+        for ($i = 0, $iMax = sizeof($matches[0]); $i < $iMax; $i++) {
             $numval = $matches[1][$i];
             if ($hex) {
                 $numval = hexdec($numval);

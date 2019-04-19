@@ -119,7 +119,7 @@ class SVG
 			$pts = preg_split('/[ ,]+/', trim($attribs['points']));
 			$maxr=$maxb=0;
 			$minl=$mint=999999;
-			for ($i=0;$i<count($pts); $i++) {
+            for ($i = 0, $iMax = count($pts); $i < $iMax; $i++) {
 				if ($i % 2 == 0) {	// x values
 					$minl = min($minl,$pts[$i]);
 					$maxr = max($maxr,$pts[$i]);
@@ -151,7 +151,7 @@ class SVG
 					list($tmp, $cmd, $arg) = $c;
 					if ($cmd=='M' || $cmd=='L' || $cmd=='C' || $cmd=='S' || $cmd=='Q' || $cmd=='T') {
 						$pts = preg_split('/[ ,]+/', trim($arg));
-						for ($i=0;$i<count($pts); $i++) {
+                        for ($i = 0, $iMax = count($pts); $i < $iMax; $i++) {
 							if ($i % 2 == 0) {	// x values
 								$minl = min($minl,$pts[$i]);
 								$maxr = max($maxr,$pts[$i]);
@@ -189,7 +189,7 @@ class SVG
 		if (isset($gradient_info['transform'])){
 			preg_match_all('/(matrix|translate|scale|rotate|skewX|skewY)\((.*?)\)/is',$gradient_info['transform'],$m);
 			if (count($m[0])) {
-				for($i=0; $i<count($m[0]); $i++) {
+                for ($i = 0, $iMax = count($m[0]); $i < $iMax; $i++) {
 					$c = strtolower($m[1][$i]);
 					$v = trim($m[2][$i]);
 					$vv = preg_split('/[ ,]+/',$v);
@@ -733,7 +733,7 @@ class SVG
 		if (isset($critere_style['transform'])){
 			preg_match_all('/(matrix|translate|scale|rotate|skewX|skewY)\((.*?)\)/is',$critere_style['transform'],$m);
 			if (count($m[0])) {
-				for($i=0; $i<count($m[0]); $i++) {
+                for ($i = 0, $iMax = count($m[0]); $i < $iMax; $i++) {
 					$c = strtolower($m[1][$i]);
 					$v = trim($m[2][$i]);
 					$vv = preg_split('/[ ,]+/',$v);
@@ -1034,7 +1034,7 @@ $md = $sy * cos($t);
 			else {
 			  if (count($d) % 2 == 1) { $d = array_merge($d, $d); }	// 5, 3, 1 => 5,3,1,5,3,1  OR 3 => 3,3
 			  $arr = '';
-			  for($i=0; $i<count($d); $i+=2) {
+                for ($i = 0, $iMax = count($d); $i < $iMax; $i += 2) {
 				$arr .= sprintf('%.3F %.3F ', $d[$i]*$this->kp, $d[$i+1]*$this->kp);
 			  }
 			  if (isset($critere_style['stroke-dashoffset'])){ $off = $critere_style['stroke-dashoffset'] + 0; }
@@ -1762,7 +1762,7 @@ function Arcto($x1, $y1, $x2, $y2, $rx, $ry, $angle, $largeArcFlag, $sweepFlag) 
 			$ybase = - $this->ConvertSVGSizePixels($arguments[1],'y');	// mPDF 4.4.003 
 		}
 		$path_cmd = sprintf('%.3F %.3F m ', $xbase*$this->kp, $ybase*$this->kp);
-		for ($i = 2; $i<count($arguments);$i += 2) {
+        for ($i = 2, $iMax = count($arguments); $i < $iMax; $i += 2) {
 			if ($ispolyline) {
 				$tmp_x = $arguments[$i] ;
 				$tmp_y = - $arguments[($i+1)] ;
@@ -1785,7 +1785,7 @@ function Arcto($x1, $y1, $x2, $y2, $rx, $ry, $angle, $largeArcFlag, $sweepFlag) 
 		$xbase = $arguments[0] ;
 		$ybase = - $arguments[1] ;
 		$path_cmd = sprintf('%.3F %.3F m ', $xbase*$this->kp, $ybase*$this->kp);
-		for ($i = 2; $i<count($arguments);$i += 2) {
+        for ($i = 2, $iMax = count($arguments); $i < $iMax; $i += 2) {
 			$tmp_x = $arguments[$i] ;
 			$tmp_y = - $arguments[($i+1)] ;
 
@@ -2115,7 +2115,7 @@ function svgDefineTxtStyle($critere_style)
 			// Get User-defined entities
 			preg_match_all('/<!ENTITY\s+([a-z]+)\s+\"(.*?)\">/si',$data, $ent);
 			// Replace entities
-			for ($i=0; $i<count($ent[0]); $i++) {
+            for ($i = 0, $iMax = count($ent[0]); $i < $iMax; $i++) {
 				$data = preg_replace('/&'.preg_quote($ent[1][$i],'/').';/is', $ent[2][$i], $data);
 			}
 		}
@@ -2127,7 +2127,7 @@ function svgDefineTxtStyle($critere_style)
 			preg_match_all('/(<(linearGradient|radialgradient)[^>]*)xlink:href=["\']#(.*?)["\'](.*?)\/>/si',$data, $links);
 			if (count($links[0])) { $links[5] = array(); }	// mPDF 4.5.010
 			// Delete links from data - keeping in $links
-			for ($i=0; $i<count($links[0]); $i++) {
+            for ($i = 0, $iMax = count($links[0]); $i < $iMax; $i++) {
 				$links[5][$i] = 'tmpLink'.RAND(100000,9999999);	// mPDF 4.5.010
 				$data = preg_replace('/'.preg_quote($links[0][$i],'/').'/is', '<MYLINKS'.$links[5][$i].'>' , $data);	// mPDF 4.5.010
 			}
@@ -2136,11 +2136,11 @@ function svgDefineTxtStyle($critere_style)
 			$targets = array();
 			$stops = array();
 			// keeping in $targets
-			for ($i=0; $i<count($m[0]); $i++) {
+            for ($i = 0, $iMax = count($m[0]); $i < $iMax; $i++) {
 				$stops[$m[3][$i]] = $m[5][$i];
 			}
 			// Add back links this time as targets (gradients)
-			for ($i=0; $i<count($links[0]); $i++) {
+            for ($i = 0, $iMax = count($links[0]); $i < $iMax; $i++) {
 				$def = $links[1][$i] .' '.$links[4][$i].'>'. $stops[$links[3][$i]].'</'.$links[2][$i] .'>' ;	// mPDF 4.5.010
 				$data = preg_replace('/<MYLINKS'.$links[5][$i].'>/is', $def , $data);	// mPDF 4.5.010
 			}
@@ -2267,7 +2267,7 @@ function svgDefineTxtStyle($critere_style)
 					$path = $attribs['points'];
 					preg_match_all('/[0-9\-\.]*/',$path, $tmp, PREG_SET_ORDER);
 					$arguments = array();
-					for ($i=0;$i<count($tmp);$i++){
+                    for ($i = 0, $iMax = count($tmp); $i < $iMax; $i++) {
 						if ($tmp[$i][0] !=''){
 							array_push($arguments, $tmp[$i][0]);
 						}
@@ -2282,7 +2282,7 @@ function svgDefineTxtStyle($critere_style)
 					$path = $attribs['points'];
 					preg_match_all('/([\-]*[0-9\.]+)/',$path, $tmp);
 					$arguments = array();
-					for ($i=0;$i<count($tmp[0]);$i++){
+                    for ($i = 0, $iMax = count($tmp[0]); $i < $iMax; $i++) {
 						if ($tmp[0][$i] !=''){
 							array_push($arguments, $tmp[0][$i]);
 						}

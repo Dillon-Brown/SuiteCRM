@@ -58,7 +58,7 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         $str = ['nope', '%foo', 'bar%', '%bazz%'];
         $ret = this_callback($str);
         $result = [];
-        for ($i = 0; $i < strlen($ret); $i++) {
+        for ($i = 0, $iMax = strlen($ret); $i < $iMax; $i++) {
             $result[] = ord($ret[$i]);
         }
         $this->assertEquals([14, 15, 186, 186], $result);

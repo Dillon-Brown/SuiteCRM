@@ -2494,7 +2494,7 @@ class InboundEmail extends SugarBean
 
         $mboxImap = '';
 
-        for ($i = 2; $i < count($exMbox); $i++) {
+        for ($i = 2, $iMax = count($exMbox); $i < $iMax; $i++) {
             if (!empty($mboxImap)) {
                 $mboxImap .= ".";
             }
@@ -3922,7 +3922,7 @@ class InboundEmail extends SugarBean
         }
 
         $results = array();
-        for ($i = 0; $i < count($a_bc); $i++) {
+        for ($i = 0, $iMax = count($a_bc); $i < $iMax; $i++) {
             if (isset($a_offset[$i])) {
                 if (!is_numeric($a_bc[$i])) {
                     $aBcI = 0;
@@ -4172,7 +4172,7 @@ class InboundEmail extends SugarBean
                 $exValue = explode(';', $value);
                 $newValue['type'] = $exValue[0];
 
-                for ($i = 1; $i < count($exValue); $i++) {
+                for ($i = 1, $iMax = count($exValue); $i < $iMax; $i++) {
                     $exContent = explode('=', $exValue[$i]);
                     $newValue[trim($exContent[0])] = trim($exContent[1], "\t \"");
                 }
@@ -7440,7 +7440,7 @@ eoq;
             $revSorts = array();
             $keys = array_reverse(array_keys($sorts[$sort]));
 
-            for ($i = 0; $i < count($keys); $i++) {
+            for ($i = 0, $iMax = count($keys); $i < $iMax; $i++) {
                 $v = $keys[$i];
                 $revSorts[$v] = $sorts[$sort][$v];
             }

@@ -1801,7 +1801,7 @@ EOQ;
         $emailLink = '';
 
         $emailUI = new EmailUI();
-        for ($i = 0; $i < count($focus->emailAddress->addresses); $i++) {
+        for ($i = 0, $iMax = count($focus->emailAddress->addresses); $i < $iMax; $i++) {
             $emailField = 'email' . (string) ($i + 1);
             $optOut = (bool)$focus->emailAddress->addresses[$i]['opt_out'];
             if (!$optOut && $focus->emailAddress->addresses[$i]['email_address'] === $emailAddress) {
@@ -1891,7 +1891,7 @@ EOQ;
 
         $ret1 = '';
         $ret2 = '';
-        for ($i = 0; $i < strlen($macro); $i++) {
+        for ($i = 0, $iMax = strlen($macro); $i < $iMax; $i++) {
             if (array_key_exists($macro{$i}, $format)) {
                 $ret1 .= "<i>" . $format[$macro{$i}] . "</i>";
                 $ret2 .= "<i>" . $name[$macro{$i}] . "</i>";

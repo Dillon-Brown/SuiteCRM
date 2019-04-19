@@ -31,7 +31,7 @@ function ReadDefaultCSS($CSSstr) {
 	$CSSstr = preg_replace('/(<\!\-\-|\-\->)/s',' ',$CSSstr);
 	if ($CSSstr ) {
 		preg_match_all('/(.*?)\{(.*?)\}/',$CSSstr,$styles);
-		for($i=0; $i < count($styles[1]) ; $i++)  {
+        for ($i = 0, $iMax = count($styles[1]); $i < $iMax; $i++) {
 			$stylestr= trim($styles[2][$i]);
 			$stylearr = explode(';',$stylestr);
 			foreach($stylearr AS $sta) {
@@ -75,13 +75,13 @@ function ReadDefaultCSS($CSSstr) {
 
 function ReadCSS($html) {
 	preg_match_all('/<style[^>]*media=["\']([^"\'>]*)["\'].*?<\/style>/is',$html,$m);
-	for($i=0; $i<count($m[0]); $i++) {
+    for ($i = 0, $iMax = count($m[0]); $i < $iMax; $i++) {
 		if ($this->mpdf->CSSselectMedia && !preg_match('/('.trim($this->mpdf->CSSselectMedia).'|all)/i',$m[1][$i])) { 
 			$html = preg_replace('/'.preg_quote($m[0][$i],'/').'/','',$html);
 		}
 	}
 	preg_match_all('/<link[^>]*media=["\']([^"\'>]*)["\'].*?>/is',$html,$m);
-	for($i=0; $i<count($m[0]); $i++) {
+    for ($i = 0, $iMax = count($m[0]); $i < $iMax; $i++) {
 		if ($this->mpdf->CSSselectMedia && !preg_match('/('.trim($this->mpdf->CSSselectMedia).'|all)/i',$m[1][$i])) { 
 			$html = preg_replace('/'.preg_quote($m[0][$i],'/').'/','',$html);
 		}
@@ -94,8 +94,8 @@ function ReadCSS($html) {
 	// case so we can use str_replace later.
 	preg_replace('/<\/style>/i', '</style>', $html);
 	preg_match_all('/<style.*?>(.*?)<\/style>/si',$html,$m);
-	if (count($m[1])) { 
-		for($i=0;$i<count($m[1]);$i++) {
+	if (count($m[1])) {
+        for ($i = 0, $iMax = count($m[1]); $i < $iMax; $i++) {
 			// Remove comment tags 
 			$sub = preg_replace('/(<\!\-\-|\-\->)/s',' ',$m[1][$i]);
 			$sub = '>'.preg_replace('|/\*.*?\*/|s',' ',$sub).'</style>';
@@ -171,8 +171,8 @@ function ReadCSS($html) {
 			}
 			$regexpem = '/(background[^;]*url\s*\(\s*[\'\"]{0,1})([^\)\'\"]*)([\'\"]{0,1}\s*\))/si';
 			$xem = preg_match_all($regexpem,$CSSextblock,$cxtem);
-			if ($xem) { 
-				for ($i=0;$i<count($cxtem[0]);$i++) {
+			if ($xem) {
+                for ($i = 0, $iMax = count($cxtem[0]); $i < $iMax; $i++) {
 					// path is relative to original stlyesheet!!
 					$embedded = $cxtem[2][$i];
 					if (!preg_match('/^data:image/i', $embedded)) {	// mPDF 5.5.13
@@ -195,8 +195,8 @@ function ReadCSS($html) {
 		$tmpCSSstr = implode(' ',$CSSblock[1]);
 		$regexpem = '/(background[^;]*url\s*\(\s*[\'\"]{0,1})([^\)\'\"]*)([\'\"]{0,1}\s*\))/si';
 		$xem = preg_match_all($regexpem,$tmpCSSstr ,$cxtem);
-		if ($xem) { 
-		   for ($i=0;$i<count($cxtem[0]);$i++) {
+		if ($xem) {
+            for ($i = 0, $iMax = count($cxtem[0]); $i < $iMax; $i++) {
 			$embedded = $cxtem[2][$i];
 			if (!preg_match('/^data:image/i', $embedded)) {	// mPDF 5.5.13
 				$this->mpdf->GetFullPath($embedded);
@@ -212,7 +212,7 @@ function ReadCSS($html) {
 
 	if (preg_match('/@media/',$CSSstr)) { 
 		preg_match_all('/@media(.*?)\{(([^\{\}]*\{[^\{\}]*\})+)\s*\}/is',$CSSstr,$m);
-		for($i=0; $i<count($m[0]); $i++) {
+        for ($i = 0, $iMax = count($m[0]); $i < $iMax; $i++) {
 			if ($this->mpdf->CSSselectMedia && !preg_match('/('.trim($this->mpdf->CSSselectMedia).'|all)/i',$m[1][$i])) { 
 				$CSSstr = preg_replace('/'.preg_quote($m[0][$i],'/').'/','',$CSSstr);
 			}
@@ -225,8 +225,8 @@ function ReadCSS($html) {
 	// mPDF 5.5.13
 	// Replace any background: url(data:image... with temporary image file reference
 	preg_match_all("/(url\(data:image\/(jpeg|gif|png);base64,(.*)\))/si", $CSSstr, $idata);
-	if (count($idata[0])) { 
-		for($i=0;$i<count($idata[0]);$i++) {
+	if (count($idata[0])) {
+        for ($i = 0, $iMax = count($idata[0]); $i < $iMax; $i++) {
 			$file = _MPDF_TEMP_PATH.'_tempCSSidata'.RAND(1,10000).'_'.$i.'.'.$idata[2][$i];
 			//Save to local file
 			file_put_contents($file, base64_decode($idata[3][$i]));
@@ -238,7 +238,7 @@ function ReadCSS($html) {
 	$CSSstr = preg_replace('/(<\!\-\-|\-\->)/s',' ',$CSSstr);
 	if ($CSSstr ) {
 		preg_match_all('/(.*?)\{(.*?)\}/',$CSSstr,$styles);
-		for($i=0; $i < count($styles[1]) ; $i++)  {
+        for ($i = 0, $iMax = count($styles[1]); $i < $iMax; $i++) {
 			// SET array e.g. $classproperties['COLOR'] = '#ffffff';
 	 		$stylestr= trim($styles[2][$i]);
 			$stylearr = explode(';',$stylestr);
@@ -355,7 +355,7 @@ function readInlineCSS($html) {
 	$values = $styleinfo[2];
 	//Array-properties and Array-values must have the SAME SIZE!
 	$classproperties = array();
-	for($i = 0; $i < count($properties) ; $i++) {
+    for ($i = 0, $iMax = count($properties); $i < $iMax; $i++) {
 		// Ignores -webkit-gradient so doesn't override -moz-
 		if ((strtoupper($properties[$i])=='BACKGROUND-IMAGE' || strtoupper($properties[$i])=='BACKGROUND') && preg_match('/-webkit-gradient/i',$values[$i])) { 
 			continue; 
@@ -369,8 +369,8 @@ function readInlineCSS($html) {
 
 function _fix_borderStr($bd) {
 	preg_match_all("/\((.*?)\)/", $bd, $m);
-	if (count($m[1])) { 
-		for($i=0;$i<count($m[1]);$i++) {
+	if (count($m[1])) {
+        for ($i = 0, $iMax = count($m[1]); $i < $iMax; $i++) {
 			$sub = preg_replace("/ /", "", $m[1][$i]);
 			$bd = preg_replace('/'.preg_quote($m[1][$i], '/').'/si', $sub, $bd); 
 		}

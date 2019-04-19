@@ -358,8 +358,8 @@ class Zend_Search_Lucene_Search_QueryLexer extends Zend_Search_Lucene_FSM
             $this->_queryString[$count] = iconv_substr($inputString, $count, 1, $encoding);
         }
 
-        for ($this->_queryStringPosition = 0;
-             $this->_queryStringPosition < count($this->_queryString);
+        for ($this->_queryStringPosition = 0, $loopsMax = count($this->_queryString);
+             $this->_queryStringPosition < $loopsMax;
              $this->_queryStringPosition++) {
             $this->process($this->_translateInput($this->_queryString[$this->_queryStringPosition]));
         }
