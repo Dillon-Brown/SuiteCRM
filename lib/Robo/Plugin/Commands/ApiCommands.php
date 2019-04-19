@@ -43,6 +43,8 @@ namespace SuiteCRM\Robo\Plugin\Commands;
 use Api\Core\Config\ApiConfig;
 use DateTime;
 use DBManager;
+use Exception;
+use InvalidArgumentException;
 use OAuth2Clients;
 use Robo\Task\Base\loadTasks;
 use Robo\Tasks;
@@ -90,9 +92,9 @@ class ApiCommands extends Tasks
      * Configure SuiteCRM V8 API
      * @param string $name
      * @param string $password
-     * @throws \Exception
+     * @throws Exception
      */
-    public function configureV8Api($name, $password)
+    public function configureV8Api($name = '', $password = '')
     {
         $this->say('Configure V8 Api');
 
@@ -101,16 +103,17 @@ class ApiCommands extends Tasks
         $this->setKeyPermissions();
         $this->updateEncryptionKey();
         $this->rebuildHtaccessFile();
-        $client = $this->createClient($name);
-        $user = $this->createAPIUser($name, $password);
-        $this->outputClientCredentials($client);
-        $this->outputUserCredentials($user);
+        $this->createClient($name);
+        $this->createAPIUser([
+            'name' => $name,
+            'password' => $password,
+        ]);
     }
 
     /**
      * Generate OAuth2 public/private keys
      */
-    private function generateKeys()
+    public function generateKeys()
     {
         $privateKey = openssl_pkey_new(
             [
@@ -153,7 +156,7 @@ class ApiCommands extends Tasks
 
     /**
      * Update OAuth2 encryption keys
-     * @throws \Exception
+     * @throws Exception
      */
     private function updateEncryptionKey()
     {
@@ -185,7 +188,7 @@ class ApiCommands extends Tasks
      * Creates OAuth2 client
      * @param string $userName
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function createClient($userName)
     {
@@ -213,29 +216,37 @@ class ApiCommands extends Tasks
 
     /**
      * Creates a SuiteCRM user for the V8 API
-     * @param string $name
-     * @param string $password
-     * @return array
+     * @param array $opts
      */
-    public function createAPIUser($name, $password)
-    {
-        $count = $this->getNameCount($name, 'users', 'user_name');
+    public function createAPIUser(
+        array $opts = [
+            'name' => '',
+            'password' => '',
+        ]
+    ) {
+        $this->askDefaultOptionWhenEmpty('Username:', 'API Username', $opts['name']);
+        $this->askDefaultOptionWhenEmpty('Password:', 'API Password', $opts['password']);
+
+        $count = $this->getNameCount($opts['name'], 'users', 'user_name');
 
         $userBean = $this->beanManager->newBeanSafe(
             User::class
         );
 
-        $userBean->user_name = $name . ' ' . $count;
+        $userBean->user_name = $opts['name'] . ' ' . $count;
         $userBean->first_name = 'V8';
         $userBean->last_name = 'API User';
         $userBean->email1 = 'API@example.com';
         $userBean->save();
-        $userBean->setNewPassword($password, 1);
+        $userBean->setNewPassword($opts['password'], 1);
         $userBean->retrieve($userBean->id);
 
-        return !empty($userBean->fetched_row['id'])
-            ? compact('userBean', 'password')
-            : [];
+        if (empty($userBean->fetched_row['id'])) {
+            throw new InvalidArgumentException('UserBean is empty');
+        }
+
+        $this->outputUserCredentials(compact('userBean', $opts['password']));
+        $this->say('User successfully created');
     }
 
     /**
