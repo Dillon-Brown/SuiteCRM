@@ -568,7 +568,7 @@ var $kerninfo;
 			if (!$this->descent) $this->descent = ($yMin*$scale);
 			$this->capHeight = $this->ascent;
 		}
-		$this->stemV = 50 + intval(pow(($usWeightClass / 65.0),2));
+		$this->stemV = 50 + (int)pow(($usWeightClass / 65.0), 2);
 
 		///////////////////////////////////
 		// post - PostScript table
@@ -739,7 +739,7 @@ var $kerninfo;
 					$val = $this->read_short();
 					if (count($glyphToChar[$left])==1 && count($glyphToChar[$right])==1) {
 					  if ($left != 32 && $right != 32) {
-						$this->kerninfo[$glyphToChar[$left][0]][$glyphToChar[$right][0]] = intval($val*$scale);
+						$this->kerninfo[$glyphToChar[$left][0]][$glyphToChar[$right][0]] = (int)($val * $scale);
 					  }
 					}
 				}
@@ -1773,7 +1773,7 @@ var $kerninfo;
 				foreach($glyphToChar[$glyph] AS $char) {
 					//$this->charWidths[$char] = intval(round($scale*$aw));
 					if ($char != 0 && $char != 65535) {
- 						$w = intval(round($scale*$aw));
+ 						$w = (int)round($scale * $aw);
 						if ($w == 0) { $w = 65535; }
 						if ($char < 196608) {
 							$this->charWidths[$char*2] = chr($w >> 8);
@@ -1787,7 +1787,7 @@ var $kerninfo;
 		$data = $this->get_chunk(($start+$numberOfHMetrics*4),($numGlyphs*2));
 		$arr = unpack("n*", $data);
 		$diff = $numGlyphs-$numberOfHMetrics;
-		$w = intval(round($scale*$aw));
+		$w = (int)round($scale * $aw);
 		if ($w == 0) { $w = 65535; }
 		for( $pos=0; $pos<$diff; $pos++) {
 			$glyph = $pos + $numberOfHMetrics;

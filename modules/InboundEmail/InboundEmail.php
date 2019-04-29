@@ -1082,7 +1082,7 @@ class InboundEmail extends SugarBean
                 if (!empty($tmp)) {
                     $tmp .= ", ";
                 }
-                $tmp .= "{$uid}";
+                $tmp .= (string)($uid);
             }
             $GLOBALS['log']->info("INBOUNDEMAIL-CACHE: filter UIDs: [ {$tmp} ]");
 
@@ -1093,7 +1093,7 @@ class InboundEmail extends SugarBean
                     $cols .= ",";
                 }
 
-                $cols .= "{$colDef['name']}";
+                $cols .= (string)($colDef['name']);
             }
             foreach ($insert as $overview) {
                 if (in_array($overview->imap_uid, $uids)) {
@@ -1190,7 +1190,7 @@ class InboundEmail extends SugarBean
                     $cols .= ",";
                 }
 
-                $cols .= "{$colDef['name']}";
+                $cols .= (string)($colDef['name']);
             }
 
             foreach ($update as $overview) {

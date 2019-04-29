@@ -944,7 +944,7 @@ function array_merge_recursive_unique($array1, $array2) {
     $ret = $arrays[0];
     for ($i = 1; $i < $narrays; $i ++) {
         foreach ($arrays[$i] as $key => $value) {
-            if (((string) $key) === ((string) intval($key))) { // integer or string as integer key - append
+            if (((string) $key) === ((string)(int)$key)) { // integer or string as integer key - append
                 $ret[] = $value;
             }
             else { // string key - merge
