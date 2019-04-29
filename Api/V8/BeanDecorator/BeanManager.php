@@ -223,6 +223,6 @@ class BeanManager
             )
         )["cnt"];
 
-        return (int)$rowCount;
+        return intval($rowCount);
     }
 }
