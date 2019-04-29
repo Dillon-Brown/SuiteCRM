@@ -625,7 +625,7 @@ class Smarty
             foreach ($tpl_var as $_key => $_val) {
                 if ($_key != '') {
                     if (!@is_array($this->_tpl_vars[$_key])) {
-                        settype($this->_tpl_vars[$_key], 'array');
+                        $this->_tpl_vars[$_key] = (array)$this->_tpl_vars[$_key];
                     }
                     if ($merge && is_array($_val)) {
                         foreach ($_val as $_mkey => $_mval) {
@@ -639,7 +639,7 @@ class Smarty
         } else {
             if ($tpl_var != '' && isset($value)) {
                 if (!@is_array($this->_tpl_vars[$tpl_var])) {
-                    settype($this->_tpl_vars[$tpl_var], 'array');
+                    $this->_tpl_vars[$tpl_var] = (array)$this->_tpl_vars[$tpl_var];
                 }
                 if ($merge && is_array($value)) {
                     foreach ($value as $_mkey => $_mval) {
@@ -662,7 +662,7 @@ class Smarty
     {
         if ($tpl_var != '' && isset($value)) {
             if (!@is_array($this->_tpl_vars[$tpl_var])) {
-                settype($this->_tpl_vars[$tpl_var], 'array');
+                $this->_tpl_vars[$tpl_var] = (array)$this->_tpl_vars[$tpl_var];
             }
             if ($merge && is_array($value)) {
                 foreach ($value as $_key => $_val) {
@@ -725,8 +725,8 @@ class Smarty
      */
     public function register_object($object, &$object_impl, $allowed = array(), $smarty_args = true, $block_methods = array())
     {
-        settype($allowed, 'array');
-        settype($smarty_args, 'boolean');
+        $allowed = (array)$allowed;
+        $smarty_args = (bool)$smarty_args;
         $this->_reg_objects[$object] =
             array(&$object_impl, $allowed, $smarty_args, $block_methods);
     }

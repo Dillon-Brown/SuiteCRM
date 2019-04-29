@@ -1623,7 +1623,7 @@ class ListView
         reset($data);
 
         //GETTING OFFSET
-        $offset = intval($this->getOffset($html_varName));
+        $offset = (int)$this->getOffset($html_varName);
         $timeStamp = $this->unique_id();
         $_SESSION[$html_varName."_FROM_LIST_VIEW"] = $timeStamp;
 
