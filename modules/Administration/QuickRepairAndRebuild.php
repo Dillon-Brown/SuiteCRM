@@ -1,7 +1,11 @@
 <?php
+
+use Api\Core\Config\ApiConfig;
+
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
+
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
@@ -40,8 +44,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-
-
 class RepairAndClear
 {
     public $module_list;
@@ -50,14 +52,14 @@ class RepairAndClear
     public $execute;
     protected $module_list_from_cache;
 
-    public function repairAndClearAll($selected_actions, $modules, $autoexecute=false, $show_output=true)
+    public function repairAndClearAll($selected_actions, $modules, $autoexecute = false, $show_output = true)
     {
         global $mod_strings;
-        $this->module_list= $modules;
+        $this->module_list = $modules;
         $this->show_output = $show_output;
         $this->actions = $selected_actions;
         $this->actions[] = 'repairDatabase';
-        $this->execute=$autoexecute;
+        $this->execute = $autoexecute;
 
         //clear vardefs always..
         $this->clearVardefs();
@@ -65,61 +67,65 @@ class RepairAndClear
         $this->clearLanguageCache();
         foreach ($this->actions as $current_action) {
             switch ($current_action) {
-            case 'repairDatabase':
-                if (isset($mod_strings['LBL_ALL_MODULES']) && in_array($mod_strings['LBL_ALL_MODULES'], $this->module_list)) {
+                case 'repairDatabase':
+                    if (isset($mod_strings['LBL_ALL_MODULES']) && in_array($mod_strings['LBL_ALL_MODULES'],
+                            $this->module_list)) {
+                        $this->repairDatabase();
+                    } else {
+                        $this->repairDatabaseSelectModules();
+                    }
+                    break;
+                case 'rebuildExtensions':
+                    $this->rebuildExtensions();
+                    break;
+                case 'clearTpls':
+                    $this->clearTpls();
+                    break;
+                case 'clearJsFiles':
+                    $this->clearJsFiles();
+                    break;
+                case 'clearDashlets':
+                    $this->clearDashlets();
+                    break;
+                case 'clearSugarFeedCache':
+                    $this->clearSugarFeedCache();
+                    break;
+                case 'clearThemeCache':
+                    $this->clearThemeCache();
+                    break;
+                case 'clearVardefs':
+                    $this->clearVardefs();
+                    break;
+                case 'clearJsLangFiles':
+                    $this->clearJsLangFiles();
+                    break;
+                case 'rebuildAuditTables':
+                    $this->rebuildAuditTables();
+                    break;
+                case 'clearSearchCache':
+                    $this->clearSearchCache();
+                    break;
+                case 'clearAll':
+                    $this->clearTpls();
+                    $this->clearJsFiles();
+                    $this->clearVardefs();
+                    $this->clearJsLangFiles();
+                    $this->clearLanguageCache();
+                    $this->clearDashlets();
+                    $this->clearSugarFeedCache();
+                    $this->clearSmarty();
+                    $this->clearThemeCache();
+                    $this->clearXMLfiles();
+                    $this->clearSearchCache();
+                    $this->clearExternalAPICache();
+                    $this->rebuildExtensions();
+                    $this->rebuildAuditTables();
+                    if (empty(ApiConfig::OAUTH2_ENCRYPTION_KEY)) {
+                        $this->rebuildEncryptionKey();
+                    }
                     $this->repairDatabase();
-                } else {
-                    $this->repairDatabaseSelectModules();
-                }
-                break;
-            case 'rebuildExtensions':
-                $this->rebuildExtensions();
-                break;
-            case 'clearTpls':
-                $this->clearTpls();
-                break;
-            case 'clearJsFiles':
-                $this->clearJsFiles();
-                break;
-            case 'clearDashlets':
-                $this->clearDashlets();
-                break;
-            case 'clearSugarFeedCache':
-                $this->clearSugarFeedCache();
-                break;
-            case 'clearThemeCache':
-                $this->clearThemeCache();
-                break;
-            case 'clearVardefs':
-                $this->clearVardefs();
-                break;
-            case 'clearJsLangFiles':
-                $this->clearJsLangFiles();
-                break;
-            case 'rebuildAuditTables':
-                $this->rebuildAuditTables();
-                break;
-            case 'clearSearchCache':
-                $this->clearSearchCache();
-                break;
-            case 'clearAll':
-                $this->clearTpls();
-                $this->clearJsFiles();
-                $this->clearVardefs();
-                $this->clearJsLangFiles();
-                $this->clearLanguageCache();
-                $this->clearDashlets();
-                $this->clearSugarFeedCache();
-                $this->clearSmarty();
-                $this->clearThemeCache();
-                $this->clearXMLfiles();
-                $this->clearSearchCache();
-                $this->clearExternalAPICache();
-                $this->rebuildExtensions();
-                $this->rebuildAuditTables();
-                $this->repairDatabase();
-                break;
-        }
+                    break;
+            }
         }
     }
 
@@ -130,9 +136,9 @@ class RepairAndClear
     {
         global $dictionary, $mod_strings;
         if (false == $this->show_output) {
-            $_REQUEST['repair_silent']='1';
+            $_REQUEST['repair_silent'] = '1';
         }
-        $_REQUEST['execute']=$this->execute;
+        $_REQUEST['execute'] = $this->execute;
         $GLOBALS['reload_vardefs'] = true;
         $hideModuleMenu = true;
         include_once('modules/Administration/repairDatabase.php');
@@ -149,14 +155,16 @@ class RepairAndClear
         if (is_admin($current_user) || is_admin_for_any_module($current_user)) {
             $export = false;
             if ($this->show_output) {
-                echo getClassicModuleTitle($mod_strings['LBL_REPAIR_DATABASE'], array($mod_strings['LBL_REPAIR_DATABASE']), false);
+                echo getClassicModuleTitle($mod_strings['LBL_REPAIR_DATABASE'],
+                    array($mod_strings['LBL_REPAIR_DATABASE']), false);
             }
             if ($this->show_output) {
                 echo "<h1 id=\"rdloading\">{$mod_strings['LBL_REPAIR_DATABASE_PROCESSING']}</h1>";
                 ob_flush();
             }
             $sql = '';
-            if (!isset($mod_strings['LBL_ALL_MODULES']) || ($this->module_list && !in_array($mod_strings['LBL_ALL_MODULES'], $this->module_list))) {
+            if (!isset($mod_strings['LBL_ALL_MODULES']) || ($this->module_list && !in_array($mod_strings['LBL_ALL_MODULES'],
+                        $this->module_list))) {
                 $repair_related_modules = array_keys($dictionary);
                 //repair DB
                 $dm = inDeveloperMode();
@@ -172,7 +180,7 @@ class RepairAndClear
 
 
                             if ($this->show_output) {
-                                print_r("<p>" .$mod_strings['LBL_REPAIR_DB_FOR'].' '. $bean_name . "</p>");
+                                print_r("<p>" . $mod_strings['LBL_REPAIR_DB_FOR'] . ' ' . $bean_name . "</p>");
                             }
                             $sql .= $db->repairTable($focus, $this->execute);
                         }
@@ -199,7 +207,7 @@ class RepairAndClear
 
                         echo "<form method=\"post\" action=\"index.php?module=Administration&amp;action=repairDatabase\">";
                         echo "<textarea name=\"sql\" rows=\"24\" cols=\"150\" id=\"repairsql\">$qry_str</textarea>";
-                        echo "<br /><input type=\"submit\" value=\"".$mod_strings['LBL_REPAIR_DATABASE_EXECUTE']."\" name=\"raction\" /> <input type=\"submit\" name=\"raction\" value=\"".$mod_strings['LBL_REPAIR_DATABASE_EXPORT']."\" />";
+                        echo "<br /><input type=\"submit\" value=\"" . $mod_strings['LBL_REPAIR_DATABASE_EXECUTE'] . "\" name=\"raction\" /> <input type=\"submit\" name=\"raction\" value=\"" . $mod_strings['LBL_REPAIR_DATABASE_EXPORT'] . "\" />";
                     }
                 } elseif ($this->show_output) {
                     echo "<h3>{$mod_strings['LBL_REPAIR_DATABASE_SYNCED']}</h3>";
@@ -242,6 +250,7 @@ class RepairAndClear
         }
         $this->_clearCache(sugar_cached('smarty/templates_c'), '.tpl.php');
     }
+
     public function clearXMLfiles()
     {
         global $mod_strings;
@@ -250,6 +259,7 @@ class RepairAndClear
         }
         $this->_clearCache(sugar_cached("xml"), '.xml');
     }
+
     public function clearDashlets()
     {
         global $mod_strings;
@@ -258,6 +268,7 @@ class RepairAndClear
         }
         $this->_clearCache(sugar_cached('dashlets'), '.php');
     }
+
     public function clearThemeCache()
     {
         global $mod_strings;
@@ -266,6 +277,7 @@ class RepairAndClear
         }
         SugarThemeRegistry::clearAllCaches();
     }
+
     public function clearSugarFeedCache()
     {
         global $mod_strings;
@@ -275,6 +287,7 @@ class RepairAndClear
 
         SugarFeed::flushBackendCache();
     }
+
     public function clearTpls()
     {
         global $mod_strings;
@@ -283,26 +296,31 @@ class RepairAndClear
         }
         if (!in_array(translate('LBL_ALL_MODULES'), (array)$this->module_list) && !empty($this->module_list)) {
             foreach ($this->module_list as $module_name_singular) {
-                $this->_clearCache(sugar_cached('modules/').$this->_getModuleNamePlural($module_name_singular), '.tpl');
+                $this->_clearCache(sugar_cached('modules/') . $this->_getModuleNamePlural($module_name_singular),
+                    '.tpl');
             }
         } else {
             $this->_clearCache(sugar_cached('modules/'), '.tpl');
         }
     }
+
     public function clearVardefs()
     {
         global $mod_strings;
         if ($this->show_output) {
             echo "<h3>{$mod_strings['LBL_QR_CLEARVADEFS']}</h3>";
         }
-        if (!empty($this->module_list) && is_array($this->module_list) && !in_array(translate('LBL_ALL_MODULES'), $this->module_list)) {
+        if (!empty($this->module_list) && is_array($this->module_list) && !in_array(translate('LBL_ALL_MODULES'),
+                $this->module_list)) {
             foreach ($this->module_list as $module_name_singular) {
-                $this->_clearCache(sugar_cached('modules/').$this->_getModuleNamePlural($module_name_singular), 'vardefs.php');
+                $this->_clearCache(sugar_cached('modules/') . $this->_getModuleNamePlural($module_name_singular),
+                    'vardefs.php');
             }
         } else {
             $this->_clearCache(sugar_cached('modules/'), 'vardefs.php');
         }
     }
+
     public function clearJsFiles()
     {
         global $mod_strings;
@@ -312,12 +330,14 @@ class RepairAndClear
 
         if (!in_array(translate('LBL_ALL_MODULES'), $this->module_list) && !empty($this->module_list)) {
             foreach ($this->module_list as $module_name_singular) {
-                $this->_clearCache(sugar_cached('modules/').$this->_getModuleNamePlural($module_name_singular), '.js');
+                $this->_clearCache(sugar_cached('modules/') . $this->_getModuleNamePlural($module_name_singular),
+                    '.js');
             }
         } else {
             $this->_clearCache(sugar_cached('modules/'), '.js');
         }
     }
+
     public function clearJsLangFiles()
     {
         global $mod_strings;
@@ -326,12 +346,14 @@ class RepairAndClear
         }
         if (!in_array(translate('LBL_ALL_MODULES'), $this->module_list) && !empty($this->module_list)) {
             foreach ($this->module_list as $module_name_singular) {
-                $this->_clearCache(sugar_cached('jsLanguage/').$this->_getModuleNamePlural($module_name_singular), '.js');
+                $this->_clearCache(sugar_cached('jsLanguage/') . $this->_getModuleNamePlural($module_name_singular),
+                    '.js');
             }
         } else {
             $this->_clearCache(sugar_cached('jsLanguage'), '.js');
         }
     }
+
     /**
      * Remove the language cache files from cache/modules/<module>/language
      */
@@ -359,8 +381,8 @@ class RepairAndClear
             $languages = array($GLOBALS['current_language'] => $GLOBALS['current_language']);
         }
         foreach (array_keys($languages) as $language) {
-            sugar_cache_clear('app_strings.'.$language);
-            sugar_cache_clear('app_list_strings.'.$language);
+            sugar_cache_clear('app_strings.' . $language);
+            sugar_cache_clear('app_list_strings.' . $language);
         }
     }
 
@@ -373,12 +395,13 @@ class RepairAndClear
         if ($this->show_output) {
             echo "<h3>{$mod_strings['LBL_QR_CLEARSEARCH']}</h3>";
         }
-        $search_dir=sugar_cached('');
+        $search_dir = sugar_cached('');
         $src_file = $search_dir . 'modules/unified_search_modules.php';
         if (file_exists($src_file)) {
             unlink("$src_file");
         }
     }
+
     public function clearExternalAPICache()
     {
         global $mod_strings, $sugar_config;
@@ -394,7 +417,7 @@ class RepairAndClear
     public function rebuildAuditTables()
     {
         global $mod_strings;
-        include('include/modules.php');	//bug 15661
+        include('include/modules.php');    //bug 15661
         if ($this->show_output) {
             echo "<h3> {$mod_strings['LBL_QR_REBUILDAUDIT']}</h3>";
         }
@@ -419,6 +442,26 @@ class RepairAndClear
         }
     }
 
+    /**
+     * Rebuilds the OAuth2 encryption key
+     * @throws Exception
+     */
+    private function rebuildEncryptionKey()
+    {
+        $oldKey = ApiConfig::OAUTH2_ENCRYPTION_KEY;
+        $key = base64_encode(random_bytes(32));
+        $apiConfig = file_get_contents('Api/Core/Config/ApiConfig.php');
+
+        $configFileContents = str_replace(
+            $oldKey,
+            $key,
+            $apiConfig
+        );
+        file_put_contents(
+            'Api/Core/Config/ApiConfig.php', $configFileContents, LOCK_EX
+        );
+    }
+
     private function _rebuildAuditTablesHelper($focus)
     {
         global $mod_strings;
@@ -431,17 +474,17 @@ class RepairAndClear
         if ($focus->is_AuditEnabled()) {
             if (!$focus->db->tableExists($focus->get_audit_table_name())) {
                 if ($this->show_output) {
-                    echo $mod_strings['LBL_QR_CREATING_TABLE']." ".$focus->get_audit_table_name().' '.$mod_strings['LBL_FOR'].' '. $focus->object_name.'.<br/>';
+                    echo $mod_strings['LBL_QR_CREATING_TABLE'] . " " . $focus->get_audit_table_name() . ' ' . $mod_strings['LBL_FOR'] . ' ' . $focus->object_name . '.<br/>';
                 }
                 $focus->create_audit_table();
             } else {
                 if ($this->show_output) {
-                    $echo=str_replace('%1$', $focus->object_name, $mod_strings['LBL_REBUILD_AUDIT_SKIP']);
+                    $echo = str_replace('%1$', $focus->object_name, $mod_strings['LBL_REBUILD_AUDIT_SKIP']);
                     echo $echo;
                 }
             }
         } elseif ($this->show_output) {
-            echo $focus->object_name.$mod_strings['LBL_QR_NOT_AUDIT_ENABLED'];
+            echo $focus->object_name . $mod_strings['LBL_QR_NOT_AUDIT_ENABLED'];
         }
     }
 
@@ -456,11 +499,13 @@ class RepairAndClear
     {
         if (!file_exists($thedir)) {
             LoggerManager::getLogger()->warn('QRR: directory not found: ' . $thedir);
+
             return false;
         }
 
         if (!is_dir($thedir)) {
             LoggerManager::getLogger()->warn('QRR: it is not a directory: ' . $thedir);
+
             return false;
         }
 
