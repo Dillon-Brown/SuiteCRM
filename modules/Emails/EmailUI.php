@@ -2585,7 +2585,9 @@ eoq;
      */
     public function getRelatedEmail($beanType, $whereArr, $relatedBeanInfoArr = '')
     {
-        global $beanList, $current_user, $app_strings, $db;
+        global $beanList, $current_user, $app_strings;
+        $db = DBManagerFactory::getInstance();
+
         $finalQuery = '';
         $searchBeans = null;
         if ($beanType === 'LBL_DROPDOWN_LIST_ALL') {

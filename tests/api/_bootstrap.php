@@ -1,7 +1,9 @@
 <?php
 /* bootstrap composer's autoloader */
 require_once __DIR__.'/../../vendor/autoload.php';
-global $sugar_config, $db;
+global $sugar_config;
+require_once __DIR__ .'/../../include/database/DBManagerFactory.php';
+$db = DBManagerFactory::getInstance();
 require_once __DIR__ .'/../../include/utils.php';
 require_once __DIR__ .'/../../include/modules.php';
 require_once __DIR__ .'/../../include/entryPoint.php';

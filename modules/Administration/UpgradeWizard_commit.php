@@ -101,7 +101,8 @@ function UWrebuild()
 unset($_SESSION['rebuild_relationships']);
 unset($_SESSION['rebuild_extensions']);
 
-global $log, $db;
+global $log;
+$db = DBManagerFactory::getInstance();
 
 // process commands
 if (!isset($_REQUEST['mode']) || ($_REQUEST['mode'] == "")) {

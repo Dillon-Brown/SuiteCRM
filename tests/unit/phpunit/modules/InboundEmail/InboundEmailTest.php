@@ -3498,7 +3498,8 @@ class InboundEmailTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
         // test
         
         
-        global $sugar_config, $db;
+        global $sugar_config;
+        $db = DBManagerFactory::getInstance();
 
         //unset and reconnect Db to resolve mysqli fetch exeception
         unset($db->database);

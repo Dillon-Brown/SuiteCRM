@@ -256,7 +256,7 @@ class UserPreference extends SugarBean
      */
     public function getUserDateTimePreferences()
     {
-        global $sugar_config, $db, $timedate, $current_user;
+        global $sugar_config, $timedate, $current_user;
 
         $user = $this->_userFocus;
 
@@ -415,7 +415,8 @@ class UserPreference extends SugarBean
         $is_value_array = false,
         $unset_value = false
     ) {
-        global $current_user, $db;
+        global $current_user;
+        $db = DBManagerFactory::getInstance();
 
         // Admin-only function; die if calling as a non-admin
         if (!is_admin($current_user)) {

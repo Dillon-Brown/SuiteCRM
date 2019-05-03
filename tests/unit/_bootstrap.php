@@ -8,7 +8,7 @@ if (!defined('sugarEntry')) {
 }
 /* bootstrap composer's autoloader */
 require_once __DIR__.'/../../vendor/autoload.php';
-global $sugar_config, $db;
+global $sugar_config;
 
 require_once __DIR__ .'/../../include/database/DBManagerFactory.php';
 
