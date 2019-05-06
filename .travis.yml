@@ -10,16 +10,20 @@ matrix:
   fast_finish: true
 jobs:
   include:
-      - stage: codecoverage
-        if: type IN (pull_request) OR branch in (master, develop, hotfix)
-        php: 7.0
-        script: ./vendor/bin/codecept run install --env travis-ci-hub -f --ext DotReporter; echo "\$sugar_config['state_checker']['test_state_check_mode'] = 1;" >> config_override.php  ; ./vendor/bin/robo code:coverage; cat codeception.yml; bash <(curl -s https://codecov.io/bash) -f ./_output/coverage.xml
+    - stage: codecoverage
+      if: type IN (pull_request) OR branch in (master, develop, hotfix)
+      php: 7.0
+      script: ./vendor/bin/codecept run install --env travis-ci-hub -f --ext DotReporter; ./vendor/bin/robo code:coverage; cat codeception.yml; bash <(curl -s https://codecov.io/bash) -f ./_output/coverage.xml
 sudo: required
 dist: trusty
 services:
   - mysql
 addons:
   chrome: stable
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
 
 env:
   - INSTANCE_URL=http://localhost DATABASE_DRIVER=MYSQL DATABASE_NAME=automated_tests DATABASE_HOST=localhost DATABASE_USER=automated_tests DATABASE_PASSWORD=automated_tests INSTANCE_ADMIN_USER=admin INSTANCE_ADMIN_PASSWORD=admin1 COMPOSER_MEMORY_LIMIT=-1
@@ -68,7 +72,7 @@ script:
   - echo "using install wizard"
   - ./vendor/bin/codecept run install --env travis-ci-hub -f --ext DotReporter
   - ./build/push_output.sh
-  
+
   # Run the unit tests
   # - ./vendor/bin/codecept run unit --steps -f
   - cd tests
