@@ -89,7 +89,6 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
-use PDO;
 
 require_once('include/database/MysqlManager.php');
 
@@ -308,21 +307,15 @@ class MysqliManager extends MysqlManager
         }
 
         if ($this->getOption('persistent')) {
-            $this->database = new PDO(
-                $configOptions['db_host_name'],
-                $configOptions['db_user_name'],
-                $configOptions['db_password'],
-                [PDO::MYSQL_ATTR_INIT_COMMAND => $collation, PDO::ATTR_PERSISTENT => true]
-            );
+            try {
+                $this->database = new PDO("mysql:host=mariadb;dbname=suitecrm-mysql", 'root', 'ChangeMe2');
+            } catch (PDOException $e) {
+                echo 'Connection failed: ' . $e->getMessage();
+            }
         }
 
         if (!$this->database) {
-            $this->database = new PDO(
-                $configOptions['db_host_name'],
-                $configOptions['db_user_name'],
-                $configOptions['db_password'],
-                [PDO::MYSQL_ATTR_INIT_COMMAND => $collation]
-            );
+            $this->database = new PDO("mysql:host=mariadb;dbname=suitecrm-mysql", 'root', 'ChangeMe2');
         }
 
         if (empty($this->database)) {
