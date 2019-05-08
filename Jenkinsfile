@@ -2,19 +2,25 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('composer_install') {
             steps {
-                echo 'Building..'
+                sh 'composer self-update'
+                sh 'composer install --no-interaction'
             }
         }
-        stage('Test') {
+        stage('php_lint') {
             steps {
-                echo 'Testing..'
+                sh 'for file in $(git diff --name-status HEAD~1 HEAD | egrep "^[ACMR].*\.php$" | cut -c 3-); do php -l $file; done'
             }
         }
-        stage('Deploy') {
+        stage('phpunit') {
             steps {
-                echo 'Deploying....'
+                sh 'cd tests && ../vendor/bin/phpunit'
+            }
+        }
+        stage('output') {
+            steps {
+                sh 'cat ../suitecrm.log'
             }
         }
     }
