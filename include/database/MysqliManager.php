@@ -1,14 +1,11 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
-    die('Not A Valid Entry Point');
-}
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -92,6 +89,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
+use PDO;
 
 require_once('include/database/MysqlManager.php');
 
@@ -118,25 +116,35 @@ class MysqliManager extends MysqlManager
         'affected_row_count' => 'mysqli_affected_rows',
     );
 
+    protected $lastsql;
+
+    protected $sQuery;
+
+    protected $pdo;
+
     /**
-     * @see MysqlManager::query()
+     * @param string|array $sql
+     * @param bool $dieOnError
+     * @param string $msg
+     * @param bool $suppress
+     * @param bool $keepResult
+     * @return bool|resource
      */
     public function query($sql, $dieOnError = false, $msg = '', $suppress = false, $keepResult = false)
     {
         if (is_array($sql)) {
             return $this->queryArray($sql, $dieOnError, $msg, $suppress);
         }
+        static $queryMD5 = [];
 
-        static $queryMD5 = array();
-
-        parent::countQuery($sql);
+        $this->countQuery();
         LoggerManager::getLogger()->info('Query:' . $this->removeLineBreaks($sql));
         $this->checkConnection();
         $this->query_time = microtime(true);
         $this->lastsql = $sql;
         if (!empty($sql)) {
-            if ($this->database instanceof mysqli) {
-                $result = $suppress ? @mysqli_query($this->database, $sql) : mysqli_query($this->database, $sql);
+            if ($this->database instanceof PDO) {
+                $result = $this->database->query($sql);
                 if ($result === false && !$suppress) {
                     if (inDeveloperMode()) {
                         LoggerManager::getLogger()->debug('Mysqli_query failed, error was: ' . $this->lastDbError() . ', query was: ');
@@ -146,9 +154,6 @@ class MysqliManager extends MysqlManager
             } else {
                 LoggerManager::getLogger()->fatal('Database error: Incorrect link');
             }
-        } else {
-            $GLOBALS['log']->fatal('MysqliManager: Empty query');
-            $result = null;
         }
         $md5 = md5($sql);
 
@@ -156,22 +161,14 @@ class MysqliManager extends MysqlManager
             $queryMD5[$md5] = true;
         }
 
+        if (empty($result)) {
+            LoggerManager::getLogger()->fatal('MysqliManager: Empty query');
+            $result = null;
+        }
+
         $this->query_time = microtime(true) - $this->query_time;
         $GLOBALS['log']->info('Query Execution Time:' . $this->query_time);
         $this->dump_slow_queries($sql);
-
-        // This is some heavy duty debugging, leave commented out unless you need this:
-        /*
-        $bt = debug_backtrace();
-        for ( $i = count($bt) ; $i-- ; $i > 0 ) {
-            if ( strpos('MysqliManager.php',$bt[$i]['file']) === false ) {
-                $line = $bt[$i];
-            }
-        }
-
-        $GLOBALS['log']->fatal("${line['file']}:${line['line']} ${line['function']} \nQuery: $sql\n");
-        */
-
 
         if ($keepResult) {
             $this->lastResult = $result;
@@ -291,97 +288,77 @@ class MysqliManager extends MysqlManager
     }
 
     /**
-     * @see DBManager::connect()
+     * @param array|null $configOptions
+     * @param bool $dieOnError
+     * @return bool
+     * @throws Exception
      */
     public function connect(array $configOptions = null, $dieOnError = false)
     {
         global $sugar_config;
 
-        if (is_null($configOptions)) {
+        if ($configOptions === null) {
             $configOptions = $sugar_config['dbconfig'];
         }
 
-        if (!isset($this->database)) {
+        $collation = 'SET NAMES ' . $this->getOption('collation');
 
-            //mysqli connector has a separate parameter for port.. We need to separate it out from the host name
-            $dbhost = $configOptions['db_host_name'];
-            $dbport = isset($configOptions['db_port']) ? ($configOptions['db_port'] == '' ? null : $configOptions['db_port']) : null;
-
-            $pos = strpos($configOptions['db_host_name'], ':');
-            if ($pos !== false) {
-                $dbhost = substr($configOptions['db_host_name'], 0, $pos);
-                $dbport = substr($configOptions['db_host_name'], $pos + 1);
-            }
-
-            $this->database = @mysqli_connect(
-                $dbhost,
-                $configOptions['db_user_name'],
-                $configOptions['db_password'],
-                isset($configOptions['db_name']) ? $configOptions['db_name'] : '',
-                $dbport
-            );
-            if (empty($this->database)) {
-                $GLOBALS['log']->fatal("Could not connect to DB server " . $dbhost . " as " . $configOptions['db_user_name'] . ". port " . $dbport . ": " . mysqli_connect_error());
-                if ($dieOnError) {
-                    if (isset($GLOBALS['app_strings']['ERR_NO_DB'])) {
-                        sugar_die($GLOBALS['app_strings']['ERR_NO_DB']);
-                    } else {
-                        sugar_die("Could not connect to the database. Please refer to suitecrm.log for details (2).");
-                    }
-                } else {
-                    return false;
-                }
-            }
+        if (empty($this->getOption('collation'))) {
+            $collation = 'SET NAMES utf8';
         }
 
-        if (!empty($configOptions['db_name']) && !@mysqli_select_db($this->database, $configOptions['db_name'])) {
-            $GLOBALS['log']->fatal("Unable to select database {$configOptions['db_name']}: " . mysqli_connect_error());
+        if ($this->getOption('persistent')) {
+            $this->database = new PDO(
+                $configOptions['db_host_name'],
+                $configOptions['db_user_name'],
+                $configOptions['db_password'],
+                [PDO::MYSQL_ATTR_INIT_COMMAND => $collation, PDO::ATTR_PERSISTENT => true]
+            );
+        }
+
+        if (!$this->database) {
+            $this->database = new PDO(
+                $configOptions['db_host_name'],
+                $configOptions['db_user_name'],
+                $configOptions['db_password'],
+                [PDO::MYSQL_ATTR_INIT_COMMAND => $collation]
+            );
+        }
+
+        if (empty($this->database)) {
+            LoggerManager::getLogger()->fatal('Could not connect to server ' . $configOptions['db_host_name'] . ' as ' . $configOptions['db_user_name'] . ':' . $this->database->errorInfo());
             if ($dieOnError) {
                 if (isset($GLOBALS['app_strings']['ERR_NO_DB'])) {
                     sugar_die($GLOBALS['app_strings']['ERR_NO_DB']);
                 } else {
-                    sugar_die("Could not connect to the database. Please refer to suitecrm.log for details (2).");
+                    sugar_die('Could not connect to the database. Please refer to suitecrm.log for details (1).');
                 }
             } else {
                 return false;
             }
         }
 
-        // cn: using direct calls to prevent this from spamming the Logs
+        $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->database->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
-        $collation = $this->getOption('collation');
-        if (!empty($collation)) {
-            $names = "SET NAMES 'utf8' COLLATE '$collation'";
-            mysqli_query($this->database, $names);
+        if (!$this->checkError('Could Not Connect:', $dieOnError)) {
+            LoggerManager::getLogger()->info('connected to db');
         }
-        mysqli_set_charset($this->database, "utf8");
-
-        if ($this->checkError('Could Not Connect', $dieOnError)) {
-            $GLOBALS['log']->info("connected to db");
-        }
-
         $this->connectOptions = $configOptions;
+
+        LoggerManager::getLogger()->info('Connect:' . $this->database);
 
         return true;
     }
 
     /**
-     * (non-PHPdoc)
-     * @see MysqlManager::lastDbError()
+     * @return bool|false|string
      */
     public function lastDbError()
     {
-        if ($this->database) {
-            if (mysqli_errno($this->database)) {
-                return "MySQL error " . mysqli_errno($this->database) . ": " . mysqli_error($this->database);
-            }
-        } else {
-            $err = mysqli_connect_error();
-            if ($err) {
-                return $err;
-            }
+        if ($this->database && $this->database->errorCode()) {
+            return 'MySQL error ' . $this->database->errorCode() . ': ' . $this->database->errorInfo();
         }
-
         return false;
     }
 

@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -37,10 +37,6 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-
-if (!defined('sugarEntry') || !sugarEntry) {
-    die('Not A Valid Entry Point');
-}
 
 /*********************************************************************************
  * Description: This file handles the Data base functionality for the application.
@@ -94,6 +90,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
+use PDO;
+
 /**
  * MySQL manager implementation for mysql extension
  */
@@ -130,7 +128,7 @@ class MysqlManager extends DBManager
         'relate' => 'varchar',
         'multienum' => 'text',
         'html' => 'text',
-    'emailbody' => 'nvarchar(max)',
+        'emailbody' => 'nvarchar(max)',
         'longhtml' => 'longtext',
         'datetime' => 'datetime',
         'datetimecombo' => 'datetime',
@@ -162,15 +160,19 @@ class MysqlManager extends DBManager
         "disable_keys" => true,
     );
 
+    protected $lastsql;
+
+    protected $sQuery;
+
+    protected $pdo;
+
     /**
-     * Parses and runs queries
-     *
-     * @param  string $sql SQL Statement to execute
-     * @param  bool $dieOnError True if we want to call die if the query returns errors
-     * @param  string $msg Message to log if error occurs
-     * @param  bool $suppress Flag to suppress all error output unless in debug logging mode.
-     * @param  bool $keepResult True if we want to push this result into the $lastResult array.
-     * @return resource result set
+     * @param string|array $sql
+     * @param bool $dieOnError
+     * @param string $msg
+     * @param bool $suppress
+     * @param bool $keepResult
+     * @return bool|resource
      */
     public function query($sql, $dieOnError = false, $msg = '', $suppress = false, $keepResult = false)
     {
@@ -178,12 +180,13 @@ class MysqlManager extends DBManager
             return $this->queryArray($sql, $dieOnError, $msg, $suppress);
         }
 
-        parent::countQuery($sql);
+        $this->countQuery();
         LoggerManager::getLogger()->info('Query:' . $this->removeLineBreaks($sql));
         $this->checkConnection();
         $this->query_time = microtime(true);
         $this->lastsql = $sql;
-        $result = $suppress ? @mysql_query($sql, $this->database) : mysql_query($sql, $this->database);
+
+        $result = $this->database->query($sql);
 
         $this->query_time = microtime(true) - $this->query_time;
         $GLOBALS['log']->info('Query Execution Time:' . $this->query_time);
@@ -347,9 +350,9 @@ class MysqlManager extends DBManager
             preg_match_all('/(\w+)(?:\(([0-9]+,?[0-9]*)\)|)( unsigned)?/i', $row['Type'], $matches);
             $columns[$name]['type'] = strtolower($matches[1][0]);
             if (isset($matches[2][0]) && in_array(
-                strtolower($matches[1][0]),
+                    strtolower($matches[1][0]),
                     array('varchar', 'char', 'varchar2', 'int', 'decimal', 'float')
-            )
+                )
             ) {
                 $columns[$name]['len'] = strtolower($matches[2][0]);
             }
@@ -502,73 +505,65 @@ class MysqlManager extends DBManager
     }
 
     /**
-     * @see DBManager::connect()
+     * @param array|null $configOptions
+     * @param bool $dieOnError
+     * @return bool
+     * @throws Exception
      */
     public function connect(array $configOptions = null, $dieOnError = false)
     {
         global $sugar_config;
 
-        if (is_null($configOptions)) {
+        if ($configOptions === null) {
             $configOptions = $sugar_config['dbconfig'];
         }
 
+        $collation = 'SET NAMES ' . $this->getOption('collation');
+
+        if (empty($this->getOption('collation'))) {
+            $collation = 'SET NAMES utf8';
+        }
+
         if ($this->getOption('persistent')) {
-            $this->database = @mysql_pconnect(
+            $this->database = new PDO(
                 $configOptions['db_host_name'],
                 $configOptions['db_user_name'],
-                $configOptions['db_password']
+                $configOptions['db_password'],
+                [PDO::MYSQL_ATTR_INIT_COMMAND => $collation, PDO::ATTR_PERSISTENT => true]
             );
         }
 
         if (!$this->database) {
-            $this->database = mysql_connect(
+            $this->database = new PDO(
                 $configOptions['db_host_name'],
                 $configOptions['db_user_name'],
-                $configOptions['db_password']
+                $configOptions['db_password'],
+                [PDO::MYSQL_ATTR_INIT_COMMAND => $collation]
             );
-            if (empty($this->database)) {
-                $GLOBALS['log']->fatal("Could not connect to server " . $configOptions['db_host_name'] . " as " . $configOptions['db_user_name'] . ":" . mysql_error());
-                if ($dieOnError) {
-                    if (isset($GLOBALS['app_strings']['ERR_NO_DB'])) {
-                        sugar_die($GLOBALS['app_strings']['ERR_NO_DB']);
-                    } else {
-                        sugar_die("Could not connect to the database. Please refer to suitecrm.log for details (1).");
-                    }
-                } else {
-                    return false;
-                }
-            }
-            // Do not pass connection information because we have not connected yet
-            if ($this->database && $this->getOption('persistent')) {
-                $_SESSION['administrator_error'] = "<b>Severe Performance Degradation: Persistent Database Connections "
-                    . "not working.  Please set \$sugar_config['dbconfigoption']['persistent'] to false "
-                    . "in your config.php file</b>";
-            }
         }
-        if (!empty($configOptions['db_name']) && !@mysql_select_db($configOptions['db_name'])) {
-            $GLOBALS['log']->fatal("Unable to select database {$configOptions['db_name']}: " . mysql_error($this->database));
+
+        if (empty($this->database)) {
+            LoggerManager::getLogger()->fatal('Could not connect to server ' . $configOptions['db_host_name'] . ' as ' . $configOptions['db_user_name'] . ':' . $this->database->errorInfo());
             if ($dieOnError) {
-                sugar_die($GLOBALS['app_strings']['ERR_NO_DB']);
+                if (isset($GLOBALS['app_strings']['ERR_NO_DB'])) {
+                    sugar_die($GLOBALS['app_strings']['ERR_NO_DB']);
+                } else {
+                    sugar_die('Could not connect to the database. Please refer to suitecrm.log for details (1).');
+                }
             } else {
                 return false;
             }
         }
 
-        // cn: using direct calls to prevent this from spamming the Logs
-        mysql_query("SET CHARACTER SET utf8", $this->database);
-        $names = "SET NAMES 'utf8'";
-        $collation = $this->getOption('collation');
-        if (!empty($collation)) {
-            $names .= " COLLATE '$collation'";
-        }
-        mysql_query($names, $this->database);
+        $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->database->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
         if (!$this->checkError('Could Not Connect:', $dieOnError)) {
-            $GLOBALS['log']->info("connected to db");
+            LoggerManager::getLogger()->info('connected to db');
         }
         $this->connectOptions = $configOptions;
 
-        $GLOBALS['log']->info("Connect:" . $this->database);
+        LoggerManager::getLogger()->info('Connect:' . $this->database);
 
         return true;
     }
@@ -644,13 +639,13 @@ class MysqlManager extends DBManager
                 if (empty($additional_parameters)) {
                     return "DATE_FORMAT($string,'%Y-%m-%d')";
                 }
-                    $format = $additional_parameters[0];
-                    if ($format[0] != "'") {
-                        $format = $this->quoted($format);
-                    }
+                $format = $additional_parameters[0];
+                if ($format[0] != "'") {
+                    $format = $this->quoted($format);
+                }
 
-                    return "DATE_FORMAT($string,$format)";
-                
+                return "DATE_FORMAT($string,$format)";
+
             case 'ifnull':
                 if (empty($additional_parameters) && !strstr($all_strings, ",")) {
                     $all_strings .= ",''";
@@ -1209,22 +1204,13 @@ class MysqlManager extends DBManager
     }
 
     /**
-     * (non-PHPdoc)
-     * @see DBManager::lastDbError()
+     * @return bool|false|string
      */
     public function lastDbError()
     {
-        if ($this->database) {
-            if (mysql_errno($this->database)) {
-                return "MySQL error " . mysql_errno($this->database) . ": " . mysql_error($this->database);
-            }
-        } else {
-            $err = mysql_error();
-            if ($err) {
-                return $err;
-            }
+        if ($this->database && $this->database->errorCode()) {
+            return 'MySQL error ' . $this->database->errorCode() . ': ' . $this->database->errorInfo();
         }
-
         return false;
     }
 
