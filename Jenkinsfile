@@ -4,7 +4,6 @@ pipeline {
     stages {
         stage('composer_install') {
             steps {
-                sh 'composer self-update'
                 sh 'composer install --no-interaction'
             }
         }
