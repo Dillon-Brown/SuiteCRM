@@ -1,0 +1,17 @@
+{
+  "name": "suitecrm/robo",
+  "description": "SuiteCRM Robo task runner",
+  "minimum-stability": "stable",
+  "license": "GPL-3.0",
+  "require": {
+    "consolidation/robo": "^1.4"
+  },
+  "autoload":{
+    "psr-4":{
+      "SuiteCRM\\": [
+        "Plugin/",
+        "Traits/"
+      ]
+    }
+  }
+}
