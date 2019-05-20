@@ -64,8 +64,9 @@ if (!$campaign_focus->ACLAccess('Save')) {
         $campaign_focus->retrieve($_REQUEST['campaign_id']);
     }
 
-    $camp_steps[] = 'wiz_step1_';
-    $camp_steps[] = 'wiz_step2_';
+$camp_steps[] = 'wiz_step1_';
+$camp_steps[] = 'wiz_step2_';
+$_REQUEST['wiz_step1_table_name'] = $campaign_focus->retrieve($_REQUEST['table_name']);
 
     $campaign_focus = populateFromPost('', $campaign_focus);
 
