@@ -51,6 +51,12 @@ global $mod_strings;
 
     //create new campaign bean and populate
     $campaign_focus = new Campaign();
+
+if (!$campaign_focus->ACLAccess('Save')) {
+    ACLController::displayNoAccess(true);
+    sugar_cleanup(true);
+}
+
     if(isset($_REQUEST['record']) && $_REQUEST['record'] && !(isset($_REQUEST['campaign_id']) && $_REQUEST['campaign_id'])) {
         $campaign_focus->retrieve($_REQUEST['record']);
     }
@@ -404,22 +410,26 @@ global $mod_strings;
             break;
     }
 
-
-/*
+/**
  * This function will populate the passed in bean with the post variables
  * that contain the specified prefix
+ *
+ * @param $bean
+ * @param $prefix
+ * @return mixed
  */
-function populate_wizard_bean_from_request($bean,$prefix){
-    foreach($_REQUEST as $key=> $val){
-     $key = trim($key);
-     if((strstr($key, $prefix )) && (strpos($key, $prefix )== 0)){
-          $field  =substr($key, strlen($prefix)) ;
-          if(isset($_REQUEST[$key]) && !empty($_REQUEST[$key])){
-              //echo "prefix is $prefix, field is $field,    key is $key,   and value is $val<br>";
-              $value = $_REQUEST[$key];
-              $bean->$field = $value;
-          }
-     }
+function populate_wizard_bean_from_request($bean, $prefix)
+{
+    foreach ($bean->field_defs as $field => $value) {
+        foreach ($_REQUEST as $key => $val) {
+            $key = trim($key);
+            if (strpos($key, $prefix) === 0) {
+                $field = substr($key, strlen($prefix));
+                if (isset($_REQUEST[$key]) && !empty($_REQUEST[$key])) {
+                    $bean->$field = $_REQUEST[$key];
+                }
+            }
+        }
     }
 
     return $bean;
