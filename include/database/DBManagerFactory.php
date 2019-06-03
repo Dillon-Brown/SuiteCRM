@@ -51,6 +51,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 ********************************************************************************/
 
 require_once dirname(__DIR__) . '/../include/database/DBManager.php';
+require_once dirname(__DIR__) . '/../include/database/PDOManager.php';
 
 /**
  * Database driver factory
@@ -64,63 +65,13 @@ class DBManagerFactory
     /**
      * Returns a reference to the DB object of specific type
      *
-     * @param  string $type DB type
+     * @param string $type DB type
      * @param array $config DB configuration
-     * @return object DBManager instance
+     * @return PDOManager instance
      */
-    public static function getTypeInstance($type, $config = array())
+    public static function getTypeInstance($type, $config = [])
     {
-        global $sugar_config;
-
-        if (empty($config['db_manager'])) {
-            // standard types
-            switch ($type) {
-                case "mysql":
-                    if (empty($sugar_config['mysqli_disabled']) && function_exists('mysqli_connect')) {
-                        $my_db_manager = 'MysqliManager';
-                    } else {
-                        $my_db_manager = "MysqlManager";
-                    }
-                    break;
-                case "mssql":
-                      if (function_exists('sqlsrv_connect')
-                                && (empty($config['db_mssql_force_driver']) || $config['db_mssql_force_driver'] == 'sqlsrv')) {
-                          $my_db_manager = 'SqlsrvManager';
-                      } elseif (self::isFreeTDS()
-                                && (empty($config['db_mssql_force_driver']) || $config['db_mssql_force_driver'] == 'freetds')) {
-                          $my_db_manager = 'FreeTDSManager';
-                      } else {
-                          $my_db_manager = 'MssqlManager';
-                      }
-                    break;
-                default:
-                    $my_db_manager = self::getManagerByType($type, false);
-                    if (empty($my_db_manager)) {
-                        $GLOBALS['log']->fatal("unable to load DB manager for: $type");
-                        sugar_die("Cannot load DB manager");
-                    }
-            }
-        } else {
-            $my_db_manager = $config['db_manager'];
-        }
-
-        // sanitize the name
-        $my_db_manager = preg_replace("/[^A-Za-z0-9_-]/", "", $my_db_manager);
-
-        if (!empty($config['db_manager_class'])) {
-            $my_db_manager = $config['db_manager_class'];
-        } else {
-            if (file_exists("custom/include/database/{$my_db_manager}.php")) {
-                require_once("custom/include/database/{$my_db_manager}.php");
-            } else {
-                require_once("include/database/{$my_db_manager}.php");
-            }
-        }
-
-        if (class_exists($my_db_manager)) {
-            return new $my_db_manager();
-        }
-        return null;
+        return new PDOManager();
     }
 
     /**
@@ -128,32 +79,11 @@ class DBManagerFactory
      * instance if one is not specified
      *
      * @param  string $instanceName optional, name of the instance
-     * @return DBManager instance
+     * @return PDOManager instance
      */
     public static function getInstance($instanceName = '')
     {
-        global $sugar_config;
-        static $count = 0, $old_count = 0;
-
-        //fall back to the default instance name
-        if (empty($sugar_config['db'][$instanceName])) {
-            $instanceName = '';
-        }
-        if (!isset(self::$instances[$instanceName])) {
-            $config = $sugar_config['dbconfig'];
-            $count++;
-            self::$instances[$instanceName] = self::getTypeInstance($config['db_type'], $config);
-            if (!empty($sugar_config['dbconfigoption'])) {
-                self::$instances[$instanceName]->setOptions($sugar_config['dbconfigoption']);
-            }
-            self::$instances[$instanceName]->connect($config, true);
-            self::$instances[$instanceName]->count_id = $count;
-            self::$instances[$instanceName]->references = 0;
-        } else {
-            $old_count++;
-            self::$instances[$instanceName]->references = $old_count;
-        }
-        return self::$instances[$instanceName];
+        return new PDOManager();
     }
 
     /**
