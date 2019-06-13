@@ -23,6 +23,9 @@ matrix:
     - name: "PHP 7.3 / MySQL 5.7"
       php: "7.3"
       dist: xenial
+    - name: "PHP 7.4 / MySQL 5.7"
+      php: "7.4snapshot"
+      dist: xenial
     - stage: codecoverage
       if: type IN (pull_request) OR branch in (master, develop, hotfix)
       php: "7.0"
