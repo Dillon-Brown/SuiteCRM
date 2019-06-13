@@ -3183,6 +3183,11 @@ function check_php_version($sys_php_version = '')
         $sys_php_version = constant('PHP_VERSION');
     }
 
+    // Temporary, just to get the snapshot running.
+    if ($sys_php_version === '7.4.0-dev') {
+        return 1;
+    }
+
     // versions below MIN_PHP_VERSION are not accepted, so return early.
     if (version_compare($sys_php_version, constant('SUITECRM_PHP_MIN_VERSION'), '<') === true) {
         return - 1;
