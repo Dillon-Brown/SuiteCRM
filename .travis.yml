@@ -75,6 +75,7 @@ before_script:
   # Additional PHP config
   - phpenv config-add travis.php.ini
   - sudo service apache2 restart
+  - echo 'session.save_path = "/tmp"' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   # Install composer
   - composer install
   - ./vendor/bin/codecept build
