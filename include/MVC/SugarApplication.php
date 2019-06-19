@@ -618,10 +618,8 @@ class SugarApplication
                 session_destroy();
                 exit('Not a valid entry method');
             }
-        } else {
-            if (can_start_session()) {
-                session_start();
-            }
+        } elseif (can_start_session()) {
+            session_start();
         }
 
         //set the default module to either Home or specified default
@@ -629,13 +627,9 @@ class SugarApplication
 
         //set session expired message if login module and action are set to a non login default
         //AND session id in cookie is set but super global session array is empty
-        if (isset($_REQUEST['login_module']) && isset($_REQUEST['login_action']) && !($_REQUEST['login_module'] == $default_module && $_REQUEST['login_action'] == 'index')) {
-            if (!is_null($sessionIdCookie) && empty($_SESSION)) {
-                self::setCookie('loginErrorMessage', 'LBL_SESSION_EXPIRED', time() + 30, '/');
-            }
+        if (isset($_REQUEST['login_module'], $_REQUEST['login_action']) && !($_REQUEST['login_module'] == $default_module && $_REQUEST['login_action'] == 'index') && $sessionIdCookie !== null && empty($_SESSION)) {
+            self::setCookie('loginErrorMessage', 'LBL_SESSION_EXPIRED', time() + 30, '/');
         }
-
-
         LogicHook::initialize()->call_custom_logic('', 'after_session_start');
     }
 
