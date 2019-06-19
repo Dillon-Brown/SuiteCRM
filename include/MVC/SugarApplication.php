@@ -606,20 +606,21 @@ class SugarApplication
 
     public function startSession()
     {
+        $session = new \SuiteCRM\SessionHandler();
         $sessionIdCookie = isset($_COOKIE['PHPSESSID']) ? $_COOKIE['PHPSESSID'] : null;
         if (isset($_REQUEST['MSID'])) {
-            session_id($_REQUEST['MSID']);
-            session_start();
+            $sessionID = session_id($_REQUEST['MSID']);
+            $session->open();
             if (!isset($_SESSION['user_id'])) {
                 if (isset($_COOKIE['PHPSESSID'])) {
                     self::setCookie('PHPSESSID', '', time() - 42000, '/');
                 }
                 sugar_cleanup(false);
-                session_destroy();
+                $session->destroy($sessionID);
                 exit('Not a valid entry method');
             }
         } elseif (can_start_session()) {
-            session_start();
+            $session->open();
         }
 
         //set the default module to either Home or specified default
