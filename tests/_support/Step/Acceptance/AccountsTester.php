@@ -30,6 +30,7 @@ class AccountsTester extends \AcceptanceTester
         $DetailView = new DetailView($this->getScenario());
         $Sidebar = new SideBar($this->getScenario());
 
+        $I->waitForText('Create Account', 5, '.actionmenulink');
         $I->see('Create Account', '.actionmenulink');
         $Sidebar->clickSideBarAction('Create');
         $I->waitForEditViewVisible();
