@@ -140,7 +140,8 @@ $out = <<<EOQ
             </div>
             <div id="licenseaccept">
             <label style="float: none; display: inline;">
-                <input type="checkbox" class="checkbox" name="setup_license_accept" id="button_next2 Rot">{$mod_strings['LBL_LICENSE_I_ACCEPT']}
+                <input type="checkbox" class="checkbox" name="setup_license_accept" id="button_next2 Rot" onclick="document.getElementById('button_next').toggleAttribute('disabled');
+">{$mod_strings['LBL_LICENSE_I_ACCEPT']}
             </label>
                 <input type="button" class="button" name="print_license" id="button_print_license" value="{$mod_strings['LBL_LICENSE_PRINTABLE']}"
                 onClick='window.open("install.php?page=licensePrint&language={$current_language}");' />
