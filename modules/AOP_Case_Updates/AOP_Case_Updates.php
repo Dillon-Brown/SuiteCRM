@@ -135,7 +135,7 @@ class AOP_Case_Updates extends Basic
     }
 
     /**
-     * @return aCase
+     * @return bool|SugarBean
      */
     public function getCase()
     {
