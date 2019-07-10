@@ -322,6 +322,24 @@ $dictionary['Email'] = array(
             ),
         ),
 
+        'attachment' => array(
+            'name' => 'subject',
+            'vname' => 'LBL_SUBJECT',
+            'type' => 'function',
+            'source' => 'non-db',
+            'massupdate' => 0,
+            'importable' => 'false',
+            'duplicate_merge' => 'disabled',
+            'studio' => 'visible',
+            'inline_edit' => false,
+            'function' => array(
+                'name' => 'displayAttachmentField',
+                'returns' => 'html',
+                'include' => 'modules/Emails/include/displayAttachmentField.php',
+                'onListView' =>  true
+            ),
+        ),
+
         'uid' => array(
             'name' => 'uid',
             'type' => 'varchar',
