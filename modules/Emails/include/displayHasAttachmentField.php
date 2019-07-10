@@ -52,7 +52,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 function displayHasAttachmentField($focus, $field, $value, $view)
 {
-    global $app_strings, $app_list_strings, $mod_strings;
+    global $app_strings, $app_list_strings, $mod_strings, $db;
     $result = '';
     $bean = array();
 
@@ -79,6 +79,11 @@ function displayHasAttachmentField($focus, $field, $value, $view)
         if (is_object($bean)) {
             $bean = get_object_vars($bean);
         }
+    } elseif (!empty($focus['inbound_email_record'])) {
+        $inboundEmail = new InboundEmail();
+        $email = $inboundEmail->connectMailserver();
+
+        $test = '';
     } else {
         $bean = $focus;
     }
