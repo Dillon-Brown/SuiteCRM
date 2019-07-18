@@ -50,7 +50,7 @@ variables:
   before_script: *php_codecept_before_script_definition
   script:
     # Run install wizard
-    - ./vendor/bin/codecept run install --env travis-ci-hub -f -d --ext DotReporter
+    # - ./vendor/bin/codecept run install --env travis-ci-hub -f -d --ext DotReporter
     - chmod -R 777 .
     # Disable memory-intensive StateChecker behavior.
     - echo "\$sugar_config['state_checker']['save_traces'] = false;" >> config_override.php
