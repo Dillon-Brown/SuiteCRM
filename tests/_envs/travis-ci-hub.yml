@@ -8,6 +8,7 @@ modules:
       port: 9515 # ChromeDriver port
       browser: chrome
       window_size: false
+      clear_cookies: true
       capabilities:
         # If there are unexpected alerts, accept them.
         unexpectedAlertBehaviour: 'accept'

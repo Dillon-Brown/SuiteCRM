@@ -19,5 +19,5 @@ modules:
             clear_cookies: false
             port: 9515
             capabilities:
-            "goog:chromeOptions": 
+            "goog:chromeOptions":
                 args: ["--headless", "--no-sandbox", "--disable-dev-shm-usage"]

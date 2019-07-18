@@ -12,5 +12,4 @@ modules:
         unexpectedAlertBehaviour: 'accept'
         "goog:chromeOptions":
             args: ["--headless", "window-size=1920x1080"]
-
-
+            binary: "/usr/bin/google-chrome"

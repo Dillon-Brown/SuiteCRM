@@ -16,5 +16,5 @@ modules:
         width: 1280
         height: 720
         capabilities:
-          "goog:chromeOptions": 
+          "goog:chromeOptions":
             args: ["--headless", "--no-sandbox", "--disable-dev-shm-usage"]
