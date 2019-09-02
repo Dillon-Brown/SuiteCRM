@@ -5,9 +5,24 @@ sudo: required
 matrix:
   fast_finish: true
   include:
+    - name: "PHP 5.5 / MySQL 5.6"
+      php: "5.5"
+      dist: trusty
     - name: "PHP 5.6 / MySQL 5.6"
       php: "5.6"
       dist: trusty
+    - name: "PHP 7.0 / MySQL 5.7"
+      php: "7.0"
+      dist: xenial
+    - name: "PHP 7.1 / MySQL 5.7"
+      php: "7.1"
+      dist: xenial
+    - name: "PHP 7.2 / MySQL 5.7"
+      php: "7.2"
+      dist: xenial
+    - name: "PHP 7.3 / MySQL 5.7"
+      php: "7.3"
+      dist: xenial
     - name: "PHP 7.4 / MySQL 5.7"
       php: "7.4snapshot"
       dist: xenial
@@ -79,7 +94,7 @@ script:
   - echo "using install wizard"
   - ./vendor/bin/codecept run install --env travis-ci-hub -f --ext DotReporter
   - ./build/push_output.sh
-  
+
   # Run the unit tests
   - sudo chmod -R 777 .
   - ./vendor/bin/phpunit --stop-on-failure --stop-on-error --colors --configuration ./tests/phpunit.xml.dist ./tests/unit/phpunit
@@ -105,7 +120,6 @@ after_script:
   - ./build/push_output.sh
   - curl -i -F file=@suitecrm.log https://www.simpleupload.co.uk/Api/FileUpload.php?d=upload
   - curl -i -F file=@var/log/apache2/error.log https://www.simpleupload.co.uk/Api/FileUpload.php?d=upload
-  - sudo cat /var/log/apache2/error.log
   - echo $TRAVIS_COMMIT_RANGE
 
 branches:
