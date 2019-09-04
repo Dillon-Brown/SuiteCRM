@@ -6,6 +6,7 @@ use SuiteCRM\StateCheckerConfig;
 use SuiteCRM\Test\SuitePHPUnit_Framework_TestCase;
 
 /** @noinspection PhpUndefinedClassInspection */
+
 class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 {
 
@@ -14,7 +15,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
      * @var array
      */
     protected $fieldDefsStore;
-    
+
 
     public function setUp()
     {
@@ -747,7 +748,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
     {
         $request = $_REQUEST;
         self::assertFalse(isset($_SESSION));
-        
+
         // test
         $GLOBALS['log']->reset();
         $results = SugarBean::get_union_related_list(null);
@@ -910,7 +911,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         global $sugar_config;
-        
+
         $query = "SELECT * FROM aod_index";
         $resource = DBManagerFactory::getInstance()->query($query);
         $rows = [];
@@ -1238,7 +1239,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         // cleanup
         $this->db->query("DELETE FROM sugarfeed WHERE related_id LIKE 'test_contact%'");
         $this->db->query("DELETE FROM contacts_cstm WHERE id_c LIKE 'test_contact%'");
-        
+
         $this->db->query("DELETE FROM aod_index");
         foreach ($tableAodIndex as $row) {
             $query = "INSERT aod_index INTO (";
@@ -1249,9 +1250,9 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
             $query .= (implode(', ', $quoteds)) . ')';
             DBManagerFactory::getInstance()->query($query);
         }
-        
+
         // clean up
-        
+
         $state->popTable('tracker');
         $state->popTable('aod_index');
     }
@@ -1765,7 +1766,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->getFieldDefinition(null);
         self::assertFalse($results);
@@ -1773,7 +1774,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->getFieldDefinition('undefined');
         self::assertFalse($results);
@@ -1782,7 +1783,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->getFieldDefinition('name');
         self::assertEquals(array(
@@ -1816,7 +1817,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->getFieldValue(null);
         self::assertFalse($results);
@@ -1824,7 +1825,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->getFieldValue('importable');
         self::assertEquals(1, $results);
@@ -1832,7 +1833,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->getFieldValue('in_workflow');
         self::assertEquals(0, $results);
@@ -1840,7 +1841,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->getFieldValue('portal_user_type');
         self::assertEquals('Single', $results);
@@ -1855,7 +1856,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $results = $bean->unPopulateDefaultValues();
@@ -1870,7 +1871,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs = false;
         /** @noinspection PhpVoidFunctionResultUsedInspection */
@@ -1880,7 +1881,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $results = $bean->unPopulateDefaultValues();
@@ -1896,7 +1897,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $clone = clone $bean;
         self::assertEquals($bean, $clone);
@@ -1904,7 +1905,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new SugarBeanMock();
         $bean->foo = 'bar';
         $bean->setLoadedRelationships(array('foo'));
@@ -1924,7 +1925,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs = array();
         $results = $bean->get_linked_fields();
@@ -1933,7 +1934,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs = array(1);
         $results = $bean->get_linked_fields();
@@ -1942,7 +1943,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs = array(array(1));
         $results = $bean->get_linked_fields();
@@ -1951,7 +1952,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs = array(array('type' => 'link'));
         $results = $bean->get_linked_fields();
@@ -1971,7 +1972,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->getFieldDefinitions();
         self::assertEquals($bean->field_defs, $results);
@@ -1986,7 +1987,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->load_relationship(null);
         self::assertEquals(false, $results);
@@ -1995,7 +1996,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->load_relationship('test');
         self::assertEquals(false, $results);
@@ -2003,7 +2004,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs['testKey'] = 'testValue';
         $results = $bean->load_relationship('testKey');
@@ -2012,7 +2013,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs['testKey'] = 'testValue';
         /** @noinspection PhpUndefinedFieldInspection */
@@ -2023,7 +2024,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs['testKey'] = array('type' => 'link');
         /** @noinspection PhpUndefinedFieldInspection */
@@ -2036,7 +2037,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs['testKey'] = array(
             'type' => 'link',
@@ -2053,7 +2054,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs['testKey'] = array(
             'type' => 'link',
@@ -2070,7 +2071,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs['testKey'] = array(
             'type' => 'link',
@@ -2088,7 +2089,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs['testKey'] = array(
             'type' => 'link',
@@ -2113,7 +2114,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->get_linked_beans(null);
         self::assertEquals(array(), $results);
@@ -2121,7 +2122,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $results = $bean->get_linked_beans(null, 'Case');
         self::assertEquals(array(), $results);
@@ -2129,7 +2130,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         /** @noinspection PhpUndefinedFieldInspection */
         $bean->testKey = new ProspectLink('test', $bean);
@@ -2139,7 +2140,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         /** @noinspection PhpUndefinedFieldInspection */
         $bean->testKey = new ProspectLink('test', $bean);
@@ -2156,7 +2157,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs = array();
         $results = $bean->get_import_required_fields();
@@ -2171,7 +2172,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
     {
         // test
         $GLOBALS['log']->reset();
-        LoggerManager::getLogger()->fatal('test');
+        $GLOBALS['log']->fatal('test');
         $bean = new Contact();
         $bean->field_defs = array();
         $results = $bean->get_importable_fields();
@@ -2271,7 +2272,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         $contactFieldDefs = BeanFactory::getBean('Contacts')->field_defs;
 
         // test
-        
+
         global $current_user;
 
         // test
@@ -2296,7 +2297,6 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
 
         self::assertEquals($bean, $bean->custom_fields->bean);
         self::assertEquals(false, $bean->new_with_id);
-        
 
 
         // test
@@ -2338,9 +2338,9 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         self::assertFalse($isValidator->isValidId($results));
 
         self::assertEquals(false, $bean->in_save);
-        
+
         self::assertEquals($current_user->id, $bean->modified_user_id);
-        
+
         self::assertEquals(0, $bean->deleted);
         self::assertEquals($bean->date_modified, $bean->date_entered);
         /** @noinspection UnSafeIsSetOverArrayInspection */
@@ -2348,7 +2348,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         self::assertFalse($isValidator->isValidId($bean->id));
         self::assertEquals($bean, $bean->custom_fields->bean);
         self::assertEquals(true, $bean->new_with_id);
-        
+
 
         // test
         $GLOBALS['log']->reset();
@@ -2364,10 +2364,9 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         }
         self::assertFalse($isValidator->isValidId($results));
 
-        
-        
+
         self::assertEquals($current_user->id, $bean->modified_user_id);
-        
+
         self::assertEquals(0, $bean->deleted);
         /** @noinspection UnSafeIsSetOverArrayInspection */
         self::assertFalse(isset($bean->date_entered));
@@ -2376,7 +2375,6 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         self::assertFalse($isValidator->isValidId($bean->id));
         self::assertEquals($bean, $bean->custom_fields->bean);
         self::assertEquals(false, $bean->new_with_id);
-        
 
 
         // test
@@ -2404,9 +2402,9 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         self::assertFalse($isValidator->isValidId($results));
 
         self::assertEquals(null, $bean->in_save);
-        
+
         self::assertEquals($current_user->id, $bean->modified_user_id);
-        
+
         self::assertEquals($current_user->user_name, null);
         self::assertEquals(0, $bean->deleted);
         /** @noinspection UnSafeIsSetOverArrayInspection */
@@ -2416,47 +2414,6 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         self::assertFalse($isValidator->isValidId($bean->id));
         self::assertEquals($bean, $bean->custom_fields->bean);
         self::assertEquals(false, $bean->new_with_id);
-        
-
-        // test
-        $GLOBALS['log']->reset();
-        $bean = BeanFactory::getBean('Users');
-        $bean->id = 'testBean_1';
-        $bean->modified_by_name = 'testing';
-        $bean->field_defs = array(
-            'email_addresses' => array(
-                'type' => 'link',
-            ),
-            'email_addresses_non_primary' => array(
-                'type' => 'email',
-            ),
-        );
-        /** @noinspection PhpUndefinedFieldInspection */
-        $bean->emailAddress = new EmailAddress();
-        /** @noinspection PhpUndefinedFieldInspection */
-        $bean->email_addresses_non_primary = array(true);
-        $results = null;
-        try {
-            $results = $bean->save();
-            self::assertTrue(false);
-        } catch (Exception $e) {
-        }
-        self::assertFalse($isValidator->isValidId($results));
-
-        self::assertEquals(false, $bean->in_save);
-        
-        self::assertEquals($current_user->id, $bean->modified_user_id);
-        
-        self::assertEquals($current_user->user_name, null);
-        self::assertEquals(0, $bean->deleted);
-        /** @noinspection UnSafeIsSetOverArrayInspection */
-        self::assertFalse(isset($bean->date_entered));
-        /** @noinspection UnSafeIsSetOverArrayInspection */
-        self::assertEquals(isset($current_user) ? $current_user->id : '', $bean->created_by);
-        self::assertFalse($isValidator->isValidId($bean->id));
-        self::assertEquals($bean, $bean->custom_fields->bean);
-        self::assertEquals(false, $bean->new_with_id);
-        
 
 
         // test
@@ -2485,9 +2442,9 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         self::assertFalse($isValidator->isValidId($results));
 
         self::assertEquals(false, $bean->in_save);
-        
+
         self::assertEquals($current_user->id, $bean->modified_user_id);
-        
+
         self::assertEquals($current_user->user_name, null);
         self::assertEquals(0, $bean->deleted);
         /** @noinspection UnSafeIsSetOverArrayInspection */
@@ -2497,7 +2454,47 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         self::assertFalse($isValidator->isValidId($bean->id));
         self::assertEquals($bean, $bean->custom_fields->bean);
         self::assertEquals(false, $bean->new_with_id);
-        
+
+
+        // test
+        $GLOBALS['log']->reset();
+        $bean = BeanFactory::getBean('Users');
+        $bean->id = 'testBean_1';
+        $bean->modified_by_name = 'testing';
+        $bean->field_defs = array(
+            'email_addresses' => array(
+                'type' => 'link',
+            ),
+            'email_addresses_non_primary' => array(
+                'type' => 'email',
+            ),
+        );
+        /** @noinspection PhpUndefinedFieldInspection */
+        $bean->emailAddress = new EmailAddress();
+        /** @noinspection PhpUndefinedFieldInspection */
+        $bean->email_addresses_non_primary = array(true);
+        $results = null;
+        try {
+            $results = $bean->save();
+            self::assertTrue(false);
+        } catch (Exception $e) {
+        }
+        self::assertFalse($isValidator->isValidId($results));
+
+        self::assertEquals(false, $bean->in_save);
+
+        self::assertEquals($current_user->id, $bean->modified_user_id);
+
+        self::assertEquals($current_user->user_name, null);
+        self::assertEquals(0, $bean->deleted);
+        /** @noinspection UnSafeIsSetOverArrayInspection */
+        self::assertFalse(isset($bean->date_entered));
+        /** @noinspection UnSafeIsSetOverArrayInspection */
+        self::assertEquals(isset($current_user) ? $current_user->id : '', $bean->created_by);
+        self::assertFalse($isValidator->isValidId($bean->id));
+        self::assertEquals($bean, $bean->custom_fields->bean);
+        self::assertEquals(false, $bean->new_with_id);
+
 
         // test
         $GLOBALS['log']->reset();
@@ -2547,7 +2544,7 @@ class SugarBeanTest extends SuitePHPUnit_Framework_TestCase
         $this->db->query("DELETE FROM contacts_cstm WHERE id_c LIKE 'testBean_1'");
         $this->db->query("DELETE FROM email_addr_bean_rel WHERE bean_id LIKE 'testBean_1'");
         $this->db->query("DELETE FROM email_addresses WHERE email_address LIKE 'testbean1@email.com'");
-        
+
         // clean up
         BeanFactory::getBean('Users')->field_defs = $userFieldDefs;
         BeanFactory::getBean('Contacts')->field_defs = $contactFieldDefs;
