@@ -75,7 +75,7 @@ class ViewHistory extends SugarView
         $this->parser = ParserFactory::getParser($this->layout, $this->module, $packageName, $subpanelName) ;
         $this->history = $this->parser->getHistory() ;
         $action = ! empty($_REQUEST [ 'histAction' ]) ? $_REQUEST [ 'histAction' ] : 'browse' ;
-        $GLOBALS['log']->debug(get_class($this)."->display(): performing History action {$action}") ;
+        LoggerManager::getLogger()->debug(get_class($this)."->display(): performing History action {$action}") ;
         $this->$action() ;
     }
 

@@ -66,7 +66,7 @@ global $theme;
 
 
 
-$GLOBALS['log']->info("Campaign detail view");
+LoggerManager::getLogger()->info("Campaign detail view");
 
 $xtpl=new XTemplate('modules/Campaigns/PopupCampaignRoi.html');
 

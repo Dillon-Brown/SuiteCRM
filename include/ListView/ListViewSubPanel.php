@@ -63,7 +63,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
             // validate path is a .tpl file
             $path_parts = pathinfo($templatePath);
             if ($path_parts['extension'] != 'tpl') {
-                $GLOBALS['log']->fatal('ListViewSubPanel::initNewSmartyTemplate path must have an tpl extension');
+                LoggerManager::getLogger()->fatal('ListViewSubPanel::initNewSmartyTemplate path must have an tpl extension');
 
                 // TODO: Remove after 7.8. This is just to see which subpanels need to be upgraded to smarty
                 echo 'ListViewSubPanel::initNewSmartyTemplate path must have an tpl extension';
@@ -114,7 +114,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                     $this->smartyTemplate->assign("IMAGE_PATH", $this->local_image_path);
                     $this->smartyTemplate->assign("MODULE_NAME", $this->local_current_module);
                 } else {
-                    $GLOBALS['log']->error("NO SMARTY TEMPLATE PATH DEFINED CANNOT CREATE SMARTY TEMPLATE");
+                    LoggerManager::getLogger()->error("NO SMARTY TEMPLATE PATH DEFINED CANNOT CREATE SMARTY TEMPLATE");
                 }
             }
         }
@@ -596,7 +596,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
                 }
 
 
-                $GLOBALS['log']->debug("Offsets: (start, previous, next, last)(0, $previous_offset, $next_offset, $last_offset)");
+                LoggerManager::getLogger()->debug("Offsets: (start, previous, next, last)(0, $previous_offset, $next_offset, $last_offset)");
 
                 if (0 == $current_offset) {
                     $start_link = "<button type='button' name='listViewStartButton' title='{$this->local_app_strings['LNK_LIST_START']}' class='button' disabled><span class='suitepicon suitepicon-action-first'></span></button>";
@@ -659,8 +659,8 @@ if (!defined('sugarEntry') || !sugarEntry) {
                     }
                 }
 
-                $GLOBALS['log']->info("Offset (next, current, prev)($next_offset, $current_offset, $previous_offset)");
-                $GLOBALS['log']->info("Start/end records ($start_record, $end_record)");
+                LoggerManager::getLogger()->info("Offset (next, current, prev)($next_offset, $current_offset, $previous_offset)");
+                LoggerManager::getLogger()->info("Start/end records ($start_record, $end_record)");
 
                 $end_record = $end_record - 1;
 

@@ -36,7 +36,7 @@ class AOD_LogicHooks
             $index = BeanFactory::getBean("AOD_Index")->getIndex();
             $index->index($bean->module_name, $bean->id);
         } catch (Exception $ex) {
-            $GLOBALS['log']->error($ex->getMessage());
+            LoggerManager::getLogger()->error($ex->getMessage());
         }
     }
 
@@ -52,7 +52,7 @@ class AOD_LogicHooks
             $index = BeanFactory::getBean("AOD_Index")->getIndex();
             $index->remove($bean->module_name, $bean->id);
         } catch (Exception $ex) {
-            $GLOBALS['log']->error($ex->getMessage());
+            LoggerManager::getLogger()->error($ex->getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ class AOD_LogicHooks
             $index = BeanFactory::getBean("AOD_Index")->getIndex();
             $index->index($bean->module_name, $bean->id);
         } catch (Exception $ex) {
-            $GLOBALS['log']->error($ex->getMessage());
+            LoggerManager::getLogger()->error($ex->getMessage());
         }
     }
 }

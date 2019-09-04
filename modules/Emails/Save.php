@@ -216,12 +216,12 @@ if (!empty($_REQUEST['to_addrs_ids'])) {
 
 if (isset($_REQUEST['object_type']) && !empty($_REQUEST['object_type']) && isset($_REQUEST['object_id']) && !empty($_REQUEST['object_id'])) {
     //run linking code only if the object_id has not been linked as part of the contacts above and it is an OOB relationship
-    $GLOBALS['log']->debug("CESELY".$_REQUEST['object_type']);
+    LoggerManager::getLogger()->debug("CESELY".$_REQUEST['object_type']);
     if (!in_array($_REQUEST['object_id'], $exContactIds)) {
         $rel = strtolower($_REQUEST['object_type']);
         if ($focus->load_relationship($rel)) {
             $focus->$rel->add($_REQUEST['object_id']);
-            $GLOBALS['log']->debug("CESELY LOADED".$_REQUEST['object_type']);
+            LoggerManager::getLogger()->debug("CESELY LOADED".$_REQUEST['object_type']);
         }
     }
 }
@@ -278,7 +278,7 @@ if (empty($_POST['return_action'])) {
 } else {
     $return_action = $_POST['return_action'];
 }
-$GLOBALS['log']->debug("Saved record with id of ".$return_id);
+LoggerManager::getLogger()->debug("Saved record with id of ".$return_id);
 
 if ($focus->type == 'draft') {
     if ($return_module == 'Emails') {

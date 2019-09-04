@@ -590,7 +590,7 @@ class Email extends Basic
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -632,7 +632,7 @@ class Email extends Basic
         if (!$upload->confirm_upload()) {
             $err = $upload->get_upload_error();
             if ($err) {
-                $GLOBALS['log']->error("Email Attachment could not be attached due to error: $err");
+                LoggerManager::getLogger()->error("Email Attachment could not be attached due to error: $err");
             }
 
             return array();
@@ -640,7 +640,7 @@ class Email extends Basic
 
         $guid = create_guid();
         $fileName = $upload->create_stored_filename();
-        $GLOBALS['log']->debug("Email Attachment [$fileName]");
+        LoggerManager::getLogger()->debug("Email Attachment [$fileName]");
         if ($upload->final_move($guid)) {
             copy("upload://$guid", sugar_cached("$email_uploads/$guid"));
 
@@ -650,7 +650,7 @@ class Email extends Basic
                 'nameForDisplay' => $fileName
             );
         }
-        $GLOBALS['log']->debug("Email Attachment [$fileName] could not be moved to upload dir");
+        LoggerManager::getLogger()->debug("Email Attachment [$fileName] could not be moved to upload dir");
 
         return array();
     }
@@ -1212,7 +1212,7 @@ class Email extends Basic
                         $note->file_mime_type = $this->email2GetMime($fileLocation);
                         $dest = "upload://{$note->id}";
                         if (!copy($fileLocation, $dest)) {
-                            $GLOBALS['log']->debug("EMAIL 2.0: could not copy attachment file to $fileLocation => $dest");
+                            LoggerManager::getLogger()->debug("EMAIL 2.0: could not copy attachment file to $fileLocation => $dest");
                         }
 
                         $note->save();
@@ -1256,7 +1256,7 @@ class Email extends Basic
                         $note->file_mime_type = $mime_type;
                         $dest = "upload://{$note->id}";
                         if (!copy($fileLocation, $dest)) {
-                            $GLOBALS['log']->debug("EMAIL 2.0: could not copy SugarDocument revision file $fileLocation => $dest");
+                            LoggerManager::getLogger()->debug("EMAIL 2.0: could not copy SugarDocument revision file $fileLocation => $dest");
                         }
 
                         $note->save();
@@ -1453,13 +1453,13 @@ class Email extends Basic
                         $connectString = $ie->getConnectString($ie->getServiceString(), $ie->mailbox);
                         $returnData = $ie->getImap()->append($connectString, $data, "\\Seen");
                         if (!$returnData) {
-                            $GLOBALS['log']->debug("could not copy email to {$ie->mailbox} for {$ie->name}");
+                            LoggerManager::getLogger()->debug("could not copy email to {$ie->mailbox} for {$ie->name}");
                         } // if
                     } else {
-                        $GLOBALS['log']->debug("could not connect to mail serve for folder {$ie->mailbox} for {$ie->name}");
+                        LoggerManager::getLogger()->debug("could not connect to mail serve for folder {$ie->mailbox} for {$ie->name}");
                     } // else
                 } else {
-                    $GLOBALS['log']->debug("could not copy email to {$ie->mailbox} sent folder as its empty");
+                    LoggerManager::getLogger()->debug("could not copy email to {$ie->mailbox} sent folder as its empty");
                 } // else
             } // if
         } // if
@@ -1562,7 +1562,7 @@ class Email extends Basic
         $id = false;
 
         if ($this->isDuplicate) {
-            $GLOBALS['log']->debug("EMAIL - tried to save a duplicate Email record");
+            LoggerManager::getLogger()->debug("EMAIL - tried to save a duplicate Email record");
         } else {
             if (empty($this->id)) {
                 $this->id = create_guid();
@@ -1593,7 +1593,7 @@ class Email extends Basic
                 $this->assigned_user_id = $current_user->id;
             }
 
-            $GLOBALS['log']->debug('-------------------------------> Email called save()');
+            LoggerManager::getLogger()->debug('-------------------------------> Email called save()');
             
             if (empty($this->date_sent_received)) {
                 global $timedate;
@@ -1646,7 +1646,7 @@ class Email extends Basic
                 }
             }
         }
-        $GLOBALS['log']->debug('-------------------------------> Email save() done');
+        LoggerManager::getLogger()->debug('-------------------------------> Email save() done');
 
         return $id;
     }
@@ -1675,7 +1675,7 @@ class Email extends Basic
             LoggerManager::getLogger()->warn('Email error: File Location not found for save temp note attachments. File location was: "' . $fileLocation . '"');
         } else {
             if (!copy($fileLocation, $noteFile)) {
-                $GLOBALS['log']->fatal("EMAIL 2.0: could not copy SugarDocument revision file $fileLocation => $noteFile");
+                LoggerManager::getLogger()->fatal("EMAIL 2.0: could not copy SugarDocument revision file $fileLocation => $noteFile");
             } else {
                 if (!$tmpNote->save()) {
                     return false;
@@ -2415,11 +2415,11 @@ class Email extends Basic
         for ($i = 0; $i < $max_files_upload; $i++) {
             // cn: Bug 5995 - rudimentary error checking
             if (!isset($_FILES["email_attachment{$i}"])) {
-                $GLOBALS['log']->debug("Email Attachment {$i} does not exist.");
+                LoggerManager::getLogger()->debug("Email Attachment {$i} does not exist.");
                 continue;
             }
             if ($_FILES['email_attachment' . $i]['error'] != 0 && $_FILES['email_attachment' . $i]['error'] != 4) {
-                $GLOBALS['log']->debug('Email Attachment could not be attach due to error: ' . $filesError[$_FILES['email_attachment' . $i]['error']]);
+                LoggerManager::getLogger()->debug('Email Attachment could not be attach due to error: ' . $filesError[$_FILES['email_attachment' . $i]['error']]);
                 continue;
             }
 
@@ -2616,11 +2616,11 @@ class Email extends Basic
         for ($i = 0; $i < $max_files_upload; $i++) {
             // cn: Bug 5995 - rudimentary error checking
             if (!isset($_FILES["email_attachment"]['name'][$i])) {
-                $GLOBALS['log']->debug("Email Attachment {$i} does not exist.");
+                LoggerManager::getLogger()->debug("Email Attachment {$i} does not exist.");
                 continue;
             }
             if ($_FILES['email_attachment']['error'][$i] != 0 && $_FILES['email_attachment']['error'][$i] != 4) {
-                $GLOBALS['log']->debug('Email Attachment could not be attach due to error: ' . $filesError[$_FILES['email_attachment']['error'][$i]]);
+                LoggerManager::getLogger()->debug('Email Attachment could not be attach due to error: ' . $filesError[$_FILES['email_attachment']['error'][$i]]);
                 continue;
             }
 
@@ -3085,7 +3085,7 @@ class Email extends Basic
 
         $mail = $this->handleBody($mail);
 
-        $GLOBALS['log']->debug('Email sending --------------------- ');
+        LoggerManager::getLogger()->debug('Email sending --------------------- ');
 
         ///////////////////////////////////////////////////////////////////////
         ////	I18N TRANSLATION
@@ -3125,12 +3125,12 @@ class Email extends Basic
                     LoggerManager::getLogger()->warn('Email saving error: after save and store in non-gmail sent folder.');
                 }
             }
-            $GLOBALS['log']->debug(' --------------------- buh bye -- sent successful');
+            LoggerManager::getLogger()->debug(' --------------------- buh bye -- sent successful');
             ////	END INBOUND EMAIL HANDLING
             ///////////////////////////////////////////////////////////////////
             return true;
         }
-        $GLOBALS['log']->debug($app_strings['LBL_EMAIL_ERROR_PREPEND'] . $mail->ErrorInfo);
+        LoggerManager::getLogger()->debug($app_strings['LBL_EMAIL_ERROR_PREPEND'] . $mail->ErrorInfo);
 
         return false;
     }
@@ -3459,10 +3459,10 @@ class Email extends Basic
             $this->contact_email = $contact->emailAddress->getPrimaryAddress($contact);
             $this->contact_name_owner = $row['contact_name_owner'];
             $this->contact_name_mod = $row['contact_name_mod'];
-            $GLOBALS['log']->debug("Call($this->id): contact_name = $this->contact_name");
-            $GLOBALS['log']->debug("Call($this->id): contact_phone = $this->contact_phone");
-            $GLOBALS['log']->debug("Call($this->id): contact_id = $this->contact_id");
-            $GLOBALS['log']->debug("Call($this->id): contact_email1 = $this->contact_email");
+            LoggerManager::getLogger()->debug("Call($this->id): contact_name = $this->contact_name");
+            LoggerManager::getLogger()->debug("Call($this->id): contact_phone = $this->contact_phone");
+            LoggerManager::getLogger()->debug("Call($this->id): contact_id = $this->contact_id");
+            LoggerManager::getLogger()->debug("Call($this->id): contact_email1 = $this->contact_email");
         } else {
             $this->contact_name = '';
             $this->contact_phone = '';
@@ -3470,10 +3470,10 @@ class Email extends Basic
             $this->contact_email = '';
             $this->contact_name_owner = '';
             $this->contact_name_mod = '';
-            $GLOBALS['log']->debug("Call($this->id): contact_name = $this->contact_name");
-            $GLOBALS['log']->debug("Call($this->id): contact_phone = $this->contact_phone");
-            $GLOBALS['log']->debug("Call($this->id): contact_id = $this->contact_id");
-            $GLOBALS['log']->debug("Call($this->id): contact_email1 = $this->contact_email");
+            LoggerManager::getLogger()->debug("Call($this->id): contact_name = $this->contact_name");
+            LoggerManager::getLogger()->debug("Call($this->id): contact_phone = $this->contact_phone");
+            LoggerManager::getLogger()->debug("Call($this->id): contact_id = $this->contact_id");
+            LoggerManager::getLogger()->debug("Call($this->id): contact_email1 = $this->contact_email");
         }
         //}
         $this->created_by_name = get_assigned_user_name($this->created_by);
@@ -4276,7 +4276,7 @@ eoq;
             return;
         }
 
-        $GLOBALS['log']->debug("*** Email trying to guess Primary Parent from address [ {$this->from_addr} ]");
+        LoggerManager::getLogger()->debug("*** Email trying to guess Primary Parent from address [ {$this->from_addr} ]");
 
         $tables = array('accounts');
         $ret = array();

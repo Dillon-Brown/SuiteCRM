@@ -66,7 +66,7 @@ class SugarLogStore implements Store
             return;
         }
        
-        $GLOBALS['log']->info("---- metrics for $monitor->name ----");
-        $GLOBALS['log']->info(var_export($values, true));
+        LoggerManager::getLogger()->info("---- metrics for $monitor->name ----");
+        LoggerManager::getLogger()->info(var_export($values, true));
     }
 }

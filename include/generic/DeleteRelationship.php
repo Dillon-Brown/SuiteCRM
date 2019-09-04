@@ -144,7 +144,7 @@ if ($bean_name === "User" && $linked_field === 'eapm') {
 if (!empty($_REQUEST['return_url'])) {
     $_REQUEST['return_url'] = urldecode($_REQUEST['return_url']);
 }
-$GLOBALS['log']->debug("deleted relationship: bean: $bean_name, linked_field: $linked_field, linked_id:$linked_id");
+LoggerManager::getLogger()->debug("deleted relationship: bean: $bean_name, linked_field: $linked_field, linked_id:$linked_id");
 if (empty($_REQUEST['refresh_page'])) {
     handleRedirect();
 }

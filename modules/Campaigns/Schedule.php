@@ -115,7 +115,7 @@ if ($campaign_id && isset($campaign) && $campaign->status == 'Inactive') {
             $where .= $clause;
         }
 
-        $GLOBALS['log']->info("Here is the where clause for the list view: $where");
+        LoggerManager::getLogger()->info("Here is the where clause for the list view: $where");
     }
 
     $ListView = new ListView();

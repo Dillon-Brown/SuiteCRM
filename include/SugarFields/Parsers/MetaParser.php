@@ -67,7 +67,7 @@ class MetaParser
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -558,7 +558,7 @@ class MetaParser
 
         foreach ($rules as $rule) {
             if (!file_exists($rule['file'])) {
-                $GLOBALS['log']->error("Cannot run rule for " . $rule['file']);
+                LoggerManager::getLogger()->error("Cannot run rule for " . $rule['file']);
                 continue;
             } //if
             require_once($rule['file']);

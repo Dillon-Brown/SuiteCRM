@@ -90,9 +90,9 @@ class Link
     {
         global $dictionary;
         require_once("modules/TableDictionary.php");
-        $GLOBALS['log']->debug("Link Constructor, relationship name: ".$_rel_name);
-        $GLOBALS['log']->debug("Link Constructor, Table name: ".$_table_name);
-        $GLOBALS['log']->debug("Link Constructor, Key name: ".$_key_name);
+        LoggerManager::getLogger()->debug("Link Constructor, relationship name: ".$_rel_name);
+        LoggerManager::getLogger()->debug("Link Constructor, Table name: ".$_table_name);
+        LoggerManager::getLogger()->debug("Link Constructor, Key name: ".$_key_name);
 
         $this->_relationship_name=$_rel_name;
         $this->relationship_fields = (!empty($fieldDef['rel_fields']))?$fieldDef['rel_fields']: array();
@@ -146,12 +146,12 @@ class Link
             $this->_bean_key_name='id';
         }
 
-        $GLOBALS['log']->debug("Link Constructor, _bean_table_name: ".$this->_bean_table_name);
-        $GLOBALS['log']->debug("Link Constructor, _bean_key_name: ".$this->_bean_key_name);
+        LoggerManager::getLogger()->debug("Link Constructor, _bean_table_name: ".$this->_bean_table_name);
+        LoggerManager::getLogger()->debug("Link Constructor, _bean_key_name: ".$this->_bean_key_name);
         if (!empty($this->_relationship->id)) {
-            $GLOBALS['log']->debug("Link Constructor, relationship record found.");
+            LoggerManager::getLogger()->debug("Link Constructor, relationship record found.");
         } else {
-            $GLOBALS['log']->debug("Link Constructor, No relationship record.") ;
+            LoggerManager::getLogger()->debug("Link Constructor, No relationship record.") ;
         }
     }
 
@@ -197,7 +197,7 @@ class Link
     {
         $bean_is_lhs=$this->_get_bean_position();
         if (!isset($bean_is_lhs)) {
-            $GLOBALS['log']->debug("Invalid relationship parameters. Exiting..");
+            LoggerManager::getLogger()->debug("Invalid relationship parameters. Exiting..");
             return null;
         }
 
@@ -211,7 +211,7 @@ class Link
     {
         $bean_is_lhs=$this->_get_bean_position();
         if (!isset($bean_is_lhs)) {
-            $GLOBALS['log']->debug("Invalid relationship parameters. Exiting..");
+            LoggerManager::getLogger()->debug("Invalid relationship parameters. Exiting..");
             return null;
         }
 
@@ -416,7 +416,7 @@ class Link
         $bean_is_lhs=$this->_get_bean_position();
 
         if (!isset($bean_is_lhs)) {
-            $GLOBALS['log']->debug("Invalid relationship parameters. Exiting..");
+            LoggerManager::getLogger()->debug("Invalid relationship parameters. Exiting..");
             return null;
         }
 
@@ -429,13 +429,13 @@ class Link
             }
         }
 
-        $GLOBALS['log']->debug("getQuery, Bean is LHS: ".$bean_is_lhs);
-        $GLOBALS['log']->debug("getQuery, Relationship type=".$this->_relationship->relationship_type);
-        $GLOBALS['log']->debug("getQuery, Relationship role column name=".$this->_relationship->relationship_role_column);
+        LoggerManager::getLogger()->debug("getQuery, Bean is LHS: ".$bean_is_lhs);
+        LoggerManager::getLogger()->debug("getQuery, Relationship type=".$this->_relationship->relationship_type);
+        LoggerManager::getLogger()->debug("getQuery, Relationship role column name=".$this->_relationship->relationship_role_column);
 
         if ($this->_relationship->relationship_type=='one-to-one' or $this->_relationship->relationship_type=='many-to-one' or
              ($this->_relationship->relationship_type=='one-to-many' && !$bean_is_lhs)) {
-            $GLOBALS['log']->debug("Processing one-to-one,many-to-one,one-to-many.");
+            LoggerManager::getLogger()->debug("Processing one-to-one,many-to-one,one-to-many.");
 
             if ($this->add_distinct) {
                 $select='SELECT DISTINCT id';
@@ -480,7 +480,7 @@ class Link
             }
         }
         if ($this->_relationship->relationship_type == 'one-to-many' && $bean_is_lhs) {
-            $GLOBALS['log']->debug("Processing one-to-many.");
+            LoggerManager::getLogger()->debug("Processing one-to-many.");
 
             if ($this->add_distinct) {
                 $select='SELECT DISTINCT '.$this->_relationship->rhs_table.'.id';
@@ -511,7 +511,7 @@ class Link
         }
 
         if ($this->_relationship->relationship_type=='many-to-many') {
-            $GLOBALS['log']->debug("Processing many-to-many.");
+            LoggerManager::getLogger()->debug("Processing many-to-many.");
 
             $swap = !$for_subpanels && $this->_swap_sides;
             if (($bean_is_lhs && !$swap) || (!$bean_is_lhs && $swap)) {
@@ -598,7 +598,7 @@ class Link
             return $query_as_array;
         }
         $query = $select.' '.$from.' '.$where;
-        $GLOBALS['log']->debug("Link Query=".$query);
+        LoggerManager::getLogger()->debug("Link Query=".$query);
         return $query;
     }
 
@@ -627,7 +627,7 @@ class Link
         }
         $query.=' WHERE '.$this->_relationship->rhs_table.".id='".$where_key_value."'";
 
-        $GLOBALS['log']->fatal("Relationship Query ".$query);
+        LoggerManager::getLogger()->fatal("Relationship Query ".$query);
 
         $result=$this->_db->query($query, true);
     }
@@ -646,7 +646,7 @@ class Link
         if (!empty($this->_relationship->relationship_role_column)) {
             $bean->{$this->_relationship->relationship_role_column}=$this->_relationship->relationship_role_column_value;
         }
-        $GLOBALS['log']->fatal("Adding many to one bean based {$bean->module_dir} {$bean->id}");
+        LoggerManager::getLogger()->fatal("Adding many to one bean based {$bean->module_dir} {$bean->id}");
         $bean->save();
     }
 
@@ -661,13 +661,13 @@ class Link
     public function add($rel_keys, $additional_values=array())
     {
         if (!isset($rel_keys) or empty($rel_keys)) {
-            $GLOBALS['log']->fatal("Link.add, Null key passed, no-op, returning... ");
+            LoggerManager::getLogger()->fatal("Link.add, Null key passed, no-op, returning... ");
             return;
         }
 
         //check to ensure that we do in fact have an id on the bean.
         if (empty($this->_bean->id)) {
-            $GLOBALS['log']->fatal("Link.add, No id on the bean... ");
+            LoggerManager::getLogger()->fatal("Link.add, No id on the bean... ");
             return;
         }
 
@@ -679,7 +679,7 @@ class Link
 
         $bean_is_lhs=$this->_get_bean_position();
         if (!isset($bean_is_lhs)) {
-            $GLOBALS['log']->fatal("Invalid relationship parameters. Exiting..");
+            LoggerManager::getLogger()->fatal("Invalid relationship parameters. Exiting..");
             return null;
         }
         //if multiple keys are passed then check for unsupported relationship types.
@@ -687,11 +687,11 @@ class Link
             if (($this->_relationship->relationship_type == 'one-to-one')
                 or ($this->_relationship->relationship_type == 'one-to-many' and !$bean_is_lhs)
                 or ($this->_relationship->relationship_type == 'many-to-one')) {
-                $GLOBALS['log']->fatal("Invalid parameters passed to function, the relationship does not support addition of multiple records.");
+                LoggerManager::getLogger()->fatal("Invalid parameters passed to function, the relationship does not support addition of multiple records.");
                 return;
             }
         }
-        $GLOBALS['log']->debug("Relationship type = {$this->_relationship->relationship_type}");
+        LoggerManager::getLogger()->debug("Relationship type = {$this->_relationship->relationship_type}");
         foreach ($keys as $key) {
 
             //fetch the related record using the key and update.
@@ -795,7 +795,7 @@ class Link
 /*			switch($this->when_dup_relationship_found) {
 
                 case 1: //do nothing.
-                    $GLOBALS['log']->debug("Executing default option, no action.");
+                    LoggerManager::getLogger()->debug("Executing default option, no action.");
                     break;
 
                 case 3: //delete the record first, then create a new entry.
@@ -816,7 +816,7 @@ class Link
     public function _delete_row($table_name, $key)
     {
         $query="UPDATE $table_name SET deleted=1, date_modified='" .$GLOBALS['timedate']->nowDb()."' WHERE id='".$this->_db->quote($key)."'";
-        $GLOBALS['log']->debug("Relationship Delete Statement :".$query);
+        LoggerManager::getLogger()->debug("Relationship Delete Statement :".$query);
 
         $result=$this->_db->query($query, true);
     }
@@ -830,7 +830,7 @@ class Link
             $delimiter=",";
         }
         $query.=$where;
-        $GLOBALS['log']->debug("Relationship Update Statement :".$query);
+        LoggerManager::getLogger()->debug("Relationship Update Statement :".$query);
 
         $result=$this->_db->query($query, true);
     }
@@ -849,7 +849,7 @@ class Link
             $delimiter=",";
         }
         $insert_string='INSERT into '.$this->_relationship->join_table.' ('.$columns_list.') VALUES ('.$values_list.')';
-        $GLOBALS['log']->debug("Relationship Insert String :".$insert_string);
+        LoggerManager::getLogger()->debug("Relationship Insert String :".$insert_string);
 
         $result=$this->_db->query($insert_string, true);
     }
@@ -867,14 +867,14 @@ class Link
      */
     public function delete($id, $related_id='')
     {
-        $GLOBALS['log']->debug(sprintf("delete called with these parameter values. id=%s, related_id=%s", $id, $related_id));
+        LoggerManager::getLogger()->debug(sprintf("delete called with these parameter values. id=%s, related_id=%s", $id, $related_id));
 
         $_relationship=&$this->_relationship;
         $_bean=&$this->_bean;
 
         $bean_is_lhs=$this->_get_bean_position();
         if (!isset($bean_is_lhs)) {
-            $GLOBALS['log']->debug("Invalid relationship parameters. Exiting..");
+            LoggerManager::getLogger()->debug("Invalid relationship parameters. Exiting..");
             return null;
         }
         if ($_relationship->relationship_type=='one-to-many' or $_relationship->relationship_type=='one-to-one') {
@@ -946,7 +946,7 @@ class Link
         }
         //if query string is not empty execute it.
         if (isset($query)) {
-            $GLOBALS['log']->fatal('Link.Delete:Delete Query: '.$query);
+            LoggerManager::getLogger()->fatal('Link.Delete:Delete Query: '.$query);
             $this->_db->query($query, true);
         }
         $custom_logic_arguments = array();
@@ -989,7 +989,7 @@ class Link
         //find the key values for the table.
         $dup_keys=$this->_get_alternate_key_fields($table_name);
         if (empty($dup_keys)) {
-            $GLOBALS['log']->debug("No alternate key define, skipping duplicate check..");
+            LoggerManager::getLogger()->debug("No alternate key define, skipping duplicate check..");
             return false;
         }
 
@@ -1001,7 +1001,7 @@ class Link
                 $this->_duplicate_where .= $delimiter.' '.$field."='".$join_key_values[$field]."'";
                 $delimiter='AND';
             } else {
-                $GLOBALS['log']->error('Duplicate checking aborted, Please supply a value for this column '.$field);
+                LoggerManager::getLogger()->error('Duplicate checking aborted, Please supply a value for this column '.$field);
                 return false;
             }
         }
@@ -1010,7 +1010,7 @@ class Link
 
         $query='SELECT id FROM '.$table_name.$this->_duplicate_where;
 
-        $GLOBALS['log']->debug("relationship_exists query(".$query.')');
+        LoggerManager::getLogger()->debug("relationship_exists query(".$query.')');
 
         $result=$this->_db->query($query, true);
         $row = $this->_db->fetchByAssoc($result);
@@ -1082,7 +1082,7 @@ class Link
             }
         }
         // couldn't find the metadata for the table in either the standard or custom locations
-        $GLOBALS['log']->debug('Error fetching field defs for join table '.$table_name);
+        LoggerManager::getLogger()->debug('Error fetching field defs for join table '.$table_name);
 
         return null;
     }

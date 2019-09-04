@@ -782,7 +782,7 @@ class EditViewMerge
         return false;
     }
     /**
-     * Logs the given message if the message is not a string it will export it first. If $this->fp is NULL then it will try to log to the $GLOBALS['log'] if it is available
+     * Logs the given message if the message is not a string it will export it first. If $this->fp is NULL then it will try to log to the LoggerManager::getLogger() if it is available
      *
      * @param MULTI $message
      */
@@ -795,7 +795,7 @@ class EditViewMerge
             fwrite($this->fp, $message. "\n");
         } else {
             if (!empty($GLOBALS['log'])) {
-                $GLOBALS['log']->debug($message . "\n");
+                LoggerManager::getLogger()->debug($message . "\n");
             }
         }
     }

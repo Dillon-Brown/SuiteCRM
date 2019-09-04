@@ -535,7 +535,7 @@ abstract class source
         if (!empty($property_name)) {
             $name = $property_name;
         }
-        $GLOBALS['log']->info($name. ': '.$log_data);
+        LoggerManager::getLogger()->info($name. ': '.$log_data);
     }
 
     /**

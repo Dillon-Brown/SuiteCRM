@@ -112,7 +112,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
         } else {
             $this->_padFields(); // destined for a View, so we want to add in (empty) fields
         }
-//      $GLOBALS['log']->debug($this->_viewdefs['panels']);
+//      LoggerManager::getLogger()->debug($this->_viewdefs['panels']);
     }
 
     public function getAvailableFields()
@@ -120,14 +120,14 @@ class ParserModifyLayoutView extends ModuleBuilderParser
         // Available fields are those that are in the Model and the original layout definition, but not already shown in the View
         // So, because the formats of the two are different we brute force loop through View and unset the fields we find in a copy of Model
         $availableFields = $this->_getModelFields();
-        $GLOBALS['log']->debug(get_class($this)."->getAvailableFields(): _getModelFields returns: ".implode(",", array_keys($availableFields)));
+        LoggerManager::getLogger()->debug(get_class($this)."->getAvailableFields(): _getModelFields returns: ".implode(",", array_keys($availableFields)));
         if (! empty($this->_viewdefs)) {
             foreach ($this->_viewdefs ['panels'] as $panel) {
                 foreach ($panel as $row) {
                     foreach ($row as $fieldArray) { // fieldArray is an array('name'=>name,'label'=>label)
                         if (isset($fieldArray ['name'])) {
                             unset($availableFields [$fieldArray ['name']]);
-                            $GLOBALS['log']->debug(get_class($this)."->getAvailableFields(): removing ".$fieldArray ['name']);
+                            LoggerManager::getLogger()->debug(get_class($this)."->getAvailableFields(): removing ".$fieldArray ['name']);
                         }
                     }
                 }
@@ -190,8 +190,8 @@ class ParserModifyLayoutView extends ModuleBuilderParser
 
         $olddefs = $this->_viewdefs ['panels'];
         $origFieldDefs = $this->_getOrigFieldViewDefs();
-//      $GLOBALS['log']->debug('origFieldDefs');
-//      $GLOBALS['log']->debug($origFieldDefs);
+//      LoggerManager::getLogger()->debug('origFieldDefs');
+//      LoggerManager::getLogger()->debug($origFieldDefs);
         $this->_viewdefs ['panels'] = null; // because the new field properties should replace the old fields, not be merged
 
         if ($this->maxColumns < 1) {
@@ -322,7 +322,7 @@ class ParserModifyLayoutView extends ModuleBuilderParser
     {
         $modelFields = array();
         $origViewDefs = $this->_getOrigFieldViewDefs();
-//        $GLOBALS['log']->debug("Original viewdefs = ".print_r($origViewDefs,true));
+//        LoggerManager::getLogger()->debug("Original viewdefs = ".print_r($origViewDefs,true));
         foreach ($origViewDefs as $field => $def) {
             if (!empty($field)) {
                 if (! is_array($def)) {
@@ -339,17 +339,17 @@ class ParserModifyLayoutView extends ModuleBuilderParser
                 $modelFields[$field] = array('name' => $field, 'label' => $def ['label']);
             }
         }
-        $GLOBALS['log']->debug(print_r($modelFields, true));
+        LoggerManager::getLogger()->debug(print_r($modelFields, true));
         foreach ($this->_fieldDefs as $field => $def) {
             if ((!empty($def['studio']) && $def['studio'] == 'visible')
             || (empty($def['studio']) &&  (empty($def ['source']) || $def ['source'] == 'db' || $def ['source'] == 'custom_fields') && $def ['type'] != 'id' && strcmp($field, 'deleted') != 0 && (empty($def ['dbType']) || $def ['dbType'] != 'id') && (empty($def ['dbtype']) || $def ['dbtype'] != 'id'))) {
                 $label = isset($def['vname']) ? $def['vname'] : $def['name'];
                 $modelFields [$field] = array('name' => $field, 'label' => $label);
             } else {
-                $GLOBALS['log']->debug(get_class($this)."->_getModelFields(): skipping $field from modelFields as it fails the test for inclusion");
+                LoggerManager::getLogger()->debug(get_class($this)."->_getModelFields(): skipping $field from modelFields as it fails the test for inclusion");
             }
         }
-        $GLOBALS['log']->debug(get_class($this)."->_getModelFields(): remaining entries in modelFields are: ".implode(",", array_keys($modelFields)));
+        LoggerManager::getLogger()->debug(get_class($this)."->_getModelFields(): remaining entries in modelFields are: ".implode(",", array_keys($modelFields)));
         return $modelFields;
     }
 
@@ -408,11 +408,11 @@ class ParserModifyLayoutView extends ModuleBuilderParser
     public function _getOrigFieldViewDefs()
     {
         $origFieldDefs = array();
-        $GLOBALS['log']->debug("Original File = ".$this->_originalFile);
+        LoggerManager::getLogger()->debug("Original File = ".$this->_originalFile);
         if (file_exists($this->_originalFile)) {
             include($this->_originalFile);
             $origdefs = $viewdefs [$this->_module] [$this->_sourceView] ['panels'];
-//          $GLOBALS['log']->debug($origdefs);
+//          LoggerManager::getLogger()->debug($origdefs);
             // Fix for a flexibility in the format of the panel sections - if only one panel, then we don't have a panel level defined, it goes straight into rows
             // See EditView2 for similar treatment
             if (! empty($origdefs) && count($origdefs) > 0) {

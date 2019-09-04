@@ -316,7 +316,7 @@ class SugarThemeRegistry
         }
         asort($themelist, SORT_STRING);
         if (count($themelist)==0) {
-            $GLOBALS['log']->fatal('availableThemes() is returning an empty array! Check disabled_themes in config.php and config_override.php');
+            LoggerManager::getLogger()->fatal('availableThemes() is returning an empty array! Check disabled_themes in config.php and config_override.php');
         }
         return $themelist;
     }

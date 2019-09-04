@@ -217,5 +217,5 @@ if (isset($_REQUEST['show_wizard_summary']) && $_REQUEST['show_wizard_summary'])
     $header_URL = "Location: index.php?action=WizardHome&module=Campaigns&record=".$marketing->campaign_id;
 }
 
-$GLOBALS['log']->debug("about to post header URL of: $header_URL");
+LoggerManager::getLogger()->debug("about to post header URL of: $header_URL");
 SugarApplication::headerRedirect($header_URL);

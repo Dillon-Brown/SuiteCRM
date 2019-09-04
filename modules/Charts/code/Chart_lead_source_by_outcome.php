@@ -59,7 +59,7 @@ class Chart_lead_source_by_outcome
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -87,15 +87,15 @@ class Chart_lead_source_by_outcome
         global $current_user;
         $tempx = $current_user->getPreference('lsbo_lead_sources');
         if (!empty($lsbo_lead_sources) && count($lsbo_lead_sources) > 0 && !isset($_REQUEST['lsbo_lead_sources'])) {
-            $GLOBALS['log']->fatal("user->getPreference('lsbo_lead_sources') is:");
-            $GLOBALS['log']->fatal($tempx);
+            LoggerManager::getLogger()->fatal("user->getPreference('lsbo_lead_sources') is:");
+            LoggerManager::getLogger()->fatal($tempx);
         } elseif (isset($_REQUEST['lsbo_lead_sources']) && count($_REQUEST['lsbo_lead_sources']) > 0) {
             $tempx = $_REQUEST['lsbo_lead_sources'];
             $current_user->setPreference('lsbo_lead_sources', $_REQUEST['lsbo_lead_sources']);
-            $GLOBALS['log']->fatal("_REQUEST['lsbo_lead_sources'] is:");
-            $GLOBALS['log']->fatal($_REQUEST['lsbo_lead_sources']);
-            $GLOBALS['log']->fatal("user->getPreference('lsbo_lead_sources') is:");
-            $GLOBALS['log']->fatal($current_user->getPreference('lsbo_lead_sources'));
+            LoggerManager::getLogger()->fatal("_REQUEST['lsbo_lead_sources'] is:");
+            LoggerManager::getLogger()->fatal($_REQUEST['lsbo_lead_sources']);
+            LoggerManager::getLogger()->fatal("user->getPreference('lsbo_lead_sources') is:");
+            LoggerManager::getLogger()->fatal($current_user->getPreference('lsbo_lead_sources'));
         }
         //set $datax using selected sales stage keys
         if (!empty($tempx) && sizeof($tempx) > 0) {
@@ -111,15 +111,15 @@ class Chart_lead_source_by_outcome
         $ids =$current_user->getPreference('lsbo_ids');
         //get list of user ids for which to display data
         if (!empty($ids) && count($ids) != 0 && !isset($_REQUEST['lsbo_ids'])) {
-            $GLOBALS['log']->debug("_SESSION['lsbo_ids'] is:");
-            $GLOBALS['log']->debug($ids);
+            LoggerManager::getLogger()->debug("_SESSION['lsbo_ids'] is:");
+            LoggerManager::getLogger()->debug($ids);
         } elseif (isset($_REQUEST['lsbo_ids']) && count($_REQUEST['lsbo_ids']) > 0) {
             $ids = $_REQUEST['lsbo_ids'];
             $current_user->setPreference('lsbo_ids', $_REQUEST['lsbo_ids']);
-            $GLOBALS['log']->debug("_REQUEST['lsbo_ids'] is:");
-            $GLOBALS['log']->debug($_REQUEST['lsbo_ids']);
-            $GLOBALS['log']->debug("user->getPreference('lsbo_ids') is:");
-            $GLOBALS['log']->debug($current_user->getPreference('lsbo_ids'));
+            LoggerManager::getLogger()->debug("_REQUEST['lsbo_ids'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['lsbo_ids']);
+            LoggerManager::getLogger()->debug("user->getPreference('lsbo_ids') is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('lsbo_ids'));
         } else {
             $ids = get_user_array(false);
             $ids = array_keys($ids);
@@ -134,8 +134,8 @@ class Chart_lead_source_by_outcome
                 $id_hash = $id_hash * -1;
             }
         }
-        $GLOBALS['log']->debug("ids is:");
-        $GLOBALS['log']->debug($ids);
+        LoggerManager::getLogger()->debug("ids is:");
+        LoggerManager::getLogger()->debug($ids);
         $id_md5 = substr(md5($current_user->id), 0, 9);
 
 
@@ -143,7 +143,7 @@ class Chart_lead_source_by_outcome
         $dates				= array(date($GLOBALS['timedate']->dbDayFormat), $GLOBALS['timedate']->dbDayFormat);
         $dateFileNameSafe	= str_replace($seps, "_", $dates);
         $cache_file_name	= sugar_cached("xml/").$current_user->getUserPrivGuid()."_lead_source_by_outcome_".$dateFileNameSafe[0]."_".$dateFileNameSafe[1].".xml";
-        $GLOBALS['log']->debug("cache file name is: $cache_file_name");
+        LoggerManager::getLogger()->debug("cache file name is: $cache_file_name");
 
 
         $tools='<div align="right"><a href="index.php?module='.$currentModule.'&action='. $action .'&lsbo_refresh=true" class="tabFormAdvLink">'.SugarThemeRegistry::current()->getImage('refresh', 'border="0" align="absmiddle"', null, null, '.gif', $mod_strings['LBL_REFRESH']).'&nbsp;'.$current_module_strings['LBL_REFRESH'].'</a>&nbsp;&nbsp;<a href="javascript: toggleDisplay(\'lsbo_edit\');" class="tabFormAdvLink">'.SugarThemeRegistry::current()->getImage('edit', 'border="0"  align="absmiddle"', null, null, '.gif', $mod_strings['LBL_EDIT']).'&nbsp;'. $current_module_strings['LBL_EDIT'].'</a>&nbsp;&nbsp;'.$extra_tools.'</div>'; ?>
@@ -229,11 +229,11 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
         $kDelim = $current_user->getPreference('num_grp_sep');
 
         if (!file_exists($cache_file_name) || $refresh == true) {
-            $GLOBALS['log']->debug("datay is:");
-            $GLOBALS['log']->debug($datay);
-            $GLOBALS['log']->debug("user_id is: ");
-            $GLOBALS['log']->debug($user_id);
-            $GLOBALS['log']->debug("cache_file_name is: $cache_file_name");
+            LoggerManager::getLogger()->debug("datay is:");
+            LoggerManager::getLogger()->debug($datay);
+            LoggerManager::getLogger()->debug("user_id is: ");
+            LoggerManager::getLogger()->debug($user_id);
+            LoggerManager::getLogger()->debug("cache_file_name is: $cache_file_name");
             $opp = new Opportunity();
             $where="";
             //build the where clause for the query that matches $user
@@ -374,15 +374,15 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
 
         $tempx = $current_user->getPreference('lsbo_lead_sources');
         if (!empty($lsbo_lead_sources) && count($lsbo_lead_sources) > 0 && !isset($_REQUEST['lsbo_lead_sources'])) {
-            $GLOBALS['log']->fatal("user->getPreference('lsbo_lead_sources') is:");
-            $GLOBALS['log']->fatal($tempx);
+            LoggerManager::getLogger()->fatal("user->getPreference('lsbo_lead_sources') is:");
+            LoggerManager::getLogger()->fatal($tempx);
         } elseif (isset($_REQUEST['lsbo_lead_sources']) && count($_REQUEST['lsbo_lead_sources']) > 0) {
             $tempx = $_REQUEST['lsbo_lead_sources'];
             $current_user->setPreference('lsbo_lead_sources', $_REQUEST['lsbo_lead_sources']);
-            $GLOBALS['log']->fatal("_REQUEST['lsbo_lead_sources'] is:");
-            $GLOBALS['log']->fatal($_REQUEST['lsbo_lead_sources']);
-            $GLOBALS['log']->fatal("user->getPreference('lsbo_lead_sources') is:");
-            $GLOBALS['log']->fatal($current_user->getPreference('lsbo_lead_sources'));
+            LoggerManager::getLogger()->fatal("_REQUEST['lsbo_lead_sources'] is:");
+            LoggerManager::getLogger()->fatal($_REQUEST['lsbo_lead_sources']);
+            LoggerManager::getLogger()->fatal("user->getPreference('lsbo_lead_sources') is:");
+            LoggerManager::getLogger()->fatal($current_user->getPreference('lsbo_lead_sources'));
         }
         //set $datax using selected sales stage keys
         if (!empty($tempx) && sizeof($tempx) > 0) {
@@ -400,15 +400,15 @@ echo "<p align='center'>".$this->gen_xml($datax, $ids, $cache_file_name, $refres
         $ids =$current_user->getPreference('lsbo_ids');
         //get list of user ids for which to display data
         if (!empty($ids) && count($ids) != 0 && !isset($_REQUEST['lsbo_ids'])) {
-            $GLOBALS['log']->debug("_SESSION['lsbo_ids'] is:");
-            $GLOBALS['log']->debug($ids);
+            LoggerManager::getLogger()->debug("_SESSION['lsbo_ids'] is:");
+            LoggerManager::getLogger()->debug($ids);
         } elseif (isset($_REQUEST['lsbo_ids']) && count($_REQUEST['lsbo_ids']) > 0) {
             $ids = $_REQUEST['lsbo_ids'];
             $current_user->setPreference('lsbo_ids', $_REQUEST['lsbo_ids']);
-            $GLOBALS['log']->debug("_REQUEST['lsbo_ids'] is:");
-            $GLOBALS['log']->debug($_REQUEST['lsbo_ids']);
-            $GLOBALS['log']->debug("user->getPreference('lsbo_ids') is:");
-            $GLOBALS['log']->debug($current_user->getPreference('lsbo_ids'));
+            LoggerManager::getLogger()->debug("_REQUEST['lsbo_ids'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['lsbo_ids']);
+            LoggerManager::getLogger()->debug("user->getPreference('lsbo_ids') is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('lsbo_ids'));
         } else {
             $ids = get_user_array(false);
             $ids = array_keys($ids);

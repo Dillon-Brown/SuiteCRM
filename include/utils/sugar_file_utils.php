@@ -97,7 +97,7 @@ function sugar_mkdir($pathname, $mode = null, $recursive = false, $context = nul
         if (is_null($GLOBALS['log'])) {
             throw new Exception("Error occurred but the system doesn't have logger. Error message: \"$errorMessage\"");
         }
-        $GLOBALS['log']->error($errorMessage);
+        LoggerManager::getLogger()->error($errorMessage);
     }
 
     return $result;
@@ -229,7 +229,7 @@ function sugar_file_get_contents($filename, $use_include_path = false, $context 
     }
 
     if (!is_readable($filename)) {
-        $GLOBALS['log']->error("File $filename cannot be read");
+        LoggerManager::getLogger()->error("File $filename cannot be read");
 
         return false;
     }
@@ -265,7 +265,7 @@ function sugar_touch($filename, $time = null, $atime = null)
     }
 
     if (!$result) {
-        $GLOBALS['log']->error("File $filename cannot be touched");
+        LoggerManager::getLogger()->error("File $filename cannot be touched");
 
         return $result;
     }
@@ -424,7 +424,7 @@ function sugar_cached($file)
 function sugar_is_dir($path)
 {
     if (isset($GLOBALS['log'])) {
-        $GLOBALS['log']->deprecated('sugar_file_utils.php: sugar_is_dir() is deprecated');
+        LoggerManager::getLogger()->deprecated('sugar_file_utils.php: sugar_is_dir() is deprecated');
     }
     return is_dir($path);
 }
@@ -439,7 +439,7 @@ function sugar_is_dir($path)
 function sugar_is_file($path)
 {
     if (isset($GLOBALS['log'])) {
-        $GLOBALS['log']->deprecated('sugar_file_utils.php: sugar_is_file() is deprecated');
+        LoggerManager::getLogger()->deprecated('sugar_file_utils.php: sugar_is_file() is deprecated');
     }
     return is_file($path);
 }

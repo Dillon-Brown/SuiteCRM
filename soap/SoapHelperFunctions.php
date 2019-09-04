@@ -685,7 +685,7 @@ function new_handle_set_relationship($module_name, $module_id, $link_field_name,
     }
 
     foreach ($related_ids as $ids) {
-        $GLOBALS['log']->debug("ids = " . $ids);
+        LoggerManager::getLogger()->debug("ids = " . $ids);
     }
 
     if ($mod->load_relationship($link_field_name)) {
@@ -739,7 +739,7 @@ function new_handle_set_entries($module_name, $name_value_lists, $select_fields 
 
         //Add the account to a contact
         if ($module_name == 'Contacts') {
-            $GLOBALS['log']->debug('Creating Contact Account');
+            LoggerManager::getLogger()->debug('Creating Contact Account');
             add_create_account($seed);
             $duplicate_id = check_for_duplicate_contacts($seed);
             if ($duplicate_id == null) {
@@ -1060,7 +1060,7 @@ function check_for_duplicate_contacts($seed)
                     //as an existing contact's account name, then find the match.
                     $contact->load_relationship('accounts');
                     if (empty($seed->account_name) || strcmp($seed->account_name, $contact->account_name) == 0) {
-                        $GLOBALS['log']->info('End: SoapHelperWebServices->check_for_duplicate_contacts - duplicte found ' . $contact->id);
+                        LoggerManager::getLogger()->info('End: SoapHelperWebServices->check_for_duplicate_contacts - duplicte found ' . $contact->id);
 
                         return $contact->id;
                     }

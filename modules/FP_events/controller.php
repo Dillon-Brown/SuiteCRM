@@ -441,7 +441,7 @@ class FP_eventsController extends SugarController
 
                 //Send the message, log if error occurs
                 if (!$send_invite) {
-                    $GLOBALS['log']->fatal('ERROR: Invite email failed to send to: '.$rcpt_name.' at '.$rcpt_email);
+                    LoggerManager::getLogger()->fatal('ERROR: Invite email failed to send to: '.$rcpt_name.' at '.$rcpt_email);
                     $error_count ++;
                 } else {
                     //update contact to invites
@@ -498,7 +498,7 @@ class FP_eventsController extends SugarController
 
                 //Send the message, log if error occurs
                 if (!$send_invite) {
-                    $GLOBALS['log']->fatal('ERROR: Invite email failed to send to: '.$rcpt_name.' at '.$rcpt_email);
+                    LoggerManager::getLogger()->fatal('ERROR: Invite email failed to send to: '.$rcpt_name.' at '.$rcpt_email);
                     $error_count ++;
                 } else {
                     //update contact to invites
@@ -554,7 +554,7 @@ class FP_eventsController extends SugarController
 
                 //Send the message, log if error occurs
                 if (!$send_invite) {
-                    $GLOBALS['log']->fatal('ERROR: Invite email failed to send to: '.$rcpt_name.' at '.$rcpt_email);
+                    LoggerManager::getLogger()->fatal('ERROR: Invite email failed to send to: '.$rcpt_name.' at '.$rcpt_email);
                     $error_count ++;
                 } else {
                     //update contact to invites

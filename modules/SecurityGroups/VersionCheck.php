@@ -28,7 +28,7 @@ class VersionCheck
                 global $sugar_config;
                 $upgrade_url = "http://www.eggsurplus.com/version.php?version=".$sugar_config['sugar_version'];
                 $upgrade_text = "SecuritySuite for ".$sugar_config['sugar_version'];
-                $GLOBALS['log']->fatal($securitysuite_warning."<a href='$upgrade_url'>$upgrade_text</a>");
+                LoggerManager::getLogger()->fatal($securitysuite_warning."<a href='$upgrade_url'>$upgrade_text</a>");
                 //echo $display_warning;?>
 <script language="Javascript">
 				

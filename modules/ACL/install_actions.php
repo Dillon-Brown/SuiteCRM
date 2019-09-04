@@ -58,7 +58,7 @@ if (is_admin($current_user)) {
             } else {
                 require_once($beanFiles[$class]);
                 $mod = new $class();
-                $GLOBALS['log']->debug("DOING: $class");
+                LoggerManager::getLogger()->debug("DOING: $class");
                 if ($mod->bean_implements('ACL') && empty($mod->acl_display_only)) {
                     // BUG 10339: do not display messages for upgrade wizard
                     if (!isset($_REQUEST['upgradeWizard'])) {

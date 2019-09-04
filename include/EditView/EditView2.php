@@ -275,7 +275,7 @@ class EditView
                     "modules/$this->module/metadata/$metadataFileName.php",
                     $app_strings['ERR_CANNOT_CREATE_METADATA_FILE']
                 );
-                $GLOBALS['log']->fatal($error);
+                LoggerManager::getLogger()->fatal($error);
                 echo $error;
                 die();
             }
@@ -337,7 +337,7 @@ class EditView
             $obj = new $bean();
             $this->focus = $obj->retrieve($request['record']);
         } else {
-            $GLOBALS['log']->debug('Unable to populate bean, no record and no module parameter found');
+            LoggerManager::getLogger()->debug('Unable to populate bean, no record and no module parameter found');
         }
     }
 

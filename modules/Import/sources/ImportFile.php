@@ -120,7 +120,7 @@ class ImportFile extends ImportDataSource
         }
 
         if ($checkUploadPath && UploadStream::path($filename) == null) {
-            $GLOBALS['log']->fatal("ImportFile detected attempt to access to the following file not within the sugar upload dir: $filename");
+            LoggerManager::getLogger()->fatal("ImportFile detected attempt to access to the following file not within the sugar upload dir: $filename");
             return null;
         }
 

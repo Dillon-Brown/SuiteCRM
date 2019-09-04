@@ -141,7 +141,7 @@ class UploadFile
         $fullname = "upload://$bean_id.$filename";
         if (file_exists($fullname)) {
             if (!rename($fullname, "upload://$bean_id")) {
-                $GLOBALS['log']->fatal("unable to rename file: $fullname => $bean_id");
+                LoggerManager::getLogger()->fatal("unable to rename file: $fullname => $bean_id");
             }
 
             return true;
@@ -200,10 +200,10 @@ class UploadFile
                 if (copy($oldStyleSource, $source)) {
                     // delete the old
                     if (!unlink($oldStyleSource)) {
-                        $GLOBALS['log']->error("upload_file could not unlink [ {$oldStyleSource} ]");
+                        LoggerManager::getLogger()->error("upload_file could not unlink [ {$oldStyleSource} ]");
                     }
                 } else {
-                    $GLOBALS['log']->error("upload_file could not copy [ {$oldStyleSource} ] to [ {$source} ]");
+                    LoggerManager::getLogger()->error("upload_file could not copy [ {$oldStyleSource} ] to [ {$source} ]");
                 }
             }
         }
@@ -214,7 +214,7 @@ class UploadFile
             LoggerManager::getLogger()->warn('Upload File error: Argument cannot be a directory. Argument was: "' . $source . '"');
         } else {
             if (!copy($source, $destination)) {
-                $GLOBALS['log']->error("upload_file could not copy [ {$source} ] to [ {$destination} ]");
+                LoggerManager::getLogger()->error("upload_file could not copy [ {$source} ] to [ {$destination} ]");
             } else {
                 return true;
             }
@@ -263,7 +263,7 @@ class UploadFile
                             $sugar_config['upload_maxsize']
                         )
                     );
-                    $GLOBALS['log']->fatal($errMess);
+                    LoggerManager::getLogger()->fatal($errMess);
                 } else {
                     //log the error, the string produced will read something like:
                     //ERROR: There was an error during upload. Error code: 3
@@ -275,7 +275,7 @@ class UploadFile
                             self::$filesError[$_FILES['filename_file']['error']]
                         )
                     );
-                    $GLOBALS['log']->fatal($errMess);
+                    LoggerManager::getLogger()->fatal($errMess);
                 }
             }
 
@@ -285,13 +285,13 @@ class UploadFile
         if (!is_uploaded_file($_FILES[$this->field_name]['tmp_name'])) {
             return false;
         } elseif ($_FILES[$this->field_name]['size'] > $sugar_config['upload_maxsize']) {
-            $GLOBALS['log']->fatal("ERROR: uploaded file was too big: max filesize: {$sugar_config['upload_maxsize']}");
+            LoggerManager::getLogger()->fatal("ERROR: uploaded file was too big: max filesize: {$sugar_config['upload_maxsize']}");
 
             return false;
         }
 
         if (!UploadStream::writable()) {
-            $GLOBALS['log']->fatal("ERROR: cannot write to upload directory");
+            LoggerManager::getLogger()->fatal("ERROR: cannot write to upload directory");
 
             return false;
         }
@@ -498,13 +498,13 @@ class UploadFile
                 } else {
                     $result['success'] = false;
                     // FIXME: Translate
-                    $GLOBALS['log']->error("Could not load the requested API (" . $doc_type . ")");
+                    LoggerManager::getLogger()->error("Could not load the requested API (" . $doc_type . ")");
                     $result['errorMessage'] = 'Could not find a proper API';
                 }
             } catch (Exception $e) {
                 $result['success'] = false;
                 $result['errorMessage'] = $e->getMessage();
-                $GLOBALS['log']->error("Caught exception: (" . $e->getMessage() . ") ");
+                LoggerManager::getLogger()->error("Caught exception: (" . $e->getMessage() . ") ");
             }
             if (!$result['success']) {
                 sugar_rename($new_destination, str_replace($bean_id . '_' . $file_name, $bean_id, $new_destination));

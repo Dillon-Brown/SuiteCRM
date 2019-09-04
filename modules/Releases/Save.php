@@ -93,6 +93,6 @@ if (!empty($_REQUEST['edit'])) {
     $edit='&edit=true';
 }
 
-$GLOBALS['log']->debug("Saved record with id of ".$return_id);
+LoggerManager::getLogger()->debug("Saved record with id of ".$return_id);
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id$edit");

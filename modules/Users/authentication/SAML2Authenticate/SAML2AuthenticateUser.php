@@ -82,10 +82,10 @@ class SAML2AuthenticateUser extends SugarAuthenticateUser
      */
     public function loadUserOnLogin($name, $password, $fallback = false, $PARAMS = array())
     {
-        $GLOBALS['log']->debug("Starting user load for ". $name);
+        LoggerManager::getLogger()->debug("Starting user load for ". $name);
         $user_id = $this->authenticateUser($name, null, $fallback);
         if (empty($user_id)) {
-            $GLOBALS['log']->fatal('SECURITY: User authentication for '.$name.' failed');
+            LoggerManager::getLogger()->fatal('SECURITY: User authentication for '.$name.' failed');
             return false;
         }
         $this->loadUserOnSession($user_id);

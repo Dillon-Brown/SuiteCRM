@@ -151,7 +151,7 @@ class SurveyResponses extends Basic
         $email_template = $email_template->retrieve($emailTemplateId);
 
         if (!$email_template) {
-            $GLOBALS['log']->warn("SurveyResponse: Email template is empty");
+            LoggerManager::getLogger()->warn("SurveyResponse: Email template is empty");
 
             return false;
         }
@@ -167,7 +167,7 @@ class SurveyResponses extends Basic
 
         $mailer->AddAddress($email);
         if (!$mailer->Send()) {
-            $GLOBALS['log']->info("SurveyResponse: Could not send email:  " . $mailer->ErrorInfo);
+            LoggerManager::getLogger()->info("SurveyResponse: Could not send email:  " . $mailer->ErrorInfo);
 
             return false;
         }

@@ -51,7 +51,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
 
     public function filter_fields($value, $fields)
     {
-        $GLOBALS['log']->info('Begin: SoapHelperWebServices->filter_fields');
+        LoggerManager::getLogger()->info('Begin: SoapHelperWebServices->filter_fields');
         global $invalid_contact_fields;
         $filterFields = array();
         foreach ($fields as $field) {
@@ -80,13 +80,13 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
             }
             $filterFields[] = $field;
         }
-        $GLOBALS['log']->info('End: SoapHelperWebServices->filter_fields');
+        LoggerManager::getLogger()->info('End: SoapHelperWebServices->filter_fields');
         return $filterFields;
     }
 
     public function getRelationshipResults($bean, $link_field_name, $link_module_fields, $optional_where = '', $order_by = '')
     {
-        $GLOBALS['log']->info('Begin: SoapHelperWebServices->getRelationshipResults');
+        LoggerManager::getLogger()->info('Begin: SoapHelperWebServices->getRelationshipResults');
         require_once('include/TimeDate.php');
         global  $beanList, $beanFiles, $current_user;
         global $disable_date_format, $timedate;
@@ -127,17 +127,17 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
                 $row = clean_sensitive_data($bean->field_defs, $row);
                 $list[] = $row;
             }
-            $GLOBALS['log']->info('End: SoapHelperWebServices->getRelationshipResults');
+            LoggerManager::getLogger()->info('End: SoapHelperWebServices->getRelationshipResults');
             return array('rows' => $list, 'fields_set_on_rows' => $filterFields);
         }
-        $GLOBALS['log']->info('End: SoapHelperWebServices->getRelationshipResults - ' . $link_field_name . ' relationship does not exists');
+        LoggerManager::getLogger()->info('End: SoapHelperWebServices->getRelationshipResults - ' . $link_field_name . ' relationship does not exists');
         return false;
         // else
     } // fn
 
     public function get_field_list($value, $fields, $translate=true)
     {
-        $GLOBALS['log']->info('Begin: SoapHelperWebServices->get_field_list');
+        LoggerManager::getLogger()->info('Begin: SoapHelperWebServices->get_field_list');
         $module_fields = array();
         $link_fields = array();
         if (!empty($value->field_defs)) {
@@ -241,7 +241,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
             $module_fields['created_by_name']['name'] = 'created_by_name';
         }
 
-        $GLOBALS['log']->info('End: SoapHelperWebServices->get_field_list');
+        LoggerManager::getLogger()->info('End: SoapHelperWebServices->get_field_list');
         return array('module_fields' => $module_fields, 'link_fields' => $link_fields);
     }
 
@@ -344,7 +344,7 @@ class SugarWebServiceUtilv3 extends SoapHelperWebServices
         $results = array();
         foreach ($activityModules as $module => $meta) {
             if (!self::check_modules_access($GLOBALS['current_user'], $module, 'read')) {
-                $GLOBALS['log']->debug("SugarWebServiceImpl->get_last_viewed: NO ACCESS to $module");
+                LoggerManager::getLogger()->debug("SugarWebServiceImpl->get_last_viewed: NO ACCESS to $module");
                 continue;
             }
 

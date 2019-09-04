@@ -81,7 +81,7 @@ if (isset($_REQUEST['offset']) or isset($_REQUEST['record'])) {
 echo getClassicModuleTitle($mod_strings['LBL_MODULE_NAME'], array($mod_strings['LBL_MODULE_NAME'],$focus->get_summary_text()), true);
 
 
-$GLOBALS['log']->info("Role detail view");
+LoggerManager::getLogger()->info("Role detail view");
 
 $xtpl=new XTemplate('modules/Roles/DetailView.html');
 $xtpl->assign("MOD", $mod_strings);

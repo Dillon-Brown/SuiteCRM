@@ -54,7 +54,7 @@ global $timedate;
 global $theme;
 
 /* start standard DetailView layout process */
-$GLOBALS['log']->info("InboundEmails DetailView");
+LoggerManager::getLogger()->info("InboundEmails DetailView");
 $focus = new InboundEmail();
 $focus->retrieve($_REQUEST['record']);
 if (empty($focus->id)) {

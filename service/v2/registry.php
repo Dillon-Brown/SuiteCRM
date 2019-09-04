@@ -78,7 +78,7 @@ class registry
     {
         // START OF REGISTER FUNCTIONS
         
-        $GLOBALS['log']->info('Begin: registry->registerFunction');
+        LoggerManager::getLogger()->info('Begin: registry->registerFunction');
         
         $this->serviceClass->registerFunction(
             'login',
@@ -217,7 +217,7 @@ class registry
         );
 
             
-        $GLOBALS['log']->info('END: registry->registerFunction');
+        LoggerManager::getLogger()->info('END: registry->registerFunction');
             
         // END OF REGISTER FUNCTIONS
     } // fn
@@ -231,7 +231,7 @@ class registry
         
         // START OF REGISTER COMPLEX TYPES
         
-        $GLOBALS['log']->info('Begin: registry->registerTypes');
+        LoggerManager::getLogger()->info('Begin: registry->registerTypes');
 
         $this->serviceClass->registerType(
             'new_note_attachment',
@@ -678,7 +678,7 @@ class registry
         );
                 
         
-        $GLOBALS['log']->info('End: registry->registerTypes');
+        LoggerManager::getLogger()->info('End: registry->registerTypes');
 
         // END OF REGISTER COMPLEX TYPES
     } // fn

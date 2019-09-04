@@ -113,7 +113,7 @@ class SchedulersJob extends Basic
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -213,11 +213,11 @@ class SchedulersJob extends Basic
         curl_close($ch);
 
         if ($result !== false && $cInfo['http_code'] < 400) {
-            $GLOBALS['log']->debug("----->Firing was successful: $job");
-            $GLOBALS['log']->debug('----->WTIH RESULT: '.strip_tags($result).' AND '.strip_tags(print_r($cInfo, true)));
+            LoggerManager::getLogger()->debug("----->Firing was successful: $job");
+            LoggerManager::getLogger()->debug('----->WTIH RESULT: '.strip_tags($result).' AND '.strip_tags(print_r($cInfo, true)));
             return true;
         }
-        $GLOBALS['log']->fatal("Job failed: $job");
+        LoggerManager::getLogger()->fatal("Job failed: $job");
         return false;
     }
     ////	END SCHEDULERSJOB HELPER FUNCTIONS
@@ -293,7 +293,7 @@ class SchedulersJob extends Basic
      */
     public function resolveJob($resolution, $message = null)
     {
-        $GLOBALS['log']->info("Resolving job {$this->id} as $resolution: $message");
+        LoggerManager::getLogger()->info("Resolving job {$this->id} as $resolution: $message");
         if ($resolution == self::JOB_FAILURE) {
             $this->failure_count++;
             if ($this->requeue && $this->retry_count > 0) {
@@ -304,7 +304,7 @@ class SchedulersJob extends Basic
                 }
                 $this->execute_time = $GLOBALS['timedate']->getNow()->modify("+{$this->job_delay} seconds")->asDb();
                 $this->retry_count--;
-                $GLOBALS['log']->info("Will retry job {$this->id} at {$this->execute_time} ($this->retry_count)");
+                LoggerManager::getLogger()->info("Will retry job {$this->id} at {$this->execute_time} ($this->retry_count)");
                 $this->onFailureRetry();
             } else {
                 // final failure
@@ -365,7 +365,7 @@ class SchedulersJob extends Basic
             $delay = intval($this->job_delay);
         }
         $this->execute_time = $GLOBALS['timedate']->getNow()->modify("+$delay seconds")->asDb();
-        $GLOBALS['log']->info("Postponing job {$this->id} to {$this->execute_time}: $message");
+        LoggerManager::getLogger()->info("Postponing job {$this->id} to {$this->execute_time}: $message");
 
         $this->save();
         return true;
@@ -402,15 +402,15 @@ class SchedulersJob extends Basic
         $job = new self();
         $job->retrieve($id);
         if (empty($job->id)) {
-            $GLOBALS['log']->fatal("Job $id not found.");
+            LoggerManager::getLogger()->fatal("Job $id not found.");
             return "Job $id not found.";
         }
         if ($job->status != self::JOB_STATUS_RUNNING) {
-            $GLOBALS['log']->fatal("Job $id is not marked as running.");
+            LoggerManager::getLogger()->fatal("Job $id is not marked as running.");
             return "Job $id is not marked as running.";
         }
         if ($job->client != $client) {
-            $GLOBALS['log']->fatal("Job $id belongs to client {$job->client}, can not run as $client.");
+            LoggerManager::getLogger()->fatal("Job $id belongs to client {$job->client}, can not run as $client.");
             return "Job $id belongs to another client, can not run as $client.";
         }
         $job->job_done = false;
@@ -527,7 +527,7 @@ class SchedulersJob extends Basic
                 return false;
             }
             $func = $exJob[1];
-            $GLOBALS['log']->debug("----->SchedulersJob calling function: $func");
+            LoggerManager::getLogger()->debug("----->SchedulersJob calling function: $func");
             set_error_handler(array($this, "errorHandler"), E_ALL & ~E_NOTICE & ~E_STRICT);
             if (!is_callable($func)) {
                 $this->resolveJob(self::JOB_FAILURE, sprintf(translate('ERR_CALL', 'SchedulersJobs'), $func));
@@ -551,7 +551,7 @@ class SchedulersJob extends Basic
             return $this->resolution != self::JOB_FAILURE;
         } elseif ($exJob[0] == 'url') {
             if (function_exists('curl_init')) {
-                $GLOBALS['log']->debug('----->SchedulersJob firing URL job: '.$exJob[1]);
+                LoggerManager::getLogger()->debug('----->SchedulersJob firing URL job: '.$exJob[1]);
                 set_error_handler(array($this, "errorHandler"), E_ALL & ~E_NOTICE & ~E_STRICT);
                 if ($this->fireUrl($exJob[1])) {
                     restore_error_handler();

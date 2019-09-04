@@ -178,7 +178,7 @@ class EmailReminder
         $oe = new OutboundEmail();
         $oe = $oe->getSystemMailerSettings();
         if (empty($oe->mail_smtpserver)) {
-            $GLOBALS['log']->fatal("Email Reminder: error sending email, system smtp server is not set");
+            LoggerManager::getLogger()->fatal("Email Reminder: error sending email, system smtp server is not set");
 
             return false;
         }
@@ -188,7 +188,7 @@ class EmailReminder
             $mail->addAddress($r['email'], $GLOBALS['locale']->translateCharsetMIME(trim($r['name']), 'UTF-8', $OBCharset));
             $mail->prepForOutbound();
             if (!$mail->send()) {
-                $GLOBALS['log']->fatal("Email Reminder: error sending e-mail (method: {$mail->Mailer}), (error: {$mail->ErrorInfo})");
+                LoggerManager::getLogger()->fatal("Email Reminder: error sending e-mail (method: {$mail->Mailer}), (error: {$mail->ErrorInfo})");
             }
         }
 

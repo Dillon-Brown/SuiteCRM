@@ -329,7 +329,7 @@ if (file_exists('custom/themes/' . $theme . '/tpls/MySugar.tpl')) {
 } elseif (file_exists('custom/themes/' . $theme . '/include/MySugar/tpls/MySugar.tpl')) {
     echo $sugar_smarty->fetch('custom/themes/' . $theme . '/include/MySugar/tpls/MySugar.tpl');
 } else {
-    $GLOBALS['log']->fatal('MySugar.tpl not found');
+    LoggerManager::getLogger()->fatal('MySugar.tpl not found');
 }
 
 

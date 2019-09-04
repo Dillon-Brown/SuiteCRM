@@ -101,7 +101,7 @@ if (is_admin($current_user)) {
                 try {
                     $parser = ParserFactory::getParser($view, $module);
                 } catch (Exception $e) {
-                    $GLOBALS['log']->fatal("Caught exception in RepairFieldCasing script: ".$e->getMessage());
+                    LoggerManager::getLogger()->fatal("Caught exception in RepairFieldCasing script: ".$e->getMessage());
                     continue;
                 }
                 if (isset($parser->_viewdefs['panels'])) {

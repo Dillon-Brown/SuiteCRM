@@ -59,7 +59,7 @@ class Chart_pipeline_by_sales_stage
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -94,16 +94,16 @@ class Chart_pipeline_by_sales_stage
 
         if (!empty($user_date_start) && !isset($_REQUEST['pbss_date_start'])) {
             $date_start = $timedate->to_display_date($user_date_start, false);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_date_start'] is:");
-            $GLOBALS['log']->debug($user_date_start);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_date_start'] is:");
+            LoggerManager::getLogger()->debug($user_date_start);
         } elseif (isset($_REQUEST['pbss_date_start']) && $_REQUEST['pbss_date_start'] != '') {
             $date_start = $_REQUEST['pbss_date_start'];
             $ds = $timedate->to_db_date($date_start, false);
             $current_user->setPreference('pbss_date_start', $ds);
-            $GLOBALS['log']->debug("_REQUEST['pbss_date_start'] is:");
-            $GLOBALS['log']->debug($_REQUEST['pbss_date_start']);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_date_start'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('pbss_date_start'));
+            LoggerManager::getLogger()->debug("_REQUEST['pbss_date_start'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['pbss_date_start']);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_date_start'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('pbss_date_start'));
         } else {
             $date_start = $timedate->nowDate();
         }
@@ -111,19 +111,19 @@ class Chart_pipeline_by_sales_stage
         $user_date_end = $current_user->getPreference('pbss_date_end');
         if (!empty($user_date_end) && !isset($_REQUEST['pbss_date_end'])) {
             $date_end = $timedate->to_display_date($user_date_end, false);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_date_end'] is:");
-            $GLOBALS['log']->debug($user_date_end);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_date_end'] is:");
+            LoggerManager::getLogger()->debug($user_date_end);
         } elseif (isset($_REQUEST['pbss_date_end']) && $_REQUEST['pbss_date_end'] != '') {
             $date_end = $_REQUEST['pbss_date_end'];
             $de = $timedate->to_db_date($date_end, false);
             $current_user->setPreference('pbss_date_end', $de);
-            $GLOBALS['log']->debug("_REQUEST['pbss_date_end'] is:");
-            $GLOBALS['log']->debug($_REQUEST['pbss_date_end']);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_date_end'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('pbss_date_end'));
+            LoggerManager::getLogger()->debug("_REQUEST['pbss_date_end'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['pbss_date_end']);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_date_end'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('pbss_date_end'));
         } else {
             $date_end = $timedate->asUserDate($timedate->fromString("2010-01-01"));
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_date_end'] not found. Using: ".$date_end);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_date_end'] not found. Using: ".$date_end);
         }
 
         // cn: format date_start|end to user's preferred
@@ -142,15 +142,15 @@ class Chart_pipeline_by_sales_stage
         //get list of sales stage keys to display
         if (!empty($user_tempx) && count($user_tempx) > 0 && !isset($_REQUEST['pbss_sales_stages'])) {
             $tempx = $user_tempx ;
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_sales_stages'] is:");
-            $GLOBALS['log']->debug($user_tempx);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_sales_stages'] is:");
+            LoggerManager::getLogger()->debug($user_tempx);
         } elseif (isset($_REQUEST['pbss_sales_stages']) && count($_REQUEST['pbss_sales_stages']) > 0) {
             $tempx = $_REQUEST['pbss_sales_stages'];
             $current_user->setPreference('pbss_sales_stages', $_REQUEST['pbss_sales_stages']);
-            $GLOBALS['log']->debug("_REQUEST['pbss_sales_stages'] is:");
-            $GLOBALS['log']->debug($_REQUEST['pbss_sales_stages']);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_sales_stages'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('pbss_sales_stages'));
+            LoggerManager::getLogger()->debug("_REQUEST['pbss_sales_stages'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['pbss_sales_stages']);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_sales_stages'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('pbss_sales_stages'));
         }
 
         //set $datax using selected sales stage keys
@@ -163,8 +163,8 @@ class Chart_pipeline_by_sales_stage
             $datax = $app_list_strings['sales_stage_dom'];
             $datax_selected = array_keys($app_list_strings['sales_stage_dom']);
         }
-        $GLOBALS['log']->debug("datax is:");
-        $GLOBALS['log']->debug($datax);
+        LoggerManager::getLogger()->debug("datax is:");
+        LoggerManager::getLogger()->debug($datax);
 
         $ids = array();
         $new_ids = array();
@@ -173,15 +173,15 @@ class Chart_pipeline_by_sales_stage
         if (!empty($user_ids) && count($user_ids) != 0 && !isset($_REQUEST['pbss_ids'])) {
             $ids = $user_ids;
 
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_ids'] is:");
-            $GLOBALS['log']->debug($user_ids);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_ids'] is:");
+            LoggerManager::getLogger()->debug($user_ids);
         } elseif (isset($_REQUEST['pbss_ids']) && count($_REQUEST['pbss_ids']) > 0) {
             $ids = $_REQUEST['pbss_ids'];
             $current_user->setPreference('pbss_ids', $_REQUEST['pbss_ids']);
-            $GLOBALS['log']->debug("_REQUEST['pbss_ids'] is:");
-            $GLOBALS['log']->debug($_REQUEST['pbss_ids']);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_ids'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('pbss_ids'));
+            LoggerManager::getLogger()->debug("_REQUEST['pbss_ids'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['pbss_ids']);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_ids'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('pbss_ids'));
         } else {
             $ids = get_user_array(false);
             $ids = array_keys($ids);
@@ -196,12 +196,12 @@ class Chart_pipeline_by_sales_stage
                 $id_hash = $id_hash * -1;
             }
         }
-        $GLOBALS['log']->debug("ids is:");
-        $GLOBALS['log']->debug($ids);
+        LoggerManager::getLogger()->debug("ids is:");
+        LoggerManager::getLogger()->debug($ids);
 
         $cache_file_name	= sugar_cached("xml/").$current_user->getUserPrivGuid()."_lead_source_by_outcome_".$dateFileNameSafe[0]."_".$dateFileNameSafe[1].".xml";
 
-        $GLOBALS['log']->debug("cache file name is: $cache_file_name");
+        LoggerManager::getLogger()->debug("cache file name is: $cache_file_name");
 
         $tools='<div align="right"><a href="index.php?module='.$currentModule.'&action='. $action .'&pbss_refresh=true" class="tabFormAdvLink">'.SugarThemeRegistry::current()->getImage('refresh', 'border="0" align="absmiddle"', null, null, '.gif', $mod_strings['LBL_REFRESH']).'&nbsp;'.$current_module_strings['LBL_REFRESH'].'</a>&nbsp;&nbsp;<a href="javascript: toggleDisplay(\'pipeline_by_sales_stage_edit\');" class="tabFormAdvLink">'.SugarThemeRegistry::current()->getImage('edit', 'border="0" align="absmiddle"', null, null, '.gif', $mod_strings['LBL_EDIT']).'&nbsp;'. $current_module_strings['LBL_EDIT'].'</a>&nbsp;&nbsp;'.$extra_tools.'</div>';
 
@@ -314,12 +314,12 @@ echo get_validate_chart_js();
         global $timedate;
 
         if (!file_exists($cache_file_name) || $refresh == true) {
-            $GLOBALS['log']->debug("starting pipeline chart");
-            $GLOBALS['log']->debug("datax is:");
-            $GLOBALS['log']->debug($datax);
-            $GLOBALS['log']->debug("user_id is: ");
-            $GLOBALS['log']->debug($user_id);
-            $GLOBALS['log']->debug("cache_file_name is: $cache_file_name");
+            LoggerManager::getLogger()->debug("starting pipeline chart");
+            LoggerManager::getLogger()->debug("datax is:");
+            LoggerManager::getLogger()->debug($datax);
+            LoggerManager::getLogger()->debug("user_id is: ");
+            LoggerManager::getLogger()->debug($user_id);
+            LoggerManager::getLogger()->debug("cache_file_name is: $cache_file_name");
             $opp = new Opportunity;
             $where="";
             //build the where clause for the query that matches $user
@@ -480,16 +480,16 @@ echo get_validate_chart_js();
 
         if (!empty($user_date_start) && !isset($_REQUEST['pbss_date_start'])) {
             $date_start = $timedate->to_display_date($user_date_start, false);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_date_start'] is:");
-            $GLOBALS['log']->debug($user_date_start);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_date_start'] is:");
+            LoggerManager::getLogger()->debug($user_date_start);
         } elseif (isset($_REQUEST['pbss_date_start']) && $_REQUEST['pbss_date_start'] != '') {
             $date_start = $_REQUEST['pbss_date_start'];
             $ds = $timedate->to_db_date($date_start, false);
             $current_user->setPreference('pbss_date_start', $ds);
-            $GLOBALS['log']->debug("_REQUEST['pbss_date_start'] is:");
-            $GLOBALS['log']->debug($_REQUEST['pbss_date_start']);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_date_start'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('pbss_date_start'));
+            LoggerManager::getLogger()->debug("_REQUEST['pbss_date_start'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['pbss_date_start']);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_date_start'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('pbss_date_start'));
         } else {
             $date_start = $timedate->nowDate();
         }
@@ -497,19 +497,19 @@ echo get_validate_chart_js();
         $user_date_end = $current_user->getPreference('pbss_date_end');
         if (!empty($user_date_end) && !isset($_REQUEST['pbss_date_end'])) {
             $date_end = $timedate->to_display_date($user_date_end, false);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_date_end'] is:");
-            $GLOBALS['log']->debug($user_date_end);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_date_end'] is:");
+            LoggerManager::getLogger()->debug($user_date_end);
         } elseif (isset($_REQUEST['pbss_date_end']) && $_REQUEST['pbss_date_end'] != '') {
             $date_end = $_REQUEST['pbss_date_end'];
             $de = $timedate->to_db_date($date_end, false);
             $current_user->setPreference('pbss_date_end', $de);
-            $GLOBALS['log']->debug("_REQUEST['pbss_date_end'] is:");
-            $GLOBALS['log']->debug($_REQUEST['pbss_date_end']);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_date_end'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('pbss_date_end'));
+            LoggerManager::getLogger()->debug("_REQUEST['pbss_date_end'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['pbss_date_end']);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_date_end'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('pbss_date_end'));
         } else {
             $date_end = $timedate->asUserDate($timedate->fromString("2010-01-01"));
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_date_end'] not found. Using: ".$date_end);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_date_end'] not found. Using: ".$date_end);
         }
 
         $tempx = array();
@@ -519,15 +519,15 @@ echo get_validate_chart_js();
         //get list of sales stage keys to display
         if (!empty($user_tempx) && count($user_tempx) > 0 && !isset($_REQUEST['pbss_sales_stages'])) {
             $tempx = $user_tempx ;
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_sales_stages'] is:");
-            $GLOBALS['log']->debug($user_tempx);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_sales_stages'] is:");
+            LoggerManager::getLogger()->debug($user_tempx);
         } elseif (isset($_REQUEST['pbss_sales_stages']) && count($_REQUEST['pbss_sales_stages']) > 0) {
             $tempx = $_REQUEST['pbss_sales_stages'];
             $current_user->setPreference('pbss_sales_stages', $_REQUEST['pbss_sales_stages']);
-            $GLOBALS['log']->debug("_REQUEST['pbss_sales_stages'] is:");
-            $GLOBALS['log']->debug($_REQUEST['pbss_sales_stages']);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_sales_stages'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('pbss_sales_stages'));
+            LoggerManager::getLogger()->debug("_REQUEST['pbss_sales_stages'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['pbss_sales_stages']);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_sales_stages'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('pbss_sales_stages'));
         }
 
         //set $datax using selected sales stage keys
@@ -540,8 +540,8 @@ echo get_validate_chart_js();
             $datax = $app_list_strings['sales_stage_dom'];
             $datax_selected = array_keys($app_list_strings['sales_stage_dom']);
         }
-        $GLOBALS['log']->debug("datax is:");
-        $GLOBALS['log']->debug($datax);
+        LoggerManager::getLogger()->debug("datax is:");
+        LoggerManager::getLogger()->debug($datax);
 
 
 
@@ -552,15 +552,15 @@ echo get_validate_chart_js();
         if (!empty($user_ids) && count($user_ids) != 0 && !isset($_REQUEST['pbss_ids'])) {
             $ids = $user_ids;
 
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_ids'] is:");
-            $GLOBALS['log']->debug($user_ids);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_ids'] is:");
+            LoggerManager::getLogger()->debug($user_ids);
         } elseif (isset($_REQUEST['pbss_ids']) && count($_REQUEST['pbss_ids']) > 0) {
             $ids = $_REQUEST['pbss_ids'];
             $current_user->setPreference('pbss_ids', $_REQUEST['pbss_ids']);
-            $GLOBALS['log']->debug("_REQUEST['pbss_ids'] is:");
-            $GLOBALS['log']->debug($_REQUEST['pbss_ids']);
-            $GLOBALS['log']->debug("USER PREFERENCES['pbss_ids'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('pbss_ids'));
+            LoggerManager::getLogger()->debug("_REQUEST['pbss_ids'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['pbss_ids']);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['pbss_ids'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('pbss_ids'));
         } else {
             $ids = get_user_array(false);
             $ids = array_keys($ids);

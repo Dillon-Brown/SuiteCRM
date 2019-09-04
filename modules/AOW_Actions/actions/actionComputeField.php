@@ -130,7 +130,7 @@ class actionComputeField extends actionBase
             return true;
         } catch (Exception $e) {
             if (isset($GLOBALS['log'])) {
-                $GLOBALS['log']->fatal("Calculated Field Exception: " . $e->getMessage());
+                LoggerManager::getLogger()->fatal("Calculated Field Exception: " . $e->getMessage());
             }
 
             return false;

@@ -131,7 +131,7 @@ class Employee extends Person
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -327,8 +327,8 @@ class Employee extends Person
         if ($current_user->id) {
             if (!is_admin($current_user)) {
                 if ($this->id && $current_user->id != $this->id) {
-                    $GLOBALS['log']->security("{$current_user->name} tried to update {$this->name} record with out permission.");
-                    $GLOBALS['log']->fatal("You can change only your own employee data.");
+                    LoggerManager::getLogger()->security("{$current_user->name} tried to update {$this->name} record with out permission.");
+                    LoggerManager::getLogger()->fatal("You can change only your own employee data.");
 
                     return false;
                 }

@@ -87,7 +87,7 @@ function retrieveErrorReportAttachment(Email $email)
  */
 function createBouncedCampaignLogEntry($row, $email, $email_description)
 {
-    $GLOBALS['log']->debug("Creating bounced email campaign log");
+    LoggerManager::getLogger()->debug("Creating bounced email campaign log");
     $bounce = new CampaignLog();
     $bounce->campaign_id=$row['campaign_id'];
     $bounce->target_tracker_key=$row['target_tracker_key'];
@@ -216,11 +216,11 @@ function checkBouncedEmailForIdentifier($email_description)
     if (preg_match('/X-CampTrackID: [a-z0-9\-]*/i', $email_description, $matches)) {
         $identifiers = preg_split('/X-CampTrackID: /i', $matches[0], -1, PREG_SPLIT_NO_EMPTY);
         $found = true;
-        $GLOBALS['log']->debug("Found campaign identifier in header of email");
+        LoggerManager::getLogger()->debug("Found campaign identifier in header of email");
     } elseif (preg_match('/index.php\?entryPoint=removeme&identifier=[a-z0-9\-]*/', $email_description, $matches)) {
         $identifiers = preg_split('/index.php\?entryPoint=removeme&identifier=/', $matches[0], -1, PREG_SPLIT_NO_EMPTY);
         $found = true;
-        $GLOBALS['log']->debug("Found campaign identifier in body of email");
+        LoggerManager::getLogger()->debug("Found campaign identifier in body of email");
     }
     
     return array('found' => $found, 'matches' => $matches, 'identifiers' => $identifiers);
@@ -263,18 +263,18 @@ function campaign_process_bounced_emails(&$email, &$email_header)
                         $return_id = createBouncedCampaignLogEntry($row, $email, $email_description);
                         return true;
                     }
-                    $GLOBALS['log']->debug("Warning: campaign log entry already exists for identifier $identifier");
+                    LoggerManager::getLogger()->debug("Warning: campaign log entry already exists for identifier $identifier");
                     return false;
                 }
-                $GLOBALS['log']->info("Warning: skipping bounced email with this tracker_key(identifier) in the message body: ".$identifier);
+                LoggerManager::getLogger()->info("Warning: skipping bounced email with this tracker_key(identifier) in the message body: ".$identifier);
                 return false;
             }
-            $GLOBALS['log']->info("Warning: Empty identifier for campaign log.");
+            LoggerManager::getLogger()->info("Warning: Empty identifier for campaign log.");
             return false;
         }
-        $GLOBALS['log']->info("Warning: skipping bounced email because it does not have the removeme link.");
+        LoggerManager::getLogger()->info("Warning: skipping bounced email because it does not have the removeme link.");
         return false;
     }
-    $GLOBALS['log']->info("Warning: skipping bounced email because the sender is not MAILER-DAEMON.");
+    LoggerManager::getLogger()->info("Warning: skipping bounced email because the sender is not MAILER-DAEMON.");
     return false;
 }

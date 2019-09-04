@@ -222,7 +222,7 @@ class ListViewDataEmails extends ListViewData
                 break;
 
             default:
-                $GLOBALS['log']->warn("unknown or undefined folder type (we will use 'imap' instead): " . $folder->getType());
+                LoggerManager::getLogger()->warn("unknown or undefined folder type (we will use 'imap' instead): " . $folder->getType());
                 $this->searchType = "imap";
                 break;
         }
@@ -823,12 +823,12 @@ class ListViewDataEmails extends ListViewData
 
                     // handle default case
 
-                    $GLOBALS['log']->fatal("Unknown or undefined search type" . ($this->searchType ? " ($this->searchType)" : ''));
+                    LoggerManager::getLogger()->fatal("Unknown or undefined search type" . ($this->searchType ? " ($this->searchType)" : ''));
 
                     break;
             }
         } catch (SuiteException $e) {
-            $GLOBALS['log']->warn(
+            LoggerManager::getLogger()->warn(
                 'Exception (class ' . get_class($e) .
                 ') message was: ' . $e->getMessage() .
                 " (code: " . $e->getCode() .

@@ -132,7 +132,7 @@ class User extends Person implements EmailInterface
     {
         $this->$key = $value;
         if ($key == 'id' && $value == '1') {
-            $GLOBALS['log']->fatal('DEBUG: User::' . $key . ' set to ' . $value);
+            LoggerManager::getLogger()->fatal('DEBUG: User::' . $key . ' set to ' . $value);
         }
     }
 
@@ -143,7 +143,7 @@ class User extends Person implements EmailInterface
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -381,7 +381,7 @@ class User extends Person implements EmailInterface
         // for BC
         if (func_num_args() > 4) {
             $user = func_get_arg(4);
-            $GLOBALS['log']->deprecated('User::setPreferences() should not be used statically.');
+            LoggerManager::getLogger()->deprecated('User::setPreferences() should not be used statically.');
         } else {
             $user = $this;
         }
@@ -402,7 +402,7 @@ class User extends Person implements EmailInterface
         // for BC
         if (func_num_args() > 1) {
             $user = func_get_arg(1);
-            $GLOBALS['log']->deprecated('User::resetPreferences() should not be used statically.');
+            LoggerManager::getLogger()->deprecated('User::resetPreferences() should not be used statically.');
         } else {
             $user = $this;
         }
@@ -420,7 +420,7 @@ class User extends Person implements EmailInterface
         // for BC
         if (func_num_args() > 0) {
             $user = func_get_arg(0);
-            $GLOBALS['log']->deprecated('User::savePreferencesToDB() should not be used statically.');
+            LoggerManager::getLogger()->deprecated('User::savePreferencesToDB() should not be used statically.');
         } else {
             $user = $this;
         }
@@ -450,7 +450,7 @@ class User extends Person implements EmailInterface
         // for BC
         if (func_num_args() > 0) {
             $user = func_get_arg(0);
-            $GLOBALS['log']->deprecated('User::getUserDateTimePreferences() should not be used statically.');
+            LoggerManager::getLogger()->deprecated('User::getUserDateTimePreferences() should not be used statically.');
         } else {
             $user = $this;
         }
@@ -472,7 +472,7 @@ class User extends Person implements EmailInterface
         // for BC
         if (func_num_args() > 1) {
             $user = func_get_arg(1);
-            $GLOBALS['log']->deprecated('User::loadPreferences() should not be used statically.');
+            LoggerManager::getLogger()->deprecated('User::loadPreferences() should not be used statically.');
         } else {
             $user = $this;
         }
@@ -518,7 +518,7 @@ class User extends Person implements EmailInterface
         // for BC
         if (func_num_args() > 2) {
             $user = func_get_arg(2);
-            $GLOBALS['log']->deprecated('User::getPreference() should not be used statically.');
+            LoggerManager::getLogger()->deprecated('User::getPreference() should not be used statically.');
         } else {
             $user = $this;
         }
@@ -613,14 +613,14 @@ class User extends Person implements EmailInterface
 
             if ($smtp_error) {
                 $msg .= 'SMTP server settings required first.';
-                $GLOBALS['log']->warn($msg);
+                LoggerManager::getLogger()->warn($msg);
                 if (isset($mod_strings['ERR_USER_FACTOR_SMTP_REQUIRED'])) {
                     SugarApplication::appendErrorMessage($mod_strings['ERR_USER_FACTOR_SMTP_REQUIRED']);
                 }
             } else {
                 if ($this->factor_auth != $tmpUser->factor_auth || $this->factor_auth_interface != $tmpUser->factor_auth_interface) {
                     $msg .= 'Current user is not able to change two factor authentication settings.';
-                    $GLOBALS['log']->warn($msg);
+                    LoggerManager::getLogger()->warn($msg);
                     SugarApplication::appendErrorMessage($mod_strings['ERR_USER_FACTOR_CHANGE_DISABLED']);
                 }
             }
@@ -699,7 +699,7 @@ class User extends Person implements EmailInterface
 
         // User Profile specific save for Email addresses
         if (!$this->emailAddress->saveAtUserProfile($_REQUEST)) {
-            $GLOBALS['log']->error('Email address save error');
+            LoggerManager::getLogger()->error('Email address save error');
             return false;
         }
 
@@ -1090,7 +1090,7 @@ EOQ;
         }
 
         if (count($rows) > 1) {
-            $GLOBALS['log']->fatal('ambiguous user email address');
+            LoggerManager::getLogger()->fatal('ambiguous user email address');
         }
         if (!empty($rows[0]['id'])) {
             return $this->retrieve($rows[0]['id']);
@@ -1124,12 +1124,12 @@ EOQ;
             $_SESSION['loginattempts'] = 1;
         }
         if ($_SESSION['loginattempts'] > 5) {
-            $GLOBALS['log']->fatal('SECURITY: ' . $this->user_name . ' has attempted to login ' . $_SESSION['loginattempts'] . ' times from IP address: ' . $_SERVER['REMOTE_ADDR'] . '.');
+            LoggerManager::getLogger()->fatal('SECURITY: ' . $this->user_name . ' has attempted to login ' . $_SESSION['loginattempts'] . ' times from IP address: ' . $_SERVER['REMOTE_ADDR'] . '.');
 
             return null;
         }
 
-        $GLOBALS['log']->debug("Starting user load for $this->user_name");
+        LoggerManager::getLogger()->debug("Starting user load for $this->user_name");
 
         if (!isset($this->user_name) || $this->user_name == "" || !isset($username_password) || $username_password == "") {
             return null;
@@ -1140,7 +1140,7 @@ EOQ;
         }
         $row = self::findUserPassword($this->user_name, $username_password);
         if (empty($row) || !empty($GLOBALS['login_error'])) {
-            $GLOBALS['log']->fatal('SECURITY: User authentication for ' . $this->user_name . ' failed - could not Load User from Database');
+            LoggerManager::getLogger()->fatal('SECURITY: User authentication for ' . $this->user_name . ' failed - could not Load User from Database');
 
             return null;
         }
@@ -1222,14 +1222,14 @@ EOQ;
     public static function findUserPassword($name, $password, $where = '', $checkPasswordMD5 = true)
     {
         if (!$name) {
-            $GLOBALS['log']->fatal('Invalid Argument: Username is not set');
+            LoggerManager::getLogger()->fatal('Invalid Argument: Username is not set');
             return false;
         }
         $db = DBManagerFactory::getInstance();
         $before = $name;
         $name = $db->quote($name);
         if ($before && !$name) {
-            $GLOBALS['log']->fatal('DB Quote error: return value is removed, check the Database connection.');
+            LoggerManager::getLogger()->fatal('DB Quote error: return value is removed, check the Database connection.');
             return false;
         }
         $query = "SELECT * from users where user_name='$name'";
@@ -1277,7 +1277,7 @@ EOQ;
     {
         global $mod_strings;
         global $current_user;
-        $GLOBALS['log']->debug("Starting password change for $this->user_name");
+        LoggerManager::getLogger()->debug("Starting password change for $this->user_name");
 
         if (!isset($new_password) || $new_password == "") {
             $this->error_string = $mod_strings['ERR_PASSWORD_CHANGE_FAILED_1'] . $current_user->user_name . $mod_strings['ERR_PASSWORD_CHANGE_FAILED_2'];
@@ -1293,7 +1293,7 @@ EOQ;
             //check old password first
             $row = self::findUserPassword($this->user_name, md5($username_password));
             if (empty($row)) {
-                $GLOBALS['log']->warn("Incorrect old password for " . $this->user_name . "");
+                LoggerManager::getLogger()->warn("Incorrect old password for " . $this->user_name . "");
                 $this->error_string = $mod_strings['ERR_PASSWORD_INCORRECT_OLD_1'] . $this->user_name . $mod_strings['ERR_PASSWORD_INCORRECT_OLD_2'];
 
                 return false;
@@ -1476,7 +1476,7 @@ EOQ;
             $remaining_admins = $this->db->getOne("SELECT COUNT(*) as c from users where is_admin = 1 AND deleted=0");
 
             if (($remaining_admins <= 1) && ($this->is_admin != '1') && ($this->id == $current_user->id)) {
-                $GLOBALS['log']->debug("Number of remaining administrator accounts: {$remaining_admins}");
+                LoggerManager::getLogger()->debug("Number of remaining administrator accounts: {$remaining_admins}");
                 $this->error_string .= $mod_strings['ERR_LAST_ADMIN_1'] . $this->user_name . $mod_strings['ERR_LAST_ADMIN_2'];
                 $verified = false;
             }

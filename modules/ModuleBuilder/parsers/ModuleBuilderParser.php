@@ -60,7 +60,7 @@ class ModuleBuilderParser
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -87,7 +87,7 @@ class ModuleBuilderParser
         if (! file_exists($file)) {
             $this->_fatalError("ModuleBuilderParser: required viewdef file {$file} does not exist");
         }
-        $GLOBALS['log']->info('ModuleBuilderParser->_loadFromFile(): file='.$file);
+        LoggerManager::getLogger()->info('ModuleBuilderParser->_loadFromFile(): file='.$file);
         require($file); // loads in a $viewdefs
 
         // Check to see if we have the module name set as a variable rather than embedded in the $viewdef array
@@ -109,12 +109,12 @@ class ModuleBuilderParser
         if (isset($variables['module_name'])) {
             $mbName = $variables['module_name'];
             if ($mbName != $moduleName) {
-                $GLOBALS['log']->debug('ModuleBuilderParser->_loadFromFile(): tidying module names from '.$mbName.' to '.$moduleName);
+                LoggerManager::getLogger()->debug('ModuleBuilderParser->_loadFromFile(): tidying module names from '.$mbName.' to '.$moduleName);
                 $defs[$moduleName] = $defs[$mbName];
                 unset($defs[$mbName]);
             }
         }
-        //	    $GLOBALS['log']->debug('ModuleBuilderParser->_loadFromFile(): '.print_r($defs,true));
+        //	    LoggerManager::getLogger()->debug('ModuleBuilderParser->_loadFromFile(): '.print_r($defs,true));
         return (array('viewdefs' => $defs, 'variables' => $variables));
     }
 
@@ -133,7 +133,7 @@ class ModuleBuilderParser
         }
 
         mkdir_recursive(dirname($file)) ;
-        $GLOBALS['log']->debug("ModuleBuilderParser->_writeFile(): file=".$file);
+        LoggerManager::getLogger()->debug("ModuleBuilderParser->_writeFile(): file=".$file);
         $useVariables = (count($variables)>0);
         if ($fh = @sugar_fopen($file, 'w')) {
             $out = "<?php\n";
@@ -164,11 +164,11 @@ class ModuleBuilderParser
             }
             $out .= ";\n?>\n";
 
-//           $GLOBALS['log']->debug("parser.modifylayout.php->_writeFile(): out=".print_r($out,true));
+//           LoggerManager::getLogger()->debug("parser.modifylayout.php->_writeFile(): out=".print_r($out,true));
             fputs($fh, $out);
             fclose($fh);
         } else {
-            $GLOBALS['log']->fatal("ModuleBuilderParser->_writeFile() Could not write new viewdef file ".$file);
+            LoggerManager::getLogger()->fatal("ModuleBuilderParser->_writeFile() Could not write new viewdef file ".$file);
         }
     }
 

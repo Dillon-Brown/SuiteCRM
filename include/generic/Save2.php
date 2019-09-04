@@ -76,7 +76,7 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
         $_REQUEST['subpanel_field_name'] //link attribute name
     );
 } elseif (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'addtoprospectlist') {
-    $GLOBALS['log']->debug(print_r($_REQUEST, true));
+    LoggerManager::getLogger()->debug(print_r($_REQUEST, true));
     if (!empty($_REQUEST['prospect_list_id']) and !empty($_REQUEST['prospect_ids'])) {
         add_prospects_to_prospect_list(
             $_REQUEST['prospect_list_id'],
@@ -211,7 +211,7 @@ if (isset($_REQUEST['return_type'])  && $_REQUEST['return_type'] == 'report') {
 
 if ($refreshsubpanel) {
     //refresh contents of the sub-panel.
-    $GLOBALS['log']->debug("Location: index.php?sugar_body_only=1&module=".$_REQUEST['module']."&subpanel=".$_REQUEST['subpanel_module_name']."&action=SubPanelViewer&inline=1&record=".$_REQUEST['record']);
+    LoggerManager::getLogger()->debug("Location: index.php?sugar_body_only=1&module=".$_REQUEST['module']."&subpanel=".$_REQUEST['subpanel_module_name']."&action=SubPanelViewer&inline=1&record=".$_REQUEST['record']);
     if (empty($_REQUEST['refresh_page']) || $_REQUEST['refresh_page'] != 1) {
         $inline = isset($_REQUEST['inline'])?$_REQUEST['inline']: $inline;
         header("Location: index.php?sugar_body_only=1&module=".$_REQUEST['module']."&subpanel=".$_REQUEST['subpanel_module_name']."&action=SubPanelViewer&inline=$inline&record=".$_REQUEST['record']);

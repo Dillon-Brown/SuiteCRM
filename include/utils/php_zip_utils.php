@@ -52,7 +52,7 @@ function unzip($zip_archive, $zip_dir)
 function unzip_file($zip_archive, $archive_file, $zip_dir)
 {
     if (!is_dir($zip_dir)) {
-        $GLOBALS['log']->fatal("Specified directory for zip file extraction does not exist.");
+        LoggerManager::getLogger()->fatal("Specified directory for zip file extraction does not exist.");
         if (defined('SUITE_PHPUNIT_RUNNER') || defined('SUGARCRM_INSTALL')) {
             return false;
         }
@@ -63,7 +63,7 @@ function unzip_file($zip_archive, $archive_file, $zip_dir)
     $res = $zip->open(UploadFile::realpath($zip_archive)); // we need realpath here for PHP streams support
 
     if ($res !== true) {
-        $GLOBALS['log']->fatal(sprintf(sprintf("ZIP Error(%d): Status(%s)", $res, $zip->status)));
+        LoggerManager::getLogger()->fatal(sprintf(sprintf("ZIP Error(%d): Status(%s)", $res, $zip->status)));
         if (defined('SUITE_PHPUNIT_RUNNER') || defined('SUGARCRM_INSTALL')) {
             return false;
         }
@@ -76,7 +76,7 @@ function unzip_file($zip_archive, $archive_file, $zip_dir)
     }
     
     if ($res !== true) {
-        $GLOBALS['log']->fatal(sprintf(sprintf("ZIP Error(%d): Status(%s)", $res, $zip->status)));
+        LoggerManager::getLogger()->fatal(sprintf(sprintf("ZIP Error(%d): Status(%s)", $res, $zip->status)));
         if (defined('SUITE_PHPUNIT_RUNNER') || defined('SUGARCRM_INSTALL')) {
             return false;
         }
@@ -87,7 +87,7 @@ function unzip_file($zip_archive, $archive_file, $zip_dir)
 function zip_dir($zip_dir, $zip_archive)
 {
     if (!is_dir($zip_dir)) {
-        $GLOBALS['log']->fatal("Specified directory for zip file extraction does not exist.");
+        LoggerManager::getLogger()->fatal("Specified directory for zip file extraction does not exist.");
         return false;
     }
     $zip = new ZipArchive();
@@ -125,7 +125,7 @@ function zip_files_list($zip_file, $file_list, $prefix = '')
     $archive    = new ZipArchive();
     $res = $archive->open(UploadFile::realpath($zip_file), ZipArchive::CREATE|ZipArchive::OVERWRITE); // we need realpath here for PHP streams support
     if ($res !== true) {
-        $GLOBALS['log']->fatal("Unable to open zip file, check directory permissions: $zip_file");
+        LoggerManager::getLogger()->fatal("Unable to open zip file, check directory permissions: $zip_file");
         return false;
     }
     foreach ($file_list as $file) {

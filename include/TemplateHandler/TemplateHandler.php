@@ -75,7 +75,7 @@ class TemplateHandler
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -377,7 +377,7 @@ class TemplateHandler
             return $this->ss->fetch($file);
         }
         global $app_strings;
-        $GLOBALS['log']->fatal($app_strings['ERR_NO_SUCH_FILE'] . ": $file");
+        LoggerManager::getLogger()->fatal($app_strings['ERR_NO_SUCH_FILE'] . ": $file");
 
         return $app_strings['ERR_NO_SUCH_FILE'] . ": $file";
     }

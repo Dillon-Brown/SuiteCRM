@@ -831,7 +831,7 @@ class ListView
                 $this->xTemplate->assign("IMAGE_PATH", $this->local_image_path);
                 $this->xTemplate->assign("MODULE_NAME", $this->local_current_module);
             } else {
-                $GLOBALS['log']->error("NO XTEMPLATEPATH DEFINED CANNOT CREATE XTEMPLATE");
+                LoggerManager::getLogger()->error("NO XTEMPLATEPATH DEFINED CANNOT CREATE XTEMPLATE");
             }
         }
     }
@@ -1304,7 +1304,7 @@ class ListView
             }
 
 
-            $GLOBALS['log']->debug("Offsets: (start, previous, next, last)(0, $previous_offset, $next_offset, $last_offset)");
+            LoggerManager::getLogger()->debug("Offsets: (start, previous, next, last)(0, $previous_offset, $next_offset, $last_offset)");
 
             if (0 == $current_offset) {
                 $start_link = "<button type='button' name='listViewStartButton' title='{$this->local_app_strings['LNK_LIST_START']}' class='button' disabled>".SugarThemeRegistry::current()->getImage("start_off", "aborder='0' align='absmiddle'", null, null, '.gif', $this->local_app_strings['LNK_LIST_START'])."</button>";
@@ -1367,8 +1367,8 @@ class ListView
                 }
             }
 
-            $GLOBALS['log']->info("Offset (next, current, prev)($next_offset, $current_offset, $previous_offset)");
-            $GLOBALS['log']->info("Start/end records ($start_record, $end_record)");
+            LoggerManager::getLogger()->info("Offset (next, current, prev)($next_offset, $current_offset, $previous_offset)");
+            LoggerManager::getLogger()->info("Start/end records ($start_record, $end_record)");
 
             $end_record = $end_record-1;
 

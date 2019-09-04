@@ -77,7 +77,7 @@ class CalendarDashlet extends Dashlet
         if ($this->seedBean = BeanFactory::newBean('Calendar')) {
             $this->seedBean->module_name = 'Calendar';
         } else {
-            $GLOBALS['log']->warn('Calendar bean not created');
+            LoggerManager::getLogger()->warn('Calendar bean not created');
         }
     }
 
@@ -90,7 +90,7 @@ class CalendarDashlet extends Dashlet
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be removed in 7.8,
         please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }

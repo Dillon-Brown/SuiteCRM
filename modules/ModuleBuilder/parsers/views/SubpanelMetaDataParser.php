@@ -84,11 +84,11 @@ class SubpanelMetaDataParser extends ListLayoutMetaDataParser
         $this->_viewdefs = array_change_key_case($this->implementation->getViewdefs()); // force to lower case so don't have problems with case mismatches later
         $this->_fielddefs = $this->implementation->getFielddefs();
         $this->_standardizeFieldLabels($this->_fielddefs);
-        $GLOBALS['log']->debug(get_class($this) . "->__construct(): viewdefs = " . print_r($this->_viewdefs, true));
-        $GLOBALS['log']->debug(get_class($this) . "->__construct(): viewdefs = " . print_r($this->_viewdefs, true));
+        LoggerManager::getLogger()->debug(get_class($this) . "->__construct(): viewdefs = " . print_r($this->_viewdefs, true));
+        LoggerManager::getLogger()->debug(get_class($this) . "->__construct(): viewdefs = " . print_r($this->_viewdefs, true));
         $this->_invisibleFields = $this->findInvisibleFields($this->_viewdefs);
 
-        $GLOBALS['log']->debug(get_class($this) . "->__construct(): invisibleFields = " . print_r(
+        LoggerManager::getLogger()->debug(get_class($this) . "->__construct(): invisibleFields = " . print_r(
             $this->_invisibleFields,
             true
         ));

@@ -185,6 +185,6 @@ class TemplateDatetimecombo extends TemplateRange
                 }
             }
         }
-        $GLOBALS['log']->debug('populate: '.print_r($this, true));
+        LoggerManager::getLogger()->debug('populate: '.print_r($this, true));
     }
 }

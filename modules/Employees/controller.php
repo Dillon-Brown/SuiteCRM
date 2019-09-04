@@ -52,7 +52,7 @@ class EmployeesController extends SugarController
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -79,7 +79,7 @@ class EmployeesController extends SugarController
             $u->employee_status = 'Terminated';
             $u->save();
             $u->mark_deleted($u->id);
-            $GLOBALS['log']->info("User id: {$GLOBALS['current_user']->id} deleted user record: {$_REQUEST['record']}");
+            LoggerManager::getLogger()->info("User id: {$GLOBALS['current_user']->id} deleted user record: {$_REQUEST['record']}");
 
             SugarApplication::redirect("index.php?module=Employees&action=index");
         } else {

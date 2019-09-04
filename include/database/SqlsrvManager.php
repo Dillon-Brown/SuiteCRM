@@ -186,7 +186,7 @@ class SqlsrvManager extends MssqlManager
         }
         $this->database = sqlsrv_connect($connect_param, $options);
         if (empty($this->database)) {
-            $GLOBALS['log']->fatal("Could not connect to server " . $configOptions['db_host_name'] . " as " . $configOptions['db_user_name'] . ".");
+            LoggerManager::getLogger()->fatal("Could not connect to server " . $configOptions['db_host_name'] . " as " . $configOptions['db_user_name'] . ".");
             if ($dieOnError) {
                 if (isset($GLOBALS['app_strings']['ERR_NO_DB'])) {
                     sugar_die($GLOBALS['app_strings']['ERR_NO_DB']);
@@ -199,14 +199,14 @@ class SqlsrvManager extends MssqlManager
         }
 
         if ($this->checkError('Could Not Connect:', $dieOnError)) {
-            $GLOBALS['log']->info("connected to db");
+            LoggerManager::getLogger()->info("connected to db");
         }
 
         sqlsrv_query($this->database, 'SET DATEFORMAT mdy');
 
         $this->connectOptions = $configOptions;
 
-        $GLOBALS['log']->info("Connect:" . $this->database);
+        LoggerManager::getLogger()->info("Connect:" . $this->database);
 
         return true;
     }
@@ -229,7 +229,7 @@ class SqlsrvManager extends MssqlManager
         $result = $suppress ? @sqlsrv_query($this->database, $sql) : sqlsrv_query($this->database, $sql);
 
         $this->query_time = microtime(true) - $this->query_time;
-        $GLOBALS['log']->info('Query Execution Time:' . $this->query_time);
+        LoggerManager::getLogger()->info('Query Execution Time:' . $this->query_time);
 
 
         $this->checkError($msg . ' Query Failed:' . $sql . '::', $dieOnError);
@@ -332,7 +332,7 @@ class SqlsrvManager extends MssqlManager
      */
     public function disconnect()
     {
-        $GLOBALS['log']->debug('Calling Mssql::disconnect()');
+        LoggerManager::getLogger()->debug('Calling Mssql::disconnect()');
         if (!empty($this->database)) {
             $this->freeResult();
             sqlsrv_close($this->database);

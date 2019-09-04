@@ -76,7 +76,7 @@ class SugarFieldAddress extends SugarFieldBase
         $this->setup($parentFieldArray, $vardef, $displayParams, $tabindex);
         global $app_strings;
         if (!isset($displayParams['key'])) {
-            $GLOBALS['log']->debug($app_strings['ERR_ADDRESS_KEY_NOT_SPECIFIED']);
+            LoggerManager::getLogger()->debug($app_strings['ERR_ADDRESS_KEY_NOT_SPECIFIED']);
             $this->ss->trigger_error($app_strings['ERR_ADDRESS_KEY_NOT_SPECIFIED']);
             return;
         }
@@ -95,7 +95,7 @@ class SugarFieldAddress extends SugarFieldBase
         $this->setup($parentFieldArray, $vardef, $displayParams, $tabindex);
         global $app_strings;
         if (!isset($displayParams['key'])) {
-            $GLOBALS['log']->debug($app_strings['ERR_ADDRESS_KEY_NOT_SPECIFIED']);
+            LoggerManager::getLogger()->debug($app_strings['ERR_ADDRESS_KEY_NOT_SPECIFIED']);
             $this->ss->trigger_error($app_strings['ERR_ADDRESS_KEY_NOT_SPECIFIED']);
             return;
         }

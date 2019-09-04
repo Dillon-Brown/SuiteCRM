@@ -206,7 +206,7 @@ if ($action=='WizardMarketingSave') {
     $header_URL .= '&WizardMarketingSave=1&marketing_id=' . (isset($_POST['marketing_id']) && $_POST['marketing_id'] ?
             $_POST['marketing_id'] : $_REQUEST['wiz_mass']);
 }
-$GLOBALS['log']->debug("about to post header URL of: $header_URL");
+LoggerManager::getLogger()->debug("about to post header URL of: $header_URL");
 
 if (preg_match('/\s*Location:\s*(.*)$/', $header_URL, $matches)) {
     $href = $matches[1];

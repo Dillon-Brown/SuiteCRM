@@ -183,11 +183,11 @@ class OAuthPluginBase extends ExternalAPIBase implements ExternalOAuthAPIPlugin
             $callback_url = $sugar_config['site_url'].'/index.php?module=EAPM&action=oauth&record='.$this->eapmBean->id;
             $callback_url = $this->formatCallbackURL($callback_url);
 
-            $GLOBALS['log']->debug("OAuth request token: {$oauthReq} callback: $callback_url");
+            LoggerManager::getLogger()->debug("OAuth request token: {$oauthReq} callback: $callback_url");
 
             $request_token_info = $oauth->getRequestTokenByUrl($oauthReq, $callback_url);
 
-            $GLOBALS['log']->debug("OAuth token: ".var_export($request_token_info, true));
+            LoggerManager::getLogger()->debug("OAuth token: ".var_export($request_token_info, true));
 
             if (empty($request_token_info['oauth_token_secret']) || empty($request_token_info['oauth_token'])) {
                 return false;
@@ -200,9 +200,9 @@ class OAuthPluginBase extends ExternalAPIBase implements ExternalOAuthAPIPlugin
         } else {
             $accReq = $this->getOauthAccessURL();
             $oauth->setToken($_SESSION['eapm_oauth_token'], $_SESSION['eapm_oauth_secret']);
-            $GLOBALS['log']->debug("OAuth access token: {$accReq}");
+            LoggerManager::getLogger()->debug("OAuth access token: {$accReq}");
             $access_token_info = $oauth->getAccessToken($accReq);
-            $GLOBALS['log']->debug("OAuth token: ".var_export($access_token_info, true));
+            LoggerManager::getLogger()->debug("OAuth token: ".var_export($access_token_info, true));
             // FIXME: error checking here
             $this->oauth_token = $access_token_info['oauth_token'];
             $this->oauth_secret = $access_token_info['oauth_token_secret'];

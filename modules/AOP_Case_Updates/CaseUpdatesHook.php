@@ -222,7 +222,7 @@ class CaseUpdatesHook
     public function saveEmailUpdate($email)
     {
         if ($email->intent !== 'createcase' || $email->parent_type !== 'Cases') {
-            $GLOBALS['log']->warn('CaseUpdatesHook: saveEmailUpdate: Not a create case or wrong parent type');
+            LoggerManager::getLogger()->warn('CaseUpdatesHook: saveEmailUpdate: Not a create case or wrong parent type');
 
             return;
         }
@@ -230,13 +230,13 @@ class CaseUpdatesHook
             return;
         }
         if (!$email->parent_id) {
-            $GLOBALS['log']->warn('CaseUpdatesHook: saveEmailUpdate No parent id');
+            LoggerManager::getLogger()->warn('CaseUpdatesHook: saveEmailUpdate No parent id');
 
             return;
         }
 
         if ($email->cases) {
-            $GLOBALS['log']->warn('CaseUpdatesHook: saveEmailUpdate cases already set');
+            LoggerManager::getLogger()->warn('CaseUpdatesHook: saveEmailUpdate cases already set');
 
             return;
         }
@@ -364,7 +364,7 @@ class CaseUpdatesHook
         if (!isAOPEnabled()) {
             return true;
         }
-        $GLOBALS['log']->warn('CaseUpdatesHook: sendClosureEmail called');
+        LoggerManager::getLogger()->warn('CaseUpdatesHook: sendClosureEmail called');
         require_once 'include/SugarPHPMailer.php';
         $mailer = new SugarPHPMailer();
         $admin = new Administration();
@@ -378,7 +378,7 @@ class CaseUpdatesHook
         $emailTemplate->retrieve($aop_config['case_closure_email_template_id']);
 
         if (!$emailTemplate->id) {
-            $GLOBALS['log']->warn('CaseUpdatesHook: sendClosureEmail template is empty');
+            LoggerManager::getLogger()->warn('CaseUpdatesHook: sendClosureEmail template is empty');
 
             return false;
         }
@@ -412,10 +412,10 @@ class CaseUpdatesHook
                 return true;
             }
         } catch (phpmailerException $exception) {
-            $GLOBALS['log']->fatal('CaseUpdatesHook: sending email Failed:  ' . $exception->getMessage());
+            LoggerManager::getLogger()->fatal('CaseUpdatesHook: sending email Failed:  ' . $exception->getMessage());
         }
 
-        $GLOBALS['log']->info('CaseUpdatesHook: Could not send email:  ' . $mailer->ErrorInfo);
+        LoggerManager::getLogger()->info('CaseUpdatesHook: Could not send email:  ' . $mailer->ErrorInfo);
 
         return false;
     }
@@ -528,7 +528,7 @@ class CaseUpdatesHook
         $aop_config = $this->getAOPConfig();
         $emailTemplate->retrieve($aop_config['case_creation_email_template_id']);
         if (!$emailTemplate->id) {
-            $GLOBALS['log']->warn('CaseUpdatesHook: sendCreationEmail template is empty');
+            LoggerManager::getLogger()->warn('CaseUpdatesHook: sendCreationEmail template is empty');
 
             return false;
         }
@@ -555,10 +555,10 @@ class CaseUpdatesHook
                 return true;
             }
         } catch (phpmailerException $exception) {
-            $GLOBALS['log']->fatal('CaseUpdatesHook: sending email Failed:  ' . $exception->getMessage());
+            LoggerManager::getLogger()->fatal('CaseUpdatesHook: sending email Failed:  ' . $exception->getMessage());
         }
 
-        $GLOBALS['log']->info('CaseUpdatesHook: Could not send email:  ' . $mailer->ErrorInfo);
+        LoggerManager::getLogger()->info('CaseUpdatesHook: Could not send email:  ' . $mailer->ErrorInfo);
 
         return false;
     }
@@ -639,7 +639,7 @@ class CaseUpdatesHook
             }
             if ($email_template->id) {
                 foreach ($caseUpdate->getContacts() as $contact) {
-                    $GLOBALS['log']->info('AOPCaseUpdates: Calling send email');
+                    LoggerManager::getLogger()->info('AOPCaseUpdates: Calling send email');
                     $emails = [];
                     $emails[] = $contact->emailAddress->getPrimaryAddress($contact);
                     $caseUpdate->sendEmail(

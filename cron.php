@@ -57,20 +57,20 @@ if (!is_windows()) {
     $cronUser = getRunningUser();
  
     if ($cronUser == '') {
-        $GLOBALS['log']->warning('cron.php: can\'t determine running user. No cron user checks will occur.');
+        LoggerManager::getLogger()->warn('cron.php: can\'t determine running user. No cron user checks will occur.');
     } elseif (array_key_exists('cron', $sugar_config) && array_key_exists('allowed_cron_users', $sugar_config['cron'])) {
         if (!in_array($cronUser, $sugar_config['cron']['allowed_cron_users'])) {
-            $GLOBALS['log']->fatal("cron.php: running as $cronUser is not allowed in allowed_cron_users ".
+            LoggerManager::getLogger()->fatal("cron.php: running as $cronUser is not allowed in allowed_cron_users ".
                                    "in config.php. Exiting.");
             if ($cronUser == 'root') {
                 // Additional advice so that people running as root aren't led to adding root as an allowed user:
-                $GLOBALS['log']->fatal('cron.php: root\'s crontab should not be used for cron.php. ' .
+                LoggerManager::getLogger()->fatal('cron.php: root\'s crontab should not be used for cron.php. ' .
                                        'Use your web server user\'s crontab instead.');
             }
             sugar_die('cron.php running with user that is not in allowed_cron_users in config.php');
         }
     } else {
-        $GLOBALS['log']->warning('cron.php: missing expected allowed_cron_users entry in config.php. ' .
+        LoggerManager::getLogger()->warn('cron.php: missing expected allowed_cron_users entry in config.php. ' .
                                  'No cron user checks will occur.');
     }
 }
@@ -86,9 +86,9 @@ global $current_user;
 $current_user = new User();
 $current_user->getSystemUser();
 
-$GLOBALS['log']->debug('--------------------------------------------> at cron.php <--------------------------------------------');
+LoggerManager::getLogger()->debug('--------------------------------------------> at cron.php <--------------------------------------------');
 $cron_driver = !empty($sugar_config['cron_class'])?$sugar_config['cron_class']:'SugarCronJobs';
-$GLOBALS['log']->debug("Using $cron_driver as CRON driver");
+LoggerManager::getLogger()->debug("Using $cron_driver as CRON driver");
 
 if (file_exists("custom/include/SugarQueue/$cron_driver.php")) {
     require_once "custom/include/SugarQueue/$cron_driver.php";

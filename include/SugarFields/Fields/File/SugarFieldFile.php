@@ -187,7 +187,7 @@ class SugarFieldFile extends SugarFieldBase
         }
         
         if ($vardef['allowEapm'] == true && empty($bean->$field)) {
-            $GLOBALS['log']->info("The $field is empty, clearing out the lot");
+            LoggerManager::getLogger()->info("The $field is empty, clearing out the lot");
             // Looks like we are emptying this out
             $clearFields = array('docId', 'docType', 'docUrl', 'docDirectUrl');
             foreach ($clearFields as $clearMe) {

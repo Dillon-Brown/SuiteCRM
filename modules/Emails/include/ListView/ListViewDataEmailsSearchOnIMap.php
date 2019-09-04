@@ -370,7 +370,7 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
                     }
                 }
             } else {
-                $GLOBALS['log']->warn("Unknown requested search type");
+                LoggerManager::getLogger()->warn("Unknown requested search type");
             }
         }
 

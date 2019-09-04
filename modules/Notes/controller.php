@@ -68,7 +68,7 @@
              $this->bean->contact_name = $_REQUEST['parent_name'];
          }
         
-         $GLOBALS['log']->debug('PERFORMING NOTES SAVE');
+         LoggerManager::getLogger()->debug('PERFORMING NOTES SAVE');
          $upload_file = new UploadFile('uploadfile');
          $do_final_move = 0;
          if (isset($_FILES['uploadfile']) && $upload_file->confirm_upload()) {

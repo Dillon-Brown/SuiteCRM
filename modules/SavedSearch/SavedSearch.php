@@ -90,7 +90,7 @@ class SavedSearch extends SugarBean
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -434,7 +434,7 @@ class SavedSearch extends SugarBean
 
         $saved_search_id = $focus->save();
 
-        $GLOBALS['log']->debug("Saved record with id of " . $focus->id);
+        LoggerManager::getLogger()->debug("Saved record with id of " . $focus->id);
         $orderBy = empty($contents['orderBy']) ? 'name' : $contents['orderBy'];
 
         $contentsSortOrder = null;

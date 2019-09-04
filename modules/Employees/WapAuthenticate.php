@@ -92,8 +92,8 @@ if ($focus->is_authenticated()) {
     $_SESSION['authenticated_user_theme'] = $authenticated_user_theme;
     $_SESSION['authenticated_user_language'] = $authenticated_user_language;
 
-    $GLOBALS['log']->debug("authenticated_user_theme is $authenticated_user_theme");
-    $GLOBALS['log']->debug("authenticated_user_language is $authenticated_user_language");
+    LoggerManager::getLogger()->debug("authenticated_user_theme is $authenticated_user_theme");
+    LoggerManager::getLogger()->debug("authenticated_user_language is $authenticated_user_language");
 
     // Clear all uploaded import files for this user if it exists
 

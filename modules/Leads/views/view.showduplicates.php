@@ -59,7 +59,7 @@ class ViewShowDuplicates extends SugarView
         global $mod_strings;
 
         if (!isset($_SESSION['SHOW_DUPLICATES'])) {
-            $GLOBALS['log']->error("Unauthorized access to this area.");
+            LoggerManager::getLogger()->error("Unauthorized access to this area.");
             sugar_die("Unauthorized access to this area.");
         }
 

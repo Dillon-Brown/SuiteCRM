@@ -54,7 +54,7 @@ class actionSendEmail extends actionBase
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -550,7 +550,7 @@ class actionSendEmail extends actionBase
                 $fileLocation = "upload://{$attachment->id}";
                 $dest = "upload://{$note->id}";
                 if (!copy($fileLocation, $dest)) {
-                    $GLOBALS['log']->debug("EMAIL 2.0: could not copy attachment file to $fileLocation => $dest");
+                    LoggerManager::getLogger()->debug("EMAIL 2.0: could not copy attachment file to $fileLocation => $dest");
                 }
                 $note->save();
             }

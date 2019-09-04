@@ -704,19 +704,19 @@ function installLog($entry)
     if (!file_exists($log)) {
         $fp = @sugar_fopen($log, 'w+'); // attempts to create file
         if (!is_resource($fp)) {
-            $GLOBALS['log']->fatal('could not create the install.log file');
+            LoggerManager::getLogger()->fatal('could not create the install.log file');
         }
     } else {
         $fp = @sugar_fopen($log, 'a+'); // write pointer at end of file
         if (!is_resource($fp)) {
-            $GLOBALS['log']->fatal('could not open/lock install.log file');
+            LoggerManager::getLogger()->fatal('could not open/lock install.log file');
         }
     }
 
 
 
     if (@fwrite($fp, $nl.$entry) === false) {
-        $GLOBALS['log']->fatal('could not write to install.log: '.$entry);
+        LoggerManager::getLogger()->fatal('could not write to install.log: '.$entry);
     }
 
     if (is_resource($fp)) {
@@ -1170,10 +1170,10 @@ function drop_table_install(&$focus)
 
     if ($result) {
         $focus->drop_tables();
-        $GLOBALS['log']->info("Dropped old ".$focus->table_name." table.");
+        LoggerManager::getLogger()->info("Dropped old ".$focus->table_name." table.");
         return 1;
     }
-    $GLOBALS['log']->info("Did not need to drop old ".$focus->table_name." table.  It doesn't exist.");
+    LoggerManager::getLogger()->info("Did not need to drop old ".$focus->table_name." table.  It doesn't exist.");
     return 0;
 }
 
@@ -1186,10 +1186,10 @@ function create_table_if_not_exist(&$focus)
     // normal code follows
     $result = $db->tableExists($focus->table_name);
     if ($result) {
-        $GLOBALS['log']->info("Table ".$focus->table_name." already exists.");
+        LoggerManager::getLogger()->info("Table ".$focus->table_name." already exists.");
     } else {
         $focus->create_tables();
-        $GLOBALS['log']->info("Created ".$focus->table_name." table.");
+        LoggerManager::getLogger()->info("Created ".$focus->table_name." table.");
         $table_created = true;
     }
     return $table_created;

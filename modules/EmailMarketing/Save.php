@@ -152,7 +152,7 @@ if ($marketing->all_prospect_lists==1) {
 }
 if ($_REQUEST['action'] != 'WizardMarketingSave' && (!isset($_REQUEST['func']) || $_REQUEST['func'] != 'wizardUpdate')) {
     $header_URL = "Location: index.php?action=DetailView&module=Campaigns&record={$_REQUEST['campaign_id']}";
-    $GLOBALS['log']->debug("about to post header URL of: $header_URL");
+    LoggerManager::getLogger()->debug("about to post header URL of: $header_URL");
     header($header_URL);
 }
 

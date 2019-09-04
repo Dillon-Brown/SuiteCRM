@@ -73,7 +73,7 @@ global $mod_strings;
         case 1:
             //save here so we can link relationships
             $campaign_focus->save();
-            $GLOBALS['log']->debug("Saved record with id of ".$campaign_focus->id);
+            LoggerManager::getLogger()->debug("Saved record with id of ".$campaign_focus->id);
             echo json_encode(array('record'=>$campaign_focus->id));
             break;
         case 2:
@@ -230,7 +230,7 @@ global $mod_strings;
             }
             //require_once('modules/Campaigns/WizardMarketing.php');
             $header_URL = "Location: index.php?return_module=Campaigns&module=Campaigns&action=".$action.$redirectToTargetList."&campaign_id=".$campaign_focus->id."&return_action=WizardNewsLetter&return_id=".$campaign_focus->id;
-            $GLOBALS['log']->debug("about to post header URL of: $header_URL");
+            LoggerManager::getLogger()->debug("about to post header URL of: $header_URL");
             SugarApplication::headerRedirect($header_URL);
             break;
         case 3:
@@ -387,7 +387,7 @@ global $mod_strings;
             }
             //require_once('modules/Campaigns/WizardMarketing.php');
             $header_URL = "Location: index.php?return_module=Campaigns&module=Campaigns&action=".$action.$redirectToTargetList."&campaign_id=".$campaign_focus->id."&record=".$campaign_focus->id;
-            $GLOBALS['log']->debug("about to post header URL of: $header_URL");
+            LoggerManager::getLogger()->debug("about to post header URL of: $header_URL");
             SugarApplication::headerRedirect($header_URL);
             break;
     }

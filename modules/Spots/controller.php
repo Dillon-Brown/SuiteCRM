@@ -247,7 +247,7 @@ EOF;
         } elseif ($this->getDatabaseType() === 'mysql') {
             $query = $mysqlSelect.' '.$fromClause.' '.$whereClause;
         } else {
-            $GLOBALS['log']->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
+            LoggerManager::getLogger()->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
 
             return;
         }
@@ -370,7 +370,7 @@ EOF;
         } elseif ($this->getDatabaseType() === 'mysql') {
             $query = $mysqlSelect.' '.$fromClause.' '.$whereClause;
         } else {
-            $GLOBALS['log']->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
+            LoggerManager::getLogger()->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
 
             return;
         }
@@ -490,7 +490,7 @@ EOF;
         } elseif ($this->getDatabaseType() === 'mysql') {
             $query = $mysqlSelect.' '.$fromClause.' '.$whereClause;
         } else {
-            $GLOBALS['log']->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
+            LoggerManager::getLogger()->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
 
             return;
         }
@@ -645,7 +645,7 @@ EOF;
         } elseif ($this->getDatabaseType() === 'mysql') {
             $query = $mysqlQueryCalls.$aclWhereCalls.$mysqlQueryMeetings.$aclWhereMeetings.$mysqlQueryTasks.$aclWhereTasks;
         } else {
-            $GLOBALS['log']->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
+            LoggerManager::getLogger()->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
 
             return;
         }
@@ -745,7 +745,7 @@ EOF;
         } elseif ($this->getDatabaseType() === 'mysql') {
             $query = $mysqlSelect.' '.$fromClause.' '.$whereClause;
         } else {
-            $GLOBALS['log']->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
+            LoggerManager::getLogger()->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
 
             return;
         }
@@ -965,7 +965,7 @@ EOF;
         } elseif ($this->getDatabaseType() === 'mysql') {
             $query = $mysqlSelect.' '.$fromClause.' '.$whereClause;
         } else {
-            $GLOBALS['log']->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
+            LoggerManager::getLogger()->error($mod_strings['LBL_AN_UNSUPPORTED_DB']);
 
             return;
         }

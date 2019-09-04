@@ -190,6 +190,6 @@ class ViewBackups extends SugarView
         
         <?php
         }   // end if/else of $run options
-        $GLOBALS['log']->info("Backups");
+        LoggerManager::getLogger()->info("Backups");
     }
 }

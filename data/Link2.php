@@ -108,11 +108,11 @@ class Link2
                 } elseif (isset($this->def[0])) {
                     $this->def = $this->def[0];
                 } else {
-                    $GLOBALS['log']->fatal('Link definition not found for: ' . $linkName);
+                    LoggerManager::getLogger()->fatal('Link definition not found for: ' . $linkName);
                 }
             }
             if (empty($this->def['name'])) {
-                $GLOBALS['log']->fatal("failed to find link for $linkName");
+                LoggerManager::getLogger()->fatal("failed to find link for $linkName");
 
                 return;
             }
@@ -134,7 +134,7 @@ class Link2
             if (!isset($this->def['source']) || $this->def['source'] === 'non-db') {
                 $logFunction = 'warn';
             }
-            $GLOBALS['log']->$logFunction("{$this->name} for {$this->def['relationship']} failed to load\n");
+            LoggerManager::getLogger()->$logFunction("{$this->name} for {$this->def['relationship']} failed to load\n");
         }
         //Following behavior is tied to a property(ignore_role) value in the vardef.
         // It alters the values of 2 properties, ignore_role_filter and add_distinct.
@@ -194,7 +194,7 @@ class Link2
         if (is_object($this->relationship) && method_exists($this->relationship, 'load')) {
             return $this->relationship->load($this, $params);
         }
-        $GLOBALS['log']->fatal('load() function is not implemented in a relationship');
+        LoggerManager::getLogger()->fatal('load() function is not implemented in a relationship');
         return null;
     }
 
@@ -356,7 +356,7 @@ class Link2
             }
         }
 
-        $GLOBALS['log']->error("Unable to get proper side for link {$this->name}");
+        LoggerManager::getLogger()->error("Unable to get proper side for link {$this->name}");
         return null;
     }
 
@@ -480,7 +480,7 @@ class Link2
                     }
                 }
             } else {
-                $GLOBALS['log']->fatal('"rows" should be an array or object');
+                LoggerManager::getLogger()->fatal('"rows" should be an array or object');
             }
 
             //If we did a complete load, cache the result in $this->beans
@@ -529,7 +529,7 @@ class Link2
             if (!($key instanceof SugarBean)) {
                 $key = $this->getRelatedBean($key);
                 if (!($key instanceof SugarBean)) {
-                    $GLOBALS['log']->error('Unable to load related bean by id');
+                    LoggerManager::getLogger()->error('Unable to load related bean by id');
 
                     return false;
                 }
@@ -576,7 +576,7 @@ class Link2
             if (!($key instanceof SugarBean)) {
                 $key = $this->getRelatedBean($key);
                 if (!($key instanceof SugarBean)) {
-                    $GLOBALS['log']->error('Unable to load related bean by id');
+                    LoggerManager::getLogger()->error('Unable to load related bean by id');
 
                     return false;
                 }

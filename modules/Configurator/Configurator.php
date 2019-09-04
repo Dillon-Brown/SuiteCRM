@@ -78,7 +78,7 @@ class Configurator
             if ($key == "logger_file_ext") {
                 $trim_value = preg_replace('/.*\.([^\.]+)$/', '\1', $value);
                 if (in_array($trim_value, $this->config['upload_badext'])) {
-                    $GLOBALS['log']->security("Invalid log file extension: trying to use invalid file extension '$value'.");
+                    LoggerManager::getLogger()->security("Invalid log file extension: trying to use invalid file extension '$value'.");
                     continue;
                 }
             }
@@ -201,7 +201,7 @@ class Configurator
         $sugar_config = array();
         if (file_exists('config_override.php')) {
             if (!is_readable('config_override.php')) {
-                $GLOBALS['log']->fatal("Unable to read the config_override.php file. Check the file permissions");
+                LoggerManager::getLogger()->fatal("Unable to read the config_override.php file. Check the file permissions");
             } else {
                 include('config_override.php');
             }
@@ -216,7 +216,7 @@ class Configurator
             touch('config_override.php');
         }
         if (!(make_writable('config_override.php')) || !(is_writable('config_override.php'))) {
-            $GLOBALS['log']->fatal("Unable to write to the config_override.php file. Check the file permissions");
+            LoggerManager::getLogger()->fatal("Unable to write to the config_override.php file. Check the file permissions");
             return;
         }
         $fp = sugar_fopen('config_override.php', 'w');
@@ -264,7 +264,7 @@ class Configurator
     {
         if (!verify_uploaded_image($path)) {
             $error = translate('LBL_ALERT_TYPE_IMAGE');
-            $GLOBALS['log']->fatal("A user ({$GLOBALS['current_user']->id}) attempted to use an invalid file for the logo - {$path}");
+            LoggerManager::getLogger()->fatal("A user ({$GLOBALS['current_user']->id}) attempted to use an invalid file for the logo - {$path}");
             $this->error = $error;
             return false;
         }

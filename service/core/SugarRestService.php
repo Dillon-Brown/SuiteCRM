@@ -94,14 +94,14 @@ class SugarRestService extends SugarWebService
      */
     public function __construct($url)
     {
-        $GLOBALS['log']->info('Begin: SugarRestService->__construct');
+        LoggerManager::getLogger()->info('Begin: SugarRestService->__construct');
         $this->restURL = $url;
 
         $this->responseClass = $this->_getTypeName(@$_REQUEST['response_type']);
         $this->serverClass = $this->_getTypeName(@$_REQUEST['input_type']);
-        $GLOBALS['log']->info('SugarRestService->__construct serverclass = ' . $this->serverClass);
+        LoggerManager::getLogger()->info('SugarRestService->__construct serverclass = ' . $this->serverClass);
         require_once('service/core/REST/'. $this->serverClass . '.php');
-        $GLOBALS['log']->info('End: SugarRestService->__construct');
+        LoggerManager::getLogger()->info('End: SugarRestService->__construct');
     } // ctor
 
     /**
@@ -135,7 +135,7 @@ class SugarRestService extends SugarWebService
      */
     public function serve()
     {
-        $GLOBALS['log']->info('Begin: SugarRestService->serve');
+        LoggerManager::getLogger()->info('Begin: SugarRestService->serve');
         require_once('service/core/REST/'. $this->responseClass . '.php');
         $response  = $this->responseClass;
 
@@ -143,7 +143,7 @@ class SugarRestService extends SugarWebService
         $this->server->faultServer = $responseServer;
         $responseServer->faultServer = $responseServer;
         $responseServer->generateResponse($this->server->serve());
-        $GLOBALS['log']->info('End: SugarRestService->serve');
+        LoggerManager::getLogger()->info('End: SugarRestService->serve');
     } // fn
 
     /**
@@ -197,12 +197,12 @@ class SugarRestService extends SugarWebService
      */
     public function registerImplClass($className)
     {
-        $GLOBALS['log']->info('Begin: SugarRestService->registerImplClass');
+        LoggerManager::getLogger()->info('Begin: SugarRestService->registerImplClass');
         $this->implementationClass = $className;
         $this->implementation = new $this->implementationClass();
         $this->server = new $this->serverClass($this->implementation);
         $this->server->registerd = $this->registeredFunc;
-        $GLOBALS['log']->info('End: SugarRestService->registerImplClass');
+        LoggerManager::getLogger()->info('End: SugarRestService->registerImplClass');
     } // fn
 
     /**
@@ -213,9 +213,9 @@ class SugarRestService extends SugarWebService
      */
     public function error($errorObject)
     {
-        $GLOBALS['log']->info('Begin: SugarRestService->error');
+        LoggerManager::getLogger()->info('Begin: SugarRestService->error');
         $this->server->fault($errorObject);
-        $GLOBALS['log']->info('End: SugarRestService->error');
+        LoggerManager::getLogger()->info('End: SugarRestService->error');
     } // fn
 
     /**

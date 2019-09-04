@@ -60,13 +60,13 @@ class AOPInboundEmail extends InboundEmail
     {
         global $current_user, $mod_strings, $current_language;
         $mod_strings = return_module_language($current_language, "Emails");
-        $GLOBALS['log']->debug('In handleCreateCase in AOPInboundEmail');
+        LoggerManager::getLogger()->debug('In handleCreateCase in AOPInboundEmail');
         $c = new aCase();
         $this->getCaseIdFromCaseNumber($email->name, $c);
 
         if (!$this->handleCaseAssignment($email) && $this->isMailBoxTypeCreateCase()) {
             // create a case
-            $GLOBALS['log']->debug('retrieveing email');
+            LoggerManager::getLogger()->debug('retrieveing email');
             $email->retrieve($email->id);
             $c = new aCase();
 
@@ -92,7 +92,7 @@ class AOPInboundEmail extends InboundEmail
             }
             isValidEmailAddress($contactAddr);
 
-            $GLOBALS['log']->debug('finding related accounts with address ' . $contactAddr);
+            LoggerManager::getLogger()->debug('finding related accounts with address ' . $contactAddr);
             if ($accountIds = $this->getRelatedId($contactAddr, 'accounts')) {
                 if (sizeof($accountIds) == 1) {
                     $c->account_id = $accountIds[0];
@@ -145,7 +145,7 @@ class AOPInboundEmail extends InboundEmail
             $email->assigned_user_id = $c->assigned_user_id;
             $email->name = str_replace('%1', $c->case_number, $c->getEmailSubjectMacro()) . " ". $email->name;
             $email->save();
-            $GLOBALS['log']->debug('InboundEmail created one case with number: '.$c->case_number);
+            LoggerManager::getLogger()->debug('InboundEmail created one case with number: '.$c->case_number);
             $createCaseTemplateId = $this->get_stored_options('create_case_email_template', "");
             if (!empty($this->stored_options)) {
                 $storedOptions = unserialize(base64_decode($this->stored_options));
@@ -217,7 +217,7 @@ class AOPInboundEmail extends InboundEmail
                 if (!$et->text_only) {
                     $reply->description_html	= $et->body_html .  "<div><hr /></div>" . $email->description;
                 }
-                $GLOBALS['log']->debug('saving and sending auto-reply email');
+                LoggerManager::getLogger()->debug('saving and sending auto-reply email');
                 //$reply->save(); // don't save the actual email.
                 $reply->send();
             } // if

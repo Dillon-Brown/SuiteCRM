@@ -86,7 +86,7 @@ class jjwg_MapsController extends SugarController
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -115,7 +115,7 @@ class jjwg_MapsController extends SugarController
     public function action_geocoded_counts()
     {
         $this->view = 'geocoded_counts';
-        $GLOBALS['log']->debug(__METHOD__.' START');
+        LoggerManager::getLogger()->debug(__METHOD__.' START');
 
         $this->bean->geocoded_counts = array();
         $this->bean->geocoded_headings = array('N/A');
@@ -181,7 +181,7 @@ class jjwg_MapsController extends SugarController
      */
     public function action_geocode_addresses()
     {
-        $GLOBALS['log']->debug(__METHOD__.' START');
+        LoggerManager::getLogger()->debug(__METHOD__.' START');
 
         if (!empty($_REQUEST['display_module']) && in_array($_REQUEST['display_module'], $this->settings['valid_geocode_modules'])) {
             $geocode_modules = array($_REQUEST['display_module']);
@@ -195,7 +195,7 @@ class jjwg_MapsController extends SugarController
 
 
         foreach ($geocode_modules as $module_type) {
-            $GLOBALS['log']->debug(__METHOD__.' $module_type: '.$module_type);
+            LoggerManager::getLogger()->debug(__METHOD__.' $module_type: '.$module_type);
             // Define display object from the necessary classes (utils.php)
             $this->display_object = get_module_info($module_type);
 
@@ -211,7 +211,7 @@ class jjwg_MapsController extends SugarController
                 $tmpDisplayResults[] = $display;
             }
             foreach ($tmpDisplayResults as $display) {
-                $GLOBALS['log']->debug(__METHOD__.' $display[\'id\': '.$display['id']);
+                LoggerManager::getLogger()->debug(__METHOD__.' $display[\'id\': '.$display['id']);
                 $geocoding_inc++;
                 $aInfo = array();
                 $cache_found = false;

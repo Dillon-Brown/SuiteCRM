@@ -61,7 +61,7 @@ class SugarHttpClient
     {
         if (!function_exists("curl_init")) {
             $this->last_error = 'ERROR_NO_CURL';
-            $GLOBALS['log']->fatal("REST call failed - no cURL!");
+            LoggerManager::getLogger()->fatal("REST call failed - no cURL!");
             return false;
         }
         $curl = curl_init($url);
@@ -72,16 +72,16 @@ class SugarHttpClient
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-        $GLOBALS['log']->debug("HTTP client call: $url -> $postArgs");
+        LoggerManager::getLogger()->debug("HTTP client call: $url -> $postArgs");
         $response = curl_exec($curl);
         if ($response === false) {
             $this->last_error = 'ERROR_REQUEST_FAILED';
             $curl_errno = curl_errno($curl);
             $curl_error = curl_error($curl);
-            $GLOBALS['log']->error("HTTP client: cURL call failed: error $curl_errno: $curl_error");
+            LoggerManager::getLogger()->error("HTTP client: cURL call failed: error $curl_errno: $curl_error");
             return false;
         }
-        $GLOBALS['log']->debug("HTTP client response: $response");
+        LoggerManager::getLogger()->debug("HTTP client response: $response");
         curl_close($curl);
         return $response;
     }

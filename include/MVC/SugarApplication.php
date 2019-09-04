@@ -73,7 +73,7 @@ class SugarApplication
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -163,7 +163,7 @@ class SugarApplication
             // set in modules/Users/Authenticate.php
             if (!$authController->sessionAuthenticate()) {
                 // if the object we get back is null for some reason, this will break - like user prefs are corrupted
-                $GLOBALS['log']->fatal('User retrieval for ID: (' . $_SESSION['authenticated_user_id'] . ') does not exist in database or retrieval failed catastrophically.  Calling session_destroy() and sending user to Login page.');
+                LoggerManager::getLogger()->fatal('User retrieval for ID: (' . $_SESSION['authenticated_user_id'] . ') does not exist in database or retrieval failed catastrophically.  Calling session_destroy() and sending user to Login page.');
                 session_destroy();
                 SugarApplication::redirect('index.php?action=Login&module=Users');
                 die();
@@ -173,27 +173,27 @@ class SugarApplication
             SugarApplication::redirect('index.php?action=Login&module=Users');
             die();
         }
-        $GLOBALS['log']->debug('Current user is: ' . $GLOBALS['current_user']->user_name);
+        LoggerManager::getLogger()->debug('Current user is: ' . $GLOBALS['current_user']->user_name);
 
         //set cookies
         if (isset($_SESSION['authenticated_user_id'])) {
-            $GLOBALS['log']->debug("setting cookie ck_login_id_20 to " . $_SESSION['authenticated_user_id']);
+            LoggerManager::getLogger()->debug("setting cookie ck_login_id_20 to " . $_SESSION['authenticated_user_id']);
             self::setCookie('ck_login_id_20', $_SESSION['authenticated_user_id'], time() + 86400 * 90);
         }
         if (isset($_SESSION['authenticated_user_theme'])) {
-            $GLOBALS['log']->debug("setting cookie ck_login_theme_20 to " . $_SESSION['authenticated_user_theme']);
+            LoggerManager::getLogger()->debug("setting cookie ck_login_theme_20 to " . $_SESSION['authenticated_user_theme']);
             self::setCookie('ck_login_theme_20', $_SESSION['authenticated_user_theme'], time() + 86400 * 90);
         }
         if (isset($_SESSION['authenticated_user_theme_color'])) {
-            $GLOBALS['log']->debug("setting cookie ck_login_theme_color_20 to " . $_SESSION['authenticated_user_theme_color']);
+            LoggerManager::getLogger()->debug("setting cookie ck_login_theme_color_20 to " . $_SESSION['authenticated_user_theme_color']);
             self::setCookie('ck_login_theme_color_20', $_SESSION['authenticated_user_theme_color'], time() + 86400 * 90);
         }
         if (isset($_SESSION['authenticated_user_theme_font'])) {
-            $GLOBALS['log']->debug("setting cookie ck_login_theme_font_20 to " . $_SESSION['authenticated_user_theme_font']);
+            LoggerManager::getLogger()->debug("setting cookie ck_login_theme_font_20 to " . $_SESSION['authenticated_user_theme_font']);
             self::setCookie('ck_login_theme_font_20', $_SESSION['authenticated_user_theme_font'], time() + 86400 * 90);
         }
         if (isset($_SESSION['authenticated_user_language'])) {
-            $GLOBALS['log']->debug("setting cookie ck_login_language_20 to " . $_SESSION['authenticated_user_language']);
+            LoggerManager::getLogger()->debug("setting cookie ck_login_language_20 to " . $_SESSION['authenticated_user_language']);
             self::setCookie('ck_login_language_20', $_SESSION['authenticated_user_language'], time() + 86400 * 90);
         }
         //check if user can access
@@ -346,7 +346,7 @@ class SugarApplication
     public static function preLoadLanguages()
     {
         $GLOBALS['current_language'] = get_current_language();
-        $GLOBALS['log']->debug('current_language is: ' . $GLOBALS['current_language']);
+        LoggerManager::getLogger()->debug('current_language is: ' . $GLOBALS['current_language']);
         //set module and application string arrays based upon selected language
         $GLOBALS['app_strings'] = return_application_language($GLOBALS['current_language']);
     }
@@ -358,7 +358,7 @@ class SugarApplication
     public function loadLanguages()
     {
         $GLOBALS['current_language'] = get_current_language();
-        $GLOBALS['log']->debug('current_language is: ' . $GLOBALS['current_language']);
+        LoggerManager::getLogger()->debug('current_language is: ' . $GLOBALS['current_language']);
         //set module and application string arrays based upon selected language
         $GLOBALS['app_strings'] = return_application_language($GLOBALS['current_language']);
         if (empty($GLOBALS['current_user']->id)) {

@@ -66,7 +66,7 @@ class ProjectTaskViewList extends ViewList
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -244,7 +244,7 @@ class ProjectTaskViewList extends ViewList
             if (count($where_clauses) > 0) {
                 $where = '('. implode(' ) AND ( ', $where_clauses) . ')';
             }
-            $GLOBALS['log']->info("List View Where Clause: $where");
+            LoggerManager::getLogger()->info("List View Where Clause: $where");
         }
         if ($use_old_search) {
             switch ($view) {

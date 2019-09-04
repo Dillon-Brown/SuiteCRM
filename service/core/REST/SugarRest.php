@@ -108,16 +108,16 @@ if (!defined('sugarEntry')) {
      public function generateFaultResponse($errorObject)
      {
          //ob_clean();
-         $GLOBALS['log']->info('In SugarRest->fault. Setting fault object on response');
+         LoggerManager::getLogger()->info('In SugarRest->fault. Setting fault object on response');
          header('HTTP/1.1 500 Internal Server Error');
          header('Content-Type: text/html; charset="ISO-8859-1"');
          echo '<br>500 Internal Server Error <br>';
          if (is_object($errorObject)) {
              $error = $errorObject->number . ': ' . $errorObject->name . '<br>' . $errorObject->description;
-             $GLOBALS['log']->error($error);
+             LoggerManager::getLogger()->error($error);
              echo  $error;
          } else {
-             $GLOBALS['log']->error(var_export($errorObject, true));
+             LoggerManager::getLogger()->error(var_export($errorObject, true));
              print_r($errorObject);
          } // else
      }

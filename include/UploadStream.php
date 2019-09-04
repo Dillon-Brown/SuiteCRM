@@ -88,7 +88,7 @@ class UploadStream
                 }
             }
 
-            $GLOBALS['log']->fatal('Stream ' . UploadStream::STREAM_NAME . ' is not listed in suhosin.executor.include.whitelist and blocked because of it');
+            LoggerManager::getLogger()->fatal('Stream ' . UploadStream::STREAM_NAME . ' is not listed in suhosin.executor.include.whitelist and blocked because of it');
 
             return false;
         }
@@ -100,7 +100,7 @@ class UploadStream
             foreach ($streams as $stream) {
                 $stream = explode('://', $stream, 2);
                 if ($stream[0] == UploadStream::STREAM_NAME) {
-                    $GLOBALS['log']->fatal('Stream ' . UploadStream::STREAM_NAME . 'is listed in suhosin.executor.include.blacklist and blocked because of it');
+                    LoggerManager::getLogger()->fatal('Stream ' . UploadStream::STREAM_NAME . 'is listed in suhosin.executor.include.blacklist and blocked because of it');
 
                     return false;
                 }
@@ -109,7 +109,7 @@ class UploadStream
             return true;
         }
 
-        $GLOBALS['log']->fatal('Suhosin blocks all streams, please define ' . UploadStream::STREAM_NAME . ' stream in suhosin.executor.include.whitelist');
+        LoggerManager::getLogger()->fatal('Suhosin blocks all streams, please define ' . UploadStream::STREAM_NAME . ' stream in suhosin.executor.include.whitelist');
 
         return false;
     }

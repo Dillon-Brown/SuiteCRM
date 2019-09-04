@@ -422,7 +422,7 @@ EOQ;
         ////	END INBOUND EMAIL HANDLING
         ///////////////////////////////////////////////////////////////////////////////
 
-        $GLOBALS['log']->debug("Saved record with id of ".$return_id);
+        LoggerManager::getLogger()->debug("Saved record with id of ".$return_id);
         if ($redirect) {
             handleRedirect($return_id, 'Leads');
         } else {

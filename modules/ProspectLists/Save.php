@@ -110,6 +110,6 @@ if ($return_action == "SaveCampaignProspectListRelationshipNew") {
     if (isset($_REQUEST['offset']) && empty($_REQUEST['duplicateSave'])) {
         $redirect_url .= "&offset=".$_REQUEST['offset'];
     }
-    $GLOBALS['log']->debug("Saved record with id of ".$return_id);
+    LoggerManager::getLogger()->debug("Saved record with id of ".$return_id);
     handleRedirect($return_id, $return_module);
 }

@@ -85,7 +85,7 @@ if (!class_exists('Tracker')) {
         {
             $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
             if (isset($GLOBALS['log'])) {
-                $GLOBALS['log']->deprecated($deprecatedMessage);
+                LoggerManager::getLogger()->deprecated($deprecatedMessage);
             } else {
                 trigger_error($deprecatedMessage, E_USER_DEPRECATED);
             }
@@ -109,7 +109,7 @@ if (!class_exists('Tracker')) {
             if (empty($_SESSION['breadCrumbs'])) {
                 $breadCrumb = new BreadCrumbStack($user_id, $modules);
                 $_SESSION['breadCrumbs'] = $breadCrumb;
-                $GLOBALS['log']->info(string_format($GLOBALS['app_strings']['LBL_BREADCRUMBSTACK_CREATED'], array($user_id)));
+                LoggerManager::getLogger()->info(string_format($GLOBALS['app_strings']['LBL_BREADCRUMBSTACK_CREATED'], array($user_id)));
             } else {
                 $breadCrumb = $_SESSION['breadCrumbs'];
                 $module_query = '';
@@ -128,7 +128,7 @@ if (!class_exists('Tracker')) {
             }
 
             $list = $breadCrumb->getBreadCrumbList($modules);
-            $GLOBALS['log']->info("Tracker: retrieving ".count($list)." items");
+            LoggerManager::getLogger()->info("Tracker: retrieving ".count($list)." items");
             return $list;
         }
 

@@ -85,7 +85,7 @@ class SugarAuthenticate
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -180,7 +180,7 @@ class SugarAuthenticate
 
         $_SESSION['authenticated_user_language'] = $authenticated_user_language;
 
-        $GLOBALS['log']->debug("authenticated_user_language is $authenticated_user_language");
+        LoggerManager::getLogger()->debug("authenticated_user_language is $authenticated_user_language");
 
         // Clear all uploaded import files for this user if it exists
         require_once('modules/Import/ImportCacheFiles.php');
@@ -203,20 +203,20 @@ class SugarAuthenticate
         $authenticated = false;
         $allowed_actions = array("Authenticate", "Login"); // these are actions where the user/server keys aren't compared
         if (isset($_SESSION['authenticated_user_id'])) {
-            $GLOBALS['log']->debug("We have an authenticated user id: ".$_SESSION["authenticated_user_id"]);
+            LoggerManager::getLogger()->debug("We have an authenticated user id: ".$_SESSION["authenticated_user_id"]);
 
             $authenticated = $this->postSessionAuthenticate();
         } elseif (isset($action) && isset($module) && $action == "Authenticate" && $module == "Users") {
-            $GLOBALS['log']->debug("We are authenticating user now");
+            LoggerManager::getLogger()->debug("We are authenticating user now");
         } else {
-            $GLOBALS['log']->debug("The current user does not have a session.  Going to the login page");
+            LoggerManager::getLogger()->debug("The current user does not have a session.  Going to the login page");
             $action = "Login";
             $module = "Users";
             $_REQUEST['action'] = $action;
             $_REQUEST['module'] = $module;
         }
         if (empty($GLOBALS['current_user']->id) && !in_array($action, $allowed_actions)) {
-            $GLOBALS['log']->debug("The current user is not logged in going to login page");
+            LoggerManager::getLogger()->debug("The current user is not logged in going to login page");
             $action = "Login";
             $module = "Users";
             $_REQUEST['action'] = $action;
@@ -246,7 +246,7 @@ class SugarAuthenticate
 
         //CHECK IF USER IS CROSSING SITES
         if (($user_unique_key != $server_unique_key) && (!in_array($action, $allowed_actions)) && (!isset($_SESSION['login_error']))) {
-            $GLOBALS['log']->debug('Destroying Session User has crossed Sites');
+            LoggerManager::getLogger()->debug('Destroying Session User has crossed Sites');
             session_destroy();
             header("Location: index.php?action=Login&module=Users" . $GLOBALS['app']->getLoginRedirect());
             sugar_cleanup(true);
@@ -254,59 +254,59 @@ class SugarAuthenticate
         if (!$this->userAuthenticate->loadUserOnSession($_SESSION['authenticated_user_id'])) {
             session_destroy();
             header("Location: index.php?action=Login&module=Users&loginErrorMessage=LBL_SESSION_EXPIRED");
-            $GLOBALS['log']->debug('Current user session does not exist redirecting to login');
+            LoggerManager::getLogger()->debug('Current user session does not exist redirecting to login');
             sugar_cleanup(true);
         }
 
-        $GLOBALS['log']->debug('FACTOR AUTH: -------------------------------------------------------------');
-        $GLOBALS['log']->debug('FACTOR AUTH: --------------------- CHECK FACTOR AUtH ---------------------');
-        $GLOBALS['log']->debug('FACTOR AUTH: -------------------------------------------------------------');
+        LoggerManager::getLogger()->debug('FACTOR AUTH: -------------------------------------------------------------');
+        LoggerManager::getLogger()->debug('FACTOR AUTH: --------------------- CHECK FACTOR AUtH ---------------------');
+        LoggerManager::getLogger()->debug('FACTOR AUTH: -------------------------------------------------------------');
 
         //session_destroy(); die();
 
         if (!$this->userAuthenticate->isUserLogoutRequest()) {
-            $GLOBALS['log']->debug('FACTOR AUTH: User needs factor auth, request is not Logout');
+            LoggerManager::getLogger()->debug('FACTOR AUTH: User needs factor auth, request is not Logout');
 
             if ($this->userAuthenticate->isUserNeedFactorAuthentication()) {
-                $GLOBALS['log']->debug('FACTOR AUTH: User needs factor auth, set on User Profile page');
+                LoggerManager::getLogger()->debug('FACTOR AUTH: User needs factor auth, set on User Profile page');
 
                 if (!$this->userAuthenticate->isUserFactorAuthenticated()) {
-                    $GLOBALS['log']->debug('FACTOR AUTH: User is not factor authenticated yet');
+                    LoggerManager::getLogger()->debug('FACTOR AUTH: User is not factor authenticated yet');
 
                     if ($this->userAuthenticate->isUserFactorTokenReceived()) {
-                        $GLOBALS['log']->debug('FACTOR AUTH: User sent back a token in request');
+                        LoggerManager::getLogger()->debug('FACTOR AUTH: User sent back a token in request');
 
                         if (!$this->userAuthenticate->factorAuthenticateCheck()) {
-                            $GLOBALS['log']->debug('FACTOR AUTH: User factor auth failed so we show token input form');
+                            LoggerManager::getLogger()->debug('FACTOR AUTH: User factor auth failed so we show token input form');
 
                             $msg = $app_strings['ERR_TWO_FACTOR_FAILED'];
                             self::addFactorMessage($msg);
                             $this->userAuthenticate->showFactorTokenInput();
                         } else {
-                            $GLOBALS['log']->debug('FACTOR AUTH: User factor auth success!');
+                            LoggerManager::getLogger()->debug('FACTOR AUTH: User factor auth success!');
                         }
                     } else {
-                        $GLOBALS['log']->debug('FACTOR AUTH: User did not sent back the token so we send a new one and redirect to token input form');
+                        LoggerManager::getLogger()->debug('FACTOR AUTH: User did not sent back the token so we send a new one and redirect to token input form');
 
                         if (
                             $this->userAuthenticate->isFactorTokenSent()
                             && $this->userAuthenticate->isUserRequestedResendToken() === false
                         ) {
-                            $GLOBALS['log']->fatal('DEBUG: token is not sent yet, do we send a token to user');
+                            LoggerManager::getLogger()->fatal('DEBUG: token is not sent yet, do we send a token to user');
                             $this->userAuthenticate->showFactorTokenInput();
                         } else {
-                            $GLOBALS['log']->fatal('DEBUG: token already sent');
+                            LoggerManager::getLogger()->fatal('DEBUG: token already sent');
                         }
 
                         if ($this->userAuthenticate->sendFactorTokenToUser()) {
-                            $GLOBALS['log']->debug('FACTOR AUTH: Factor Token sent to User');
+                            LoggerManager::getLogger()->debug('FACTOR AUTH: Factor Token sent to User');
 
                             $msg = $app_strings['ERR_TWO_FACTOR_CODE_SENT'];
                             self::addFactorMessage($msg);
 
                             $this->userAuthenticate->showFactorTokenInput();
                         } else {
-                            $GLOBALS['log']->debug('FACTOR AUTH: failed to send factor token to user so just redirect to the logout url and kick off ');
+                            LoggerManager::getLogger()->debug('FACTOR AUTH: failed to send factor token to user so just redirect to the logout url and kick off ');
 
                             $msg = $app_strings['ERR_TWO_FACTOR_CODE_FAILED'];
                             self::addFactorMessage($msg);
@@ -315,17 +315,17 @@ class SugarAuthenticate
                         }
                     }
                 } else {
-                    $GLOBALS['log']->debug('FACTOR AUTH: User factor authenticated already');
+                    LoggerManager::getLogger()->debug('FACTOR AUTH: User factor authenticated already');
                 }
             } else {
-                $GLOBALS['log']->debug('FACTOR AUTH: User does`nt need factor auth');
+                LoggerManager::getLogger()->debug('FACTOR AUTH: User does`nt need factor auth');
             }
         } else {
-            $GLOBALS['log']->debug('FACTOR AUTH: User Logout requested');
+            LoggerManager::getLogger()->debug('FACTOR AUTH: User Logout requested');
         }
 
 
-        $GLOBALS['log']->debug('Current user is: ' . $GLOBALS['current_user']->user_name);
+        LoggerManager::getLogger()->debug('Current user is: ' . $GLOBALS['current_user']->user_name);
 
         return true;
     }
@@ -359,7 +359,7 @@ class SugarAuthenticate
                 $factorMessage = $_SESSION['factor_message'];
             } else {
                 $msg = 'Incorrect login factor message type.';
-                $GLOBALS['log']->warn($msg);
+                LoggerManager::getLogger()->warn($msg);
                 throw new RuntimeException($msg);
             }
             unset($_SESSION['factor_message']);
@@ -399,7 +399,7 @@ class SugarAuthenticate
                 }
                 // we have a different IP address
                 if ($_SESSION["ipaddress"] != $clientIP && empty($classCheck)) {
-                    $GLOBALS['log']->fatal("IP Address mismatch: SESSION IP: {$_SESSION['ipaddress']} CLIENT IP: {$clientIP}");
+                    LoggerManager::getLogger()->fatal("IP Address mismatch: SESSION IP: {$_SESSION['ipaddress']} CLIENT IP: {$clientIP}");
                     session_destroy();
                     die($mod_strings['ERR_IP_CHANGE'] . "<a href=\"{$sugar_config['site_url']}\">" + $mod_strings['ERR_RETURN'] + "</a>");
                 }

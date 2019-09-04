@@ -198,7 +198,7 @@ class ParserModifyListView extends ModuleBuilderParser
                 $this->availableFields [$key] = $def;
             }
         }
-        $GLOBALS['log']->debug('parser.modifylistview.php->getAvailableFields(): field_defs=' . print_r(
+        LoggerManager::getLogger()->debug('parser.modifylistview.php->getAvailableFields(): field_defs=' . print_r(
             $this->availableFields,
             true
         ));
@@ -306,7 +306,7 @@ class ParserModifyListView extends ModuleBuilderParser
      */
     public function _loadLayoutFromRequest()
     {
-        $GLOBALS['log']->debug("ParserModifyListView->_loadLayoutFromRequest()");
+        LoggerManager::getLogger()->debug("ParserModifyListView->_loadLayoutFromRequest()");
         $fields = array();
         $rejectTypes = array('html', 'enum', 'text');
         for ($i = 0; isset($_POST ['group_' . $i]) && $i < 2; $i++) {

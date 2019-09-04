@@ -94,7 +94,7 @@ class FactorAuthEmailCode implements FactorAuthInterface
         
         if (!$this->validateTokenMessage()) {
             $msg = 'Factor Authentication mail is invalid';
-            $GLOBALS['log']->warn($msg);
+            LoggerManager::getLogger()->warn($msg);
             SugarApplication::appendErrorMessage($msg_strings['ERR_FACTOR_VALIDATION']);
         }
 
@@ -126,12 +126,12 @@ class FactorAuthEmailCode implements FactorAuthInterface
 
         if (!$mailer->send()) {
             $ret = false;
-            $GLOBALS['log']->fatal(
+            LoggerManager::getLogger()->fatal(
                 'Email sending for two factor email authentication via Email Code failed. Mailer Error Info: ' .
                     $mailer->ErrorInfo
             );
         } else {
-            $GLOBALS['log']->debug(
+            LoggerManager::getLogger()->debug(
                 'FACTOR AUTH: token sent to user: ' .
                     $current_user->id . ', token: ' . '{$token}' . ' so we store it in the session'
             );
@@ -150,12 +150,12 @@ class FactorAuthEmailCode implements FactorAuthInterface
         }
         if (!isset($sugar_config['passwordsetting']['factoremailtmpl']) || !$sugar_config['passwordsetting']['factoremailtmpl'] || !$emailTpl) {
             $msg .= 'Two factor email template is not set, change settings on password management page.';
-            $GLOBALS['log']->warn($msg);
+            LoggerManager::getLogger()->warn($msg);
             SugarApplication::appendErrorMessage($mod_strings['ERR_NO_2FACTOR_EMAIL_TMPL']);
             return false;
         } elseif ($emailTpl && !preg_match('/\$code\b/', $emailTpl->body_html)) {
             $msg .= 'Two factor email template should contains a $code at least.';
-            $GLOBALS['log']->warn($msg);
+            LoggerManager::getLogger()->warn($msg);
             SugarApplication::appendErrorMessage($mod_strings['ERR_NO_2FACTOR_EMAIL_TMPL_CODE']);
             return false;
         }

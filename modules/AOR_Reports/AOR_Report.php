@@ -82,7 +82,7 @@ class AOR_Report extends Basic
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -248,7 +248,7 @@ class AOR_Report extends Basic
 
                 // if we have a main group already thats wrong cause only one main grouping field possible
                 if (!is_null($mainGroupField)) {
-                    $GLOBALS['log']->fatal('main group already found');
+                    LoggerManager::getLogger()->fatal('main group already found');
                 }
 
                 $mainGroupField = $field;
@@ -315,7 +315,7 @@ class AOR_Report extends Basic
         $rows = $this->getGroupDisplayFieldByReportId($this->id, $level);
 
         if (count($rows) > 1) {
-            $GLOBALS['log']->fatal('ambiguous group display for report ' . $this->id);
+            LoggerManager::getLogger()->fatal('ambiguous group display for report ' . $this->id);
         } else {
             if (count($rows) == 1) {
                 $rows[0]['module_path'] = unserialize(base64_decode($rows[0]['module_path']));
@@ -330,7 +330,7 @@ class AOR_Report extends Basic
 
                 if ($level > 10) {
                     $msg = 'Too many nested groups';
-                    $GLOBALS['log']->fatal($msg);
+                    LoggerManager::getLogger()->fatal($msg);
 
                     return null;
                 }
@@ -648,7 +648,7 @@ class AOR_Report extends Basic
         // See if the report actually has any fields, if not we don't want to run any queries since we can't show anything
         $fieldCount = count($this->getReportFields());
         if (!$fieldCount) {
-            $GLOBALS['log']->info('Running report "' . $this->name . '" with 0 fields');
+            LoggerManager::getLogger()->info('Running report "' . $this->name . '" with 0 fields');
         }
 
         $total_rows = 0;
@@ -1269,7 +1269,7 @@ class AOR_Report extends Basic
             $query_where = preg_replace('/\b(AND|OR)\s*\(\s*\)|[^\w+\s*]\(\s*\)/i', '', $query_where_clean);
             $safe++;
             if ($safe > 100) {
-                $GLOBALS['log']->fatal('Invalid report query conditions');
+                LoggerManager::getLogger()->fatal('Invalid report query conditions');
                 break;
             }
         }
@@ -1921,7 +1921,7 @@ class AOR_Report extends Basic
 
                     if ($condition->value_type == 'Value' && !$condition->value && $condition->operator == 'Equal_To') {
                         if (!isset($value)) {
-                            $GLOBALS['log']->warn(
+                            LoggerManager::getLogger()->warn(
                                 $condition->field
                                 . ' value is not set, assuming empty string value'
                             );
@@ -1976,7 +1976,7 @@ class AOR_Report extends Basic
                             $tiltLogicOp = false;
                         }
                     } else {
-                        $GLOBALS['log']->debug('illegal condition');
+                        LoggerManager::getLogger()->debug('illegal condition');
                     }
                 }
             }

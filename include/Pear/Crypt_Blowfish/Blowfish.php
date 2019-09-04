@@ -108,7 +108,7 @@ class Crypt_Blowfish
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -208,7 +208,7 @@ class Crypt_Blowfish
     public function encrypt($plainText)
     {
         if (!is_string($plainText)) {
-            $GLOBALS['log']->fatal('Plain text must be a string');
+            LoggerManager::getLogger()->fatal('Plain text must be a string');
         }
 
         /*
@@ -239,7 +239,7 @@ class Crypt_Blowfish
     public function decrypt($cipherText)
     {
         if (!is_string($cipherText)) {
-            $GLOBALS['log']->fatal('Chiper text must be a string');
+            LoggerManager::getLogger()->fatal('Chiper text must be a string');
         }
 
         /*
@@ -272,13 +272,13 @@ class Crypt_Blowfish
     public function setKey($key)
     {
         if (!is_string($key)) {
-            $GLOBALS['log']->fatal('Key must be a string');
+            LoggerManager::getLogger()->fatal('Key must be a string');
         }
 
         $len = strlen($key);
 
         if ($len > 56 || $len == 0) {
-            $GLOBALS['log']->fatal('Key must be less than 56 characters and non-zero. Supplied key length: ' . $len);
+            LoggerManager::getLogger()->fatal('Key must be less than 56 characters and non-zero. Supplied key length: ' . $len);
         }
 
         /*

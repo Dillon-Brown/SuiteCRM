@@ -72,10 +72,10 @@ class campaign_charts
             $xmlFile = $sugarChart->getXMLFileName($campaign_id);
 
             if (!file_exists($xmlFile) || $refresh == true) {
-                $GLOBALS['log']->debug("datay is:");
-                $GLOBALS['log']->debug($datay);
-                $GLOBALS['log']->debug("user_id is: ");
-                $GLOBALS['log']->debug("cache_file_name is: $xmlFile");
+                LoggerManager::getLogger()->debug("datay is:");
+                LoggerManager::getLogger()->debug($datay);
+                LoggerManager::getLogger()->debug("user_id is: ");
+                LoggerManager::getLogger()->debug("cache_file_name is: $xmlFile");
 
                 $focus = new Campaign();
 
@@ -183,7 +183,7 @@ class campaign_charts
             $return = '';
             $return .= $sugarChart->display($campaign_id, $xmlFile, $width, '480', "");
         } else {
-            $GLOBALS['log']->fatal('no campaign id');
+            LoggerManager::getLogger()->fatal('no campaign id');
             $return = false;
         }
         return $return;
@@ -220,10 +220,10 @@ class campaign_charts
         }
 
         if ((!file_exists($cache_file_name) || $refresh == true) && $campaign_id) {
-            $GLOBALS['log']->debug("datay is:");
-            $GLOBALS['log']->debug($datay);
-            $GLOBALS['log']->debug("user_id is: ");
-            $GLOBALS['log']->debug("cache_file_name is: $cache_file_name");
+            LoggerManager::getLogger()->debug("datay is:");
+            LoggerManager::getLogger()->debug($datay);
+            LoggerManager::getLogger()->debug("user_id is: ");
+            LoggerManager::getLogger()->debug("cache_file_name is: $cache_file_name");
 
             $focus = new Campaign();
             $focus->retrieve($campaign_id);
@@ -307,7 +307,7 @@ class campaign_charts
             $total=0;
             $total_targeted=0;
         } elseif (!$campaign_id) {
-            $GLOBALS['log']->fatal('no campaign id');
+            LoggerManager::getLogger()->fatal('no campaign id');
         }
 
         global $current_user;
@@ -364,7 +364,7 @@ class campaign_charts
 
         $campaign_id = (int) $campaign_id;
         if (!$campaign_id) {
-            $GLOBALS['log']->debug('campaign response rio data hasn\'t got campaign id');
+            LoggerManager::getLogger()->debug('campaign response rio data hasn\'t got campaign id');
             return false;
         }
 
@@ -375,10 +375,10 @@ class campaign_charts
         }
 
         if (!file_exists($cache_file_name) || $refresh == true) {
-            $GLOBALS['log']->debug("datay is:");
-            $GLOBALS['log']->debug($datay);
-            $GLOBALS['log']->debug("user_id is: ");
-            $GLOBALS['log']->debug("cache_file_name is: $cache_file_name");
+            LoggerManager::getLogger()->debug("datay is:");
+            LoggerManager::getLogger()->debug($datay);
+            LoggerManager::getLogger()->debug("user_id is: ");
+            LoggerManager::getLogger()->debug("cache_file_name is: $cache_file_name");
 
             $focus = new Campaign();
             $focus->retrieve($campaign_id);

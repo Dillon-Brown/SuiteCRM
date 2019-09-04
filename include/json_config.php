@@ -249,7 +249,7 @@ class json_config
                 $module_arr['fields'][$field] = $focus->$field;
             }
         }
-        $GLOBALS['log']->debug("JSON_SERVER:populate bean:");
+        LoggerManager::getLogger()->debug("JSON_SERVER:populate bean:");
         return $module_arr;
     }
 

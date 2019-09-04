@@ -532,7 +532,7 @@ abstract class DBManager
     {
         $values = array();
         if (!is_array($field_defs) && !is_object($field_defs)) {
-            $GLOBALS['log']->fatal('$filed_defs should be an array');
+            LoggerManager::getLogger()->fatal('$filed_defs should be an array');
         } else {
             foreach ((array)$field_defs as $field => $fieldDef) {
                 if (isset($fieldDef['source']) && $fieldDef['source'] != 'db') {
@@ -1337,7 +1337,7 @@ abstract class DBManager
         $this->log->info('call to DBManager::generateInsertSQL() is deprecated');
 
         if (!$table) {
-            $GLOBALS['log']->fatal('empty table name');
+            LoggerManager::getLogger()->fatal('empty table name');
         }
 
         global $sugar_config;
@@ -1980,7 +1980,7 @@ abstract class DBManager
         $fields = $bean->getFieldDefinitions();
         // get column names and values
         if (!is_array($fields) && !is_object($fields)) {
-            $GLOBALS['log']->fatal('Field Definition should be an array.');
+            LoggerManager::getLogger()->fatal('Field Definition should be an array.');
         } else {
             foreach ((array)$fields as $field => $fieldDef) {
                 if (isset($fieldDef['source']) && $fieldDef['source'] != 'db') {
@@ -2537,7 +2537,7 @@ abstract class DBManager
     protected function oneColumnSQLRep($fieldDef, $ignoreRequired = false, $table = '', $return_as_array = false)
     {
         if (!isset($fieldDef['name'])) {
-            $GLOBALS['log']->fatal('"name" field does not exists in field definition.');
+            LoggerManager::getLogger()->fatal('"name" field does not exists in field definition.');
             $name = null;
         } else {
             $name = $fieldDef['name'];
@@ -3562,7 +3562,7 @@ abstract class DBManager
 
         if (is_int($encode) && func_num_args() == 3) {
             // old API: $result, $rowNum, $encode
-            $GLOBALS['log']->deprecated("Using row number in fetchByAssoc is not portable and no longer supported. Please fix your code.");
+            LoggerManager::getLogger()->deprecated("Using row number in fetchByAssoc is not portable and no longer supported. Please fix your code.");
             $encode = func_get_arg(2);
         }
         $row = $this->fetchRow($result);

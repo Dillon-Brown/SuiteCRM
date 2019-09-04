@@ -205,7 +205,7 @@ EOQ;
 
                     $newFileLocation = "upload://$id";
                     if (!copy($file_location, $newFileLocation)) {
-                        $GLOBALS['log']->debug("EMAIL Template could not copy attachment to $newFileLocation");
+                        LoggerManager::getLogger()->debug("EMAIL Template could not copy attachment to $newFileLocation");
                     } else {
                         if ($useUploadFolder) {
                             $secureLink = ($useSiteURL ? $sugar_config['site_url'] . '/' : '') . "public/{$id}";
@@ -281,7 +281,7 @@ EOQ;
                 $oldId = $preProcessedImages[$file['name']];
                 $note->id = $oldId;
                 $note->new_with_id = true;
-                $GLOBALS['log']->debug("Image {$file['name']} has already been processed.");
+                LoggerManager::getLogger()->debug("Image {$file['name']} has already been processed.");
             }
 
             $i=preg_replace("/email_attachment(.+)/", '$1', $key);
@@ -344,7 +344,7 @@ EOQ;
             if ($note->new_with_id === false) {
                 $note->file->final_move($note->id);
             } else {
-                $GLOBALS['log']->debug("Not performing final move for note id {$note->id} as it has already been processed");
+                LoggerManager::getLogger()->debug("Not performing final move for note id {$note->id} as it has already been processed");
             }
         }
 
@@ -406,7 +406,7 @@ EOQ;
         clear_register_value('select_array', $focus->object_name);
 
         if ($redirect) {
-            $GLOBALS['log']->debug("Saved record with id of ".$return_id);
+            LoggerManager::getLogger()->debug("Saved record with id of ".$return_id);
             handleRedirect($return_id, "EmailTemplates");
         } else {
             return $focus;

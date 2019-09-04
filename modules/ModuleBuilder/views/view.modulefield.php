@@ -192,7 +192,7 @@ class ViewModulefield extends SugarView
             $tf->populateFromRow($vardef);
             $vardef = array_merge($vardef, $tf->get_field_def());
 
-            //          $GLOBALS['log']->debug('vardefs after loading = '.print_r($vardef,true));
+            //          LoggerManager::getLogger()->debug('vardefs after loading = '.print_r($vardef,true));
            
             
             //Check if autoincrement fields are allowed
@@ -215,7 +215,7 @@ class ViewModulefield extends SugarView
             }
             $fv->ss->assign('allowAutoInc', $allowAutoInc);
 
-            $GLOBALS['log']->warn('view.modulefield: hidelevel '.$fv->ss->get_template_vars('hideLevel')." ".print_r($vardef, true));
+            LoggerManager::getLogger()->warn('view.modulefield: hidelevel '.$fv->ss->get_template_vars('hideLevel')." ".print_r($vardef, true));
             if (!empty($vardef['vname'])) {
                 $fv->ss->assign('lbl_value', htmlentities(translate($vardef['vname'], $moduleName), ENT_QUOTES, 'UTF-8'));
             }

@@ -57,7 +57,7 @@ abstract class ext_rest extends source
         $data = '';
         $data = @file_get_contents($url);
         if (empty($data)) {
-            $GLOBALS['log']->error("Unable to retrieve contents from url:[{$url}]");
+            LoggerManager::getLogger()->error("Unable to retrieve contents from url:[{$url}]");
         }
         return $data;
     }

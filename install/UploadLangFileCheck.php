@@ -66,19 +66,19 @@ if (file_exists($file_name)) {
     $filesize =filesize($file_name);
 }
 
-//$GLOBALS['log']->fatal($file_name);
+//LoggerManager::getLogger()->fatal($file_name);
 $response = '';
 
-//$GLOBALS['log']->fatal('file name '.$file_name);
-//$GLOBALS['log']->fatal('file size loaded '.filesize($file_name));
+//LoggerManager::getLogger()->fatal('file name '.$file_name);
+//LoggerManager::getLogger()->fatal('file size loaded '.filesize($file_name));
 
 
 //if($filesize > ini_get("upload_max_filesize"))
 
-//$GLOBALS['log']->fatal(substr(ini_get("upload_max_filesize"), 0, strlen( ini_get("upload_max_filesize")) - 1));
+//LoggerManager::getLogger()->fatal(substr(ini_get("upload_max_filesize"), 0, strlen( ini_get("upload_max_filesize")) - 1));
 //get the file size defined in php.ini
 //$uploadSizeIni = substr(ini_get("upload_max_filesize"), 0, strlen( ini_get("upload_max_filesize")) - 1);
-//$GLOBALS['log']->fatal('Upload php setting Size '.return_bytes(ini_get("upload_max_filesize")));
+//LoggerManager::getLogger()->fatal('Upload php setting Size '.return_bytes(ini_get("upload_max_filesize")));
 if ($filesize != null) {
     if (($filesize > return_bytes(ini_get("upload_max_filesize"))) || ($filesize > return_bytes(ini_get("post_max_size")))) {
         $response=$filesize;

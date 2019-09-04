@@ -89,7 +89,7 @@ if (isset($focus->campaign_type) && $focus->campaign_type == "NewsLetter") {
     echo getClassicModuleTitle($mod_strings['LBL_MODULE_NAME'], array($mod_strings['LBL_MODULE_NAME'],$focus->name), true);
 }
 
-    $GLOBALS['log']->info("Campaign detail view");
+    LoggerManager::getLogger()->info("Campaign detail view");
     $smarty = new Sugar_Smarty();
     $smarty->assign("MOD", $mod_strings);
     $smarty->assign("APP", $app_strings);

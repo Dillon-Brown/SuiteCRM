@@ -68,7 +68,7 @@ echo getClassicModuleTitle($mod_strings['LBL_MODULE_NAME'], array($mod_strings['
 
 
 
-$GLOBALS['log']->info("campaign tracker detail view");
+LoggerManager::getLogger()->info("campaign tracker detail view");
 
 $xtpl=new XTemplate('modules/CampaignTrackers/DetailView.html');
 $xtpl->assign("MOD", $mod_strings);

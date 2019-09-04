@@ -89,7 +89,7 @@ class AOP_Case_Updates extends Basic
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -155,7 +155,7 @@ class AOP_Case_Updates extends Basic
             $description = $dom->saveHTML();
 
             foreach (libxml_get_errors() as $xmlError) {
-                $GLOBALS['log']->warn(sprintf('%s in %s', trim($xmlError->message), get_class($this)));
+                LoggerManager::getLogger()->warn(sprintf('%s in %s', trim($xmlError->message), get_class($this)));
             }
 
             libxml_clear_errors();
@@ -274,7 +274,7 @@ class AOP_Case_Updates extends Basic
         $addDelimiter = true,
         $contactId = null
     ) {
-        $GLOBALS['log']->info('AOPCaseUpdates: sendEmail called');
+        LoggerManager::getLogger()->info('AOPCaseUpdates: sendEmail called');
         require_once 'include/SugarPHPMailer.php';
         $mailer = new SugarPHPMailer();
         $admin = new Administration();
@@ -327,9 +327,9 @@ class AOP_Case_Updates extends Basic
                 return true;
             }
         } catch (phpmailerException $exception) {
-            $GLOBALS['log']->fatal('AOPCaseUpdates: sending email Failed:  ' . $exception->getMessage());
+            LoggerManager::getLogger()->fatal('AOPCaseUpdates: sending email Failed:  ' . $exception->getMessage());
         }
-        $GLOBALS['log']->info('AOPCaseUpdates: Could not send email:  ' . $mailer->ErrorInfo);
+        LoggerManager::getLogger()->info('AOPCaseUpdates: Could not send email:  ' . $mailer->ErrorInfo);
 
         return false;
     }

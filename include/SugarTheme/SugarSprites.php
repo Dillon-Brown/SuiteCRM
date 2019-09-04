@@ -80,7 +80,7 @@ class SugarSprites
     {
         if (file_exists("cache/sprites/{$dir}/{$file}.meta.php")) {
             $sprites = array();
-            $GLOBALS['log']->debug("Sprites: Loading sprites metadata for $dir");
+            LoggerManager::getLogger()->debug("Sprites: Loading sprites metadata for $dir");
             include("cache/sprites/{$dir}/{$file}.meta.php");
             foreach ($sprites as $id => $meta) {
                 $this->sprites[$id] = $meta;

@@ -381,7 +381,7 @@ class ModuleBuilderController extends SugarController
                 if (!empty($bean)) {
                     $field_defs = $bean->field_defs;
                     if (isset($field_defs[$field->name. '_c'])) {
-                        $GLOBALS['log']->error($GLOBALS['mod_strings']['ERROR_ALREADY_EXISTS'] . '[' . $field->name . ']');
+                        LoggerManager::getLogger()->error($GLOBALS['mod_strings']['ERROR_ALREADY_EXISTS'] . '[' . $field->name . ']');
                         sugar_die($GLOBALS['mod_strings']['ERROR_ALREADY_EXISTS']);
                     }
                 }
@@ -540,12 +540,12 @@ class ModuleBuilderController extends SugarController
 
         $relationships->addFromPost() ;
         $relationships->save() ;
-        $GLOBALS['log']->debug("\n\nSTART BUILD");
+        LoggerManager::getLogger()->debug("\n\nSTART BUILD");
         if (empty($_REQUEST [ 'view_package' ])) {
             $relationships->build() ;
             LanguageManager::clearLanguageCache($_REQUEST [ 'view_module' ]);
         }
-        $GLOBALS['log']->debug("\n\nEND BUILD");
+        LoggerManager::getLogger()->debug("\n\nEND BUILD");
         $this->view = 'relationships' ;
     }
 

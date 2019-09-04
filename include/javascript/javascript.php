@@ -72,7 +72,7 @@ class javascript
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -188,7 +188,7 @@ class javascript
                 $this->addFieldGeneric($dispField, $type, $vname, $required, $prefix);
             }
         } else {
-            $GLOBALS['log']->debug('No VarDef Label For ' . $field . ' in module ' . $this->sugarbean->module_dir);
+            LoggerManager::getLogger()->debug('No VarDef Label For ' . $field . ' in module ' . $this->sugarbean->module_dir);
         }
     }
 

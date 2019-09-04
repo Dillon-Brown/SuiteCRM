@@ -349,7 +349,7 @@ class SugarFolder
         }
 
         if (empty($user->id)) {
-            $GLOBALS['log']->fatal("*** FOLDERS: tried to update folder subscriptions for a user with no ID");
+            LoggerManager::getLogger()->fatal("*** FOLDERS: tried to update folder subscriptions for a user with no ID");
             return false;
         }
 
@@ -654,12 +654,12 @@ class SugarFolder
     public function addBean(SugarBean $bean)
     {
         if (empty($bean->id) || empty($bean->module_dir)) {
-            $GLOBALS['log']->fatal("*** FOLDERS: addBean() got empty bean - not saving");
+            LoggerManager::getLogger()->fatal("*** FOLDERS: addBean() got empty bean - not saving");
             return false;
         }
 
         if (empty($this->id)) {
-            $GLOBALS['log']->fatal("*** FOLDERS: addBean() is trying to save to a non-saved or non-existent folder");
+            LoggerManager::getLogger()->fatal("*** FOLDERS: addBean() is trying to save to a non-saved or non-existent folder");
             return false;
         }
 

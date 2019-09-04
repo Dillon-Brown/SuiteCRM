@@ -115,7 +115,7 @@ class EmailsControllerActionGetFromFields
         if ($accountSignatures != null) {
             $emailSignatures = unserialize(base64_decode($accountSignatures));
         } else {
-            $GLOBALS['log']->warn('User ' . $this->currentUser->name . ' does not have a signature');
+            LoggerManager::getLogger()->warn('User ' . $this->currentUser->name . ' does not have a signature');
             $emailSignatures = null;
         }
 

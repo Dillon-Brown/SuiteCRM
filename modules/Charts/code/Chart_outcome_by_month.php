@@ -59,7 +59,7 @@ class Chart_outcome_by_month
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -86,30 +86,30 @@ class Chart_outcome_by_month
         $user_date_start = $current_user->getPreference('obm_date_start');
         if (!empty($user_date_start)  && !isset($_REQUEST['obm_date_start'])) {
             $date_start =$user_date_start;
-            $GLOBALS['log']->debug("USER PREFERENCES['obm_date_start'] is:");
-            $GLOBALS['log']->debug($user_date_start);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['obm_date_start'] is:");
+            LoggerManager::getLogger()->debug($user_date_start);
         } elseif (isset($_REQUEST['obm_year']) && $_REQUEST['obm_year'] != '') {
             $date_start = $_REQUEST['obm_year'].'-01-01';
             $current_user->setPreference('obm_date_start', $date_start);
-            $GLOBALS['log']->debug("_REQUEST['obm_date_start'] is:");
-            $GLOBALS['log']->debug($_REQUEST['obm_date_start']);
-            $GLOBALS['log']->debug("_SESSION['obm_date_start'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('obm_date_start'));
+            LoggerManager::getLogger()->debug("_REQUEST['obm_date_start'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['obm_date_start']);
+            LoggerManager::getLogger()->debug("_SESSION['obm_date_start'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('obm_date_start'));
         } else {
             $date_start = date('Y').'-01-01';
         }
         $user_date_end = $current_user->getPreference('obm_date_end');
         if (!empty($user_date_end) && !isset($_REQUEST['obm_date_end'])) {
             $date_end =$user_date_end;
-            $GLOBALS['log']->debug("USER PREFERENCES['obm_date_end'] is:");
-            $GLOBALS['log']->debug($date_end);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['obm_date_end'] is:");
+            LoggerManager::getLogger()->debug($date_end);
         } elseif (isset($_REQUEST['obm_year']) && $_REQUEST['obm_year'] != '') {
             $date_end = $_REQUEST['obm_year'].'-12-31';
             $current_user->setPreference('obm_date_end', $date_end);
-            $GLOBALS['log']->debug("_REQUEST['obm_date_end'] is:");
-            $GLOBALS['log']->debug($_REQUEST['obm_date_end']);
-            $GLOBALS['log']->debug("USER PREFERENCES['obm_date_end'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('obm_date_end'));
+            LoggerManager::getLogger()->debug("_REQUEST['obm_date_end'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['obm_date_end']);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['obm_date_end'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('obm_date_end'));
         } else {
             $date_end = date('Y').'-12-31';
         }
@@ -119,15 +119,15 @@ class Chart_outcome_by_month
         $user_ids = $current_user->getPreference('obm_ids');
         if (!empty($user_ids) && count($user_ids) != 0 && !isset($_REQUEST['obm_ids'])) {
             $ids = $user_ids;
-            $GLOBALS['log']->debug("USER PREFERENCES['obm_ids'] is:");
-            $GLOBALS['log']->debug($user_ids);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['obm_ids'] is:");
+            LoggerManager::getLogger()->debug($user_ids);
         } elseif (isset($_REQUEST['obm_ids']) && count($_REQUEST['obm_ids']) > 0) {
             $ids = $_REQUEST['obm_ids'];
             $current_user->setPreference('obm_ids', $_REQUEST['obm_ids']);
-            $GLOBALS['log']->debug("_REQUEST['obm_ids'] is:");
-            $GLOBALS['log']->debug($_REQUEST['obm_ids']);
-            $GLOBALS['log']->debug("USER PREFRENCES['obm_ids'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('obm_ids'));
+            LoggerManager::getLogger()->debug("_REQUEST['obm_ids'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['obm_ids']);
+            LoggerManager::getLogger()->debug("USER PREFRENCES['obm_ids'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('obm_ids'));
         } else {
             $ids = get_user_array(false);
             $ids = array_keys($ids);
@@ -142,8 +142,8 @@ class Chart_outcome_by_month
                 $id_hash = $id_hash * -1;
             }
         }
-        $GLOBALS['log']->debug("ids is:");
-        $GLOBALS['log']->debug($ids);
+        LoggerManager::getLogger()->debug("ids is:");
+        LoggerManager::getLogger()->debug($ids);
         $id_md5 = substr(md5($current_user->id), 0, 9);
 
 
@@ -157,7 +157,7 @@ class Chart_outcome_by_month
 
         $cache_file_name = sugar_cached("xml/").$current_user->getUserPrivGuid()."_outcome_by_month_".$dateFileNameSafe[0]."_".$dateFileNameSafe[1].".xml";
 
-        $GLOBALS['log']->debug("cache file name is: $cache_file_name");
+        LoggerManager::getLogger()->debug("cache file name is: $cache_file_name");
 
 
         global $app_strings;
@@ -244,11 +244,11 @@ echo get_validate_chart_js();
         global $timedate;
 
         if (!file_exists($cache_file_name) || $refresh == true) {
-            $GLOBALS['log']->debug("date_start is: $date_start");
-            $GLOBALS['log']->debug("date_end is: $date_end");
-            $GLOBALS['log']->debug("user_id is: ");
-            $GLOBALS['log']->debug($user_id);
-            $GLOBALS['log']->debug("cache_file_name is: $cache_file_name");
+            LoggerManager::getLogger()->debug("date_start is: $date_start");
+            LoggerManager::getLogger()->debug("date_end is: $date_end");
+            LoggerManager::getLogger()->debug("user_id is: ");
+            LoggerManager::getLogger()->debug($user_id);
+            LoggerManager::getLogger()->debug("cache_file_name is: $cache_file_name");
 
             $where = "";
             //build the where clause for the query that matches $user
@@ -383,30 +383,30 @@ echo get_validate_chart_js();
         $user_date_start = $current_user->getPreference('obm_date_start');
         if (!empty($user_date_start)  && !isset($_REQUEST['obm_date_start'])) {
             $date_start =$user_date_start;
-            $GLOBALS['log']->debug("USER PREFERENCES['obm_date_start'] is:");
-            $GLOBALS['log']->debug($user_date_start);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['obm_date_start'] is:");
+            LoggerManager::getLogger()->debug($user_date_start);
         } elseif (isset($_REQUEST['obm_year']) && $_REQUEST['obm_year'] != '') {
             $date_start = $_REQUEST['obm_year'].'-01-01';
             $current_user->setPreference('obm_date_start', $date_start);
-            $GLOBALS['log']->debug("_REQUEST['obm_date_start'] is:");
-            $GLOBALS['log']->debug($_REQUEST['obm_date_start']);
-            $GLOBALS['log']->debug("_SESSION['obm_date_start'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('obm_date_start'));
+            LoggerManager::getLogger()->debug("_REQUEST['obm_date_start'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['obm_date_start']);
+            LoggerManager::getLogger()->debug("_SESSION['obm_date_start'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('obm_date_start'));
         } else {
             $date_start = date('Y').'-01-01';
         }
         $user_date_end = $current_user->getPreference('obm_date_end');
         if (!empty($user_date_end) && !isset($_REQUEST['obm_date_end'])) {
             $date_end =$user_date_end;
-            $GLOBALS['log']->debug("USER PREFERENCES['obm_date_end'] is:");
-            $GLOBALS['log']->debug($date_end);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['obm_date_end'] is:");
+            LoggerManager::getLogger()->debug($date_end);
         } elseif (isset($_REQUEST['obm_year']) && $_REQUEST['obm_year'] != '') {
             $date_end = $_REQUEST['obm_year'].'-12-31';
             $current_user->setPreference('obm_date_end', $date_end);
-            $GLOBALS['log']->debug("_REQUEST['obm_date_end'] is:");
-            $GLOBALS['log']->debug($_REQUEST['obm_date_end']);
-            $GLOBALS['log']->debug("USER PREFERENCES['obm_date_end'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('obm_date_end'));
+            LoggerManager::getLogger()->debug("_REQUEST['obm_date_end'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['obm_date_end']);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['obm_date_end'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('obm_date_end'));
         } else {
             $date_end = date('Y').'-12-31';
         }
@@ -416,15 +416,15 @@ echo get_validate_chart_js();
         $user_ids = $current_user->getPreference('obm_ids');
         if (!empty($user_ids) && count($user_ids) != 0 && !isset($_REQUEST['obm_ids'])) {
             $ids = $user_ids;
-            $GLOBALS['log']->debug("USER PREFERENCES['obm_ids'] is:");
-            $GLOBALS['log']->debug($user_ids);
+            LoggerManager::getLogger()->debug("USER PREFERENCES['obm_ids'] is:");
+            LoggerManager::getLogger()->debug($user_ids);
         } elseif (isset($_REQUEST['obm_ids']) && count($_REQUEST['obm_ids']) > 0) {
             $ids = $_REQUEST['obm_ids'];
             $current_user->setPreference('obm_ids', $_REQUEST['obm_ids']);
-            $GLOBALS['log']->debug("_REQUEST['obm_ids'] is:");
-            $GLOBALS['log']->debug($_REQUEST['obm_ids']);
-            $GLOBALS['log']->debug("USER PREFRENCES['obm_ids'] is:");
-            $GLOBALS['log']->debug($current_user->getPreference('obm_ids'));
+            LoggerManager::getLogger()->debug("_REQUEST['obm_ids'] is:");
+            LoggerManager::getLogger()->debug($_REQUEST['obm_ids']);
+            LoggerManager::getLogger()->debug("USER PREFRENCES['obm_ids'] is:");
+            LoggerManager::getLogger()->debug($current_user->getPreference('obm_ids'));
         } else {
             $ids = get_user_array(false);
             $ids = array_keys($ids);

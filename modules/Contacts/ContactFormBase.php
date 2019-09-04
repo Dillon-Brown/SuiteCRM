@@ -590,7 +590,7 @@ EOQ;
         $focus->save($check_notify);
         $return_id = $focus->id;
 
-        $GLOBALS['log']->debug("Saved record with id of ".$return_id);
+        LoggerManager::getLogger()->debug("Saved record with id of ".$return_id);
 
         if ($redirect && !empty($_POST['is_ajax_call']) && $_POST['is_ajax_call'] == '1') {
             $json = getJSONobj();

@@ -126,7 +126,7 @@ class sendEmail
                 rename($sugar_config['upload_dir'] . 'attachfile.pdf', $sugar_config['upload_dir'] . $note->id);
                 $email->attachNote($note);
             } else {
-                $GLOBALS['log']->error('AOS_PDF_Templates: Unable to save note');
+                LoggerManager::getLogger()->error('AOS_PDF_Templates: Unable to save note');
             }
         }
 

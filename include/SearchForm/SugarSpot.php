@@ -375,7 +375,7 @@ class SugarSpot
 
             if (!isset($return_fields['name'])) {
                 // FAIL: couldn't find id & name for the module
-                $GLOBALS['log']->error("Unable to find name for module $moduleName");
+                LoggerManager::getLogger()->error("Unable to find name for module $moduleName");
                 continue;
             }
 

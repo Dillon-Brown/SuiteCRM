@@ -87,7 +87,7 @@ class Release extends SugarBean
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -115,7 +115,7 @@ class Release extends SugarBean
         }
         $query .= " order by list_order asc";
         $result = $this->db->query($query, false);
-        $GLOBALS['log']->debug("get_releases: result is ".var_export($result, true));
+        LoggerManager::getLogger()->debug("get_releases: result is ".var_export($result, true));
 
         $list = array();
         if ($add_blank) {
@@ -126,8 +126,8 @@ class Release extends SugarBean
         while (($row = $this->db->fetchByAssoc($result)) != null) {
             //while ($row = $this->db->fetchByAssoc($result)) {
             $list[$row['id']] = $row['name'];
-            $GLOBALS['log']->debug("row id is:".$row['id']);
-            $GLOBALS['log']->debug("row name is:".$row['name']);
+            LoggerManager::getLogger()->debug("row id is:".$row['id']);
+            LoggerManager::getLogger()->debug("row name is:".$row['name']);
         }
         //}
         return $list;

@@ -68,7 +68,7 @@ class One2MRelationship extends M2MRelationship
                 $this->name
             );
             if (empty($links)) {
-                $GLOBALS['log']->fatal("No Links found for relationship {$this->name}");
+                LoggerManager::getLogger()->fatal("No Links found for relationship {$this->name}");
             } else {
                 if (!is_array($links)) { //Only one link for a self referencing relationship, this is very bad.
                     $this->lhsLinkDef = $this->rhsLinkDef = $links;

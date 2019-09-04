@@ -75,7 +75,7 @@ class SugarFieldImage extends SugarFieldFile
                 $move = true;
             } else {
                 //not valid image.
-                $GLOBALS['log']->fatal("Image Field : Not a Valid Image.");
+                LoggerManager::getLogger()->fatal("Image Field : Not a Valid Image.");
                 $temp = $vardef['vname'];
                 $temp = translate($temp, $bean->module_name);
                 SugarApplication::appendErrorMessage($temp . " Field :  Not a valid image format.");

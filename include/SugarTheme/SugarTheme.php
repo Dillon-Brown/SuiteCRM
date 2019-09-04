@@ -717,7 +717,7 @@ EOHTML;
         } elseif (is_file($this->getDefaultTemplatePath().'/'.$templateName)) {
             $templatePath = $this->getDefaultTemplatePath().'/'.$templateName;
         } else {
-            $GLOBALS['log']->warn("Template $templateName not found");
+            LoggerManager::getLogger()->warn("Template $templateName not found");
             return false;
         }
 
@@ -771,7 +771,7 @@ EOHTML;
 
         // trap alt attributes in other_attributes
         if (preg_match('/alt=["\']([^\'"]+)["\']/i', $other_attributes)) {
-            $GLOBALS['log']->debug("Sprites: alt attribute detected for $imageName");
+            LoggerManager::getLogger()->debug("Sprites: alt attribute detected for $imageName");
         }
         // sprite handler, makes use of own caching mechanism
         if (!empty($GLOBALS['sugar_config']['use_sprites']) && $GLOBALS['sugar_config']['use_sprites']) {
@@ -850,7 +850,7 @@ EOHTML;
             //$this->_spriteCache[$imageName]['imageURL'] = $imageURL;
         } else {
             $this->_spriteCache[$imageName] = false;
-            $GLOBALS['log']->debug("Sprites: miss for $imageURL");
+            LoggerManager::getLogger()->debug("Sprites: miss for $imageURL");
         }
         return $this->_spriteCache[$imageName];
     }
@@ -882,7 +882,7 @@ EOHTML;
         }
 
         // use </span> instead of /> to prevent weird UI results
-        $GLOBALS['log']->debug("Sprites: generated sprite -> $attr");
+        LoggerManager::getLogger()->debug("Sprites: generated sprite -> $attr");
         return "<span {$attr}></span>";
     }
 
@@ -903,7 +903,7 @@ EOHTML;
         if ($img_name) {
             $img = $this->getImage($img_name, $img_other_attributes, $img_width, $img_height, null, $img_alt);
             if ($img == false) {
-                $GLOBALS['log']->debug('Sprites: unknown image getLink');
+                LoggerManager::getLogger()->debug('Sprites: unknown image getLink');
                 $img = 'unknown';
             }
             switch ($img_placement) {
@@ -1039,7 +1039,7 @@ EOHTML;
             $cssFileContents .= file_get_contents('custom/'.$fullFileName);
         }
         if (empty($cssFileContents)) {
-            $GLOBALS['log']->warn("CSS File $cssFileName not found");
+            LoggerManager::getLogger()->warn("CSS File $cssFileName not found");
             return false;
         }
 
@@ -1119,7 +1119,7 @@ EOHTML;
             $jsFileContents .= file_get_contents('custom/'.$fullFileName);
         }
         if (empty($jsFileContents)) {
-            $GLOBALS['log']->warn("Javascript File $jsFileName not found");
+            LoggerManager::getLogger()->warn("Javascript File $jsFileName not found");
             return false;
         }
 

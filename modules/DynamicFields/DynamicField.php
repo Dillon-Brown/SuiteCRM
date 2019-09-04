@@ -77,7 +77,7 @@ class DynamicField
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -173,7 +173,7 @@ class DynamicField
             return false;
         }
 
-        $GLOBALS['log']->debug('rebuilding cache for ' . $module);
+        LoggerManager::getLogger()->debug('rebuilding cache for ' . $module);
         $query = "SELECT * FROM fields_meta_data WHERE $where deleted = 0";
 
         $result = $this->db->query($query);
@@ -597,7 +597,7 @@ class DynamicField
      */
     public function addFieldObject(&$field)
     {
-        $GLOBALS['log']->debug('adding field');
+        LoggerManager::getLogger()->debug('adding field');
         $object_name = $this->module;
         $db_name = $field->name;
 
@@ -843,7 +843,7 @@ class DynamicField
     {
         $out = '';
         if (!$this->db->tableExists($this->bean->table_name . '_cstm')) {
-            $GLOBALS['log']->debug('creating custom table for ' . $this->bean->table_name);
+            LoggerManager::getLogger()->debug('creating custom table for ' . $this->bean->table_name);
             $idDef = array(
                 'id_c' => array(
                     'name' => 'id_c',
@@ -1043,7 +1043,7 @@ class DynamicField
     public function retrieve()
     {
         if (!isset($this->bean)) {
-            $GLOBALS['log']->fatal('DynamicField retrieve, bean not instantiated');
+            LoggerManager::getLogger()->fatal('DynamicField retrieve, bean not instantiated');
 
             return false;
         }

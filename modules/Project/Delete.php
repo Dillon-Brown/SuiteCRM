@@ -53,7 +53,7 @@ $sugarbean = new Project();
 // perform the delete if given a record to delete
 
 if (empty($_REQUEST['record'])) {
-    $GLOBALS['log']->info('delete called without a record id specified');
+    LoggerManager::getLogger()->info('delete called without a record id specified');
 } else {
     $record = $_REQUEST['record'];
     $sugarbean->retrieve($record);
@@ -61,7 +61,7 @@ if (empty($_REQUEST['record'])) {
         ACLController::displayNoAccess(true);
         sugar_cleanup(true);
     }
-    $GLOBALS['log']->info("deleting record: $record");
+    LoggerManager::getLogger()->info("deleting record: $record");
     $sugarbean->mark_deleted($record);
 }
 

@@ -65,7 +65,7 @@ class EmailAuthenticateUser extends SugarAuthenticateUser
     {
         global $login_error;
 
-        $GLOBALS['log']->debug("Starting user load for ". $name);
+        LoggerManager::getLogger()->debug("Starting user load for ". $name);
         if (empty($name) || empty($password)) {
             return false;
         }
@@ -74,7 +74,7 @@ class EmailAuthenticateUser extends SugarAuthenticateUser
             $input_hash = SugarAuthenticate::encodePassword($password);
             $user_id = $this->authenticateUser($name, $input_hash);
             if (empty($user_id)) {
-                $GLOBALS['log']->fatal('SECURITY: User authentication for '.$name.' failed');
+                LoggerManager::getLogger()->fatal('SECURITY: User authentication for '.$name.' failed');
                 return false;
             }
         }
@@ -136,9 +136,9 @@ class EmailAuthenticateUser extends SugarAuthenticateUser
         $notify_mail->FromName = 'Sugar Authentication';
 
         if (!$notify_mail->Send()) {
-            $GLOBALS['log']->warn("Notifications: error sending e-mail (method: {$notify_mail->Mailer}), (error: {$notify_mail->ErrorInfo})");
+            LoggerManager::getLogger()->warn("Notifications: error sending e-mail (method: {$notify_mail->Mailer}), (error: {$notify_mail->ErrorInfo})");
         } else {
-            $GLOBALS['log']->info("Notifications: e-mail successfully sent");
+            LoggerManager::getLogger()->info("Notifications: e-mail successfully sent");
         }
     }
 }

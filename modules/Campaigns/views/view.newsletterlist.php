@@ -61,7 +61,7 @@ class ViewNewsLetterList extends ViewList
         if (count($where_clauses) > 0) {
             $this->where = '('. implode(' ) AND ( ', $where_clauses) . ')';
         }
-        $GLOBALS['log']->info("List View Where Clause: $this->where");
+        LoggerManager::getLogger()->info("List View Where Clause: $this->where");
 
 
         echo $this->searchForm->display($this->headers);

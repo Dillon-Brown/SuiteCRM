@@ -100,7 +100,7 @@ class SugarAuthenticateUser
     {
         global $login_error;
 
-        $GLOBALS['log']->debug("Starting user load for " . $name);
+        LoggerManager::getLogger()->debug("Starting user load for " . $name);
         if (empty($name) || empty($password)) {
             return false;
         }
@@ -114,7 +114,7 @@ class SugarAuthenticateUser
         } // if
         $user_id = $this->authenticateUser($name, $input_hash, $fallback);
         if (empty($user_id)) {
-            $GLOBALS['log']->fatal('SECURITY: User authentication for ' . $name . ' failed');
+            LoggerManager::getLogger()->fatal('SECURITY: User authentication for ' . $name . ' failed');
             return false;
         }
         $this->loadUserOnSession($user_id);
@@ -196,13 +196,13 @@ class SugarAuthenticateUser
     {
         global $current_user;
 
-        $GLOBALS['log']->debug('Redirect to factor token input.....');
+        LoggerManager::getLogger()->debug('Redirect to factor token input.....');
         
         $factory = new FactorAuthFactory();
         $factorAuth = $factory->getFactorAuth();
         if (!$factorAuth->validateTokenMessage()) {
             $msg = 'Factor Authentication message is invalid.';
-            $GLOBALS['log']->warn($msg);
+            LoggerManager::getLogger()->warn($msg);
             global $app_strings;
             SugarApplication::appendErrorMessage($app_strings['ERR_FACTOR_TPL_INVALID']);
             SugarAuthenticate::addFactorMessage($app_strings['ERR_FACTOR_TPL_INVALID']);
@@ -271,13 +271,13 @@ class SugarAuthenticateUser
 
         if (!$mailer->send()) {
             $ret = false;
-            $GLOBALS['log']->fatal(
+            LoggerManager::getLogger()->fatal(
                 'Email sending for two factor email authentication via Email Code failed. Mailer Error Info: ' .
                     $mailer->ErrorInfo
             );
         } else {
             $ret = true;
-            $GLOBALS['log']->debug(
+            LoggerManager::getLogger()->debug(
                 'Token sent to user: ' .
                     $current_user->id . ', token: ' . $token . ' so we store it in the session'
             );
@@ -293,7 +293,7 @@ class SugarAuthenticateUser
      */
     public function redirectToLogout()
     {
-        $GLOBALS['log']->debug('Session destroy and redirect to logout.....');
+        LoggerManager::getLogger()->debug('Session destroy and redirect to logout.....');
         session_destroy();
         header('Location: index.php?action=Logout&module=Users');
         sugar_cleanup(true);

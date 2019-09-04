@@ -99,7 +99,7 @@ class JsChart extends SugarChart
             $xmlStr = $this->processXML($this->xmlFile);
             $json = $this->buildJson($xmlStr);
         } catch (Exception $e) {
-            $GLOBALS['log']->fatal("Unable to return chart data, invalid xml for file {$this->xmlFile}");
+            LoggerManager::getLogger()->fatal("Unable to return chart data, invalid xml for file {$this->xmlFile}");
             return '';
         }
         $this->saveJsonFile($json);
@@ -531,7 +531,7 @@ class JsChart extends SugarChart
         $path = SugarThemeRegistry::current()->getImageURL('sugarColors.xml', false);
 
         if (!file_exists($path)) {
-            $GLOBALS['log']->debug("Cannot open file ($path)");
+            LoggerManager::getLogger()->debug("Cannot open file ($path)");
         }
         $xmlstr = file_get_contents($path);
         $xml = new SimpleXMLElement($xmlstr);
@@ -669,17 +669,17 @@ class JsChart extends SugarChart
 
         // open file
         if (!$fh = sugar_fopen($this->jsonFilename, 'w')) {
-            $GLOBALS['log']->debug("Cannot open file ($this->jsonFilename)");
+            LoggerManager::getLogger()->debug("Cannot open file ($this->jsonFilename)");
             return;
         }
 
         // write the contents to the file
         if (fwrite($fh, $jsonContents) === false) {
-            $GLOBALS['log']->debug("Cannot write to file ($this->jsonFilename)");
+            LoggerManager::getLogger()->debug("Cannot write to file ($this->jsonFilename)");
             return false;
         }
 
-        $GLOBALS['log']->debug("Success, wrote ($jsonContents) to file ($this->jsonFilename)");
+        LoggerManager::getLogger()->debug("Success, wrote ($jsonContents) to file ($this->jsonFilename)");
 
         fclose($fh);
         return true;
@@ -711,7 +711,7 @@ class JsChart extends SugarChart
     public function processXML($xmlFile)
     {
         if (!file_exists($xmlFile)) {
-            $GLOBALS['log']->debug("Cannot open file ($xmlFile)");
+            LoggerManager::getLogger()->debug("Cannot open file ($xmlFile)");
         }
 
         $pattern = array();

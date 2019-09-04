@@ -202,7 +202,7 @@ class One2MBeanRelationship extends One2MRelationship
             $db = DBManagerFactory::getInstance();
             $query = $this->getQuery($link, $params);
             if (empty($query)) {
-                $GLOBALS['log']->fatal("query for {$this->name} was empty when loading from   {$this->lhsLink}\n");
+                LoggerManager::getLogger()->fatal("query for {$this->name} was empty when loading from   {$this->lhsLink}\n");
                 return array("rows" => array());
             }
             $result = $db->query($query);

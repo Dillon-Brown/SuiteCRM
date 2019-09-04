@@ -91,7 +91,7 @@ class SugarMerge
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -146,7 +146,7 @@ class SugarMerge
                             if (in_array($e, $merge)) {
                                 $this->merged[$e] = $this->mergeModule($e, true, $save, $logHistory);
                             } else {
-                                $GLOBALS['log']->debug("SugarMerge is skipping $e module as filter array passed in but module not specified for merge.");
+                                LoggerManager::getLogger()->debug("SugarMerge is skipping $e module as filter array passed in but module not specified for merge.");
                                 continue;
                             }
                         } else {
@@ -232,7 +232,7 @@ class SugarMerge
         $historyPath = 'custom/' . MB_HISTORYMETADATALOCATION . "/modules/$module/metadata/$file";
         $history = new History($historyPath);
         $timeStamp = $history->append($customFile);
-        $GLOBALS['log']->debug("Created history file after merge with new file: " . $historyPath .'_'.$timeStamp);
+        LoggerManager::getLogger()->debug("Created history file after merge with new file: " . $historyPath .'_'.$timeStamp);
     }
 
     /**

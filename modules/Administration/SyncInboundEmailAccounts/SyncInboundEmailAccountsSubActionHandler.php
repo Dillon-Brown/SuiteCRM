@@ -257,14 +257,14 @@ class SyncInboundEmailAccountsSubActionHandler
 
                     $this->output(sprintf($mod_strings['LBL_SYNC_UPDATED'], $updated));
                 } catch (SyncInboundEmailAccountsIMapConnectionException $e) {
-                    $GLOBALS['log']->warn($e->getMessage());
+                    LoggerManager::getLogger()->warn($e->getMessage());
                     $this->output($mod_strings['LBL_SYNC_ERROR_CONN']);
                 } catch (SyncInboundEmailAccountsEmptyException $e) {
                     $this->output($mod_strings['LBL_SYNC_NO_EMAIL']);
                 }
             } else {
                 $this->output($mod_strings['LBL_IE_NOT_FOUND']);
-                $GLOBALS['log']->debug("Inbound Email Account record not found, please check the record still exists and non-deleted: " . $ieId);
+                LoggerManager::getLogger()->debug("Inbound Email Account record not found, please check the record still exists and non-deleted: " . $ieId);
             }
         }
         $this->output($mod_strings['LBL_SYNC_DONE']);
@@ -289,7 +289,7 @@ class SyncInboundEmailAccountsSubActionHandler
         $errs = $this->imap->getErrors();
         if ($errs) {
             foreach ($errs as $err) {
-                $GLOBALS['log']->error("IMAP error detected: " . $err);
+                LoggerManager::getLogger()->error("IMAP error detected: " . $err);
             }
             $this->output($mod_strings['LBL_SYNC_ERROR_FOUND']);
         }
@@ -297,7 +297,7 @@ class SyncInboundEmailAccountsSubActionHandler
         $warns = $this->imap->getAlerts();
         if ($warns) {
             foreach ($warns as $warn) {
-                $GLOBALS['log']->warn("IMAP error detected: " . $warn);
+                LoggerManager::getLogger()->warn("IMAP error detected: " . $warn);
             }
             $this->output($mod_strings['LBL_SYNC_ALERT_FOUND']);
         }
@@ -468,7 +468,7 @@ class SyncInboundEmailAccountsSubActionHandler
             $deliveredTo = $matches[2];
         }
         if (empty($message_id) || !isset($message_id)) {
-            $GLOBALS['log']->debug('*********** NO MESSAGE_ID.');
+            LoggerManager::getLogger()->debug('*********** NO MESSAGE_ID.');
             $message_id = $ie->getMessageId($header);
         }
 

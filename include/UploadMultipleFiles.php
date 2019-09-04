@@ -145,7 +145,7 @@ class UploadMultipleFiles
         $fullname = "upload://$bean_id.$filename";
         if (file_exists($fullname)) {
             if (!rename($fullname, "upload://$bean_id")) {
-                $GLOBALS['log']->fatal("unable to rename file: $fullname => $bean_id");
+                LoggerManager::getLogger()->fatal("unable to rename file: $fullname => $bean_id");
             }
 
             return true;
@@ -203,17 +203,17 @@ class UploadMultipleFiles
                 if (copy($oldStyleSource, $source)) {
                     // delete the old
                     if (!unlink($oldStyleSource)) {
-                        $GLOBALS['log']->error("upload_file could not unlink [ {$oldStyleSource} ]");
+                        LoggerManager::getLogger()->error("upload_file could not unlink [ {$oldStyleSource} ]");
                     }
                 } else {
-                    $GLOBALS['log']->error("upload_file could not copy [ {$oldStyleSource} ] to [ {$source} ]");
+                    LoggerManager::getLogger()->error("upload_file could not copy [ {$oldStyleSource} ] to [ {$source} ]");
                 }
             }
         }
 
         $destination = "upload://$new_id";
         if (!copy($source, $destination)) {
-            $GLOBALS['log']->error("upload_file could not copy [ {$source} ] to [ {$destination} ]");
+            LoggerManager::getLogger()->error("upload_file could not copy [ {$source} ] to [ {$destination} ]");
         }
     }
 
@@ -257,7 +257,7 @@ class UploadMultipleFiles
                             $sugar_config['upload_maxsize']
                         )
                     );
-                    $GLOBALS['log']->fatal($errMess);
+                    LoggerManager::getLogger()->fatal($errMess);
                 } else {
                     //log the error, the string produced will read something like:
                     //ERROR: There was an error during upload. Error code: 3
@@ -269,7 +269,7 @@ class UploadMultipleFiles
                             self::$filesError[$_FILES['filename_file']['error'][$this->index]]
                         )
                     );
-                    $GLOBALS['log']->fatal($errMess);
+                    LoggerManager::getLogger()->fatal($errMess);
                 }
             }
 
@@ -279,13 +279,13 @@ class UploadMultipleFiles
         if (!is_uploaded_file($_FILES[$this->field_name]['tmp_name'][$this->index])) {
             return false;
         } elseif ($_FILES[$this->field_name]['size'][$this->index] > $sugar_config['upload_maxsize']) {
-            $GLOBALS['log']->fatal("ERROR: uploaded file was too big: max filesize: {$sugar_config['upload_maxsize']}");
+            LoggerManager::getLogger()->fatal("ERROR: uploaded file was too big: max filesize: {$sugar_config['upload_maxsize']}");
 
             return false;
         }
 
         if (!UploadStream::writable()) {
-            $GLOBALS['log']->fatal("ERROR: cannot write to upload directory");
+            LoggerManager::getLogger()->fatal("ERROR: cannot write to upload directory");
 
             return false;
         }
@@ -445,13 +445,13 @@ class UploadMultipleFiles
         }
         if ($this->use_soap) {
             if (!file_put_contents($destination, $this->file)) {
-                $GLOBALS['log']->fatal("ERROR: can't save file to $destination");
+                LoggerManager::getLogger()->fatal("ERROR: can't save file to $destination");
 
                 return false;
             }
         } else {
             if (!UploadStream::move_uploaded_file($_FILES[$this->field_name]['tmp_name'][$this->index], $destination)) {
-                $GLOBALS['log']->fatal(
+                LoggerManager::getLogger()->fatal(
                     "ERROR: can't move_uploaded_file to $destination." .
                     "You should try making the directory writable by the webserver"
                 );
@@ -492,13 +492,13 @@ class UploadMultipleFiles
                 } else {
                     $result['success'] = false;
                     // FIXME: Translate
-                    $GLOBALS['log']->error("Could not load the requested API (" . $doc_type . ")");
+                    LoggerManager::getLogger()->error("Could not load the requested API (" . $doc_type . ")");
                     $result['errorMessage'] = 'Could not find a proper API';
                 }
             } catch (Exception $e) {
                 $result['success'] = false;
                 $result['errorMessage'] = $e->getMessage();
-                $GLOBALS['log']->error("Caught exception: (" . $e->getMessage() . ") ");
+                LoggerManager::getLogger()->error("Caught exception: (" . $e->getMessage() . ") ");
             }
             if (!$result['success']) {
                 sugar_rename($new_destination, str_replace($bean_id . '_' . $file_name, $bean_id, $new_destination));

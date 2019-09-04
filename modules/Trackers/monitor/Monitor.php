@@ -72,7 +72,7 @@ class Monitor implements Trackable
     public function __construct($name='', $monitorId='', $metadata='', $store='')
     {
         if (empty($metadata) || !file_exists($metadata)) {
-            $GLOBALS['log']->error($GLOBALS['app_strings']['ERR_MONITOR_FILE_MISSING'] . "($metadata)");
+            LoggerManager::getLogger()->error($GLOBALS['app_strings']['ERR_MONITOR_FILE_MISSING'] . "($metadata)");
             throw new Exception($GLOBALS['app_strings']['ERR_MONITOR_FILE_MISSING'] . "($metadata)");
         }
 
@@ -114,7 +114,7 @@ class Monitor implements Trackable
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -131,7 +131,7 @@ class Monitor implements Trackable
     public function setValue($name, $value)
     {
         if (!isset($this->metrics[$name])) {
-            $GLOBALS['log']->error($GLOBALS['app_strings']['ERR_UNDEFINED_METRIC'] . "($name)");
+            LoggerManager::getLogger()->error($GLOBALS['app_strings']['ERR_UNDEFINED_METRIC'] . "($name)");
             throw new Exception($GLOBALS['app_strings']['ERR_UNDEFINED_METRIC'] . "($name)");
         } elseif ($this->metrics[$name]->isMutable()) {
             $this->$name = is_object($value) ? get_class($value) : $value;
@@ -232,7 +232,7 @@ class Monitor implements Trackable
         }
 
         if (!file_exists("modules/Trackers/store/$store.php")) {
-            $GLOBALS['log']->error($GLOBALS['app_strings']['ERR_STORE_FILE_MISSING'] . "($store)");
+            LoggerManager::getLogger()->error($GLOBALS['app_strings']['ERR_STORE_FILE_MISSING'] . "($store)");
             throw new Exception($GLOBALS['app_strings']['ERR_STORE_FILE_MISSING'] . "($store)");
         }
 

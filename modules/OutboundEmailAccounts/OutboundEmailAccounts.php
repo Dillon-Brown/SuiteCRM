@@ -61,8 +61,8 @@ class OutboundEmailAccounts extends OutboundEmailAccounts_sugar
             $bean = new OutboundEmailAccounts();
             $bean->retrieve($this->id);
             if (!$bean->mail_smtppass) {
-                $GLOBALS['log']->warn("Unable to send email via SMTP using an empty password.");
-                $GLOBALS['log']->info("Please ensure that the email settings are configured correctly");
+                LoggerManager::getLogger()->warn("Unable to send email via SMTP using an empty password.");
+                LoggerManager::getLogger()->info("Please ensure that the email settings are configured correctly");
                 $this->mail_smtppass = null;
             } else {
                 $this->mail_smtppass = $bean->mail_smtppass;

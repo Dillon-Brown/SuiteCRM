@@ -148,7 +148,7 @@ class AuthenticationController
             //loginLicense();
             if (!empty($GLOBALS['login_error'])) {
                 unset($_SESSION['authenticated_user_id']);
-                $GLOBALS['log']->fatal('FAILED LOGIN: potential hack attempt:'.$GLOBALS['login_error']);
+                LoggerManager::getLogger()->fatal('FAILED LOGIN: potential hack attempt:'.$GLOBALS['login_error']);
                 $this->loginSuccess = false;
                 return false;
             }
@@ -186,7 +186,7 @@ class AuthenticationController
             //kbrill bug #13225
             LogicHook::initialize();
             $GLOBALS['logic_hook']->call_custom_logic('Users', 'login_failed');
-            $GLOBALS['log']->fatal(
+            LoggerManager::getLogger()->fatal(
                 'FAILED LOGIN:attempts[' . $_SESSION['loginAttempts'] . '], ' .
                 'ip[' . query_client_ip() . '], username[' . $username . ']'
             );

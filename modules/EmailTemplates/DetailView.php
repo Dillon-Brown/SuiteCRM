@@ -97,7 +97,7 @@ $params[] = $focus->name;
 echo getClassicModuleTitle($focus->module_dir, $params, true);
 
 
-$GLOBALS['log']->info("EmailTemplate detail view");
+LoggerManager::getLogger()->info("EmailTemplate detail view");
 
 $xtpl=new XTemplate('modules/EmailTemplates/DetailView.html');
 $xtpl->assign("MOD", $mod_strings);

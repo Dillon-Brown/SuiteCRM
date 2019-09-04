@@ -78,7 +78,7 @@ global $theme;
 
 $json = getJSONobj();
 
-$GLOBALS['log']->info("Wizard Continue Create Wizard");
+LoggerManager::getLogger()->info("Wizard Continue Create Wizard");
 if ($campaign_focus->campaign_type=='NewsLetter') {
     echo getClassicModuleTitle($mod_strings['LBL_MODULE_NAME'], array($mod_strings['LBL_NEWSLETTER WIZARD_TITLE'].' '.$campaign_focus->name), true);
 } else {
@@ -277,8 +277,8 @@ if ($outboundEmailAccounts) {
         $outboundEmailLabels[$outboundEmailAccount->id] = $outboundEmailAccount->name;
     }
 } else {
-    $GLOBALS['log']->warn('There are no outbound email accounts available.');
-    $GLOBALS['log']->info('Please ensure that the email settings are configured correctly');
+    LoggerManager::getLogger()->warn('There are no outbound email accounts available.');
+    LoggerManager::getLogger()->info('Please ensure that the email settings are configured correctly');
 }
 
 $ss->assign('OUTBOUND_MAILBOXES', get_select_options_with_id($outboundEmailLabels, $mrkt_focus->outbound_email_id));

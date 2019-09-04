@@ -147,7 +147,7 @@ class SAML2Authenticate extends SugarAuthenticate
             );
         } else {
             // TODO: SLO Url need for SAML2, add it to SAML2 authentication settings
-            $GLOBALS['log']->debug('SLO Url need for SAML2, add it to SAML2 authentication settings');
+            LoggerManager::getLogger()->debug('SLO Url need for SAML2, add it to SAML2 authentication settings');
             SugarApplication::redirect('index.php');
         }
     }

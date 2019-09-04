@@ -62,7 +62,7 @@ $focus->set_user_relationship($focus->id, $_REQUEST['mass']);
 
 
 $header_URL = $sugar_config["site_url"] . "/index.php?action=PopupUsers&form=UsersForm&module=Users&record={$_REQUEST['record']}";
-$GLOBALS['log']->debug("about to post header URL of: $header_URL");
+LoggerManager::getLogger()->debug("about to post header URL of: $header_URL");
 
 echo "<script language=javascript>\n";
 echo "<!-- //\n";

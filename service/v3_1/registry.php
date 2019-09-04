@@ -53,7 +53,7 @@ class registry_v3_1 extends registry_v3
      */
     protected function registerFunction()
     {
-        $GLOBALS['log']->info('Begin: registry->registerFunction');
+        LoggerManager::getLogger()->info('Begin: registry->registerFunction');
         parent::registerFunction();
 
         $this->serviceClass->registerFunction(

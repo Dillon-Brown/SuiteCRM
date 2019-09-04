@@ -82,7 +82,7 @@ class ViewImportvcardsave extends SugarView
                 break;
                 default:
                     $redirect .= "&error=vcardErrorDefault";
-                    $GLOBALS['log']->error('Upload error code: ' . $_FILES['vcard']['error'] . '. Please refer to the error codes http://php.net/manual/en/features.file-upload.errors.php');
+                    LoggerManager::getLogger()->error('Upload error code: ' . $_FILES['vcard']['error'] . '. Please refer to the error codes http://php.net/manual/en/features.file-upload.errors.php');
                 break;
             }
 

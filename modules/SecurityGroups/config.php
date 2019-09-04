@@ -38,7 +38,7 @@ $image_path = $theme_path."images/";
 
 $focus = new Administration();
 $focus->retrieveSettings(); //retrieve all admin settings.
-$GLOBALS['log']->info("SecuritySuite Configure Settings view");
+LoggerManager::getLogger()->info("SecuritySuite Configure Settings view");
 
 $xtpl=new XTemplate('modules/SecurityGroups/config.html');
 $xtpl->assign("MOD", $mod_strings);

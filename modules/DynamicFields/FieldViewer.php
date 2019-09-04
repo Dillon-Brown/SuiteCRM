@@ -52,7 +52,7 @@ class FieldViewer
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -71,7 +71,7 @@ class FieldViewer
         //Only display range search option if in Studio, not ModuleBuilder
         $this->ss->assign('range_search_option_enabled', empty($_REQUEST['view_package']));
 
-        $GLOBALS['log']->debug('FieldViewer.php->getLayout() = ' . $vardef['type']);
+        LoggerManager::getLogger()->debug('FieldViewer.php->getLayout() = ' . $vardef['type']);
         switch ($vardef['type']) {
             case 'address':
                 return $this->ss->fetch('modules/DynamicFields/templates/Fields/Forms/address.tpl');

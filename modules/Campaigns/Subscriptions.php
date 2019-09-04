@@ -61,7 +61,7 @@ if (isset($_REQUEST['return_module'])) {
 }
 
 if (isset($_REQUEST['record'])) {
-    $GLOBALS['log']->debug("In Subscriptions, about to retrieve record: ".$_REQUEST['record']);
+    LoggerManager::getLogger()->debug("In Subscriptions, about to retrieve record: ".$_REQUEST['record']);
     $result = $focus->retrieve($_REQUEST['record']);
     if ($result == null) {
         sugar_die($app_strings['ERROR_NO_RECORD']);

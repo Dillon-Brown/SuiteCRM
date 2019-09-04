@@ -280,7 +280,7 @@ function validate_user($user_name, $password)
             return true;
         }
     } else {
-        $GLOBALS['log']->fatal("SECURITY: failed attempted login for $user_name using SOAP api");
+        LoggerManager::getLogger()->fatal("SECURITY: failed attempted login for $user_name using SOAP api");
         $server->setError("Invalid username and/or password");
 
         return false;
@@ -852,7 +852,7 @@ function track_email($user_name, $password, $parent_id, $contact_ids, $date_sent
     }
     global $current_user;
 
-    $GLOBALS['log']->info("In track email: username: $user_name contacts: $contact_ids date_sent_received: $date_sent_received");
+    LoggerManager::getLogger()->info("In track email: username: $user_name contacts: $contact_ids date_sent_received: $date_sent_received");
 
     // translate date sent from VB format 7/22/2004 9:36:31 AM
     // to yyyy-mm-dd 9:36:31 AM

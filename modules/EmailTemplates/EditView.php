@@ -115,7 +115,7 @@ if (!$focus->ACLAccess('EditView') || (!is_admin($current_user) && isset($focus-
     sugar_cleanup(true);
 }
 
-$GLOBALS['log']->info("EmailTemplate detail view");
+LoggerManager::getLogger()->info("EmailTemplate detail view");
 
 if ($has_campaign || $inboundEmail) {
     $xtpl = new XTemplate('modules/EmailTemplates/EditView.html');

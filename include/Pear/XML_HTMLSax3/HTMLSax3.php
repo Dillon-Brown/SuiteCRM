@@ -178,7 +178,7 @@ class XML_HTMLSax3_StateParser
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -557,7 +557,7 @@ class XML_HTMLSax3
             $this->state_parser->handler_default =& $object;
             return true;
         }
-        $GLOBALS['log']->info('XML_HTMLSax3::set_object requires '.
+        LoggerManager::getLogger()->info('XML_HTMLSax3::set_object requires '.
                 'an object instance');
     }
 
@@ -594,7 +594,7 @@ class XML_HTMLSax3
             $this->state_parser->parser_options[$name] = $value;
             return true;
         }
-        $GLOBALS['log']->info('XML_HTMLSax3::set_option('.$name.') illegal');
+        LoggerManager::getLogger()->info('XML_HTMLSax3::set_option('.$name.') illegal');
     }
 
     /**

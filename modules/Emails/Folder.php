@@ -130,7 +130,7 @@ class Folder
             $foldersId = $request['folders_id'];
             $this->retrieve($foldersId);
         } else {
-            $GLOBALS['log']->warn("Empty or undefined Email Folder ID");
+            LoggerManager::getLogger()->warn("Empty or undefined Email Folder ID");
         }
 
         return $this;

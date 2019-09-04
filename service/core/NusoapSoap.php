@@ -59,7 +59,7 @@ abstract class NusoapSoap extends SugarSoapService
      */
     public function __construct($url)
     {
-        $GLOBALS['log']->info('Begin: NusoapSoap->__construct');
+        LoggerManager::getLogger()->info('Begin: NusoapSoap->__construct');
         $this->server = new soap_server();
         $this->soapURL = $url;
         $this->server->configureWSDL('sugarsoap', $this->getNameSpace(), $url);
@@ -67,7 +67,7 @@ abstract class NusoapSoap extends SugarSoapService
             $GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents('php://input');
         }
         parent::__construct();
-        $GLOBALS['log']->info('End: NusoapSoap->__construct');
+        LoggerManager::getLogger()->info('End: NusoapSoap->__construct');
     } // ctor
 
     /**
@@ -78,7 +78,7 @@ abstract class NusoapSoap extends SugarSoapService
         if ($this->in_service) {
             $out = ob_get_contents();
             ob_end_clean();
-            $GLOBALS['log']->info('NusoapSoap->shutdown: service died unexpectedly');
+            LoggerManager::getLogger()->info('NusoapSoap->shutdown: service died unexpectedly');
             $this->server->fault(-1, "Unknown error in SOAP call: service died unexpectedly", '', $out);
             $this->server->send_response();
         }
@@ -90,7 +90,7 @@ abstract class NusoapSoap extends SugarSoapService
      */
     public function serve()
     {
-        $GLOBALS['log']->info('Begin: NusoapSoap->serve');
+        LoggerManager::getLogger()->info('Begin: NusoapSoap->serve');
         ob_clean();
         $this->in_service = true;
         register_shutdown_function(array($this, "shutdown"));
@@ -99,7 +99,7 @@ abstract class NusoapSoap extends SugarSoapService
         $this->in_service = false;
         ob_end_flush();
         flush();
-        $GLOBALS['log']->info('End: NusoapSoap->serve');
+        LoggerManager::getLogger()->info('End: NusoapSoap->serve');
     } // fn
 
     /**
@@ -153,12 +153,12 @@ abstract class NusoapSoap extends SugarSoapService
      */
     public function registerImplClass($implementationClass)
     {
-        $GLOBALS['log']->info('Begin: NusoapSoap->registerImplClass');
+        LoggerManager::getLogger()->info('Begin: NusoapSoap->registerImplClass');
         if (empty($implementationClass)) {
             $implementationClass = $this->implementationClass;
         } // if
         $this->server->register_class($implementationClass);
-        $GLOBALS['log']->info('End: NusoapSoap->registerImplClass');
+        LoggerManager::getLogger()->info('End: NusoapSoap->registerImplClass');
     } // fn
 
     /**
@@ -169,9 +169,9 @@ abstract class NusoapSoap extends SugarSoapService
      */
     public function registerClass($registryClass)
     {
-        $GLOBALS['log']->info('Begin: NusoapSoap->registerClass');
+        LoggerManager::getLogger()->info('Begin: NusoapSoap->registerClass');
         $this->registryClass = $registryClass;
-        $GLOBALS['log']->info('End: NusoapSoap->registerClass');
+        LoggerManager::getLogger()->info('End: NusoapSoap->registerClass');
     } // fn
 
     /**
@@ -182,8 +182,8 @@ abstract class NusoapSoap extends SugarSoapService
      */
     public function error($errorObject)
     {
-        $GLOBALS['log']->info('Begin: NusoapSoap->error');
+        LoggerManager::getLogger()->info('Begin: NusoapSoap->error');
         $this->server->fault($errorObject->getFaultCode(), $errorObject->getName(), '', $errorObject->getDescription());
-        $GLOBALS['log']->info('Begin: NusoapSoap->error');
+        LoggerManager::getLogger()->info('Begin: NusoapSoap->error');
     } // fn
 } // clazz

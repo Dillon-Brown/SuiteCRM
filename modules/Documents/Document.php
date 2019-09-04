@@ -115,7 +115,7 @@ class Document extends File
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -183,7 +183,7 @@ class Document extends File
                     $oldDocument->retrieve($_REQUEST['duplicateId']);
                     $old_name = "upload://{$oldDocument->document_revision_id}";
                     $new_name = "upload://{$Revision->id}";
-                    $GLOBALS['log']->debug("Attempting to copy from $old_name to $new_name");
+                    LoggerManager::getLogger()->debug("Attempting to copy from $old_name to $new_name");
                     copy($old_name, $new_name);
                     $createRevision = true;
                 }

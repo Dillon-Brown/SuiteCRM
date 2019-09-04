@@ -135,11 +135,11 @@ class JsonRPCServerUtils
         $current_user = BeanFactory::newBean('Users');
 
         $result = $current_user->retrieve($_SESSION['authenticated_user_id']);
-        $GLOBALS['log']->debug('JSON_SERVER: retrieved user from SESSION');
+        LoggerManager::getLogger()->debug('JSON_SERVER: retrieved user from SESSION');
 
 
         if ($result === null) {
-            $GLOBALS['log']->debug('JSON_SERVER: could get a user from SESSION. DESTROY');
+            LoggerManager::getLogger()->debug('JSON_SERVER: could get a user from SESSION. DESTROY');
             session_destroy();
 
             return null;

@@ -248,7 +248,7 @@ class ModuleBuilderViewWizard extends SugarView
         $sb->loadModules() ;
         $nodes = $sb->getNodes() ;
         $this->buttons = array( ) ;
-        //$GLOBALS['log']->debug(print_r($nodes,true));
+        //LoggerManager::getLogger()->debug(print_r($nodes,true));
         foreach ($nodes as $module) {
             $this->buttons[$module['name']] = [
                 'action' => $module['action'],

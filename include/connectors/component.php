@@ -102,7 +102,7 @@ class component
         $results = array();
         $args = $this->mapInput($args, $module);
         if (empty($args)) {
-            $GLOBALS['log']->fatal($GLOBALS['app_strings']['ERR_MISSING_MAPPING_ENTRY_FORM_MODULE']);
+            LoggerManager::getLogger()->fatal($GLOBALS['app_strings']['ERR_MISSING_MAPPING_ENTRY_FORM_MODULE']);
             throw new Exception($GLOBALS['app_strings']['ERR_MISSING_MAPPING_ENTRY_FORM_MODULE']);
         }
 
@@ -257,7 +257,7 @@ class component
 
             //Check for situation where nothing was mapped or the only field mapped was id
             if (empty($mapping) || (count($mapping) == 1 && isset($mapping['id']))) {
-                $GLOBALS['log']->error($GLOBALS['mod_strings']['ERROR_NO_DISPLAYABLE_MAPPED_FIELDS']);
+                LoggerManager::getLogger()->error($GLOBALS['mod_strings']['ERROR_NO_DISPLAYABLE_MAPPED_FIELDS']);
                 throw new Exception($GLOBALS['mod_strings']['ERROR_NO_DISPLAYABLE_MAPPED_FIELDS']);
             }
 

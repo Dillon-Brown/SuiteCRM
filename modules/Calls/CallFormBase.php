@@ -222,12 +222,12 @@ EOQ;
             return null;
         }
         if (!isset($_POST[$prefix.'reminder_checked']) or ($_POST[$prefix.'reminder_checked'] == 0)) {
-            $GLOBALS['log']->debug(__FILE__.'('.__LINE__.'): No reminder checked, resetting the reminder_time');
+            LoggerManager::getLogger()->debug(__FILE__.'('.__LINE__.'): No reminder checked, resetting the reminder_time');
             $_POST[$prefix.'reminder_time'] = -1;
         }
 
         if (!isset($_POST[$prefix.'reminder_time'])) {
-            $GLOBALS['log']->debug(__FILE__.'('.__LINE__.'): Getting the users default reminder time');
+            LoggerManager::getLogger()->debug(__FILE__.'('.__LINE__.'): Getting the users default reminder time');
             $_POST[$prefix.'reminder_time'] = $current_user->getPreference('reminder_time');
         }
 

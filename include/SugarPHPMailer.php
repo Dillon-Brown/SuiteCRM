@@ -119,7 +119,7 @@ class SugarPHPMailer extends PHPMailer
         $deprecatedMessage =
             'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -364,7 +364,7 @@ eoq;
      */
     protected function setError($msg)
     {
-        $GLOBALS['log']->fatal("SugarPHPMailer encountered an error: {$msg}");
+        LoggerManager::getLogger()->fatal("SugarPHPMailer encountered an error: {$msg}");
         parent::setError($msg);
     }
 
@@ -454,7 +454,7 @@ eoq;
         //$this->FromName = 'My Name';
         //$this->Sender   = 'me@here.com';
         //$this->Password = 'wrong';
-        //$GLOBALS['log']->debug("PHPMailer Send Function: { FromName: $this->FromName From: $this->From Host: $this->Host UserName: $this->Username }");
+        //LoggerManager::getLogger()->debug("PHPMailer Send Function: { FromName: $this->FromName From: $this->From Host: $this->Host UserName: $this->Username }");
        
         
         $ret = null;
@@ -484,22 +484,22 @@ eoq;
         } catch (Exception $e) {
             $phpMailerExceptionMsg=$e->errorMessage(); //Pretty error messages from PHPMailer
             if ($phpMailerExceptionMsg) {
-                $GLOBALS['log']->error("send: PHPMailer Exception: { $phpMailerExceptionMsg }");
+                LoggerManager::getLogger()->error("send: PHPMailer Exception: { $phpMailerExceptionMsg }");
             }
         } catch (\Exception $e) { //The leading slash means the Global PHP Exception class will be caught
             $phpMailerExceptionMsg=$e->getMessage(); //generic error messages from anything else
             if ($phpMailerExceptionMsg) {
-                $GLOBALS['log']->error("send: PHPMailer Exception: { $phpMailerExceptionMsg }");
+                LoggerManager::getLogger()->error("send: PHPMailer Exception: { $phpMailerExceptionMsg }");
             }
         }
 
         /* uncomment this to send full log into suitecrm.log:
         $line = strtok($this->fullSmtpLog, "\n");
         while ($line !== false) {
-             $GLOBALS['log']->debug("smtp send: { $line }");
+             LoggerManager::getLogger()->debug("smtp send: { $line }");
              $line = strtok( "\n" );
         }
-        $GLOBALS['log']->debug("------------ Exiting SugarMailer send");
+        LoggerManager::getLogger()->debug("------------ Exiting SugarMailer send");
         */
         return $ret;
     }

@@ -48,7 +48,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 if (file_exists($removeFile)) {
     if (!unlink($removeFile)) {
-        $GLOBALS['log']->error("*** Could not unlink() file: [ {$removeFile} ]");
+        LoggerManager::getLogger()->error("*** Could not unlink() file: [ {$removeFile} ]");
     } else {
         $bean->$field = '';
         $bean->save();

@@ -97,7 +97,7 @@ function portal_login($portal_auth, $user_name, $application_name)
         $_SESSION['ip_address'] = query_client_ip();
         $_SESSION['portal_id'] = $current_user->id;
         $_SESSION['type'] = 'portal';
-        $GLOBALS['log']->debug("Saving new session");
+        LoggerManager::getLogger()->debug("Saving new session");
         login_success();
         return array('id'=>session_id(), 'error'=>$error->get_soap_array());
     }
@@ -142,7 +142,7 @@ function portal_validate_authenticated($session_id)
         }
     }
     session_destroy();
-    $GLOBALS['log']->fatal('SECURITY: The session ID is invalid');
+    LoggerManager::getLogger()->fatal('SECURITY: The session ID is invalid');
     return false;
 }
 

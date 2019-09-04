@@ -67,7 +67,7 @@ class ListViewDataEmailsSearchOnCrm extends ListViewDataEmailsSearchAbstract
         // Fix fields in filter fields
 
         if (!is_string($id)) {
-            $GLOBALS['log']->warn("ID should be a string: {$id}");
+            LoggerManager::getLogger()->warn("ID should be a string: {$id}");
         }
 
         $filterFields = $this->lvde->fixFieldsInFilter($filterFields, $request, $where);

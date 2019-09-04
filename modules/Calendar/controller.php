@@ -101,7 +101,7 @@ class CalendarController extends SugarController
         
         $path = "modules/{$bean->module_dir}/{$bean->object_name}FormBase.php";
         if (!file_exists($path)) {
-            $GLOBALS['log']->fatal("File {$bean->object_name}FormBase.php doesn't exist");
+            LoggerManager::getLogger()->fatal("File {$bean->object_name}FormBase.php doesn't exist");
             sugar_cleanup(true);
         }
                
@@ -110,7 +110,7 @@ class CalendarController extends SugarController
         $FBObjectName = "{$bean->object_name}FormBase";
         
         if (!class_exists($FBObjectName)) {
-            $GLOBALS['log']->fatal("Class {$bean->object_name}FormBase doesn't exist");
+            LoggerManager::getLogger()->fatal("Class {$bean->object_name}FormBase doesn't exist");
             sugar_cleanup(true);
         }
         

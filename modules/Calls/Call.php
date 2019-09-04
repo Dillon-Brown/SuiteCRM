@@ -152,7 +152,7 @@ class Call extends SugarBean
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -428,11 +428,11 @@ class Call extends SugarBean
 
             // Get the contact name.
             $row = $this->db->fetchByAssoc($result);
-            $GLOBALS['log']->info("additional call fields $query");
+            LoggerManager::getLogger()->info("additional call fields $query");
             if ($row != null) {
                 $this->contact_name = $locale->getLocaleFormattedName($row['first_name'], $row['last_name'], '', '');
-                $GLOBALS['log']->debug("Call($this->id): contact_name = $this->contact_name");
-                $GLOBALS['log']->debug("Call($this->id): contact_id = $this->contact_id");
+                LoggerManager::getLogger()->debug("Call($this->id): contact_name = $this->contact_name");
+                LoggerManager::getLogger()->debug("Call($this->id): contact_id = $this->contact_id");
             }
         }
         if (!isset($this->duration_minutes)) {
@@ -611,7 +611,7 @@ class Call extends SugarBean
         $template = new User();
         // First, get the list of IDs.
         $query = "SELECT calls_users.required, calls_users.accept_status, calls_users.user_id from calls_users where calls_users.call_id='$this->id' AND calls_users.deleted=0";
-        $GLOBALS['log']->debug("Finding linked records $this->object_name: ".$query);
+        LoggerManager::getLogger()->debug("Finding linked records $this->object_name: ".$query);
         $result = $this->db->query($query, true);
         $list = array();
 
@@ -635,7 +635,7 @@ class Call extends SugarBean
         $template = $this;
         // First, get the list of IDs.
         $query = "SELECT calls_users.required, calls_users.accept_status, calls_users.call_id from calls_users where calls_users.user_id='$user->id' AND ( calls_users.accept_status IS NULL OR  calls_users.accept_status='none') AND calls_users.deleted=0";
-        $GLOBALS['log']->debug("Finding linked records $this->object_name: ".$query);
+        LoggerManager::getLogger()->debug("Finding linked records $this->object_name: ".$query);
 
 
         $result = $this->db->query($query, true);
@@ -689,7 +689,7 @@ class Call extends SugarBean
             return parent::get_notification_recipients();
         }
 
-        //		$GLOBALS['log']->debug('Call.php->get_notification_recipients():'.print_r($this,true));
+        //		LoggerManager::getLogger()->debug('Call.php->get_notification_recipients():'.print_r($this,true));
         $list = array();
         if (!is_array($this->contacts_arr)) {
             $this->contacts_arr =	array();
@@ -707,7 +707,7 @@ class Call extends SugarBean
             $notify_user = new User();
             $notify_user->retrieve($user_id);
             $notify_user->new_assigned_user_name = $notify_user->full_name;
-            $GLOBALS['log']->info("Notifications: recipient is $notify_user->new_assigned_user_name");
+            LoggerManager::getLogger()->info("Notifications: recipient is $notify_user->new_assigned_user_name");
             $list[$notify_user->id] = $notify_user;
         }
 
@@ -715,7 +715,7 @@ class Call extends SugarBean
             $notify_user = new Contact();
             $notify_user->retrieve($contact_id);
             $notify_user->new_assigned_user_name = $notify_user->full_name;
-            $GLOBALS['log']->info("Notifications: recipient is $notify_user->new_assigned_user_name");
+            LoggerManager::getLogger()->info("Notifications: recipient is $notify_user->new_assigned_user_name");
             $list[$notify_user->id] = $notify_user;
         }
 
@@ -723,7 +723,7 @@ class Call extends SugarBean
             $notify_user = new Lead();
             $notify_user->retrieve($lead_id);
             $notify_user->new_assigned_user_name = $notify_user->full_name;
-            $GLOBALS['log']->info("Notifications: recipient is $notify_user->new_assigned_user_name");
+            LoggerManager::getLogger()->info("Notifications: recipient is $notify_user->new_assigned_user_name");
             $list[$notify_user->id] = $notify_user;
         }
         global $sugar_config;
@@ -733,7 +733,7 @@ class Call extends SugarBean
                 unset($list[$current_user->id]);
             }
         }
-        //		$GLOBALS['log']->debug('Call.php->get_notification_recipients():'.print_r($list,true));
+        //		LoggerManager::getLogger()->debug('Call.php->get_notification_recipients():'.print_r($list,true));
         return $list;
     }
 

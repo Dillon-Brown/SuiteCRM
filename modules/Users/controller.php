@@ -77,11 +77,11 @@ class UsersController extends SugarController
             $u->employee_status = 'Terminated';
             $u->save();
             $u->mark_deleted($u->id);
-            $GLOBALS['log']->info("User id: {$GLOBALS['current_user']->id} deleted user record: {$_REQUEST['record']}");
+            LoggerManager::getLogger()->info("User id: {$GLOBALS['current_user']->id} deleted user record: {$_REQUEST['record']}");
 
             $eapm = loadBean('EAPM');
             $eapm->delete_user_accounts($_REQUEST['record']);
-            $GLOBALS['log']->info("Removing user's External Accounts");
+            LoggerManager::getLogger()->info("Removing user's External Accounts");
 
             SugarApplication::redirect("index.php?module=Users&action=index");
         } else {

@@ -62,7 +62,7 @@ if (isset($_REQUEST['record']) && !empty($_REQUEST['record'])) {
 if (isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
     $focus->id = "";
 }
-$GLOBALS['log']->info('EmailTemplate detail view');
+LoggerManager::getLogger()->info('EmailTemplate detail view');
 
 ///////////////////////////////////////////////////////////////////////////////
 ////	OUTPUT

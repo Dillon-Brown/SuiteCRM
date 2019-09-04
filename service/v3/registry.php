@@ -53,7 +53,7 @@ class registry_v3 extends registry
      */
     protected function registerFunction()
     {
-        $GLOBALS['log']->info('Begin: registry->registerFunction');
+        LoggerManager::getLogger()->info('Begin: registry->registerFunction');
         parent::registerFunction();
 
         $this->serviceClass->registerFunction(
@@ -92,7 +92,7 @@ class registry_v3 extends registry
             array('return'=>'tns:get_entry_result_version2')
         );
                     
-        $GLOBALS['log']->info('END: registry->registerFunction');
+        LoggerManager::getLogger()->info('END: registry->registerFunction');
             
         // END OF REGISTER FUNCTIONS
     }

@@ -54,7 +54,7 @@ class SearchFormMetaParser extends MetaParser
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -158,16 +158,16 @@ class SearchFormMetaParser extends MetaParser
         $toptr = $this->getElementsByType("tr", $table);
 
         if (!is_array($toptr) || empty($toptr)) {
-            $GLOBALS['log']->error("Could not process top row (<tr>) for $section section");
-            $GLOBALS['log']->error($table);
+            LoggerManager::getLogger()->error("Could not process top row (<tr>) for $section section");
+            LoggerManager::getLogger()->error($table);
             return array();
         }
 
         $tabledata = $this->getElementsByType("table", $toptr[0]);
 
         if (empty($tabledata)) {
-            $GLOBALS['log']->error("Error: HTML format for SearchForm.html not as expected, results may not be accurate");
-            $GLOBALS['log']->error($toptr[0]);
+            LoggerManager::getLogger()->error("Error: HTML format for SearchForm.html not as expected, results may not be accurate");
+            LoggerManager::getLogger()->error($toptr[0]);
             $tabledata[0] = "<table>{$table}</table>";
         }
 
@@ -268,7 +268,7 @@ class SearchFormMetaParser extends MetaParser
         require_once('include/SugarFields/Parsers/Rules/BaseRule.php');
         $baseRule = new BaseRule();
         if (!is_array($section)) {
-            $GLOBALS['log']->error("Error: SearchFormMetaParser->applyRules expects Array");
+            LoggerManager::getLogger()->error("Error: SearchFormMetaParser->applyRules expects Array");
             return $section;
         }
 

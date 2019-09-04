@@ -81,7 +81,7 @@ class LogicHook
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -160,7 +160,7 @@ class LogicHook
         }
         if (file_exists("$custom/logic_hooks.php")) {
             if (isset($GLOBALS['log'])) {
-                $GLOBALS['log']->debug('Including module specific hook file for '.$custom);
+                LoggerManager::getLogger()->debug('Including module specific hook file for '.$custom);
             }
             include("$custom/logic_hooks.php");
         }
@@ -169,7 +169,7 @@ class LogicHook
         }
         if (file_exists("$custom/Ext/LogicHooks/logichooks.ext.php")) {
             if (isset($GLOBALS['log'])) {
-                $GLOBALS['log']->debug('Including Ext hook file for '.$custom);
+                LoggerManager::getLogger()->debug('Including Ext hook file for '.$custom);
             }
             include("$custom/Ext/LogicHooks/logichooks.ext.php");
         }
@@ -199,7 +199,7 @@ class LogicHook
         // declare the hook array variable, it will be defined in the included file.
         $hook_array = null;
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->debug("Hook called: $module_dir::$event");
+            LoggerManager::getLogger()->debug("Hook called: $module_dir::$event");
         }
         if (!empty($module_dir)) {
             // This will load an array of the hooks to process
@@ -244,7 +244,7 @@ class LogicHook
                 $hook_details = $hook_array[$event][$hook_index];
                 if (!file_exists($hook_details[2])) {
                     if (isset($GLOBALS['log'])) {
-                        $GLOBALS['log']->error('Unable to load custom logic file: '.$hook_details[2]);
+                        LoggerManager::getLogger()->error('Unable to load custom logic file: '.$hook_details[2]);
                     }
                     continue;
                 }
@@ -256,7 +256,7 @@ class LogicHook
                 //TODO Make a factory for these classes.  Cache instances accross uses
                 if ($hook_class == $hook_function) {
                     if (isset($GLOBALS['log'])) {
-                        $GLOBALS['log']->debug('Creating new instance of hook class '.$hook_class.' with parameters');
+                        LoggerManager::getLogger()->debug('Creating new instance of hook class '.$hook_class.' with parameters');
                     }
                     if (!is_null($this->bean)) {
                         $class = new $hook_class($this->bean, $event, $arguments);
@@ -265,7 +265,7 @@ class LogicHook
                     }
                 } else {
                     if (isset($GLOBALS['log'])) {
-                        $GLOBALS['log']->debug('Creating new instance of hook class '.$hook_class.' without parameters');
+                        LoggerManager::getLogger()->debug('Creating new instance of hook class '.$hook_class.' without parameters');
                     }
                     $class = new $hook_class();
                     if (!is_null($this->bean)) {

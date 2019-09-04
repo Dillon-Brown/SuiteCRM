@@ -126,7 +126,7 @@ class aSubPanel
             $this->canDisplay = $this->load_sub_subpanels() ; //load sub-panel definition.
         } else {
             if (!isset($this->_instance_properties [ 'module' ])) {
-                $GLOBALS['log']->fatal('Undefined index: module');
+                LoggerManager::getLogger()->fatal('Undefined index: module');
                 $instancePropertiesModule = null;
             } else {
                 $instancePropertiesModule = $this->_instance_properties [ 'module' ];
@@ -135,7 +135,7 @@ class aSubPanel
                 _pstack_trace();
             }
             if (!isset($this->_instance_properties [ 'subpanel_name' ])) {
-                $GLOBALS['log']->fatal('Invalid or missing SubPanelDefinition property: subpanel_name');
+                LoggerManager::getLogger()->fatal('Invalid or missing SubPanelDefinition property: subpanel_name');
                 $def_path = null;
             } else {
                 $subPanelName = $this->_instance_properties ['subpanel_name'];
@@ -160,7 +160,7 @@ class aSubPanel
             }
 
             if (!$loaded) {
-                $GLOBALS['log']->fatal("Failed to load original or custom subpanel data for $name in $def_path");
+                LoggerManager::getLogger()->fatal("Failed to load original or custom subpanel data for $name in $def_path");
                 $this->canDisplay = false;
             }
 
@@ -200,7 +200,7 @@ class aSubPanel
 
             $where_clauses = $searchForm->generateSearchWhere(true, $seed->module_dir);
 
-            $GLOBALS['log']->info("Subpanel Where Clause: $this->search_query");
+            LoggerManager::getLogger()->info("Subpanel Where Clause: $this->search_query");
 
             if (count($where_clauses) > 0) {
                 return '(' . implode(' ) AND ( ', $where_clauses) . ')';
@@ -216,7 +216,7 @@ class aSubPanel
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -320,7 +320,7 @@ class aSubPanel
         if (empty($this->sub_subpanels)) {
             $panels = $this->get_inst_prop_value('collection_list') ;
             if (null === $panels) {
-                $GLOBALS['log']->fatal('Incorrect or missing SubPanelDefinition property: collection_list');
+                LoggerManager::getLogger()->fatal('Incorrect or missing SubPanelDefinition property: collection_list');
                 $panels = array();
             }
             foreach ($panels as $panel => $properties) {
@@ -663,7 +663,7 @@ class SubPanelDefinitions
 
                 // make sure the module attribute is set, else none of this works...
                 if (!isset($values_array [ 'module' ])) {
-                    $GLOBALS['log']->debug("SubPanelDefinitions->get_available_tabs(): no module defined in subpaneldefs for '$key' =>" . var_export($values_array, true) . " - ingoring subpanel defintion") ;
+                    LoggerManager::getLogger()->debug("SubPanelDefinitions->get_available_tabs(): no module defined in subpaneldefs for '$key' =>" . var_export($values_array, true) . " - ingoring subpanel defintion") ;
                     continue;
                 }
 

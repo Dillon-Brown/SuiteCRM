@@ -266,7 +266,7 @@ class EmailsController extends SugarController
 
             $this->view = 'sendemail';
         } else {
-            $GLOBALS['log']->security(
+            LoggerManager::getLogger()->security(
                 'User ' . $current_user->name .
                 ' attempted to send an email using incorrect email account settings in' .
                 ' which they do not have access to.'
@@ -388,7 +388,7 @@ class EmailsController extends SugarController
      */
     private function log($msg, $level = 'info')
     {
-        $GLOBALS['log']->$level($msg);
+        LoggerManager::getLogger()->$level($msg);
     }
 
     /**
@@ -493,7 +493,7 @@ class EmailsController extends SugarController
         $email->email2init();
         $ie = new InboundEmail();
         $ie->email = $email;
-        $GLOBALS['log']->debug('********** EMAIL 2.0 - Asynchronous - at: refreshSugarFolders');
+        LoggerManager::getLogger()->debug('********** EMAIL 2.0 - Asynchronous - at: refreshSugarFolders');
         $rootNode = new ExtNode('', '');
         $folderOpenState = $current_user->getPreference('folderOpenState', 'Emails');
         $folderOpenState = empty($folderOpenState) ? '' : $folderOpenState;
@@ -507,7 +507,7 @@ class EmailsController extends SugarController
             );
             $out = json_encode(array('response' => $ret));
         } catch (SugarFolderEmptyException $e) {
-            $GLOBALS['log']->warn($e->getMessage());
+            LoggerManager::getLogger()->warn($e->getMessage());
             $out = json_encode(array('errors' => array($mod_strings['LBL_ERROR_NO_FOLDERS'])));
         }
 
@@ -606,7 +606,7 @@ class EmailsController extends SugarController
                 }
             }
         } else {
-            $GLOBALS['log']->fatal('EmailsController::action_ImportFromListView() missing inbound_email_record');
+            LoggerManager::getLogger()->fatal('EmailsController::action_ImportFromListView() missing inbound_email_record');
         }
 
         header('location:index.php?module=Emails&action=index');
@@ -858,7 +858,7 @@ class EmailsController extends SugarController
     private function getRequestedArgument($request, $key)
     {
         if (!isset($request[$key])) {
-            $GLOBALS['log']->error("Requested key is not set: ");
+            LoggerManager::getLogger()->error("Requested key is not set: ");
 
             return null;
         }
@@ -1003,7 +1003,7 @@ class EmailsController extends SugarController
             $error = 'Email Error: Not authorized to use Outbound Account "' . $outboundEmailAccount->name . '"';
         }
         if ($error !== false) {
-            $GLOBALS['log']->security($error);
+            LoggerManager::getLogger()->security($error);
             return false;
         }
         return true;

@@ -75,7 +75,7 @@ class File extends Basic
         $deprecatedMessage =
             'PHP4 Style Constructors are deprecated and will be remove in 8.0, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -168,7 +168,7 @@ class File extends Basic
         }
         if (file_exists($removeFile)) {
             if (!unlink($removeFile)) {
-                $GLOBALS['log']->error("*** Could not unlink() file: [ {$removeFile} ]");
+                LoggerManager::getLogger()->error("*** Could not unlink() file: [ {$removeFile} ]");
             } else {
                 $this->uploadfile = '';
                 $this->filename = '';

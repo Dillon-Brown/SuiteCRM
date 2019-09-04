@@ -147,7 +147,7 @@ class MysqliManager extends MysqlManager
                 LoggerManager::getLogger()->fatal('Database error: Incorrect link');
             }
         } else {
-            $GLOBALS['log']->fatal('MysqliManager: Empty query');
+            LoggerManager::getLogger()->fatal('MysqliManager: Empty query');
             $result = null;
         }
         $md5 = md5($sql);
@@ -157,7 +157,7 @@ class MysqliManager extends MysqlManager
         }
 
         $this->query_time = microtime(true) - $this->query_time;
-        $GLOBALS['log']->info('Query Execution Time:' . $this->query_time);
+        LoggerManager::getLogger()->info('Query Execution Time:' . $this->query_time);
         $this->dump_slow_queries($sql);
 
         // This is some heavy duty debugging, leave commented out unless you need this:
@@ -169,7 +169,7 @@ class MysqliManager extends MysqlManager
             }
         }
 
-        $GLOBALS['log']->fatal("${line['file']}:${line['line']} ${line['function']} \nQuery: $sql\n");
+        LoggerManager::getLogger()->fatal("${line['file']}:${line['line']} ${line['function']} \nQuery: $sql\n");
         */
 
 
@@ -214,12 +214,12 @@ class MysqliManager extends MysqlManager
     public function disconnect()
     {
         if (isset($GLOBALS['log']) && !is_null($GLOBALS['log'])) {
-            $GLOBALS['log']->debug('Calling MySQLi::disconnect()');
+            LoggerManager::getLogger()->debug('Calling MySQLi::disconnect()');
         }
         if (!empty($this->database)) {
             $this->freeResult();
             if (!@mysqli_close($this->database)) {
-                $GLOBALS['log']->fatal('mysqli_close() failed');
+                LoggerManager::getLogger()->fatal('mysqli_close() failed');
             }
             $this->database = null;
         }
@@ -321,7 +321,7 @@ class MysqliManager extends MysqlManager
                 $dbport
             );
             if (empty($this->database)) {
-                $GLOBALS['log']->fatal("Could not connect to DB server " . $dbhost . " as " . $configOptions['db_user_name'] . ". port " . $dbport . ": " . mysqli_connect_error());
+                LoggerManager::getLogger()->fatal("Could not connect to DB server " . $dbhost . " as " . $configOptions['db_user_name'] . ". port " . $dbport . ": " . mysqli_connect_error());
                 if ($dieOnError) {
                     if (isset($GLOBALS['app_strings']['ERR_NO_DB'])) {
                         sugar_die($GLOBALS['app_strings']['ERR_NO_DB']);
@@ -335,7 +335,7 @@ class MysqliManager extends MysqlManager
         }
 
         if (!empty($configOptions['db_name']) && !@mysqli_select_db($this->database, $configOptions['db_name'])) {
-            $GLOBALS['log']->fatal("Unable to select database {$configOptions['db_name']}: " . mysqli_connect_error());
+            LoggerManager::getLogger()->fatal("Unable to select database {$configOptions['db_name']}: " . mysqli_connect_error());
             if ($dieOnError) {
                 if (isset($GLOBALS['app_strings']['ERR_NO_DB'])) {
                     sugar_die($GLOBALS['app_strings']['ERR_NO_DB']);
@@ -362,7 +362,7 @@ class MysqliManager extends MysqlManager
         mysqli_query($this->database, "SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode, 'STRICT_TRANS_TABLES', ''))");
 
         if ($this->checkError('Could Not Connect', $dieOnError)) {
-            $GLOBALS['log']->info("connected to db");
+            LoggerManager::getLogger()->info("connected to db");
         }
 
         $this->connectOptions = $configOptions;

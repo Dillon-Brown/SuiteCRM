@@ -85,7 +85,7 @@ class ModuleInstaller
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -302,7 +302,7 @@ class ModuleInstaller
             $backup_path = clean_path(remove_file_extension(urldecode($_REQUEST['install_file']))."-restore");
             /* END - RESTORE POINT - by MR. MILK August 31, 2005 02:22:18 PM */
             foreach ($this->installdefs['copy'] as $cp) {
-                $GLOBALS['log']->debug("Copying ..." . $cp['from'].  " to " .$cp['to']);
+                LoggerManager::getLogger()->debug("Copying ..." . $cp['from'].  " to " .$cp['to']);
                 /* BEGIN - RESTORE POINT - by MR. MILK August 31, 2005 02:22:11 PM */
                 //$this->copy_path($cp['from'], $cp['to']);
                 $this->copy_path($cp['from'], $cp['to'], $backup_path);
@@ -318,7 +318,7 @@ class ModuleInstaller
             foreach ($this->installdefs['copy'] as $cp) {
                 $cp['to'] = clean_path(str_replace('<basepath>', $this->base_dir, $cp['to']));
                 $cp['from'] = clean_path(str_replace('<basepath>', $this->base_dir, $cp['from']));
-                $GLOBALS['log']->debug('Unlink ' . $cp['to']);
+                LoggerManager::getLogger()->debug('Unlink ' . $cp['to']);
                 /* BEGIN - RESTORE POINT - by MR. MILK August 31, 2005 02:22:11 PM */
                 //rmdir_recursive($cp['to']);
 
@@ -350,19 +350,19 @@ class ModuleInstaller
                 $to = $cp['to'] . $k;
                 //if it's not a sugar file then we remove it otherwise we can't restor it
                 if (!$this->ms->sugarFileExists($to)) {
-                    $GLOBALS['log']->debug('ModuleInstaller[uninstall_new_file] deleting file ' . $to);
+                    LoggerManager::getLogger()->debug('ModuleInstaller[uninstall_new_file] deleting file ' . $to);
                     if (file_exists($to)) {
                         unlink($to);
                     }
                 } else {
-                    $GLOBALS['log']->fatal('ModuleInstaller[uninstall_new_file] Could not remove file ' . $to . ' as no backup file was found to restore to');
+                    LoggerManager::getLogger()->fatal('ModuleInstaller[uninstall_new_file] Could not remove file ' . $to . ' as no backup file was found to restore to');
                 }
             }
         }
         //lets check if the directory is empty if it is we will delete it as well
         $files_remaining = $this->dir_file_count($cp['to']);
         if (file_exists($cp['to']) && $files_remaining == 0) {
-            $GLOBALS['log']->debug('ModuleInstaller[uninstall_new_file] deleting directory ' . $cp['to']);
+            LoggerManager::getLogger()->debug('ModuleInstaller[uninstall_new_file] deleting directory ' . $cp['to']);
             rmdir_recursive($cp['to']);
         }
     }
@@ -398,7 +398,7 @@ class ModuleInstaller
                 if (!empty($module)) {
                     $item['to_module'] = $module;
                 }
-                $GLOBALS['log']->debug("Installing section $section from $from for " .$item['to_module']);
+                LoggerManager::getLogger()->debug("Installing section $section from $from for " .$item['to_module']);
                 if ($item['to_module'] == 'application') {
                     $path = "custom/Extension/application/Ext/$extname";
                 } else {
@@ -440,7 +440,7 @@ class ModuleInstaller
                 if (!empty($module)) {
                     $item['to_module'] = $module;
                 }
-                $GLOBALS['log']->debug("Uninstalling section $section from $from for " .$item['to_module']);
+                LoggerManager::getLogger()->debug("Uninstalling section $section from $from for " .$item['to_module']);
                 if ($item['to_module'] == 'application') {
                     $path = "custom/Extension/application/Ext/$extname";
                 } else {
@@ -496,7 +496,7 @@ class ModuleInstaller
                 if (!empty($module)) {
                     $item['to_module'] = $module;
                 }
-                $GLOBALS['log']->debug("Disabling $extname ... from $from for " .$item['to_module']);
+                LoggerManager::getLogger()->debug("Disabling $extname ... from $from for " .$item['to_module']);
                 if ($item['to_module'] == 'application') {
                     $path = "custom/Extension/application/Ext/$extname";
                 } else {
@@ -539,7 +539,7 @@ class ModuleInstaller
                 if (!empty($module)) {
                     $item['to_module'] = $module;
                 }
-                $GLOBALS['log']->debug("Enabling $extname ... from $from for " .$item['to_module']);
+                LoggerManager::getLogger()->debug("Enabling $extname ... from $from for " .$item['to_module']);
 
                 if ($item['to_module'] == 'application') {
                     $path = "custom/Extension/application/Ext/$extname";
@@ -610,7 +610,7 @@ class ModuleInstaller
         if (write_array_to_file("unified_search_modules_display", $unified_search_modules_display, 'custom/modules/unified_search_modules_display.php') == false) {
             global $app_strings;
             $msg = string_format($app_strings['ERR_FILE_WRITE'], array('custom/modules/unified_search_modules_display.php'));
-            $GLOBALS['log']->error($msg);
+            LoggerManager::getLogger()->error($msg);
             throw new Exception($msg);
             return false;
         }
@@ -649,7 +649,7 @@ class ModuleInstaller
         if (write_array_to_file("unified_search_modules_display", $unified_search_modules_display, 'custom/modules/unified_search_modules_display.php') == false) {
             global $app_strings;
             $msg = string_format($app_strings['ERR_FILE_WRITE'], array('custom/modules/unified_search_modules_display.php'));
-            $GLOBALS['log']->error($msg);
+            LoggerManager::getLogger()->error($msg);
             throw new Exception($msg);
             return false;
         }
@@ -688,7 +688,7 @@ class ModuleInstaller
         if (write_array_to_file("unified_search_modules_display", $unified_search_modules_display, 'custom/modules/unified_search_modules_display.php') == false) {
             global $app_strings;
             $msg = string_format($app_strings['ERR_FILE_WRITE'], array('custom/modules/unified_search_modules_display.php'));
-            $GLOBALS['log']->error($msg);
+            LoggerManager::getLogger()->error($msg);
             throw new Exception($msg);
             return false;
         }
@@ -783,7 +783,7 @@ class ModuleInstaller
                 $this->log(translate('LBL_MI_IN_DASHLETS') . $cp['name']);
                 $cp['from'] = str_replace('<basepath>', $this->base_dir, $cp['from']);
                 $path = 'custom/modules/Home/Dashlets/' . $cp['name'] . '/';
-                $GLOBALS['log']->debug("Installing Dashlet " . $cp['name'] . "..." . $cp['from']);
+                LoggerManager::getLogger()->debug("Installing Dashlet " . $cp['name'] . "..." . $cp['from']);
                 if (!file_exists($path)) {
                     mkdir_recursive($path, true);
                 }
@@ -799,7 +799,7 @@ class ModuleInstaller
             foreach ($this->installdefs['dashlets'] as $cp) {
                 $this->log(translate('LBL_MI_UN_DASHLETS') . $cp['name']);
                 $path = 'custom/modules/Home/Dashlets/' . $cp['name'];
-                $GLOBALS['log']->debug('Unlink ' .$path);
+                LoggerManager::getLogger()->debug('Unlink ' .$path);
                 if (file_exists($path)) {
                     rmdir_recursive($path);
                 }
@@ -823,7 +823,7 @@ class ModuleInstaller
             $this->log(translate('LBL_MI_IN_MENUS'));
             foreach ($this->installdefs['dcaction'] as $action) {
                 $action['from'] = str_replace('<basepath>', $this->base_dir, $action['from']);
-                $GLOBALS['log']->debug("Installing DCActions ..." . $action['from']);
+                LoggerManager::getLogger()->debug("Installing DCActions ..." . $action['from']);
                 $path = 'custom/Extension/application/Ext/DashletContainer/Containers';
                 if (!file_exists($path)) {
                     mkdir_recursive($path, true);
@@ -840,7 +840,7 @@ class ModuleInstaller
             $this->log(translate('LBL_MI_UN_MENUS'));
             foreach ($this->installdefs['dcaction'] as $action) {
                 $action['from'] = str_replace('<basepath>', $this->base_dir, $action['from']);
-                $GLOBALS['log']->debug("Uninstalling DCActions ..." . $action['from']);
+                LoggerManager::getLogger()->debug("Uninstalling DCActions ..." . $action['from']);
                 $path = 'custom/Extension/application/Ext/DashletContainer/Containers';
                 if (is_file($path . '/'. $this->id_name . '.php')) {
                     rmdir_recursive($path . '/'. $this->id_name . '.php');
@@ -860,7 +860,7 @@ class ModuleInstaller
                 $dir = str_replace('_', '/', $cp['name']);
                 $cp['connector'] = str_replace('<basepath>', $this->base_dir, $cp['connector']);
                 $source_path = 'custom/modules/Connectors/connectors/sources/' . $dir. '/';
-                $GLOBALS['log']->debug("Installing Connector " . $cp['name'] . "..." . $cp['connector']);
+                LoggerManager::getLogger()->debug("Installing Connector " . $cp['name'] . "..." . $cp['connector']);
                 if (!file_exists($source_path)) {
                     mkdir_recursive($source_path, true);
                 }
@@ -888,7 +888,7 @@ class ModuleInstaller
                 $dir = str_replace('_', '/', $cp['name']);
                 $source_path = 'custom/modules/Connectors/connectors/sources/' . $dir;
                 $formatter_path = 'custom/modules/Connectors/connectors/formatters/' . $dir;
-                $GLOBALS['log']->debug('Unlink ' .$source_path);
+                LoggerManager::getLogger()->debug('Unlink ' .$source_path);
                 rmdir_recursive($source_path);
                 rmdir_recursive($formatter_path);
             }
@@ -900,7 +900,7 @@ class ModuleInstaller
 
     public function install_vardef($from, $to_module)
     {
-        $GLOBALS['log']->debug("Installing Vardefs ..." . $from .  " for " .$to_module);
+        LoggerManager::getLogger()->debug("Installing Vardefs ..." . $from .  " for " .$to_module);
         $path = 'custom/Extension/modules/' . $to_module. '/Ext/Vardefs';
         if ($to_module == 'application') {
             $path ='custom/Extension/' . $to_module. '/Ext/Vardefs';
@@ -913,7 +913,7 @@ class ModuleInstaller
 
     public function install_layoutdef($from, $to_module)
     {
-        $GLOBALS['log']->debug("Installing Layout Defs ..." . $from .  " for " .$to_module);
+        LoggerManager::getLogger()->debug("Installing Layout Defs ..." . $from .  " for " .$to_module);
         $path = 'custom/Extension/modules/' . $to_module. '/Ext/Layoutdefs';
         if ($to_module == 'application') {
             $path ='custom/Extension/' . $to_module. '/Ext/Layoutdefs';
@@ -934,7 +934,7 @@ class ModuleInstaller
                 $modules[]=$packs['to_module'];
                 $languages[$packs['language']] = $packs['language'];
                 $packs['from'] = str_replace('<basepath>', $this->base_dir, $packs['from']);
-                $GLOBALS['log']->debug("Installing Language Pack ..." . $packs['from']  .  " for " .$packs['to_module']);
+                LoggerManager::getLogger()->debug("Installing Language Pack ..." . $packs['from']  .  " for " .$packs['to_module']);
                 $path = $this->getInstallLanguagesPath($packs);
                 if (!file_exists(dirname($path))) {
                     mkdir_recursive(dirname($path), true);
@@ -971,7 +971,7 @@ class ModuleInstaller
                 $modules[]=$packs['to_module'];
                 $languages[$packs['language']] = $packs['language'];
                 $packs['from'] = str_replace('<basepath>', $this->base_dir, $packs['from']);
-                $GLOBALS['log']->debug("Uninstalling Language Pack ..." . $packs['from']  .  " for " .$packs['to_module']);
+                LoggerManager::getLogger()->debug("Uninstalling Language Pack ..." . $packs['from']  .  " for " .$packs['to_module']);
                 $path = 'custom/Extension/modules/' . $packs['to_module']. '/Ext/Language';
                 if ($packs['to_module'] == 'application') {
                     $path ='custom/Extension/' . $packs['to_module']. '/Ext/Language';
@@ -993,7 +993,7 @@ class ModuleInstaller
             $languages = $modules = array();
             foreach ($this->installdefs['language'] as $item) {
                 $from = str_replace('<basepath>', $this->base_dir, $item['from']);
-                $GLOBALS['log']->debug("Disabling Language {$item['language']}... from $from for " .$item['to_module']);
+                LoggerManager::getLogger()->debug("Disabling Language {$item['language']}... from $from for " .$item['to_module']);
                 $modules[]=$item['to_module'];
                 $languages[$item['language']] = $item['language'];
                 if ($item['to_module'] == 'application') {
@@ -1027,7 +1027,7 @@ class ModuleInstaller
         if (isset($this->installdefs['language'])) {
             foreach ($this->installdefs['language'] as $item) {
                 $from = str_replace('<basepath>', $this->base_dir, $item['from']);
-                $GLOBALS['log']->debug("Enabling Language {$item['language']}... from $from for " .$item['to_module']);
+                LoggerManager::getLogger()->debug("Enabling Language {$item['language']}... from $from for " .$item['to_module']);
                 $modules[]=$item['to_module'];
                 $languages[$item['language']] = $item['language'];
                 if (!empty($module)) {
@@ -1221,10 +1221,10 @@ class ModuleInstaller
 
         if (!$uninstall) {
             $from = str_replace('<basepath>', $this->base_dir, $from);
-            $GLOBALS['log']->debug('Copy ' . $from);
+            LoggerManager::getLogger()->debug('Copy ' . $from);
         } else {
             $from = str_replace('<basepath>', $backup_path, $from);
-            //$GLOBALS['log']->debug('Restore ' . $from);
+            //LoggerManager::getLogger()->debug('Restore ' . $from);
         }
         $from = clean_path($from);
         $to = clean_path($to);
@@ -1293,7 +1293,7 @@ class ModuleInstaller
                 }
             }
             if (!$installed) {
-                $GLOBALS['log']->debug('Could not install custom field ' . $field['name'] . ' for module ' .  $field['module'] . ': Module does not exist');
+                LoggerManager::getLogger()->debug('Could not install custom field ' . $field['name'] . ' for module ' .  $field['module'] . ': Module does not exist');
             }
         }
     }
@@ -1378,7 +1378,7 @@ class ModuleInstaller
     {
         $_REQUEST['moduleInstaller'] = true;
         if (!file_exists($file)) {
-            $GLOBALS['log']->debug('File does not exists : '.$file);
+            LoggerManager::getLogger()->debug('File does not exists : '.$file);
             return;
         }
         include($file);
@@ -1395,12 +1395,12 @@ class ModuleInstaller
             }
 
             if (!$this->silent) {
-                $GLOBALS['log']->debug("Processing relationship meta for ". $rel_name."...");
+                LoggerManager::getLogger()->debug("Processing relationship meta for ". $rel_name."...");
             }
             SugarBean::createRelationshipMeta($rel_name, $this->db, $table, $rel_dictionary, '');
             Relationship::delete_cache();
             if (!$this->silent) {
-                $GLOBALS['log']->debug('done<br>');
+                LoggerManager::getLogger()->debug('done<br>');
             }
         }
     }
@@ -1431,7 +1431,7 @@ class ModuleInstaller
     {
         if ($rel_dictionary == null) {
             if (!file_exists($file)) {
-                $GLOBALS['log']->debug('File does not exists : '.$file);
+                LoggerManager::getLogger()->debug('File does not exists : '.$file);
                 return;
             }
             include($file);
@@ -1806,10 +1806,10 @@ class ModuleInstaller
     public function merge_files($path, $name, $filter = '', $application = false)
     {
         if (!$application) {
-            $GLOBALS['log']->debug(get_class($this)."->merge_files() : merging module files in custom/Extension/modules/<module>/$path to custom/modules/<module>/$path$name");
+            LoggerManager::getLogger()->debug(get_class($this)."->merge_files() : merging module files in custom/Extension/modules/<module>/$path to custom/modules/<module>/$path$name");
             foreach ($this->modules as $module) {
-                //$GLOBALS['log']->debug("Merging Files for: ".$module);
-                //$GLOBALS['log']->debug("Merging Files for path: ".$path);
+                //LoggerManager::getLogger()->debug("Merging Files for: ".$module);
+                //LoggerManager::getLogger()->debug("Merging Files for path: ".$path);
                 $extension = "<?php \n //WARNING: The contents of this file are auto-generated\n";
                 $extpath = "modules/$module/$path";
                 $module_install  = 'custom/Extension/'.$extpath;
@@ -1825,7 +1825,7 @@ class ModuleInstaller
                                 $override[] = $entry;
                             } else {
                                 $file = file_get_contents($module_install . '/' . $entry);
-                                $GLOBALS['log']->debug(get_class($this)."->merge_files(): found {$module_install}{$entry}") ;
+                                LoggerManager::getLogger()->debug(get_class($this)."->merge_files(): found {$module_install}{$entry}") ;
                                 $extension .= "\n". str_replace(array('<?php', '?>', '<?PHP', '<?'), array('','', '' ,''), $file);
                             }
                         }
@@ -1852,7 +1852,7 @@ class ModuleInstaller
             }
         }
 
-        $GLOBALS['log']->debug("Merging application files for $name in $path");
+        LoggerManager::getLogger()->debug("Merging application files for $name in $path");
         //Now the application stuff
         $extension = "<?php \n //WARNING: The contents of this file are auto-generated\n";
         $extpath = "application/$path";
@@ -1937,12 +1937,12 @@ class ModuleInstaller
                     $mod = new $class();
                     //#30273
                     if (is_subclass_of($mod, 'SugarBean')  && $mod->disable_vardefs == false) {
-                        $GLOBALS['log']->debug("Creating Tables Bean : $bean");
+                        LoggerManager::getLogger()->debug("Creating Tables Bean : $bean");
                         $mod->create_tables();
                         SugarBean::createRelationshipMeta($mod->getObjectName(), $mod->db, $mod->table_name, array(), $mod->module_dir);
                     }
                 } else {
-                    $GLOBALS['log']->debug("File Does Not Exist:" . $beanFiles[$class]);
+                    LoggerManager::getLogger()->debug("File Does Not Exist:" . $beanFiles[$class]);
                 }
             }
         }
@@ -1961,13 +1961,13 @@ class ModuleInstaller
                     $mod = new $class();
 
                     if (is_subclass_of($mod, 'SugarBean')) {
-                        $GLOBALS['log']->debug("Drop Tables : $bean");
+                        LoggerManager::getLogger()->debug("Drop Tables : $bean");
                         if (isset($GLOBALS['mi_remove_tables']) && $GLOBALS['mi_remove_tables']) {
                             $mod->drop_tables();
                         }
                     }
                 } else {
-                    $GLOBALS['log']->debug("File Does Not Exist:" . $beanFiles[$class]);
+                    LoggerManager::getLogger()->debug("File Does Not Exist:" . $beanFiles[$class]);
                 }
             }
         }
@@ -1994,7 +1994,7 @@ class ModuleInstaller
 
     public function log($str)
     {
-        $GLOBALS['log']->debug('ModuleInstaller:'. $str);
+        LoggerManager::getLogger()->debug('ModuleInstaller:'. $str);
         if (!$this->silent) {
             echo $str . '<br>';
         }
@@ -2005,14 +2005,14 @@ class ModuleInstaller
     {
         if (is_file($source)) {
             if ($uninstall) {
-                $GLOBALS['log']->debug("Restoring ... " . $source.  " to " .$dest);
+                LoggerManager::getLogger()->debug("Restoring ... " . $source.  " to " .$dest);
                 if (copy($source, $dest)) {
                     if (is_writable($dest)) {
                         sugar_touch($dest, filemtime($source));
                     }
                     return(unlink($source));
                 }
-                $GLOBALS['log']->debug("Can't restore file: " . $source);
+                LoggerManager::getLogger()->debug("Can't restore file: " . $source);
                 return true;
             }
             if (file_exists($dest)) {
@@ -2021,13 +2021,13 @@ class ModuleInstaller
                     mkdir_recursive(dirname($rest), true);
                 }
 
-                $GLOBALS['log']->debug("Backup ... " . $dest.  " to " .$rest);
+                LoggerManager::getLogger()->debug("Backup ... " . $dest.  " to " .$rest);
                 if (copy($dest, $rest)) {
                     if (is_writable($rest)) {
                         sugar_touch($rest, filemtime($dest));
                     }
                 } else {
-                    $GLOBALS['log']->debug("Can't backup file: " . $dest);
+                    LoggerManager::getLogger()->debug("Can't backup file: " . $dest);
                 }
             }
             return(copy($source, $dest));
@@ -2257,7 +2257,7 @@ class ModuleInstaller
                 echo '</div>';
             }
             UpdateSystemTabs('Add', $installed_modules);
-            $GLOBALS['log']->debug('Complete');
+            LoggerManager::getLogger()->debug('Complete');
         } else {
             die("No \$installdefs Defined In $this->base_dir/manifest.php");
         }
@@ -2412,7 +2412,7 @@ class ModuleInstaller
                 $cp['from'] = str_replace('<basepath>', $this->base_dir, $cp['from']);
                 $path = 'custom/modules/Home/Dashlets/' . $cp['name'] . '/';
                 $disabled_path = 'custom/modules/Home/'.DISABLED_PATH.'Dashlets/' . $cp['name'];
-                $GLOBALS['log']->debug("Enabling Dashlet " . $cp['name'] . "..." . $cp['from']);
+                LoggerManager::getLogger()->debug("Enabling Dashlet " . $cp['name'] . "..." . $cp['from']);
                 if (file_exists($disabled_path)) {
                     rename($disabled_path, $path);
                 }
@@ -2427,7 +2427,7 @@ class ModuleInstaller
             foreach ($this->installdefs['dashlets'] as $cp) {
                 $path = 'custom/modules/Home/Dashlets/' . $cp['name'];
                 $disabled_path = 'custom/modules/Home/'.DISABLED_PATH.'Dashlets/' . $cp['name'];
-                $GLOBALS['log']->debug('Disabling ' .$path);
+                LoggerManager::getLogger()->debug('Disabling ' .$path);
                 if (file_exists($path)) {
                     mkdir_recursive('custom/modules/Home/'.DISABLED_PATH.'Dashlets/', true);
                     rename($path, $disabled_path);
@@ -2453,7 +2453,7 @@ class ModuleInstaller
                         //if(is_file($backup_path) && md5_file($backup_path) == md5_file($cp['to'])){
                         //since the files are the same then we can safely move back from the -restore
                         //directory into the file system
-                        $GLOBALS['log']->debug("ENABLE COPY:: FROM: ".$cp['from']. " TO: ".$cp['to']);
+                        LoggerManager::getLogger()->debug("ENABLE COPY:: FROM: ".$cp['from']. " TO: ".$cp['to']);
                         $this->copy_path($cp['from'], $cp['to']);
                         /*}else{
                         	//since they are not equal then we need to prompt the user
@@ -2470,16 +2470,16 @@ class ModuleInstaller
         //but we should check the version in the module install against the version on the file system
         //if they match then we can copy the file back, but otherwise we should ask the user.
 
-        //		$GLOBALS['log']->debug('ModuleInstaller.php->disable_copy()');
+        //		LoggerManager::getLogger()->debug('ModuleInstaller.php->disable_copy()');
         if (isset($GLOBALS['mi_overwrite_files']) && $GLOBALS['mi_overwrite_files']) {
-            //		$GLOBALS['log']->debug('ModuleInstaller.php->disable_copy():mi_overwrite_files=true');
+            //		LoggerManager::getLogger()->debug('ModuleInstaller.php->disable_copy():mi_overwrite_files=true');
             if (!empty($this->installdefs['copy'])) {
-                //				$GLOBALS['log']->debug('ModuleInstaller.php->disable_copy(): installdefs not empty');
+                //				LoggerManager::getLogger()->debug('ModuleInstaller.php->disable_copy(): installdefs not empty');
                 foreach ($this->installdefs['copy'] as $cp) {
                     $cp['to'] = clean_path(str_replace('<basepath>', $this->base_dir, $cp['to']));
                     $backup_path = clean_path(remove_file_extension(urldecode(hashToFile($_REQUEST['install_file'])))."-restore/".$cp['to']); // bug 16966 tyoung - replaced missing assignment to $backup_path
                     //check if this file exists in the -restore directory
-                    //					$GLOBALS['log']->debug("ModuleInstaller.php->disable_copy(): backup_path=".$backup_path);
+                    //					LoggerManager::getLogger()->debug("ModuleInstaller.php->disable_copy(): backup_path=".$backup_path);
                     if (file_exists($backup_path)) {
                         //since the file exists, then we want do an md5 of the install version and the file system version
                         $from = str_replace('<basepath>', $this->base_dir, $cp['from']);
@@ -2487,7 +2487,7 @@ class ModuleInstaller
                         //if(is_file($from) && md5_file($from) == md5_file($cp['to'])){
                         //since the files are the same then we can safely move back from the -restore
                         //directory into the file system
-                        $GLOBALS['log']->debug("DISABLE COPY:: FROM: ".$backup_path. " TO: ".$cp['to']);
+                        LoggerManager::getLogger()->debug("DISABLE COPY:: FROM: ".$backup_path. " TO: ".$cp['to']);
                         $this->copy_path($backup_path, $cp['to']);
                         /*}else{
                         	//since they are not equal then we need to prompt the user

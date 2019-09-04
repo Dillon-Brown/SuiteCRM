@@ -544,5 +544,5 @@ echo '<script>' .
 </form>
 
 <?php
-    $GLOBALS['log']->info("Upgrade Wizard patches");
+    LoggerManager::getLogger()->info("Upgrade Wizard patches");
 ?>

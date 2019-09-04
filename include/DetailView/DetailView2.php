@@ -115,7 +115,7 @@ class DetailView2 extends EditView
             if (!file_exists("modules/$this->module/metadata/$metadataFileName.php")) {
                 global $app_strings;
                 $error = str_replace("[file]", "modules/$this->module/metadata/$metadataFileName.php", $app_strings['ERR_CANNOT_CREATE_METADATA_FILE']);
-                $GLOBALS['log']->fatal($error);
+                LoggerManager::getLogger()->fatal($error);
                 echo $error;
                 die();
             }

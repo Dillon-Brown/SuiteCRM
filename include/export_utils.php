@@ -452,7 +452,7 @@ function parseRelateFields($line, $record, $customRelateFields)
         $relatedField = $splits[1];
 
         if ($currentModule != $record['related_type']) {
-            $GLOBALS['log']->debug('incorrect related type in export');
+            LoggerManager::getLogger()->debug('incorrect related type in export');
         } else {
             if (isset($customRelateFields[$currentModule][$record['id']][$relatedModule][$relatedField])) {
                 $relatedValue = $customRelateFields[$currentModule][$record['id']][$relatedModule][$relatedField];
@@ -528,7 +528,7 @@ function generateSearchWhere($module, $query)
     if (count($where_clauses) > 0) {
         $where = '('. implode(' ) AND ( ', $where_clauses) . ')';
     }
-    $GLOBALS['log']->info("Export Where Clause: {$where}");
+    LoggerManager::getLogger()->info("Export Where Clause: {$where}");
     $ret_array['where'] = $where;
     $ret_array['searchFields'] = $searchForm->searchFields;
     return $ret_array;

@@ -140,7 +140,7 @@ class SugarView
         $deprecatedMessage =
             'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -169,11 +169,11 @@ class SugarView
     {
         $this->ss = new Sugar_Smarty();
         if (!isset($GLOBALS['mod_strings'])) {
-            $GLOBALS['log']->warn('Undefined index: mod_strings');
+            LoggerManager::getLogger()->warn('Undefined index: mod_strings');
             $GLOBALS['mod_strings'] = array();
         }
         if (!isset($GLOBALS['app_strings'])) {
-            $GLOBALS['log']->warn('Undefined index: app_strings');
+            LoggerManager::getLogger()->warn('Undefined index: app_strings');
             $GLOBALS['app_strings'] = array();
         }
         $this->ss->assign('MOD', $GLOBALS['mod_strings']);
@@ -1219,7 +1219,7 @@ EOHTML;
     {
         if (!empty($this->module) && !file_exists('modules/' . $this->module)) {
             $error = str_replace("[module]", "$this->module", $GLOBALS['app_strings']['ERR_CANNOT_FIND_MODULE']);
-            $GLOBALS['log']->fatal($error);
+            LoggerManager::getLogger()->fatal($error);
             echo $error;
             die();
         }
@@ -1552,7 +1552,7 @@ EOHTML;
         if (!$foundViewDefs && file_exists($coreMetaPath)) {
             $metadataFile = $coreMetaPath;
         }
-        $GLOBALS['log']->debug("metadatafile=" . $metadataFile);
+        LoggerManager::getLogger()->debug("metadatafile=" . $metadataFile);
 
         return $metadataFile;
     }
@@ -1883,7 +1883,7 @@ EOHTML;
             isset($_SERVER['REQUEST_METHOD']) &&
             strtolower($_SERVER['REQUEST_METHOD']) == 'post'
         ) {
-            $GLOBALS['log']->fatal($GLOBALS['app_strings']['UPLOAD_ERROR_HOME_TEXT']);
+            LoggerManager::getLogger()->fatal($GLOBALS['app_strings']['UPLOAD_ERROR_HOME_TEXT']);
 
             return true;
         }

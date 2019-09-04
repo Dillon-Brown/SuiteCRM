@@ -546,5 +546,5 @@ if ($install_type != "module" && $install_type != "langpack") {
 </form>
 
 <?php
-    $GLOBALS['log']->info("Upgrade Wizard patches");
+    LoggerManager::getLogger()->info("Upgrade Wizard patches");
 ?>

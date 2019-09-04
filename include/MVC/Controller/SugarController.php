@@ -207,7 +207,7 @@ class SugarController
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -300,7 +300,7 @@ class SugarController
         if ($this->hasFunction($this->getActionMethodName())) {
             $GLOBALS['sugar_config']['http_referer']['actions'][] = $action;
         } else {
-            $GLOBALS['log']->debug("Unable to find SugarController:: $action");
+            LoggerManager::getLogger()->debug("Unable to find SugarController:: $action");
         }
     }
 
@@ -383,10 +383,10 @@ class SugarController
 
     protected function showException(Exception $e)
     {
-        $GLOBALS['log']->fatal('Exception in Controller: ' . $e->getMessage());
-        $GLOBALS['log']->fatal("backtrace:\n" . $e->getTraceAsString());
+        LoggerManager::getLogger()->fatal('Exception in Controller: ' . $e->getMessage());
+        LoggerManager::getLogger()->fatal("backtrace:\n" . $e->getTraceAsString());
         if ($prev = $e->getPrevious()) {
-            $GLOBALS['log']->fatal("Previous:\n");
+            LoggerManager::getLogger()->fatal("Previous:\n");
             $this->showException($prev);
         }
     }
@@ -397,7 +397,7 @@ class SugarController
      */
     protected function handleException(Exception $e)
     {
-        $GLOBALS['log']->fatal("Exception handling in " . __FILE__ . ':' . __LINE__);
+        LoggerManager::getLogger()->fatal("Exception handling in " . __FILE__ . ':' . __LINE__);
         $this->showException($e);
         $logicHook = new LogicHook();
 
@@ -504,7 +504,7 @@ class SugarController
     {
         $function = $this->getPreActionMethodName();
         if ($this->hasFunction($function)) {
-            $GLOBALS['log']->debug('Performing pre_action');
+            LoggerManager::getLogger()->debug('Performing pre_action');
             $this->$function();
 
             return true;
@@ -521,7 +521,7 @@ class SugarController
     {
         $function = $this->getActionMethodName();
         if ($this->hasFunction($function)) {
-            $GLOBALS['log']->debug('Performing action: ' . $function . ' MODULE: ' . $this->module);
+            LoggerManager::getLogger()->debug('Performing action: ' . $function . ' MODULE: ' . $this->module);
             $this->$function();
 
             return true;
@@ -538,7 +538,7 @@ class SugarController
     {
         $function = $this->getPostActionMethodName();
         if ($this->hasFunction($function)) {
-            $GLOBALS['log']->debug('Performing post_action');
+            LoggerManager::getLogger()->debug('Performing post_action');
             $this->$function();
 
             return true;
@@ -641,7 +641,7 @@ class SugarController
         if (!empty($_POST['assigned_user_id']) && $_POST['assigned_user_id'] != $this->bean->assigned_user_id && $_POST['assigned_user_id'] != $GLOBALS['current_user']->id && empty($GLOBALS['sugar_config']['exclude_notifications'][$this->bean->module_dir])) {
             $this->bean->notify_on_save = true;
         }
-        $GLOBALS['log']->debug("SugarController:: performing pre_save.");
+        LoggerManager::getLogger()->debug("SugarController:: performing pre_save.");
         require_once('include/SugarFields/SugarFieldHandler.php');
         $sfh = new SugarFieldHandler();
         foreach ($this->bean->field_defs as $field => $properties) {
@@ -1068,7 +1068,7 @@ class SugarController
             // A 'classic' module, using the old pre-MVC display files
             // We should now discard the bean we just obtained for tracking as the pre-MVC module will instantiate its own
             unset($GLOBALS['FOCUS']);
-            $GLOBALS['log']->debug('Module:' . $this->module . ' using file: ' . $file);
+            LoggerManager::getLogger()->debug('Module:' . $this->module . ' using file: ' . $file);
             $this->action_default();
             $this->_processed = true;
         }
@@ -1083,11 +1083,11 @@ class SugarController
     {
         if (!empty($this->action_file_map[strtolower($this->do_action)])) {
             $this->view = '';
-            $GLOBALS['log']->debug('Using Action File Map:' . $this->action_file_map[strtolower($this->do_action)]);
+            LoggerManager::getLogger()->debug('Using Action File Map:' . $this->action_file_map[strtolower($this->do_action)]);
             require_once($this->action_file_map[strtolower($this->do_action)]);
             $this->_processed = true;
         } elseif (!empty($this->action_view_map[strtolower($this->do_action)])) {
-            $GLOBALS['log']->debug('Using Action View Map:' . $this->action_view_map[strtolower($this->do_action)]);
+            LoggerManager::getLogger()->debug('Using Action View Map:' . $this->action_view_map[strtolower($this->do_action)]);
             $this->view = $this->action_view_map[strtolower($this->do_action)];
             $this->_processed = true;
         } else {

@@ -75,7 +75,7 @@ function mkdir_recursive($path, $check_is_parent_dir = false)
     }
     if (is_file($path)) {
         if (!empty($GLOBALS['log'])) {
-            $GLOBALS['log']->fatal("ERROR: mkdir_recursive(): argument $path is already a file.");
+            LoggerManager::getLogger()->fatal("ERROR: mkdir_recursive(): argument $path is already a file.");
         }
         return false;
     }
@@ -133,7 +133,7 @@ function rmdir_recursive($path)
     }
     if (!is_dir($path)) {
         if (file_exists($path) && !empty($GLOBALS['log'])) {
-            $GLOBALS['log']->fatal("ERROR: rmdir_recursive(): argument $path is not a file or a dir.");
+            LoggerManager::getLogger()->fatal("ERROR: rmdir_recursive(): argument $path is not a file or a dir.");
         }
         return false;
     }
@@ -151,7 +151,7 @@ function rmdir_recursive($path)
     $d->close();
     $rmOk = @rmdir($path);
     if ($rmOk === false) {
-        $GLOBALS['log']->error("ERROR: Unable to remove directory $path");
+        LoggerManager::getLogger()->error("ERROR: Unable to remove directory $path");
     }
     return($status);
 }
@@ -185,7 +185,7 @@ function findTextFiles($the_dir, $the_array)
                 case "text/rtf":
                     break;
                 default:
-                    $GLOBALS['log']->info("no type handler for $the_dir/$f with mime_content_type: " . mime_content_type("$the_dir/$f") . "\n");
+                    LoggerManager::getLogger()->info("no type handler for $the_dir/$f with mime_content_type: " . mime_content_type("$the_dir/$f") . "\n");
             }
         }
     }
@@ -224,13 +224,13 @@ function findAllFiles($the_dir, $the_array, $include_dirs=false, $ext='', $exclu
     if (is_null($d)) {
         $backtrace = getBacktraceString();
         $emsg = 'wrong parameter for dir() function: ' . $the_dir . "\n" . $backtrace;
-        $GLOBALS['log']->fatal($emsg);
+        LoggerManager::getLogger()->fatal($emsg);
         return $the_array;
     }
     if ($d === false) {
         $backtrace = getBacktraceString();
         $emsg = 'dir() function return with another error: ' . $the_dir . "\n" . $backtrace;
-        $GLOBALS['log']->fatal($emsg);
+        LoggerManager::getLogger()->fatal($emsg);
         return $the_array;
     }
 

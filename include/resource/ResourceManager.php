@@ -155,7 +155,7 @@ class ResourceManager
             $module = $observer->module;
             $limitMsg = str_replace('$limit', $limit, $limitMsg);
             $limitMsg = str_replace('$module', $module, $limitMsg);
-            $GLOBALS['log']->fatal($limitMsg);
+            LoggerManager::getLogger()->fatal($limitMsg);
             $observer->notify($limitMsg);
         }
     }

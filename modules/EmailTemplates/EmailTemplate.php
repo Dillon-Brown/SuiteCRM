@@ -128,7 +128,7 @@ class EmailTemplate extends SugarBean
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -477,7 +477,7 @@ class EmailTemplate extends SugarBean
                         $value = $focus->{$field_name};
                     } else {
                         $value = null;
-                        $GLOBALS['log']->warn("Undefined field name in email template: $field_name");
+                        LoggerManager::getLogger()->warn("Undefined field name in email template: $field_name");
                     }
                 }
 

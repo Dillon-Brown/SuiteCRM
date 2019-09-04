@@ -72,7 +72,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
      */
     public function login($user_auth, $application = null, $name_value_list = array())
     {
-        $GLOBALS['log']->info("Begin: SugarWebServiceImpl->login({$user_auth['user_name']}, $application, ". print_r($name_value_list, true) .")");
+        LoggerManager::getLogger()->info("Begin: SugarWebServiceImpl->login({$user_auth['user_name']}, $application, ". print_r($name_value_list, true) .")");
         global $sugar_config, $system_config;
         $error = new SoapError();
         $user = new User();
@@ -94,7 +94,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
         if ($isLoginSuccess) {
             if ($_SESSION['hasExpiredPassword'] =='1') {
                 $error->set_error('password_expired');
-                $GLOBALS['log']->fatal('password expired for user ' . $user_auth['user_name']);
+                LoggerManager::getLogger()->fatal('password expired for user ' . $user_auth['user_name']);
                 LogicHook::initialize();
                 $GLOBALS['logic_hook']->call_custom_logic('Users', 'login_failed');
                 self::$helperObject->setFaultObject($error);
@@ -107,7 +107,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
             }
         } elseif ($usr_id && isset($user->user_name) && ($user->getPreference('lockout') == '1')) {
             $error->set_error('lockout_reached');
-            $GLOBALS['log']->fatal('Lockout reached for user ' . $user_auth['user_name']);
+            LoggerManager::getLogger()->fatal('Lockout reached for user ' . $user_auth['user_name']);
             LogicHook::initialize();
             $GLOBALS['logic_hook']->call_custom_logic('Users', 'login_failed');
             self::$helperObject->setFaultObject($error);
@@ -148,7 +148,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
             $_SESSION['avail_modules']= self::$helperObject->get_user_module_list($current_user);
             $_SESSION['authenticated_user_id'] = $current_user->id;
             $_SESSION['unique_key'] = $sugar_config['unique_key'];
-            $GLOBALS['log']->info('End: SugarWebServiceImpl->login - successful login');
+            LoggerManager::getLogger()->info('End: SugarWebServiceImpl->login - successful login');
             $current_user->call_custom_logic('after_login');
             $nameValueArray = array();
             global $current_language;
@@ -181,7 +181,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
         $GLOBALS['logic_hook']->call_custom_logic('Users', 'login_failed');
         $error->set_error('invalid_login');
         self::$helperObject->setFaultObject($error);
-        $GLOBALS['log']->error('End: SugarWebServiceImpl->login - failed login');
+        LoggerManager::getLogger()->error('End: SugarWebServiceImpl->login - failed login');
     }
 
 
@@ -263,7 +263,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
         $deleted = false,
         $favorites = false
     ) {
-        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->get_entry_list');
+        LoggerManager::getLogger()->info('Begin: SugarWebServiceImpl->get_entry_list');
         global  $beanList, $beanFiles;
         $error = new SoapError();
         $using_cp = false;
@@ -272,12 +272,12 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
             $using_cp = true;
         }
         if (!self::$helperObject->checkSessionAndModuleAccess($session, 'invalid_session', $module_name, 'read', 'no_access', $error)) {
-            $GLOBALS['log']->error('End: SugarWebServiceImpl->get_entry_list - FAILED on checkSessionAndModuleAccess');
+            LoggerManager::getLogger()->error('End: SugarWebServiceImpl->get_entry_list - FAILED on checkSessionAndModuleAccess');
             return;
         } // if
 
         if (!self::$helperObject->checkQuery($error, $query, $order_by)) {
-            $GLOBALS['log']->info('End: SugarWebServiceImpl->get_entry_list');
+            LoggerManager::getLogger()->info('End: SugarWebServiceImpl->get_entry_list');
             return;
         } // if
 
@@ -292,7 +292,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
         $seed = new $class_name();
 
         if (!self::$helperObject->checkACLAccess($seed, 'list', $error, 'no_access')) {
-            $GLOBALS['log']->error('End: SugarWebServiceImpl->get_entry_list - FAILED on checkACLAccess');
+            LoggerManager::getLogger()->error('End: SugarWebServiceImpl->get_entry_list - FAILED on checkACLAccess');
             return;
         } // if
 
@@ -348,7 +348,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
             $totalRecordCount = -1;
         }
 
-        $GLOBALS['log']->info('End: SugarWebServiceImpl->get_entry_list - SUCCESS');
+        LoggerManager::getLogger()->info('End: SugarWebServiceImpl->get_entry_list - SUCCESS');
         return array('result_count'=>sizeof($output_list), 'total_count' => $totalRecordCount, 'next_offset'=>$next_offset, 'entry_list'=>$output_list, 'relationship_list' => $returnRelationshipList);
     } // fn
 
@@ -363,14 +363,14 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
      */
     public function get_module_layout($session, $a_module_names, $a_type, $a_view, $acl_check = true, $md5 = false)
     {
-        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->get_module_layout');
+        LoggerManager::getLogger()->info('Begin: SugarWebServiceImpl->get_module_layout');
 
         global  $beanList, $beanFiles;
         $error = new SoapError();
         $results = array();
         foreach ($a_module_names as $module_name) {
             if (!self::$helperObject->checkSessionAndModuleAccess($session, 'invalid_session', $module_name, 'read', 'no_access', $error)) {
-                $GLOBALS['log']->error("End: SugarWebServiceImpl->get_module_layout for $module_name - FAILED on checkSessionAndModuleAccess");
+                LoggerManager::getLogger()->error("End: SugarWebServiceImpl->get_module_layout for $module_name - FAILED on checkSessionAndModuleAccess");
                 continue;
             }
 
@@ -397,7 +397,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
             }
         }
 
-        $GLOBALS['log']->info('End: SugarWebServiceImpl->get_module_layout ->> '.print_r($results, true));
+        LoggerManager::getLogger()->info('End: SugarWebServiceImpl->get_module_layout ->> '.print_r($results, true));
 
         return $results;
     }
@@ -421,7 +421,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
      */
     public function search_by_module($session, $search_string, $modules, $offset, $max_results, $assigned_user_id = '', $select_fields = array(), $unified_search_only = true, $favorites = false)
     {
-        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->search_by_module');
+        LoggerManager::getLogger()->info('Begin: SugarWebServiceImpl->search_by_module');
         global  $beanList, $beanFiles;
         global $sugar_config,$current_language;
 
@@ -429,7 +429,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
         $output_list = array();
         if (!self::$helperObject->checkSessionAndModuleAccess($session, 'invalid_session', '', '', '', $error)) {
             $error->set_error('invalid_login');
-            $GLOBALS['log']->error('End: SugarWebServiceImpl->search_by_module - FAILED on checkSessionAndModuleAccess');
+            LoggerManager::getLogger()->error('End: SugarWebServiceImpl->search_by_module - FAILED on checkSessionAndModuleAccess');
             return;
         }
         global $current_user;
@@ -468,7 +468,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
             } // if
         } // foreach
 
-        $GLOBALS['log']->info('SugarWebServiceImpl->search_by_module - search string = ' . $search_string);
+        LoggerManager::getLogger()->info('SugarWebServiceImpl->search_by_module - search string = ' . $search_string);
 
         if (!empty($search_string) && isset($search_string)) {
             $search_string = trim(DBManagerFactory::getInstance()->quote(securexss(from_html(clean_string($search_string, 'UNIFIED_SEARCH')))));
@@ -591,7 +591,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
                     } // if
                 } // else
 
-                $GLOBALS['log']->info('SugarWebServiceImpl->search_by_module - query = ' . $main_query);
+                LoggerManager::getLogger()->info('SugarWebServiceImpl->search_by_module - query = ' . $main_query);
                 if ($max_results < -1) {
                     $result = $seed->db->query($main_query);
                 } else {
@@ -620,7 +620,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
                 $output_list[] = array('name' => $name, 'records' => $rowArray);
             } // foreach
 
-            $GLOBALS['log']->info('End: SugarWebServiceImpl->search_by_module');
+            LoggerManager::getLogger()->info('End: SugarWebServiceImpl->search_by_module');
             return array('entry_list'=>$output_list);
         } // if
         return array('entry_list'=>$output_list);
@@ -633,19 +633,19 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
      */
     public function oauth_request_token()
     {
-        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->oauth_request_token');
+        LoggerManager::getLogger()->info('Begin: SugarWebServiceImpl->oauth_request_token');
         require_once "include/SugarOAuthServer.php";
         try {
             $oauth = new SugarOAuthServer(rtrim($GLOBALS['sugar_config']['site_url'], '/').'/service/v4/rest.php');
             $result = $oauth->requestToken()."&oauth_callback_confirmed=true&authorize_url=".$oauth->authURL();
         } catch (OAuthException $e) {
-            $GLOBALS['log']->debug("OAUTH Exception: $e");
+            LoggerManager::getLogger()->debug("OAUTH Exception: $e");
             $errorObject = new SoapError();
             $errorObject->set_error('invalid_login');
             self::$helperObject->setFaultObject($errorObject);
             $result = null;
         }
-        $GLOBALS['log']->info('End: SugarWebServiceImpl->oauth_request_token');
+        LoggerManager::getLogger()->info('End: SugarWebServiceImpl->oauth_request_token');
         return $result;
     }
 
@@ -654,35 +654,35 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
      */
     public function oauth_access_token()
     {
-        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->oauth_access_token');
+        LoggerManager::getLogger()->info('Begin: SugarWebServiceImpl->oauth_access_token');
         require_once "include/SugarOAuthServer.php";
         try {
             $oauth = new SugarOAuthServer();
             $result = $oauth->accessToken();
         } catch (OAuthException $e) {
-            $GLOBALS['log']->debug("OAUTH Exception: $e");
+            LoggerManager::getLogger()->debug("OAUTH Exception: $e");
             $errorObject = new SoapError();
             $errorObject->set_error('invalid_login');
             self::$helperObject->setFaultObject($errorObject);
             $result = null;
         }
-        $GLOBALS['log']->info('End: SugarWebServiceImpl->oauth_access_token');
+        LoggerManager::getLogger()->info('End: SugarWebServiceImpl->oauth_access_token');
         return $result;
     }
 
     public function oauth_access($session='')
     {
-        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->oauth_access');
+        LoggerManager::getLogger()->info('Begin: SugarWebServiceImpl->oauth_access');
         $error = new SoapError();
         $output_list = array();
         if (!self::$helperObject->checkSessionAndModuleAccess($session, 'invalid_session', '', '', '', $error)) {
             $error->set_error('invalid_login');
-            $GLOBALS['log']->info('End: SugarWebServiceImpl->oauth_access');
+            LoggerManager::getLogger()->info('End: SugarWebServiceImpl->oauth_access');
             $result = $error;
         } else {
             $result = array('id'=>session_id());
         }
-        $GLOBALS['log']->info('End: SugarWebServiceImpl->oauth_access');
+        LoggerManager::getLogger()->info('End: SugarWebServiceImpl->oauth_access');
         return $result;
     }
 
@@ -694,10 +694,10 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
      */
     public function job_queue_next($session, $clientid)
     {
-        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->job_queue_next');
+        LoggerManager::getLogger()->info('Begin: SugarWebServiceImpl->job_queue_next');
         $error = new SoapError();
         if (! self::$helperObject->checkSessionAndModuleAccess($session, 'invalid_session', '', 'read', 'no_access', $error)) {
-            $GLOBALS['log']->info('End: SugarWebServiceImpl->job_queue_next denied.');
+            LoggerManager::getLogger()->info('End: SugarWebServiceImpl->job_queue_next denied.');
             return;
         }
         require_once 'include/SugarQueue/SugarJobQueue.php';
@@ -708,7 +708,7 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
         } else {
             $jobid = null;
         }
-        $GLOBALS['log']->info('End: SugarWebServiceImpl->job_queue_next');
+        LoggerManager::getLogger()->info('End: SugarWebServiceImpl->job_queue_next');
         return array("results" => $jobid);
     }
 
@@ -719,17 +719,17 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
      */
     public function job_queue_cycle($session, $clientid)
     {
-        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->job_queue_cycle');
+        LoggerManager::getLogger()->info('Begin: SugarWebServiceImpl->job_queue_cycle');
         $error = new SoapError();
         if (! self::$helperObject->checkSessionAndModuleAccess($session, 'invalid_session', '', 'read', 'no_access', $error)) {
-            $GLOBALS['log']->info('End: SugarWebServiceImpl->job_queue_cycle denied.');
+            LoggerManager::getLogger()->info('End: SugarWebServiceImpl->job_queue_cycle denied.');
             return;
         }
         require_once 'include/SugarQueue/SugarJobQueue.php';
         $queue = new SugarJobQueue();
         $queue->cleanup();
         $queue->runSchedulers();
-        $GLOBALS['log']->info('End: SugarWebServiceImpl->job_queue_cycle');
+        LoggerManager::getLogger()->info('End: SugarWebServiceImpl->job_queue_cycle');
         return array("results" => "ok");
     }
 
@@ -741,16 +741,16 @@ class SugarWebServiceImplv4 extends SugarWebServiceImplv3_1
      */
     public function job_queue_run($session, $jobid, $clientid)
     {
-        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->job_queue_run');
+        LoggerManager::getLogger()->info('Begin: SugarWebServiceImpl->job_queue_run');
         $error = new SoapError();
         if (! self::$helperObject->checkSessionAndModuleAccess($session, 'invalid_session', '', 'read', 'no_access', $error)) {
-            $GLOBALS['log']->info('End: SugarWebServiceImpl->job_queue_run denied.');
+            LoggerManager::getLogger()->info('End: SugarWebServiceImpl->job_queue_run denied.');
             return;
         }
-        $GLOBALS['log']->debug('Starting job $jobid execution as $clientid');
+        LoggerManager::getLogger()->debug('Starting job $jobid execution as $clientid');
         require_once 'modules/SchedulersJobs/SchedulersJob.php';
         $result = SchedulersJob::runJobId($jobid, $clientid);
-        $GLOBALS['log']->info('End: SugarWebServiceImpl->job_queue_run');
+        LoggerManager::getLogger()->info('End: SugarWebServiceImpl->job_queue_run');
         if ($result === true) {
             return array("results" => true);
         }

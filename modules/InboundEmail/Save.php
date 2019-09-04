@@ -182,7 +182,7 @@ if (isset($_REQUEST['is_auto_import']) && $_REQUEST['is_auto_import'] == 'on') {
     $focus->groupfolder_id = "";
     //If the user is turning the auto-import feature off then remove all previous subscriptions.
     if (!empty($focus->fetched_row['groupfolder_id'])) {
-        $GLOBALS['log']->debug("Clearining all subscriptions to folder id: {$focus->fetched_row['groupfolder_id']}");
+        LoggerManager::getLogger()->debug("Clearining all subscriptions to folder id: {$focus->fetched_row['groupfolder_id']}");
         $f = new SugarFolder();
         $f->clearSubscriptionsForFolder($focus->fetched_row['groupfolder_id']);
         //Now delete the old group folder.
@@ -201,7 +201,7 @@ if (!empty($focus->groupfolder_id)) {
 }
 
 $focus->stored_options = base64_encode(serialize($stored_options));
-$GLOBALS['log']->info('----->InboundEmail now saving self');
+LoggerManager::getLogger()->info('----->InboundEmail now saving self');
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -381,7 +381,7 @@ if ($_REQUEST['module'] == 'Campaigns') {
         $edit='&edit=true';
     }
 
-    $GLOBALS['log']->debug("Saved record with id of ".$return_id);
+    LoggerManager::getLogger()->debug("Saved record with id of ".$return_id);
 
     $redirectUrl = "Location: index.php?module=$return_module&action=$return_action&record=$return_id$edit";
 

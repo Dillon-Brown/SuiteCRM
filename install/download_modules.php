@@ -149,7 +149,7 @@ if (!defined('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
 }
 
 if ($upload_max_filesize_bytes < constant('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
-    $GLOBALS['log']->debug("detected upload_max_filesize: $upload_max_filesize");
+    LoggerManager::getLogger()->debug("detected upload_max_filesize: $upload_max_filesize");
     $fileMaxSize = '<p class="error">'.$mod_strings['ERR_UPLOAD_MAX_FILESIZE']."</p>\n";
 }
 $availablePatches = getLangPacks(true);

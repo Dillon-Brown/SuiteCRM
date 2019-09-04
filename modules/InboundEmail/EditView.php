@@ -66,7 +66,7 @@ $email = new Email();
 $domMailBoxType = $app_list_strings['dom_mailbox_type'];
 
 if (isset($_REQUEST['record'])) {
-    $GLOBALS['log']->debug("In InboundEmail edit view, about to retrieve record: ".$_REQUEST['record']);
+    LoggerManager::getLogger()->debug("In InboundEmail edit view, about to retrieve record: ".$_REQUEST['record']);
     $result = $focus->retrieve($_REQUEST['record']);
     if ($result == null) {
         sugar_die($app_strings['ERROR_NO_RECORD']);
@@ -89,12 +89,12 @@ if ($focus->mailbox_type == 'bounce') {
 
 $isDuplicate = isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true';
 if ($isDuplicate) {
-    $GLOBALS['log']->debug("isDuplicate found - duplicating record of id: ".$focus->id);
+    LoggerManager::getLogger()->debug("isDuplicate found - duplicating record of id: ".$focus->id);
     $origin_id = $focus->id;
     $focus->id = "";
 }
 
-$GLOBALS['log']->info("InboundEmail Edit View");
+LoggerManager::getLogger()->info("InboundEmail Edit View");
 /* End standard EditView setup logic */
 
 /* Start custom setup logic */

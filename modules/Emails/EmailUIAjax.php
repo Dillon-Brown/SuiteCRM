@@ -64,7 +64,7 @@ function handleSubs($subs, $email, $json, $user = null)
         $user = $current_user;
     }
 
-    $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: setFolderViewSelection");
+    LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: setFolderViewSelection");
     $viewFolders = $subs;
     $user->setPreference('showFolders', base64_encode(serialize($viewFolders)), '', 'Emails');
     $tree = $email->et->getMailboxNodes(false);
@@ -115,7 +115,7 @@ if (isset($_REQUEST['emailUIAction'])) {
         $cid = $current_user->id;
         $current_user = BeanFactory::getBean('Users', $_REQUEST['user']);
     } else {
-        $GLOBALS['log']->debug(
+        LoggerManager::getLogger()->debug(
             'If you are on user edit view and want to apply the email settings for the selected user,' .
             ' add user to request on user edit view: [emailUIAction:' . $_REQUEST['emailUIAction'] . ']'
         );
@@ -128,7 +128,7 @@ if (isset($_REQUEST['emailUIAction'])) {
         ////    COMPOSE REPLY FORWARD
         // this is used in forward/reply
         case "composeEmail":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: composeEmail");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: composeEmail");
             if (isset($_REQUEST['sugarEmail']) && $_REQUEST['sugarEmail'] == 'true' && isset($_REQUEST['uid']) && !empty($_REQUEST['uid'])) {
                 $ie->email->retrieve($_REQUEST['uid']);
                 $ie->email->from_addr = $ie->email->from_addr_name;
@@ -183,7 +183,7 @@ if (isset($_REQUEST['emailUIAction'])) {
          * sendEmail handles both send and save draft duties
          */
         case "sendEmail":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: sendEmail");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: sendEmail");
 
 
             $sea = new SugarEmailAddress();
@@ -208,7 +208,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case "uploadAttachment":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: uploadAttachment");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: uploadAttachment");
             $metadata = $email->email2saveAttachment();
 
             if (!empty($metadata)) {
@@ -218,7 +218,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case "removeUploadedAttachment":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: removeUploadedAttachment");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: removeUploadedAttachment");
             $fileFromRequest = from_html($_REQUEST['file']);
             $fileGUID = substr($fileFromRequest, 0, 36);
             // Bug52727: sanitize fileGUID to remove path components: /\.
@@ -229,7 +229,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case "fillComposeCache": // fills client-side compose email cache with signatures and email templates
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: fillComposeCache");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: fillComposeCache");
             $out = array();
             $email_templates_arr = $email->et->getEmailTemplatesArray();
             natcasesort($email_templates_arr);
@@ -267,7 +267,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case "getSignature":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getSignature");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getSignature");
             if (isset($_REQUEST['id'])) {
                 $signature = $current_user->getSignature($_REQUEST['id']);
                 $signature['signature_html'] = from_html($signature['signature_html']);
@@ -279,7 +279,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
     case "deleteSignature":
-        $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: deleteSignature");
+        LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: deleteSignature");
         if (isset($_REQUEST['id'])) {
             require_once("modules/Users/UserSignature.php");
             $us = new UserSignature();
@@ -305,7 +305,7 @@ if (isset($_REQUEST['emailUIAction'])) {
         }
         break;
     case 'getTemplateAttachments':
-        $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getTemplateAttachments");
+        LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getTemplateAttachments");
         if (isset($_REQUEST['parent_id']) && !empty($_REQUEST['parent_id'])) {
             $db = DBManagerFactory::getInstance();
 
@@ -375,7 +375,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case "getQuickCreateForm":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getQuickCreateForm");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getQuickCreateForm");
             if (isset($_REQUEST['qc_module']) && !empty($_REQUEST['qc_module'])) {
                 if (!ACLController::checkAccess($_REQUEST['qc_module'], 'edit', true)) {
                     echo trim($json->encode(array('html' => translate('LBL_NO_ACCESS', 'ACL')), true));
@@ -406,21 +406,21 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case 'saveQuickCreate':
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: saveQuickCreate");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: saveQuickCreate");
             require_once('include/MVC/Controller/ControllerFactory.php');
             if (isset($_REQUEST['qcmodule'])) {
-                $GLOBALS['log']->debug("********** QCmodule was set: {$_REQUEST['qcmodule']}");
+                LoggerManager::getLogger()->debug("********** QCmodule was set: {$_REQUEST['qcmodule']}");
             }
             $controller = ControllerFactory::getController($_REQUEST['qcmodule']);
             $controller->loadBean();
             $controller->pre_save();
-            $GLOBALS['log']->debug("********** saving new {$controller->module}");
+            LoggerManager::getLogger()->debug("********** saving new {$controller->module}");
             $controller->action_save();
             //Relate the email to the new bean
             if (isset($_REQUEST['sugarEmail']) && $_REQUEST['sugarEmail'] == 'true' && isset($_REQUEST['uid']) && !empty($_REQUEST['uid'])) {
                 $ie->email->retrieve($_REQUEST['uid']);
             } elseif (isset($_REQUEST['uid']) && !empty($_REQUEST['uid']) && isset($_REQUEST['ieId']) && !empty($_REQUEST['ieId'])) {
-                $GLOBALS['log']->debug("********** Quick Create from non-imported message");
+                LoggerManager::getLogger()->debug("********** Quick Create from non-imported message");
                 $ie->retrieve($_REQUEST['ieId']);
                 $ie->mailbox = $_REQUEST['mbox'];
                 $ie->connectMailserver();
@@ -435,7 +435,7 @@ if (isset($_REQUEST['emailUIAction'])) {
                     $ie->getDuplicateEmailId($_REQUEST['uid'], $uid);
                 } // id
                 $ie->email->retrieve($ie->email->id);
-                $GLOBALS['log']->debug("**********Imported Email");
+                LoggerManager::getLogger()->debug("**********Imported Email");
                 $ie->email->assigned_user_id = $controller->bean->assigned_user_id;
                 $ie->email->assigned_user_name = $controller->bean->assigned_user_name;
             }
@@ -555,7 +555,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             echo $out;
             break;
         case "doAssignmentDelete":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: doAssignmentDelete");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: doAssignmentDelete");
             if (isset($_REQUEST['uids']) && !empty($_REQUEST['uids']) &&
                 isset($_REQUEST['ieId']) && !empty($_REQUEST['ieId']) &&
                 isset($_REQUEST['folder']) && !empty($_REQUEST['folder'])
@@ -566,7 +566,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
         case "markEmail":
             global $app_strings;
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: markEmail");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: markEmail");
             if (isset($_REQUEST['uids']) && !empty($_REQUEST['uids']) &&
                 isset($_REQUEST['type']) && !empty($_REQUEST['type']) &&
                 isset($_REQUEST['folder']) && !empty($_REQUEST['folder']) &&
@@ -587,7 +587,7 @@ if (isset($_REQUEST['emailUIAction'])) {
                     }
                 }   // else
                 $uids = implode($app_strings['LBL_EMAIL_DELIMITER'], $uids);
-                $GLOBALS['log']->debug("********** EMAIL 2.0 - Marking emails $uids as {$_REQUEST['type']}");
+                LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Marking emails $uids as {$_REQUEST['type']}");
 
                 $ret = array();
                 if (strpos(
@@ -611,21 +611,21 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case "checkEmail2":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: checkEmail2");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: checkEmail2");
 
             $showFolders = sugar_unserialize(base64_decode($current_user->getPreference('showFolders', 'Emails')));
 
             $ret = array();
             $ret['numberAccounts'] = count($showFolders);
 
-            $GLOBALS['log']->info("EMAIL2.0: async checkEmail - found [ " . $ret['numberAccounts'] . " ] accounts to check");
+            LoggerManager::getLogger()->info("EMAIL2.0: async checkEmail - found [ " . $ret['numberAccounts'] . " ] accounts to check");
 
             if (!empty($showFolders) && is_array($showFolders)) {
                 foreach ($showFolders as $ieId) {
                     $ieId = trim($ieId);
 
                     if (!empty($ieId)) {
-                        $GLOBALS['log']->info("INBOUNDEMAIL: trying to check email for GUID [ {$ieId} ]");
+                        LoggerManager::getLogger()->info("INBOUNDEMAIL: trying to check email for GUID [ {$ieId} ]");
                         $ie->disconnectMailserver();
                         $ie->retrieve($ieId);
 
@@ -633,7 +633,7 @@ if (isset($_REQUEST['emailUIAction'])) {
                     }
                 }
             } else {
-                $GLOBALS['log']->info("EMAIL2.0: at checkEmail() async call - not subscribed accounts to check.");
+                LoggerManager::getLogger()->info("EMAIL2.0: at checkEmail() async call - not subscribed accounts to check.");
             }
 
 
@@ -642,7 +642,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case "checkEmail":
-            $GLOBALS['log']->info("[EMAIL] - Start checkEmail action for user [{$current_user->user_name}]");
+            LoggerManager::getLogger()->info("[EMAIL] - Start checkEmail action for user [{$current_user->user_name}]");
             if (isset($_REQUEST['ieId']) && !empty($_REQUEST['ieId'])) {
                 $ie->retrieve($_REQUEST['ieId']);
                 $ie->mailbox = (isset($_REQUEST['mbox']) && !empty($_REQUEST['mbox'])) ? $_REQUEST['mbox'] : "INBOX";
@@ -650,25 +650,25 @@ if (isset($_REQUEST['emailUIAction'])) {
             } elseif (isset($_REQUEST['all']) && !empty($_REQUEST['all'])) {
                 $showFolders = sugar_unserialize(base64_decode($current_user->getPreference('showFolders', 'Emails')));
 
-                $GLOBALS['log']->info("[EMAIL] - checkEmail found " . count($showFolders) . " accounts to check for user [{$current_user->user_name}]");
+                LoggerManager::getLogger()->info("[EMAIL] - checkEmail found " . count($showFolders) . " accounts to check for user [{$current_user->user_name}]");
 
                 if (!empty($showFolders) && is_array($showFolders)) {
                     foreach ($showFolders as $ieId) {
                         $ieId = trim($ieId);
                         if (!empty($ieId)) {
-                            $GLOBALS['log']->info("[EMAIL] - Start checking email for GUID [{$ieId}] for user [{$current_user->user_name}]");
+                            LoggerManager::getLogger()->info("[EMAIL] - Start checking email for GUID [{$ieId}] for user [{$current_user->user_name}]");
                             $ie->disconnectMailserver();
                             // If I-E not exist - skip check
                             if (is_null($ie->retrieve($ieId))) {
-                                $GLOBALS['log']->info("[EMAIL] - Inbound with GUID [{$ieId}] not exist");
+                                LoggerManager::getLogger()->info("[EMAIL] - Inbound with GUID [{$ieId}] not exist");
                                 continue;
                             }
                             $ie->checkEmail(false);
-                            $GLOBALS['log']->info("[EMAIL] - Done checking email for GUID [{$ieId}] for user [{$current_user->user_name}]");
+                            LoggerManager::getLogger()->info("[EMAIL] - Done checking email for GUID [{$ieId}] for user [{$current_user->user_name}]");
                         }
                     }
                 } else {
-                    $GLOBALS['log']->info("EMAIL2.0: at checkEmail() async call - not subscribed accounts to check.");
+                    LoggerManager::getLogger()->info("EMAIL2.0: at checkEmail() async call - not subscribed accounts to check.");
                 }
             }
 
@@ -676,11 +676,11 @@ if (isset($_REQUEST['emailUIAction'])) {
             $return = $tree->generateNodesRaw();
             $out = $json->encode($return);
             echo $out;
-            $GLOBALS['log']->info("[EMAIL] - Done checkEmail action for user [{$current_user->user_name}]");
+            LoggerManager::getLogger()->info("[EMAIL] - Done checkEmail action for user [{$current_user->user_name}]");
             break;
 
         case "checkEmailProgress":
-            $GLOBALS['log']->info("[EMAIL] - Start checkEmail action for user [{$current_user->user_name}]");
+            LoggerManager::getLogger()->info("[EMAIL] - Start checkEmail action for user [{$current_user->user_name}]");
             if (isset($_REQUEST['ieId']) && !empty($_REQUEST['ieId'])) {
                 $ie->retrieve($_REQUEST['ieId']);
                 $ie->mailbox = (isset($_REQUEST['mbox']) && !empty($_REQUEST['mbox'])) ? $_REQUEST['mbox'] : "INBOX";
@@ -710,21 +710,21 @@ if (isset($_REQUEST['emailUIAction'])) {
             $return = $tree->generateNodesRaw();
             $out = $json->encode($return);
             echo $out;
-            $GLOBALS['log']->info("[EMAIL] - Done checkEmail action for user [{$current_user->user_name}]");
+            LoggerManager::getLogger()->info("[EMAIL] - Done checkEmail action for user [{$current_user->user_name}]");
             break;
 
         case "synchronizeEmail":
-            $GLOBALS['log']->info("[EMAIL] Start action synchronizeEmail for user [{$current_user->user_name}]");
+            LoggerManager::getLogger()->info("[EMAIL] Start action synchronizeEmail for user [{$current_user->user_name}]");
             $ie->syncEmail(true);
             $tree = $email->et->getMailboxNodes(true);
             $return = $tree->generateNodesRaw();
             $out = $json->encode($return);
             echo $out;
-            $GLOBALS['log']->info("[EMAIL] Done action synchronizeEmail for user [{$current_user->user_name}]");
+            LoggerManager::getLogger()->info("[EMAIL] Done action synchronizeEmail for user [{$current_user->user_name}]");
             break;
 
         case "importEmail":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: importEmail");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: importEmail");
             $ie->retrieve($_REQUEST['ieId']);
             $ie->mailbox = $_REQUEST['mbox'];
             $ie->connectMailserver();
@@ -767,7 +767,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case "setReadFlag":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: setReadFlag");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: setReadFlag");
             $ie->retrieve($_REQUEST['ieId']);
             $ie->setReadFlagOnFolderCache($_REQUEST['mbox'], $_REQUEST['uid']);
             $email->et->getListEmails($_REQUEST['ieId'], $_REQUEST['mbox'], 0, 'true');
@@ -775,7 +775,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case "deleteMessage":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: deleteMessage");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: deleteMessage");
             if (isset($_REQUEST['uid']) && !empty($_REQUEST['uid']) && isset($_REQUEST['ieId']) && !empty($_REQUEST['ieId'])) {
                 $ie->retrieve($_REQUEST['ieId']);
                 $ie->mailbox = $_REQUEST['mbox'];
@@ -784,7 +784,7 @@ if (isset($_REQUEST['emailUIAction'])) {
                     $ie->deleteMessageOnMailServer($_REQUEST['uid']);
                     $ie->deleteMessageFromCache($_REQUEST['uid']);
                 } else {
-                    $GLOBALS['log']->debug("*** ERROR: tried to delete an email for an account for which {$current_user->full_name} is not the owner!");
+                    LoggerManager::getLogger()->debug("*** ERROR: tried to delete an email for an account for which {$current_user->full_name} is not the owner!");
                     echo "NOOP: error see log";
                 }
             } else {
@@ -793,7 +793,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case "getSingleMessage":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getSingleMessage");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getSingleMessage");
             if (isset($_REQUEST['uid']) && !empty($_REQUEST['uid']) && isset($_REQUEST['ieId']) && !empty($_REQUEST['ieId'])) {
                 // this method needs to guarantee UTF-8 charset - encoding detection
                 // and conversion is unreliable, and can break valid UTF-8 text
@@ -806,7 +806,7 @@ if (isset($_REQUEST['emailUIAction'])) {
             break;
 
         case "getSingleMessageFromSugar":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getSingleMessageFromSugar");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getSingleMessageFromSugar");
             if (isset($_REQUEST['uid']) && !empty($_REQUEST['uid'])) {
                 $email->retrieve($_REQUEST['uid']);
                 //$email->description_html = from_html($email->description_html);
@@ -857,7 +857,7 @@ eoq;
             break;
 
         case "getMultipleMessages":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getMultipleMessages");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getMultipleMessages");
             if (isset($_REQUEST['uid']) && !empty($_REQUEST['uid']) && isset($_REQUEST['ieId']) && !empty($_REQUEST['ieId'])) {
                 $exUids = explode(",", $_REQUEST['uid']);
 
@@ -898,7 +898,7 @@ eoq;
             break;
 
         case "getMultipleMessagesFromSugar":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getMultipleMessagesFromSugar");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getMultipleMessagesFromSugar");
             if (isset($_REQUEST['uid']) && !empty($_REQUEST['uid'])) {
                 $exIds = explode(",", $_REQUEST['uid']);
                 $out = array();
@@ -922,14 +922,14 @@ eoq;
         ///////////////////////////////////////////////////////////////////////////
         ////    LIST VIEW
         case "getMessageCount":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getMessageCount");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getMessageCount");
 
             $out = $ie->getCacheCount($_REQUEST['mbox']);
             echo $json->encode($out);
             break;
 
         case "getMessageList":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getMessageListJSON");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getMessageListJSON");
             if (isset($_REQUEST['ieId']) && !empty($_REQUEST['ieId'])) {
                 // user view preferences
                 $email->et->saveListView($_REQUEST['ieId'], $_REQUEST['mbox']);
@@ -952,12 +952,12 @@ eoq;
             //die();
             } else {
                 echo $msg = 'error: no ieID';
-                $GLOBALS['log']->error($msg);
+                LoggerManager::getLogger()->error($msg);
             }
             break;
 
         case "getMessageListSugarFolders":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getMessageListSugarFoldersJSON");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getMessageListSugarFoldersJSON");
             if (isset($_REQUEST['ieId']) && !empty($_REQUEST['ieId'])) {
                 // user view preferences
                 $email->et->saveListView($_REQUEST['ieId'], "SUGAR.{$_REQUEST['mbox']}");
@@ -982,7 +982,7 @@ eoq;
                 $sortSerial = $current_user->getPreference('folderSortOrder', 'Emails');
                 if (!empty($sortSerial) && !empty($_REQUEST['ieId']) && !empty($_REQUEST['mbox'])) {
                     $sortArray = sugar_unserialize($sortSerial);
-                    $GLOBALS['log']->debug("********** EMAIL 2.0********** ary=" . print_r(
+                    LoggerManager::getLogger()->debug("********** EMAIL 2.0********** ary=" . print_r(
                         $sortArray,
                         true
                     ) . ' id=' . $_REQUEST['ieId'] . '; box=' . $_REQUEST['mbox']);
@@ -1044,7 +1044,7 @@ eoq;
             break;
 
         case "updateSubscriptions":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: updateSubscriptions");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: updateSubscriptions");
             if (isset($_REQUEST['subscriptions']) && !empty($_REQUEST['subscriptions'])) {
                 $subs = explode("::", $_REQUEST['subscriptions']);
                 $childrenSubs = array();
@@ -1061,13 +1061,13 @@ eoq;
             } elseif (empty($_REQUEST['subscriptions'])) {
                 $email->et->folder->clearSubscriptions();
             } else {
-                $GLOBALS['log']->fatal('Incorrect request for update subscriptions');
+                LoggerManager::getLogger()->fatal('Incorrect request for update subscriptions');
             }
             break;
 
         case "refreshSugarFolders":
             try {
-                $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: refreshSugarFolders");
+                LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: refreshSugarFolders");
                 $rootNode = new ExtNode('', '');
                 $folderOpenState = $current_user->getPreference('folderOpenState', 'Emails');
                 $folderOpenState = (empty($folderOpenState)) ? "" : $folderOpenState;
@@ -1080,7 +1080,7 @@ eoq;
                 $out = $json->encode($ret);
                 echo $out;
             } catch (SugarFolderEmptyException $e) {
-                $GLOBALS['log']->warn($e);
+                LoggerManager::getLogger()->warn($e);
                 $out = $json->encode(array(
                     'message' => 'No folder selected warning message here...',
                 ));
@@ -1090,14 +1090,14 @@ eoq;
 
 
         case "getFoldersForSettings":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getFoldersForSettings");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getFoldersForSettings");
             $ret = $email->et->folder->getFoldersForSettings($current_user);
             $out = $json->encode($ret);
             echo $out;
             break;
 
         case "moveEmails":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: moveEmails");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: moveEmails");
             $ie->moveEmails(
                 $_REQUEST['sourceIeId'],
                 $_REQUEST['sourceFolder'],
@@ -1108,7 +1108,7 @@ eoq;
             break;
 
         case "saveNewFolder":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: saveNewFolder");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: saveNewFolder");
             if (isset($_REQUEST['folderType']) && !empty($_REQUEST['folderType'])) {
                 switch ($_REQUEST['folderType']) {
                     case "sugar":
@@ -1143,7 +1143,7 @@ eoq;
         case "deleteFolder":
             $v = $app_strings['LBL_NONE'];
             $return = array();
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: deleteFolder");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: deleteFolder");
             if (isset($_REQUEST['folderType']) && !empty($_REQUEST['folderType'])) {
                 switch ($_REQUEST['folderType']) {
                     case "sugar":
@@ -1181,7 +1181,7 @@ eoq;
             echo $out;
             break;
         case "renameFolder":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: renameFolder");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: renameFolder");
 
             if (isset($_REQUEST['ieId']) && isset($_REQUEST['oldFolderName']) && !empty($_REQUEST['oldFolderName'])
                 && isset($_REQUEST['newFolderName']) && !empty($_REQUEST['newFolderName'])
@@ -1199,7 +1199,7 @@ eoq;
             }
             // no break
         case "moveFolder":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: moveFolder");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: moveFolder");
             if (isset($_REQUEST['folderId']) && !empty($_REQUEST['folderId']) && isset($_REQUEST['newParentId']) && !empty($_REQUEST['newParentId']) && $_REQUEST['newParentId'] != $_REQUEST['folderId']) {
                 if (is_guid($_REQUEST['folderId']) && is_guid($_REQUEST['newParentId'])) {
                     $email->et->folder->retrieve($_REQUEST['folderId']);
@@ -1228,7 +1228,7 @@ eoq;
 
 
         case "rebuildFolders":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: rebuildFolders");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: rebuildFolders");
             $tree = $email->et->getMailboxNodes(false);
             $return = $tree->generateNodesRaw();
             $out = $json->encode($return);
@@ -1236,12 +1236,12 @@ eoq;
             break;
 
         case "setFolderOpenState":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: setFolderOpenState");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: setFolderOpenState");
             $email->et->saveFolderOpenState($_REQUEST['focusFolder'], $_REQUEST['focusFolderOpen']);
             break;
 
         case "saveListViewSortOrder":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: saveListViewSortOrder");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: saveListViewSortOrder");
             $email->et->saveListViewSortOrder(
                 $_REQUEST['ieId'],
                 $_REQUEST['focusFolder'],
@@ -1256,7 +1256,7 @@ eoq;
         ////    INBOUND EMAIL ACCOUNTS
 
         case "retrieveAllOutbound":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: retrieveAllOutbound");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: retrieveAllOutbound");
             global $current_user;
             $oe = new OutboundEmail();
             $outbounds = $oe->getUserMailers($current_user);
@@ -1267,7 +1267,7 @@ eoq;
             break;
 
         case "editOutbound":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: editOutbound");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: editOutbound");
             if (isset($_REQUEST['outbound_email']) && !empty($_REQUEST['outbound_email'])) {
                 $oe = new OutboundEmail();
                 $oe->retrieve($_REQUEST['outbound_email']);
@@ -1288,7 +1288,7 @@ eoq;
             break;
 
         case "deleteOutbound":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: deleteOutbound");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: deleteOutbound");
             if (isset($_REQUEST['outbound_email']) && !empty($_REQUEST['outbound_email'])) {
                 $oe = new OutboundEmail();
                 global $current_user;
@@ -1321,7 +1321,7 @@ eoq;
             break;
 
         case "saveOutbound":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: saveOutbound");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: saveOutbound");
 
             $oe = new OutboundEmail();
             $oe->id = $_REQUEST['mail_id'];
@@ -1349,13 +1349,13 @@ eoq;
 
         case "saveDefaultOutbound":
             global $current_user;
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: saveDefaultOutbound");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: saveDefaultOutbound");
             $outbound_id = empty($_REQUEST['id']) ? "" : $_REQUEST['id'];
             $ie = new InboundEmail();
             $ie->setUsersDefaultOutboundServerId($current_user, $outbound_id);
             break;
         case "testOutbound":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: testOutbound");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: testOutbound");
 
             $pass = '';
             if (!empty($_REQUEST['mail_smtppass'])) {
@@ -1383,7 +1383,7 @@ eoq;
             break;
 
         case "rebuildShowAccount":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: rebuildShowAccount");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: rebuildShowAccount");
             $ret = $email->et->getShowAccountsOptions($ie);
             $results = array('account_list' => $ret, 'count' => count($ret));
             $out = $json->encode($results);
@@ -1391,14 +1391,14 @@ eoq;
             break;
 
         case "rebuildShowAccountForSearch":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: rebuildShowAccount");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: rebuildShowAccount");
             $ret = $email->et->getShowAccountsOptionsForSearch($ie);
             $out = $json->encode($ret);
             echo $out;
             break;
 
         case "deleteIeAccount":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: deleteIeAccount");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: deleteIeAccount");
             if (isset($_REQUEST['group_id']) && $_REQUEST['group_id'] == $current_user->id) {
                 $ret = array();
                 $updateFolders = array();
@@ -1420,7 +1420,7 @@ eoq;
             break;
 
         case "saveIeAccount":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: saveIeAccount");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: saveIeAccount");
             if (isset($_REQUEST['server_url']) && !empty($_REQUEST['server_url'])) {
                 if (false === $ie->savePersonalEmailAccount($current_user->id, $current_user->user_name, false)) {
                     $ret = array('error' => 'error');
@@ -1504,7 +1504,7 @@ eoq;
             break;
 
         case "getIeAccount":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getIeAccount");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getIeAccount");
             $ieId = $_REQUEST['ieId'];
             $ie->retrieve($ieId);
 
@@ -1563,7 +1563,7 @@ eoq;
         ///////////////////////////////////////////////////////////////////////////
         ////    SEARCH
         case "search":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: search");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: search");
             if (isset($_REQUEST['subject']) && !empty($_REQUEST['subject']) && isset($_REQUEST['ieId']) && !empty($_REQUEST['ieId'])) {
                 $metalist = $ie->search($_REQUEST['ieId'], $_REQUEST['subject']);
                 if (!isset($_REQUEST['page'])) {
@@ -1583,7 +1583,7 @@ eoq;
             break;
 
         case "searchAdvanced":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: searchAdvanced");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: searchAdvanced");
 
             $metalist = $email->searchImportedEmails();
             $out = $email->et->jsonOuput($metalist, 'Email', $metalist['totalCount']);
@@ -1602,14 +1602,14 @@ eoq;
         ///////////////////////////////////////////////////////////////////////////
         ////    SETTINGS
         case "loadPreferences":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: loadPreferences");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: loadPreferences");
             $prefs = $email->et->getUserPreferencesJS();
             $out = $json->encode($prefs);
             echo $out;
             break;
 
         case "saveSettingsGeneral":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: saveSettingsGeneral");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: saveSettingsGeneral");
             $emailSettings = array();
             $emailSettings['emailCheckInterval'] = $_REQUEST['emailCheckInterval'];
             //$emailSettings['autoImport'] = isset($_REQUEST['autoImport']) ? '1' : '0';
@@ -1628,7 +1628,7 @@ eoq;
             break;
 
         case "setPreference":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: setPreference");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: setPreference");
             if (isset($_REQUEST['prefName']) && isset($_REQUEST['prefValue'])) {
                 // handle potential JSON encoding
                 if (isset($_REQUEST['decode'])) {
@@ -1646,7 +1646,7 @@ eoq;
         ////    ADDRESS BOOK
 
         case "editContact":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: editContact");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: editContact");
             if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
                 $module = "Contacts";
                 $ret = $email->et->getEditContact($_REQUEST['id'], $module);
@@ -1658,7 +1658,7 @@ eoq;
 
         /* The four calls below all have the same return signature */
         case "removeContact":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: removeContacts");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: removeContacts");
             if (strpos($_REQUEST['ids'], "::") !== false) {
                 $removeIds = explode("::", $_REQUEST['ids']);
             } else {
@@ -1668,14 +1668,14 @@ eoq;
 
             // no break
         case "saveContactEdit":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: saveContactEdit");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: saveContactEdit");
             if (isset($_REQUEST['args']) && !empty($_REQUEST['args'])) {
                 $email->et->saveContactEdit($_REQUEST['args']);
             }
         // flow into getUserContacts();
         // no break
         case "addContact":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: addContacts");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: addContacts");
             $contacts = array();
 
             if (isset($_REQUEST['bean_module']) && !empty($_REQUEST['bean_module']) && isset($_REQUEST['bean_id']) && !empty($_REQUEST['bean_id'])) {
@@ -1688,7 +1688,7 @@ eoq;
 
             // no break
         case "addContactsMultiple":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: addContacts");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: addContacts");
             if (isset($_REQUEST['contactData'])) {
                 $contacts = $json->decode(from_HTML($_REQUEST['contactData']));
                 if ($contacts) {
@@ -1699,7 +1699,7 @@ eoq;
 
             // no break
         case "getUserContacts":
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: getUserContacts");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: getUserContacts");
             $contacts = $email->et->getContacts();
 
             if (is_array($contacts) && !empty($contacts)) {
@@ -1777,7 +1777,7 @@ eoq;
                 $countq = $qArray['countQuery'];
                 $time = microtime(true);
                 $r = $ie->db->query($countq);
-                $GLOBALS['log']->debug("***QUERY counted in " . (microtime(true) - $time) . " milisec\n");
+                LoggerManager::getLogger()->debug("***QUERY counted in " . (microtime(true) - $time) . " milisec\n");
                 if ($row = DBManagerFactory::getInstance()->fetchByAssoc($r)) {
                     $count = $row['c'];
                 }
@@ -1795,7 +1795,7 @@ eoq;
                 $order = (!empty($sort) && !empty($direction)) ? " ORDER BY {$sort} {$direction}" : "";
 
                 $r = $ie->db->limitQuery($qArray['query'] . " $order ", $start, 25, true);
-                $GLOBALS['log']->debug("***QUERY Got results in " . (microtime(true) - $time) . " milisec\n");
+                LoggerManager::getLogger()->debug("***QUERY Got results in " . (microtime(true) - $time) . " milisec\n");
 
 
                 while ($a = $ie->db->fetchByAssoc($r)) {
@@ -1823,7 +1823,7 @@ eoq;
         ////    MISC
 
         default:
-            $GLOBALS['log']->debug("********** EMAIL 2.0 - Asynchronous - at: default");
+            LoggerManager::getLogger()->debug("********** EMAIL 2.0 - Asynchronous - at: default");
             echo "NOOP";
             break;
     } // switch

@@ -137,7 +137,7 @@ class Meeting extends SugarBean
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -269,7 +269,7 @@ class Meeting extends SugarBean
             } else {
                 // Generic Message Provides no value to End User - Log the issue with message detail and continue
                 // SugarApplication::appendErrorMessage($GLOBALS['app_strings']['ERR_EXTERNAL_API_SAVE_FAIL']);
-                $GLOBALS['log']->warn('ERR_EXTERNAL_API_SAVE_FAIL' . ": " . $this->type . " - " .  $response['errorMessage']);
+                LoggerManager::getLogger()->warn('ERR_EXTERNAL_API_SAVE_FAIL' . ": " . $this->type . " - " .  $response['errorMessage']);
             }
 
             $api->logoff();
@@ -404,11 +404,11 @@ class Meeting extends SugarBean
 
             // Get the contact name.
             $row = $this->db->fetchByAssoc($result);
-            $GLOBALS['log']->info("additional call fields $query");
+            LoggerManager::getLogger()->info("additional call fields $query");
             if ($row != null) {
                 $this->contact_name = $locale->getLocaleFormattedName($row['first_name'], $row['last_name'], '', '');
-                $GLOBALS['log']->debug("Call($this->id): contact_name = $this->contact_name");
-                $GLOBALS['log']->debug("Call($this->id): contact_id = $this->contact_id");
+                LoggerManager::getLogger()->debug("Call($this->id): contact_name = $this->contact_name");
+                LoggerManager::getLogger()->debug("Call($this->id): contact_id = $this->contact_id");
             }
         }
 
@@ -496,7 +496,7 @@ class Meeting extends SugarBean
                 }
                 $this->date_end = $td->format($GLOBALS['timedate']->get_date_time_format());
             } else {
-                $GLOBALS['log']->fatal("Meeting::save: Bad date {$this->date_start} for format ".$GLOBALS['timedate']->get_date_time_format());
+                LoggerManager::getLogger()->fatal("Meeting::save: Bad date {$this->date_start} for format ".$GLOBALS['timedate']->get_date_time_format());
             }
         }
 
@@ -748,7 +748,7 @@ class Meeting extends SugarBean
         $template = new User();
         // First, get the list of IDs.
         $query = "SELECT meetings_users.required, meetings_users.accept_status, meetings_users.user_id from meetings_users where meetings_users.meeting_id='$this->id' AND meetings_users.deleted=0";
-        $GLOBALS['log']->debug("Finding linked records $this->object_name: ".$query);
+        LoggerManager::getLogger()->debug("Finding linked records $this->object_name: ".$query);
         $result = $this->db->query($query, true);
         $list = array();
 
@@ -770,7 +770,7 @@ class Meeting extends SugarBean
     {
         $template = $this;
         // First, get the list of IDs.
-        $GLOBALS['log']->debug("Finding linked records $this->object_name: ");
+        LoggerManager::getLogger()->debug("Finding linked records $this->object_name: ");
         $query = "SELECT meetings_users.required, meetings_users.accept_status, meetings_users.meeting_id from meetings_users where meetings_users.user_id='$user->id' AND( meetings_users.accept_status IS NULL OR	meetings_users.accept_status='none') AND meetings_users.deleted=0";
         $result = $this->db->query($query, true);
         $list = array();
@@ -836,7 +836,7 @@ class Meeting extends SugarBean
             $notify_user = new User();
             $notify_user->retrieve($user_id);
             $notify_user->new_assigned_user_name = $notify_user->full_name;
-            $GLOBALS['log']->info("Notifications: recipient is $notify_user->new_assigned_user_name");
+            LoggerManager::getLogger()->info("Notifications: recipient is $notify_user->new_assigned_user_name");
             $list[$notify_user->id] = $notify_user;
         }
 
@@ -844,7 +844,7 @@ class Meeting extends SugarBean
             $notify_user = new Contact();
             $notify_user->retrieve($contact_id);
             $notify_user->new_assigned_user_name = $notify_user->full_name;
-            $GLOBALS['log']->info("Notifications: recipient is $notify_user->new_assigned_user_name");
+            LoggerManager::getLogger()->info("Notifications: recipient is $notify_user->new_assigned_user_name");
             $list[$notify_user->id] = $notify_user;
         }
 
@@ -852,7 +852,7 @@ class Meeting extends SugarBean
             $notify_user = new Lead();
             $notify_user->retrieve($lead_id);
             $notify_user->new_assigned_user_name = $notify_user->full_name;
-            $GLOBALS['log']->info("Notifications: recipient is $notify_user->new_assigned_user_name");
+            LoggerManager::getLogger()->info("Notifications: recipient is $notify_user->new_assigned_user_name");
             $list[$notify_user->id] = $notify_user;
         }
 

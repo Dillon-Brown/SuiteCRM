@@ -102,7 +102,7 @@ class EmailUI
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -485,7 +485,7 @@ HTML;
         if (!empty($bean)) {
             $myBean = $bean;
         } else {
-            $GLOBALS['log']->warn('EmailUI::populateComposeViewFields - $bean is empty');
+            LoggerManager::getLogger()->warn('EmailUI::populateComposeViewFields - $bean is empty');
         }
 
         $emailLink = $this->createEmailLink(
@@ -498,7 +498,7 @@ HTML;
 
         // focus is set?
         if (!is_object($myBean)) {
-            $GLOBALS['log']->warn('incorrect bean');
+            LoggerManager::getLogger()->warn('incorrect bean');
         } else {
             if (is_array($emailField)) {
                 $emailFields = $emailField;
@@ -604,7 +604,7 @@ HTML;
                             }
                         }
                     } else {
-                        $GLOBALS['log']->warn(get_class($myBean) . ' does not have email1 field');
+                        LoggerManager::getLogger()->warn(get_class($myBean) . ' does not have email1 field');
                     }
                 }
             }
@@ -1452,7 +1452,7 @@ HTML;
         // get unread counts
         $exMbox = explode("::", $nodePath);
         $unseen = 0;
-        $GLOBALS['log']->debug("$key --- $nodePath::$label");
+        LoggerManager::getLogger()->debug("$key --- $nodePath::$label");
 
         if (count($exMbox) >= 2) {
             $mailbox = "";
@@ -2331,9 +2331,9 @@ eoq;
         }
 
         if ($noCache) {
-            $GLOBALS['log']->debug("EMAILUI: getSingleMessage() NOT using cache file");
+            LoggerManager::getLogger()->debug("EMAILUI: getSingleMessage() NOT using cache file");
         } else {
-            $GLOBALS['log']->debug("EMAILUI: getSingleMessage() using cache file [ " . $_REQUEST['mbox'] . $_REQUEST['uid'] . ".php ]");
+            LoggerManager::getLogger()->debug("EMAILUI: getSingleMessage() using cache file [ " . $_REQUEST['mbox'] . $_REQUEST['uid'] . ".php ]");
         }
 
         $this->setReadFlag($_REQUEST['ieId'], $_REQUEST['mbox'], $_REQUEST['uid']);
@@ -2454,7 +2454,7 @@ eoq;
     public function handleReplyType($email, $type)
     {
         global $mod_strings;
-        $GLOBALS['log']->debug("****At Handle Reply Type: $type");
+        LoggerManager::getLogger()->debug("****At Handle Reply Type: $type");
         switch ($type) {
             case "reply":
             case "replyAll":
@@ -2484,16 +2484,16 @@ eoq;
                 break;
 
             case "replyCase":
-                $GLOBALS['log']->debug("EMAILUI: At reply case");
+                LoggerManager::getLogger()->debug("EMAILUI: At reply case");
                 $header = $email->getReplyHeader();
 
                 $myCase = new aCase();
                 $myCase->retrieve($email->parent_id);
                 $myCaseMacro = $myCase->getEmailSubjectMacro();
                 $email->parent_name = $myCase->name;
-                $GLOBALS['log']->debug("****Case # : {$myCase->case_number} macro: $myCaseMacro");
+                LoggerManager::getLogger()->debug("****Case # : {$myCase->case_number} macro: $myCaseMacro");
                 if (!strpos($email->name, str_replace('%1', $myCase->case_number, $myCaseMacro))) {
-                    $GLOBALS['log']->debug("Replacing");
+                    LoggerManager::getLogger()->debug("Replacing");
                     $email->name = str_replace('%1', $myCase->case_number, $myCaseMacro) . ' ' . $email->name;
                 }
                 $email->name = "{$mod_strings['LBL_RE']} {$email->name}";
@@ -2743,7 +2743,7 @@ eoq;
     public function _cleanUIDList($uids, $returnString = false)
     {
         global $app_strings;
-        $GLOBALS['log']->debug("_cleanUIDList: before - [ {$uids} ]");
+        LoggerManager::getLogger()->debug("_cleanUIDList: before - [ {$uids} ]");
 
         if (!is_array($uids)) {
             $returnString = true;
@@ -2761,7 +2761,7 @@ eoq;
 
         if ($returnString) {
             $cleanImplode = implode($app_strings['LBL_EMAIL_DELIMITER'], $cleanUids);
-            $GLOBALS['log']->debug("_cleanUIDList: after - [ {$cleanImplode} ]");
+            LoggerManager::getLogger()->debug("_cleanUIDList: after - [ {$cleanImplode} ]");
 
             return $cleanImplode;
         }
@@ -3016,7 +3016,7 @@ eoq;
             $selected = ($personalSelected || $groupSelected);
 
             if (!$selected) {
-                $GLOBALS['log']->debug("Inbound Email {$v->name}, not selected and will not be available for selection within compose UI.");
+                LoggerManager::getLogger()->debug("Inbound Email {$v->name}, not selected and will not be available for selection within compose UI.");
                 continue;
             }
 
@@ -3393,7 +3393,7 @@ eoq;
                 return $ret;
             }
         } else {
-            $GLOBALS['log']->debug("EMAILUI: cache file not found [ {$cacheFilePath} ] - creating blank cache file");
+            LoggerManager::getLogger()->debug("EMAILUI: cache file not found [ {$cacheFilePath} ] - creating blank cache file");
             $this->writeCacheFile('retArr', array(), $ieId, $type, $file);
         }
 
@@ -3418,7 +3418,7 @@ eoq;
             include($cacheFilePath); // provides $cacheFile['timestamp']
 
             if (isset($cacheFile['timestamp'])) {
-                $GLOBALS['log']->debug("EMAILUI: found timestamp [ {$cacheFile['timestamp']} ]");
+                LoggerManager::getLogger()->debug("EMAILUI: found timestamp [ {$cacheFile['timestamp']} ]");
 
                 return $cacheFile['timestamp'];
             }
@@ -3446,7 +3446,7 @@ eoq;
 
             if (isset($cacheFile['timestamp'])) {
                 $cacheFile['timestamp'] = strtotime('now');
-                $GLOBALS['log']->debug("EMAILUI: setting updated timestamp [ {$cacheFile['timestamp']} ]");
+                LoggerManager::getLogger()->debug("EMAILUI: setting updated timestamp [ {$cacheFile['timestamp']} ]");
 
                 return $this->_writeCacheFile($cacheFile, $cacheFilePath);
             }
@@ -3503,7 +3503,7 @@ eoq;
 
             return true;
         }
-        $GLOBALS['log']->debug("EMAILUI: Could not write cache file [ {$file} ]");
+        LoggerManager::getLogger()->debug("EMAILUI: Could not write cache file [ {$file} ]");
 
         return false;
     }

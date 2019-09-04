@@ -47,14 +47,14 @@ if (!isset($_SESSION['SHOW_DUPLICATES'])) {
 }
 
 // retrieve $_POST values out of the $_SESSION variable - placed in there by AccountFormBase to avoid the length limitations on URLs implicit with GETS
-//$GLOBALS['log']->debug('ShowDuplicates.php: _POST = '.print_r($_SESSION['SHOW_DUPLICATES'],true));
+//LoggerManager::getLogger()->debug('ShowDuplicates.php: _POST = '.print_r($_SESSION['SHOW_DUPLICATES'],true));
 parse_str($_SESSION['SHOW_DUPLICATES'], $_POST);
 $post = array_map("securexss", $_POST);
 foreach ($post as $k => $v) {
     $_POST[$k] = $v;
 }
 unset($_SESSION['SHOW_DUPLICATES']);
-//$GLOBALS['log']->debug('ShowDuplicates.php: _POST = '.print_r($_POST,true));
+//LoggerManager::getLogger()->debug('ShowDuplicates.php: _POST = '.print_r($_POST,true));
 
 global $app_strings;
 global $app_list_strings;

@@ -470,7 +470,7 @@ EOQ;
         }
         $return_id = $focus->id;
 
-        $GLOBALS['log']->debug("Saved record with id of ".$return_id);
+        LoggerManager::getLogger()->debug("Saved record with id of ".$return_id);
         if ($redirect) {
             handleRedirect($return_id, "Opportunities");
         } else {

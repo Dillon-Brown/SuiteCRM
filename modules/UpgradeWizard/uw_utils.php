@@ -784,9 +784,9 @@ function upgradeUWFiles($file)
             foreach ($filesToAddPost as $file) {
                 if (file_exists("$from_dir/$file")) {
                     $allFiles[] = "$from_dir/$file";
-                    $GLOBALS['log']->info("File added to post upgrade: $from_dir/$file");
+                    LoggerManager::getLogger()->info("File added to post upgrade: $from_dir/$file");
                 } else {
-                    $GLOBALS['log']->error("File not found for post upgrade: $from_dir/$file");
+                    LoggerManager::getLogger()->error("File not found for post upgrade: $from_dir/$file");
                 }
             }
         }
@@ -1290,7 +1290,7 @@ function logThis($entry, $path='')
             $fp = fopen($log, 'w+'); // attempts to create file
         }
         if (!is_resource($fp)) {
-            $GLOBALS['log']->fatal('UpgradeWizard could not create the upgradeWizard.log file');
+            LoggerManager::getLogger()->fatal('UpgradeWizard could not create the upgradeWizard.log file');
             die($mod_strings['ERR_UW_LOG_FILE_UNWRITABLE']);
         }
     } else {
@@ -1301,7 +1301,7 @@ function logThis($entry, $path='')
         }
 
         if (!is_resource($fp)) {
-            $GLOBALS['log']->fatal('UpgradeWizard could not open/lock upgradeWizard.log file');
+            LoggerManager::getLogger()->fatal('UpgradeWizard could not open/lock upgradeWizard.log file');
             die($mod_strings['ERR_UW_LOG_FILE_UNWRITABLE']);
         }
     }
@@ -1309,7 +1309,7 @@ function logThis($entry, $path='')
     $line = date('r').' [UpgradeWizard] - '.$entry."\n";
 
     if (@fwrite($fp, $line) === false) {
-        $GLOBALS['log']->fatal('UpgradeWizard could not write to upgradeWizard.log: '.$entry);
+        LoggerManager::getLogger()->fatal('UpgradeWizard could not write to upgradeWizard.log: '.$entry);
         die($mod_strings['ERR_UW_LOG_FILE_UNWRITABLE']);
     }
 
@@ -1352,7 +1352,7 @@ function updateQuickCreateDefs()
             file_exists($editviewdefs) &&
             !file_exists($quickcreatedefs)) {
             //clone editviewdef and save it in custom/working/modules/metadata
-            $GLOBALS['log']->debug("Copying editviewdefs.php as quickcreatedefs.php for the $modname module in custom/working/modules/$modname/metadata!");
+            LoggerManager::getLogger()->debug("Copying editviewdefs.php as quickcreatedefs.php for the $modname module in custom/working/modules/$modname/metadata!");
             if (copy($editviewdefs, $quickcreatedefs)) {
                 if (file_exists($quickcreatedefs) && is_readable($quickcreatedefs)) {
                     $file = file($quickcreatedefs);
@@ -1367,10 +1367,10 @@ function updateQuickCreateDefs()
                     //write back.
                     fclose($fp);
                 } else {
-                    $GLOBALS['log']->debug("Failed to replace 'EditView' with QuickCreate because $quickcreatedefs is either not readable or does not exist.");
+                    LoggerManager::getLogger()->debug("Failed to replace 'EditView' with QuickCreate because $quickcreatedefs is either not readable or does not exist.");
                 }
             } else {
-                $GLOBALS['log']->debug("Failed to copy $editviewdefs to $quickcreatedefs!");
+                LoggerManager::getLogger()->debug("Failed to copy $editviewdefs to $quickcreatedefs!");
             }
         }
     }
@@ -2010,7 +2010,7 @@ function prepSystemForUpgrade()
     $upload_max_filesize_bytes = return_bytes($upload_max_filesize);
 
     if ($upload_max_filesize_bytes < constant('SUGARCRM_MIN_UPLOAD_MAX_FILESIZE_BYTES')) {
-        $GLOBALS['log']->debug("detected upload_max_filesize: $upload_max_filesize");
+        LoggerManager::getLogger()->debug("detected upload_max_filesize: $upload_max_filesize");
         $admin_strings = return_module_language($current_language, 'Administration');
         echo '<p class="error">'.$admin_strings['MSG_INCREASE_UPLOAD_MAX_FILESIZE'].' '.get_cfg_var('cfg_file_path')."</p>\n";
     }
@@ -2407,7 +2407,7 @@ function resetUwSession()
  */
 function UWrebuild()
 {
-    $GLOBALS['log']->deprecated('UWrebuild is deprecated');
+    LoggerManager::getLogger()->deprecated('UWrebuild is deprecated');
 }
 
 function getCustomTables()
@@ -3668,7 +3668,7 @@ function fix_dropdown_list()
                         fwrite($fp, $contents);
                         fclose($fp);
                     } else {
-                        $GLOBALS['log']->error("Unable to update file contents in fix_dropdown_list for {$file}");
+                        LoggerManager::getLogger()->error("Unable to update file contents in fix_dropdown_list for {$file}");
                     } //if-else
                 }
             }
@@ -3791,7 +3791,7 @@ function fix_dropdown_list()
                         fclose($fp);
                     } else {
                         //If we can't update the file, just return
-                        $GLOBALS['log']->error("Unable to update file contents in fix_dropdown_list.");
+                        LoggerManager::getLogger()->error("Unable to update file contents in fix_dropdown_list.");
                         return;
                     }
                 } //if($touched)
@@ -4112,7 +4112,7 @@ function upgrade_connectors()
     remove_linkedin_config();
 
     if (!ConnectorUtils::updateMetaDataFiles()) {
-        $GLOBALS['log']->fatal('Cannot update metadata files for connectors');
+        LoggerManager::getLogger()->fatal('Cannot update metadata files for connectors');
     }
 
     //Delete the custom connectors.php file if it exists so that it may be properly rebuilt
@@ -4144,7 +4144,7 @@ function remove_linkedin_config()
             }
             if (!write_array_to_file('modules_sources', $modules_sources, $display_file)) {
                 //Log error
-                $GLOBALS['log']->fatal("Cannot write \$modules_sources to " . $display_file);
+                LoggerManager::getLogger()->fatal("Cannot write \$modules_sources to " . $display_file);
             }
         }
     }
@@ -4159,7 +4159,7 @@ function remove_linkedin_config()
 
             if (!write_array_to_file('searchdefs', $searchdefs, $search_file)) {
                 //Log error
-                $GLOBALS['log']->fatal("Cannot write \$searchdefs to " . $search_file);
+                LoggerManager::getLogger()->fatal("Cannot write \$searchdefs to " . $search_file);
             }
         }
     }

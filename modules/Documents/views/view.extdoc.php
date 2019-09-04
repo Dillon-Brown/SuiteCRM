@@ -71,7 +71,7 @@ class DocumentsViewExtdoc extends SugarView
         } else {
             $tmpApi = ExternalAPIFactory::loadAPI($_REQUEST['apiName'], true);
             if ($tmpApi === false) {
-                $GLOBALS['log']->error(string_format($mod_strings['ERR_INVALID_EXTERNAL_API_ACCESS'], array($_REQUEST['apiName'])));
+                LoggerManager::getLogger()->error(string_format($mod_strings['ERR_INVALID_EXTERNAL_API_ACCESS'], array($_REQUEST['apiName'])));
                 return;
             }
             $apiName = $_REQUEST['apiName'];
@@ -101,7 +101,7 @@ class DocumentsViewExtdoc extends SugarView
                 }
             } catch (Exception $ex) {
                 $validSession = false;
-                $GLOBALS['log']->error(string_format($mod_strings['ERR_INVALID_EXTERNAL_API_LOGIN'], array($apiName)));
+                LoggerManager::getLogger()->error(string_format($mod_strings['ERR_INVALID_EXTERNAL_API_LOGIN'], array($apiName)));
             }
         }
 

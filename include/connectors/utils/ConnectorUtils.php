@@ -122,7 +122,7 @@ class ConnectorUtils
             }
 
             if (!write_array_to_file('searchdefs', $searchdefs, 'custom/modules/Connectors/metadata/searchdefs.php')) {
-                $GLOBALS['log']->fatal("Cannot write file custom/modules/Connectors/metadata/searchdefs.php");
+                LoggerManager::getLogger()->fatal("Cannot write file custom/modules/Connectors/metadata/searchdefs.php");
                 return array();
             }
         }
@@ -230,7 +230,7 @@ class ConnectorUtils
             }
 
             if (!write_array_to_file('viewdefs', $view_defs, 'custom/modules/Connectors/metadata/mergeviewdefs.php')) {
-                $GLOBALS['log']->fatal("Cannot write file custom/modules/Connectors/metadata/mergeviewdefs.php");
+                LoggerManager::getLogger()->fatal("Cannot write file custom/modules/Connectors/metadata/mergeviewdefs.php");
                 return array();
             }
         }
@@ -284,7 +284,7 @@ class ConnectorUtils
                 if (!isset($connectors) || !is_array($connectors)) {
                     $connectors = array();
                     $err_str = string_format($GLOBALS['app_strings']['ERR_CONNECTOR_NOT_ARRAY'], array($src4));
-                    $GLOBALS['log']->error($err_str);
+                    LoggerManager::getLogger()->error($err_str);
                 }
 
                 $sources = array_merge($sources, $connectors);
@@ -321,7 +321,7 @@ class ConnectorUtils
 
         if (!write_array_to_file('connectors', $connectors, $toFile)) {
             //Log error and return empty array
-            $GLOBALS['log']->fatal("Cannot write sources to file");
+            LoggerManager::getLogger()->fatal("Cannot write sources to file");
             return false;
         }
         self::$connectors_cache = $connectors;
@@ -394,7 +394,7 @@ class ConnectorUtils
 
             if (!write_array_to_file('modules_sources', $modules_sources, CONNECTOR_DISPLAY_CONFIG_FILE)) {
                 //Log error and return empty array
-                $GLOBALS['log']->fatal("Cannot write \$modules_sources to " . CONNECTOR_DISPLAY_CONFIG_FILE);
+                LoggerManager::getLogger()->fatal("Cannot write \$modules_sources to " . CONNECTOR_DISPLAY_CONFIG_FILE);
             }
         }
 
@@ -483,12 +483,12 @@ class ConnectorUtils
         }
 
         if (!write_array_to_file('viewdefs', $viewdefs, "custom/modules/{$module}/metadata/detailviewdefs.php")) {
-            $GLOBALS['log']->fatal("Cannot update file custom/modules/{$module}/metadata/detailviewdefs.php");
+            LoggerManager::getLogger()->fatal("Cannot update file custom/modules/{$module}/metadata/detailviewdefs.php");
             return false;
         }
 
         if (file_exists($cachedfile = sugar_cached("modules/{$module}/DetailView.tpl")) && !unlink($cachedfile)) {
-            $GLOBALS['log']->fatal("Cannot delete file $cachedfile");
+            LoggerManager::getLogger()->fatal("Cannot delete file $cachedfile");
             return false;
         }
     }
@@ -506,7 +506,7 @@ class ConnectorUtils
 
             require(CONNECTOR_DISPLAY_CONFIG_FILE);
 
-            $GLOBALS['log']->debug(var_export($modules_sources, true));
+            LoggerManager::getLogger()->debug(var_export($modules_sources, true));
             if (!empty($modules_sources)) {
                 foreach ($modules_sources as $module=>$mapping) {
                     $metadata_file = file_exists("custom/modules/{$module}/metadata/detailviewdefs.php") ? "custom/modules/{$module}/metadata/detailviewdefs.php" : "modules/{$module}/metadata/detailviewdefs.php";
@@ -514,7 +514,7 @@ class ConnectorUtils
 
                     $viewdefs = array();
                     if (!file_exists($metadata_file)) {
-                        $GLOBALS['log']->info("Unable to update metadata file for module: {$module}");
+                        LoggerManager::getLogger()->info("Unable to update metadata file for module: {$module}");
                         continue;
                     }
                     require($metadata_file);
@@ -571,7 +571,7 @@ class ConnectorUtils
 
                             //Log an error message
                             if (!$added_field) {
-                                $GLOBALS['log']->fatal("Unable to place hover field link on metadata for module {$module}");
+                                LoggerManager::getLogger()->fatal("Unable to place hover field link on metadata for module {$module}");
                             }
                         }
                     }
@@ -583,12 +583,12 @@ class ConnectorUtils
                     }
 
                     if (!write_array_to_file('viewdefs', $viewdefs, "custom/modules/{$module}/metadata/detailviewdefs.php")) {
-                        $GLOBALS['log']->fatal("Cannot update file custom/modules/{$module}/metadata/detailviewdefs.php");
+                        LoggerManager::getLogger()->fatal("Cannot update file custom/modules/{$module}/metadata/detailviewdefs.php");
                         return false;
                     }
 
                     if (file_exists($cachedfile = sugar_cached("modules/{$module}/DetailView.tpl")) && !unlink($cachedfile)) {
-                        $GLOBALS['log']->fatal("Cannot delete file $cachedfile");
+                        LoggerManager::getLogger()->fatal("Cannot delete file $cachedfile");
                         return false;
                     }
                 }
@@ -764,7 +764,7 @@ class ConnectorUtils
             require("modules/Connectors/connectors/sources/{$dir}/language/{$lang}");
             return !empty($connector_strings) ? $connector_strings : array();
         }
-        $GLOBALS['log']->error("Unable to locate language string file for source {$source_id}");
+        LoggerManager::getLogger()->error("Unable to locate language string file for source {$source_id}");
         return array();
     }
 
@@ -787,7 +787,7 @@ class ConnectorUtils
 
         if (!write_array_to_file("connector_strings", $connector_strings, "custom/modules/Connectors/connectors/sources/{$dir}/language/{$lang}")) {
             //Log error and return empty array
-            $GLOBALS['log']->fatal("Cannot write connectory_strings to file custom/modules/Connectors/connectors/sources/{$dir}/language/{$lang}");
+            LoggerManager::getLogger()->fatal("Cannot write connectory_strings to file custom/modules/Connectors/connectors/sources/{$dir}/language/{$lang}");
             return false;
         }
     }
@@ -830,7 +830,7 @@ class ConnectorUtils
 
         if (!write_array_to_file('modules_sources', $modules_sources, CONNECTOR_DISPLAY_CONFIG_FILE)) {
             //Log error and return empty array
-            $GLOBALS['log']->fatal("Cannot write \$modules_sources to " . CONNECTOR_DISPLAY_CONFIG_FILE);
+            LoggerManager::getLogger()->fatal("Cannot write \$modules_sources to " . CONNECTOR_DISPLAY_CONFIG_FILE);
         }
         return true;
     }
@@ -870,7 +870,7 @@ class ConnectorUtils
 
         if (!write_array_to_file('modules_sources', $modules_sources, CONNECTOR_DISPLAY_CONFIG_FILE)) {
             //Log error and return empty array
-            $GLOBALS['log']->fatal("Cannot write \$modules_sources to " . CONNECTOR_DISPLAY_CONFIG_FILE);
+            LoggerManager::getLogger()->fatal("Cannot write \$modules_sources to " . CONNECTOR_DISPLAY_CONFIG_FILE);
             return false;
         }
 

@@ -135,7 +135,7 @@ class SearchForm
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -446,7 +446,7 @@ class SearchForm
      */
     public function displayTabs($currentKey)
     {
-        $GLOBALS['log']->debug('SearchForm.php->displayTabs(): tabs='.print_r($this->tabs, true));
+        LoggerManager::getLogger()->debug('SearchForm.php->displayTabs(): tabs='.print_r($this->tabs, true));
 
         $tabPanel = new SugarWidgetTabs($this->tabs, $currentKey, 'SUGAR.searchForm.searchFormSelect');
 
@@ -490,7 +490,7 @@ class SearchForm
     public function setup()
     {
         global $mod_strings, $app_strings, $app_list_strings, $theme, $timedate;
-        $GLOBALS['log']->debug('SearchForm.php->setup()');
+        LoggerManager::getLogger()->debug('SearchForm.php->setup()');
         $this->xtpl = new XTemplate($this->tpl);
         $this->xtpl->assign("MOD", $mod_strings);
         $this->xtpl->assign("APP", $app_strings);
@@ -555,7 +555,7 @@ class SearchForm
     public function displayHeader($view)
     {
         global $current_user;
-        $GLOBALS['log']->debug('SearchForm.php->displayHeader()');
+        LoggerManager::getLogger()->debug('SearchForm.php->displayHeader()');
         $header_text = '';
         if (is_admin($current_user) && $_REQUEST['module'] != 'DynamicLayout' && !empty($_SESSION['editinplace'])) {
             $header_text = "<a href='index.php?action=index&module=DynamicLayout&from_action=SearchForm&from_module=".$_REQUEST['module'] ."'>".SugarThemeRegistry::current()->getImage("EditLayout", "border='0' align='bottom'", null, null, '.gif', 'Edit Layout')."</a>";
@@ -581,7 +581,7 @@ class SearchForm
      */
     public function displayWithHeaders($view, $basic_search_text = '', $advanced_search_text = '', $saved_views_text = '')
     {
-        $GLOBALS['log']->debug('SearchForm.php->displayWithHeaders()');
+        LoggerManager::getLogger()->debug('SearchForm.php->displayWithHeaders()');
         $this->displayHeader($view);
         echo "<div id='{$this->module}basic_searchSearchForm' " . (($view == 'basic_search') ? '' : "style='display: none'") . ">" . $basic_search_text . "</div>";
         echo "<div id='{$this->module}advanced_searchSearchForm' " . (($view == 'advanced_search') ? '' : "style='display: none'") . ">" . $advanced_search_text . "</div>";
@@ -633,10 +633,10 @@ class SearchForm
     public function displayAdvanced($header = true, $return = false, $listViewDefs='', $lv='')
     {
         global $current_user, $current_language;
-        $GLOBALS['log']->debug('SearchForm.php->displayAdvanced()');
+        LoggerManager::getLogger()->debug('SearchForm.php->displayAdvanced()');
         $this->bean->custom_fields->populateAllXTPL($this->xtpl, 'search');
         if (!empty($listViewDefs) && !empty($lv)) {
-            $GLOBALS['log']->debug('SearchForm.php->displayAdvanced(): showing saved search');
+            LoggerManager::getLogger()->debug('SearchForm.php->displayAdvanced(): showing saved search');
             $savedSearch = new SavedSearch($listViewDefs[$this->module], $lv->data['pageData']['ordering']['orderBy'], $lv->data['pageData']['ordering']['sortOrder']);
             $this->xtpl->assign('SAVED_SEARCH', $savedSearch->getForm($this->module, false));
             $this->xtpl->assign('MOD_SAVEDSEARCH', return_module_language($current_language, 'SavedSearch'));

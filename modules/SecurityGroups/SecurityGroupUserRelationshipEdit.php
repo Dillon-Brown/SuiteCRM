@@ -35,7 +35,7 @@ safe_map('primary_group', $focus);
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-$GLOBALS['log']->info("SecurityGroup User relationship");
+LoggerManager::getLogger()->info("SecurityGroup User relationship");
 
 $json = getJSONobj();
 require_once('include/QuickSearchDefaults.php');

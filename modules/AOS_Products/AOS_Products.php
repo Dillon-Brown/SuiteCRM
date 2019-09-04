@@ -42,7 +42,7 @@ class AOS_Products extends AOS_Products_sugar
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -74,7 +74,7 @@ class AOS_Products extends AOS_Products_sugar
         }
 
         require_once('include/upload_file.php');
-        $GLOBALS['log']->debug('UPLOADING PRODUCT IMAGE');
+        LoggerManager::getLogger()->debug('UPLOADING PRODUCT IMAGE');
         $upload_file = new UploadFile('uploadfile');
 
         if (isset($_FILES['uploadimage']['tmp_name'])&&$_FILES['uploadimage']['tmp_name']!="") {

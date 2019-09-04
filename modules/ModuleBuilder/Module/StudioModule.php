@@ -103,7 +103,7 @@ class StudioModule
         if ($this->seed) {
             $this->fields = $this->seed->field_defs;
         }
-        $GLOBALS['log']->debug(get_class($this) . "->__construct($module): " . print_r($this->fields, true));
+        LoggerManager::getLogger()->debug(get_class($this) . "->__construct($module): " . print_r($this->fields, true));
     }
 
     /**

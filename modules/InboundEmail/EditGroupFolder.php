@@ -58,14 +58,14 @@ $javascript = new Javascript();
 /* Start standard EditView setup logic */
 
 if (isset($_REQUEST['record'])) {
-    $GLOBALS['log']->debug("In EditGroupFolder view, about to retrieve record: ".$_REQUEST['record']);
+    LoggerManager::getLogger()->debug("In EditGroupFolder view, about to retrieve record: ".$_REQUEST['record']);
     $result = $focus->retrieve($_REQUEST['record']);
     if ($result == null) {
         sugar_die($app_strings['ERROR_NO_RECORD']);
     }
 }
 
-$GLOBALS['log']->info("SugarFolder Edit View");
+LoggerManager::getLogger()->info("SugarFolder Edit View");
 /* End standard EditView setup logic */
 
 // TEMPLATE ASSIGNMENTS

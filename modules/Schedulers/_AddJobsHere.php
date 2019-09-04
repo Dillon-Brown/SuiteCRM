@@ -99,7 +99,7 @@ function refreshJobs()
 function pollMonitoredInboxes()
 {
     $_bck_up = array('team_id' => $GLOBALS['current_user']->team_id, 'team_set_id' => $GLOBALS['current_user']->team_set_id);
-    $GLOBALS['log']->info('----->Scheduler fired job of type pollMonitoredInboxes()');
+    LoggerManager::getLogger()->info('----->Scheduler fired job of type pollMonitoredInboxes()');
     global $dictionary;
     global $app_strings;
 
@@ -109,10 +109,10 @@ function pollMonitoredInboxes()
     $ie = new InboundEmail();
     $emailUI = new EmailUI();
     $r = $ie->db->query('SELECT id, name FROM inbound_email WHERE is_personal = 0 AND deleted=0 AND status=\'Active\' AND mailbox_type != \'bounce\'');
-    $GLOBALS['log']->debug('Just got Result from get all Inbounds of Inbound Emails');
+    LoggerManager::getLogger()->debug('Just got Result from get all Inbounds of Inbound Emails');
 
     while ($a = $ie->db->fetchByAssoc($r)) {
-        $GLOBALS['log']->debug('In while loop of Inbound Emails');
+        LoggerManager::getLogger()->debug('In while loop of Inbound Emails');
         $ieX = new InboundEmail();
         $ieX->retrieve($a['id']);
         $mailboxes = $ieX->mailboxarray;
@@ -130,9 +130,9 @@ function pollMonitoredInboxes()
                 $connectToMailServer = true;
             } // if
 
-            $GLOBALS['log']->debug('Trying to connect to mailserver for [ ' . $a['name'] . ' ]');
+            LoggerManager::getLogger()->debug('Trying to connect to mailserver for [ ' . $a['name'] . ' ]');
             if ($connectToMailServer) {
-                $GLOBALS['log']->debug('Connected to mailserver');
+                LoggerManager::getLogger()->debug('Connected to mailserver');
                 if (!$ieX->isPop3Protocol()) {
                     $newMsgs = $ieX->getNewMessageIds();
                 }
@@ -159,7 +159,7 @@ function pollMonitoredInboxes()
                         } else {
                             $lastRobin = $emailUI->getLastRobin($ieX);
                         }
-                        $GLOBALS['log']->debug('distribution method id [ ' . $distributionMethod . ' ]');
+                        LoggerManager::getLogger()->debug('distribution method id [ ' . $distributionMethod . ' ]');
                     }
                     foreach ($newMsgs as $k => $msgNo) {
                         $uid = $msgNo;
@@ -207,7 +207,7 @@ function pollMonitoredInboxes()
                                             $counts[$leastBusy] = $counts[$leastBusy] + 1;
                                         }
                                     } // else
-                                    $GLOBALS['log']->debug('userId [ ' . $userId . ' ]');
+                                    LoggerManager::getLogger()->debug('userId [ ' . $userId . ' ]');
                                     $ieX->handleCreateCase($ieX->email, $userId);
                                 } // if
                             } // if
@@ -235,7 +235,7 @@ function pollMonitoredInboxes()
                                 $ieX->handleAutoresponse($email, $contactAddr);
                             } // else
                         } // else
-                        $GLOBALS['log']->debug('***** On message [ ' . $current . ' of ' . $total . ' ] *****');
+                        LoggerManager::getLogger()->debug('***** On message [ ' . $current . ' of ' . $total . ' ] *****');
                         $current++;
                     } // foreach
                     // update Inbound Account with last robin
@@ -254,7 +254,7 @@ function pollMonitoredInboxes()
                     }
                 }
             } else {
-                $GLOBALS['log']->fatal("SCHEDULERS: could not get an IMAP connection resource for ID [ {$a['id']} ]. Skipping mailbox [ {$a['name']} ].");
+                LoggerManager::getLogger()->fatal("SCHEDULERS: could not get an IMAP connection resource for ID [ {$a['id']} ]. Skipping mailbox [ {$a['name']} ].");
                 // cn: bug 9171 - continue while
             } // else
         } // foreach
@@ -272,7 +272,7 @@ function runMassEmailCampaign()
     if (!class_exists('LoggerManager')) {
     }
     $GLOBALS['log'] = LoggerManager::getLogger('emailmandelivery');
-    $GLOBALS['log']->debug('Called:runMassEmailCampaign');
+    LoggerManager::getLogger()->debug('Called:runMassEmailCampaign');
 
     if (!class_exists('DBManagerFactory')) {
         require('include/database/DBManagerFactory.php');
@@ -295,7 +295,7 @@ function runMassEmailCampaign()
  */
 function pruneDatabase()
 {
-    $GLOBALS['log']->info('----->Scheduler fired job of type pruneDatabase()');
+    LoggerManager::getLogger()->info('----->Scheduler fired job of type pruneDatabase()');
     $backupDir = sugar_cached('backups');
     $backupFile = 'backup-pruneDatabase-GMT0_' . gmdate('Y_m_d-H_i_s', strtotime('now')) . '.php';
 
@@ -370,7 +370,7 @@ function pruneDatabase()
 function trimTracker()
 {
     global $sugar_config, $timedate;
-    $GLOBALS['log']->info('----->Scheduler fired job of type trimTracker()');
+    LoggerManager::getLogger()->info('----->Scheduler fired job of type trimTracker()');
     $db = DBManagerFactory::getInstance();
 
     $admin = new Administration();
@@ -394,7 +394,7 @@ function trimTracker()
             $query = "DELETE FROM $tableName WHERE date_modified < $timeStamp";
         }
 
-        $GLOBALS['log']->info("----->Scheduler is about to trim the $tableName table by running the query $query");
+        LoggerManager::getLogger()->info("----->Scheduler is about to trim the $tableName table by running the query $query");
         $db->query($query);
     } //foreach
     return true;
@@ -405,7 +405,7 @@ function trimTracker()
  */
 function pollMonitoredInboxesForBouncedCampaignEmails()
 {
-    $GLOBALS['log']->info('----->Scheduler job of type pollMonitoredInboxesForBouncedCampaignEmails()');
+    LoggerManager::getLogger()->info('----->Scheduler job of type pollMonitoredInboxesForBouncedCampaignEmails()');
     global $dictionary;
 
 
@@ -428,7 +428,7 @@ function pollMonitoredInboxesForBouncedCampaignEmails()
  */
 function sendEmailReminders()
 {
-    $GLOBALS['log']->info('----->Scheduler fired job of type sendEmailReminders()');
+    LoggerManager::getLogger()->info('----->Scheduler fired job of type sendEmailReminders()');
     require_once("modules/Activities/EmailReminder.php");
     $reminder = new EmailReminder();
     return $reminder->process();
@@ -436,7 +436,7 @@ function sendEmailReminders()
 
 function removeDocumentsFromFS()
 {
-    $GLOBALS['log']->info('Starting removal of documents if they are not present in DB');
+    LoggerManager::getLogger()->info('Starting removal of documents if they are not present in DB');
 
     /**
      * @var DBManager $db
@@ -501,7 +501,7 @@ function removeDocumentsFromFS()
 function trimSugarFeeds()
 {
     global $sugar_config, $timedate;
-    $GLOBALS['log']->info('----->Scheduler fired job of type trimSugarFeeds()');
+    LoggerManager::getLogger()->info('----->Scheduler fired job of type trimSugarFeeds()');
     $db = DBManagerFactory::getInstance();
 
     //get the pruning interval from globals if it's specified
@@ -513,7 +513,7 @@ function trimSugarFeeds()
     $query = "DELETE FROM sugarfeed WHERE date_modified < $timeStamp";
 
 
-    $GLOBALS['log']->info("----->Scheduler is about to trim the sugarfeed table by running the query $query");
+    LoggerManager::getLogger()->info("----->Scheduler is about to trim the sugarfeed table by running the query $query");
     $db->query($query);
 
     return true;
@@ -543,7 +543,7 @@ function cleanJobQueue($job)
 function pollMonitoredInboxesAOP()
 {
     require_once 'modules/InboundEmail/AOPInboundEmail.php';
-    $GLOBALS['log']->info('----->Scheduler fired job of type pollMonitoredInboxesAOP()');
+    LoggerManager::getLogger()->info('----->Scheduler fired job of type pollMonitoredInboxesAOP()');
     global $dictionary;
     global $app_strings;
     global $sugar_config;
@@ -556,10 +556,10 @@ function pollMonitoredInboxesAOP()
         ' AND mailbox_type != \'bounce\''
     );
 
-    $GLOBALS['log']->debug('Just got Result from get all Inbounds of Inbound Emails');
+    LoggerManager::getLogger()->debug('Just got Result from get all Inbounds of Inbound Emails');
 
     while ($inboundEmailRow = $aopInboundEmail->db->fetchByAssoc($sqlQueryResult)) {
-        $GLOBALS['log']->debug('In while loop of Inbound Emails');
+        LoggerManager::getLogger()->debug('In while loop of Inbound Emails');
 
         $aopInboundEmailX = new AOPInboundEmail();
 
@@ -585,9 +585,9 @@ function pollMonitoredInboxesAOP()
                 $connectToMailServer = true;
             } // if
 
-            $GLOBALS['log']->debug('Trying to connect to mailserver for [ ' . $inboundEmailRow['name'] . ' ]');
+            LoggerManager::getLogger()->debug('Trying to connect to mailserver for [ ' . $inboundEmailRow['name'] . ' ]');
             if ($connectToMailServer) {
-                $GLOBALS['log']->debug('Connected to mailserver');
+                LoggerManager::getLogger()->debug('Connected to mailserver');
 
                 if (!$aopInboundEmailX->isPop3Protocol()) {
                     $newMsgs = $aopInboundEmailX->getNewMessageIds();
@@ -631,7 +631,7 @@ function pollMonitoredInboxesAOP()
                                 }
                                 if ($aopInboundEmailX->isMailBoxTypeCreateCase()) {
                                     $userId = $assignManager->getNextAssignedUser();
-                                    $GLOBALS['log']->debug('userId [ ' . $userId . ' ]');
+                                    LoggerManager::getLogger()->debug('userId [ ' . $userId . ' ]');
                                     $validatior = new SuiteValidator();
                                     if ((!isset($aopInboundEmailX->email) || !$aopInboundEmailX->email ||
                                         !isset($aopInboundEmailX->email->id) || !$aopInboundEmailX->email->id) &&
@@ -670,7 +670,7 @@ function pollMonitoredInboxesAOP()
                                 $aopInboundEmailX->handleAutoresponse($email, $contactAddr);
                             } // else
                         } // else
-                        $GLOBALS['log']->debug('***** On message [ ' . $current . ' of ' . $total . ' ] *****');
+                        LoggerManager::getLogger()->debug('***** On message [ ' . $current . ' of ' . $total . ' ] *****');
                         $current++;
                     } // foreach
                     // update Inbound Account with last robin
@@ -687,7 +687,7 @@ function pollMonitoredInboxesAOP()
                     }
                 }
             } else {
-                $GLOBALS['log']->fatal("SCHEDULERS: could not get an IMAP connection resource for ID [ {$inboundEmailRow['id']} ]. Skipping mailbox [ {$inboundEmailRow['name']} ].");
+                LoggerManager::getLogger()->fatal("SCHEDULERS: could not get an IMAP connection resource for ID [ {$inboundEmailRow['id']} ]. Skipping mailbox [ {$inboundEmailRow['name']} ].");
                 // cn: bug 9171 - continue while
             } // else
         } // foreach

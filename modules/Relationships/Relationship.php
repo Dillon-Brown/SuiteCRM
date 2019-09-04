@@ -87,7 +87,7 @@ class Relationship extends SugarBean
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -122,7 +122,7 @@ class Relationship extends SugarBean
                 return true;
             }
         } else {
-            $GLOBALS['log']->fatal('Invalid Argument: Argument 2 should be a DBManager');
+            LoggerManager::getLogger()->fatal('Invalid Argument: Argument 2 should be a DBManager');
         }
 
         return false;
@@ -134,7 +134,7 @@ class Relationship extends SugarBean
             $query = "UPDATE relationships SET deleted=1 WHERE deleted=0 AND relationship_name = '" . $relationship_name . "'";
             $db->query($query, true, " Error updating relationships table for " . $relationship_name);
         } else {
-            $GLOBALS['log']->fatal('Invalid Argument: Argument 2 should be a DBManager');
+            LoggerManager::getLogger()->fatal('Invalid Argument: Argument 2 should be a DBManager');
         }
     }
 
@@ -222,7 +222,7 @@ class Relationship extends SugarBean
                 $this->$field = $value;
             }
         } else {
-            $GLOBALS['log']->fatal('Error fetching relationship from cache '.$relationship_name);
+            LoggerManager::getLogger()->fatal('Error fetching relationship from cache '.$relationship_name);
             return false;
         }
     }

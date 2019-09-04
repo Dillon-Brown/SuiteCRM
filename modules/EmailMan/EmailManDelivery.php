@@ -149,11 +149,11 @@ do {
         //verify the queue item before further processing.
         //we have found cases where users have taken away access to email templates while them message is in queue.
         if ((empty($row['related_confirm_opt_in']) || $row['related_confirm_opt_in'] == '0') && empty($row['campaign_id'])) {
-            $GLOBALS['log']->fatal('Skipping emailman entry with empty campaign id' . print_r($row, true));
+            LoggerManager::getLogger()->fatal('Skipping emailman entry with empty campaign id' . print_r($row, true));
             continue;
         }
         if ((empty($row['related_confirm_opt_in']) || $row['related_confirm_opt_in'] == '0') && empty($row['marketing_id'])) {
-            $GLOBALS['log']->fatal('Skipping emailman entry with empty marketing id' . print_r($row, true));
+            LoggerManager::getLogger()->fatal('Skipping emailman entry with empty marketing id' . print_r($row, true));
             continue;  //do not process this row .
         }
 
@@ -163,7 +163,7 @@ do {
         }
 
         if ((empty($row['related_confirm_opt_in']) || $row['related_confirm_opt_in'] == '0') && !$emailman->verify_campaign($row['marketing_id'])) {
-            $GLOBALS['log']->fatal('Error verifying templates for the campaign, exiting');
+            LoggerManager::getLogger()->fatal('Error verifying templates for the campaign, exiting');
             continue;
         }
 
@@ -256,9 +256,9 @@ do {
 
         if ((empty($row['related_confirm_opt_in']) || $row['related_confirm_opt_in'] == '0')) {
             if (!$emailman->sendEmail($mail, $massemailer_email_copy, $test)) {
-                $GLOBALS['log']->fatal("Email delivery FAILURE:" . print_r($row, true));
+                LoggerManager::getLogger()->fatal("Email delivery FAILURE:" . print_r($row, true));
             } else {
-                $GLOBALS['log']->debug("Email delivery SUCCESS:" . print_r($row, true));
+                LoggerManager::getLogger()->debug("Email delivery SUCCESS:" . print_r($row, true));
             }
         } else {
             if ($confirmOptInEnabled) {
@@ -268,10 +268,10 @@ do {
                 $now = TimeDate::getInstance()->nowDb();
                     
                 if (!$emailman->sendOptInEmail($emailAddress, $row['related_type'], $row['related_id'])) {
-                    $GLOBALS['log']->fatal("Confirm Opt In Email delivery FAILURE:" . print_r($row, true));
+                    LoggerManager::getLogger()->fatal("Confirm Opt In Email delivery FAILURE:" . print_r($row, true));
                     $emailAddress->confirm_opt_in_fail_date = $now;
                 } else {
-                    $GLOBALS['log']->debug("Confirm Opt In Email delivery SUCCESS:" . print_r($row, true));
+                    LoggerManager::getLogger()->debug("Confirm Opt In Email delivery SUCCESS:" . print_r($row, true));
 
                     if (is_string($emailAddress->email_address)) {
                         $emailAddressString = $emailAddress->email_address;
@@ -297,7 +297,7 @@ do {
         }
 
         if ($mail->isError()) {
-            $GLOBALS['log']->fatal("Email delivery error:" . print_r($row, true) . $mail->ErrorInfo);
+            LoggerManager::getLogger()->fatal("Email delivery error:" . print_r($row, true) . $mail->ErrorInfo);
         }
         $count++;
     }

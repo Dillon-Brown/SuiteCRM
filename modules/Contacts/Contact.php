@@ -182,7 +182,7 @@ class Contact extends Person implements EmailInterface
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -453,7 +453,7 @@ class Contact extends Person implements EmailInterface
             $this->account_name = $row['name'];
             $this->account_id = $row['id'];
             if (null === $locale || !is_object($locale) || !method_exists($locale, 'getLocaleFormattedName')) {
-                $GLOBALS['log']->fatal('Call to a member function getLocaleFormattedName() on ' . gettype($locale));
+                LoggerManager::getLogger()->fatal('Call to a member function getLocaleFormattedName() on ' . gettype($locale));
             } else {
                 $this->report_to_name = $locale->getLocaleFormattedName(
                     $row['first_name'],
@@ -506,13 +506,13 @@ class Contact extends Person implements EmailInterface
         $this->load_relationship("user_sync");
 
         if (!isset($this->user_sync)) {
-            $GLOBALS['log']->fatal('Contact::$user_sync is not set');
+            LoggerManager::getLogger()->fatal('Contact::$user_sync is not set');
             $beanIDs = null;
         } elseif (!is_object($this->user_sync)) {
-            $GLOBALS['log']->fatal('Contact::$user_sync is not an object');
+            LoggerManager::getLogger()->fatal('Contact::$user_sync is not an object');
             $beanIDs = null;
         } elseif (!method_exists($this->user_sync, 'get')) {
-            $GLOBALS['log']->fatal('Contact::$user_sync::get() is not a function');
+            LoggerManager::getLogger()->fatal('Contact::$user_sync::get() is not a function');
             $beanIDs = null;
         } else {
             $beanIDs = $this->user_sync->get();
@@ -594,7 +594,7 @@ class Contact extends Person implements EmailInterface
         $where_clause = "(email1='$email' OR email2='$email') AND deleted=0";
 
         $query = "SELECT id FROM $this->table_name WHERE $where_clause";
-        $GLOBALS['log']->debug("Retrieve $this->object_name: " . $query);
+        LoggerManager::getLogger()->debug("Retrieve $this->object_name: " . $query);
         $result = $this->db->getOne($query, true, "Retrieving record $where_clause:");
 
         return empty($result) ? null : $result;
@@ -662,11 +662,11 @@ class Contact extends Person implements EmailInterface
             $result = $this->db->query($sql);
             while ($hash = $this->db->fetchByAssoc($result)) {
                 if (!isset($this->user_sync)) {
-                    $GLOBALS['log']->fatal('Contact::$user_sync is not set');
+                    LoggerManager::getLogger()->fatal('Contact::$user_sync is not set');
                 } elseif (!is_object($this->user_sync)) {
-                    $GLOBALS['log']->fatal('Contact::$user_sync is not an object');
+                    LoggerManager::getLogger()->fatal('Contact::$user_sync is not an object');
                 } elseif (!method_exists($this->user_sync, 'add')) {
-                    $GLOBALS['log']->fatal('Contact::$user_sync::add() is not a function');
+                    LoggerManager::getLogger()->fatal('Contact::$user_sync::add() is not a function');
                 } else {
                     $this->user_sync->add($hash['id']);
                 }
@@ -679,11 +679,11 @@ class Contact extends Person implements EmailInterface
                 ) {
                     // it is a user, add user
                     if (!isset($this->user_sync)) {
-                        $GLOBALS['log']->fatal('Contact::$user_sync is not set');
+                        LoggerManager::getLogger()->fatal('Contact::$user_sync is not set');
                     } elseif (!is_object($this->user_sync)) {
-                        $GLOBALS['log']->fatal('Contact::$user_sync is not an object');
+                        LoggerManager::getLogger()->fatal('Contact::$user_sync is not an object');
                     } elseif (!method_exists($this->user_sync, 'add')) {
-                        $GLOBALS['log']->fatal('Contact::$user_sync::add() is not a function');
+                        LoggerManager::getLogger()->fatal('Contact::$user_sync::add() is not a function');
                     } else {
                         $this->user_sync->add($user_id ? $user_id : $focus_user->id);
                     }

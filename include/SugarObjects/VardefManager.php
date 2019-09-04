@@ -320,7 +320,7 @@ class VardefManager
             self::loadVardef($module, $object, false, array('ignore_rel_calc_fields' => true));
         }
         if (empty($dictionary[$object])) {
-            $GLOBALS['log']->debug("Failed to load vardefs for $module:$object in linkFieldsForModule<br/>");
+            LoggerManager::getLogger()->debug("Failed to load vardefs for $module:$object in linkFieldsForModule<br/>");
             return false;
         }
 

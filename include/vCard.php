@@ -322,11 +322,11 @@ class vCard
                 }
 
                 if ($keys[0] == 'ORG') {
-                    $GLOBALS['log']->debug('I found a company name');
+                    LoggerManager::getLogger()->debug('I found a company name');
                     if (!empty($value)) {
-                        $GLOBALS['log']->debug('I found a company name (fer real)');
+                        LoggerManager::getLogger()->debug('I found a company name (fer real)');
                         if (is_a($bean, "Contact") || is_a($bean, "Lead")) {
-                            $GLOBALS['log']->debug('And Im dealing with a person!');
+                            LoggerManager::getLogger()->debug('And Im dealing with a person!');
                             $accountBean = BeanFactory::getBean('Accounts');
                             // It's a contact, we better try and match up an account
                             $full_company_name = trim($values[0]);
@@ -346,17 +346,17 @@ class vCard
                                 }
                                 $short_company_name = trim(preg_replace(array_keys($vCardTrimStrings), $vCardTrimStrings, $full_company_name), " ,.");
 
-                                $GLOBALS['log']->debug('Trying an extended search for: ' . $short_company_name);
+                                LoggerManager::getLogger()->debug('Trying an extended search for: ' . $short_company_name);
                                 $result = $accountBean->retrieve_by_string_fields(array('name' => $short_company_name, 'deleted' => 0));
                             }
 
                             if (is_a($bean, "Lead") || ! isset($result->id)) {
                                 // We could not find a parent account, or this is a lead so only copy the name, no linking
-                                $GLOBALS['log']->debug("Did not find a matching company ($full_company_name)");
+                                LoggerManager::getLogger()->debug("Did not find a matching company ($full_company_name)");
                                 $bean->account_id = '';
                                 $bean->account_name = $full_company_name;
                             } else {
-                                $GLOBALS['log']->debug("Found a matching company: " . $result->name);
+                                LoggerManager::getLogger()->debug("Found a matching company: " . $result->name);
                                 $bean->account_id = $result->id;
                                 $bean->account_name = $result->name;
                             }
@@ -376,13 +376,13 @@ class vCard
 
         foreach ($bean->get_import_required_fields() as $key => $value) {
             if (empty($bean->$key)) {
-                $GLOBALS['log']->error("Cannot import vCard, required field is not set: $key");
+                LoggerManager::getLogger()->error("Cannot import vCard, required field is not set: $key");
                 return;
             }
         }
 
         if (is_a($bean, "Contact") && empty($bean->account_id) && !empty($bean->account_name)) {
-            $GLOBALS['log']->debug("Look ma! I'm creating a new account: " . $bean->account_name);
+            LoggerManager::getLogger()->debug("Look ma! I'm creating a new account: " . $bean->account_name);
             // We need to create a new account
             $accountBean = BeanFactory::getBean('Accounts');
             // Populate the newly created account with all of the contact information

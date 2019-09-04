@@ -210,7 +210,7 @@ function get_notes_in_module($in, $module, $orderBy = '')
             if ($valid->validateQueryClauses($fakeWhere, $orderBy)) {
                 $query .= ' ORDER BY '. $orderBy;
             } else {
-                $GLOBALS['log']->error("Bad order by: $orderBy");
+                LoggerManager::getLogger()->error("Bad order by: $orderBy");
             }
         }
 
@@ -272,7 +272,7 @@ function get_related_list($in, $template, $where, $order_by, $row_offset = 0, $l
             require_once 'include/SugarSQLValidate.php';
             $valid = new SugarSQLValidate();
             if (!$valid->validateQueryClauses($where)) {
-                $GLOBALS['log']->error("Bad query: $where");
+                LoggerManager::getLogger()->error("Bad query: $where");
                 // No way to directly pass back an error.
                 return array();
             }
@@ -377,7 +377,7 @@ function login_user($portal_auth)
         $current_user = $bean;
         return 'success';
     }
-    $GLOBALS['log']->fatal('SECURITY: User authentication for '. $portal_auth['user_name']. ' failed');
+    LoggerManager::getLogger()->fatal('SECURITY: User authentication for '. $portal_auth['user_name']. ' failed');
     return 'fail';
 }
 

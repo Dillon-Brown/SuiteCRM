@@ -67,7 +67,7 @@ abstract class PHP5Soap extends SugarSoapService
     {
         ob_clean();
         global $HTTP_RAW_POST_DATA;
-        $GLOBALS['log']->debug("I am here1 ". $HTTP_RAW_POST_DATA);
+        LoggerManager::getLogger()->debug("I am here1 ". $HTTP_RAW_POST_DATA);
         $qs = '';
         if (isset($_SERVER['QUERY_STRING'])) {
             $qs = $_SERVER['QUERY_STRING'];

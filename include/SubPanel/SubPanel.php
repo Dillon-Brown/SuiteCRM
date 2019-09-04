@@ -313,7 +313,7 @@ class SubPanel
         //tyoung 10.12.07 pushed panel->name to lowercase to match case in subpaneldefs.php files -
         //gave error on bad index 'module' as this override key didn't match the key in the subpaneldefs
         $name = "layout_defs['".  $panel->parent_bean->module_dir. "']['subpanel_setup']['" .strtolower($panel->name). "']";
-        //  	$GLOBALS['log']->debug('SubPanel.php->saveSubPanelDefOverride(): '.$name);
+        //  	LoggerManager::getLogger()->debug('SubPanel.php->saveSubPanelDefOverride(): '.$name);
         $newValue = override_value_to_string($name, 'override_subpanel_name', $filename);
         mkdir_recursive('custom/Extension/modules/'. $panel->parent_bean->module_dir . '/Ext/Layoutdefs', true);
         $fp = sugar_fopen('custom/Extension/modules/'. $panel->parent_bean->module_dir . "/Ext/Layoutdefs/$extname.php", 'w');
@@ -423,7 +423,7 @@ class SubPanel
         if (count($where_clauses) > 0) {
             $this->search_query = '('. implode(' ) AND ( ', $where_clauses) . ')';
         }
-        $GLOBALS['log']->info("Subpanel Where Clause: $this->search_query");
+        LoggerManager::getLogger()->info("Subpanel Where Clause: $this->search_query");
     }
 
     public function get_searchdefs($module)

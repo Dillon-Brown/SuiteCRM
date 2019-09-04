@@ -66,7 +66,7 @@ global $theme, $currentModule, $sugar_config;
 //get administration bean for email setup
 $focus = new Administration();
 $focus->retrieveSettings(); //retrieve all admin settings.
-$GLOBALS['log']->info("Mass Emailer(EmailMan) ConfigureSettings view");
+LoggerManager::getLogger()->info("Mass Emailer(EmailMan) ConfigureSettings view");
 $email = new Email();
 $ss = new Sugar_Smarty();
 $ss->assign("MOD", $mod_strings);

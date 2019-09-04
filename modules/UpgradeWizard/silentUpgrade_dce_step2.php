@@ -425,7 +425,6 @@ $upgradeType = verifyArguments($argv, $usage_dce, $usage_regular);
 
 ///////////////////////////////////////////////////////////////////////////////
 ////	PREP LOCALLY USED PASSED-IN VARS & CONSTANTS
-//$GLOBALS['log']	= LoggerManager::getLogger();
 //require_once('/var/www/html/eddy/sugarnode/SugarTemplateUtilities.php');
 
 $path			= $argv[2]; // custom log file, if blank will use ./upgradeWizard.log

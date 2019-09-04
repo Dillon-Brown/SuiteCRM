@@ -207,7 +207,7 @@ if (isset($_REQUEST['record']) &&  !empty($_REQUEST['record'])) {
 } else {
     //there is no record to retrieve, so ask which type of campaign wizard to launch
     /*    $header_URL = "Location: index.php?module=Campaigns&action=index";
-        $GLOBALS['log']->debug("about to post header URL of: $header_URL");
+        LoggerManager::getLogger()->debug("about to post header URL of: $header_URL");
         header($header_URL);
     */
     global $mod_strings;

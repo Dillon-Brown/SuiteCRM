@@ -731,7 +731,7 @@ class chart
         $date1 = DateTime::createFromFormat('Y-m-d', $day);
         $date = $date1->format('Y-m-d');
         $now = $now->format('Y-m-d');
-        // $GLOBALS['log']->fatal("date2 ".$now);
+        // LoggerManager::getLogger()->fatal("date2 ".$now);
 
         if ($date1->format('l') == 'Sunday' && $date == $now) {
             return 'weekend-today';

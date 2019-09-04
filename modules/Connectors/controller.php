@@ -360,7 +360,7 @@ class ConnectorsController extends SugarController
             $json = getJSONobj();
             echo $json->encode($results);
         } else {
-            $GLOBALS['log']->error($GLOBALS['app_strings']['ERR_MISSING_MAPPING_ENTRY_FORM_MODULE']);
+            LoggerManager::getLogger()->error($GLOBALS['app_strings']['ERR_MISSING_MAPPING_ENTRY_FORM_MODULE']);
             echo '';
         }
     }
@@ -481,7 +481,7 @@ class ConnectorsController extends SugarController
 
         if (!write_array_to_file('modules_sources', $modules_sources, CONNECTOR_DISPLAY_CONFIG_FILE)) {
             //Log error and return empty array
-            $GLOBALS['log']->fatal("Cannot write \$modules_sources to " . CONNECTOR_DISPLAY_CONFIG_FILE);
+            LoggerManager::getLogger()->fatal("Cannot write \$modules_sources to " . CONNECTOR_DISPLAY_CONFIG_FILE);
         }
 
         $sources_modules = array();
@@ -506,7 +506,7 @@ class ConnectorsController extends SugarController
 
         //Write the new searchdefs out
         if (!write_array_to_file('searchdefs', $searchdefs, 'custom/modules/Connectors/metadata/searchdefs.php')) {
-            $GLOBALS['log']->fatal("Cannot write file custom/modules/Connectors/metadata/searchdefs.php");
+            LoggerManager::getLogger()->fatal("Cannot write file custom/modules/Connectors/metadata/searchdefs.php");
         }
 
         //Unset the $_SESSION['searchDefs'] variable
@@ -530,7 +530,7 @@ class ConnectorsController extends SugarController
 
                 $fakeMapping = array('beans' => array());
                 if (!write_array_to_file('mapping', $fakeMapping, "{$dir}/mapping.php")) {
-                    $GLOBALS['log']->fatal("Cannot write file {$dir}/mapping.php");
+                    LoggerManager::getLogger()->fatal("Cannot write file {$dir}/mapping.php");
                 }
                 $s = SourceFactory::getSource($id);
                 $s->saveMappingHook($fakeMapping);
@@ -600,7 +600,7 @@ class ConnectorsController extends SugarController
             }
 
             if (!write_array_to_file('mapping', $mapping, "{$dir}/mapping.php")) {
-                $GLOBALS['log']->fatal("Cannot write file {$dir}/mapping.php");
+                LoggerManager::getLogger()->fatal("Cannot write file {$dir}/mapping.php");
             }
             $source->saveMappingHook($mapping);
         } //foreach
@@ -682,7 +682,7 @@ class ConnectorsController extends SugarController
             }
 
             if (!write_array_to_file('mapping', $mapping, "{$dir}/mapping.php")) {
-                $GLOBALS['log']->fatal("Cannot write file {$dir}/mapping.php");
+                LoggerManager::getLogger()->fatal("Cannot write file {$dir}/mapping.php");
             }
             $source->saveMappingHook($mapping);
         }
@@ -727,7 +727,7 @@ class ConnectorsController extends SugarController
                 echo $mod_strings['LBL_TEST_SOURCE_FAILED'];
             }
         } catch (Exception $ex) {
-            $GLOBALS['log']->fatal($ex->getMessage());
+            LoggerManager::getLogger()->fatal($ex->getMessage());
             echo $ex->getMessage();
         }
     }

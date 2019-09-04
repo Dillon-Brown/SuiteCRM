@@ -66,7 +66,7 @@ if (preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/
                     $marketing->save();
                 } else {
                     // TODO something is not OK, the selected campaign isn't related to this marketing!!
-                    $GLOBALS['log']->debug('Selected marketing not found!');
+                    LoggerManager::getLogger()->debug('Selected marketing not found!');
                 }
             }
             break;

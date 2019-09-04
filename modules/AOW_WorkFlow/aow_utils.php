@@ -83,7 +83,7 @@ function getModuleFields(
                             $blockedModuleFields[$mod->module_dir]
                             ) && !$current_user->isAdmin()
                         ) {
-                            $GLOBALS['log']->debug('hiding ' . $arr['name'] . ' field from ' . $current_user->name);
+                            LoggerManager::getLogger()->debug('hiding ' . $arr['name'] . ' field from ' . $current_user->name);
                             continue;
                         }
                     }

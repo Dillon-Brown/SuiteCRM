@@ -20,7 +20,7 @@ class SecurityGroup extends SecurityGroup_sugar
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -173,7 +173,7 @@ class SecurityGroup extends SecurityGroup_sugar
         ) {
             $query .= ' and acl_roles_actions.access_override = 80  ';
         }
-        $GLOBALS['log']->debug("SecuritySuite: groupHasAccess $query");
+        LoggerManager::getLogger()->debug("SecuritySuite: groupHasAccess $query");
         $result = $db->query($query);
         $row = $db->fetchByAssoc($result);
         if (isset($row) && $row['results'] > 0) {
@@ -251,7 +251,7 @@ class SecurityGroup extends SecurityGroup_sugar
                             . "left join securitygroups_records d on d.securitygroup_id = g.id and d.record_id = '$focus->id' and d.module = '$focus->module_dir' and d.deleted = 0 "
                             . "where d.id is null and g.id = '" . $defaultGroup['securitygroup_id'] . "' and g.deleted = 0 ";
                     }
-                    $GLOBALS['log']->debug("SecuritySuite: Assign Default Groups: $query");
+                    LoggerManager::getLogger()->debug("SecuritySuite: Assign Default Groups: $query");
                     $focus->db->query($query, true);
                 }
             } //end foreach default group
@@ -289,7 +289,7 @@ class SecurityGroup extends SecurityGroup_sugar
                     . 'inner join securitygroups g on u.securitygroup_id = g.id and g.deleted = 0 and (g.noninheritable is null or g.noninheritable <> 1) '
                     . "left join securitygroups_records d on d.securitygroup_id = u.securitygroup_id and d.record_id = '$focus->id' and d.module = '$focus->module_dir' and d.deleted = 0 "
                     . "where d.id is null and u.user_id = '$currentUserId' and u.deleted = 0 and (u.noninheritable is null or u.noninheritable <> 1)";
-                $GLOBALS['log']->debug("SecuritySuite: Inherit from Creator: $query");
+                LoggerManager::getLogger()->debug("SecuritySuite: Inherit from Creator: $query");
                 $focus->db->query($query, true);
             }
         }
@@ -321,7 +321,7 @@ class SecurityGroup extends SecurityGroup_sugar
                         . 'inner join securitygroups g on u.securitygroup_id = g.id and g.deleted = 0 and (g.noninheritable is null or g.noninheritable <> 1) '
                         . "left join securitygroups_records d on d.securitygroup_id = u.securitygroup_id and d.record_id = '$focus->id' and d.module = '$focus->module_dir' and d.deleted = 0 "
                         . "where d.id is null and u.user_id = '$assigned_user_id' and u.deleted = 0  and (u.noninheritable is null or u.noninheritable <> 1)";
-                    $GLOBALS['log']->debug("SecuritySuite: Inherit from Assigned: $query");
+                    LoggerManager::getLogger()->debug("SecuritySuite: Inherit from Assigned: $query");
                     $focus->db->query($query, true);
                 }
             } //if !empty assigned_user_id
@@ -464,7 +464,7 @@ class SecurityGroup extends SecurityGroup_sugar
             . "where d.id is null and r.module = '" . $focus->db->quote($parent_type) . "' "
             . "and r.record_id = '" . $focus->db->quote($parent_id) . "' "
             . 'and r.deleted = 0 ';
-        $GLOBALS['log']->debug("SecuritySuite: Inherit from Parent: $query");
+        LoggerManager::getLogger()->debug("SecuritySuite: Inherit from Parent: $query");
         $focus->db->query($query, true);
     }
 
@@ -487,7 +487,7 @@ class SecurityGroup extends SecurityGroup_sugar
             . " where securitygroups.deleted = 0 and securitygroups_users.user_id = '$user_id' "
             . '  and (securitygroups.noninheritable is null or securitygroups.noninheritable <> 1) '
             . '  and (securitygroups_users.noninheritable is null or securitygroups_users.noninheritable <> 1) ';
-        $GLOBALS['log']->debug("SecuritySuite: Inherit One Pre-Check Qualifier: $query");
+        LoggerManager::getLogger()->debug("SecuritySuite: Inherit One Pre-Check Qualifier: $query");
         $result = $db->query($query);
         $row = $db->fetchByAssoc($result);
         if (isset($row) && $row['results'] == 1) {
@@ -498,7 +498,7 @@ class SecurityGroup extends SecurityGroup_sugar
                 . 'inner join securitygroups g on u.securitygroup_id = g.id and g.deleted = 0 and (g.noninheritable is null or g.noninheritable <> 1) '
                 . "left join securitygroups_records d on d.securitygroup_id = u.securitygroup_id and d.record_id = '$record_id' and d.module = '$module' and d.deleted = 0 "
                 . "where d.id is null and u.user_id = '$user_id' and u.deleted = 0 and (u.noninheritable is null or u.noninheritable <> 1)";
-            $GLOBALS['log']->debug("SecuritySuite: Inherit One: $query");
+            LoggerManager::getLogger()->debug("SecuritySuite: Inherit One: $query");
             $db->query($query, true);
 
             return true;
@@ -523,7 +523,7 @@ class SecurityGroup extends SecurityGroup_sugar
                 . " where securitygroups.deleted = 0 and securitygroups_users.user_id = '$user_id' "
                 . '  and (securitygroups.noninheritable is null or securitygroups.noninheritable <> 1) '
                 . '  and (securitygroups_users.noninheritable is null or securitygroups_users.noninheritable <> 1) ';
-            $GLOBALS['log']->debug("SecuritySuite: Inherit One Pre-Check Qualifier: $query");
+            LoggerManager::getLogger()->debug("SecuritySuite: Inherit One Pre-Check Qualifier: $query");
             $result = $db->query($query);
             $row = $db->fetchByAssoc($result);
             if (isset($row)) {
@@ -546,7 +546,7 @@ class SecurityGroup extends SecurityGroup_sugar
             . 'from securitygroups_default '
             . 'inner join securitygroups on securitygroups_default.securitygroup_id = securitygroups.id '
             . 'where securitygroups_default.deleted = 0 and securitygroups.deleted = 0';
-        $GLOBALS['log']->debug("SecuritySuite: Retrieve Default Groups: $query");
+        LoggerManager::getLogger()->debug("SecuritySuite: Retrieve Default Groups: $query");
         $result = $db->query($query);
         while (($row = $db->fetchByAssoc($result)) != null) {
             $default_groups[$row['id']] = array(
@@ -579,7 +579,7 @@ class SecurityGroup extends SecurityGroup_sugar
                 ENT_QUOTES
         ) . "'," . $db->convert('', 'today') . ',0 )';
       
-        $GLOBALS['log']->debug("SecuritySuite: Save Default Group: $query");
+        LoggerManager::getLogger()->debug("SecuritySuite: Save Default Group: $query");
         $db->query($query);
     }
 
@@ -614,7 +614,7 @@ class SecurityGroup extends SecurityGroup_sugar
         require_once 'modules/Relationships/Relationship.php';
         $rs = new Relationship();
         $query = "SELECT lhs_module, rhs_module FROM $rs->table_name WHERE deleted=0 AND (lhs_module = 'SecurityGroups' OR rhs_module='SecurityGroups')";
-        $GLOBALS['log']->debug("SecuritySuite: Get SecuritySuite Enabled Modules: $query");
+        LoggerManager::getLogger()->debug("SecuritySuite: Get SecuritySuite Enabled Modules: $query");
         $result = $rs->db->query($query);
         while (($row = $rs->db->fetchByAssoc($result)) != null) {
             if ($row['lhs_module'] == 'SecurityGroups') {
@@ -646,7 +646,7 @@ class SecurityGroup extends SecurityGroup_sugar
      */
     public static function getLinkName($this_module, $rel_module)
     {
-        $GLOBALS['log']->debug("SecurityGroup->getLinkName this_module: $this_module rel_module: $rel_module");
+        LoggerManager::getLogger()->debug("SecurityGroup->getLinkName this_module: $this_module rel_module: $rel_module");
         include_once 'modules/Relationships/RelationshipHandler.php';
         $db = DBManagerFactory::getInstance();
         $rh = new RelationshipHandler($db, $this_module);
@@ -674,7 +674,7 @@ class SecurityGroup extends SecurityGroup_sugar
                 '',
                 'today'
             ) . ',0) ';
-        $GLOBALS['log']->debug("SecuritySuite: addGroupToRecord: $query");
+        LoggerManager::getLogger()->debug("SecuritySuite: addGroupToRecord: $query");
         $db->query($query, true);
     }
 
@@ -692,7 +692,7 @@ class SecurityGroup extends SecurityGroup_sugar
         $db = DBManagerFactory::getInstance();
         $query = 'update securitygroups_records set deleted = 1, date_modified = ' . $db->convert('', 'today') . ' '
             . "where securitygroup_id = '" . $securitygroup_id . "' and record_id = '$record_id' and module = '$module'";
-        $GLOBALS['log']->debug("SecuritySuite: addGroupToRecord: $query");
+        LoggerManager::getLogger()->debug("SecuritySuite: addGroupToRecord: $query");
         $db->query($query, true);
     }
 
@@ -753,7 +753,7 @@ class SecurityGroup extends SecurityGroup_sugar
             . " where securitygroups.deleted = 0 and users.employee_status = 'Active' "
             . "  and securitygroups.id = '$this->id' "
             . ' order by users.user_name asc ';
-        $GLOBALS['log']->debug("SecuritySuite: getMembers: $query");
+        LoggerManager::getLogger()->debug("SecuritySuite: getMembers: $query");
         $user_array = array();
         $result = $db->query($query);
         while (($row = $db->fetchByAssoc($result)) != null) {

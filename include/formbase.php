@@ -127,7 +127,7 @@ function populateFromPost($prefix, &$focus, $skipRetrieve = false, $checkACL = f
         if ($sf != null) {
             $sf->save($focus, $_POST, $field, $def, $prefix);
         } else {
-            $GLOBALS['log']->fatal("Field '$field' does not have a SugarField handler");
+            LoggerManager::getLogger()->fatal("Field '$field' does not have a SugarField handler");
         }
 
         /*
@@ -403,13 +403,13 @@ function add_prospects_to_prospect_list($parent_id, $child_id)
 
 function add_to_prospect_list($query_panel, $parent_module, $parent_type, $parent_id, $child_id, $link_attribute, $link_type, $parent)
 {
-    $GLOBALS['log']->debug('add_prospects_to_prospect_list:parameters:'.$query_panel);
-    $GLOBALS['log']->debug('add_prospects_to_prospect_list:parameters:'.$parent_module);
-    $GLOBALS['log']->debug('add_prospects_to_prospect_list:parameters:'.$parent_type);
-    $GLOBALS['log']->debug('add_prospects_to_prospect_list:parameters:'.$parent_id);
-    $GLOBALS['log']->debug('add_prospects_to_prospect_list:parameters:'.$child_id);
-    $GLOBALS['log']->debug('add_prospects_to_prospect_list:parameters:'.$link_attribute);
-    $GLOBALS['log']->debug('add_prospects_to_prospect_list:parameters:'.$link_type);
+    LoggerManager::getLogger()->debug('add_prospects_to_prospect_list:parameters:'.$query_panel);
+    LoggerManager::getLogger()->debug('add_prospects_to_prospect_list:parameters:'.$parent_module);
+    LoggerManager::getLogger()->debug('add_prospects_to_prospect_list:parameters:'.$parent_type);
+    LoggerManager::getLogger()->debug('add_prospects_to_prospect_list:parameters:'.$parent_id);
+    LoggerManager::getLogger()->debug('add_prospects_to_prospect_list:parameters:'.$child_id);
+    LoggerManager::getLogger()->debug('add_prospects_to_prospect_list:parameters:'.$link_attribute);
+    LoggerManager::getLogger()->debug('add_prospects_to_prospect_list:parameters:'.$link_type);
     require_once('include/SubPanel/SubPanelTiles.php');
 
 
@@ -448,7 +448,7 @@ function add_to_prospect_list($query_panel, $parent_module, $parent_type, $paren
             if ($link_type != 'default') {
                 $relationship_attribute=strtolower($object->$link_attribute);
             }
-            $GLOBALS['log']->debug('add_prospects_to_prospect_list:relationship_attribute:'.$relationship_attribute);
+            LoggerManager::getLogger()->debug('add_prospects_to_prospect_list:relationship_attribute:'.$relationship_attribute);
             // load relationship for the first time or on change of relationship atribute.
             if (empty($focus->$relationship_attribute)) {
                 $focus->load_relationship($relationship_attribute);
@@ -465,13 +465,13 @@ function save_from_report($report_id, $parent_id, $module_name, $relationship_at
     global $beanFiles;
     global $beanList;
 
-    $GLOBALS['log']->debug("Save2: Linking with report output");
-    $GLOBALS['log']->debug("Save2:Report ID=".$report_id);
-    $GLOBALS['log']->debug("Save2:Parent ID=".$parent_id);
-    $GLOBALS['log']->debug("Save2:Module Name=".$module_name);
-    $GLOBALS['log']->debug("Save2:Relationship Attribute Name=".$relationship_attr_name);
+    LoggerManager::getLogger()->debug("Save2: Linking with report output");
+    LoggerManager::getLogger()->debug("Save2:Report ID=".$report_id);
+    LoggerManager::getLogger()->debug("Save2:Parent ID=".$parent_id);
+    LoggerManager::getLogger()->debug("Save2:Module Name=".$module_name);
+    LoggerManager::getLogger()->debug("Save2:Relationship Attribute Name=".$relationship_attr_name);
 
-    $GLOBALS['log']->debug("Save2:Bean Name=" . $module_name);
+    LoggerManager::getLogger()->debug("Save2:Bean Name=" . $module_name);
     $focus = BeanFactory::newBean($module_name);
 
     $focus->retrieve($parent_id);
@@ -493,7 +493,7 @@ function save_from_report($report_id, $parent_id, $module_name, $relationship_at
     $report->run_query();
 
     $sql = $report->query_list[0];
-    $GLOBALS['log']->debug("Save2:Report Query=".$sql);
+    LoggerManager::getLogger()->debug("Save2:Report Query=".$sql);
     $result = $report->db->query($sql);
 
     $reportBean = BeanFactory::newBean($saved->module);

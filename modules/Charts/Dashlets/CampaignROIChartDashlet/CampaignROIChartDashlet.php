@@ -231,7 +231,7 @@ EOD;
         global $mod_strings;
         
         if (!$campaign_id) {
-            $GLOBALS['log']->debug('roi chart need a campaign id');
+            LoggerManager::getLogger()->debug('roi chart need a campaign id');
             return false;
         }
 

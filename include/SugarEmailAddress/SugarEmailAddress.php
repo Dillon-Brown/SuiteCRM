@@ -200,7 +200,7 @@ class SugarEmailAddress extends SugarBean
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -269,13 +269,13 @@ class SugarEmailAddress extends SugarBean
         // validate the request first
 
         if (!$this->isUserProfileEditViewPageSaveAction($request)) {
-            $GLOBALS['log']->error('Invalid Referrer: '.
+            LoggerManager::getLogger()->error('Invalid Referrer: '.
                 'expected the Save action to be called from the User\'s Profile Edit View');
             return false;
         }
 
         if (!$request) {
-            $GLOBALS['log']->error('This function requires a request array');
+            LoggerManager::getLogger()->error('This function requires a request array');
             return false;
         }
 
@@ -289,7 +289,7 @@ class SugarEmailAddress extends SugarBean
         }
 
         if (!$neededRequest) {
-            $GLOBALS['log']->error('Email info is not found in request');
+            LoggerManager::getLogger()->error('Email info is not found in request');
             return false;
         }
 
@@ -308,12 +308,12 @@ class SugarEmailAddress extends SugarBean
         }
 
         if (!$usefulRequest) {
-            $GLOBALS['log']->error('Cannot find valid email address(es) in request');
+            LoggerManager::getLogger()->error('Cannot find valid email address(es) in request');
             return false;
         }
 
         if (!isset($usefulRequest['Users']) || !$usefulRequest['Users']) {
-            $GLOBALS['log']->error('Cannot find valid user in request');
+            LoggerManager::getLogger()->error('Cannot find valid user in request');
             return false;
         }
 
@@ -349,29 +349,29 @@ class SugarEmailAddress extends SugarBean
         if ($primary && preg_match('/^Users(\d+)emailAddress(\d+)$/', $primary, $matches)) {
             $usefulRequest['Users'][$matches[1]]['emailAddress'][$matches[2]]['primary'] = true;
         } else {
-            $GLOBALS['log']->warn("Primary email is not selected.");
+            LoggerManager::getLogger()->warn("Primary email is not selected.");
         }
 
         if ($replyTo && preg_match('/^Users(\d+)emailAddress(\d+)$/', $replyTo, $matches)) {
             $usefulRequest['Users'][$matches[1]]['emailAddress'][$matches[2]]['replyTo'] = true;
         } else {
-            $GLOBALS['log']->warn("Reply-to email is not selected.");
+            LoggerManager::getLogger()->warn("Reply-to email is not selected.");
         }
 
         if (count($usefulRequest['Users']) < 1) {
-            $GLOBALS['log']->error("Cannot find valid user in request");
+            LoggerManager::getLogger()->error("Cannot find valid user in request");
             return false;
         }
 
         if (count($usefulRequest['Users']) > 1) {
-            $GLOBALS['log']->warn("Expected only one user in request");
+            LoggerManager::getLogger()->warn("Expected only one user in request");
         }
 
         $return = true;
         foreach ($usefulRequest['Users'] as $user) {
             foreach ($user['emailAddress'] as $email) {
                 if (!$this->handleEmailSaveAtUserProfile($email['id'], $email['email'], $email['primary'], $email['replyTo'])) {
-                    $GLOBALS['log']->warn("Some emails were not saved or updated: {$email['id']} ({$email['email']})");
+                    LoggerManager::getLogger()->warn("Some emails were not saved or updated: {$email['id']} ({$email['email']})");
                     $return = false;
                 }
             }
@@ -401,30 +401,30 @@ class SugarEmailAddress extends SugarBean
         // first validations
 
         if (!$id) {
-            $GLOBALS['log']->error("Missing email ID");
+            LoggerManager::getLogger()->error("Missing email ID");
             return false;
         }
 
         if (!$address) {
-            $GLOBALS['log']->error("Missing email address");
+            LoggerManager::getLogger()->error("Missing email address");
             return false;
         }
 
         if (!$this->isValidEmail($address)) {
-            $GLOBALS['log']->error("Invalid email address format");
+            LoggerManager::getLogger()->error("Invalid email address format");
             return false;
         }
 
         $email = new SugarEmailAddress();
         if (!$email->retrieve($id)) {
-            $GLOBALS['log']->error('Email retrieve error, please ensure that the email ID is correct');
+            LoggerManager::getLogger()->error('Email retrieve error, please ensure that the email ID is correct');
             return false;
         }
 
         $db = DBManagerFactory::getInstance();
         $query = sprintf("SELECT * FROM email_addresses WHERE id = %s AND deleted = 0", $db->quoted($id));
         if ($db->getOne($query) === false) {
-            $GLOBALS['log']->error("Missing Email ID ($id)");
+            LoggerManager::getLogger()->error("Missing Email ID ($id)");
             return false;
         }
 
@@ -444,10 +444,10 @@ class SugarEmailAddress extends SugarBean
                     deleted = 0";
             $result = $db->query($query);
             if (!$result) {
-                $GLOBALS['log']->warn("Undefined behavior: Missing error information about email save (1)");
+                LoggerManager::getLogger()->warn("Undefined behavior: Missing error information about email save (1)");
             }
             if ($db->getAffectedRowCount($result) != 1) {
-                $GLOBALS['log']->debug("Email address has not change");
+                LoggerManager::getLogger()->debug("Email address has not change");
             }
         }
 
@@ -468,10 +468,10 @@ class SugarEmailAddress extends SugarBean
                 deleted = 0";
         $result = $db->query($query);
         if (!$result) {
-            $GLOBALS['log']->warn("Undefined behavior: Missing error information about email save (2)");
+            LoggerManager::getLogger()->warn("Undefined behavior: Missing error information about email save (2)");
         }
         if ($db->getAffectedRowCount($result) != 1) {
-            $GLOBALS['log']->debug("Primary or reply-to Email address has not change");
+            LoggerManager::getLogger()->debug("Primary or reply-to Email address has not change");
         }
 
         return true;
@@ -578,7 +578,7 @@ class SugarEmailAddress extends SugarBean
     {
         $deprecatedMessage = 'SugarEmailAddress::save() function calls are deprecated use SugarEmailAddress::saveEmail() function instead';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -615,7 +615,7 @@ class SugarEmailAddress extends SugarBean
         $optIn = null
     ) {
         if (gettype($id) == "boolean") {
-            $GLOBALS['log']->fatal('SugarEmailAddress::saveEmail() Invalid arguments - Parent method SugarBean::save
+            LoggerManager::getLogger()->fatal('SugarEmailAddress::saveEmail() Invalid arguments - Parent method SugarBean::save
             ($checknotify) is not implemented. Please pass the correct arguments into SugarEmailAddress::saveEmail()');
         }
 
@@ -811,10 +811,10 @@ class SugarEmailAddress extends SugarBean
 
                     $return[] = $bean;
                 } else {
-                    $GLOBALS['log']->fatal("SUGAREMAILADDRESS: could not find valid class file for [ {$className} ]");
+                    LoggerManager::getLogger()->fatal("SUGAREMAILADDRESS: could not find valid class file for [ {$className} ]");
                 }
             } else {
-                $GLOBALS['log']->fatal("SUGAREMAILADDRESS: could not find valid class [ {$a['bean_module']} ]");
+                LoggerManager::getLogger()->fatal("SUGAREMAILADDRESS: could not find valid class [ {$a['bean_module']} ]");
             }
         }
 
@@ -839,7 +839,7 @@ class SugarEmailAddress extends SugarBean
         $optOut = ''
     ) {
         if (!is_array($new_addrs)) {
-            $GLOBALS['log']->fatal(
+            LoggerManager::getLogger()->fatal(
                 'Invalid Argument: new address should be an array of strings, ' .
                 gettype($new_addrs) . ' given.'
             );
@@ -868,7 +868,7 @@ class SugarEmailAddress extends SugarBean
 
 
             if (empty($widget_id)) {
-                $GLOBALS['log']->debug('Widget not found, so it should be an update and not a create');
+                LoggerManager::getLogger()->debug('Widget not found, so it should be an update and not a create');
             }
 
             //Iterate over the widgets for this module, in case there are multiple email widgets for this module
@@ -996,7 +996,7 @@ class SugarEmailAddress extends SugarBean
                         $reqVar = trim($reqVar);
                         if (strpos($k, 'emailAddress') !== false) {
                             if (!is_array($deleteValues)) {
-                                $GLOBALS['log']->fatal('Invalid Argument: Delete Values to be an array, ' . gettype($deleteValues) . ' given.');
+                                LoggerManager::getLogger()->fatal('Invalid Argument: Delete Values to be an array, ' . gettype($deleteValues) . ' given.');
                             } else {
                                 if (!empty($reqVar) && !in_array($k, $deleteValues)) {
                                     $email_id = (array_key_exists($k, $email_ids)) ? $email_ids[$k] : null;
@@ -1088,7 +1088,7 @@ class SugarEmailAddress extends SugarBean
 
             $this->addresses[] = $addr;
         } else {
-            $GLOBALS['log']->fatal("SUGAREMAILADDRESS: address did not valid [ {$addr} ]");
+            LoggerManager::getLogger()->fatal("SUGAREMAILADDRESS: address did not valid [ {$addr} ]");
         }
     }
 
@@ -1479,10 +1479,10 @@ class SugarEmailAddress extends SugarBean
     public function getEmailAddressWidgetEditView($id, $module, $asMetadata = false, $tpl = '', $tabindex = '0')
     {
         if (null === $id) {
-            $GLOBALS['log']->debug('ID is null so it should be a create and NOT an update');
+            LoggerManager::getLogger()->debug('ID is null so it should be a create and NOT an update');
         }
         if (null === $module) {
-            $GLOBALS['log']->fatal('Invalid Argument: module');
+            LoggerManager::getLogger()->fatal('Invalid Argument: module');
 
             return false;
         }
@@ -1504,13 +1504,13 @@ class SugarEmailAddress extends SugarBean
         $saveModule = $module;
         if (isset($_POST['is_converted']) && $_POST['is_converted'] == true) {
             if (!isset($_POST['return_id'])) {
-                $GLOBALS['log']->fatal('return_id not set');
+                LoggerManager::getLogger()->fatal('return_id not set');
                 $id = null;
             } else {
                 $id = $_POST['return_id'];
             }
             if (!isset($_POST['return_module'])) {
-                $GLOBALS['log']->fatal('return_module not set');
+                LoggerManager::getLogger()->fatal('return_module not set');
                 $module = '';
             } else {
                 $module = $_POST['return_module'];
@@ -1555,10 +1555,10 @@ class SugarEmailAddress extends SugarBean
         $required = false;
         $moduleFound = true;
         if (!isset($beanList[$passedModule])) {
-            $GLOBALS['log']->fatal('Module not found in bean list: ' . $passedModule);
+            LoggerManager::getLogger()->fatal('Module not found in bean list: ' . $passedModule);
             $moduleFound = false;
         } elseif (!isset($dictionary[$beanList[$passedModule]])) {
-            $GLOBALS['log']->fatal('Module bean not found in dictionary: ' . $beanList[$passedModule]);
+            LoggerManager::getLogger()->fatal('Module bean not found in dictionary: ' . $beanList[$passedModule]);
             $moduleFound = false;
         }
         if ($moduleFound) {
@@ -1701,7 +1701,7 @@ class SugarEmailAddress extends SugarBean
         $mod = isset($focus) ? $focus->module_dir : "";
 
         if (!isset($_POST) || !isset($_POST[$mod . '_email_widget_id'])) {
-            $GLOBALS['log']->fatal("Missing Argument: a required post variable not found: {$mod}_email_widget_id");
+            LoggerManager::getLogger()->fatal("Missing Argument: a required post variable not found: {$mod}_email_widget_id");
             $widget_id = null;
         } else {
             $widget_id = $_POST[$mod . '_email_widget_id'];
@@ -1712,7 +1712,7 @@ class SugarEmailAddress extends SugarBean
         if (isset($_POST['emailAddressWidget'])) {
             $emailAddressWidget = $_POST['emailAddressWidget'];
         } else {
-            $GLOBALS['log']->fatal('Missing Argument: a required post variable not found: emailAddressWidget');
+            LoggerManager::getLogger()->fatal('Missing Argument: a required post variable not found: emailAddressWidget');
         }
 
         $this->smarty->assign('emailAddressWidget', $emailAddressWidget);
@@ -1735,7 +1735,7 @@ class SugarEmailAddress extends SugarBean
                 !is_array($_POST[$mod . $widget_id . 'emailAddressOptOutFlag']) ||
                 !is_object($_POST[$mod . $widget_id . 'emailAddressOptOutFlag'])
             ) {
-                $GLOBALS['log']->fatal(
+                LoggerManager::getLogger()->fatal(
                     'Invalid Argument: post variable ' .
                     $mod . $widget_id . 'emailAddressOptOutFlag' .
                     ' should be an array, ' .
@@ -1752,7 +1752,7 @@ class SugarEmailAddress extends SugarBean
                 !is_array($_POST[$mod . $widget_id . 'emailAddressInvalidFlag']) ||
                 !is_object($_POST[$mod . $widget_id . 'emailAddressInvalidFlag'])
             ) {
-                $GLOBALS['log']->fatal(
+                LoggerManager::getLogger()->fatal(
                     'Invalid Argument: post variable ' .
                     $mod . $widget_id . 'emailAddressInvalidFlag' .
                     ' should be an array, ' .
@@ -1769,7 +1769,7 @@ class SugarEmailAddress extends SugarBean
                 !is_array($_POST[$mod . $widget_id . 'emailAddressReplyToFlag']) ||
                 !is_object($_POST[$mod . $widget_id . 'emailAddressReplyToFlag'])
             ) {
-                $GLOBALS['log']->fatal(
+                LoggerManager::getLogger()->fatal(
                     'Invalid Argument: post variable ' .
                     $mod . $widget_id . 'emailAddressReplyToFlag' .
                     ' should be an array, ' .
@@ -1786,7 +1786,7 @@ class SugarEmailAddress extends SugarBean
                 !is_array($_POST[$mod . $widget_id . 'emailAddressDeleteFlag']) ||
                 !is_object($_POST[$mod . $widget_id . 'emailAddressDeleteFlag'])
             ) {
-                $GLOBALS['log']->fatal(
+                LoggerManager::getLogger()->fatal(
                     'Invalid Argument: post variable ' .
                     $mod . $widget_id . 'emailAddressDeleteFlag' .
                     ' should be an array, ' .
@@ -1803,7 +1803,7 @@ class SugarEmailAddress extends SugarBean
                 !is_array($_POST[$mod . $widget_id . 'emailAddressVerifiedValue' . $count]) ||
                 !is_object($_POST[$mod . $widget_id . 'emailAddressVerifiedValue' . $count])
             ) {
-                $GLOBALS['log']->fatal(
+                LoggerManager::getLogger()->fatal(
                     'Invalid Argument: post variable ' .
                     $mod . $widget_id . 'emailAddressVerifiedValue' . $count .
                     ' not found.'
@@ -1836,14 +1836,14 @@ class SugarEmailAddress extends SugarBean
         $mod = isset($focus) ? $focus->module_dir : "";
 
         if (!$mod) {
-            $GLOBALS['log']->fatal('Invalid Argument: Missing module dir.');
+            LoggerManager::getLogger()->fatal('Invalid Argument: Missing module dir.');
 
             return false;
         }
 
         $widget_id = '';
         if (!isset($_POST[$mod . '_email_widget_id'])) {
-            $GLOBALS['log']->fatal('Invalid Argument: requested argument missing: "' . $mod . '_email_widget_id"');
+            LoggerManager::getLogger()->fatal('Invalid Argument: requested argument missing: "' . $mod . '_email_widget_id"');
         } else {
             $widget_id = $_POST[$mod . '_email_widget_id'];
         }
@@ -1851,7 +1851,7 @@ class SugarEmailAddress extends SugarBean
         $get .= '&' . $mod . '_email_widget_id=' . $widget_id;
 
         if (!isset($_POST['emailAddressWidget'])) {
-            $GLOBALS['log']->fatal('Invalid Argument: requested argument missing: "emailAddressWidget"');
+            LoggerManager::getLogger()->fatal('Invalid Argument: requested argument missing: "emailAddressWidget"');
             $get .= '&emailAddressWidget=';
         } else {
             $get .= '&emailAddressWidget=' . $_POST['emailAddressWidget'];

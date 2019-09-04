@@ -56,11 +56,11 @@ class SugarSoapService2 extends NusoapSoap
      */
     public function register($excludeFunctions = array())
     {
-        $GLOBALS['log']->info('Begin: SugarSoapService2->register');
+        LoggerManager::getLogger()->info('Begin: SugarSoapService2->register');
         $this->excludeFunctions = $excludeFunctions;
         $registryObject = new $this->registryClass($this);
         $registryObject->register();
         $this->excludeFunctions = array();
-        $GLOBALS['log']->info('End: SugarSoapService2->register');
+        LoggerManager::getLogger()->info('End: SugarSoapService2->register');
     } // fn
 } // clazz

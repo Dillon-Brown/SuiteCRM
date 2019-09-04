@@ -68,7 +68,7 @@ if (isset($_POST['mass']) && is_array($_POST['mass'])) {
 
             //if($sugarbean->ACLAccess('Delete')){
                 
-            $GLOBALS['log']->debug("MassAssign - deleting relationship: $groupFocus->name");
+            LoggerManager::getLogger()->debug("MassAssign - deleting relationship: $groupFocus->name");
             if ($sugarbean->module_dir == 'Users') {
                 $rel_name = "SecurityGroups";
             } elseif (empty($rel_name) || !isset($rel_name)) {
@@ -85,13 +85,13 @@ if (isset($_POST['mass']) && is_array($_POST['mass'])) {
 
             //if($sugarbean->ACLAccess('Save')){
                 
-            $GLOBALS['log']->debug("MassAssign - adding relationship: $groupFocus->name");
+            LoggerManager::getLogger()->debug("MassAssign - adding relationship: $groupFocus->name");
             if ($sugarbean->module_dir == 'Users') {
                 $rel_name = "SecurityGroups";
             } elseif (empty($rel_name) || !isset($rel_name)) {
                 $rel_name = $groupFocus->getLinkName($sugarbean->module_dir, "SecurityGroups");
             }
-            $GLOBALS['log']->debug("MassAssign - adding relationship relationship name: ".$rel_name);
+            LoggerManager::getLogger()->debug("MassAssign - adding relationship relationship name: ".$rel_name);
             $sugarbean->load_relationship($rel_name);
             $sugarbean->$rel_name->add($groupFocus->id);
                 

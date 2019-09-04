@@ -87,12 +87,12 @@ if (is_dir($cachedir)) {
 }
 
 $response = '';
-//$GLOBALS['log']->fatal('file name '.$file_name);
-//$GLOBALS['log']->fatal('file size loaded '.filesize($file_name));
+//LoggerManager::getLogger()->fatal('file name '.$file_name);
+//LoggerManager::getLogger()->fatal('file size loaded '.filesize($file_name));
 /*
 if($allModFiles != null){
     foreach($allModFiles as $f){
-        $GLOBALS['log']->fatal('file name '.$f);
+        LoggerManager::getLogger()->fatal('file name '.$f);
         $response .= $f;
     }
 }

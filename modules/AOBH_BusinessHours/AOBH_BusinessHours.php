@@ -146,9 +146,9 @@ class AOBH_BusinessHours extends Basic
     public function diffBusinessHours(DateTime $startTime, DateTime $endTime)
     {
         $hours = ($endTime->getTimestamp() - $startTime->getTimestamp()) / (60 * 60);
-        $GLOBALS['log']->fatal('-------Hours------->'.$hours);
-        $GLOBALS['log']->fatal($startTime->getTimestamp());
-        $GLOBALS['log']->fatal($endTime->getTimestamp());
+        LoggerManager::getLogger()->fatal('-------Hours------->'.$hours);
+        LoggerManager::getLogger()->fatal($startTime->getTimestamp());
+        LoggerManager::getLogger()->fatal($endTime->getTimestamp());
 
         $sub = $hours < 0;
         $interval = new DateInterval('PT1H');
@@ -169,7 +169,7 @@ class AOBH_BusinessHours extends Basic
         if ($sub) {
             $businessHours = 0 - $businessHours;
         }
-        $GLOBALS['log']->fatal('-------businessHours-------'.$businessHours);
+        LoggerManager::getLogger()->fatal('-------businessHours-------'.$businessHours);
 
         return $businessHours;
     }

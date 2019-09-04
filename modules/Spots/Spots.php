@@ -240,7 +240,7 @@ class Spots extends Basic
     public function logSpotsErrorWithKeyMatching($type)
     {
         global $mod_strings;
-        $GLOBALS['log']->error($mod_strings['LBL_AN_DUPLICATE_LABEL_FOR_SUBAREA'].' '.$type);
+        LoggerManager::getLogger()->error($mod_strings['LBL_AN_DUPLICATE_LABEL_FOR_SUBAREA'].' '.$type);
     }
 
     /**

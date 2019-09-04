@@ -170,7 +170,7 @@ class EmailMan extends SugarBean
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -806,14 +806,14 @@ class EmailMan extends SugarBean
             $email_marketing = new EmailMarketing();
             $ret = $email_marketing->retrieve($marketing_id);
             if (empty($ret)) {
-                $GLOBALS['log']->fatal('Error retrieving marketing message for the email campaign. marketing_id = ' . $marketing_id);
+                LoggerManager::getLogger()->fatal('Error retrieving marketing message for the email campaign. marketing_id = ' . $marketing_id);
 
                 return false;
             }
 
             //verify the email template.
             if (empty($email_marketing->template_id)) {
-                $GLOBALS['log']->fatal('Error retrieving template for the email campaign. marketing_id = ' . $marketing_id);
+                LoggerManager::getLogger()->fatal('Error retrieving template for the email campaign. marketing_id = ' . $marketing_id);
 
                 return false;
             }
@@ -822,13 +822,13 @@ class EmailMan extends SugarBean
 
             $ret = $emailtemplate->retrieve($email_marketing->template_id);
             if (empty($ret)) {
-                $GLOBALS['log']->fatal('Error retrieving template for the email campaign. template_id = ' . $email_marketing->template_id);
+                LoggerManager::getLogger()->fatal('Error retrieving template for the email campaign. template_id = ' . $email_marketing->template_id);
 
                 return false;
             }
 
             if (empty($emailtemplate->subject) and empty($emailtemplate->body) and empty($emailtemplate->body_html)) {
-                $GLOBALS['log']->fatal('Email template is empty. email_template_id=' . $email_marketing->template_id);
+                LoggerManager::getLogger()->fatal('Email template is empty. email_template_id=' . $email_marketing->template_id);
 
                 return false;
             }
@@ -898,18 +898,18 @@ class EmailMan extends SugarBean
             //of type send error to denote that this user was not emailed
             $this->set_as_sent($module->email1, true, null, null, 'send error');
             //create fatal logging for easy review of cause.
-            $GLOBALS['log']->fatal('Email Address provided is not Primary Address for email with id ' . $module->email1 . "' Emailman id=$this->id");
+            LoggerManager::getLogger()->fatal('Email Address provided is not Primary Address for email with id ' . $module->email1 . "' Emailman id=$this->id");
             return true;
         }
 
         if (!$this->valid_email_address($module->email1)) {
             $this->set_as_sent($module->email1, true, null, null, 'invalid email');
-            $GLOBALS['log']->fatal('Encountered invalid email address: ' . $module->email1 . " Emailman id=$this->id");
+            LoggerManager::getLogger()->fatal('Encountered invalid email address: ' . $module->email1 . " Emailman id=$this->id");
             return true;
         }
 
         if ($this->shouldBlockEmail($module)) {
-            $GLOBALS['log']->warn('Email Address was sent due to not being confirm opt in' . $module->email1);
+            LoggerManager::getLogger()->warn('Email Address was sent due to not being confirm opt in' . $module->email1);
 
             // block sending campaign email
             $this->set_as_sent($module->email1, true, null, null, 'blocked');

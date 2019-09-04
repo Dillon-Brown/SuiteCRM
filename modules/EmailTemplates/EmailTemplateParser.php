@@ -163,7 +163,7 @@ class EmailTemplateParser
         $charUnderscore = chr(95);
 
         if (strpos($variable, $charVariable) === false || strpos($variable, $charUnderscore) === false) {
-            $GLOBALS['log']->warn(sprintf(
+            LoggerManager::getLogger()->warn(sprintf(
                 'Variable %s parsed to an empty string, because attribute has no %s or %s character',
                 $variable,
                 $charVariable,
@@ -188,7 +188,7 @@ class EmailTemplateParser
             return $this->module->$attribute;
         }
 
-        $GLOBALS['log']->warn(sprintf(
+        LoggerManager::getLogger()->warn(sprintf(
             'Variable %s parsed to an empty string, because attribute %s is not set in %s bean',
             $variable,
             $attribute,

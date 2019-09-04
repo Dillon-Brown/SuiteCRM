@@ -79,7 +79,7 @@ global $theme;
 
 $json = getJSONobj();
 
-$GLOBALS['log']->info("Campaign NewsLetter Wizard");
+LoggerManager::getLogger()->info("Campaign NewsLetter Wizard");
 
 if ((isset($_REQUEST['wizardtype'])  && $_REQUEST['wizardtype']==1)  ||  ($focus->campaign_type=='NewsLetter')) {
     echo getClassicModuleTitle($mod_strings['LBL_MODULE_NAME'], array($mod_strings['LBL_NEWSLETTER WIZARD_TITLE'].$focus->name), true, false);
@@ -448,10 +448,10 @@ if ($targetList) {
             $targetListDataAssoc[$prospectLst->id] = $next;
         }
     } else {
-        $GLOBALS['log']->warn('There are no outbound target lists available for campaign .');
+        LoggerManager::getLogger()->warn('There are no outbound target lists available for campaign .');
     }
 } else {
-    $GLOBALS['log']->warn('No target list is created');
+    LoggerManager::getLogger()->warn('No target list is created');
 }
 
 

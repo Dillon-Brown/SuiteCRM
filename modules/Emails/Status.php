@@ -73,7 +73,7 @@ if (isset($_REQUEST['contact_id']) && is_null($focus->contact_id)) {
 }
 echo getClassicModuleTitle($mod_strings['LBL_SEND'], array($mod_strings['LBL_SEND']), true);
 
-$GLOBALS['log']->info("Email detail view");
+LoggerManager::getLogger()->info("Email detail view");
 
 $xtpl=new XTemplate('modules/Emails/Status.html');
 $xtpl->assign("MOD", $mod_strings);

@@ -92,7 +92,7 @@ class Sugar_Smarty extends Smarty
     {
         $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
         if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
+            LoggerManager::getLogger()->deprecated($deprecatedMessage);
         } else {
             trigger_error($deprecatedMessage, E_USER_DEPRECATED);
         }
@@ -178,19 +178,19 @@ class Sugar_Smarty extends Smarty
         
         switch ($error_type) {
             case E_USER_ERROR:
-                $GLOBALS['log']->error('Smarty: ' . $error_msg);
+                LoggerManager::getLogger()->error('Smarty: ' . $error_msg);
                 break;
             case E_USER_WARNING:
-                $GLOBALS['log']->warn('Smarty: ' . $error_msg);
+                LoggerManager::getLogger()->warn('Smarty: ' . $error_msg);
                 break;
             case E_USER_NOTICE:
-                $GLOBALS['log']->error('Smarty: ' . $error_msg);
+                LoggerManager::getLogger()->error('Smarty: ' . $error_msg);
                 break;
             case E_USER_DEPRECATED:
-                $GLOBALS['log']->debug('Smarty: ' . $error_msg);
+                LoggerManager::getLogger()->debug('Smarty: ' . $error_msg);
                 break;
             default:
-                $GLOBALS['log']->fatal('Smarty: ' . $error_type . ' ' . $error_msg);
+                LoggerManager::getLogger()->fatal('Smarty: ' . $error_type . ' ' . $error_msg);
                 break;
         }
     }

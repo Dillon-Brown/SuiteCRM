@@ -156,7 +156,7 @@ class SugarDateTime extends DateTime
             // TODO: better way to not risk locale stuff problems?
             $data = strptime($time, $str_format);
             if (empty($data)) {
-                $GLOBALS['log']->error("Cannot parse $time for format $format");
+                LoggerManager::getLogger()->error("Cannot parse $time for format $format");
                 return null;
             }
             if ($data["tm_year"] == 0) {
@@ -177,7 +177,7 @@ class SugarDateTime extends DateTime
             $data = $res->_strptime($time, $format);
         }
         if (empty($data)) {
-            $GLOBALS['log']->error("Cannot parse $time for format $format");
+            LoggerManager::getLogger()->error("Cannot parse $time for format $format");
             return null;
         }
         if (isset($data["tm_year"])) {
@@ -270,7 +270,7 @@ class SugarDateTime extends DateTime
                 return $this->__get($var);
             }
         }
-        $GLOBALS['log']->fatal("SugarDateTime: unknowm method $name called");
+        LoggerManager::getLogger()->fatal("SugarDateTime: unknowm method $name called");
         sugar_die("SugarDateTime: unknowm method $name called");
         return false;
     }

@@ -98,7 +98,7 @@ class SugarWebServiceImplv4_1 extends SugarWebServiceImplv4
         $offset = 0,
         $limit = false
     ) {
-        $GLOBALS['log']->info('Begin: SugarWebServiceImpl->get_relationships');
+        LoggerManager::getLogger()->info('Begin: SugarWebServiceImpl->get_relationships');
         self::$helperObject = new SugarWebServiceUtilv4_1();
         global $beanList, $beanFiles;
         $error = new SoapError();
@@ -112,7 +112,7 @@ class SugarWebServiceImplv4_1 extends SugarWebServiceImplv4
             $error
         )
         ) {
-            $GLOBALS['log']->info('End: SugarWebServiceImpl->get_relationships');
+            LoggerManager::getLogger()->info('End: SugarWebServiceImpl->get_relationships');
 
             return;
         } // if
@@ -120,13 +120,13 @@ class SugarWebServiceImplv4_1 extends SugarWebServiceImplv4
         $mod = BeanFactory::getBean($module_name, $module_id);
 
         if (!self::$helperObject->checkQuery($error, $related_module_query, $order_by)) {
-            $GLOBALS['log']->info('End: SugarWebServiceImpl->get_relationships');
+            LoggerManager::getLogger()->info('End: SugarWebServiceImpl->get_relationships');
 
             return;
         } // if
 
         if (!self::$helperObject->checkACLAccess($mod, 'DetailView', $error, 'no_access')) {
-            $GLOBALS['log']->info('End: SugarWebServiceImpl->get_relationships');
+            LoggerManager::getLogger()->info('End: SugarWebServiceImpl->get_relationships');
 
             return;
         } // if
@@ -146,7 +146,7 @@ class SugarWebServiceImplv4_1 extends SugarWebServiceImplv4
         );
 
         if (self::$helperObject->isLogLevelDebug()) {
-            $GLOBALS['log']->debug('SoapHelperWebServices->get_relationships - return data for getRelationshipResults is ' . var_export(
+            LoggerManager::getLogger()->debug('SoapHelperWebServices->get_relationships - return data for getRelationshipResults is ' . var_export(
                 $result,
                 true
             ));
@@ -185,7 +185,7 @@ class SugarWebServiceImplv4_1 extends SugarWebServiceImplv4
             }
         } // if
 
-        $GLOBALS['log']->info('End: SugarWebServiceImpl->get_relationships');
+        LoggerManager::getLogger()->info('End: SugarWebServiceImpl->get_relationships');
 
         return array('entry_list' => $output_list, 'relationship_list' => $linkoutput_list);
     }
@@ -267,7 +267,7 @@ class SugarWebServiceImplv4_1 extends SugarWebServiceImplv4
             $error
         )
         ) {
-            $GLOBALS['log']->info('End: SugarWebServiceImpl->get_modified_relationships');
+            LoggerManager::getLogger()->info('End: SugarWebServiceImpl->get_modified_relationships');
 
             return;
         } // if

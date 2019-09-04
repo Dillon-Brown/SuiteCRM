@@ -81,7 +81,7 @@ class ImportViewStep3 extends ImportView
         $ignored_fields = array();
 
         if (!empty($_REQUEST['source_id'])) {
-            $GLOBALS['log']->fatal("Loading import map properties.");
+            LoggerManager::getLogger()->fatal("Loading import map properties.");
             $mapping_file = new ImportMap();
             $mapping_file->retrieve($_REQUEST['source_id'], false);
             $_REQUEST['source'] = $mapping_file->source;
