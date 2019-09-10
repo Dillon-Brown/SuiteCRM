@@ -75,12 +75,25 @@ class CodeCoverageCommandsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstr
         }
     }
 
-    public function testGetCodeCoverageCommand()
+    public function testGetPHPUnitCodeCoverageCommand()
     {
-        $commandExpected = './vendor/bin/phpunit --configuration ./tests/phpunit.xml.dist --coverage-clover ./tests/_output/coverage.xml ./tests/unit/phpunit';
+        $commandExpected = './vendor/bin/phpunit --configuration ./tests/phpunit.xml.dist --coverage-php ./tests/_output/unitCoverage.serialized ./tests/unit/phpunit';
         // Run tests
-        $reflection = new ReflectionClass(CodeCoverageCommands::class);
-        $method = $reflection->getMethod('getCodeCoverageCommand');
+        $method = (new ReflectionClass(CodeCoverageCommands::class))->getMethod('getPHPUnitCodeCoverageCommand');
+        $method->setAccessible(true);
+
+        $actual = $method->invoke(
+            self::$testClass
+        );
+
+        $this->assertEquals($commandExpected, $actual);
+    }
+
+    public function testGetCodeceptionCodeCoverageCommand()
+    {
+        $commandExpected = './vendor/bin/codecept run api --coverage-php';
+        // Run tests
+        $method = (new ReflectionClass(CodeCoverageCommands::class))->getMethod('getPHPUnitCodeCoverageCommand');
         $method->setAccessible(true);
 
         $actual = $method->invoke(
