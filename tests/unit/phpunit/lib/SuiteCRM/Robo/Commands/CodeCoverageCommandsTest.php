@@ -91,7 +91,7 @@ class CodeCoverageCommandsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstr
 
     public function testGetCodeceptionCodeCoverageCommand()
     {
-        $commandExpected = './vendor/bin/codecept run api --coverage-php';
+        $commandExpected = './vendor/bin/codecept\ run\ api --coverage-php';
         // Run tests
         $method = (new ReflectionClass(CodeCoverageCommands::class))->getMethod('getCodeceptionCodeCoverageCommand');
         $method->setAccessible(true);
