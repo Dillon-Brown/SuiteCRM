@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -43,7 +43,6 @@ namespace SuiteCRM\Robo\Plugin\Commands;
 use SuiteCRM\Utility\OperatingSystem;
 use SuiteCRM\Robo\Traits\RoboTrait;
 use Robo\Task\Base\loadTasks;
-use SuiteCRM\Utility\Paths;
 
 class CodeCoverageCommands extends \Robo\Tasks
 {
@@ -96,7 +95,9 @@ class CodeCoverageCommands extends \Robo\Tasks
      */
     private function generateCodeCoverageFile()
     {
-        $this->_exec($this->getCodeCoverageCommand());
+        $this->_exec($this->getPHPUnitCodeCoverageCommand());
+        $this->say('Code coverage php object outputted to ./tests/_output/coverage.serialized');
+        $this->_exec($this->getCodeceptionCodeCoverageCommand());
         $this->say('Code coverage xml outputted to ./tests/_output/coverage.xml');
     }
 
@@ -117,12 +118,22 @@ class CodeCoverageCommands extends \Robo\Tasks
         );
     }
 
-    private function getCodeCoverageCommand()
+    private function getPHPUnitCodeCoverageCommand()
     {
         $os = new OperatingSystem();
         $command =
             $os->toOsPath('./vendor/bin/phpunit')
-            . ' --configuration ./tests/phpunit.xml.dist --coverage-clover ./tests/_output/coverage.xml ./tests/unit/phpunit';
+            . ' --configuration ./tests/phpunit.xml.dist --coverage-php ./tests/_output/unitCoverage.serialized ./tests/unit/phpunit';
+
+        return $command;
+    }
+
+    private function getCodeceptionCodeCoverageCommand()
+    {
+        $os = new OperatingSystem();
+        $command =
+            $os->toOsPath('./vendor/bin/codecept run api')
+            . ' --coverage-php';
 
         return $command;
     }
