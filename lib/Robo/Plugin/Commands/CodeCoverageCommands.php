@@ -132,8 +132,8 @@ class CodeCoverageCommands extends \Robo\Tasks
     {
         $os = new OperatingSystem();
         $command =
-            $os->toOsPath('./vendor/bin/codecept run api')
-            . ' --coverage-php';
+            $os->toOsPath('./vendor/bin/codecept')
+            . ' run api --coverage';
 
         return $command;
     }
