@@ -284,7 +284,7 @@
             <tr>
                 {capture name=SMARTY_LBL_EXTERNAL_AUTH_ONLY}&nbsp;{$MOD.LBL_EXTERNAL_AUTH_ONLY} {$EXTERNAL_AUTH_CLASS_1}{/capture}
                 <td scope="row" nowrap>
-                    <slot>{$EXTERNAL_AUTH_CLASS} {$MOD.LBL_ONLY}:
+                    <slot>{$EXTERNAL_AUTH_CLASS}:
                     </slot>&nbsp;{sugar_help text=$smarty.capture.SMARTY_LBL_EXTERNAL_AUTH_ONLY}</td>
                 <td><input type='hidden' value='0' name='external_auth_only'><input type='checkbox' value='1'
                                                                                     name='external_auth_only' {$EXTERNAL_AUTH_ONLY_CHECKED}>

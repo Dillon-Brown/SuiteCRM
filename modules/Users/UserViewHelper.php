@@ -480,26 +480,23 @@ class UserViewHelper
 
     protected function setupAdvancedTabTeamSettings()
     {
-        global $sugar_config;
+        global $sugar_config, $mod_strings;
 
-        $authclass = '';
+        $authClass = '';
         if (!empty($sugar_config['authenticationClass'])) {
-            $this->ss->assign('EXTERNAL_AUTH_CLASS_1', $sugar_config['authenticationClass']);
-            $this->ss->assign('EXTERNAL_AUTH_CLASS', $sugar_config['authenticationClass']);
-            $authclass = $sugar_config['authenticationClass'];
-        } else {
-            if (!empty($GLOBALS['system_config']->settings['system_ldap_enabled'])) {
-                $this->ss->assign('EXTERNAL_AUTH_CLASS_1', translate('LBL_LDAP', 'Users'));
-                $this->ss
-                        ->assign('EXTERNAL_AUTH_CLASS', translate('LBL_LDAP_AUTHENTICATION', 'Users'));
-                $authclass = 'LDAPAuthenticate';
-            }
+            $authClass = $sugar_config['authenticationClass'];
+            $this->ss->assign('EXTERNAL_AUTH_CLASS_1', $mod_strings['LBL_' . strtoupper($authClass) . '_ONLY_HELP']);
+            $this->ss->assign('EXTERNAL_AUTH_CLASS', $mod_strings['LBL_' . strtoupper($authClass) . '_ONLY']);
+        } elseif (!empty($GLOBALS['system_config']->settings['system_ldap_enabled'])) {
+            $authClass = 'LDAPAuthenticate';
+            $this->ss->assign('EXTERNAL_AUTH_CLASS_1', $mod_strings['LBL_' . strtoupper($authClass) . '_ONLY_HELP']);
+            $this->ss->assign('EXTERNAL_AUTH_CLASS', $mod_strings['LBL_' . strtoupper($authClass) . '_ONLY']);
         }
         if (!empty($this->bean->external_auth_only)) {
             $this->ss->assign('EXTERNAL_AUTH_ONLY_CHECKED', 'CHECKED');
         }
 
-        if ($this->is_super_admin && !empty($authclass)) {
+        if ($this->is_super_admin && !empty($authClass)) {
             $this->ss->assign('DISPLAY_EXTERNAL_AUTH', true);
         }
     }
