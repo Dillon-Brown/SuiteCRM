@@ -54,11 +54,11 @@ class SAML2AuthenticateUser extends SugarAuthenticateUser
      * Does the actual authentication of the user and returns an id that will be used
      * to load the current user (loadUserOnSession)
      *
-     * @param STRING $name
-     * @param STRING $password
+     * @param string $name
+     * @param string $password
      * @param bool $fallback - is this authentication a fallback from a failed authentication
      * @param bool $checkPasswordMD5 use md5 check for user_hash before return the user data (SAML2 default is false)
-     * @return STRING id - used for loading the user
+     * @return string id - used for loading the user
      */
     public function authenticateUser($name, $password, $fallback = false, $checkPasswordMD5 = false)
     {
@@ -87,7 +87,7 @@ class SAML2AuthenticateUser extends SugarAuthenticateUser
         LoggerManager::getLogger()->debug('Starting user load for ' . $name);
         $user_id = $this->authenticateUser($name, null, $fallback);
         if (empty($user_id)) {
-            LoggerManager::getLogger()->fatal('SECURITY: User authentication for ' . $name . ' failed');
+            LoggerManager::getLogger()->fatal('SECURITY: User authentication for ' . $name . ' failed, user does not exist in CRM');
 
             return false;
         }
