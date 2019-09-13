@@ -112,7 +112,7 @@ class SugarAuthenticate
         $_SESSION['waiting_error'] = '';
         $_SESSION['hasExpiredPassword'] = '0';
 
-        if ($usr === null || ($usr['external_auth_only'] === 1)) {
+        if ($usr === null || ($usr->external_auth_only === '1')) {
             return false;
         }
 
