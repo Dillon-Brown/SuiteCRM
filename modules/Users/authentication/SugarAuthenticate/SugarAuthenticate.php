@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -44,7 +44,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 /**
  * This file is used to control the authentication process.
- * It will call on the user authenticate and controll redirection
+ * It will call on the user authenticate and control redirection
  * based on the users validation
  *
  */
@@ -63,16 +63,15 @@ class SugarAuthenticate
      * Constructs SugarAuthenticate
      * This will load the user authentication class
      *
-     * @return SugarAuthenticate
      */
     public function __construct()
     {
         // check in custom dir first, in case someone want's to override an auth controller
 
-        if (file_exists('custom/modules/Users/authentication/'.$this->authenticationDir.'/' . $this->userAuthenticateClass . '.php')) {
-            require_once('custom/modules/Users/authentication/'.$this->authenticationDir.'/' . $this->userAuthenticateClass . '.php');
-        } elseif (file_exists('modules/Users/authentication/'.$this->authenticationDir.'/' . $this->userAuthenticateClass . '.php')) {
-            require_once('modules/Users/authentication/'.$this->authenticationDir.'/' . $this->userAuthenticateClass . '.php');
+        if (file_exists('custom/modules/Users/authentication/' . $this->authenticationDir . '/' . $this->userAuthenticateClass . '.php')) {
+            require_once('custom/modules/Users/authentication/' . $this->authenticationDir . '/' . $this->userAuthenticateClass . '.php');
+        } elseif (file_exists('modules/Users/authentication/' . $this->authenticationDir . '/' . $this->userAuthenticateClass . '.php')) {
+            require_once('modules/Users/authentication/' . $this->authenticationDir . '/' . $this->userAuthenticateClass . '.php');
         }
 
         $this->userAuthenticate = new $this->userAuthenticateClass();
@@ -99,44 +98,51 @@ class SugarAuthenticate
      *
      * @param string $username
      * @param string $password
+     * @param bool $fallback
+     * @param array $params
      * @return boolean
      */
-    public function loginAuthenticate($username, $password, $fallback=false, $PARAMS = array())
+    public function loginAuthenticate($username, $password, $fallback = false, $params = [])
     {
-        global $mod_strings;
         unset($_SESSION['login_error']);
-        $usr= new user();
-        $usr_id=$usr->retrieve_user_id($username);
+        $usr = new user();
+        $usr_id = $usr->retrieve_user_id($username);
         $usr->retrieve($usr_id);
-        $_SESSION['login_error']='';
-        $_SESSION['waiting_error']='';
-        $_SESSION['hasExpiredPassword']='0';
-        if ($this->userAuthenticate->loadUserOnLogin($username, $password, $fallback, $PARAMS)) {
+        $_SESSION['login_error'] = '';
+        $_SESSION['waiting_error'] = '';
+        $_SESSION['hasExpiredPassword'] = '0';
+
+        if ($usr === null || ($usr['external_auth_only'] === 1)) {
+            return false;
+        }
+
+        if ($this->userAuthenticate->loadUserOnLogin($username, $password, $fallback, $params)) {
             require_once('modules/Users/password_utils.php');
             if (hasPasswordExpired($username)) {
                 $_SESSION['hasExpiredPassword'] = '1';
             }
             // now that user is authenticated, reset loginfailed
-            if ($usr->getPreference('loginfailed') != '' && $usr->getPreference('loginfailed') != 0) {
+            if ($usr->getPreference('loginfailed') !== '' && $usr->getPreference('loginfailed') !== 0) {
                 $usr->setPreference('loginfailed', '0');
                 $usr->savePreferencesToDB();
             }
+
             return $this->postLoginAuthenticate();
         }
         //if(!empty($usr_id) && $res['lockoutexpiration'] > 0){
         if (!empty($usr_id)) {
-            if (($logout=$usr->getPreference('loginfailed'))=='') {
+            if (($logout = $usr->getPreference('loginfailed')) === '') {
                 $usr->setPreference('loginfailed', '1');
             } else {
-                $usr->setPreference('loginfailed', $logout+1);
+                $usr->setPreference('loginfailed', $logout + 1);
             }
             $usr->savePreferencesToDB();
         }
-        
-        if (strtolower(get_class($this)) != 'sugarauthenticate') {
+
+        if (strtolower(get_class($this)) !== 'sugarauthenticate') {
             $sa = new SugarAuthenticate();
-            $error = (!empty($_SESSION['login_error']))?$_SESSION['login_error']:'';
-            if ($sa->loginAuthenticate($username, $password, true, $PARAMS)) {
+            $error = (!empty($_SESSION['login_error'])) ? $_SESSION['login_error'] : '';
+            if ($sa->loginAuthenticate($username, $password, true, $params)) {
                 return true;
             }
             $_SESSION['login_error'] = $error;
@@ -159,12 +165,9 @@ class SugarAuthenticate
     public function postLoginAuthenticate()
     {
         global $reset_language_on_default_user, $sugar_config;
-        
+
         //just do a little house cleaning here
-        unset($_SESSION['login_password']);
-        unset($_SESSION['login_error']);
-        unset($_SESSION['login_user_name']);
-        unset($_SESSION['ACL']);
+        unset($_SESSION['login_password'], $_SESSION['login_error'], $_SESSION['login_user_name'], $_SESSION['ACL']);
 
         //set the server unique key
         if (isset($sugar_config['unique_key'])) {
@@ -172,7 +175,7 @@ class SugarAuthenticate
         }
 
         //set user language
-        if (isset($reset_language_on_default_user) && $reset_language_on_default_user && $GLOBALS['current_user']->user_name == $sugar_config['default_user_name']) {
+        if (!empty($reset_language_on_default_user) && $GLOBALS['current_user']->user_name === $sugar_config['default_user_name']) {
             $authenticated_user_language = $sugar_config['default_language'];
         } else {
             $authenticated_user_language = isset($_REQUEST['login_language']) ? $_REQUEST['login_language'] : (isset($_REQUEST['ck_login_language_20']) ? $_REQUEST['ck_login_language_20'] : $sugar_config['default_language']);
@@ -180,11 +183,11 @@ class SugarAuthenticate
 
         $_SESSION['authenticated_user_language'] = $authenticated_user_language;
 
-        $GLOBALS['log']->debug("authenticated_user_language is $authenticated_user_language");
+        LoggerManager::getLogger()->debug("authenticated_user_language is $authenticated_user_language");
 
         // Clear all uploaded import files for this user if it exists
         require_once('modules/Import/ImportCacheFiles.php');
-        $tmp_file_name = ImportCacheFiles::getImportDir()."/IMPORT_" . $GLOBALS['current_user']->id;
+        $tmp_file_name = ImportCacheFiles::getImportDir() . '/IMPORT_' . $GLOBALS['current_user']->id;
 
         if (file_exists($tmp_file_name)) {
             unlink($tmp_file_name);
@@ -201,41 +204,44 @@ class SugarAuthenticate
     {
         global $module, $action, $allowed_actions;
         $authenticated = false;
-        $allowed_actions = array("Authenticate", "Login"); // these are actions where the user/server keys aren't compared
+        $allowed_actions = [
+            'Authenticate',
+            'Login'
+        ]; // these are actions where the user/server keys aren't compared
         if (isset($_SESSION['authenticated_user_id'])) {
-            $GLOBALS['log']->debug("We have an authenticated user id: ".$_SESSION["authenticated_user_id"]);
+            LoggerManager::getLogger()->debug('We have an authenticated user id: ' . $_SESSION['authenticated_user_id']);
 
             $authenticated = $this->postSessionAuthenticate();
-        } elseif (isset($action) && isset($module) && $action == "Authenticate" && $module == "Users") {
-            $GLOBALS['log']->debug("We are authenticating user now");
+        } elseif (isset($action, $module) && $action === 'Authenticate' && $module === 'Users') {
+            LoggerManager::getLogger()->debug('We are authenticating user now');
         } else {
-            $GLOBALS['log']->debug("The current user does not have a session.  Going to the login page");
-            $action = "Login";
-            $module = "Users";
+            LoggerManager::getLogger()->debug('The current user does not have a session.  Going to the login page');
+            $action = 'Login';
+            $module = 'Users';
             $_REQUEST['action'] = $action;
             $_REQUEST['module'] = $module;
         }
-        if (empty($GLOBALS['current_user']->id) && !in_array($action, $allowed_actions)) {
-            $GLOBALS['log']->debug("The current user is not logged in going to login page");
-            $action = "Login";
-            $module = "Users";
+        if (empty($GLOBALS['current_user']->id) && !in_array($action, $allowed_actions, true)) {
+            LoggerManager::getLogger()->debug('The current user is not logged in going to login page');
+            $action = 'Login';
+            $module = 'Users';
             $_REQUEST['action'] = $action;
             $_REQUEST['module'] = $module;
         }
 
-        if ($authenticated && ((empty($_REQUEST['module']) || empty($_REQUEST['action'])) || ($_REQUEST['module'] != 'Users' || $_REQUEST['action'] != 'Logout'))) {
+        if ($authenticated && ((empty($_REQUEST['module']) || empty($_REQUEST['action'])) || ($_REQUEST['module'] !== 'Users' || $_REQUEST['action'] !== 'Logout'))) {
             $this->validateIP();
         }
+
         return $authenticated;
     }
-
-
 
 
     /**
      * Called after a session is authenticated - if this returns false the sessionAuthenticate will return false and destroy the session
      * and it will load the  current user
      * @return boolean
+     * @throws SuiteException
      */
     public function postSessionAuthenticate()
     {
@@ -245,68 +251,69 @@ class SugarAuthenticate
         $server_unique_key = (isset($sugar_config['unique_key'])) ? $sugar_config['unique_key'] : '';
 
         //CHECK IF USER IS CROSSING SITES
-        if (($user_unique_key != $server_unique_key) && (!in_array($action, $allowed_actions)) && (!isset($_SESSION['login_error']))) {
-            $GLOBALS['log']->debug('Destroying Session User has crossed Sites');
+        if (($user_unique_key !== $server_unique_key) && (!isset($_SESSION['login_error'])) && (!in_array($action,
+                $allowed_actions, true))) {
+            LoggerManager::getLogger()->debug('Destroying Session User has crossed Sites');
             session_destroy();
-            header("Location: index.php?action=Login&module=Users" . $GLOBALS['app']->getLoginRedirect());
+            header('Location: index.php?action=Login&module=Users' . $GLOBALS['app']->getLoginRedirect());
             sugar_cleanup(true);
         }
         if (!$this->userAuthenticate->loadUserOnSession($_SESSION['authenticated_user_id'])) {
             session_destroy();
-            header("Location: index.php?action=Login&module=Users&loginErrorMessage=LBL_SESSION_EXPIRED");
-            $GLOBALS['log']->debug('Current user session does not exist redirecting to login');
+            header('Location: index.php?action=Login&module=Users&loginErrorMessage=LBL_SESSION_EXPIRED');
+            LoggerManager::getLogger()->debug('Current user session does not exist redirecting to login');
             sugar_cleanup(true);
         }
 
-        $GLOBALS['log']->debug('FACTOR AUTH: -------------------------------------------------------------');
-        $GLOBALS['log']->debug('FACTOR AUTH: --------------------- CHECK FACTOR AUtH ---------------------');
-        $GLOBALS['log']->debug('FACTOR AUTH: -------------------------------------------------------------');
+        LoggerManager::getLogger()->debug('FACTOR AUTH: -------------------------------------------------------------');
+        LoggerManager::getLogger()->debug('FACTOR AUTH: --------------------- CHECK FACTOR AUtH ---------------------');
+        LoggerManager::getLogger()->debug('FACTOR AUTH: -------------------------------------------------------------');
 
         //session_destroy(); die();
 
         if (!$this->userAuthenticate->isUserLogoutRequest()) {
-            $GLOBALS['log']->debug('FACTOR AUTH: User needs factor auth, request is not Logout');
+            LoggerManager::getLogger()->debug('FACTOR AUTH: User needs factor auth, request is not Logout');
 
             if ($this->userAuthenticate->isUserNeedFactorAuthentication()) {
-                $GLOBALS['log']->debug('FACTOR AUTH: User needs factor auth, set on User Profile page');
+                LoggerManager::getLogger()->debug('FACTOR AUTH: User needs factor auth, set on User Profile page');
 
                 if (!$this->userAuthenticate->isUserFactorAuthenticated()) {
-                    $GLOBALS['log']->debug('FACTOR AUTH: User is not factor authenticated yet');
+                    LoggerManager::getLogger()->debug('FACTOR AUTH: User is not factor authenticated yet');
 
                     if ($this->userAuthenticate->isUserFactorTokenReceived()) {
-                        $GLOBALS['log']->debug('FACTOR AUTH: User sent back a token in request');
+                        LoggerManager::getLogger()->debug('FACTOR AUTH: User sent back a token in request');
 
                         if (!$this->userAuthenticate->factorAuthenticateCheck()) {
-                            $GLOBALS['log']->debug('FACTOR AUTH: User factor auth failed so we show token input form');
+                            LoggerManager::getLogger()->debug('FACTOR AUTH: User factor auth failed so we show token input form');
 
                             $msg = $app_strings['ERR_TWO_FACTOR_FAILED'];
                             self::addFactorMessage($msg);
                             $this->userAuthenticate->showFactorTokenInput();
                         } else {
-                            $GLOBALS['log']->debug('FACTOR AUTH: User factor auth success!');
+                            LoggerManager::getLogger()->debug('FACTOR AUTH: User factor auth success!');
                         }
                     } else {
-                        $GLOBALS['log']->debug('FACTOR AUTH: User did not sent back the token so we send a new one and redirect to token input form');
+                        LoggerManager::getLogger()->debug('FACTOR AUTH: User did not sent back the token so we send a new one and redirect to token input form');
 
                         if (
                             $this->userAuthenticate->isFactorTokenSent()
                             && $this->userAuthenticate->isUserRequestedResendToken() === false
                         ) {
-                            $GLOBALS['log']->fatal('DEBUG: token is not sent yet, do we send a token to user');
+                            LoggerManager::getLogger()->fatal('DEBUG: token is not sent yet, do we send a token to user');
                             $this->userAuthenticate->showFactorTokenInput();
                         } else {
-                            $GLOBALS['log']->fatal('DEBUG: token already sent');
+                            LoggerManager::getLogger()->fatal('DEBUG: token already sent');
                         }
 
                         if ($this->userAuthenticate->sendFactorTokenToUser()) {
-                            $GLOBALS['log']->debug('FACTOR AUTH: Factor Token sent to User');
+                            LoggerManager::getLogger()->debug('FACTOR AUTH: Factor Token sent to User');
 
                             $msg = $app_strings['ERR_TWO_FACTOR_CODE_SENT'];
                             self::addFactorMessage($msg);
 
                             $this->userAuthenticate->showFactorTokenInput();
                         } else {
-                            $GLOBALS['log']->debug('FACTOR AUTH: failed to send factor token to user so just redirect to the logout url and kick off ');
+                            LoggerManager::getLogger()->debug('FACTOR AUTH: failed to send factor token to user so just redirect to the logout url and kick off ');
 
                             $msg = $app_strings['ERR_TWO_FACTOR_CODE_FAILED'];
                             self::addFactorMessage($msg);
@@ -315,17 +322,17 @@ class SugarAuthenticate
                         }
                     }
                 } else {
-                    $GLOBALS['log']->debug('FACTOR AUTH: User factor authenticated already');
+                    LoggerManager::getLogger()->debug('FACTOR AUTH: User factor authenticated already');
                 }
             } else {
-                $GLOBALS['log']->debug('FACTOR AUTH: User does`nt need factor auth');
+                LoggerManager::getLogger()->debug('FACTOR AUTH: User does`nt need factor auth');
             }
         } else {
-            $GLOBALS['log']->debug('FACTOR AUTH: User Logout requested');
+            LoggerManager::getLogger()->debug('FACTOR AUTH: User Logout requested');
         }
 
 
-        $GLOBALS['log']->debug('Current user is: ' . $GLOBALS['current_user']->user_name);
+        LoggerManager::getLogger()->debug('Current user is: ' . $GLOBALS['current_user']->user_name);
 
         return true;
     }
@@ -339,31 +346,32 @@ class SugarAuthenticate
         if (!isset($_SESSION['factor_message'])) {
             $_SESSION['factor_message'] = array();
         }
-        if (!in_array($msg, $_SESSION['factor_message'])) {
+        if (!in_array($msg, $_SESSION['factor_message'], true)) {
             $_SESSION['factor_message'][] = $msg;
         }
     }
 
     /**
      * Read back the session messages and clear it;
+     * @param string $sep
      * @return bool|string
-     * @throws \RuntimeException
      */
     public static function getFactorMessages($sep = '<br>')
     {
         $factorMessage = false;
-        if (isset($_SESSION['factor_message']) && $_SESSION['factor_message']) {
+        if (!empty($_SESSION['factor_message'])) {
             if (is_array($_SESSION['factor_message']) || is_object($_SESSION['factor_message'])) {
                 $factorMessage = implode($sep, $_SESSION['factor_message']);
             } elseif (is_string($_SESSION['factor_message'])) {
                 $factorMessage = $_SESSION['factor_message'];
             } else {
                 $msg = 'Incorrect login factor message type.';
-                $GLOBALS['log']->warn($msg);
+                LoggerManager::getLogger()->warn($msg);
                 throw new RuntimeException($msg);
             }
             unset($_SESSION['factor_message']);
         }
+
         return $factorMessage;
     }
 
@@ -373,23 +381,23 @@ class SugarAuthenticate
      */
     public function validateIP()
     {
-        global $sugar_config;
+        global $sugar_config, $mod_strings;
         // grab client ip address
         $clientIP = query_client_ip();
         $classCheck = 0;
         // check to see if config entry is present, if not, verify client ip
-        if (!isset($sugar_config['verify_client_ip']) || $sugar_config['verify_client_ip'] == true) {
+        if (!isset($sugar_config['verify_client_ip']) || $sugar_config['verify_client_ip'] === true) {
             // check to see if we've got a current ip address in $_SESSION
             // and check to see if the session has been hijacked by a foreign ip
-            if (isset($_SESSION["ipaddress"])) {
-                $session_parts = explode(".", $_SESSION["ipaddress"]);
-                $client_parts = explode(".", $clientIP);
+            if (isset($_SESSION['ipaddress'])) {
+                $session_parts = explode('.', $_SESSION['ipaddress']);
+                $client_parts = explode('.', $clientIP);
                 if (count($session_parts) < 4) {
                     $classCheck = 0;
                 } else {
                     // match class C IP addresses
-                    for ($i = 0; $i < 3; $i ++) {
-                        if ($session_parts[$i] == $client_parts[$i]) {
+                    for ($i = 0; $i < 3; $i++) {
+                        if ($session_parts[$i] === $client_parts[$i]) {
                             $classCheck = 1;
                             continue;
                         }
@@ -398,18 +406,16 @@ class SugarAuthenticate
                     }
                 }
                 // we have a different IP address
-                if ($_SESSION["ipaddress"] != $clientIP && empty($classCheck)) {
-                    $GLOBALS['log']->fatal("IP Address mismatch: SESSION IP: {$_SESSION['ipaddress']} CLIENT IP: {$clientIP}");
+                if ($_SESSION['ipaddress'] !== $clientIP && empty($classCheck)) {
+                    LoggerManager::getLogger()->fatal("IP Address mismatch: SESSION IP: {$_SESSION['ipaddress']} CLIENT IP: {$clientIP}");
                     session_destroy();
                     die($mod_strings['ERR_IP_CHANGE'] . "<a href=\"{$sugar_config['site_url']}\">" + $mod_strings['ERR_RETURN'] + "</a>");
                 }
             } else {
-                $_SESSION["ipaddress"] = $clientIP;
+                $_SESSION['ipaddress'] = $clientIP;
             }
         }
     }
-
-
 
 
     /**
@@ -445,6 +451,7 @@ class SugarAuthenticate
     {
         return true;
     }
+
     /**
      * If a user may change there user name through the Sugar UI
      *
@@ -464,9 +471,9 @@ class SugarAuthenticate
     {
         if (isset($_SESSION['authenticated_user_id'])) {
             ob_clean();
-            // fixing bug #46837: Previosly links/URLs to records in Sugar from MSO Excel/Word were referred to the home screen and not the record
+            // fixing bug #46837: Previously links/URLs to records in Sugar from MSO Excel/Word were referred to the home screen and not the record
             // It used to appear when default browser was not MS IE
-            header("Location: ".$GLOBALS['app']->getLoginRedirect());
+            header('Location: ' . $GLOBALS['app']->getLoginRedirect());
             sugar_cleanup(true);
         }
     }

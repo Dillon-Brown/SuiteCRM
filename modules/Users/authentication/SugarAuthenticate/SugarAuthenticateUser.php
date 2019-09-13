@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -43,7 +43,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 
-
 include_once get_custom_file_if_exists('modules/Users/authentication/SugarAuthenticate/FactorAuthFactory.php');
 
 /**
@@ -59,70 +58,73 @@ class SugarAuthenticateUser
      *
      * @param STRING $name
      * @param STRING $password
-     * @param STRING $fallback - is this authentication a fallback from a failed authentication
+     * @param bool $fallback - is this authentication a fallback from a failed authentication
      * @return STRING id - used for loading the user
      */
     public function authenticateUser($name, $password, $fallback = false)
     {
-        $row = User::findUserPassword($name, $password, "(portal_only IS NULL OR portal_only !='1') AND (is_group IS NULL OR is_group !='1') AND status !='Inactive'");
+        $row = User::findUserPassword($name, $password,
+            "(portal_only IS NULL OR portal_only !='1') AND (is_group IS NULL OR is_group !='1') AND status !='Inactive'");
 
-        // set the ID in the seed user.  This can be used for retrieving the full user record later
-        //if it's falling back on Sugar Authentication after the login failed on an external authentication return empty if the user has external_auth_disabled for them
-        if (empty($row) || !empty($row['external_auth_only'])) {
-            return '';
+        if (!empty($row['id'])) {
+            return $row['id'];
         }
-        return $row['id'];
+
+        return false;
     }
 
     /**
      * Checks if a user is a sugarLogin user
      * which implies they should use the sugar authentication to login
      *
-     * @param STRING $name
-     * @param STRIUNG $password
+     * @param string $name
+     * @param string $password
      * @return boolean
      */
     public function isSugarLogin($name, $password)
     {
-        $row = User::findUserPassword($name, $password, "(portal_only IS NULL OR portal_only !='1') AND (is_group IS NULL OR is_group !='1') AND status !='Inactive' AND sugar_login=1");
+        $row = User::findUserPassword($name, $password,
+            "(portal_only IS NULL OR portal_only !='1') AND (is_group IS NULL OR is_group !='1') AND status !='Inactive' AND sugar_login=1");
+
         return !empty($row);
     }
 
     /**
      * this is called when a user logs in
      *
-     * @param STRING $name
-     * @param STRING $password
-     * @param STRING $fallback - is this authentication a fallback from a failed authentication
+     * @param string $name
+     * @param string $password
+     * @param bool $fallback - is this authentication a fallback from a failed authentication
+     * @param array $params
      * @return boolean
      */
-    public function loadUserOnLogin($name, $password, $fallback = false, $PARAMS = array())
+    public function loadUserOnLogin($name, $password, $fallback = false, $params = [])
     {
-        global $login_error;
-
-        $GLOBALS['log']->debug("Starting user load for " . $name);
+        LoggerManager::getLogger()->debug('Starting user load for ' . $name);
         if (empty($name) || empty($password)) {
             return false;
         }
         $input_hash = $password;
         $passwordEncrypted = false;
-        if (!empty($PARAMS) && isset($PARAMS['passwordEncrypted']) && $PARAMS['passwordEncrypted']) {
+        if (!empty($params['passwordEncrypted'])) {
             $passwordEncrypted = true;
-        }// if
+        }
         if (!$passwordEncrypted) {
             $input_hash = SugarAuthenticate::encodePassword($password);
-        } // if
+        }
         $user_id = $this->authenticateUser($name, $input_hash, $fallback);
         if (empty($user_id)) {
-            $GLOBALS['log']->fatal('SECURITY: User authentication for ' . $name . ' failed');
+            LoggerManager::getLogger()->fatal('SECURITY: User authentication for ' . $name . ' failed');
+
             return false;
         }
         $this->loadUserOnSession($user_id);
+
         return true;
     }
 
     /**
-     * Loads the current user bassed on the given user_id
+     * Loads the current user based on the given user_id
      *
      * @param STRING $user_id
      * @return boolean
@@ -139,6 +141,7 @@ class SugarAuthenticateUser
                 return true;
             }
         }
+
         return false;
     }
 
@@ -152,6 +155,7 @@ class SugarAuthenticateUser
         if ($current_user->factor_auth) {
             $ret = true;
         }
+
         return $ret;
     }
 
@@ -160,11 +164,7 @@ class SugarAuthenticateUser
      */
     public function isUserFactorAuthenticated()
     {
-        $ret = true;
-        if (!isset($_SESSION['user_factor_authenticated']) || !$_SESSION['user_factor_authenticated']) {
-            $ret = false;
-        }
-        return $ret;
+        return !(empty($_SESSION['user_factor_authenticated']));
     }
 
     /**
@@ -172,37 +172,32 @@ class SugarAuthenticateUser
      */
     public function isUserFactorTokenReceived()
     {
-        $ret = false;
-        if (isset($_REQUEST['factor_token'])) {
-            $ret = true;
-        }
-        return $ret;
+        return isset($_REQUEST['factor_token']);
     }
 
     public function factorAuthenticateCheck()
     {
-        if ($_SESSION['user_factor_authenticated'] || $_REQUEST['factor_token'] == $_SESSION['factor_token']) {
+        if ($_SESSION['user_factor_authenticated'] || $_REQUEST['factor_token'] === $_SESSION['factor_token']) {
             $_SESSION['user_factor_authenticated'] = true;
         } else {
             $_SESSION['user_factor_authenticated'] = false;
         }
+
         return $_SESSION['user_factor_authenticated'];
     }
 
     /**
+     * @throws SuiteException
      * @global User $current_user
      */
     public function showFactorTokenInput()
     {
-        global $current_user;
+        LoggerManager::getLogger()->debug('Redirect to factor token input.....');
 
-        $GLOBALS['log']->debug('Redirect to factor token input.....');
-        
-        $factory = new FactorAuthFactory();
-        $factorAuth = $factory->getFactorAuth();
+        $factorAuth = (new FactorAuthFactory())->getFactorAuth();
         if (!$factorAuth->validateTokenMessage()) {
             $msg = 'Factor Authentication message is invalid.';
-            $GLOBALS['log']->warn($msg);
+            LoggerManager::getLogger()->warn($msg);
             global $app_strings;
             SugarApplication::appendErrorMessage($app_strings['ERR_FACTOR_TPL_INVALID']);
             SugarAuthenticate::addFactorMessage($app_strings['ERR_FACTOR_TPL_INVALID']);
@@ -219,21 +214,16 @@ class SugarAuthenticateUser
      */
     public function isFactorTokenSent()
     {
-        $ret = false;
-        if (isset($_SESSION['factor_token']) && $_SESSION['factor_token']) {
-            $ret = true;
-        }
-        return $ret;
+        return !empty($_SESSION['factor_token']);
     }
 
     /**
      * @return bool
+     * @throws Exception
      */
     public function sendFactorTokenToUser()
     {
         global $current_user, $sugar_config;
-
-        $ret = true;
 
         $min = 10000;
         $max = 99999;
@@ -241,7 +231,7 @@ class SugarAuthenticateUser
         if (function_exists('random_int')) {
             $token = random_int($min, $max);
         } else {
-            $token = rand($min, $max);
+            $token = mt_rand($min, $max);
         }
 
         $emailTemplate = new EmailTemplate();
@@ -252,8 +242,7 @@ class SugarAuthenticateUser
         $mailer = new SugarPHPMailer();
         $mailer->setMailerForSystem();
 
-        $emailObj = new Email();
-        $defaults = $emailObj->getSystemDefaultEmail();
+        $defaults = (new Email())->getSystemDefaultEmail();
 
         $mailer->From = $defaults['email'];
         isValidEmailAddress($mailer->From);
@@ -271,29 +260,28 @@ class SugarAuthenticateUser
 
         if (!$mailer->send()) {
             $ret = false;
-            $GLOBALS['log']->fatal(
+            LoggerManager::getLogger()->fatal(
                 'Email sending for two factor email authentication via Email Code failed. Mailer Error Info: ' .
-                    $mailer->ErrorInfo
+                $mailer->ErrorInfo
             );
         } else {
             $ret = true;
-            $GLOBALS['log']->debug(
+            LoggerManager::getLogger()->debug(
                 'Token sent to user: ' .
-                    $current_user->id . ', token: ' . $token . ' so we store it in the session'
+                $current_user->id . ', token: ' . $token . ' so we store it in the session'
             );
 
             $_SESSION['user_factor_authenticated'] = false;
             $_SESSION['factor_token'] = $token;
         }
+
         return $ret;
     }
 
-    /**
-     *
-     */
+
     public function redirectToLogout()
     {
-        $GLOBALS['log']->debug('Session destroy and redirect to logout.....');
+        LoggerManager::getLogger()->debug('Session destroy and redirect to logout.....');
         session_destroy();
         header('Location: index.php?action=Logout&module=Users');
         sugar_cleanup(true);
@@ -305,14 +293,7 @@ class SugarAuthenticateUser
      */
     public function isUserLogoutRequest()
     {
-        $logout = false;
-        if (
-                isset($_REQUEST['module']) && $_REQUEST['module'] == 'Users' &&
-                isset($_REQUEST['action']) && $_REQUEST['action'] == 'Logout'
-        ) {
-            $logout = true;
-        }
-        return $logout;
+        return isset($_REQUEST['module'], $_REQUEST['action']) && $_REQUEST['module'] === 'Users' && $_REQUEST['action'] === 'Logout';
     }
 
     /**
