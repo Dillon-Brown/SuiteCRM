@@ -2,13 +2,14 @@
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
+
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -40,16 +41,16 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-
-
-
 class AuthenticationController
 {
-    public $loggedIn = false; //if a user has attempted to login
+    // If a user has attempted to login
+    public $loggedIn = false;
     public $authenticated = false;
-    public $loginSuccess = false;// if a user has successfully logged in
 
-    protected static $authcontrollerinstance = null;
+    // If a user has successfully logged in
+    public $loginSuccess = false;
+
+    protected static $authcontrollerinstance;
 
     /**
      * @var SugarAuthenticate
@@ -59,8 +60,7 @@ class AuthenticationController
     /**
      * Creates an instance of the authentication controller and loads it
      *
-     * @param STRING $type - the authentication Controller
-     * @return AuthenticationController -
+     * @param string $type - the authentication Controller
      */
     public function __construct($type = null)
     {
@@ -79,15 +79,15 @@ class AuthenticationController
                 ? $GLOBALS['sugar_config']['authenticationClass'] : 'SugarAuthenticate';
         }
 
-        if ($type == 'SugarAuthenticate' && !empty($GLOBALS['system_config']->settings['system_ldap_enabled']) && empty($_SESSION['sugar_user'])) {
+        if ($type === 'SugarAuthenticate' && empty($_SESSION['sugar_user']) && !empty($GLOBALS['system_config']->settings['system_ldap_enabled'])) {
             $type = 'LDAPAuthenticate';
         }
 
         // check in custom dir first, in case someone want's to override an auth controller
-        if (file_exists('custom/modules/Users/authentication/'.$type.'/' . $type . '.php')) {
-            require_once('custom/modules/Users/authentication/'.$type.'/' . $type . '.php');
-        } elseif (file_exists('modules/Users/authentication/'.$type.'/' . $type . '.php')) {
-            require_once('modules/Users/authentication/'.$type.'/' . $type . '.php');
+        if (file_exists('custom/modules/Users/authentication/' . $type . '/' . $type . '.php')) {
+            require_once('custom/modules/Users/authentication/' . $type . '/' . $type . '.php');
+        } elseif (file_exists('modules/Users/authentication/' . $type . '/' . $type . '.php')) {
+            require_once('modules/Users/authentication/' . $type . '/' . $type . '.php');
         } else {
             require_once('modules/Users/authentication/SugarAuthenticate/SugarAuthenticate.php');
             $type = 'SugarAuthenticate';
@@ -95,8 +95,8 @@ class AuthenticationController
 
         if (!empty($_REQUEST['no_saml'])
             && (
-                (is_subclass_of($type, 'SAMLAuthenticate') || 'SAMLAuthenticate' == $type) ||
-                (is_subclass_of($type, 'SAML2Authenticate') || 'SAML2Authenticate' == $type)
+                (is_subclass_of($type, 'SAMLAuthenticate') || 'SAMLAuthenticate' === $type) ||
+                (is_subclass_of($type, 'SAML2Authenticate') || 'SAML2Authenticate' === $type)
             )) {
             $type = 'SugarAuthenticate';
         }
@@ -108,7 +108,7 @@ class AuthenticationController
      * Returns an instance of the authentication controller
      *
      * @param string $type this is the type of authetnication you want to use default is SugarAuthenticate
-     * @return an instance of the authetnciation controller
+     * @return AuthenticationController|null instance of the authetnciation controller
      */
     public static function getInstance($type = null)
     {
@@ -124,13 +124,13 @@ class AuthenticationController
      *
      * @param string $username
      * @param string $password
-     * @param array $PARAMS
+     * @param array $params
      * @return boolean true if the user successfully logs in or false otherwise.
      */
-    public function login($username, $password, $PARAMS = array())
+    public function login($username, $password, $params = [])
     {
         //kbrill bug #13225
-        $_SESSION['loginAttempts'] = (isset($_SESSION['loginAttempts']))? $_SESSION['loginAttempts'] + 1: 1;
+        $_SESSION['loginAttempts'] = (isset($_SESSION['loginAttempts'])) ? $_SESSION['loginAttempts'] + 1 : 1;
         unset($GLOBALS['login_error']);
 
         if ($this->loggedIn) {
@@ -138,7 +138,7 @@ class AuthenticationController
         }
         LogicHook::initialize()->call_custom_logic('Users', 'before_login');
 
-        $this->loginSuccess = $this->authController->loginAuthenticate($username, $password, false, $PARAMS);
+        $this->loginSuccess = $this->authController->loginAuthenticate($username, $password, false, $params);
         $this->loggedIn = true;
 
         if ($this->loginSuccess) {
@@ -148,8 +148,9 @@ class AuthenticationController
             //loginLicense();
             if (!empty($GLOBALS['login_error'])) {
                 unset($_SESSION['authenticated_user_id']);
-                $GLOBALS['log']->fatal('FAILED LOGIN: potential hack attempt:'.$GLOBALS['login_error']);
+                LoggerManager::getLogger()->fatal('FAILED LOGIN: potential hack attempt:' . $GLOBALS['login_error']);
                 $this->loginSuccess = false;
+
                 return false;
             }
 
@@ -162,7 +163,7 @@ class AuthenticationController
             $config = new Administration();
             $config->retrieveSettings();
             $postSilentInstallAdminWizardCompleted = $GLOBALS['current_user']->getPreference('postSilentInstallAdminWizardCompleted');
-            if ((is_admin($GLOBALS['current_user']) && empty($config->settings['system_adminwizard']) && $_REQUEST['action'] != 'AdminWizard') ||($postSilentInstallAdminWizardCompleted !== null && !$postSilentInstallAdminWizardCompleted)) {
+            if ((is_admin($GLOBALS['current_user']) && empty($config->settings['system_adminwizard']) && $_REQUEST['action'] != 'AdminWizard') || ($postSilentInstallAdminWizardCompleted !== null && !$postSilentInstallAdminWizardCompleted)) {
                 $GLOBALS['module'] = 'Configurator';
                 $GLOBALS['action'] = 'AdminWizard';
                 ob_clean();
@@ -172,25 +173,26 @@ class AuthenticationController
 
             $ut = $GLOBALS['current_user']->getPreference('ut');
             $checkTimeZone = true;
-            if (is_array($PARAMS) && !empty($PARAMS) && isset($PARAMS['passwordEncrypted'])) {
+            if (is_array($params) && !empty($params) && isset($params['passwordEncrypted'])) {
                 $checkTimeZone = false;
             } // if
-            if (empty($ut) && $checkTimeZone && $_REQUEST['action'] != 'SetTimezone' && $_REQUEST['action'] != 'SaveTimezone') {
+            if (empty($ut) && $checkTimeZone && $_REQUEST['action'] !== 'SetTimezone' && $_REQUEST['action'] !== 'SaveTimezone') {
                 $GLOBALS['module'] = 'Users';
                 $GLOBALS['action'] = 'Wizard';
                 ob_clean();
-                header("Location: index.php?module=Users&action=Wizard");
+                header('Location: index.php?module=Users&action=Wizard');
                 sugar_cleanup(true);
             }
         } else {
             //kbrill bug #13225
             LogicHook::initialize();
             $GLOBALS['logic_hook']->call_custom_logic('Users', 'login_failed');
-            $GLOBALS['log']->fatal(
+            LoggerManager::getLogger()->fatal(
                 'FAILED LOGIN:attempts[' . $_SESSION['loginAttempts'] . '], ' .
                 'ip[' . query_client_ip() . '], username[' . $username . ']'
             );
         }
+
         // if password has expired, set a session variable
 
         return $this->loginSuccess;
@@ -200,7 +202,7 @@ class AuthenticationController
      * This is called on every page hit.
      * It returns true if the current session is authenticated or false otherwise
      *
-     * @return booelan
+     * @return bool
      */
     public function sessionAuthenticate()
     {
@@ -215,6 +217,7 @@ class AuthenticationController
             $_SESSION['userStats']['lastTime'] = time();
             $_SESSION['userStats']['pages']++;
         }
+
         return $this->authenticated;
     }
 
