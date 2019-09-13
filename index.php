@@ -47,6 +47,13 @@ $startTime = microtime(true);
 require_once 'include/entryPoint.php';
 ob_start();
 require_once 'include/MVC/SugarApplication.php';
+
+session_start();
+session_destroy();
+ob_clean();
+header('Location: index.php?module=Users&action=Login');
+sugar_cleanup(true);
+
 $app = new SugarApplication();
 $app->startSession();
 $app->execute();
