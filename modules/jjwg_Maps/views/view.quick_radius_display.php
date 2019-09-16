@@ -35,14 +35,14 @@ class Jjwg_MapsViewQuick_Radius_Display extends SugarView
                 $url .= '&'.$key.'='.urlencode($_REQUEST[$key]);
             }
         } ?>
-<h2><?php echo htmlspecialchars($_REQUEST['quick_address']); ?><div class="clear"></div></h2>
+<h2><?php echo htmlspecialchars($_REQUEST['quick_address'], ENT_QUOTES | ENT_HTML5); ?><div class="clear"></div></h2>
 <div class="clear"></div>
 
 <iframe src="<?php echo $url; ?>"
 	width="100%" height="900" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto"><p>Sorry,
     your browser does not support iframes.</p></iframe>
 
-<p>IFrame: <a href="<?php echo htmlspecialchars($url); ?>"><?php echo $mod_strings['LBL_MAP']; ?> URL</a></p>
+<p>IFrame: <a href="<?php echo htmlspecialchars($url, ENT_QUOTES | ENT_HTML5); ?>"><?php echo $mod_strings['LBL_MAP']; ?> URL</a></p>
 
 <?php
     }

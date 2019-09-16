@@ -254,7 +254,7 @@ class nusoap_parser extends nusoap_base
         // set my status
         $this->message[$pos]['status'] = $this->status;
         // set name
-        $this->message[$pos]['name'] = htmlspecialchars($name);
+        $this->message[$pos]['name'] = htmlspecialchars($name, ENT_QUOTES | ENT_HTML5);
         // set attrs
         $this->message[$pos]['attrs'] = $attrs;
 

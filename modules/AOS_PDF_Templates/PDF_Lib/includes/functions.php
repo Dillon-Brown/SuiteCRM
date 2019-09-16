@@ -102,7 +102,7 @@ if (!function_exists('htmlspecialchars_decode')) {
 
 function PreparePreText($text, $ff='//FF//')
 {
-    $text = htmlspecialchars($text);
+    $text = htmlspecialchars($text, ENT_QUOTES | ENT_HTML5);
     if ($ff) {
         $text = str_replace($ff, '</pre><formfeed /><pre>', $text);
     }

@@ -794,7 +794,7 @@ class nusoap_base
      */
     public function formatDump($str)
     {
-        $str = htmlspecialchars($str);
+        $str = htmlspecialchars($str, ENT_QUOTES | ENT_HTML5);
         return nl2br($str);
     }
 
