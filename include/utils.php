@@ -3291,7 +3291,7 @@ function pre_login_check()
     global $action, $login_error;
     if (!empty($action) && $action == 'Login') {
         if (!empty($login_error)) {
-            $login_error = htmlentities($login_error, ENT_QUOTES | ENT_HTML5);
+            $login_error = htmlentities($login_error);
             $login_error = str_replace(array('&lt;pre&gt;', '&lt;/pre&gt;', "\r\n", "\n"), '<br>', $login_error);
             $_SESSION['login_error'] = $login_error;
             echo '<script>

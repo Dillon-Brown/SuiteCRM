@@ -611,7 +611,7 @@ class ListViewDisplay
         global $app_strings;
         unset($_REQUEST[session_name()]);
         unset($_REQUEST['PHPSESSID']);
-        $current_query_by_page = htmlentities(json_encode($_REQUEST), ENT_QUOTES | ENT_HTML5);
+        $current_query_by_page = htmlentities(json_encode($_REQUEST));
 
         $js = <<<EOF
             if(sugarListView.get_checks_count() < 1) {
