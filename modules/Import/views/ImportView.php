@@ -56,7 +56,8 @@ class ImportView extends SugarView
 
         parent::__construct($bean, $view_object_map);
 
-        if (isset($_REQUEST['button']) && trim($_REQUEST['button']) == htmlentities($mod_strings['LBL_BACK'])) {
+        if (isset($_REQUEST['button']) && trim($_REQUEST['button']) == htmlentities($mod_strings['LBL_BACK'],
+                ENT_QUOTES | ENT_HTML5)) {
             // if the request comes from the "Back" button, decrease the step count
             $this->currentStep = isset($_REQUEST['current_step']) ? ($_REQUEST['current_step'] - 1) : 1;
         } else {

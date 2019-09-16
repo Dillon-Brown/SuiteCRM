@@ -275,7 +275,7 @@ class PopupSmarty extends ListViewSmarty
             $this->_popupMeta['create']['createButton'] = translate($this->_popupMeta['create']['createButton']);
         }
         $this->th->ss->assign('popupMeta', $this->_popupMeta);
-        $this->th->ss->assign('current_query', htmlentities(json_encode(($_REQUEST))));
+        $this->th->ss->assign('current_query', htmlentities(json_encode(($_REQUEST)), ENT_QUOTES | ENT_HTML5));
         $this->th->ss->assign('customFields', $this->customFieldDefs);
         $this->th->ss->assign('numCols', NUM_COLS);
         $this->th->ss->assign('massUpdateData', $this->massUpdateData);

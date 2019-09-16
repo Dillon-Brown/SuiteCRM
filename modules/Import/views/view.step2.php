@@ -71,12 +71,11 @@ class ImportViewStep2 extends ImportView
         $this->ss->assign("CURRENT_STEP", $this->currentStep);
         $this->ss->assign("TYPE", (!empty($_REQUEST['type']) ? $_REQUEST['type'] : "import"));
         $this->ss->assign("CUSTOM_DELIMITER", (!empty($_REQUEST['custom_delimiter']) ? $_REQUEST['custom_delimiter'] : ","));
-        $this->ss->assign("CUSTOM_ENCLOSURE", htmlentities(
-            (!empty($_REQUEST['custom_enclosure']) && $_REQUEST['custom_enclosure'] != 'other'
+        $this->ss->assign("CUSTOM_ENCLOSURE",
+            htmlentities((!empty($_REQUEST['custom_enclosure']) && $_REQUEST['custom_enclosure'] != 'other'
                 ? $_REQUEST['custom_enclosure'] :
                 (!empty($_REQUEST['custom_enclosure_other'])
-                    ? $_REQUEST['custom_enclosure_other'] : ""))
-        ));
+                    ? $_REQUEST['custom_enclosure_other'] : "")), ENT_QUOTES | ENT_HTML5));
 
         $this->ss->assign("IMPORT_MODULE", $_REQUEST['import_module']);
         $this->ss->assign("HEADER", $app_strings['LBL_IMPORT']." ". $mod_strings['LBL_MODULE_NAME']);

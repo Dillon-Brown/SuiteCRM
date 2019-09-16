@@ -90,7 +90,7 @@ class ImportViewStep3 extends ImportView
                 $_REQUEST['custom_delimiter'] = $mapping_file->delimiter;
             }
             if (isset($mapping_file->enclosure)) {
-                $_REQUEST['custom_enclosure'] = htmlentities($mapping_file->enclosure);
+                $_REQUEST['custom_enclosure'] = htmlentities($mapping_file->enclosure, ENT_QUOTES | ENT_HTML5);
             }
             $field_map = $mapping_file->getMapping();
             //print_r($field_map);die();
@@ -160,7 +160,7 @@ class ImportViewStep3 extends ImportView
         }
 
         // save first row to send to step 4
-        $this->ss->assign("FIRSTROW", htmlentities(json_encode($rows[0])));
+        $this->ss->assign("FIRSTROW", htmlentities(json_encode($rows[0]), ENT_QUOTES | ENT_HTML5));
 
         // Now build template
         $this->ss->assign("TMP_FILE", $uploadFileName);
@@ -267,7 +267,8 @@ class ImportViewStep3 extends ImportView
                 if (isset($properties['comment'])) {
                     $fieldtype .= ' - ' . $properties['comment'];
                 }
-                $options[$displayname.$fieldname] = '<option value="'.$fieldname.'" title="'. $displayname . htmlentities($fieldtype) . '"'
+                $options[$displayname.$fieldname] = '<option value="'.$fieldname.'" title="'. $displayname . htmlentities($fieldtype,
+                        ENT_QUOTES | ENT_HTML5) . '"'
                     . $selected . $req_class . '>' . $displayname . $req_mark . '</option>\n';
             }
 

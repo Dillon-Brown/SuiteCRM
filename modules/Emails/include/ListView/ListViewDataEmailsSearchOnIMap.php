@@ -365,7 +365,7 @@ class ListViewDataEmailsSearchOnIMap extends ListViewDataEmailsSearchAbstract
                         )
                     ) {
                         // Ensure the encoding is UTF-8
-                        $queryString = htmlentities($request[$field_name], null, 'UTF-8');
+                        $queryString = htmlentities($request[$field_name], ENT_QUOTES | null, 'UTF-8');
                         break;
                     }
                 }

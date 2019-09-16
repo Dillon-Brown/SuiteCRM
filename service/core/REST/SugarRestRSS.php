@@ -99,8 +99,10 @@ EORSS;
 
     protected function generateItem($item)
     {
-        $name = !empty($item['name_value_list']['name']['value'])?htmlentities($item['name_value_list']['name']['value']): '';
-        $url = $GLOBALS['sugar_config']['site_url']  . htmlentities('/index.php?module=' . $item['module_name']. '&action=DetailView&record=' . $item['id']);
+        $name = !empty($item['name_value_list']['name']['value'])? htmlentities($item['name_value_list']['name']['value'],
+            ENT_QUOTES | ENT_HTML5) : '';
+        $url = $GLOBALS['sugar_config']['site_url']  . htmlentities('/index.php?module=' . $item['module_name'] . '&action=DetailView&record=' . $item['id'],
+                ENT_QUOTES | ENT_HTML5);
         $date = TimeDate::httpTime(TimeDate::getInstance()->fromDb($item['name_value_list']['date_modified']['value'])->getTimestamp());
         $description = '';
         $displayFieldNames = true;
@@ -112,9 +114,9 @@ EORSS;
                 continue;
             }
             if ($displayFieldNames) {
-                $description .= '<b>' .htmlentities($k) . ':<b>&nbsp;';
+                $description .= '<b>' . htmlentities($k, ENT_QUOTES | ENT_HTML5) . ':<b>&nbsp;';
             }
-            $description .= htmlentities($v['value']) . "<br>";
+            $description .= htmlentities($v['value'], ENT_QUOTES | ENT_HTML5) . "<br>";
         }
 
         echo <<<EORSS
