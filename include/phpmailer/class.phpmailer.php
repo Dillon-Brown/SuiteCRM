@@ -2188,7 +2188,7 @@ class PHPMailer
      */
     protected function generateId()
     {
-        return md5(uniqid(time()));
+        return md5(uniqid(time(), true));
     }
 
     /**

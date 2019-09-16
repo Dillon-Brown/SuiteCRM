@@ -131,7 +131,7 @@ class MyPipelineBySalesStageDashlet extends DashletGenericChart
 
         $chartReadyData = $this->prepareChartData($data, $currency_symbol, $thousands_symbol);
 
-        $canvasId = 'rGraphOppByLeadSourceByOutcome'.uniqid();
+        $canvasId = 'rGraphOppByLeadSourceByOutcome'.uniqid('', true);
         $chartWidth     = 900;
         $chartHeight    = 500;
         $autoRefresh = $this->processAutoRefresh();

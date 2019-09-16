@@ -32213,7 +32213,7 @@ arabic-indic | bengali | cambodian | devanagari | gujarati | gurmukhi | kannada 
             $this->useRC128encryption = true;
         }
         if ($owner_pass === null) {
-            $owner_pass = uniqid(rand());
+            $owner_pass = uniqid(rand(), true);
         }
         $this->encrypted = true;
         $this->_generateencryptionkey($user_pass, $owner_pass, $protection);

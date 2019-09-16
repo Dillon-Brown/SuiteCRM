@@ -76,7 +76,7 @@ class XHProfRuns_Default implements iXHProfRuns
 
     private function gen_run_id($type)
     {
-        return uniqid();
+        return uniqid('', true);
     }
 
     private function file_name($run_id, $type)

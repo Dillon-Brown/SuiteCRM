@@ -140,7 +140,7 @@ class PipelineBySalesStageDashlet extends DashletGenericChart
         $endDate = $this->pbss_date_end;
 
         //TODO find a better way of doing this
-        $canvasId = 'rGraphFunnel'.uniqid();
+        $canvasId = 'rGraphFunnel'.uniqid('', true);
 
         //These are taken in the same fashion as the hard-coded array above
         $module = 'Opportunities';

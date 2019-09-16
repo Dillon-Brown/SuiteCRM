@@ -1871,7 +1871,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position in file : ".ftell($this->zip_fd)."'");
 
            // ----- Creates a temporay file
-           $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.uniqid('pclzip-').'.tmp';
+           $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.uniqid('pclzip-', true).'.tmp';
 
            // ----- Open the temporary file in write mode
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Open file in binary read mode");
@@ -4419,7 +4419,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            if ($v_nb_extracted > 0) {
 
         // ----- Creates a temporay file
-               $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.uniqid('pclzip-').'.tmp';
+               $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.uniqid('pclzip-', true).'.tmp';
 
                // ----- Creates a temporary zip archive
                $v_temp_zip = new PclZip($v_zip_temp_name);
@@ -4737,7 +4737,7 @@ r5573 - 2005-06-03 16:32:18 -0700 (Fri, 03 Jun 2005) - bob - checking in chosen 
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 5, "Position in archive_to_add : ".ftell($p_archive_to_add->zip_fd)."'");
 
            // ----- Creates a temporay file
-           $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.uniqid('pclzip-').'.tmp';
+           $v_zip_temp_name = PCLZIP_TEMPORARY_DIR.uniqid('pclzip-', true).'.tmp';
 
            // ----- Open the temporary file in write mode
            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Open file in binary read mode");
