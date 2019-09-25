@@ -38,6 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
+use SuiteCRM\Mail\Parsers\MailMimeParser;
 use SuiteCRM\StateSaver;
 
 if (!defined('sugarEntry') || !sugarEntry) {
@@ -189,7 +190,8 @@ class InboundEmail extends SugarBean
     public function __construct(ImapHandlerInterface $imapHandler = null, MailParserInterface $mailParser = null)
     {
         if (null === $mailParser) {
-            $mailParser = $mailParser->getMailParser();
+            LoggerManager::getLogger()->debug('Using system default MailParser. Hint: Use any MailParserInterface as dependency of InboundEmail');
+            $mailParser = MailMimeParser::class;
         }
 
         $this->mailParser = $mailParser;
@@ -4001,45 +4003,45 @@ class InboundEmail extends SugarBean
         $emailBody = $this->imap->fetchBody($uid, '', FT_UID);
 
         $emailHTML = $this->mailParser->parseMail($emailBody)->getHtmlContent();
-//        $emailHTML = $this->handleInlineImages($emailBody, $emailHTML);
+        $emailHTML = $this->handleInlineImages($emailBody, $emailHTML);
         $emailHTML = $this->customGetMessageText($emailHTML);
 
         return SugarCleaner::cleanHtml($emailHTML, true);
     }
 
-//    /**
-//     * Returns email HTML with visible inline images.
-//     * @param string $email
-//     * @param string $emailHTML
-//     * @return mixed|string
-//     */
-//    protected function handleInlineImages($email, $emailHTML)
-//    {
-//        foreach ($this->mailParser->parse($email)->getAllAttachmentParts() as $attachment) {
-//            $disposition = $attachment->getContentDisposition();
-//            if ($disposition === 'inline') {
-//                $fileName = $attachment->getFilename();
-//                $fileID = $attachment->getContentId();
-//
-//                foreach ($this->tempAttachment as $temp) {
-//                    if ($temp === $fileName) {
-//                        $fileKey = array_search($fileName, $this->tempAttachment, false);
-//
-//                        $filePrefix = "{$GLOBALS['sugar_config']['site_url']}/cache/images/";
-//                        $pos = strrpos($fileName, '.');
-//                        $fileType = $pos === false ? $fileName : substr($fileName, $pos + 1);
-//                        $fileName = $filePrefix . $fileKey . '.' . $fileType;
-//
-//                        $newImagePath = "class=\"image\" src=\"{$fileName}\"";
-//                        $preImagePath = "src=\"cid:$fileID\"";
-//                        $emailHTML = str_replace($preImagePath, $newImagePath, $emailHTML);
-//                    }
-//                }
-//            }
-//        }
-//
-//        return $emailHTML;
-//    }
+    /**
+     * Returns email HTML with visible inline images.
+     * @param string $email
+     * @param string $emailHTML
+     * @return mixed|string
+     */
+    protected function handleInlineImages($email, $emailHTML)
+    {
+        foreach ($this->mailParser->parse($email)->getAllAttachmentParts() as $attachment) {
+            $disposition = $attachment->getContentDisposition();
+            if ($disposition === 'inline') {
+                $fileName = $attachment->getFilename();
+                $fileID = $attachment->getContentId();
+
+                foreach ($this->tempAttachment as $temp) {
+                    if ($temp === $fileName) {
+                        $fileKey = array_search($fileName, $this->tempAttachment, false);
+
+                        $filePrefix = "{$GLOBALS['sugar_config']['site_url']}/cache/images/";
+                        $pos = strrpos($fileName, '.');
+                        $fileType = $pos === false ? $fileName : substr($fileName, $pos + 1);
+                        $fileName = $filePrefix . $fileKey . '.' . $fileType;
+
+                        $newImagePath = "class=\"image\" src=\"{$fileName}\"";
+                        $preImagePath = "src=\"cid:$fileID\"";
+                        $emailHTML = str_replace($preImagePath, $newImagePath, $emailHTML);
+                    }
+                }
+            }
+        }
+
+        return $emailHTML;
+    }
 
     /**
      * @param $uid
