@@ -44,10 +44,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-use ZBateson\MailMimeParser\MailMimeParser;
-
 require_once __DIR__ . '/../../include/Imap/ImapHandlerFactory.php';
-
 require_once __DIR__ . '/../../include/OutboundEmail/OutboundEmail.php';
 require_once __DIR__ . '/../../modules/InboundEmail/Overview.php';
 require_once __DIR__ . '/../../modules/InboundEmail/temp.php';
@@ -174,9 +171,9 @@ class InboundEmail extends SugarBean
     protected $imap;
 
     /**
-     * @var MailMimeParser
+     * @var MailParserInterface
      */
-    private $mailParser;
+    protected $mailParser;
 
     /**
      * @var Overview
@@ -186,13 +183,13 @@ class InboundEmail extends SugarBean
     /**
      * Email constructor
      * @param ImapHandlerInterface|null $imapHandler
-     * @param MailMimeParser|null $mailParser
+     * @param MailParserInterface $mailParser
      * @throws ImapHandlerException
      */
-    public function __construct(ImapHandlerInterface $imapHandler = null, MailMimeParser $mailParser = null)
+    public function __construct(ImapHandlerInterface $imapHandler = null, MailParserInterface $mailParser = null)
     {
         if (null === $mailParser) {
-            $mailParser = new MailMimeParser();
+            $mailParser = $mailParser->getMailParser();
         }
 
         $this->mailParser = $mailParser;
@@ -4003,46 +4000,46 @@ class InboundEmail extends SugarBean
     ) {
         $emailBody = $this->imap->fetchBody($uid, '', FT_UID);
 
-        $emailHTML = $this->mailParser->parse($emailBody)->getHtmlContent();
-        $emailHTML = $this->handleInlineImages($emailBody, $emailHTML);
+        $emailHTML = $this->mailParser->parseMail($emailBody)->getHtmlContent();
+//        $emailHTML = $this->handleInlineImages($emailBody, $emailHTML);
         $emailHTML = $this->customGetMessageText($emailHTML);
 
         return SugarCleaner::cleanHtml($emailHTML, true);
     }
 
-    /**
-     * Returns email HTML with visible inline images.
-     * @param string $email
-     * @param string $emailHTML
-     * @return mixed|string
-     */
-    protected function handleInlineImages($email, $emailHTML)
-    {
-        foreach ($this->mailParser->parse($email)->getAllAttachmentParts() as $attachment) {
-            $disposition = $attachment->getContentDisposition();
-            if ($disposition === 'inline') {
-                $fileName = $attachment->getFilename();
-                $fileID = $attachment->getContentId();
-
-                foreach ($this->tempAttachment as $temp) {
-                    if ($temp === $fileName) {
-                        $fileKey = array_search($fileName, $this->tempAttachment, false);
-
-                        $filePrefix = "{$GLOBALS['sugar_config']['site_url']}/cache/images/";
-                        $pos = strrpos($fileName, '.');
-                        $fileType = $pos === false ? $fileName : substr($fileName, $pos + 1);
-                        $fileName = $filePrefix . $fileKey . '.' . $fileType;
-
-                        $newImagePath = "class=\"image\" src=\"{$fileName}\"";
-                        $preImagePath = "src=\"cid:$fileID\"";
-                        $emailHTML = str_replace($preImagePath, $newImagePath, $emailHTML);
-                    }
-                }
-            }
-        }
-
-        return $emailHTML;
-    }
+//    /**
+//     * Returns email HTML with visible inline images.
+//     * @param string $email
+//     * @param string $emailHTML
+//     * @return mixed|string
+//     */
+//    protected function handleInlineImages($email, $emailHTML)
+//    {
+//        foreach ($this->mailParser->parse($email)->getAllAttachmentParts() as $attachment) {
+//            $disposition = $attachment->getContentDisposition();
+//            if ($disposition === 'inline') {
+//                $fileName = $attachment->getFilename();
+//                $fileID = $attachment->getContentId();
+//
+//                foreach ($this->tempAttachment as $temp) {
+//                    if ($temp === $fileName) {
+//                        $fileKey = array_search($fileName, $this->tempAttachment, false);
+//
+//                        $filePrefix = "{$GLOBALS['sugar_config']['site_url']}/cache/images/";
+//                        $pos = strrpos($fileName, '.');
+//                        $fileType = $pos === false ? $fileName : substr($fileName, $pos + 1);
+//                        $fileName = $filePrefix . $fileKey . '.' . $fileType;
+//
+//                        $newImagePath = "class=\"image\" src=\"{$fileName}\"";
+//                        $preImagePath = "src=\"cid:$fileID\"";
+//                        $emailHTML = str_replace($preImagePath, $newImagePath, $emailHTML);
+//                    }
+//                }
+//            }
+//        }
+//
+//        return $emailHTML;
+//    }
 
     /**
      * @param $uid
