@@ -110,9 +110,19 @@ class Employee extends Person
         $this->emailAddress = new SugarEmailAddress();
     }
 
+    /**
+     * @param $interface
+     * @return bool
+     */
+    public function bean_implements($interface)
+    {
+        switch ($interface) {
+            case 'ACL':
+                return true;
+        }
 
-
-
+        return false;
+    }
 
     public function get_summary_text()
     {

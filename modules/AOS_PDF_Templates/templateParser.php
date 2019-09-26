@@ -89,9 +89,9 @@ class templateParser
                     }
 
                     $repl_arr[$key . "_" . $fieldName] = implode(", ", $translatedVals);
-                } elseif ($field_def['type'] == 'int') {
-                    //Fix for Windows Server as it needed to be converted to a string.
-                    $repl_arr[$key . "_" . $fieldName] = strval($focus->{$fieldName});
+                } //Fix for Windows Server as it needed to be converted to a string.
+                elseif ($field_def['type'] == 'int') {
+                    $repl_arr[$key . "_" . $fieldName] = (string)$focus->$fieldName;
                 } elseif ($field_def['type'] == 'bool') {
                     if ($focus->{$fieldName} == "1") {
                         $repl_arr[$key . "_" . $fieldName] = "true";
@@ -105,8 +105,8 @@ class templateParser
                     if (!file_exists('public')) {
                         sugar_mkdir('public', 0777);
                     }
-                    if (!copy($file_location, "public/{$focus->id}" . '_' . "$fieldName")) {
-                        $secureLink = $sugar_config['site_url'] . '/' . $file_location;
+                    if (!copy($file_location, "public/{$focus->id}".  '_' . (string)$fieldName)) {
+                        $secureLink = $sugar_config['site_url'] . '/'. $file_location;
                     }
 
                     if (empty($focus->{$fieldName})) {
@@ -175,14 +175,12 @@ class templateParser
 
             if ($value != '' && is_string($value)) {
                 $string = str_replace("\$$name", $value, $string);
+            } elseif (strpos($name, 'address') > 0) {
+                $string = str_replace("\$$name<br />", '', $string);
+                $string = str_replace("\$$name <br />", '', $string);
+                $string = str_replace("\$$name", '', $string);
             } else {
-                if (strpos($name, 'address') > 0) {
-                    $string = str_replace("\$$name<br />", '', $string);
-                    $string = str_replace("\$$name <br />", '', $string);
-                    $string = str_replace("\$$name", '', $string);
-                } else {
-                    $string = str_replace("\$$name", '&nbsp;', $string);
-                }
+                $string = str_replace("\$$name", '&nbsp;', $string);
             }
         }
 

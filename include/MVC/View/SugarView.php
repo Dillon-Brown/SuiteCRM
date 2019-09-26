@@ -54,7 +54,7 @@ class SugarView
     const ERR_NOT_ARRAY = 3;
     const ERR_NOT_SUB_ARRAY = 4;
     const WARN_SCOPE_EXISTS = 5;
-    
+
     /**
      * @var array $view_object_map
      * This array is meant to hold an objects/data that we would like to pass between
@@ -136,7 +136,7 @@ class SugarView
      * @var array
      */
     private $settings = [];
-    
+
     /**
      * SugarView constructor.
      * @deprecated since version 7.11
@@ -381,7 +381,7 @@ class SugarView
         $GLOBALS['app']->headerDisplayed = true;
 
         $themeObject = SugarThemeRegistry::current();
-        $theme = $themeObject->__toString();
+        $theme = (string)$themeObject;
 
         $ss = new Sugar_Smarty();
         $ss->assign("APP", $app_strings);
@@ -774,23 +774,22 @@ class SugarView
 
         if ($retModTabs) {
             return $ss->fetch($themeObject->getTemplate('_headerModuleList.tpl'));
-        } else {
-            $ss->display($headerTpl);
+        }
+        $ss->display($headerTpl);
 
-            $this->includeClassicFile('modules/Administration/DisplayWarnings.php');
+        $this->includeClassicFile('modules/Administration/DisplayWarnings.php');
 
-            $messages = SugarApplication::getErrorMessages();
-            if (!empty($messages)) {
-                foreach ($messages as $message) {
-                    echo '<p class="error">' . $message . '</p>';
-                }
+        $messages = SugarApplication::getErrorMessages();
+        if (!empty($messages)) {
+            foreach ($messages as $message) {
+                echo '<p class="error">' . $message . '</p>';
             }
+        }
 
-            $messages = SugarApplication::getSuccessMessages();
-            if (!empty($messages)) {
-                foreach ($messages as $message) {
-                    echo '<p class="success">' . $message . '</p>';
-                }
+        $messages = SugarApplication::getSuccessMessages();
+        if (!empty($messages)) {
+            foreach ($messages as $message) {
+                echo '<p class="success">' . $message . '</p>';
             }
         }
     }
@@ -1199,9 +1198,8 @@ EOHTML;
             return $this->options['show_all'];
         } elseif (!empty($this->options) && isset($this->options[$option])) {
             return $this->options[$option];
-        } else {
-            return $default;
         }
+        return $default;
     }
 
     /**
@@ -1227,7 +1225,7 @@ EOHTML;
     protected function _checkModule()
     {
         if (!empty($this->module) && !file_exists('modules/' . $this->module)) {
-            $error = str_replace("[module]", "$this->module", $GLOBALS['app_strings']['ERR_CANNOT_FIND_MODULE']);
+            $error = str_replace("[module]", (string)$this->module, $GLOBALS['app_strings']['ERR_CANNOT_FIND_MODULE']);
             $GLOBALS['log']->fatal($error);
             echo $error;
             die();
@@ -1627,19 +1625,16 @@ EOHTML;
             if (!empty($iconPath) && !$browserTitle) {
                 if (SugarThemeRegistry::current()->directionality == "ltr") {
                     return $app_strings['LBL_SEARCH_ALT'] . "&nbsp;"
-                        . "$firstParam";
-                } else {
-                    return "$firstParam" . "&nbsp;" . $app_strings['LBL_SEARCH'];
+                        . (string)$firstParam;
                 }
-            } else {
-                return $firstParam;
+                return (string)$firstParam . "&nbsp;" . $app_strings['LBL_SEARCH'];
             }
+            return $firstParam;
+        }
+        if (!empty($iconPath) && !$browserTitle) {
+            //return "<a href='index.php?module={$this->module}&action=index'>$this->module</a>";
         } else {
-            if (!empty($iconPath) && !$browserTitle) {
-                //return "<a href='index.php?module={$this->module}&action=index'>$this->module</a>";
-            } else {
-                return $firstParam;
-            }
+            return $firstParam;
         }
     }
 
@@ -1695,9 +1690,8 @@ EOHTML;
     {
         if (SugarThemeRegistry::current()->directionality == "ltr") {
             return "<span class='pointer'>&raquo;</span>";
-        } else {
-            return "<span class='pointer'>&laquo;</span>";
         }
+        return "<span class='pointer'>&laquo;</span>";
     }
 
     /**
@@ -1960,7 +1954,7 @@ EOHTML;
     public function mergeDeepArray($arrays)
     {
         $result = array();
-        
+
         if (!is_array($arrays)) {
             throw new InvalidArgumentException('Parameter should be an array to merging. ' . gettype($arrays) . ' given.', self::ERR_NOT_ARRAY);
         }
@@ -1971,7 +1965,7 @@ EOHTML;
 
         return $result;
     }
-    
+
     /**
      *
      * @param array $array
