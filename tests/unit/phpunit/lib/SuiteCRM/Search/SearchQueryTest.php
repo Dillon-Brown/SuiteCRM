@@ -173,7 +173,7 @@ class SearchQueryTest extends SearchTestAbstract
             0 => [],
         ];
 
-        $this->assertArraySubset($query->jsonSerialize(), $actual);
+        $this->assertEquals($query->jsonSerialize(), $actual);
     }
 
     public function testInvalidRequest()
