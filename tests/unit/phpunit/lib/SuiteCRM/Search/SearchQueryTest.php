@@ -166,10 +166,10 @@ class SearchQueryTest extends SearchTestAbstract
         $query = SearchQuery::fromRequestArray($request);
 
         $actual = [
-            ['query' => 'FOO'],
-            ['size' => '123'],
-            ['from' => 3],
-            ['engine' => 'TestEngine'],
+            'query' => 'FOO',
+            'size' => '123',
+            'from' => 3,
+            'engine' => 'TestEngine',
             ['options' => ['foo' => 'bar']],
         ];
 
