@@ -170,7 +170,7 @@ class SearchQueryTest extends SearchTestAbstract
             'size' => 123,
             'from' => 3,
             'engine' => 'TestEngine',
-            'options' => [],
+            'options' => [[]],
         ];
 
         $this->assertEquals($query->jsonSerialize(), $expected);
