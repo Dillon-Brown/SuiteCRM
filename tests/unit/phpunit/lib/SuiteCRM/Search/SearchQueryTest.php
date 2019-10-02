@@ -173,7 +173,7 @@ class SearchQueryTest extends SearchTestAbstract
             ['options' => ['foo' => 'bar']],
         ];
 
-        $this->assertEquals($query->jsonSerialize(), $actual);
+        $this->assertArraySubset($query->jsonSerialize(), $actual);
     }
 
     public function testInvalidRequest()
