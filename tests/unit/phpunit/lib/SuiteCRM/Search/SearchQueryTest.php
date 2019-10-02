@@ -167,10 +167,10 @@ class SearchQueryTest extends SearchTestAbstract
 
         $actual = [
             'query' => 'FOO',
-            'size' => '123',
+            'size' => 123,
             'from' => 3,
             'engine' => 'TestEngine',
-            ['options' => ['foo' => 'bar']],
+            0 => [],
         ];
 
         $this->assertArraySubset($query->jsonSerialize(), $actual);
