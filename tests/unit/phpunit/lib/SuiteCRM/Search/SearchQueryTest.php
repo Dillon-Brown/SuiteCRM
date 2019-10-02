@@ -165,15 +165,15 @@ class SearchQueryTest extends SearchTestAbstract
         $request = $this->getRequest();
         $query = SearchQuery::fromRequestArray($request);
 
-        $actual = [
+        $expected = [
             'query' => 'FOO',
             'size' => 123,
             'from' => 3,
             'engine' => 'TestEngine',
-            0 => [],
+            'options' => [],
         ];
 
-        $this->assertEquals($query->jsonSerialize(), $actual);
+        $this->assertEquals($query->jsonSerialize(), $expected);
     }
 
     public function testInvalidRequest()
