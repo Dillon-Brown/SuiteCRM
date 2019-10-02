@@ -205,9 +205,6 @@ class SearchQuery implements \JsonSerializable
      */
     public function getSize()
     {
-        if ($this->size < 0) {
-            $this->size = 1;
-        }
         return $this->size;
     }
 
