@@ -160,6 +160,18 @@ class SearchQueryTest extends SearchTestAbstract
         self::assertEquals($query->getOption('foo'), 'bar');
     }
 
+    public function testInvalidRequestSizes()
+    {
+        $request = [
+            'search-query-size' => -1,
+        ];
+
+        $query = SearchQuery::fromRequestArray($request);
+
+        self::assertEquals($query->getSize(), 1);
+        self::assertNull($query->getEngine());
+    }
+
     public function testFromGetRequest()
     {
         $old = $_GET;
