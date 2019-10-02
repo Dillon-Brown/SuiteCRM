@@ -179,14 +179,18 @@ class SearchQueryTest extends SearchTestAbstract
     public function testInvalidRequest()
     {
         $request = [
-            'search-query-size' => -1,
+            'search-query-string' => false,
+            'search-query-size' => 'string',
             'search-query-from' => 'string',
+            'search-engine' => false,
         ];
 
         $query = SearchQuery::fromRequestArray($request);
 
-        self::assertEquals(1, $query->getSize());
-        self::assertEquals( 0, $query->getFrom());
+        self::assertEquals('', $query->getSearchString());
+        self::assertEquals(10, $query->getSize());
+        self::assertEquals(0, $query->getFrom());
+        self::assertNull($query->getEngine());
     }
 
     public function testFromGetRequest()
