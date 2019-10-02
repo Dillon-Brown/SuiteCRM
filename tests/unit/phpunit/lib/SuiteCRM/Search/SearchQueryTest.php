@@ -185,8 +185,8 @@ class SearchQueryTest extends SearchTestAbstract
 
         $query = SearchQuery::fromRequestArray($request);
 
-        self::assertEquals($query->getSize(), 1);
-        self::assertEquals($query->getFrom(), 10);
+        self::assertEquals(1, $query->getSize());
+        self::assertEquals( 0, $query->getFrom());
     }
 
     public function testFromGetRequest()
