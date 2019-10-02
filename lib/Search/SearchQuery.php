@@ -75,7 +75,7 @@ class SearchQuery implements \JsonSerializable
     /** @var null|string Optional parameter to specify the SearchEngine (unqualified class name) to use. */
     private $engine;
     /** @var array Structure containing additional search parameters */
-    private $options = [];
+    private $options;
 
     /**
      * SearchQuery constructor.
