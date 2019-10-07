@@ -54,7 +54,6 @@ class PackageManagerDisplay
      * @param string $form1 the form to display for manual downloading
      * @param string $hidden_fields the hidden fields related to downloading a package
      * @param string $form_action the form_action to be used when downloading from the server
-     * @param array $types the types of objects we will request from the server
      * @param string $type the type of package to display
      * @param bool $install
      * @return string HTML used to display the form
@@ -63,7 +62,6 @@ class PackageManagerDisplay
         $form1,
         $hidden_fields,
         $form_action,
-        $types = ['module'],
         $install = false,
         $type = 'module'
     ) {

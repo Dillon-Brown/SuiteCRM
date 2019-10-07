@@ -247,7 +247,7 @@ eoq;
 $hidden_fields = "<input type=hidden name=\"run\" value=\"upload\" />";
 $hidden_fields .= "<input type=hidden name=\"mode\"/>";
 
-$form2 = PackageManagerDisplay::buildPackageDisplay($form, $hidden_fields, $form_action, ['module'], false, 'module');
+$form2 = PackageManagerDisplay::buildPackageDisplay($form, $hidden_fields, $form_action, false, 'module');
 $form3 =<<<eoq3
 
 
