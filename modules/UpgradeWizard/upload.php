@@ -1,14 +1,11 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
-    die('Not A Valid Entry Point');
-}
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -41,19 +38,15 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-/*********************************************************************************
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 
- * Description:
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc. All Rights
- * Reserved. Contributor(s): ______________________________________..
- * *******************************************************************************/
 logThis('At upload.php');
 
-//set the upgrade progress status.
 set_upgrade_progress('upload', 'in_progress');
 
-
-$stop = true; // flag to show "next"
+$stop = true;
 $run = isset($_REQUEST['run']) ? $_REQUEST['run'] : '';
 $out = '';
 
@@ -61,33 +54,12 @@ if (file_exists('ModuleInstall/PackageManager/PackageManagerDisplay.php')) {
     require_once('ModuleInstall/PackageManager/PackageManagerDisplay.php');
 }
 
-///////////////////////////////////////////////////////////////////////////////
-////	UPLOAD FILE PROCESSING
 switch ($run) {
     case 'upload':
         logThis('running upload');
         $perform = false;
         $tempFile = '';
 
-        if (isset($_REQUEST['release_id']) && $_REQUEST['release_id'] != "") {
-            require_once('ModuleInstall/PackageManager/PackageManager.php');
-            $pm = new PackageManager();
-            $tempFile = '';
-            $perform = false;
-            if (!empty($_SESSION['ML_PATCHES'])) {
-                $release_map = $_SESSION['ML_PATCHES'][$_REQUEST['release_id']];
-                if (!empty($release_map)) {
-                    $tempFile = $pm->download($release_map['category_id'], $release_map['package_id'], $_REQUEST['release_id']);
-                    $perform = true;
-                    if ($release_map['type'] != 'patch') {
-                        $pm->performSetup($tempFile, $release_map['type'], false);
-                        header('Location: index.php?module=Administration&action=UpgradeWizard&view=module');
-                    }
-                }
-            }
-
-            $base_filename = urldecode($tempFile);
-        } else {
             $upload = new UploadFile('upgrade_zip');
             /* Bug 51722 - Cannot Upload Upgrade File if System Settings Are Not Sufficient, Just Make sure that we can
             upload no matter what, set the default to 60M */
@@ -118,7 +90,7 @@ switch ($run) {
             /* Bug 51722 - Restore the upload size in the config */
             $sugar_config['upload_maxsize'] = $upload_maxsize_backup;
             /* End Bug 51722 */
-        }
+
         if ($perform) {
             $manifest_file = extractManifest($tempFile);
 
