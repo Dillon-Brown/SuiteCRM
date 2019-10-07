@@ -1,14 +1,11 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
-    die('Not A Valid Entry Point');
-}
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -41,12 +38,23 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 
-
+/**
+ * @param string $source directory to open
+ * @param string $dest destination directory to copy the source to
+ * @return bool
+ * @throws Exception
+ */
 function copy_recursive($source, $dest)
 {
     if (is_file($source)) {
-        return(copy($source, $dest));
+        return (copy($source, $dest));
+    }
+    if (!is_dir($source)) {
+        LoggerManager::getLogger()->warn('Failed to recursively copy, source is not a directory or file: ' . $source);
     }
     if (!is_dir($dest)) {
         sugar_mkdir($dest);
@@ -59,12 +67,13 @@ function copy_recursive($source, $dest)
         return false;
     }
     while (false !== ($f = $d->read())) {
-        if ($f == "." || $f == "..") {
+        if ($f === "." || $f === "..") {
             continue;
         }
         $status &= copy_recursive("$source/$f", "$dest/$f");
     }
     $d->close();
+
     return $status;
 }
 
