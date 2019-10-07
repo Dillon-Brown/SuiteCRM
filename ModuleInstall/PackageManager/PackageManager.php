@@ -38,12 +38,9 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-require_once('include/nusoap/nusoap.php');
 require_once('include/utils/zip_utils.php');
-require_once('ModuleInstall/PackageManager/PackageManagerDisplay.php');
 require_once('ModuleInstall/ModuleInstaller.php');
 require_once('include/entryPoint.php');
-require_once('ModuleInstall/PackageManager/PackageManagerComm.php');
 
 class PackageManager
 {
@@ -55,7 +52,12 @@ class PackageManager
     /**
      * @var string
      */
-    protected $upload_dir;
+    public $upload_dir;
+
+    /**
+     * @var array
+     */
+    protected $cleanUpDirs;
 
     /**
      * PackageManager constructor.
@@ -67,226 +69,6 @@ class PackageManager
             '/\\');
     }
 
-    /**
-     * Obtain a list of category/packages/releases for use within the module loader
-     */
-    public function getModuleLoaderCategoryPackages($category_id = '')
-    {
-        $filter = array();
-        $filter = array('type' => "'module', 'theme', 'langpack'");
-        $filter = PackageManager::toNameValueList($filter);
-        return PackageManager::getCategoryPackages($category_id, $filter);
-    }
-
-    /**
-     * Obtain the list of category_packages from SugarDepot
-     * @return category_packages
-     */
-    public function getCategoryPackages($category_id = '', $filter = array())
-    {
-        $results = PackageManagerComm::getCategoryPackages($category_id, $filter);
-        PackageManagerComm::errorCheck();
-        $nodes = array();
-
-        $nodes[$category_id]['packages'] = array();
-        if (!empty($results['categories'])) {
-            foreach ($results['categories'] as $category) {
-                $mycat = PackageManager::fromNameValueList($category);
-                $nodes[$mycat['id']] = array('id' => $mycat['id'], 'label' => $mycat['name'], 'description' => $mycat['description'], 'type' => 'cat', 'parent' => $mycat['parent_id']);
-                $nodes[$mycat['id']]['packages'] = array();
-            }
-        }
-        if (!empty($results['packages'])) {
-            $uh = new UpgradeHistory();
-            foreach ($results['packages'] as $package) {
-                $mypack = PackageManager::fromNameValueList($package);
-                $nodes[$mypack['category_id']]['packages'][$mypack['id']] = array('id' => $mypack['id'], 'label' => $mypack['name'], 'description' => $mypack['description'], 'category_id' => $mypack['category_id'], 'type' => 'package');
-                $releases = PackageManager::getReleases($category_id, $mypack['id'], $filter);
-                $arr_releases = array();
-                $nodes[$mypack['category_id']]['packages'][$mypack['id']]['releases'] = array();
-                if (!empty($releases['packages'])) {
-                    foreach ($releases['packages'] as $release) {
-                        $myrelease = PackageManager::fromNameValueList($release);
-                        //check to see if we already this one installed
-                        $result = $uh->determineIfUpgrade($myrelease['id_name'], $myrelease['version']);
-                        $enable = false;
-                        if ($result == true || is_array($result)) {
-                            $enable = true;
-                        }
-                        $nodes[$mypack['category_id']]['packages'][$mypack['id']]['releases'][$myrelease['id']] = array('id' => $myrelease['id'], 'version' => $myrelease['version'], 'label' => $myrelease['description'], 'category_id' => $mypack['category_id'], 'package_id' => $mypack['id'], 'type' => 'release', 'enable' => $enable);
-                    }
-                }
-                //array_push($nodes[$mypack['category_id']]['packages'], $package_arr);
-            }
-        }
-        $GLOBALS['log']->debug("NODES". var_export($nodes, true));
-        return $nodes;
-    }
-
-    /**
-     * Get a list of categories from the SugarDepot
-     * @param category_id   the category id of parent to obtain
-     * @param filter        an array of filters to pass to limit the query
-     * @return array        an array of categories for display on the client
-     */
-    public function getCategories($category_id, $filter = array())
-    {
-        $nodes = array();
-        $results = PackageManagerComm::getCategories($category_id, $filter);
-        PackageManagerComm::errorCheck();
-        if (!empty($results['categories'])) {
-            foreach ($results['categories'] as $category) {
-                $mycat = PackageManager::fromNameValueList($category);
-                $nodes[] = array('id' => $mycat['id'], 'label' => $mycat['name'], 'description' => $mycat['description'], 'type' => 'cat', 'parent' => $mycat['parent_id']);
-            }
-        }
-        return $nodes;
-    }
-
-    public function getPackages($category_id, $filter = array())
-    {
-        $nodes = array();
-        $results = PackageManagerComm::getPackages($category_id, $filter);
-        PackageManagerComm::errorCheck();
-        $packages = array();
-        //$xml = '';
-        //$xml .= '<packages>';
-        if (!empty($results['packages'])) {
-            foreach ($results['packages'] as $package) {
-                $mypack = PackageManager::fromNameValueList($package);
-                $packages[$mypack['id']] = array('package_id' => $mypack['id'], 'name' => $mypack['name'], 'description' => $mypack['description'], 'category_id' => $mypack['category_id']);
-                $releases = PackageManager::getReleases($category_id, $mypack['id']);
-                $arr_releases = array();
-                foreach ($releases['packages'] as $release) {
-                    $myrelease = PackageManager::fromNameValueList($release);
-                    $arr_releases[$myrelease['id']]  = array('release_id' => $myrelease['id'], 'version' => $myrelease['version'], 'description' => $myrelease['description'], 'category_id' => $mypack['category_id'], 'package_id' => $mypack['id']);
-                }
-                $packages[$mypack['id']]['releases'] = $arr_releases;
-            }
-        }
-        return $packages;
-    }
-
-    public function getReleases($category_id, $package_id, $filter = array())
-    {
-        $releases = PackageManagerComm::getReleases($category_id, $package_id, $filter);
-        PackageManagerComm::errorCheck();
-        return $releases;
-    }
-
-    /**
-     * Retrieve the package as specified by the $id from the heartbeat server
-     *
-     * @param category_id   the category_id to which the release belongs
-     * @param package_id    the package_id to which the release belongs
-     * @param release_id    the release_id to download
-     * @return filename - the path to which the zip file was saved
-     */
-    public function download($category_id, $package_id, $release_id)
-    {
-        $GLOBALS['log']->debug('RELEASE _ID: '.$release_id);
-        if (!empty($release_id)) {
-            $filename = PackageManagerComm::addDownload($category_id, $package_id, $release_id);
-            if ($filename) {
-                $GLOBALS['log']->debug('RESULT: '.$filename);
-                PackageManagerComm::errorCheck();
-                $filepath = PackageManagerComm::performDownload($filename);
-                return $filepath;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Given the Mambo username, password, and download key attempt to authenticate, if
-     * successful then store these credentials
-     *
-     * @param username      Mambo username
-     * @param password      Mambo password
-     * @param systemname   the user's download key
-     * @return              true if successful, false otherwise
-     */
-    public function authenticate($username, $password, $systemname='', $terms_checked = true)
-    {
-        PackageManager::setCredentials($username, $password, $systemname);
-        PackageManagerComm::clearSession();
-        $result = PackageManagerComm::login($terms_checked);
-        if (is_array($result)) {
-            return $result;
-        }
-        return true;
-    }
-
-    public function setCredentials($username, $password, $systemname)
-    {
-        $admin = new Administration();
-        $admin->retrieveSettings();
-        $admin->saveSetting(CREDENTIAL_CATEGORY, CREDENTIAL_USERNAME, $username);
-        $admin->saveSetting(CREDENTIAL_CATEGORY, CREDENTIAL_PASSWORD, $password);
-        if (!empty($systemname)) {
-            $admin->saveSetting('system', 'name', $systemname);
-        }
-    }
-
-    public static function getCredentials()
-    {
-        $admin = new Administration();
-        $admin->retrieveSettings(CREDENTIAL_CATEGORY, true);
-        $credentials = array();
-        $credentials['username'] = '';
-        $credentials['password'] = '';
-        $credentials['system_name'] = '';
-        if (!empty($admin->settings[CREDENTIAL_CATEGORY.'_'.CREDENTIAL_USERNAME])) {
-            $credentials['username'] = $admin->settings[CREDENTIAL_CATEGORY.'_'.CREDENTIAL_USERNAME];
-        }
-        if (!empty($admin->settings[CREDENTIAL_CATEGORY.'_'.CREDENTIAL_USERNAME])) {
-            $credentials['password'] = $admin->settings[CREDENTIAL_CATEGORY.'_'.CREDENTIAL_PASSWORD];
-        }
-        if (!empty($admin->settings['system_name'])) {
-            $credentials['system_name'] = $admin->settings['system_name'];
-        }
-        return $credentials;
-    }
-
-    public function getTermsAndConditions()
-    {
-        return PackageManagerComm::getTermsAndConditions();
-    }
-
-    /**
-     * Retrieve documentation for the given release or package
-     *
-     * @param package_id	the specified package to retrieve documentation
-     * @param release_id	the specified release to retrieve documentation
-     *
-     * @return documents
-     */
-    public function getDocumentation($package_id, $release_id)
-    {
-        if (!empty($release_id) || !empty($package_id)) {
-            $documents = PackageManagerComm::getDocumentation($package_id, $release_id);
-            return $documents;
-        }
-        return null;
-    }
-
-    /**
-     * Grab the list of installed modules and send that list to the depot.
-     * The depot will then send back a list of modules that need to be updated
-     */
-    public function checkForUpdates()
-    {
-        $lists = $this->buildInstalledReleases(array('module'), true);
-        $updates = array();
-        if (!empty($lists)) {
-            $updates = PackageManagerComm::checkForUpdates($lists);
-        }//fi
-        return $updates;
-    }
-
-    ////////////////////////////////////////////////////////
-    /////////// HELPER FUNCTIONS
     public function toNameValueList($array)
     {
         $list = array();
@@ -355,12 +137,10 @@ class PackageManager
         return $xml;
     }
 
-    private $cleanUpDirs = array();
-
     private function addToCleanup($dir)
     {
         if (empty($this->cleanUpDirs)) {
-            register_shutdown_function(array($this, "cleanUpTempDir"));
+            register_shutdown_function([$this, 'cleanUpTempDir']);
         }
         $this->cleanUpDirs[] = $dir;
     }
@@ -372,31 +152,26 @@ class PackageManager
         }
     }
 
-    //////////////////////////////////////////////////////////////////////
-    /////////// INSTALL SECTION
     public function extractFile($zip_file, $file_in_zip, $base_tmp_upgrade_dir)
     {
         $my_zip_dir = mk_temp_dir($base_tmp_upgrade_dir);
         $this->addToCleanup($my_zip_dir);
         unzip_file($zip_file, $file_in_zip, $my_zip_dir);
-        return("$my_zip_dir/$file_in_zip");
+
+        return ("$my_zip_dir/$file_in_zip");
     }
 
     public function extractManifest($zip_file, $base_tmp_upgrade_dir)
     {
-        global $sugar_config;
-        $base_upgrade_dir       = $this->upload_dir."/upgrades";
-        $base_tmp_upgrade_dir   = "$base_upgrade_dir/temp";
+        $base_upgrade_dir = $this->upload_dir . "/upgrades";
+        $base_tmp_upgrade_dir = "$base_upgrade_dir/temp";
+
         return $this->extractFile($zip_file, "manifest.php", $base_tmp_upgrade_dir);
     }
 
     public function validate_manifest($manifest)
     {
-        // takes a manifest.php manifest array and validates contents
-        global $subdirs;
-        global $sugar_version;
-        global $sugar_flavor;
-        global $mod_strings;
+        global $sugar_version, $mod_strings;
 
         if (!isset($manifest['type'])) {
             die($mod_strings['ERROR_MANIFEST_TYPE']);
@@ -404,8 +179,8 @@ class PackageManager
         $type = $manifest['type'];
         $GLOBALS['log']->debug("Getting InstallType");
         if ($this->getInstallType("/$type/") == "") {
-            $GLOBALS['log']->debug("Error with InstallType".$type);
-            die($mod_strings['ERROR_PACKAGE_TYPE']. ": '" . $type . "'.");
+            $GLOBALS['log']->debug("Error with InstallType" . $type);
+            die($mod_strings['ERROR_PACKAGE_TYPE'] . ": '" . $type . "'.");
         }
         $GLOBALS['log']->debug("Passed with InstallType");
         if (isset($manifest['acceptable_sugar_versions'])) {
@@ -443,27 +218,28 @@ class PackageManager
 
         foreach ($subdirs as $subdir) {
             if (preg_match("#/$subdir/#", $type_string)) {
-                return($subdir);
+                return ($subdir);
             }
         }
+
         // return empty if no match
-        return("");
+        return ("");
     }
 
     public function performSetup($tempFile, $view = 'module', $display_messages = true)
     {
-        global $sugar_config,$mod_strings;
+        global $sugar_config, $mod_strings;
         $base_filename = urldecode($tempFile);
-        $GLOBALS['log']->debug("BaseFileName: ".$base_filename);
-        $base_upgrade_dir       = $this->upload_dir.'/upgrades';
-        $base_tmp_upgrade_dir   = "$base_upgrade_dir/temp";
+        $GLOBALS['log']->debug("BaseFileName: " . $base_filename);
+        $base_upgrade_dir = $this->upload_dir . '/upgrades';
+        $base_tmp_upgrade_dir = "$base_upgrade_dir/temp";
         $manifest_file = $this->extractManifest($base_filename, $base_tmp_upgrade_dir);
-        $GLOBALS['log']->debug("Manifest: ".$manifest_file);
+        $GLOBALS['log']->debug("Manifest: " . $manifest_file);
         if ($view == 'module') {
             $license_file = $this->extractFile($base_filename, 'LICENSE.txt', $base_tmp_upgrade_dir);
         }
         if (is_file($manifest_file)) {
-            $GLOBALS['log']->debug("VALIDATING MANIFEST". $manifest_file);
+            $GLOBALS['log']->debug("VALIDATING MANIFEST" . $manifest_file);
             require_once($manifest_file);
             $this->validate_manifest($manifest);
             $upgrade_zip_type = $manifest['type'];
@@ -500,11 +276,11 @@ class PackageManager
             if (copy($tempFile, $target_path)) {
                 copy($manifest_file, $target_manifest);
                 if ($display_messages) {
-                    $messages = '<script>ajaxStatus.flashStatus("' .$base_filename.$mod_strings['LBL_UW_UPLOAD_SUCCESS'] . ', 5000");</script>';
+                    $messages = '<script>ajaxStatus.flashStatus("' . $base_filename . $mod_strings['LBL_UW_UPLOAD_SUCCESS'] . ', 5000");</script>';
                 }
             } else {
                 if ($display_messages) {
-                    $messages = '<script>ajaxStatus.flashStatus("' .$mod_strings['ERR_UW_UPLOAD_ERROR'] . ', 5000");</script>';
+                    $messages = '<script>ajaxStatus.flashStatus("' . $mod_strings['ERR_UW_UPLOAD_ERROR'] . ', 5000");</script>';
                 }
             }
         }//fi
@@ -521,37 +297,34 @@ class PackageManager
 
     public function unlinkTempFiles()
     {
-        global $sugar_config;
         @unlink($_FILES['upgrade_zip']['tmp_name']);
-        @unlink("upload://".$_FILES['upgrade_zip']['name']);
+        @unlink("upload://" . $_FILES['upgrade_zip']['name']);
     }
 
-    public function performInstall($file, $silent=true)
+    public function performInstall($file, $silent = true)
     {
-        global $sugar_config;
-        global $mod_strings;
-        global $current_language;
-        $base_upgrade_dir       = $this->upload_dir.'/upgrades';
-        $base_tmp_upgrade_dir   = "$base_upgrade_dir/temp";
+        global $mod_strings, $current_language;
+        $base_upgrade_dir = $this->upload_dir . '/upgrades';
+        $base_tmp_upgrade_dir = "$base_upgrade_dir/temp";
         if (!file_exists($base_tmp_upgrade_dir)) {
             mkdir_recursive($base_tmp_upgrade_dir, true);
         }
 
-        $GLOBALS['log']->debug("INSTALLING: ".$file);
+        $GLOBALS['log']->debug("INSTALLING: " . $file);
         $mi = new ModuleInstaller();
         $mi->silent = $silent;
         $mod_strings = return_module_language($current_language, "Administration");
-        $GLOBALS['log']->debug("ABOUT TO INSTALL: ".$file);
+        $GLOBALS['log']->debug("ABOUT TO INSTALL: " . $file);
         if (preg_match("#.*\.zip\$#", $file)) {
-            $GLOBALS['log']->debug("1: ".$file);
+            $GLOBALS['log']->debug("1: " . $file);
             // handle manifest.php
             $target_manifest = remove_file_extension($file) . '-manifest.php';
             include($target_manifest);
-            $GLOBALS['log']->debug("2: ".$file);
+            $GLOBALS['log']->debug("2: " . $file);
             $unzip_dir = mk_temp_dir($base_tmp_upgrade_dir);
             $this->addToCleanup($unzip_dir);
             unzip($file, $unzip_dir);
-            $GLOBALS['log']->debug("3: ".$unzip_dir);
+            $GLOBALS['log']->debug("3: " . $unzip_dir);
             $id_name = $installdefs['id'];
             $version = $manifest['version'];
             $uh = new UpgradeHistory();
@@ -567,26 +340,23 @@ class PackageManager
             } else {
                 $mi->install($unzip_dir);
             }
-            $GLOBALS['log']->debug("INSTALLED: ".$file);
+            $GLOBALS['log']->debug("INSTALLED: " . $file);
             $new_upgrade = new UpgradeHistory();
-            $new_upgrade->filename      = $file;
-            $new_upgrade->md5sum        = md5_file($file);
-            $new_upgrade->type          = $manifest['type'];
-            $new_upgrade->version       = $manifest['version'];
-            $new_upgrade->status        = "installed";
-            //$new_upgrade->author        = $manifest['author'];
-            $new_upgrade->name          = $manifest['name'];
-            $new_upgrade->description   = $manifest['description'];
-            $new_upgrade->id_name		= $id_name;
+            $new_upgrade->filename = $file;
+            $new_upgrade->md5sum = md5_file($file);
+            $new_upgrade->type = $manifest['type'];
+            $new_upgrade->version = $manifest['version'];
+            $new_upgrade->status = "installed";
+            $new_upgrade->name = $manifest['name'];
+            $new_upgrade->description = $manifest['description'];
+            $new_upgrade->id_name = $id_name;
             $serial_manifest = array();
             $serial_manifest['manifest'] = (isset($manifest) ? $manifest : '');
             $serial_manifest['installdefs'] = (isset($installdefs) ? $installdefs : '');
             $serial_manifest['upgrade_manifest'] = (isset($upgrade_manifest) ? $upgrade_manifest : '');
-            $new_upgrade->manifest		= base64_encode(serialize($serial_manifest));
-            //$new_upgrade->unique_key    = (isset($manifest['unique_key'])) ? $manifest['unique_key'] : '';
+            $new_upgrade->manifest = base64_encode(serialize($serial_manifest));
             $new_upgrade->save();
-            //unlink($file);
-        }//fi
+        }
     }
 
     public function performUninstall($name)
@@ -596,11 +366,8 @@ class PackageManager
         $uh->id_name = $name;
         $found = $uh->checkForExisting($uh);
         if ($found != null) {
-            global $sugar_config;
-            global $mod_strings;
-            global $current_language;
-            $base_upgrade_dir       = $this->upload_dir.'/upgrades';
-            $base_tmp_upgrade_dir   = "$base_upgrade_dir/temp";
+            $base_upgrade_dir = $this->upload_dir . '/upgrades';
+            $base_tmp_upgrade_dir = "$base_upgrade_dir/temp";
             if (is_file($found->filename)) {
                 if (!isset($GLOBALS['mi_remove_tables'])) {
                     $GLOBALS['mi_remove_tables'] = true;

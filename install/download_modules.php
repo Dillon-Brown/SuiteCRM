@@ -43,7 +43,6 @@ if (!defined('sugarEntry') || !sugarEntry) {
 
 global $sugar_version, $js_custom_version;
 $lang_curr = $_SESSION['language'];
-require_once('ModuleInstall/PackageManager/PackageManagerDisplay.php');
 
 if (!isset($install_script) || !$install_script || empty($_SESSION['setup_db_admin_user_name'])) {
     die($mod_strings['ERR_NO_DIRECT_SCRIPT']);
@@ -344,11 +343,5 @@ EOQ2;
 $hidden_fields =  "<input type=\"hidden\" name=\"current_step\" value=\"{$next_step}\">";
 $hidden_fields .=  "<input type=\"hidden\" name=\"goto\" value=\"{$mod_strings['LBL_CHECKSYS_RECHECK']}\">";
 $hidden_fields .=  "<input type=\"hidden\" name=\"languagePackAction\" value=\"commit\">";
-//$form2 = PackageManagerDisplay::buildPackageDisplay($form, $hidden_fields, 'install.php', array('langpack'), 'form1', true);
-$form2 = PackageManagerDisplay::buildPatchDisplay($form, $hidden_fields, 'install.php', array('langpack'));
 
-echo $out.$form2.$out1;
-
-//unlinkTempFiles('','');
-////    END PAGEOUTPUT
-///////////////////////////////////////////////////////////////////////////////
+echo $out.$out1;

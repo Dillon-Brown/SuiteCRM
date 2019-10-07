@@ -631,10 +631,6 @@ $errors = [];
     // RUN SILENT UPGRADE
     ob_start();
     set_time_limit(0);
-    if (file_exists('ModuleInstall/PackageManager/PackageManagerDisplay.php')) {
-        require_once 'ModuleInstall/PackageManager/PackageManagerDisplay.php';
-    }
-
 
     //copy minimum required files including sugar_file_utils.php
     if (file_exists("{$zipBasePath}/include/utils/sugar_file_utils.php")) {

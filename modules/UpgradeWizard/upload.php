@@ -50,10 +50,6 @@ $stop = true;
 $run = isset($_REQUEST['run']) ? $_REQUEST['run'] : '';
 $out = '';
 
-if (file_exists('ModuleInstall/PackageManager/PackageManagerDisplay.php')) {
-    require_once('ModuleInstall/PackageManager/PackageManagerDisplay.php');
-}
-
 switch ($run) {
     case 'upload':
         logThis('running upload');
