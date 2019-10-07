@@ -2379,12 +2379,6 @@ function resetUwSession()
     if (isset($_SESSION['files'])) {
         unset($_SESSION['files']);
     }
-    if (isset($_SESSION['Upgraded451Wizard'])) {
-        unset($_SESSION['Upgraded451Wizard']);
-    }
-    if (isset($_SESSION['Initial_451to500_Step'])) {
-        unset($_SESSION['Initial_451to500_Step']);
-    }
     if (isset($_SESSION['license_shown'])) {
         unset($_SESSION['license_shown']);
     }
@@ -2839,14 +2833,8 @@ function set_upgrade_vars()
     if (isset($_SESSION['install_file']) && !empty($_SESSION['install_file']) && file_exists($_SESSION['install_file'])) {
         $upgrade_vars['install_file']=$_SESSION['install_file'];
     }
-    if (isset($_SESSION['Upgraded451Wizard']) && !empty($_SESSION['Upgraded451Wizard'])) {
-        $upgrade_vars['Upgraded451Wizard']=$_SESSION['Upgraded451Wizard'];
-    }
     if (isset($_SESSION['license_shown']) && !empty($_SESSION['license_shown'])) {
         $upgrade_vars['license_shown']=$_SESSION['license_shown'];
-    }
-    if (isset($_SESSION['Initial_451to500_Step']) && !empty($_SESSION['Initial_451to500_Step'])) {
-        $upgrade_vars['Initial_451to500_Step']=$_SESSION['Initial_451to500_Step'];
     }
     if (isset($_SESSION['zip_from_dir']) && !empty($_SESSION['zip_from_dir'])) {
         $upgrade_vars['zip_from_dir']=$_SESSION['zip_from_dir'];
