@@ -85,13 +85,7 @@ if (isset($_REQUEST['languagePackAction']) && !empty($_REQUEST['languagePackActi
         case 'upload':
         $perform = false;
         $tempFile = '';
-        if (isset($_REQUEST['release_id']) && $_REQUEST['release_id'] != "") {
-            require_once('ModuleInstall/PackageManager/PackageManager.php');
-            $pm = new PackageManager();
-            $tempFile = $pm->download($_REQUEST['release_id']);
-            $perform = true;
-        //$base_filename = urldecode($tempFile);
-        } else {
+
             $file = new UploadFile('language_pack');
             if ($file->confirm_upload()) {
                 $perform = true;
@@ -106,7 +100,6 @@ if (isset($_REQUEST['languagePackAction']) && !empty($_REQUEST['languagePackActi
                     $errors[] = $mod_strings['ERR_LANG_UPLOAD_2'];
                 }
             }
-        }
 
 
             if ($perform) { // check for a real file
