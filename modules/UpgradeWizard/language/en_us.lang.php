@@ -136,7 +136,6 @@ $mod_strings = array(
     'LBL_UW_FILE_UPLOADED' => ' has been uploaded',
     'LBL_UW_FILE' => 'File Name',
     'LBL_UW_FILES_QUEUED' => 'The following upgrade packages are ready to be installed:',
-    'LBL_UW_FILES_REMOVED' => 'The following files will be removed from the system:<br>' . PHP_EOL,
     'LBL_UW_NEXT_TO_UPLOAD' => '<b>Click Next to upload upgrade packages.</b>',
     'LBL_UW_FROZEN' => 'Upload a package before continuing.',
     'LBL_UW_HIDE_DETAILS' => 'Hide Details',
