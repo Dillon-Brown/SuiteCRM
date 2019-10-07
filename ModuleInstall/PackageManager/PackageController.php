@@ -151,18 +151,6 @@
      }
 
      /**
-      * Obtain a promotion from the depot
-      */
-     public function getPromotion()
-     {
-         $json = getJSONobj();
-
-         $header = PackageManager::getPromotion();
-
-         echo 'result = ' . $json->encode(array('promotion' => $header));
-     }
-
-     /**
       * Download the given release
       *
       * @param category_id   this is passed via POST and is the category id of the release we wish to download

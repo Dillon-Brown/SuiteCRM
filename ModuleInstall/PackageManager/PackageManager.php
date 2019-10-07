@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -38,11 +38,6 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-
-define("CREDENTIAL_CATEGORY", "ml");
-define("CREDENTIAL_USERNAME", "username");
-define("CREDENTIAL_PASSWORD", "password");
-
 require_once('include/nusoap/nusoap.php');
 require_once('include/utils/zip_utils.php');
 require_once('ModuleInstall/PackageManager/PackageManagerDisplay.php');
@@ -52,48 +47,24 @@ require_once('ModuleInstall/PackageManager/PackageManagerComm.php');
 
 class PackageManager
 {
-    public $soap_client;
+    /**
+     * @var DBManager
+     */
+    public $db;
 
     /**
-     * Constructor: In this method we will initialize the nusoap client to point to the hearbeat server
+     * @var string
+     */
+    protected $upload_dir;
+
+    /**
+     * PackageManager constructor.
      */
     public function __construct()
     {
         $this->db = DBManagerFactory::getInstance();
-        $this->upload_dir = empty($GLOBALS['sugar_config']['upload_dir']) ? 'upload' : rtrim($GLOBALS['sugar_config']['upload_dir'], '/\\');
-    }
-
-    /**
-     * @deprecated deprecated since version 7.6, PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code, use __construct instead
-     */
-    public function PackageManager()
-    {
-        $deprecatedMessage = 'PHP4 Style Constructors are deprecated and will be remove in 7.8, please update your code';
-        if (isset($GLOBALS['log'])) {
-            $GLOBALS['log']->deprecated($deprecatedMessage);
-        } else {
-            trigger_error($deprecatedMessage, E_USER_DEPRECATED);
-        }
-        self::__construct();
-    }
-
-
-    public function initializeComm()
-    {
-    }
-
-    /**
-     * Obtain a promotion from SugarDepot
-     * @return string   the string from the promotion
-     */
-    public function getPromotion()
-    {
-        $name_value_list = PackageManagerComm::getPromotion();
-        if (!empty($name_value_list)) {
-            $name_value_list = PackageManager::fromNameValueList($name_value_list);
-            return $name_value_list['description'];
-        }
-        return '';
+        $this->upload_dir = empty($GLOBALS['sugar_config']['upload_dir']) ? 'upload' : rtrim($GLOBALS['sugar_config']['upload_dir'],
+            '/\\');
     }
 
     /**

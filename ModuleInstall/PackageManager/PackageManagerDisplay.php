@@ -547,19 +547,6 @@ class PackageManagerDisplay
         if (!function_exists('curl_init') && $show_login) {
             $header_text = "<font color='red'><b>".$mod_strings['ERR_ENABLE_CURL']."</b></font>";
             $show_login = false;
-        } else {
-            $credentials = PackageManager::getCredentials();
-            if (empty($credentials['username']) || empty($credentials['password'])) {
-                //$header_text = "<font color='red'><b>".$mod_strings['ERR_CREDENTIALS_MISSING']."</b></font>";
-            } else {
-                $result = PackageManagerComm::login();
-                if ((is_array($result) && !empty($result['faultcode'])) || $result == false) {
-                    $header_text = "<font color='red'><b>".$result['faultstring']."</b></font>";
-                } else {
-                    $header_text = PackageManager::getPromotion();
-                    $isAlive = true;
-                }
-            }
         }
         return array('text' => $header_text, 'isAlive' => $isAlive, 'show_login' => $show_login);
     }
