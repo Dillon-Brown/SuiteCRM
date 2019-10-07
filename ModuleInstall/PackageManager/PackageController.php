@@ -220,43 +220,6 @@
          echo 'result = ' . $json->encode(array('nodes' => $nodes));
      }
 
-     /**
-      * Check the SugarDepot for updates for the given type as passed in via POST
-      * @param type      the type to check for
-      * @return array    return an array of releases for each given installed object if an update is found
-      */
-     public function checkForUpdates()
-     {
-         $json = getJSONobj();
-         $type = '';
-         if (isset($_REQUEST['type'])) {
-             $type = nl2br($_REQUEST['type']);
-         }
-         $pm = new PackageManager();
-         $updates = $pm->checkForUpdates();
-         $nodes = array();
-         $release_map = array();
-         if (!empty($updates)) {
-             foreach ($updates as $update) {
-                 $update = PackageManager::fromNameValueList($update);
-                 $nodes[] = array('label' => $update['name'], 'description' => $update['description'], 'version' => $update['version'], 'build_number' => $update['build_number'], 'id' => $update['id'], 'type' => $update['type']);
-                 $release_map[$update['id']] = array('package_id' => $update['package_id'], 'category_id' => $update['category_id'], 'type' => $update['type']);
-             }
-         }
-         //patches
-         $filter = array(array('name' => 'type', 'value' => "'patch'"));
-         $releases = $pm->getReleases('', '', $filter);
-         if (!empty($releases['packages'])) {
-             foreach ($releases['packages'] as $update) {
-                 $update = PackageManager::fromNameValueList($update);
-                 $nodes[] = array('label' => $update['name'], 'description' => $update['description'], 'version' => $update['version'], 'build_number' => $update['build_number'], 'id' => $update['id'], 'type' => $update['type']);
-                 $release_map[$update['id']] = array('package_id' => $update['package_id'], 'category_id' => $update['category_id'], 'type' => $update['type']);
-             }
-         }
-         $_SESSION['ML_PATCHES'] = $release_map;
-         echo 'result = ' . $json->encode(array('updates' => $nodes));
-     }
-
      public function getLicenseText()
      {
          $json = getJSONobj();
@@ -294,75 +257,6 @@
          $json = getJSONobj();
 
          echo 'result = ' . $json->encode(array('result' => 'success'));
-     }
-
-     public function authenticate()
-     {
-         $json = getJSONobj();
-         $username = '';
-         $password = '';
-         $servername = '';
-         $terms_checked = '';
-         if (isset($_REQUEST['username'])) {
-             $username = nl2br($_REQUEST['username']);
-         }
-         if (isset($_REQUEST['password'])) {
-             $password = nl2br($_REQUEST['password']);
-         }
-         if (isset($_REQUEST['servername'])) {
-             $servername = $_REQUEST['servername'];
-         }
-         if (isset($_REQUEST['terms_checked'])) {
-             $terms_checked = $_REQUEST['terms_checked'];
-             if ($terms_checked == 'on') {
-                 $terms_checked = true;
-             }
-         }
-
-         if (!empty($username) && !empty($password)) {
-             $password = md5($password);
-             $result = PackageManager::authenticate($username, $password, $servername, $terms_checked);
-             if (!is_array($result) && $result == true) {
-                 $status  = 'success';
-             } else {
-                 $status  = $result['faultstring'];
-             }
-         } else {
-             $status  = 'failed';
-         }
-
-         echo 'result = ' . $json->encode(array('status' => $status));
-     }
-
-     public function getDocumentation()
-     {
-         $json = getJSONobj();
-         $package_id = '';
-         $release_id = '';
-
-         if (isset($_REQUEST['package_id'])) {
-             $package_id = nl2br($_REQUEST['package_id']);
-         }
-         if (isset($_REQUEST['release_id'])) {
-             $release_id = nl2br($_REQUEST['release_id']);
-         }
-
-         $documents = PackageManager::getDocumentation($package_id, $release_id);
-         $GLOBALS['log']->debug("DOCUMENTS: ".var_export($documents, true));
-         echo 'result = ' . $json->encode(array('documents' => $documents));
-     }
-
-     public function downloadedDocumentation()
-     {
-         $json = getJSONobj();
-         $document_id = '';
-
-         if (isset($_REQUEST['document_id'])) {
-             $document_id = nl2br($_REQUEST['document_id']);
-         }
-         $GLOBALS['log']->debug("Downloading Document: ".$document_id);
-         PackageManagerComm::downloadedDocumentation($document_id);
-         echo 'result = ' . $json->encode(array('result' => 'true'));
      }
 
      /**
