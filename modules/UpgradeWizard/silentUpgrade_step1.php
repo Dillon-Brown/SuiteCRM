@@ -419,7 +419,6 @@ $_REQUEST['addTaskReminder'] = 'remind';
 
 
 define('SUGARCRM_INSTALL', 'SugarCRM_Install');
-define('DCE_INSTANCE', 'DCE_Instance');
 
 global $cwd;
 $cwd = getcwd(); // default to current, assumed to be in a valid SuiteCRM root dir.
@@ -445,11 +444,8 @@ echo "********************************************************************\n";
 echo "\n";
 
 global $sugar_config;
-$isDCEInstance = false;
 $errors = [];
 
-
-if ($upgradeType !== constant('DCE_INSTANCE')) {
     ini_set('error_reporting', 1);
     require_once 'include/entryPoint.php';
     require_once 'include/SugarLogger/SugarLogger.php';
@@ -932,7 +928,6 @@ if ($upgradeType !== constant('DCE_INSTANCE')) {
         }
         echo "FAILED\n";
     }
-}
 
 
 /**

@@ -238,7 +238,6 @@ $_REQUEST['addTaskReminder'] = 'remind';
 
 
 define('SUGARCRM_INSTALL', 'SugarCRM_Install');
-define('DCE_INSTANCE', 'DCE_Instance');
 
 global $cwd;
 $cwd = getcwd(); // default to current, assumed to be in a valid SuiteCRM root dir.
@@ -254,7 +253,6 @@ require_once('include/utils/zip_utils.php');
 require_once('include/utils/sugar_file_utils.php');
 require_once('include/SugarObjects/SugarConfig.php');
 global $sugar_config;
-$isDCEInstance = false;
 $errors = [];
 
 require('config.php');
