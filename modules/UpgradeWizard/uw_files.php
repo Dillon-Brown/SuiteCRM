@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -38,23 +38,20 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-
-
-
-global $sugar_version;
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
+global $sugar_version;
+
 ///////////////////////////////////////////////////////////////////////////////
 ////	DYNAMICALLY GENERATE UPGRADEWIZARD MODULE FILE LIST
-$uwFilesCurrent = findAllFiles('modules/UpgradeWizard/', array());
+$uwFilesCurrent = findAllFiles('modules/UpgradeWizard/', []);
 
 // handle 4.x to 4.5.x+ (no UpgradeWizard module)
 if (count($uwFilesCurrent) < 5) {
-    $uwFiles = array(
+    $uwFiles = [
         'modules/UpgradeWizard/language/en_us.lang.php',
-        'modules/UpgradeWizard/cancel.php',
         'modules/UpgradeWizard/commit.php',
         'modules/UpgradeWizard/commitJson.php',
         'modules/UpgradeWizard/end.php',
@@ -74,13 +71,13 @@ if (count($uwFilesCurrent) < 5) {
         'modules/UpgradeWizard/uw_files.php',
         'modules/UpgradeWizard/uw_main.tpl',
         'modules/UpgradeWizard/uw_utils.php',
-    );
+    ];
 } else {
     $uwFilesCurrent = findAllFiles('ModuleInstall', $uwFilesCurrent);
     $uwFilesCurrent = findAllFiles('include/javascript/yui', $uwFilesCurrent);
     $uwFilesCurrent[] = 'HandleAjaxCall.php';
 
-    $uwFiles = array();
+    $uwFiles = [];
     foreach ($uwFilesCurrent as $file) {
         $uwFiles[] = str_replace("./", "", clean_path($file));
     }
@@ -88,7 +85,7 @@ if (count($uwFilesCurrent) < 5) {
 ////	END DYNAMICALLY GENERATE UPGRADEWIZARD MODULE FILE LIST
 ///////////////////////////////////////////////////////////////////////////////
 
-$uw_files = array(
+$uw_files = [
     // standard files we steamroll with no warning
     'log4php.properties',
     'include/utils/encryption_utils.php',
@@ -108,6 +105,6 @@ $uw_files = array(
     'include/database/MysqlHelper.php',
     'include/database/MysqlManager.php',
     'include/database/DBManagerFactory.php',
-);
+];
 
 $uw_files = array_merge($uw_files, $uwFiles);
