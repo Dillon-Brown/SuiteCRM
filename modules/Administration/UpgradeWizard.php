@@ -99,13 +99,7 @@ if (isset($_REQUEST['run']) && ($_REQUEST['run'] != "")) {
 
     if ($run == "upload") {
         $perform = false;
-        if (isset($_REQUEST['release_id']) && $_REQUEST['release_id'] != "") {
-            require_once('ModuleInstall/PackageManager.php');
-            $pm = new PackageManager();
-            $tempFile = $pm->download('', '', $_REQUEST['release_id']);
-            $perform = true;
-            $base_filename = urldecode($tempFile);
-        } elseif (!empty($_REQUEST['load_module_from_dir'])) {
+        if (!empty($_REQUEST['load_module_from_dir'])) {
             //copy file to proper location then call performSetup
             copy($_REQUEST['load_module_from_dir'].'/'.$_REQUEST['upgrade_zip_escaped'], "upload://".$_REQUEST['upgrade_zip_escaped']);
 
