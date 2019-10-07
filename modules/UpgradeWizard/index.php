@@ -165,55 +165,28 @@ if (isset($_REQUEST['delete_package']) && $_REQUEST['delete_package'] == 'true')
     }
 }
 
-if (isset($_SESSION['UpgradedUpgradeWizard']) && $_SESSION['UpgradedUpgradeWizard'] === true) {
-    $steps = [
-        'files' => [
-            'start',
-            'systemCheck',
-            'preflight',
-            'commit',
-            'end',
-            'cancel',
-        ],
-        'desc' => [
-            $mod_strings['LBL_UW_TITLE_START'],
-            $mod_strings['LBL_UW_TITLE_SYSTEM_CHECK'],
-            $mod_strings['LBL_UW_TITLE_PREFLIGHT'],
-            $mod_strings['LBL_UW_TITLE_COMMIT'],
-            $mod_strings['LBL_UW_TITLE_END'],
-            $mod_strings['LBL_UW_TITLE_CANCEL'],
-        ],
-    ];
-} else {
-    if (empty($mod_strings['LBL_UW_TITLE_LAYOUTS'])) {
-        $mod_strings['LBL_UW_TITLE_LAYOUTS'] = 'Layouts';
-    }
-    /* END TEMP FIX */
-
-    // Upgrading from 5.0 upwards and upload not performed yet.
-    $steps = array(
-        'files' => array(
-            'start',
-            'systemCheck',
-            'upload',
-            'preflight',
-            'commit',
-            'layouts',
-            'end',
-            'cancel',
-        ),
-        'desc' => array(
-            $mod_strings['LBL_UW_TITLE_START'],
-            $mod_strings['LBL_UW_TITLE_SYSTEM_CHECK'],
-            $mod_strings['LBL_UPLOAD_UPGRADE'],
-            $mod_strings['LBL_UW_TITLE_PREFLIGHT'],
-            $mod_strings['LBL_UW_TITLE_COMMIT'],
-            $mod_strings['LBL_UW_TITLE_LAYOUTS'],
-            $mod_strings['LBL_UW_TITLE_END'],
-            $mod_strings['LBL_UW_TITLE_CANCEL'],
-        ),
-    );
-}
+$steps = [
+    'files' => [
+        'start',
+        'systemCheck',
+        'upload',
+        'preflight',
+        'commit',
+        'layouts',
+        'end',
+        'cancel',
+    ],
+    'desc' => [
+        $mod_strings['LBL_UW_TITLE_START'],
+        $mod_strings['LBL_UW_TITLE_SYSTEM_CHECK'],
+        $mod_strings['LBL_UPLOAD_UPGRADE'],
+        $mod_strings['LBL_UW_TITLE_PREFLIGHT'],
+        $mod_strings['LBL_UW_TITLE_COMMIT'],
+        $mod_strings['LBL_UW_TITLE_LAYOUTS'],
+        $mod_strings['LBL_UW_TITLE_END'],
+        $mod_strings['LBL_UW_TITLE_CANCEL'],
+    ],
+];
 
 $upgradeStepFile = '';
 if (isset($_REQUEST['step']) && $_REQUEST['step'] !=null) {
