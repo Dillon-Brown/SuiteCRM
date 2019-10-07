@@ -1547,8 +1547,6 @@ function getTableFromQuery($query)
 
 function preLicenseCheck()
 {
-    require_once('modules/UpgradeWizard/uw_files.php');
-
     global $sugar_config;
     global $mod_strings;
     global $sugar_version;
@@ -1691,8 +1689,6 @@ eoq;
 
 function preflightCheck()
 {
-    require_once('modules/UpgradeWizard/uw_files.php');
-
     global $sugar_config;
     global $mod_strings;
     global $sugar_version;
@@ -1834,10 +1830,6 @@ eoq;
     // file preflight checks
     logThis('verifying md5 checksums for files...');
     foreach ($upgradeFiles as $file) {
-        if (in_array(str_replace(clean_path("$unzip_dir/$zip_from_dir") . "/", '', $file), $uw_files)) {
-            continue;
-        } // skip already loaded files
-
         if (strpos($file, '.md5')) {
             continue;
         } // skip md5 file
