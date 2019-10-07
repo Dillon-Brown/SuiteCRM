@@ -293,7 +293,26 @@ if ($upgradeStepFile == 'end') {
     //}
 }
 
-require('modules/UpgradeWizard/'.$upgradeStepFile.'.php');
+if ($upgradeStepFile === 'cancel') {
+    logThis('Cleaning up files and session.');
+
+    if (isset($_SESSION['install_file']) && file_exists(isset($_SESSION['install_file']))) {
+        @unlink(isset($_SESSION['install_file']));
+    }
+
+    unlinkUWTempFiles();
+    resetUwSession();
+
+    $showExit = true;
+    $stepBack = $_REQUEST['step'] - 1;
+    $stepNext = $_REQUEST['step'] + 1;
+    $stepCancel = -1;
+    $stepRecheck = $_REQUEST['step'];
+}
+
+if (file_exists(('modules/UpgradeWizard/' . $upgradeStepFile . '.php'))) {
+    require_once('modules/UpgradeWizard/' . $upgradeStepFile . '.php');
+}
 
 $afterCurrentStep = $_REQUEST['step'] + 1;
 
