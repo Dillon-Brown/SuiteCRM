@@ -1,14 +1,11 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
-    die('Not A Valid Entry Point');
-}
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -40,6 +37,10 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
+
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
 
 global $sugar_version, $js_custom_version;
 $lang_curr = $_SESSION['language'];
@@ -344,6 +345,8 @@ EOQ2;
 $hidden_fields =  "<input type=\"hidden\" name=\"current_step\" value=\"{$next_step}\">";
 $hidden_fields .=  "<input type=\"hidden\" name=\"goto\" value=\"{$mod_strings['LBL_CHECKSYS_RECHECK']}\">";
 $hidden_fields .=  "<input type=\"hidden\" name=\"languagePackAction\" value=\"commit\">";
-$form2 = PackageManagerDisplay::buildPackageDisplay($form, $hidden_fields, 'install.php', false, 'patch');
+
+$packageDisplay = new PackageManagerDisplay();
+$form2 = $packageDisplay->buildPackageDisplay($form, $hidden_fields, 'install.php', false, 'patch');
 
 echo $out.$form2.$out1;

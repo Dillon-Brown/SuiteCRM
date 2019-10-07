@@ -50,7 +50,7 @@ require_once __DIR__ . '/../../ModuleInstall/PackageManager/ListViewPackages.php
 class PackageManagerDisplay
 {
     /**
-     * A Static method to Build the display for the package manager
+     * A method to Build the display for the package manager
      * @param string $form1 the form to display for manual downloading
      * @param string $hidden_fields the hidden fields related to downloading a package
      * @param string $form_action the form_action to be used when downloading from the server
@@ -58,7 +58,7 @@ class PackageManagerDisplay
      * @param bool $install
      * @return string HTML used to display the form
      */
-    public static function buildPackageDisplay(
+    public function buildPackageDisplay(
         $form1,
         $hidden_fields,
         $form_action,
@@ -74,7 +74,7 @@ class PackageManagerDisplay
         $ss->assign('FORM_1_PLACE_HOLDER', $form1);
         $ss->assign('form_action', $form_action);
         $ss->assign('hidden_fields', $hidden_fields);
-        $tree = self::buildTreeView('treeview');
+        $tree = $this->buildTreeView('treeview');
         $tree->tree_style = 'include/ytree/TreeView/css/check/tree.css';
         $ss->assign('TREEHEADER', $tree->generate_header());
         $ss->assign('installation', ($install ? 'true' : 'false'));
@@ -104,7 +104,7 @@ class PackageManagerDisplay
      * @param String div_id - this div in which to display the tree
      * @return Tree - the tree that is built
      */
-    public static function buildTreeView($div_id)
+    public function buildTreeView($div_id)
     {
         $tree = new Tree($div_id);
         foreach ([] as $arr_node) {
@@ -121,7 +121,7 @@ class PackageManagerDisplay
     }
 
     /**
-     * A Static method used to obtain the div for the license
+     * A method used to obtain the div for the license
      *
      * @param String license_file - the path to the license file
      * @param String form_action - the form action when accepting the license file
@@ -135,7 +135,7 @@ class PackageManagerDisplay
     public function getLicenseDisplay($license_file, $form_action, $next_step, $zipFile, $type, $manifest, $modify_field)
     {
         global $current_language;
-        $mod_strings = return_module_language($current_language, "Administration");
+        $mod_strings = return_module_language($current_language, 'Administration');
         $contents = sugar_file_get_contents($license_file);
         $div_id = urlencode($zipFile);
         $display = "<form name='delete{$zipFile}' action='{$form_action}' method='POST'>";
