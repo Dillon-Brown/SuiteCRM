@@ -83,7 +83,7 @@ class PackageManagerDisplay
             $ss->assign('ERR_SUHOSIN', true);
         } else {
             $ss->assign('scripts',
-                self::getDisplayScript(
+                $this->getDisplayScript(
                     $install,
                     $type,
                     null,
@@ -159,40 +159,45 @@ class PackageManagerDisplay
     }
 
     /**
-    * A Static method used to generate the javascript for the page
-    *
-    * @return String - the javascript required for the page
-    */
-    public static function getDisplayScript($install = false, $type = 'module', $releases = null, $types = array(), $isAlive = true)
+     * A method used to generate the javascript for the page
+     *
+     * @param bool|int $install
+     * @param string $type
+     * @param null $releases
+     * @param array $types
+     * @param bool $isAlive
+     * @return string - the javascript required for the page
+     */
+    public function getDisplayScript($install = false, $type = 'module', $releases = null, $types = [], $isAlive = true)
     {
-        global $sugar_version, $sugar_config;
-        global $current_language;
+        global $sugar_version, $sugar_config, $current_language;
 
-        $mod_strings = return_module_language($current_language, "Administration");
+        $mod_strings = return_module_language($current_language, 'Administration');
         $ss = new Sugar_Smarty();
         $ss->assign('MOD', $mod_strings);
         if (!$install) {
             $install = 0;
         }
         $ss->assign('INSTALLATION', $install);
-        $ss->assign('WAIT_IMAGE', SugarThemeRegistry::current()->getImage("loading", "border='0' align='bottom'", null, null, '.gif', "Loading"));
+        $ss->assign('WAIT_IMAGE',
+            SugarThemeRegistry::current()->getImage('loading', "border='0' align='bottom'", null, null, '.gif',
+                'Loading'));
 
         $ss->assign('sugar_version', $sugar_version);
         $ss->assign('js_custom_version', $sugar_config['js_custom_version']);
         $ss->assign('IS_ALIVE', $isAlive);
-        //if($type == 'patch' && $releases != null){
-        if ($type == 'patch') {
+        if ($type === 'patch') {
             $ss->assign('module_load', 'false');
-            $patches = PackageManagerDisplay::createJavascriptPackageArray($releases);
+            $patches = $this->createJavascriptPackageArray($releases);
             $ss->assign('PATCHES', $patches);
             $ss->assign('GRID_TYPE', implode(',', $types));
         } else {
             $pm = new PackageManager();
             $releases = $pm->getPackagesInStaging();
-            $patches = PackageManagerDisplay::createJavascriptModuleArray($releases);
+            $patches = $this->createJavascriptModuleArray($releases);
             $ss->assign('PATCHES', $patches);
-            $installeds = $pm->getinstalledPackages();
-            $patches = PackageManagerDisplay::createJavascriptModuleArray($installeds, 'mti_installed_data');
+            $installed = $pm->getinstalledPackages();
+            $patches = $this->createJavascriptModuleArray($installed, 'mti_installed_data');
             $ss->assign('INSTALLED_MODULES', $patches);
             $ss->assign('UPGARDE_WIZARD_URL', 'index.php?module=UpgradeWizard&action=index');
             $ss->assign('module_load', 'true');
@@ -200,19 +205,16 @@ class PackageManagerDisplay
         if (!empty($GLOBALS['ML_STATUS_MESSAGE'])) {
             $ss->assign('ML_STATUS_MESSAGE', $GLOBALS['ML_STATUS_MESSAGE']);
         }
-
-        //Bug 24064. Checking and Defining labels since these might not be cached during Upgrade
-        if (!isset($mod_strings['LBL_ML_INSTALL']) || empty($mod_strings['LBL_ML_INSTALL'])) {
+        if (empty($mod_strings['LBL_ML_INSTALL'])) {
             $mod_strings['LBL_ML_INSTALL'] = 'Install';
         }
-        if (!isset($mod_strings['LBL_ML_ENABLE_OR_DISABLE']) || empty($mod_strings['LBL_ML_ENABLE_OR_DISABLE'])) {
+        if (empty($mod_strings['LBL_ML_ENABLE_OR_DISABLE'])) {
             $mod_strings['LBL_ML_ENABLE_OR_DISABLE'] = 'Enable/Disable';
         }
-        if (!isset($mod_strings['LBL_ML_DELETE'])|| empty($mod_strings['LBL_ML_DELETE'])) {
+        if (empty($mod_strings['LBL_ML_DELETE'])) {
             $mod_strings['LBL_ML_DELETE'] = 'Delete';
         }
-        //Add by jchi 6/23/2008 to fix the bug 21667
-        $filegrid_column_ary = array(
+        $fileGridColumnArray = [
             'Name' => $mod_strings['LBL_ML_NAME'],
             'Install' => $mod_strings['LBL_ML_INSTALL'],
             'Delete' => $mod_strings['LBL_ML_DELETE'],
@@ -221,9 +223,9 @@ class PackageManagerDisplay
             'Published' => $mod_strings['LBL_ML_PUBLISHED'],
             'Uninstallable' => $mod_strings['LBL_ML_UNINSTALLABLE'],
             'Description' => $mod_strings['LBL_ML_DESCRIPTION']
-        );
+        ];
 
-        $filegridinstalled_column_ary = array(
+        $fileGridInstalledColumnArray = [
             'Name' => $mod_strings['LBL_ML_NAME'],
             'Install' => $mod_strings['LBL_ML_INSTALL'],
             'Action' => $mod_strings['LBL_ML_ACTION'],
@@ -233,160 +235,85 @@ class PackageManagerDisplay
             'Date_Installed' => $mod_strings['LBL_ML_INSTALLED'],
             'Uninstallable' => $mod_strings['LBL_ML_UNINSTALLABLE'],
             'Description' => $mod_strings['LBL_ML_DESCRIPTION']
-        );
+        ];
 
-        $ss->assign('ML_FILEGRID_COLUMN', $filegrid_column_ary);
-        $ss->assign('ML_FILEGRIDINSTALLED_COLUMN', $filegridinstalled_column_ary);
-        //end
+        $ss->assign('ML_FILEGRID_COLUMN', $fileGridColumnArray);
+        $ss->assign('ML_FILEGRIDINSTALLED_COLUMN', $fileGridInstalledColumnArray);
+        $ss->assign('SHOW_IMG',
+            SugarThemeRegistry::current()->getImage('advanced_search', 'border="0"', 8, 8, '.gif', 'Show'));
+        $ss->assign('HIDE_IMG',
+            SugarThemeRegistry::current()->getImage('basic_search', 'border="0"', 8, 8, '.gif', 'Hide'));
 
-        $ss->assign('SHOW_IMG', SugarThemeRegistry::current()->getImage('advanced_search', 'border="0"', 8, 8, '.gif', 'Show'));
-        $ss->assign('HIDE_IMG', SugarThemeRegistry::current()->getImage('basic_search', 'border="0"', 8, 8, '.gif', 'Hide'));
-        $str = $ss->fetch('ModuleInstall/PackageManager/tpls/PackageManagerScripts.tpl');
-        return $str;
+        return $ss->fetch('ModuleInstall/PackageManager/tpls/PackageManagerScripts.tpl');
     }
 
     public function createJavascriptPackageArray($releases)
     {
-        $output = "var mti_data = [";
+        $output = 'var mti_data = [';
         $count = count($releases);
         $index = 1;
         if (!empty($releases['packages'])) {
             foreach ($releases['packages'] as $release) {
-                $release = PackageManager::fromNameValueList($release);
-                $output .= "[";
-                $output .= "'".$release['description']."', '".$release['version']."', '".$release['build_number']."', '".$release['id']."'";
-                $output .= "]";
+                $release = (new PackageManager)->fromNameValueList($release);
+                $output .= '[';
+                $output .= "'" . $release['description'] . "', '" . $release['version'] . "', '" . $release['build_number'] . "', '" . $release['id'] . "'";
+                $output .= ']';
                 if ($index < $count) {
-                    $output .= ",";
+                    $output .= ',';
                 }
                 $index++;
             }
         }
         $output .= "]\n;";
+
         return $output;
     }
 
-    public static function createJavascriptModuleArray($modules, $variable_name = 'mti_data')
+    public function createJavascriptModuleArray($modules, $variable_name = 'mti_data')
     {
-        $output = "var ".$variable_name." = [";
+        $output = 'var ' . $variable_name . ' = [';
         $count = count($modules);
         $index = 1;
         if (!empty($modules)) {
             foreach ($modules as $module) {
-                $output .= "[";
-                $output .= "'".$module['name']."', '".$module['file_install']."', '".$module['file']."', '";
+                $output .= '[';
+                $output .= "'" . $module['name'] . "', '" . $module['file_install'] . "', '" . $module['file'] . "', '";
                 if (!empty($module['enabled'])) {
-                    $output .= $module['enabled'].'_'.$module['file']."', '";
+                    $output .= $module['enabled'] . '_' . $module['file'] . "', '";
                 }
 
                 $description = js_escape($module['description']);
-                $output .= $module['type']."', '".$module['version']."', '".$module['published_date']."', '".$module['uninstallable']."', '".$description."'".(isset($module['upload_file'])?" , '".$module['upload_file']."']":"]");
+                $output .= $module['type'] . "', '" . $module['version'] . "', '" . $module['published_date'] . "', '" . $module['uninstallable'] . "', '" . $description . "'" . (isset($module['upload_file']) ? " , '" . $module['upload_file'] . "']" : ']');
                 if ($index < $count) {
-                    $output .= ",";
+                    $output .= ',';
                 }
                 $index++;
             }
         }
         $output .= "]\n;";
+
         return $output;
     }
 
     /**
      *  This method is meant to be used to display the license agreement inline on the page
      *  if the system would like to perform the installation on the same page via an Ajax call
+     * @param $file
+     * @return string
      */
     public function buildLicenseOutput($file)
     {
         global $current_language;
+        $mod_strings = return_module_language($current_language, 'Administration');
+        $contents = (new PackageManager())->getLicenseFromFile($file);
 
-        $mod_strings = return_module_language($current_language, "Administration");
-        $contents = '';
-        $pm = new PackageManager();
-        $contents = $pm->getLicenseFromFile($file);
         $ss = new Sugar_Smarty();
         $ss->assign('MOD', $mod_strings);
         $ss->assign('LICENSE_CONTENTS', $contents);
         $ss->assign('FILE', $file);
         $str = $ss->fetch('ModuleInstall/PackageManagerLicense.tpl');
-        $GLOBALS['log']->debug('LICENSE OUTPUT: '.$str);
+        LoggerManager::getLogger()->debug('LICENSE OUTPUT: ' . $str);
+
         return $str;
-    }
-
-    public static function getHeader()
-    {
-        global $current_language;
-
-        $mod_strings = return_module_language($current_language, 'Administration');
-        $header_text = '';
-        $isAlive = false;
-        $show_login = false;
-        if (!function_exists('curl_init') && $show_login) {
-            $header_text = "<font color='red'><b>".$mod_strings['ERR_ENABLE_CURL']."</b></font>";
-            $show_login = false;
-        }
-        return ['text' => $header_text, 'isAlive' => $isAlive, 'show_login' => $show_login];
-    }
-
-    public function buildInstallGrid($view)
-    {
-        $uh = new UpgradeHistory();
-        $installeds = $uh->getAll();
-        $upgrades_installed = 0;
-        $installed_objects = array();
-        foreach ($installeds as $installed) {
-            $filename = from_html($installed->filename);
-            $date_entered = $installed->date_entered;
-            $type = $installed->type;
-            $version = $installed->version;
-            $upgrades_installed++;
-            $link = "";
-
-            switch ($type) {
-                case "theme":
-                case "langpack":
-                case "module":
-                case "patch":
-                $manifest_file = extractManifest($filename);
-                require_once($manifest_file);
-
-                $name = empty($manifest['name']) ? $filename : $manifest['name'];
-                $description = empty($manifest['description']) ? $mod_strings['LBL_UW_NONE'] : $manifest['description'];
-                if (($upgrades_installed==0 || $uh->UninstallAvailable($installeds, $installed))
-                    && is_file($filename) && !empty($manifest['is_uninstallable'])) {
-                    $link = urlencode($filename);
-                } else {
-                    $link = 'false';
-                }
-
-                break;
-                default:
-                    break;
-            }
-
-            if ($view == 'default' && $type != 'patch') {
-                continue;
-            }
-
-            if ($view == 'module'
-                && $type != 'module' && $type != 'theme' && $type != 'langpack') {
-                continue;
-            }
-
-            $target_manifest = remove_file_extension($filename) . "-manifest.php";
-            require_once((string)$target_manifest);
-
-            if (isset($manifest['icon']) && $manifest['icon'] != "") {
-                $manifest_copy_files_to_dir = isset($manifest['copy_files']['to_dir']) ? clean_path($manifest['copy_files']['to_dir']) : "";
-                $manifest_copy_files_from_dir = isset($manifest['copy_files']['from_dir']) ? clean_path($manifest['copy_files']['from_dir']) : "";
-                $manifest_icon = clean_path($manifest['icon']);
-                $icon = "<img src=\"" . $manifest_copy_files_to_dir . ($manifest_copy_files_from_dir != "" ? substr($manifest_icon, strlen($manifest_copy_files_from_dir)+1) : $manifest_icon) . "\">";
-            } else {
-                $icon = getImageForType($manifest['type']);
-            }
-            $installed_objects[] = array('icon' => $icon, 'name' => $name, 'type' => $type, 'version' => $version, 'date_entered' => $date_entered, 'description' => $description, 'file' => $link);
-            //print( "<form action=\"" . $form_action . "_prepare\" method=\"post\">\n" );
-            //print( "<tr><td>$icon</td><td>$name</td><td>$type</td><td>$version</td><td>$date_entered</td><td>$description</td><td>$link</td></tr>\n" );
-            //print( "</form>\n" );
-        }
     }
 }
