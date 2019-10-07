@@ -92,51 +92,10 @@ class PackageManagerDisplay
                     true)
             );
         }
-        $ss->assign('MODULE_SELECTOR', self::buildGridOutput($tree, $mod_strings, false, false));
         $ss->assign('FORM_2_PLACE_HOLDER', '');
         $ss->assign('MOD', $mod_strings);
 
         return $ss->fetch('ModuleInstall/PackageManager/tpls/PackageForm.tpl');
-    }
-
-    /**
-     *  Build html in order to display the grids relevant for module loader
-     *
-     *  @param Tree tree - the tree which we are using to display the categories
-     *  @param Array mod_strings - the local mod strings to display
-     *  @return String - a string of html
-     */
-    public static function buildGridOutput($tree, $mod_strings, $display = true, $show_login = true)
-    {
-        $output = "<div id='catview'>";
-        $loginViewStyle = ($display ? 'none' : 'block');
-        $selectViewStyle = ($display ? 'block' : 'none');
-        $output .= "<div id='selectView' style='display:".$selectViewStyle."'>";
-        //if($display){
-        $output .= "<table border=0 width='100%' class='moduleTitle'><tr><td width='100%' valign='top'>";
-        $output .= "<div id='treeview'>";
-        $output .= $tree->generate_nodes_array();
-        $output .= "</div>";
-        $output .= "</td></tr>";
-        $output .= "<tr><td width='100%'>";
-        $output .= "<div id='tabs1'></div>";
-        $output .= "</td></tr>";
-        $output .= "<tr><td width='100%' align='left'>";
-        $output .= "<input type='button' class='button' value='Download Selected' onClick='PackageManager.download();'>";
-        $output .= "</td></tr></table>";
-        // }
-        $output .= "</div>";
-        if (!$show_login) {
-            $loginViewStyle = 'none';
-        }
-        // $output .= "<div id='loginView' style='display:".$loginViewStyle."'>";
-        // jchi ,#24296 :commented code because we are currently not using depot, in the future this may change so you can put this code back in.
-        //$output .= PackageManagerDisplay::buildLoginPanel($mod_strings, $display);
-        //$output .= "</div>";
-        //$output .= "<table width='100%' class='moduleTitle' border=1><tr><td><div id='patch_downloads' class='ygrid-mso' style='height:205px;'></div></td></tr></table>";
-        $output .= "</div>";
-
-        return $output;
     }
 
     /**

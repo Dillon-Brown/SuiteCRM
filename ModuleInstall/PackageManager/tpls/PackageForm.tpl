@@ -101,7 +101,6 @@ pre {
 {$hidden_fields}
 <div id='server_upload_div'>
 {$FORM_2_PLACE_HOLDER}
-{$MODULE_SELECTOR}
 <div id='search_results_div'></div>
 </div>
 </form>
