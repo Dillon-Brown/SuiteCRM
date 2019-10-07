@@ -76,13 +76,11 @@ $mod_strings = array(
     'LBL_BUTTON_EXIT' => 'Exit',
     'LBL_BUTTON_NEXT' => 'Next >',
     'LBL_BUTTON_RECHECK' => 'Recheck',
-    'LBL_BUTTON_RESTART' => 'Restart',
 
     'LBL_UPLOAD_UPGRADE' => 'Upload Upgrade Package ',
     'LBL_UW_BACKUP_FILES_EXIST_TITLE' => 'File Backup',
     'LBL_UW_BACKUP_FILES_EXIST' => 'Backed-up files from this upgrade can be found in',
     'LBL_UW_BACKUP' => 'File BACKUP',
-    'LBL_UW_CANCEL_DESC' => 'The upgrade has been cancelled. Any temporary files that were copied and any upgrade files that were uploaded have been deleted.',
     'LBL_UW_CHECK_ALL' => 'Check All',
     'LBL_UW_CHECKLIST' => 'Upgrade Steps',
     'LBL_UW_COMMIT_ADD_TASK_DESC_1' => 'Backups of Overwritten Files are in the following directory: ' . PHP_EOL,
