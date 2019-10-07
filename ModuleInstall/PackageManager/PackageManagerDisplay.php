@@ -38,10 +38,14 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-require_once('ModuleInstall/PackageManager/PackageManager.php');
-require_once('include/ytree/Tree.php');
-require_once('include/ytree/Node.php');
-require_once('ModuleInstall/PackageManager/ListViewPackages.php');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
+
+require_once __DIR__ . '/../../ModuleInstall/PackageManager/PackageManager.php';
+require_once __DIR__ . '/../../include/ytree/Tree.php';
+require_once __DIR__ . '/../../include/ytree/Node.php';
+require_once __DIR__ . '/../../ModuleInstall/PackageManager/ListViewPackages.php';
 
 class PackageManagerDisplay
 {
