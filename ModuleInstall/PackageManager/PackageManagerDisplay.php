@@ -97,18 +97,8 @@ class PackageManagerDisplay
         $ss->assign('MODULE_SELECTOR', self::buildGridOutput($tree, $mod_strings, false, false));
         $ss->assign('FORM_2_PLACE_HOLDER', '');
         $ss->assign('MOD', $mod_strings);
-        $ss->assign('INSTALLED_PACKAGES_HOLDER', self::buildInstalledGrid($mod_strings, $types));
 
         return $ss->fetch('ModuleInstall/PackageManager/tpls/PackageForm.tpl');
-    }
-
-    public static function buildInstalledGrid($mod_strings, $types = array('modules'))
-    {
-        $descItemsInstalled = $mod_strings['LBL_UW_DESC_MODULES_INSTALLED'];
-        $output = '<table width="100%" border="0" cellspacing="0" cellpadding="0" ><tr><td align="left">'.$descItemsInstalled.'</td>';
-        $output .= '</td></tr></table>';
-        $output .= "<table width='100%'><tr><td ><div id='installed_grid' class='ygrid-mso' style='height:205px;'></div></td></tr></table>";
-        return $output;
     }
 
     /**

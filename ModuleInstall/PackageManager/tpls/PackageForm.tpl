@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -82,8 +82,19 @@ pre {
 }
 </style>
 {/literal}
-{$INSTALLED_PACKAGES_HOLDER}
-<br>
+    <table style="width:100%">
+        <tr>
+            <td align="left">'{$MOD.LBL_UW_DESC_MODULES_INSTALLED}'</td>
+            </td></tr>
+    </table>
+    <table style="width:100%">
+        <tr>
+            <td>
+                <div id='installed_grid' class='ygrid-mso' style='height:205px;'></div>
+            </td>
+        </tr>
+    </table>
+    <br>
 
 <form action='{$form_action}' method="post" name="installForm">
 <input type=hidden name="release_id">
