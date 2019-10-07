@@ -66,7 +66,6 @@ class PackageManagerDisplay
         $type = 'module'
     ) {
         global $current_language, $app_strings;
-        $app_strings = return_application_language($current_language);
         $mod_strings = return_module_language($current_language, 'Administration');
 
         $ss = new Sugar_Smarty();
@@ -93,13 +92,12 @@ class PackageManagerDisplay
             );
         }
         $ss->assign('FORM_2_PLACE_HOLDER', '');
-        $ss->assign('MOD', $mod_strings);
 
         return $ss->fetch('ModuleInstall/PackageManager/tpls/PackageForm.tpl');
     }
 
     /**
-     * A Static method used to build the initial treeview when the page is first displayed
+     * A method used to build the initial treeview when the page is first displayed
      *
      * @param String div_id - this div in which to display the tree
      * @return Tree - the tree that is built
@@ -123,52 +121,41 @@ class PackageManagerDisplay
     /**
      * A method used to obtain the div for the license
      *
-     * @param String license_file - the path to the license file
-     * @param String form_action - the form action when accepting the license file
-     * @param String next_step - the value for the next step in the installation process
-     * @param String zipFile - a string representing the path to the zip file
-     * @param String type - module/patch....
-     * @param String manifest - the path to the manifest file
-     * @param String modify_field - the field to update when the radio button is changed
-     * @return String - a form used to display the license
+     * @param string $license_file - the path to the license file
+     * @param string $form_action - the form action when accepting the license file
+     * @param string $next_step - the value for the next step in the installation process
+     * @param string $zipFile - a string representing the path to the zip file
+     * @param string $type - module/patch....
+     * @param string $manifest - the path to the manifest file
+     * @param string $modify_field - the field to update when the radio button is changed
+     * @return string - a form used to display the license
      */
-    public function getLicenseDisplay($license_file, $form_action, $next_step, $zipFile, $type, $manifest, $modify_field)
-    {
+    public function getLicenseDisplay(
+        $license_file,
+        $form_action,
+        $next_step,
+        $zipFile,
+        $type,
+        $manifest,
+        $modify_field
+    ) {
         global $current_language;
         $mod_strings = return_module_language($current_language, 'Administration');
         $contents = sugar_file_get_contents($license_file);
         $div_id = urlencode($zipFile);
-        $display = "<form name='delete{$zipFile}' action='{$form_action}' method='POST'>";
-        $display .= "<input type='hidden' name='current_step' value='{$next_step}'>";
-        $display .= "<input type='hidden' name='languagePackAction' value='{$type}'>";
-        $display .= "<input type='hidden' name='manifest' value='\".urlencode($manifest).\"'>";
-        $display .= "<input type='hidden' name='zipFile' value='\".urlencode($zipFile).\"'>";
-        $display .= "<table><tr>";
-        $display .= "<td align=\"left\" valign=\"top\" colspan=2>";
-        $display .= "<b><font color='red' >{$mod_strings['LBL_MODULE_LICENSE']}</font></b>";
-        $display .= "</td>";
-        $display .= "<td>";
-        $display .= "<span><a class=\"listViewTdToolsS1\" id='href_animate' onClick=\"PackageManager.toggleLowerDiv('span_animate_div_$div_id', 'span_license_div_$div_id', 350, 0);\"><span id='span_animate_div_$div_id'<img src='".SugarThemeRegistry::current()->getImageURL('advanced_search.gif')."' width='8' height='8' alt='Advanced' border='0'>&nbsp;Expand</span></a></span></td>";
-        $display .= "</td>";
-        $display .= "</tr>";
-        $display .= "</table>";
-        $display .= "<div id='span_license_div_$div_id' style=\"display: none;\">";
-        $display .= "<table>";
-        $display .= "<tr>";
-        $display .= "<td align=\"left\" valign=\"top\" colspan=2>";
-        $display .= "<textarea cols=\"100\" rows=\"8\">{$contents}</textarea>";
-        $display .= "</td>";
-        $display .= "</tr>";
-        $display .= "<tr>";
-        $display .= "<td align=\"left\" valign=\"top\" colspan=2>";
-        $display .= "<input type='radio' id='radio_license_agreement_accept' name='radio_license_agreement' value='accept' onClick=\"document.getElementById('$modify_field').value = 'yes';\">{$mod_strings['LBL_ACCEPT']}&nbsp;";
-        $display .= "<input type='radio' id='radio_license_agreement_reject' name='radio_license_agreement' value='reject' checked onClick=\"document.getElementById('$modify_field').value = 'no';\">{$mod_strings['LBL_DENY']}";
-        $display .= "</td>";
-        $display .= "</tr>";
-        $display .= "</table>";
-        $display .= "</div>";
-        $display .= "</form>";
-        return $display;
+
+        $ss = new Sugar_Smarty();
+        $ss->assign('MOD', $mod_strings);
+        $ss->assign('LICENSE_CONTENT', $contents);
+        $ss->assign('DIV_ID', $div_id);
+        $ss->assign('ZIP_FILE', $zipFile);
+        $ss->assign('FORM_ACTION', $form_action);
+        $ss->assign('NEXT_STEP', $next_step);
+        $ss->assign('TYPE', $type);
+        $ss->assign('MANIFEST', $manifest);
+        $ss->assign('MODIFY_FIELD', $modify_field);
+
+        return $ss->fetch('ModuleInstall/PackageManager/tpls/PackageLicense.tpl');
     }
 
     /**
