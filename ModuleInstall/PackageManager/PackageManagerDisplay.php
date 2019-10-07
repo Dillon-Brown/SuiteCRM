@@ -55,6 +55,7 @@ class PackageManagerDisplay
      * @param string $hidden_fields the hidden fields related to downloading a package
      * @param string $form_action the form_action to be used when downloading from the server
      * @param array $types the types of objects we will request from the server
+     * @param string $type the type of package to display
      * @param bool $install
      * @return string HTML used to display the form
      */
@@ -63,7 +64,8 @@ class PackageManagerDisplay
         $hidden_fields,
         $form_action,
         $types = ['module'],
-        $install = false
+        $install = false,
+        $type = 'module'
     ) {
         global $current_language, $app_strings;
         $app_strings = return_application_language($current_language);
@@ -86,7 +88,7 @@ class PackageManagerDisplay
             $ss->assign('scripts',
                 self::getDisplayScript(
                     $install,
-                    'module',
+                    $type,
                     null,
                     [],
                     true)
@@ -98,98 +100,6 @@ class PackageManagerDisplay
         $ss->assign('INSTALLED_PACKAGES_HOLDER', self::buildInstalledGrid($mod_strings, $types));
 
         return $ss->fetch('ModuleInstall/PackageManager/tpls/PackageForm.tpl');
-    }
-
-    /**
-     * A Static method to Build the display for the package manager
-     *
-     * @param String form1 - the form to display for manual downloading
-     * @param String hidden_fields - the hidden fields related to downloading a package
-     * @param String form_action - the form_action to be used when downloading from the server
-     * @param String types - the types of objects we will request from the server
-     * @param String active_form - the form to display first
-     * @return String - a string of html which will be used to display the forms
-     */
-    public function buildPatchDisplay($form1, $hidden_fields, $form_action, $types = array('module'), $active_form = 'form1')
-    {
-        global $current_language;
-        $mod_strings = return_module_language($current_language, "Administration");
-        $ss = new Sugar_Smarty();
-        $ss->assign('FORM_1_PLACE_HOLDER', $form1);
-        $ss->assign('form_action', $form_action);
-        $ss->assign('hidden_fields', $hidden_fields);
-        $mod_strings = return_module_language($current_language, "Administration");
-
-        $ss->assign('MOD', $mod_strings);
-        $result = PackageManagerDisplay::getHeader();
-        $header_text = $result['text'];
-        $isAlive = $result['isAlive'];
-        $show_login = $result['show_login'];
-        $display = 'none';
-        //if($isAlive){
-        $display = 'block';
-        //}
-        $form2 = "<table  class='tabForm' width='100%'  cellpadding='0' cellspacing='0' width='100%' border='0'>";
-        if (!$isAlive) {
-            $form2 .= "<tr><td><span id='span_display_html'>".$header_text."</span></td></tr>";
-        }
-        $form2 .= "</table>";
-        $form2 .= "<table width='100%'><tr><td align='left'>";
-        if ($show_login) {
-            $form2 .= "<input type='button' class='button' onClick='PackageManager.showLoginDialog(true);' value='".$mod_strings['LBL_MODIFY_CREDENTIALS']."'>";
-        }
-        $form2 .= "</td><td align='right'><div id='workingStatusDiv' style='display:none;'>".SugarThemeRegistry::current()->getImage("sqsWait", "border='0' align='bottom'", null, null, '.gif', "Loading")."</div></td></tr><tr><td colspan='2'>";
-
-        $loginViewStyle = ($isAlive ? 'none' : 'block');
-        $selectViewStyle = ($isAlive ? 'block' : 'none');
-        $form2 .= "<div id='selectView' style='display:".$selectViewStyle."'>";
-        $form2 .= "  <div id='patch_downloads' class='ygrid-mso' style='height:205px; display: ".$display.";'></div>";
-        $form2 .= "</div>";
-        if (!$show_login) {
-            $loginViewStyle = 'none';
-        }
-        //$form2 .= "<div id='loginView' style='display:".$loginViewStyle."'>";
-        //$form2 .= PackageManagerDisplay::buildLoginPanel($mod_strings, $isAlive);
-        //$form2 .= "</div>";
-
-        $form2 .= "</td></tr></table>";
-        $form2 = '';
-        $packages = array();
-        $releases = array();
-        if ($isAlive) {
-            $filter = array();
-            $count = count($types);
-            $index = 1;
-            $type_str = '"';
-            foreach ($types as $type) {
-                $type_str .= "'".$type."'";
-                if ($index < $count) {
-                    $type_str .= ",";
-                }
-                $index++;
-            }
-            $type_str .= '"';
-            $filter = array('type' => $type_str);
-            $filter = PackageManager::toNameValueList($filter);
-            $pm = new PackageManager();
-            /*if(in_array('patch', $types)){
-            	$releases = $pm->getReleases('3', '3', $filter);
-            }else{
-            	$releases = $pm->getReleases('', '', $filter);
-            }*/
-        }
-        if ($form_action == 'install.php' && (empty($releases) || count($releases['packages']) == 0)) {
-            //return false;
-        }
-        $tree = PackageManagerDisplay::buildTreeView('treeview', $isAlive);
-        $tree->tree_style= 'include/ytree/TreeView/css/check/tree.css';
-        $ss->assign('TREEHEADER', $tree->generate_header());
-        $ss->assign('module_load', 'false');
-        $ss->assign('MODULE_SELECTOR', PackageManagerDisplay::buildGridOutput($tree, $mod_strings, $isAlive, $show_login));
-        $ss->assign('FORM_2_PLACE_HOLDER', $form2);
-        $ss->assign('scripts', PackageManagerDisplay::getDisplayScript(false, 'patch', $releases, $types, $isAlive));
-        $str = $ss->fetch('ModuleInstall/PackageManager/tpls/PackageForm.tpl');
-        return $str;
     }
 
     public static function buildInstalledGrid($mod_strings, $types = array('modules'))

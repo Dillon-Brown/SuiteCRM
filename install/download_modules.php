@@ -344,11 +344,6 @@ EOQ2;
 $hidden_fields =  "<input type=\"hidden\" name=\"current_step\" value=\"{$next_step}\">";
 $hidden_fields .=  "<input type=\"hidden\" name=\"goto\" value=\"{$mod_strings['LBL_CHECKSYS_RECHECK']}\">";
 $hidden_fields .=  "<input type=\"hidden\" name=\"languagePackAction\" value=\"commit\">";
-//$form2 = PackageManagerDisplay::buildPackageDisplay($form, $hidden_fields, 'install.php', array('langpack'), 'form1', true);
-$form2 = PackageManagerDisplay::buildPatchDisplay($form, $hidden_fields, 'install.php', array('langpack'));
+$form2 = PackageManagerDisplay::buildPackageDisplay($form, $hidden_fields, 'install.php', ['langpack'], false, 'patch');
 
 echo $out.$form2.$out1;
-
-//unlinkTempFiles('','');
-////    END PAGEOUTPUT
-///////////////////////////////////////////////////////////////////////////////
