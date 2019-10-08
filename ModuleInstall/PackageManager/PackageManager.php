@@ -38,10 +38,13 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-require_once('include/utils/zip_utils.php');
-require_once('ModuleInstall/PackageManager/PackageManagerDisplay.php');
-require_once('ModuleInstall/ModuleInstaller.php');
-require_once('include/entryPoint.php');
+if (!defined('sugarEntry') || !sugarEntry) {
+    die('Not A Valid Entry Point');
+}
+
+require_once __DIR__ . '/../../include/utils/zip_utils.php';
+require_once __DIR__ . '/../../ModuleInstall/PackageManager/PackageManagerDisplay.php';
+require_once __DIR__ . '/../../ModuleInstall/ModuleInstaller.php';
 
 class PackageManager
 {
