@@ -46,16 +46,6 @@ require_once('include/entryPoint.php');
 class PackageManager
 {
     /**
-     * @var DBManager
-     */
-    public $db;
-
-    /**
-     * @var string
-     */
-    protected $upload_dir;
-
-    /**
      * PackageManager constructor.
      */
     public function __construct()
