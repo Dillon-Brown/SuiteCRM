@@ -48,11 +48,6 @@ require_once('ModuleInstall/PackageManager/PackageManagerComm.php');
 class PackageManager
 {
     /**
-     * @var string
-     */
-    protected $upload_dir;
-
-    /**
      * PackageManager constructor.
      */
     public function __construct()
