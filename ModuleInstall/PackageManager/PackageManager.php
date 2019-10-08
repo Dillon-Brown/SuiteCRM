@@ -48,11 +48,6 @@ require_once('ModuleInstall/PackageManager/PackageManagerComm.php');
 class PackageManager
 {
     /**
-     * @var DBManager
-     */
-    public $db;
-
-    /**
      * @var string
      */
     protected $upload_dir;
