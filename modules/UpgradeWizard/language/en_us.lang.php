@@ -190,8 +190,6 @@ $mod_strings = array(
     'LBL_UW_UNINSTALL' => 'Uninstall',
     //500 upgrade labels
     'LBL_UW_ACCEPT_THE_LICENSE' => 'Accept License',
-    'LBL_UW_CONVERT_THE_LICENSE' => 'Convert License',
-
     'LBL_START_UPGRADE_IN_PROGRESS' => 'Start in progress',
     'LBL_SYSTEM_CHECKS_IN_PROGRESS' => 'System Check in Progress',
     'LBL_LICENSE_CHECK_IN_PROGRESS' => 'License Check in progress',

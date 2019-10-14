@@ -54,11 +54,10 @@ require_once __DIR__ . '/../../modules/Administration/UpgradeHistory.php';
 
 $GLOBALS['top_message'] = '';
 
-if (!isset($locale) || empty($locale)) {
+if ($locale === null) {
     $locale = new Localization();
 }
 global $sugar_config;
-global $sugar_flavor;
 
 require_once('modules/Trackers/TrackerManager.php');
 $trackerManager = TrackerManager::getInstance();
@@ -69,8 +68,6 @@ $trackerManager->unsetMonitors();
 ////	SYSTEM PREP
 list($base_upgrade_dir, $base_tmp_upgrade_dir) = getUWDirs();
 $subdirs = array('full', 'langpack', 'module', 'patch', 'theme');
-
-global $sugar_flavor;
 
 prepSystemForUpgrade();
 
@@ -116,17 +113,7 @@ if (!isset($_SESSION['totalUpgradeTime'])) {
     $_SESSION['totalUpgradeTime'] = 0;
 }
 
-if (!isset($mod_strings['LBL_UW_ACCEPT_THE_LICENSE']) || $mod_strings['LBL_UW_ACCEPT_THE_LICENSE'] == null) {
-    $mod_strings['LBL_UW_ACCEPT_THE_LICENSE'] = 'Accept License';
-}
-if (!isset($mod_strings['LBL_UW_CONVERT_THE_LICENSE']) || $mod_strings['LBL_UW_CONVERT_THE_LICENSE'] == null) {
-    $mod_strings['LBL_UW_CONVERT_THE_LICENSE'] = 'Convert License';
-}
-
 $license_title = $mod_strings['LBL_UW_ACCEPT_THE_LICENSE'];
-if ((isset($sugar_flavor) && $sugar_flavor != null) && ($sugar_flavor=='OS' || $sugar_flavor=='CE')) {
-    $license_title = $mod_strings['LBL_UW_CONVERT_THE_LICENSE'];
-}
 
 if (isset($_REQUEST['delete_package']) && $_REQUEST['delete_package'] == 'true') {
     logThis('running delete old package');
