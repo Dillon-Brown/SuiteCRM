@@ -33,7 +33,7 @@
 <div class="container">
     <div class="row form-group">
         <div class="col-xs-12">
-            <ul class="nav nav-justified setup-panel">
+            <ul class="nav nav-justified setup-panel" style="border: 1px solid #e3e3e3;">
                 <li class="active"><a href="#step-1">
                         <h4 class="list-group-item-heading">System Check</h4>
                         <p class="list-group-item-text">First step description</p>
