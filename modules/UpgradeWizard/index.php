@@ -98,5 +98,3 @@ if (isset($_REQUEST['delete_package']) && $_REQUEST['delete_package'] === 'true'
         }
     }
 }
-
-require_once __DIR__ . '/../../modules/UpgradeWizard/start.php';
