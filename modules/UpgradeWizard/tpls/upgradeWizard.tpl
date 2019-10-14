@@ -24,6 +24,7 @@
         $('#activate-step-2').on('click', function (e) {
           $('ul.setup-panel li:eq(1)').removeClass('disabled');
           $('ul.setup-panel li a[href="#step-2"]').trigger('click');
+          $('#cancel-step-2').remove();
           $(this).remove();
         })
       });
@@ -59,9 +60,18 @@
     </div>
     <div class="row setup-content" id="step-1">
         <div class="col-xs-12">
+            <div class="col-md-12 well">
+                <p>Welcome! this Wizard will assist you in upgrading the SuiteCRM instance.</p>
+
+                <p>Note: We highly recommend that you create a copy of the SuiteCRM instance you use in production and
+                    test the upgrade package before deploying in production.</p>
+
+                <p>Click Next to perform a system check on your system to ensure that you are ready for the upgrade.
+                    This check includes file permissions, database privileges and server settings.</p>
+            </div>
             <div class="col-md-12 well text-center">
-                <h1> STEP 1</h1>
-                <button id="activate-step-2" class="btn btn-primary btn-lg">Activate Step 2</button>
+                <button id="cancel-step-2" class="btn btn-primary btn-lg">Cancel</button>
+                <button id="activate-step-2" class="btn btn-primary btn-lg">Next</button>
             </div>
         </div>
     </div>
