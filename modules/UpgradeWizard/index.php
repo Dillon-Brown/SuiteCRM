@@ -60,24 +60,6 @@ $trackerManager->pause();
 $trackerManager->unsetMonitors();
 
 prepSystemForUpgrade();
-
-$uwMain = '';
-$steps = [];
-$step = 0;
-$showNext = '';
-$showCancel = '';
-$showBack = '';
-$showRecheck = '';
-$stepNext = '';
-$stepCancel = '';
-$stepBack = '';
-$stepRecheck = '';
-$showDone = '';
-$showExit = '';
-$disableNextForLicense = '';
-
-$uh = new UpgradeHistory();
-$smarty = new Sugar_Smarty();
 set_upgrade_vars();
 initialize_session_vars();
 
@@ -116,3 +98,5 @@ if (isset($_REQUEST['delete_package']) && $_REQUEST['delete_package'] === 'true'
         }
     }
 }
+
+require_once __DIR__ . '/../../modules/UpgradeWizard/start.php';
