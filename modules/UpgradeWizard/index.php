@@ -47,54 +47,5 @@ if (!is_admin($current_user)) {
     sugar_cleanup(true);
 }
 
-require_once __DIR__ . '/../../include/utils/db_utils.php';
-require_once __DIR__ . '/../../include/utils/zip_utils.php';
-require_once __DIR__ . '/../../modules/UpgradeWizard/uw_utils.php';
-require_once __DIR__ . '/../../modules/Administration/UpgradeHistory.php';
-require_once __DIR__ . '/../../modules/Trackers/TrackerManager.php';
-
-$GLOBALS['top_message'] = '';
-
-$trackerManager = TrackerManager::getInstance();
-$trackerManager->pause();
-$trackerManager->unsetMonitors();
-
-prepSystemForUpgrade();
-set_upgrade_vars();
-initialize_session_vars();
-
-if (!isset($_SESSION['totalUpgradeTime'])) {
-    $_SESSION['totalUpgradeTime'] = 0;
-}
-
-if (isset($_REQUEST['delete_package']) && $_REQUEST['delete_package'] === 'true') {
-    logThis('running delete old package');
-    $error = '';
-    if (!isset($_REQUEST['install_file']) || ($_REQUEST['install_file'] === '')) {
-        logThis('ERROR: trying to delete non-existent file: ['.$_REQUEST['install_file'].']');
-        $error .= $mod_strings['ERR_UW_NO_FILE_UPLOADED'].'<br>';
-    }
-
-    // delete file in upgrades/patch
-    $delete_me = 'upload://upgrades/patch/'.basename(urldecode($_REQUEST['install_file']));
-    if (is_file($delete_me) && !@unlink($delete_me)) {
-        logThis('ERROR: could not delete: '.$delete_me);
-        $error .= $mod_strings['ERR_UW_FILE_NOT_DELETED'].$delete_me.'<br>';
-    }
-
-    // delete back up instance
-    $delete_dir = 'upload://upgrades/patch/'.remove_file_extension(urldecode($_REQUEST['install_file'])) . '-restore';
-    if (is_dir($delete_dir) && !@rmdir_recursive($delete_dir)) {
-        logThis('ERROR: could not delete: '.$delete_dir);
-        $error .= $mod_strings['ERR_UW_FILE_NOT_DELETED'].$delete_dir.'<br>';
-    }
-
-    if (!empty($error)) {
-        $out = "<b><span class='error'>{$error}</span></b><br />";
-        if (!empty($GLOBALS['top_message'])) {
-            $GLOBALS['top_message'] .= "<br />{$out}";
-        } else {
-            $GLOBALS['top_message'] = $out;
-        }
-    }
-}
+$ss = new Sugar_Smarty();
+$ss->display(__DIR__ . '/tpls/upgradeWizard.tpl');
