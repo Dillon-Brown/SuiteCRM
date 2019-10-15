@@ -42,18 +42,16 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
+require_once __DIR__ . '/uw_utils.php';
+
 if (!is_admin($current_user)) {
     ACLController::displayNoAccess(true);
     sugar_cleanup(true);
 }
 
-if ($_REQUEST['step'] !== null) {
-    if ($_REQUEST['step'] === -1) {
-        $_REQUEST['step'] = count($steps['files']) - 1;
-    } elseif ($_REQUEST['step'] >= count($steps['files'])) {
-        $_REQUEST['step'] = 0;
-    }
-    $upgradeStepFile = $steps['files'][$_REQUEST['step']];
+switch ($_REQUEST['step']) {
+    case 1:
+        require_once __DIR__ . '/systemCheck.php';
 }
 
 $ss = new Sugar_Smarty();

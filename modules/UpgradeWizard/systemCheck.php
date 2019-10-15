@@ -42,7 +42,90 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-if (ob_get_level() < 1) {
-    ob_start();
+logThis('[At systemCheck.php]');
+logThis('Starting file permission check...');
+$filesNotWritable = [];
+
+$upgradeDir = scandir(__DIR__ . '/../../modules/UpgradeWizard', SCANDIR_SORT_NONE);
+
+foreach ($upgradeDir as $file) {
+    $file = __DIR__ . '/../../modules/UpgradeWizard/' . $file;
+    if (!is_writable($file)) {
+        $filesNotWritable[] = $file;
+    }
 }
-ob_implicit_flush(1);
+logThis('Finished file permission check.');
+
+logThis('Starting database permissions check...');
+$db = DBManagerFactory::getInstance();
+$output = testPermsCreate($db, $output);
+$output = testPermsInsert($db, $output);
+$output = testPermsUpdate($db, $output);
+$output = testPermsSelect($db, $output);
+$output = testPermsDelete($db, $output);
+$output = testPermsAlterTableAdd($db, $output);
+$output = testPermsAlterTableChange($db, $output);
+$output = testPermsAlterTableDrop($db, $output);
+$output = testPermsDropTable($db, $output);
+logThis('Finished database permissions check.');
+
+///////////////////////////////////////////////////////////////////////////////
+////	INSTALLER TYPE CHECKS
+$result = checkSystemCompliance();
+$checks = array(
+    'phpVersion'				=> $mod_strings['LBL_UW_COMPLIANCE_PHP_VERSION'],
+    'dbVersion'                 => $mod_strings['LBL_UW_COMPLIANCE_DB'],
+    'xmlStatus'					=> $mod_strings['LBL_UW_COMPLIANCE_XML'],
+    'curlStatus'				=> $mod_strings['LBL_UW_COMPLIANCE_CURL'],
+    'imapStatus'				=> $mod_strings['LBL_UW_COMPLIANCE_IMAP'],
+    'mbstringStatus'			=> $mod_strings['LBL_UW_COMPLIANCE_MBSTRING'],
+    'safeModeStatus'			=> $mod_strings['LBL_UW_COMPLIANCE_SAFEMODE'],
+    'callTimeStatus'			=> $mod_strings['LBL_UW_COMPLIANCE_CALLTIME'],
+    'memory_msg'				=> $mod_strings['LBL_UW_COMPLIANCE_MEMORY'],
+    'stream_msg'                => $mod_strings['LBL_UW_COMPLIANCE_STREAM'],
+    'ZipStatus'			        => $mod_strings['LBL_UW_COMPLIANCE_ZIPARCHIVE'],
+    'pcreVersion'			    => $mod_strings['LBL_UW_COMPLIANCE_PCRE_VERSION'],
+    //commenting mbstring overload.
+    //'mbstring.func_overload'	=> $mod_strings['LBL_UW_COMPLIANCE_MBSTRING_FUNC_OVERLOAD'],
+);
+if ($result['error_found'] == true || !empty($result['warn_found'])) {
+    if ($result['error_found']) {
+        $stop = true;
+    }
+    $phpIniLocation = get_cfg_var("cfg_file_path");
+
+    $sysCompliance  = "<a href='javascript:void(0); toggleNwFiles(\"sysComp\");'>{$mod_strings['LBL_UW_SHOW_COMPLIANCE']}</a>";
+    $sysCompliance .= "<div id='sysComp' >";
+    $sysCompliance .= "<table cellpadding='0' cellspacing='0' border='0'>";
+    foreach ($result as $k => $v) {
+        if ($k == 'error_found') {
+            continue;
+        }
+        $sysCompliance .= "<tr><td valign='top'>{$checks[$k]}</td>";
+        $sysCompliance .= "<td valign='top'>{$v}</td></tr>";
+    }
+    $sysCompliance .= "<tr><td valign='top'>{$mod_strings['LBL_UW_COMPLIANCE_PHP_INI']}</td>";
+    $sysCompliance .= "<td valign='top'><b>{$phpIniLocation}</b></td></tr>";
+    $sysCompliance .= "</table></div>";
+} else {
+    $sysCompliance = "<b>{$mod_strings['LBL_UW_COMPLIANCE_ALL_OK']}</b>";
+}
+
+////	END INSTALLER CHECKS
+///////////////////////////////////////////////////////////////////////////////
+
+////	stop on all errors
+foreach ($errors as $k => $type) {
+    if (is_array($type) && count($type) > 0) {
+        foreach ($type as $k => $subtype) {
+            if ($subtype == true) {
+                $stop = true;
+            }
+        }
+    }
+
+    if ($type === true) {
+        logThis('Found errors during system check - disabling forward movement.');
+        $stop = true;
+    }
+}
