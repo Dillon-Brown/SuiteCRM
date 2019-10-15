@@ -26,11 +26,15 @@
           $('ul.setup-panel li a[href="#step-2"]').trigger('click');
           $('#cancel-step-2').remove();
           $(this).remove();
+          $.ajax({
+            url: "index.php?module=UpgradeWizard&step=1",
+          });
         })
       });
     </script>
 {/literal}
 
+<form action="index.php" method="POST">
 <div class="container">
     <div class="row form-group">
         <div class="col-xs-12">
@@ -104,3 +108,4 @@
         </div>
     </div>
 </div>
+</form>
