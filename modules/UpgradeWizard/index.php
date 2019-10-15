@@ -47,5 +47,14 @@ if (!is_admin($current_user)) {
     sugar_cleanup(true);
 }
 
+if ($_REQUEST['step'] !== null) {
+    if ($_REQUEST['step'] === -1) {
+        $_REQUEST['step'] = count($steps['files']) - 1;
+    } elseif ($_REQUEST['step'] >= count($steps['files'])) {
+        $_REQUEST['step'] = 0;
+    }
+    $upgradeStepFile = $steps['files'][$_REQUEST['step']];
+}
+
 $ss = new Sugar_Smarty();
 $ss->display(__DIR__ . '/tpls/upgradeWizard.tpl');
