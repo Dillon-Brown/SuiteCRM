@@ -1378,6 +1378,9 @@ function updateQuickCreateDefs()
 
 /**
  * test perms for CREATE queries
+ * @param $db
+ * @param $out
+ * @return mixed
  */
 function testPermsCreate($db, $out)
 {
@@ -1394,8 +1397,11 @@ function testPermsCreate($db, $out)
 
 /**
  * test perms for INSERT
+ * @param $db
+ * @param $out
+ * @return mixed
  */
-function testPermsInsert($db, $out, $skip=false)
+function testPermsInsert($db, $out)
 {
     logThis('Checking INSERT INTO permissions...');
     global $mod_strings;
@@ -1411,8 +1417,11 @@ function testPermsInsert($db, $out, $skip=false)
 
 /**
  * test perms for UPDATE TABLE
+ * @param $db
+ * @param $out
+ * @return mixed
  */
-function testPermsUpdate($db, $out, $skip=false)
+function testPermsUpdate($db, $out)
 {
     logThis('Checking UPDATE TABLE permissions...');
     global $mod_strings;
@@ -1427,8 +1436,11 @@ function testPermsUpdate($db, $out, $skip=false)
 
 /**
  * test perms for SELECT
+ * @param $db
+ * @param $out
+ * @return mixed
  */
-function testPermsSelect($db, $out, $skip=false)
+function testPermsSelect($db, $out)
 {
     logThis('Checking SELECT permissions...');
     global $mod_strings;
@@ -1442,8 +1454,11 @@ function testPermsSelect($db, $out, $skip=false)
 
 /**
  * test perms for DELETE
+ * @param $db
+ * @param $out
+ * @return mixed
  */
-function testPermsDelete($db, $out, $skip=false)
+function testPermsDelete($db, $out)
 {
     logThis('Checking DELETE FROM permissions...');
     global $mod_strings;
@@ -1458,8 +1473,11 @@ function testPermsDelete($db, $out, $skip=false)
 
 /**
  * test perms for ALTER TABLE ADD COLUMN
+ * @param $db
+ * @param $out
+ * @return mixed
  */
-function testPermsAlterTableAdd($db, $out, $skip=false)
+function testPermsAlterTableAdd($db, $out)
 {
     logThis('Checking ALTER TABLE ADD COLUMN permissions...');
     global $mod_strings;
@@ -1473,8 +1491,11 @@ function testPermsAlterTableAdd($db, $out, $skip=false)
 
 /**
  * test perms for ALTER TABLE ADD COLUMN
+ * @param $db
+ * @param $out
+ * @return mixed
  */
-function testPermsAlterTableChange($db, $out, $skip=false)
+function testPermsAlterTableChange($db, $out)
 {
     logThis('Checking ALTER TABLE CHANGE COLUMN permissions...');
     global $mod_strings;
@@ -1488,8 +1509,11 @@ function testPermsAlterTableChange($db, $out, $skip=false)
 
 /**
  * test perms for ALTER TABLE DROP COLUMN
+ * @param $db
+ * @param $out
+ * @return mixed
  */
-function testPermsAlterTableDrop($db, $out, $skip=false)
+function testPermsAlterTableDrop($db, $out)
 {
     logThis('Checking ALTER TABLE DROP COLUMN permissions...');
     global $mod_strings;
@@ -1504,8 +1528,11 @@ function testPermsAlterTableDrop($db, $out, $skip=false)
 
 /**
  * test perms for DROP TABLE
+ * @param $db
+ * @param $out
+ * @return mixed
  */
-function testPermsDropTable($db, $out, $skip=false)
+function testPermsDropTable($db, $out)
 {
     logThis('Checking DROP TABLE permissions...');
     global $mod_strings;
