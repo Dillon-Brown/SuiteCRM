@@ -7,7 +7,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testgetSignatureButtons()
     {
         self::markTestIncomplete('environment dependency');
-        
+
         global $mod_strings;
 
         $user = BeanFactory::newBean('Users');
@@ -54,7 +54,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testgetSystemUser()
     {
         self::markTestIncomplete('environment dependency');
-        
+
         $user = BeanFactory::newBean('Users');
 
         $result = $user->getSystemUser();
@@ -124,7 +124,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testgetUserPrivGuid()
     {
         self::markTestIncomplete('environment dependency');
-                
+
         $db = DBManagerFactory::getInstance();
         $db->disconnect();
         unset($db->database);
@@ -147,7 +147,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testsetUserPrivGuid()
     {
         self::markTestIncomplete('environment dependency');
-                
+
         $db = DBManagerFactory::getInstance();
         $db->disconnect();
         unset($db->database);
@@ -431,7 +431,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     }
 
     // --- OK
- 
+
     public function authenticate_user($id)
     {
         $user = BeanFactory::newBean('Users');
@@ -512,15 +512,6 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
         self::assertEquals(1, preg_match('/^one\d{0,}\@email\.com$/', $actual['email']));
     }
 
-    public function testencrypt_password()
-    {
-        $user = BeanFactory::newBean('Users');
-
-        $result = $user->encrypt_password("test");
-        $this->assertTrue(isset($result));
-        $this->assertGreaterThan(0, strlen($result));
-    }
-
     public function testgetPasswordHash()
     {
         $result = User::getPasswordHash("test");
@@ -588,7 +579,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testfill_in_additional_list_fields()
     {
         self::markTestIncomplete('environment dependency');
-        
+
         $user = BeanFactory::newBean('Users');
 
         $user->retrieve(1);
@@ -601,7 +592,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testfill_in_additional_detail_fields()
     {
         self::markTestIncomplete('environment dependency');
-        
+
         $user = BeanFactory::newBean('Users');
 
         $user->retrieve(1);
@@ -614,7 +605,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testretrieve_user_id()
     {
         self::markTestIncomplete('environment dependency');
-        
+
         $user = BeanFactory::newBean('Users');
 
         $result1 = $user->retrieve_user_id('admin');
@@ -1019,25 +1010,25 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
         $user->email1 = "abc@abc.com";
         $this->assertEquals(true, $user->isPrimaryEmail("abc@abc.com"));
     }
-    
+
     public function testError()
     {
         global $app_strings;
 
         // setup
         $this->assertTrue(!isset($app_strings['TEST_ERROR_MESSAGE']));
-        
+
         // test if there is no error
-        
+
         ob_start();
         include __DIR__ . '/../../../../../modules/Users/Error.php';
         $contents = ob_get_contents();
         ob_end_clean();
         $expected = '<span class=\'error\'><br><br>' . "\n" . $app_strings['NTC_CLICK_BACK'] . '</span>';
         $this->assertContains($expected, $contents);
-        
+
         // test if there is an error
-        
+
         $app_strings['TEST_ERROR_MESSAGE'] = 'Hello error';
         $request['error_string'] = 'TEST_ERROR_MESSAGE';
         $this->assertEquals($request['error_string'], 'TEST_ERROR_MESSAGE');
@@ -1047,7 +1038,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
         ob_end_clean();
         $expected = '<span class=\'error\'>Hello error<br><br>' . "\n"  . $app_strings['NTC_CLICK_BACK'] . '</span>';
         $this->assertContains($expected, $contents);
-        
+
 
         unset($app_strings['TEST_ERROR_MESSAGE']);
     }

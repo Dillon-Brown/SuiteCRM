@@ -87,19 +87,6 @@ class AccountTest extends SuitePHPUnitFrameworkTestCase
         $Account->clear_account_case_relationship('','');*/
     }
 
-    public function testremove_redundant_http()
-    {
-        $Account = BeanFactory::newBean('Accounts');
-
-        //this method has no implementation. so test for exceptions only.
-        try {
-            $Account->remove_redundant_http();
-            $this->assertTrue(true);
-        } catch (Exception $e) {
-            $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
-        }
-    }
-
     public function testfill_in_additional_list_fields()
     {
         $Account = new Account('');
@@ -174,7 +161,7 @@ class AccountTest extends SuitePHPUnitFrameworkTestCase
     public function testcreate_export_query()
     {
         $this->markTestIncomplete('Needs to clearify');
-        
+
 //        $Account = BeanFactory::newBean('Accounts');
 //
 //        // execute the method with empty strings and verify that it retunrs expected results
