@@ -1,14 +1,13 @@
 <?php
-if (!defined('sugarEntry') || !sugarEntry) {
+
+if (!defined('sugarEntry') || !sugarEntry)
     die('Not A Valid Entry Point');
-}
-/**
- *
+/* * *******************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
- *
- * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+
+ * SuiteCRM is an extension to SugarCRM Community Edition developed by Salesagility Ltd.
+ * Copyright (C) 2011 - 2014 Salesagility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -19,7 +18,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
  * details.
  *
  * You should have received a copy of the GNU Affero General Public License along with
@@ -37,29 +36,29 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
  * these Appropriate Legal Notices must retain the display of the "Powered by
  * SugarCRM" logo and "Supercharged by SuiteCRM" logo. If the display of the logos is not
- * reasonably feasible for technical reasons, the Appropriate Legal Notices must
- * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
- */
+ * reasonably feasible for  technical reasons, the Appropriate Legal Notices must
+ * display the words  "Powered by SugarCRM" and "Supercharged by SuiteCRM".
+ * ****************************************************************************** */
 
-/**
+/* * *******************************************************************************
 
-* Description: This file generates the appropriate manager for the database
-*
-* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-* All Rights Reserved.
-* Contributor(s): ______________________________________..
-********************************************************************************/
+ * Description: This file generates the appropriate manager for the database
+ *
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
+ * ****************************************************************************** */
 
-require_once dirname(__DIR__) . '/../include/database/DBManager.php';
+require_once('include/database/DBManager.php');
 
 /**
  * Database driver factory
  * @api
  * Instantiates and configures appropriate DB drivers
  */
-class DBManagerFactory
-{
-    public static $instances = array();
+class DBManagerFactory {
+
+    static $instances = array();
 
     /**
      * Returns a reference to the DB object of specific type
@@ -68,8 +67,7 @@ class DBManagerFactory
      * @param array $config DB configuration
      * @return object DBManager instance
      */
-    public static function getTypeInstance($type, $config = array())
-    {
+    public static function getTypeInstance($type, $config = array()) {
         global $sugar_config;
 
         if (empty($config['db_manager'])) {
@@ -83,15 +81,13 @@ class DBManagerFactory
                     }
                     break;
                 case "mssql":
-                      if (function_exists('sqlsrv_connect')
-                                && (empty($config['db_mssql_force_driver']) || $config['db_mssql_force_driver'] == 'sqlsrv')) {
-                          $my_db_manager = 'SqlsrvManager';
-                      } elseif (self::isFreeTDS()
-                                && (empty($config['db_mssql_force_driver']) || $config['db_mssql_force_driver'] == 'freetds')) {
-                          $my_db_manager = 'FreeTDSManager';
-                      } else {
-                          $my_db_manager = 'MssqlManager';
-                      }
+                    if (function_exists('sqlsrv_connect') && (empty($config['db_mssql_force_driver']) || $config['db_mssql_force_driver'] == 'sqlsrv' )) {
+                        $my_db_manager = 'SqlsrvManager';
+                    } elseif (self::isFreeTDS() && (empty($config['db_mssql_force_driver']) || $config['db_mssql_force_driver'] == 'freetds' )) {
+                        $my_db_manager = 'FreeTDSManager';
+                    } else {
+                        $my_db_manager = 'MssqlManager';
+                    }
                     break;
                 default:
                     $my_db_manager = self::getManagerByType($type, false);
@@ -119,8 +115,9 @@ class DBManagerFactory
 
         if (class_exists($my_db_manager)) {
             return new $my_db_manager();
+        } else {
+            return null;
         }
-        return null;
     }
 
     /**
@@ -128,10 +125,11 @@ class DBManagerFactory
      * instance if one is not specified
      *
      * @param  string $instanceName optional, name of the instance
-     * @return DBManager instance
+     * @return object DBManager instance
      */
-    public static function getInstance($instanceName = '')
-    {
+    public static function getInstance($instanceName = '') {
+        self::dumpstatic($instanceName);
+        self::dumpstatic("getInstance");
         global $sugar_config;
         static $count = 0, $old_count = 0;
 
@@ -159,14 +157,12 @@ class DBManagerFactory
     /**
      * Disconnect all DB connections in the system
      */
-    public static function disconnectAll()
-    {
+    public static function disconnectAll() {
         foreach (self::$instances as $instance) {
             $instance->disconnect();
         }
         self::$instances = array();
     }
-
 
     /**
      * Get DB manager class name by type name
@@ -176,8 +172,7 @@ class DBManagerFactory
      * @param bool $validate Return only valid drivers or any?
      * @return string
      */
-    public static function getManagerByType($type, $validate = true)
-    {
+    public static function getManagerByType($type, $validate = true) {
         $drivers = self::getDbDrivers($validate);
         if (!empty($drivers[$type])) {
             return get_class($drivers[$type]);
@@ -191,31 +186,25 @@ class DBManagerFactory
      * @param array $drivers
      * @param bool $validate Return only valid drivers or all of them?
      */
-    protected static function scanDriverDir($dir, &$drivers, $validate = true)
-    {
-        if (!is_dir($dir)) {
+    protected static function scanDriverDir($dir, &$drivers, $validate = true) {
+        if (!is_dir($dir))
             return;
-        }
         $scandir = opendir($dir);
-        if ($scandir === false) {
+        if ($scandir === false)
             return;
-        }
         while (($name = readdir($scandir)) !== false) {
-            if (substr($name, -11) != "Manager.php") {
+            if (substr($name, -11) != "Manager.php")
                 continue;
-            }
-            if ($name == "DBManager.php") {
+            if ($name == "DBManager.php")
                 continue;
-            }
             require_once("$dir/$name");
             $classname = substr($name, 0, -4);
-            if (!class_exists($classname)) {
+            if (!class_exists($classname))
                 continue;
-            }
             $driver = new $classname;
             if (!$validate || $driver->valid()) {
                 if (empty($drivers[$driver->dbType])) {
-                    $drivers[$driver->dbType]  = array();
+                    $drivers[$driver->dbType] = array();
                 }
                 $drivers[$driver->dbType][] = $driver;
             }
@@ -229,8 +218,7 @@ class DBManagerFactory
      * @param object $b
      * @return int
      */
-    public static function _compareDrivers($a, $b)
-    {
+    public static function _compareDrivers($a, $b) {
         return $b->priority - $a->priority;
     }
 
@@ -239,17 +227,15 @@ class DBManagerFactory
      * @param bool $validate Return only valid drivers or all of them?
      * @return array List of Db drivers, key - variant (mysql, mysqli), value - driver type (mysql, mssql)
      */
-    public static function getDbDrivers($validate = true)
-    {
+    public static function getDbDrivers($validate = true) {
         $drivers = array();
         self::scanDriverDir("include/database", $drivers, $validate);
         self::scanDriverDir("custom/include/database", $drivers, $validate);
 
         $result = array();
         foreach ($drivers as $type => $tdrivers) {
-            if (empty($tdrivers)) {
+            if (empty($tdrivers))
                 continue;
-            }
             if (count($tdrivers) > 1) {
                 usort($tdrivers, array(__CLASS__, "_compareDrivers"));
             }
@@ -264,14 +250,13 @@ class DBManagerFactory
      * the response is put into a global variable.
      * @return bool
      */
-    public static function isFreeTDS()
-    {
+    public static function isFreeTDS() {
         static $is_freetds = null;
 
         if ($is_freetds === null) {
             ob_start();
             phpinfo(INFO_MODULES);
-            $info=ob_get_contents();
+            $info = ob_get_contents();
             ob_end_clean();
 
             $is_freetds = (strpos($info, 'FreeTDS') !== false);
@@ -279,4 +264,23 @@ class DBManagerFactory
 
         return $is_freetds;
     }
+
+    protected function dump($value, $die = false) {
+        // echo("<br>");
+        // echo("\n");
+        // var_dump($value);
+        if ($die === true) {
+            die();
+        }
+    }
+
+    protected static function dumpstatic($value, $die = false) {
+        // echo("<br>");
+        // echo("\n");
+        // var_dump($value);
+        if ($die === true) {
+            die();
+        }
+    }
+
 }
