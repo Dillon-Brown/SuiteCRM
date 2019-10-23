@@ -964,11 +964,7 @@ class MssqlManager extends DBManager
      */
     public function quote($string)
     {
-        if (is_array($string)) {
-            return $this->arrayQuote($string);
-        }
-
-        return str_replace("'", "''", $this->quoteInternal($string));
+        return $string;
     }
 
     /**

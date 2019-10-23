@@ -146,7 +146,7 @@ class Administration extends SugarBean
         }
 
         if (!empty($category)) {
-            $query = "SELECT category, name, value FROM {$this->table_name} WHERE category = '$categoryQuoted'";
+            $query = "SELECT category, name, value FROM {$this->table_name} WHERE category = '{$category}'";
         } else {
             $query = "SELECT category, name, value FROM {$this->table_name}";
         }

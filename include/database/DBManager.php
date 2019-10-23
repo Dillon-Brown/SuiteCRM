@@ -1462,7 +1462,7 @@ abstract class DBManager {
      * @return string
      */
     public function quoted($string) {
-        return $this->quote($string);
+        return $string;
     }
 
     /**

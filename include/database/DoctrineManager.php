@@ -3533,10 +3533,9 @@ abstract class DoctrineManager {
             'driver' => 'pdo_mysql',
             'user' => $configOptions["db_user_name"],
             'password' => $configOptions["db_password"],
-            'host' => $configOptions["db_host_name"] . ':' . $configOptions["db_port"],
+            'host' => $configOptions["db_host_name"] . $configOptions["db_port"],
             'dbname' => $configOptions["db_name"],
         );
-
         $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
         $this->database = \Doctrine\ORM\EntityManager::create($dbParams, $config);
 
