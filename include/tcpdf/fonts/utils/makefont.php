@@ -10,7 +10,7 @@ r56989 - 2010-06-16 13:01:33 -0700 (Wed, 16 Jun 2010) - kjing - defunt "Mango" s
 
 r55980 - 2010-04-19 13:31:28 -0700 (Mon, 19 Apr 2010) - kjing - create Mango (6.1) based on windex
 
-r51719 - 2009-10-22 10:18:00 -0700 (Thu, 22 Oct 2009) - mitani - Converted to Build 3  tags and updated the build system 
+r51719 - 2009-10-22 10:18:00 -0700 (Thu, 22 Oct 2009) - mitani - Converted to Build 3  tags and updated the build system
 
 r51634 - 2009-10-19 13:32:22 -0700 (Mon, 19 Oct 2009) - mitani - Windex is the branch for Sugar Sales 1.0 development
 
@@ -348,76 +348,77 @@ function ReadMap($enc) {
 /**
  * Read UFM file
  */
-function ReadUFM($file, &$cidtogidmap) {
-	//Prepare empty CIDToGIDMap
-	$cidtogidmap = str_pad('', (256 * 256 * 2), "\x00");
-	//Read a font metric file
-	$a = file($file);
-	if (empty($a)) {
-		die('File not found');
-	}
-	$widths = array();
-	$fm = array();
-	foreach($a as $l) {
-		$e = explode(' ',chop($l));
-		if(count($e) < 2) {
-			continue;
-		}
-		$code = $e[0];
-		$param = $e[1];
-		if($code == 'U') {
-			// U 827 ; WX 0 ; N squaresubnosp ; G 675 ;
-			//Character metrics
-			$cc = (int)$e[1];
-			if ($cc != -1) {
-			$gn = $e[7];
-			$w = $e[4];
-			$glyph = $e[10];
-			$widths[$cc] = $w;
-			if($cc == ord('X')) {
-				$fm['CapXHeight'] = $e[13];
-			}
-			// Set GID
-			if (($cc >= 0) AND ($cc < 0xFFFF) AND $glyph) {
-				$cidtogidmap{($cc * 2)} = chr($glyph >> 8);
-				$cidtogidmap{(($cc * 2) + 1)} = chr($glyph & 0xFF);
-			}
-		}
-		if(($gn == '.notdef') AND (!isset($fm['MissingWidth']))) {
-			$fm['MissingWidth'] = $w;
-		}
-		} elseif($code == 'FontName') {
-			$fm['FontName'] = $param;
-		} elseif($code == 'Weight') {
-			$fm['Weight'] = $param;
-		} elseif($code == 'ItalicAngle') {
-			$fm['ItalicAngle'] = (double)$param;
-		} elseif($code == 'Ascender') {
-			$fm['Ascender'] = (int)$param;
-		} elseif($code == 'Descender') {
-			$fm['Descender'] = (int)$param;
-		} elseif($code == 'UnderlineThickness') {
-			$fm['UnderlineThickness'] = (int)$param;
-		} elseif($code == 'UnderlinePosition') {
-			$fm['UnderlinePosition'] = (int)$param;
-		} elseif($code == 'IsFixedPitch') {
-			$fm['IsFixedPitch'] = ($param == 'true');
-		} elseif($code == 'FontBBox') {
-			$fm['FontBBox'] = array($e[1], $e[2], $e[3], $e[4]);
-		} elseif($code == 'CapHeight') {
-			$fm['CapHeight'] = (int)$param;
-		} elseif($code == 'StdVW') {
-			$fm['StdVW'] = (int)$param;
-		}
-	}
-	if(!isset($fm['MissingWidth'])) {
-		$fm['MissingWidth'] = 600;
-	}
-	if(!isset($fm['FontName'])) {
-		die('FontName not found');
-	}
-	$fm['Widths'] = $widths;
-	return $fm;
+function ReadUFM($file, &$cidtogidmap)
+{
+    //Prepare empty CIDToGIDMap
+    $cidtogidmap = str_pad('', (256 * 256 * 2), "\x00");
+    //Read a font metric file
+    $a = file($file);
+    if (empty($a)) {
+        die('File not found');
+    }
+    $widths = array();
+    $fm = array();
+    foreach ($a as $l) {
+        $e = explode(' ', rtrim($l));
+        if (count($e) < 2) {
+            continue;
+        }
+        $code = $e[0];
+        $param = $e[1];
+        if ($code == 'U') {
+            // U 827 ; WX 0 ; N squaresubnosp ; G 675 ;
+            //Character metrics
+            $cc = (int)$e[1];
+            if ($cc != -1) {
+                $gn = $e[7];
+                $w = $e[4];
+                $glyph = $e[10];
+                $widths[$cc] = $w;
+                if ($cc == ord('X')) {
+                    $fm['CapXHeight'] = $e[13];
+                }
+                // Set GID
+                if (($cc >= 0) and ($cc < 0xFFFF) and $glyph) {
+                    $cidtogidmap{($cc * 2)} = chr($glyph >> 8);
+                    $cidtogidmap{(($cc * 2) + 1)} = chr($glyph & 0xFF);
+                }
+            }
+            if (($gn == '.notdef') and (!isset($fm['MissingWidth']))) {
+                $fm['MissingWidth'] = $w;
+            }
+        } elseif ($code == 'FontName') {
+            $fm['FontName'] = $param;
+        } elseif ($code == 'Weight') {
+            $fm['Weight'] = $param;
+        } elseif ($code == 'ItalicAngle') {
+            $fm['ItalicAngle'] = (double)$param;
+        } elseif ($code == 'Ascender') {
+            $fm['Ascender'] = (int)$param;
+        } elseif ($code == 'Descender') {
+            $fm['Descender'] = (int)$param;
+        } elseif ($code == 'UnderlineThickness') {
+            $fm['UnderlineThickness'] = (int)$param;
+        } elseif ($code == 'UnderlinePosition') {
+            $fm['UnderlinePosition'] = (int)$param;
+        } elseif ($code == 'IsFixedPitch') {
+            $fm['IsFixedPitch'] = ($param == 'true');
+        } elseif ($code == 'FontBBox') {
+            $fm['FontBBox'] = array($e[1], $e[2], $e[3], $e[4]);
+        } elseif ($code == 'CapHeight') {
+            $fm['CapHeight'] = (int)$param;
+        } elseif ($code == 'StdVW') {
+            $fm['StdVW'] = (int)$param;
+        }
+    }
+    if (!isset($fm['MissingWidth'])) {
+        $fm['MissingWidth'] = 600;
+    }
+    if (!isset($fm['FontName'])) {
+        die('FontName not found');
+    }
+    $fm['Widths'] = $widths;
+    return $fm;
 }
 
 /**

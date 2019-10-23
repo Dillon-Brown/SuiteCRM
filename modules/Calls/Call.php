@@ -672,18 +672,14 @@ class Call extends SugarBean
             if ($this->update_vcal) {
                 vCal::cache_sugar_vcal($user);
             }
-        } else {
-            if ($user->object_name == 'Contact') {
-                $relate_values = array('contact_id'=>$user->id,'call_id'=>$this->id);
-                $data_values = array('accept_status'=>$status);
-                $this->set_relationship($this->rel_contacts_table, $relate_values, true, true, $data_values);
-            } else {
-                if ($user->object_name == 'Lead') {
-                    $relate_values = array('lead_id'=>$user->id,'call_id'=>$this->id);
-                    $data_values = array('accept_status'=>$status);
-                    $this->set_relationship($this->rel_leads_table, $relate_values, true, true, $data_values);
-                }
-            }
+        } elseif ($user->object_name == 'Contact') {
+            $relate_values = array('contact_id'=>$user->id,'call_id'=>$this->id);
+            $data_values = array('accept_status'=>$status);
+            $this->set_relationship($this->rel_contacts_table, $relate_values, true, true, $data_values);
+        } elseif ($user->object_name == 'Lead') {
+            $relate_values = array('lead_id'=>$user->id,'call_id'=>$this->id);
+            $data_values = array('accept_status'=>$status);
+            $this->set_relationship($this->rel_leads_table, $relate_values, true, true, $data_values);
         }
     }
 
@@ -698,15 +694,15 @@ class Call extends SugarBean
         //		$GLOBALS['log']->debug('Call.php->get_notification_recipients():'.print_r($this,true));
         $list = array();
         if (!is_array($this->contacts_arr)) {
-            $this->contacts_arr =    array();
+            $this->contacts_arr =	array();
         }
 
         if (!is_array($this->users_arr)) {
-            $this->users_arr =    array();
+            $this->users_arr =	array();
         }
 
         if (!is_array($this->leads_arr)) {
-            $this->leads_arr =    array();
+            $this->leads_arr =	array();
         }
 
         foreach ($this->users_arr as $user_id) {
@@ -763,13 +759,11 @@ class Call extends SugarBean
             }
             /* BEGIN - SECURITY GROUPS */
             //parent_name_owner not being set for whatever reason so we need to figure this out
-            else {
-                if (!empty($this->parent_type) && !empty($this->parent_id)) {
-                    global $current_user;
-                    $parent_bean = BeanFactory::getBean($this->parent_type, $this->parent_id);
-                    if ($parent_bean !== false) {
-                        $is_owner = $current_user->id == $parent_bean->assigned_user_id;
-                    }
+            elseif (!empty($this->parent_type) && !empty($this->parent_id)) {
+                global $current_user;
+                $parent_bean = BeanFactory::getBean($this->parent_type, $this->parent_id);
+                if ($parent_bean !== false) {
+                    $is_owner = $current_user->id == $parent_bean->assigned_user_id;
                 }
             }
             require_once("modules/SecurityGroups/SecurityGroup.php");
@@ -844,12 +838,11 @@ class Call extends SugarBean
         $def = $this->field_defs['status'];
         if (isset($def['default'])) {
             return $def['default'];
-        } else {
-            $app = return_app_list_strings_language($GLOBALS['current_language']);
-            if (isset($def['options']) && isset($app[$def['options']])) {
-                $keys = array_keys($app[$def['options']]);
-                return $keys[0];
-            }
+        }
+        $app = return_app_list_strings_language($GLOBALS['current_language']);
+        if (isset($def['options']) && isset($app[$def['options']])) {
+            $keys = array_keys($app[$def['options']]);
+            return $keys[0];
         }
 
         return '';
