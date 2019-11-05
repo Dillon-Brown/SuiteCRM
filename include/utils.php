@@ -46,9 +46,14 @@ require_once 'php_version.php';
 require_once 'include/SugarObjects/SugarConfig.php';
 require_once 'include/utils/security_utils.php';
 
-
+/**
+ * @deprecated
+ * @param $sugar_config
+ */
 function make_sugar_config(&$sugar_config)
 {
+    LoggerManager::getLogger()->deprecated('make_sugar_config is deprecated and will be removed in a 
+        future release, please update your code');
     /* used to convert non-array config.php file to array format */
     global $admin_export_only;
     global $cache_dir;
