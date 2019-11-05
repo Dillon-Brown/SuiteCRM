@@ -613,16 +613,21 @@ function make_not_writable($file)
     return $ret_val;
 }
 
-/** This function returns the name of the person.
+/**
+ * @deprecated
+ * @param $row
+ * @param $first_column
+ * @param $last_column
+ * @return string
+ * This function returns the name of the person.
  * It currently returns "first last".  It should not put the space if either name is not available.
  * It should not return errors if either name is not available.
  * If no names are present, it will return ""
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
  */
 function return_name($row, $first_column, $last_column)
 {
+    LoggerManager::getLogger()->deprecated('make_not_writable is deprecated and will be removed in a 
+        future release, please update your code');
     $first_name = '';
     $last_name = '';
     $full_name = '';
