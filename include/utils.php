@@ -555,8 +555,16 @@ function get_notify_template_file($language)
     return $file;
 }
 
+/**
+ * @deprecated
+ * @param $default
+ * @param $override
+ * @return array
+ */
 function sugar_config_union($default, $override)
 {
+    LoggerManager::getLogger()->deprecated('sugar_config_union is deprecated and will be removed in a 
+        future release, please update your code');
     // a little different then array_merge and array_merge_recursive.  we want
     // the second array to override the first array if the same value exists,
     // otherwise merge the unique keys.  it handles arrays of arrays recursively
