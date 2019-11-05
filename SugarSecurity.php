@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -38,13 +38,17 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-
-
-
-
+/**
+ * @deprecated
+ * Class SugarSecure
+ */
 class SugarSecure
 {
     public $results = array();
+
+    /**
+     * @deprecated
+     */
     public function display()
     {
         echo '<table>';
@@ -53,7 +57,11 @@ class SugarSecure
         }
         echo '</table>';
     }
-    
+
+    /**
+     * @deprecated
+     * @param string $file
+     */
     public function save($file='')
     {
         $fp = fopen($file, 'ab');
@@ -62,7 +70,12 @@ class SugarSecure
         }
         fclose($fp);
     }
-    
+
+    /**
+     * @deprecated
+     * @param string $path
+     * @param string $ext
+     */
     public function scan($path= '.', $ext = '.php')
     {
         $dir = dir($path);
@@ -76,15 +89,28 @@ class SugarSecure
             }
         }
     }
-    
+
+    /**
+     * @deprecated
+     * @param $contents
+     */
     public function scanContents($contents)
     {
         return;
     }
 }
 
+/**
+ * @deprecated
+ * Class ScanFileIncludes
+ */
 class ScanFileIncludes extends SugarSecure
 {
+    /**
+     * @deprecated
+     * @param $contents
+     * @param $file
+     */
     public function scanContents($contents, $file)
     {
         $results = array();
@@ -130,17 +156,27 @@ class ScanFileIncludes extends SugarSecure
         }
     }
 }
-    
 
-
+/**
+ * @deprecated
+ * Class SugarSecureManager
+ */
 class SugarSecureManager
 {
     public $scanners = array();
+
+    /**
+     * @deprecated
+     * @param $class
+     */
     public function registerScan($class)
     {
         $this->scanners[] = new $class();
     }
-    
+
+    /**
+     * @deprecated
+     */
     public function scan()
     {
         while ($scanner = current($this->scanners)) {
@@ -149,7 +185,10 @@ class SugarSecureManager
         }
         reset($this->scanners);
     }
-    
+
+    /**
+     * @deprecated
+     */
     public function display()
     {
         while ($scanner = current($this->scanners)) {
@@ -159,7 +198,10 @@ class SugarSecureManager
         }
         reset($this->scanners);
     }
-    
+
+    /**
+     * @deprecated
+     */
     public function save()
     {
         //reset($this->scanners);
