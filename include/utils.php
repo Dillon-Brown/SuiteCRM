@@ -583,8 +583,15 @@ function sugar_config_union($default, $override)
     return $override;
 }
 
+/**
+ * @deprecated
+ * @param $file
+ * @return bool
+ */
 function make_not_writable($file)
 {
+    LoggerManager::getLogger()->deprecated('make_not_writable is deprecated and will be removed in a 
+        future release, please update your code');
     // Returns true if the given file/dir has been made not writable
     $ret_val = false;
     if (is_file($file) || is_dir($file)) {
