@@ -51,6 +51,8 @@ class SugarSecure
      */
     public function display()
     {
+        LoggerManager::getLogger()->deprecated('SugarSecure is deprecated and will be removed in a 
+        future release, please update your code');
         echo '<table>';
         foreach ($this->results as $result) {
             echo '<tr><td>' . nl2br($result) . '</td></tr>';
@@ -64,6 +66,8 @@ class SugarSecure
      */
     public function save($file='')
     {
+        LoggerManager::getLogger()->deprecated('SugarSecure is deprecated and will be removed in a 
+        future release, please update your code');
         $fp = fopen($file, 'ab');
         foreach ($this->results as $result) {
             fwrite($fp, $result);
@@ -78,6 +82,8 @@ class SugarSecure
      */
     public function scan($path= '.', $ext = '.php')
     {
+        LoggerManager::getLogger()->deprecated('SugarSecure is deprecated and will be removed in a 
+        future release, please update your code');
         $dir = dir($path);
         while ($entry = $dir->read()) {
             if (is_dir($path . '/' . $entry) && $entry != '.' && $entry != '..') {
@@ -96,7 +102,8 @@ class SugarSecure
      */
     public function scanContents($contents)
     {
-        return;
+        LoggerManager::getLogger()->deprecated('SugarSecure is deprecated and will be removed in a 
+        future release, please update your code');
     }
 }
 
@@ -113,6 +120,8 @@ class ScanFileIncludes extends SugarSecure
      */
     public function scanContents($contents, $file)
     {
+        LoggerManager::getLogger()->deprecated('ScanFileIncludes is deprecated and will be removed in a 
+        future release, please update your code');
         $results = array();
         $found = '';
         /*preg_match_all("'(require_once\([^\)]*\\$[^\)]*\))'si", $contents, $results, PREG_SET_ORDER);
@@ -171,6 +180,8 @@ class SugarSecureManager
      */
     public function registerScan($class)
     {
+        LoggerManager::getLogger()->deprecated('SugarSecureManager is deprecated and will be removed in a 
+        future release, please update your code');
         $this->scanners[] = new $class();
     }
 
@@ -179,6 +190,8 @@ class SugarSecureManager
      */
     public function scan()
     {
+        LoggerManager::getLogger()->deprecated('SugarSecureManager is deprecated and will be removed in a 
+        future release, please update your code');
         while ($scanner = current($this->scanners)) {
             $scanner->scan();
             $scanner = next($this->scanners);
@@ -191,6 +204,8 @@ class SugarSecureManager
      */
     public function display()
     {
+        LoggerManager::getLogger()->deprecated('SugarSecureManager is deprecated and will be removed in a 
+        future release, please update your code');
         while ($scanner = current($this->scanners)) {
             echo 'Scan Results: ';
             $scanner->display();
@@ -204,6 +219,8 @@ class SugarSecureManager
      */
     public function save()
     {
+        LoggerManager::getLogger()->deprecated('SugarSecureManager is deprecated and will be removed in a 
+        future release, please update your code');
         //reset($this->scanners);
         $name = 'SugarSecure'. time() . '.txt';
         while ($this->scanners  = next($this->scanners)) {
