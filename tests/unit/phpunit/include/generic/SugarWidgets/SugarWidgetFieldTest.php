@@ -60,7 +60,6 @@ class SugarWidgetFieldTest extends SuitePHPUnitFrameworkTestCase
     public function testDisplayNotFound()
     {
         $layoutManager = new LayoutManager();
-        $_REQUEST['module'] = 'Accounts';
         $layoutManager->setAttribute('context', 'invalid');
         $result = (new SugarWidgetField($layoutManager))->display([
             'label' => 'testLabelGet'
