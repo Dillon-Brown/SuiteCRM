@@ -108,13 +108,21 @@ class SugarWidgetField extends SugarWidget
     {
         LoggerManager::getLogger()->deprecated('displayDetailLabel is deprecated and will be removed in a 
         future release, please update your code');
+
         return '';
     }
 
+    /**
+     * @param $layout_def
+     * @return string
+     * @deprecated This function is unused and will be removed in a future release.
+     */
     public function & displayDetail($layout_def)
     {
-        $layout_def = '';
-        return $layout_def;
+        LoggerManager::getLogger()->deprecated('displayDetail is deprecated and will be removed in a 
+        future release, please update your code');
+
+        return '';
     }
 
     public function displayHeaderCellPlain($layout_def)
@@ -209,28 +217,68 @@ class SugarWidgetField extends SugarWidget
         return '';
     }
 
+    /**
+     * @param $layout_def
+     * @return string
+     * @deprecated This function is unused and will be removed in a future release.
+     */
     public function & displayEditLabel($layout_def)
     {
+        LoggerManager::getLogger()->deprecated('displayEditLabel is deprecated and will be removed in a 
+        future release, please update your code');
+
         return '';
     }
 
+    /**
+     * @param $layout_def
+     * @return string
+     * @deprecated This function is unused and will be removed in a future release.
+     */
     public function & displayEdit($layout_def)
     {
+        LoggerManager::getLogger()->deprecated('displayEdit is deprecated and will be removed in a 
+        future release, please update your code');
+
         return '';
     }
 
+    /**
+     * @param $layout_def
+     * @return string
+     * @deprecated This function is unused and will be removed in a future release.
+     */
     public function & displaySearchLabel($layout_def)
     {
+        LoggerManager::getLogger()->deprecated('displaySearchLabel is deprecated and will be removed in a 
+        future release, please update your code');
+
         return '';
     }
 
+    /**
+     * @param $layout_def
+     * @return string
+     * @deprecated This function is unused and will be removed in a future release.
+     */
     public function & displaySearch($layout_def)
     {
+        LoggerManager::getLogger()->deprecated('displaySearch is deprecated and will be removed in a 
+        future release, please update your code');
+
         return '';
     }
 
+    /**
+     * @param $layout_def
+     * @return string
+     * @deprecated This function is unused and will be removed in a future release.
+     */
     public function displayInput($layout_def)
     {
+        LoggerManager::getLogger()->deprecated('displayInput is deprecated and will be removed in a 
+        future release, please update your code');
+
         return ' -- Not Implemented --';
     }
 
