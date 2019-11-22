@@ -88,4 +88,15 @@ class SugarWidgetFieldTest extends SuitePHPUnitFrameworkTestCase
 
         $this->assertEquals('count', $result);
     }
+
+    public function testGetColumnAliasCharLimit()
+    {
+        $layoutManager = new LayoutManager();
+        $result = (new SugarWidgetField($layoutManager))->_get_column_alias([
+            'name' => 'testName',
+            'table_alias' => 'testAliasNameExceedsMaxCharLimitOf28'
+        ]);
+
+        $this->assertEquals('TESTALIASNAMEEXCEEDSMAFBC769', $result);
+    }
 }
