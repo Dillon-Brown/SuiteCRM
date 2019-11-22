@@ -50,53 +50,164 @@ class SugarWidgetFieldTest extends SuitePHPUnitFrameworkTestCase
         $layoutManager = new LayoutManager();
         $_REQUEST['module'] = 'Accounts';
         $layoutManager->setAttribute('context', 'HeaderCell');
-        $result = (new SugarWidgetField($layoutManager))->display([
+        $actual = (new SugarWidgetField($layoutManager))->display([
             'label' => 'testLabelGet'
         ]);
 
-        $this->assertEquals('testLabelGet', $result);
+        $this->assertEquals('testLabelGet', $actual);
     }
 
     public function testDisplayNotFound()
     {
         $layoutManager = new LayoutManager();
         $layoutManager->setAttribute('context', 'invalid');
-        $result = (new SugarWidgetField($layoutManager))->display([
+        $actual = (new SugarWidgetField($layoutManager))->display([
             'label' => 'testLabelGet'
         ]);
 
-        $this->assertEquals('display not found:displayinvalid', $result);
+        $this->assertEquals('display not found:displayinvalid', $actual);
     }
 
     public function testGetColumnAlias()
     {
         $layoutManager = new LayoutManager();
-        $result = (new SugarWidgetField($layoutManager))->_get_column_alias([
+        $actual = (new SugarWidgetField($layoutManager))->_get_column_alias([
             'name' => 'testName',
             'table_alias' => 'testAlias'
         ]);
 
-        $this->assertEquals('testAlias_testName', $result);
+        $this->assertEquals('testAlias_testName', $actual);
     }
 
     public function testGetColumnAliasCount()
     {
         $layoutManager = new LayoutManager();
-        $result = (new SugarWidgetField($layoutManager))->_get_column_alias([
+        $actual = (new SugarWidgetField($layoutManager))->_get_column_alias([
             'name' => 'count',
         ]);
 
-        $this->assertEquals('count', $result);
+        $this->assertEquals('count', $actual);
     }
 
     public function testGetColumnAliasCharLimit()
     {
         $layoutManager = new LayoutManager();
-        $result = (new SugarWidgetField($layoutManager))->_get_column_alias([
+        $actual = (new SugarWidgetField($layoutManager))->_get_column_alias([
             'name' => 'testName',
             'table_alias' => 'testAliasNameExceedsMaxCharLimitOf28'
         ]);
 
-        $this->assertEquals('TESTALIASNAMEEXCEEDSMAFBC769', $result);
+        $this->assertEquals('TESTALIASNAMEEXCEEDSMAFBC769', $actual);
+    }
+
+    public function testDisplayHeaderCellPlain()
+    {
+        $layoutManager = new LayoutManager();
+        $layoutManager->setAttribute('module_name', 'Accounts');
+        $layoutManager->setAttribute('context', 'HeaderCellPlain');
+
+        $actual = (new SugarWidgetField($layoutManager))->display([
+            'vname' => 'LNK_NEW_ACCOUNT'
+        ]);
+
+        $this->assertEquals('Create Account', $actual);
+    }
+
+    public function testDisplayHeaderCellPlainEmpty()
+    {
+        $layoutManager = new LayoutManager();
+        $layoutManager->setAttribute('context', 'HeaderCellPlain');
+
+        $actual = (new SugarWidgetField($layoutManager))->display([]);
+
+        $this->assertEquals('', $actual);
+    }
+
+    public function testDisplayHeaderCell()
+    {
+        $layoutManager = new LayoutManager();
+        $_REQUEST['module'] = 'Accounts';
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $layoutManager->setAttribute('context', 'HeaderCell');
+        $actual = (new SugarWidgetField($layoutManager))->display([
+            'name' => 'testHeaderCell',
+            'subpanel_module' => 'Contacts',
+            'sort_by' => 'last_name',
+            'sort' => '_down'
+        ]);
+
+        $this->assertContains('listViewThLinkS1', $actual);
+        $this->assertContains('&module=Accounts&_Contacts_CELL', $actual);
+        $this->assertContains('&subpanel=Contacts&_Contacts_CELL_ORDER_BY=last_name', $actual);
+        $this->assertContains('suitepicon-action-sorting-ascending', $actual);
+    }
+
+    public function testDisplayList()
+    {
+        $layoutManager = new LayoutManager();
+        $layoutManager->setAttribute('context', 'List');
+        $actual = (new SugarWidgetField($layoutManager))->display([
+            'widget_type' => 'checkbox',
+        ]);
+
+        $this->assertContains("name='checkbox_display'", $actual);
+        $this->assertContains("disabled='true'", $actual);
+    }
+
+    public function testDisplayListPlain()
+    {
+        $layoutManager = new LayoutManager();
+        $layoutManager->setAttribute('context', 'ListPlain');
+        $actual = (new SugarWidgetField($layoutManager))->display([
+            'widget_type' => 'checkbox',
+            'varname' => 'status',
+            'fields' => [
+                'STATUS' => 1
+            ]
+        ]);
+
+        $this->assertContains("name='checkbox_display'", $actual);
+        $this->assertContains("disabled='true' checked>", $actual);
+    }
+
+    public function testDisplayListPlainEmptyWidget()
+    {
+        $layoutManager = new LayoutManager();
+        $layoutManager->setAttribute('context', 'ListPlain');
+        $actual = (new SugarWidgetField($layoutManager))->display([
+            'widget_type' => '',
+            'varname' => 'status',
+            'fields' => [
+                'STATUS' => 1
+            ]
+        ]);
+
+        $this->assertEquals(1, $actual);
+    }
+
+    public function testGetVardef()
+    {
+        $layoutManager = new LayoutManager();
+        $layoutManager->setAttribute('context', 'Report');
+        $temp = (object)[
+            'all_fields' => [
+                'test_key' => 'test_value'
+            ],
+        ];
+        $layoutManager->setAttributePtr('reporter', $temp);
+
+        $actual = (new SugarWidgetField($layoutManager))->getVardef([
+            'column_key' => 'test_key'
+        ]);
+
+        $this->assertEquals('test_value', $actual);
+    }
+
+    public function testGetVardefEmpty()
+    {
+        $layoutManager = new LayoutManager();
+        $actual = (new SugarWidgetField($layoutManager))->getVardef([]);
+
+        $this->assertEquals([], $actual);
     }
 }
