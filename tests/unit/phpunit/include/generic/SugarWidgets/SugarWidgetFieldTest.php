@@ -48,8 +48,45 @@ class SugarWidgetFieldTest extends SuitePHPUnitFrameworkTestCase
     public function testDisplay()
     {
         $layoutManager = new LayoutManager();
-        $result = (new SugarWidgetField($layoutManager))->display($layoutManager);
+        $_REQUEST['module'] = 'Accounts';
+        $layoutManager->setAttribute('context', 'HeaderCell');
+        $result = (new SugarWidgetField($layoutManager))->display([
+            'label' => 'testLabelGet'
+        ]);
 
-        $this->assertEquals('', $result);
+        $this->assertEquals('testLabelGet', $result);
+    }
+
+    public function testDisplayNotFound()
+    {
+        $layoutManager = new LayoutManager();
+        $_REQUEST['module'] = 'Accounts';
+        $layoutManager->setAttribute('context', 'invalid');
+        $result = (new SugarWidgetField($layoutManager))->display([
+            'label' => 'testLabelGet'
+        ]);
+
+        $this->assertEquals('display not found:displayinvalid', $result);
+    }
+
+    public function testGetColumnAlias()
+    {
+        $layoutManager = new LayoutManager();
+        $result = (new SugarWidgetField($layoutManager))->_get_column_alias([
+            'name' => 'testName',
+            'table_alias' => 'testAlias'
+        ]);
+
+        $this->assertEquals('testAlias_testName', $result);
+    }
+
+    public function testGetColumnAliasCount()
+    {
+        $layoutManager = new LayoutManager();
+        $result = (new SugarWidgetField($layoutManager))->_get_column_alias([
+            'name' => 'count',
+        ]);
+
+        $this->assertEquals('count', $result);
     }
 }
