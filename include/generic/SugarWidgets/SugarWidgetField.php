@@ -99,8 +99,15 @@ class SugarWidgetField extends SugarWidget
         return $this->getTruncatedColumnAlias(implode("_", $alias_arr));
     }
 
+    /**
+     * @param $layout_def
+     * @return string
+     * @deprecated This function is unused and will be removed in a future release.
+     */
     public function & displayDetailLabel(& $layout_def)
     {
+        LoggerManager::getLogger()->deprecated('displayDetailLabel is deprecated and will be removed in a 
+        future release, please update your code');
         return '';
     }
 
