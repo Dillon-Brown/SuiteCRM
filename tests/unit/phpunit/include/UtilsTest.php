@@ -116,6 +116,22 @@ class UtilsTest extends SuitePHPUnitFrameworkTestCase
         $this->assertEquals(get_current_language(), 'bar');
     }
 
+    public function testis_admin()
+    {
+        // Returns true if the user is an admin.
+        $user = new \User();
+        $user->is_admin = true;
+        $this->assertTrue(is_admin($user));
+
+        // Returns false if the user is not an admin.
+        $user2 = new \User();
+        $user2->is_admin = false;
+        $this->assertFalse(is_admin($user2));
+
+        // Returns false if no user object is passed.
+        $this->assertFalse(is_admin(null));
+    }
+  
     public function testcheck_php_version()
     {
         // These are used because the tests would fail if the supported
@@ -137,5 +153,27 @@ class UtilsTest extends SuitePHPUnitFrameworkTestCase
         $this->assertEquals(check_php_version("8.0.0", $minimumVersion, $recommendedVersion), 1);
         // Handles versions with a `-dev` suffix correctly.
         $this->assertEquals(check_php_version("7.4.0-dev", $minimumVersion, $recommendedVersion), 1);
+    }
+
+    public function testreturn_bytes()
+    {
+        // Test bytes. If you input just '8', it'll output 8.
+        $this->assertEquals(return_bytes('8'), 8);
+
+        // Test kibibytes.
+        $this->assertEquals(return_bytes('8K'), 8192);
+        $this->assertEquals(return_bytes('8k'), 8192);
+
+        // Test mebibytes.
+        // 8M is 8 mebibytes, 1 mebibyte is 1,048,576 bytes or 2^20 bytes.
+        $this->assertEquals(return_bytes('8M'), 8388608);
+        $this->assertEquals(return_bytes('8m'), 8388608);
+
+        // Test gibibytes
+        $this->assertEquals(return_bytes('8G'), 8589934592);
+        $this->assertEquals(return_bytes('8g'), 8589934592);
+
+        // Make sure it also understands strings with whitespace.
+        $this->assertEquals(return_bytes('  8K  '), 8192);
     }
 }
