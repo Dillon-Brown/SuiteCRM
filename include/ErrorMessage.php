@@ -47,6 +47,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
+/**
+ * Class ErrorMessage
+ * @package SuiteCRM
+ * @deprecated ErrorMessage is deprecated, please update your code to use LoggerManager.
+ */
 class ErrorMessage
 {
 
@@ -90,6 +95,7 @@ class ErrorMessage
      * @param integer|null $code
      * @param string $level
      * @param boolean $throw
+     * @deprecated
      */
     public function __construct($message = '', $code = null, $level = self::DEFAULT_LOG_LEVEL, $throw = true)
     {
@@ -102,6 +108,7 @@ class ErrorMessage
      * @param integer|null $code
      * @param string $level
      * @param boolean $throw
+     * @deprecated
      */
     public function setState($message = '', $code = null, $level = self::DEFAULT_LOG_LEVEL, $throw = true)
     {
@@ -114,6 +121,7 @@ class ErrorMessage
     /**
      *
      * @throws ErrorMessageException
+     * @deprecated
      */
     public function handle()
     {
@@ -134,6 +142,7 @@ class ErrorMessage
      * @param boolean $throw
      * @param integer $code
      * @throws ErrorMessageException
+     * @deprecated
      */
     public static function handler($message, $level = self::DEFAULT_LOG_LEVEL, $throw = true, $code = self::DEFAULT_CODE)
     {
@@ -145,6 +154,7 @@ class ErrorMessage
      *
      * @param string $message
      * @param integer $level
+     * @deprecated
      */
     public static function log($message, $level = self::DEFAULT_LOG_LEVEL)
     {
@@ -155,6 +165,7 @@ class ErrorMessage
      *
      * @param string $message
      * @param integer $code
+     * @deprecated
      */
     public static function drop($message, $code = self::DEFAULT_CODE)
     {
