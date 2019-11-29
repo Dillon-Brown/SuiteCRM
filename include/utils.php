@@ -3627,7 +3627,7 @@ function StackTraceErrorHandler($errno, $errstr, $errfile, $errline, $errcontext
     $error_msg = '<b>[' . $type . ']</b> ' . $error_msg;
     echo $error_msg;
     $trace = display_stack_trace();
-    \SuiteCRM\ErrorMessage::log("Catch an error: $error_msg \nTrace info:\n" . $trace);
+    LoggerManager::getLogger()->fatal("Catch an error: $error_msg \nTrace info:\n" . $trace);
     if ($halt_script) {
         exit(1);
     }
@@ -5701,7 +5701,7 @@ function isValidEmailAddress($email, $message = 'Invalid email address given', $
     if ($logInvalid) {
         $trace = debug_backtrace();
         $where = "Called at {$trace[1]['file']}:{$trace[1]['line']} from function {$trace[1]['function']}.";
-        \SuiteCRM\ErrorMessage::log("$message: [$email] $where", $logInvalid);
+        LoggerManager::getLogger()->$logInvalid("$message: [$email] $where");
     }
     return false;
 }

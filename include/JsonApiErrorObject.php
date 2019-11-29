@@ -41,6 +41,7 @@
 namespace SuiteCRM;
 
 use Exception;
+use LoggerManager;
 use Psr\Http\Message\ServerRequestInterface;
 use SuiteCRM\API\v8\Exception\ApiException;
 
@@ -153,7 +154,7 @@ class JsonApiErrorObject
         if ($this->isValidTitle($title)) {
             $this->title = $title->getText();
         } else {
-            ErrorMessage::log('Invalid JSON API error object, invalid title', 'warn');
+            LoggerManager::getLogger()->warn('Invalid JSON API error object, invalid title');
             $this->title = $this->getDefaultTitle();
         }
     }
@@ -167,7 +168,7 @@ class JsonApiErrorObject
         if ($this->isValidDetail($detail)) {
             $this->detail = $detail->getText();
         } else {
-            ErrorMessage::log('Invalid JSON API error object, invalid detail', 'warn');
+            LoggerManager::getLogger()->warn('Invalid JSON API error object, invalid detail');
             $this->detail = $this->getDefaultDetail();
         }
     }
@@ -181,7 +182,7 @@ class JsonApiErrorObject
         if ($this->isValidId($id)) {
             $this->id = $id;
         } else {
-            ErrorMessage::log('Invalid JSON API error object, invalid id', 'warn');
+            LoggerManager::getLogger()->warn('Invalid JSON API error object, invalid id');
             $this->getDefaultId();
         }
     }
@@ -195,7 +196,7 @@ class JsonApiErrorObject
         if ($this->isValidCode($code)) {
             $this->code = $code;
         } else {
-            ErrorMessage::log('Invalid JSON API error object, invalid code', 'warn');
+            LoggerManager::getLogger()->warn('Invalid JSON API error code, invalid title');
             $this->code = $this->getDefaultCode();
         }
     }
@@ -209,7 +210,7 @@ class JsonApiErrorObject
         if ($this->isValidStatus($status)) {
             $this->status = $status;
         } else {
-            ErrorMessage::log('Invalid JSON API error object, invalid status', 'warn');
+            LoggerManager::getLogger()->warn('Invalid JSON API error object, invalid status');
             $this->status = $this->getDefaultSource();
         }
     }
@@ -223,7 +224,7 @@ class JsonApiErrorObject
         if ($this->isValidLinks($links)) {
             $this->links = $links;
         } else {
-            ErrorMessage::log('Invalid JSON API error object, invalid links', 'warn');
+            LoggerManager::getLogger()->warn('Invalid JSON API error object, invalid links');
             $this->links = $this->getDefaultLinks();
         }
     }
@@ -237,7 +238,7 @@ class JsonApiErrorObject
         if ($this->isValidSource($source)) {
             $this->source = $source;
         } else {
-            ErrorMessage::log('Invalid JSON API error object, invalid source', 'warn');
+            LoggerManager::getLogger()->warn('Invalid JSON API error object, invalid source');
             $this->source = $this->getDefaultSource();
         }
     }
@@ -251,7 +252,7 @@ class JsonApiErrorObject
         if ($this->getValidMeta($meta)) {
             $this->meta = $meta;
         } else {
-            ErrorMessage::log('Invalid JSON API error object, invalid meta', 'warn');
+            LoggerManager::getLogger()->warn('Invalid JSON API error object, invalid meta');
             $this->meta = $this->getDefaultMeta();
         }
     }
@@ -509,7 +510,7 @@ class JsonApiErrorObject
         $json = json_encode($this->export());
         $error = json_last_error();
         if ($error !== JSON_ERROR_NONE) {
-            ErrorMessage::log('API Error Object JSON export error: ' . json_last_error_msg());
+            LoggerManager::getLogger()->warn('API Error Object JSON export error: ' . json_last_error_msg());
         }
         return $json;
     }

@@ -41,6 +41,8 @@
 
 namespace SuiteCRM;
 
+use LoggerManager;
+
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
@@ -186,12 +188,12 @@ class LangText
                 )
             );
         } else {
-            ErrorMessage::drop('Unknown use case for translation: ' . $this->use);
+            LoggerManager::getLogger()->fatal('Unknown use case for translation: ' . $this->use);
         }
 
         if (!$text) {
             if ($this->log) {
-                ErrorMessage::handler('A language key does not found: [' . $this->key . ']', self::LOG_LEVEL, $this->throw);
+                LoggerManager::getLogger()->fatal('A language key was not found: [' . $this->key . ']');
             } else {
                 $text = $this->key;
             }
