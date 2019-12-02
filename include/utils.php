@@ -3059,9 +3059,11 @@ function display_notice($msg = false)
     }
 }
 
-/* checks if it is a number that at least has the plus at the beginning.
+/**
+ * Checks if it is a number that at least has the plus at the beginning.
+ * 
+ * @deprecated No longer used, will be removed without replacement in SuiteCRM 7.12.
  */
-
 function skype_formatted($number)
 {
     //kbrill - BUG #15375
@@ -3073,6 +3075,9 @@ function skype_formatted($number)
     //	return substr($number, 0, 1) == '+' || substr($number, 0, 2) == '00' || substr($number, 0, 2) == '011';
 }
 
+/**
+ * @deprecated No longer used, will be removed without replacement in SuiteCRM 7.12.
+ */
 function format_skype($number)
 {
     return preg_replace('/[^\+0-9]/', '', $number);

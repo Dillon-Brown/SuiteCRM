@@ -1,11 +1,11 @@
-{*
+<?php
 /**
  *
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2019 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -37,32 +37,25 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-*}
-{include file="themes/SuiteP/tpls/_head.tpl"}
-<body onMouseOut="closeMenus();">
 
-{if $AUTHENTICATED}
-    <div id="ajaxHeader">
-        {include file="themes/SuiteP/tpls/_headerModuleList.tpl"}
-    </div>
-{/if}
-{literal}
-    <iframe id='ajaxUI-history-iframe' src='index.php?entryPoint=getImage&imageName=blank.png' title='empty'
-            style='display:none'></iframe>
-<input id='ajaxUI-history-field' type='hidden'>
-<script type='text/javascript'>
-    if (SUGAR.ajaxUI && !SUGAR.ajaxUI.hist_loaded) {
-        YAHOO.util.History.register('ajaxUILoc', "", SUGAR.ajaxUI.go);
-        {/literal}{if $smarty.request.module != "ModuleBuilder"}{* Module builder will init YUI history on its own *}
-        YAHOO.util.History.initialize("ajaxUI-history-field", "ajaxUI-history-iframe");
-        {/if}{literal}
+namespace SuiteCRM\Exception;
+
+use SuiteCRM\Enumerator\ExceptionCode;
+
+/**
+ * Class NotFoundException
+ * @package SuiteCRM\Exception
+ */
+class NotFoundException extends Exception
+{
+    /**
+     * NotFoundException constructor.
+     * @param string $message
+     * @param int $code
+     * @param null $previous
+     */
+    public function __construct($message = '', $code = ExceptionCode::API_CONTENT_NEGOTIATION_FAILED, $previous = null)
+    {
+        parent::__construct('[Not Found] ' . $message, $code, $previous);
     }
-</script>
-{/literal}
-<!-- Start of page content -->
-{if $AUTHENTICATED}
-<div id="bootstrap-container"
-     class="{if $THEME_CONFIG.display_sidebar && $smarty.cookies.sidebartoggle|default:'' != 'collapsed'}col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2{/if} main bootstrap-container">
-    <div id="content" class="content">
-        <div id="pagecontent" class=".pagecontent">
-{/if}
+}
