@@ -17,5 +17,3 @@ jobs:
 
     - name: Run Travis linter
       run: travis lint .travis.yml
-      with:
-        reporter: github-pr-review
