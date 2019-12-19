@@ -13,7 +13,7 @@ jobs:
         ruby-version: '2.x'
 
     - name: Install dependencies
-      run: gem install travis --no-document --no-ri
+      run: gem install travis --no-document
 
     - name: Run Travis linter
       run: travis lint [./travis.yml]
