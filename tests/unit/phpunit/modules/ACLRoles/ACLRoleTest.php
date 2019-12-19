@@ -71,8 +71,6 @@ class ACLRoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
     public function testgetUserRoles()
     {
-        $state = new SuiteCRM\StateSaver();
-
         $aclRole = new ACLRole();
 
         //test with default/true getAsNameArray param value
@@ -116,7 +114,7 @@ class ACLRoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test with empty value
         $result = $aclRole->getRoleActions('');
-        $this->assertTrue(is_array($result));
+        $this->assertInternalType('array', $result);
         $exp = [
           'Accounts',
           'Alerts',
@@ -134,6 +132,7 @@ class ACLRoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
           'EmailTemplates',
           'EmailMarketing',
           'Emails',
+            'Employees',
           'FP_events',
           'AOD_Index',
           'AOD_IndexEvent',
@@ -179,7 +178,7 @@ class ACLRoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 
         //test with non empty but non existing role id value, initially no roles exist.
         $result = $aclRole->getRoleActions('1');
-        $this->assertTrue(is_array($result));
+        $this->assertInternalType('array', $result);
         $this->assertEquals($exp, array_keys($result));
     }
 
