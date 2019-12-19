@@ -7,9 +7,15 @@ jobs:
 
     runs-on: ubuntu-latest
 
+
     steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.x'
+
     - name: Install dependencies
       run: gem install travis --no-rdoc --no-ri
 
-    - name: Run unit tests
+    - name: Run Travis linter
       run: travis lint [./travis.yml]
