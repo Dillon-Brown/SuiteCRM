@@ -124,31 +124,16 @@ class ModuleService
         if ((property_exists($bean, 'email1') && strpos($where, 'email1')) || (property_exists($bean,
                     'email2') && strpos($where, 'email2'))) {
 
-
-
             $selectedFields = substr( strtolower($module), 0, 1).'.'. implode(','. substr( strtolower($module), 0, 1).'.' , $fields);
-
-            $quotedFields = $db->quote {
-                $selectedFields
-            };
-
             $selectedModule = strtolower($module).' ' . substr( strtolower($module), 0, 1);
 
-            $quotedModule = $db->quote {
-                $selectedModule
-            };
+            $quotedModuleName = $db->quoted($module);
 
-            $selectedModuleName = "'" . $module . "'";
-
-            $quotedModuleName = $db->quote {
-              $selectedModuleName
-            };
-
-            $selectEmailAddress = "'" . $_REQUEST['filter'] ['email1'] ['eq'] . "'";
+            $quotedEmailAddress = $db->quoted($_REQUEST['filter'] ['email1'] ['eq']);
 
             $query = "SELECT {$selectedFields} FROM email_addresses ea join email_addr_bean_rel eabr on ea.id = eabr.email_address_id join {$selectedModule} on a.id = eabr.bean_id ";
-            $query .= " where email_address= '" . $_REQUEST['filter']['email1']['eq'] . "'";
-            $query .= " and eabr.bean_module= '" . $module . "'";
+            $query .= " where email_address= {$quotedEmailAddress} ";
+            $query .= " and eabr.bean_module= {$quotedModuleName}";
 
 
            $result = $db->query($query, true, "");
