@@ -41,7 +41,7 @@
 
 function showHelp(step)
 {
-  url = 'https://community.suitecrm.com';
+  url = 'https://suitecrm.com/suitecrm/forum/suite-forum';
   name = 'helpWindowPopup';
   window.open(url,name);
 }
