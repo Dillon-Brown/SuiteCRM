@@ -59,19 +59,11 @@ class M2MRelationship extends SugarRelationship
 
         $lhsModule = $def['lhs_module'];
         $this->lhsLinkDef = $this->getLinkedDefForModuleByRelationship($lhsModule);
-        if (is_bool($this->lhsLinkDef)) {
-            $this->lhsLink = null;
-        } else {
-            $this->lhsLink = $this->lhsLinkDef['name'];
-        }
+        $this->lhsLink = $this->lhsLinkDef['name'];
 
         $rhsModule = $def['rhs_module'];
         $this->rhsLinkDef = $this->getLinkedDefForModuleByRelationship($rhsModule);
-        if (is_bool($this->rhsLinkDef)) {
-            $this->rhsLink = null;
-        } else {
-            $this->rhsLink = $this->rhsLinkDef['name'];
-        }
+        $this->rhsLink = $this->rhsLinkDef['name'];
 
         if (isset($def['self_referencing'])) {
             $this->self_referencing = $def['self_referencing'];
