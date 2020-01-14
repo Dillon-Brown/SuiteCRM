@@ -59,7 +59,7 @@ class SuiteLogger extends AbstractLogger
      * @param array $context eg array(user => 'joe')
      * @throws InvalidArgumentException
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = array())
     {
         $log = \LoggerManager::getLogger();
         $message = $this->interpolate($message, $context);
@@ -97,7 +97,7 @@ class SuiteLogger extends AbstractLogger
                 $log->debug('[DEBUG] ' . $message);
                 break;
             default:
-                throw new InvalidArgumentException('Invalid log level type: ' . $level);
+                throw new InvalidArgumentException();
         }
     }
 
@@ -107,9 +107,9 @@ class SuiteLogger extends AbstractLogger
      * @param array $context
      * @return string
      */
-    private function interpolate($message, array $context = [])
+    private function interpolate($message, array $context = array())
     {
-        $replace = [];
+        $replace = array();
 
         if (empty($context)) {
             return $message;
