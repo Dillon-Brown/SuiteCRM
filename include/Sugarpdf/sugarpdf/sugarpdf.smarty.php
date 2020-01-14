@@ -87,10 +87,13 @@ class SugarpdfSmarty extends Sugarpdf
     public function display()
     {
         //turn off all error reporting so that PHP warnings don't munge the PDF code
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushPHPConfigOptions();
+        
         $maxExecutionTime = ini_get('max_execution_time');
         $errorReporting = error_reporting();
         
-        error_reporting(0);
+        error_reporting(E_ALL);
         set_time_limit(1800);
         
         //Create new page
@@ -104,6 +107,7 @@ class SugarpdfSmarty extends Sugarpdf
             $this->Error('The class SugarpdfSmarty has to be extended and you have to set a location for the Smarty template.');
         }
         
+        $state->popPHPConfigOptions();
         ini_set('max_execution_time', $maxExecutionTime);
         error_reporting($errorReporting);
     }

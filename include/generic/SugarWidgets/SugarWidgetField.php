@@ -41,6 +41,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
+
+
+
+
+
 class SugarWidgetField extends SugarWidget
 {
     public function __construct(&$layout_manager)
@@ -62,9 +67,11 @@ class SugarWidgetField extends SugarWidget
         self::__construct($layout_manager);
     }
 
+
     public function display($layout_def)
     {
-        $context = $this->layout_manager->getAttribute('context');
+        //print $layout_def['start_link_wrapper']."===";
+        $context = $this->layout_manager->getAttribute('context'); //_ppd($context);
         $func_name = 'display'.$context;
 
         if (!empty($context) && method_exists($this, $func_name)) {
