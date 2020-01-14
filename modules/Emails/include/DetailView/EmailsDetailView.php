@@ -96,8 +96,6 @@ class EmailsDetailView extends DetailView2
         if (empty($this->focus->from_addr_name)) {
             $this->focus->from_addr_name = $this->focus->from_addr;
         }
-        //Prevent Email address to be handled as HTML tag
-        $this->focus->from_addr_name = html_entity_decode($this->focus->from_addr_name);
     }
 
     /**

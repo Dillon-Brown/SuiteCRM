@@ -223,7 +223,6 @@ $dictionary['Account'] = array(
             'name' => 'email_addresses',
             'type' => 'link',
             'relationship' => 'accounts_email_addresses',
-            'module' => 'EmailAddress',
             'source' => 'non-db',
             'vname' => 'LBL_EMAIL_ADDRESSES',
             'reportable' => false,

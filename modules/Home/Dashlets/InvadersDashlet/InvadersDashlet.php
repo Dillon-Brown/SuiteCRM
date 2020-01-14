@@ -180,6 +180,7 @@ class InvadersDashlet extends Dashlet
     {
         if (isset($_REQUEST['savedText'])) {
             $optionsArray = $this->loadOptions();
+//            _pp($_REQUEST['savedText']);
             $optionsArray['savedText'] = nl2br($_REQUEST['savedText']);
             $this->storeOptions($optionsArray);
         } else {

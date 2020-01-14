@@ -240,7 +240,7 @@ if (is_admin($current_user) && $_REQUEST['module'] != 'DynamicLayout' && !empty(
 
 echo $currency->getJavascript();
 
-$seps = get_number_separators();
+$seps = get_number_seperators();
 $ss->assign("NUM_GRP_SEP", $seps[0]);
 $ss->assign("DEC_SEP", $seps[1]);
 

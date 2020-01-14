@@ -138,13 +138,8 @@ class jjwg_Areas extends jjwg_Areas_sugar
     {
         $loc = array();
         $loc['name'] = $this->name;
-        if (!is_null($this->centroid)) {
-            $loc['lng'] = $this->centroid['lng'];
-            $loc['lat'] = $this->centroid['lat'];
-        } else {
-            $loc['lng'] = null;
-            $loc['lat'] = null;
-        }
+        $loc['lng'] = $this->centroid['lng'];
+        $loc['lat'] = $this->centroid['lat'];
         $loc = $this->define_loc($loc);
 
         return $loc;
@@ -243,13 +238,8 @@ class jjwg_Areas extends jjwg_Areas_sugar
             $loc['lng'] = $marker['lng'];
         } else {
             $loc['name'] = '';
-            if (is_null($this->centroid)) {
-                $loc['lat'] = null;
-                $loc['lng'] = null;
-            } else {
-                $loc['lat'] = $this->centroid['lat'];
-                $loc['lng'] = $this->centroid['lng'];
-            }
+            $loc['lat'] = $this->centroid['lat'];
+            $loc['lng'] = $this->centroid['lng'];
         }
 
         if (empty($loc['name'])) {

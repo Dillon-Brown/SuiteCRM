@@ -2833,11 +2833,9 @@ class Email extends Basic
     {
         global $current_user;
 
-        // User preferences should take precedence over everything else
+        // User preferences should takee precedence over everything else
         $emailSettings = $current_user->getPreference('emailSettings', 'Emails');
-        // Protect against accessing emailSettings as an array if it's null.
-        $sendPlainText = is_null($emailSettings) ? null : $emailSettings['sendPlainText'];
-        $alwaysSendEmailsInPlainText = $sendPlainText === '1';
+        $alwaysSendEmailsInPlainText = $emailSettings['sendPlainText'] === '1';
 
         $sendEmailsInPlainText = false;
         if (isset($_REQUEST['is_only_plain_text']) && $_REQUEST['is_only_plain_text'] === 'true') {

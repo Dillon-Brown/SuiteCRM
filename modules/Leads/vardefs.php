@@ -477,7 +477,6 @@ $dictionary['Lead'] = array('table' => 'leads', 'audited' => true, 'unified_sear
                 'name' => 'email_addresses',
                 'type' => 'link',
                 'relationship' => 'leads_email_addresses',
-                'module' => 'EmailAddress',
                 'source' => 'non-db',
                 'vname' => 'LBL_EMAIL_ADDRESSES',
                 'reportable' => false,

@@ -51,8 +51,10 @@ if (isset($GLOBALS['current_language']) && ($GLOBALS['current_language'] != null
 
 return_module_language($curr_lang, 'UpgradeWizard');
 
-$errorLevelStored = error_reporting();
-$maxExecutionTime = ini_get('max_execution_time');
+$state = new \SuiteCRM\StateSaver();
+$state->pushErrorLevel();
+$state->pushPHPConfigOptions();
+
 error_reporting(E_ERROR);
 set_time_limit(0);
 set_upgrade_progress('layouts', 'in_progress');
@@ -121,8 +123,8 @@ $showNext = true;
 
 set_upgrade_progress('layouts', 'done');
 
-error_reporting($errorLevelStored);
-set_time_limit($maxExecutionTime);
+$state->popErrorLevel();
+$state->popPHPConfigOptions();
 
 /**
  * Clean the merge data results, removing any emptys or blanks that should not be displayed

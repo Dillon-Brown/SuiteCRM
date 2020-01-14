@@ -41,6 +41,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
+
+
+//_ppd($_REQUEST);
 $focus = new Group();
 
 // New user

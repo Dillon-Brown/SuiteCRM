@@ -105,7 +105,6 @@ $dictionary['Prospect'] = array(
                 'name' => 'email_addresses',
                 'type' => 'link',
                 'relationship' => 'prospects_email_addresses',
-                'module' => 'EmailAddress',
                 'source' => 'non-db',
                 'vname' => 'LBL_EMAIL_ADDRESSES',
                 'reportable' => false,
