@@ -46,10 +46,10 @@ include_once __DIR__ . '/GoogleApiKeySaverEntryPointMock.php';
  * @author gyula
  */
 
+use SuiteCRM\StateCheckerPHPUnitTestCaseAbstract;
+use SuiteCRM\StateSaver;
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class GoogleApiKeySaverEntryPointTest extends SuitePHPUnitFrameworkTestCase
+class GoogleApiKeySaverEntryPointTest extends StateCheckerPHPUnitTestCaseAbstract
 {
     public function testHandleRequestError()
     {
@@ -90,6 +90,12 @@ class GoogleApiKeySaverEntryPointTest extends SuitePHPUnitFrameworkTestCase
 
     public function testHandleRequestCode()
     {
+        $state = new StateSaver();
+        $state->pushGlobals();
+        $state->pushTable('users');
+        $state->pushTable('user_preferences');
+        $state->pushTable('tracker');
+
         $user = BeanFactory::getBean('Users');
         $user->last_name = 'UNIT_TESTS';
         $user->user_name = 'UNIT_TESTS';
@@ -105,10 +111,21 @@ class GoogleApiKeySaverEntryPointTest extends SuitePHPUnitFrameworkTestCase
         } catch (Exception $e) {
         }
         $this->assertEquals(10, $e->getCode());
+        
+        $state->popTable('tracker');
+        $state->popTable('user_preferences');
+        $state->popTable('users');
+        $state->popGlobals();
     }
 
     public function testHandleRequestSetInvalid()
     {
+        $state = new StateSaver();
+        $state->pushGlobals();
+        $state->pushTable('users');
+        $state->pushTable('user_preferences');
+        $state->pushTable('tracker');
+
         $user = BeanFactory::getBean('Users');
         $user->last_name = 'UNIT_TESTS';
         $user->user_name = 'UNIT_TESTS';
@@ -122,11 +139,22 @@ class GoogleApiKeySaverEntryPointTest extends SuitePHPUnitFrameworkTestCase
         $expected = "http://foo/bar.org/index.php?module=Users&action=EditView&record=" . $user->id;
         $redirectString = $epMock->getRedirectUrl();
         $this->assertEquals($expected, $redirectString);
+        
+        $state->popTable('tracker');
+        $state->popTable('user_preferences');
+        $state->popTable('users');
+        $state->popGlobals();
     }
 
 
     public function testHandleRequestUnknown()
     {
+        $state = new StateSaver();
+        $state->pushGlobals();
+        $state->pushTable('users');
+        $state->pushTable('user_preferences');
+        $state->pushTable('tracker');
+
         $user = BeanFactory::getBean('Users');
         $user->last_name = 'UNIT_TESTS';
         $user->user_name = 'UNIT_TESTS';
@@ -139,5 +167,10 @@ class GoogleApiKeySaverEntryPointTest extends SuitePHPUnitFrameworkTestCase
         $expected = "http://foo/bar.org/index.php?module=Users&action=EditView&record=" . $user->id;
         $redirectString = $epMock->getRedirectUrl();
         $this->assertEquals($expected, $redirectString);
+
+        $state->popTable('tracker');
+        $state->popTable('user_preferences');
+        $state->popTable('users');
+        $state->popGlobals();
     }
 }

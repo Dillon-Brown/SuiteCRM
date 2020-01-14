@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class MergeRecordTest extends SuitePHPUnitFrameworkTestCase
+class MergeRecordTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +13,7 @@ class MergeRecordTest extends SuitePHPUnitFrameworkTestCase
 
     public function testMergeRecord()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $mergeRecord = new MergeRecord();
 
         $this->assertInstanceOf('MergeRecord', $mergeRecord);
@@ -103,40 +101,59 @@ class MergeRecordTest extends SuitePHPUnitFrameworkTestCase
     {
         self::markTestIncomplete('Test failing since commit a5acea613 applied php7fix patch');
 
+        $state = new SuiteCRM\StateSaver();
+        
+        
+        
+        
+        
 
         $mergeRecord = new MergeRecord();
 
         $mergeRecord->load_merge_bean('Users', false, 1);
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $mergeRecord->fill_in_additional_list_fields();
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
+        
+        // clean up
     }
 
     public function testfill_in_additional_detail_fields()
     {
         self::markTestIncomplete('Test failing since commit a5acea613 applied php7fix patch');
 
+
+        $state = new SuiteCRM\StateSaver();
+        
+        
+        
+        
+        
         $mergeRecord = new MergeRecord();
 
         $mergeRecord->load_merge_bean('Users', false, 1);
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $mergeRecord->fill_in_additional_detail_fields();
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
+        
+        // clean up
     }
 
     public function testget_summary_text()
     {
         self::markTestIncomplete('Test failing since commit a5acea613 applied php7fix patch');
+
+
 
         $mergeRecord = new MergeRecord();
 
@@ -167,6 +184,7 @@ class MergeRecordTest extends SuitePHPUnitFrameworkTestCase
     public function testbuild_generic_where_clause()
     {
         self::markTestIncomplete('Test failing since commit a5acea613 applied php7fix patch');
+
 
 
         $mergeRecord = new MergeRecord();
@@ -217,6 +235,7 @@ class MergeRecordTest extends SuitePHPUnitFrameworkTestCase
         self::markTestIncomplete('Test failing since commit a5acea613 applied php7fix patch');
 
 
+
         $mergeRecord = new MergeRecord();
 
         $mergeRecord->load_merge_bean('Meetings');
@@ -236,6 +255,11 @@ class MergeRecordTest extends SuitePHPUnitFrameworkTestCase
         self::markTestIncomplete('Test failing since commit a5acea613 applied php7fix patch');
 
 
+        $state = new SuiteCRM\StateSaver();
+        
+        
+        
+
         $mergeRecord = new MergeRecord();
 
         $mergeRecord->load_merge_bean('Meetings');
@@ -245,6 +269,8 @@ class MergeRecordTest extends SuitePHPUnitFrameworkTestCase
         $result = $mergeRecord->get_inputs_for_search_params(array('nameSearchField' => 'test', 'idSearchField' => '1'));
 
         $this->assertSame($expected, $result);
+        
+        // clean up
     }
 
     public function testemail_addresses_query()
@@ -280,6 +306,7 @@ class MergeRecordTest extends SuitePHPUnitFrameworkTestCase
     public function testcreate_where_statement()
     {
         self::markTestIncomplete('Test failing since commit a5acea613 applied php7fix patch');
+
 
 
         //unset and reconnect Db to resolve mysqli fetch exeception

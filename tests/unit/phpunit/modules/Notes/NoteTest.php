@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class NoteTest extends SuitePHPUnitFrameworkTestCase
+class NoteTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +13,7 @@ class NoteTest extends SuitePHPUnitFrameworkTestCase
 
     public function testNote()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $note = new Note();
 
         $this->assertInstanceOf('Note', $note);
@@ -47,24 +45,42 @@ class NoteTest extends SuitePHPUnitFrameworkTestCase
 
     public function testmark_deleted()
     {
+        $state = new SuiteCRM\StateSaver();
+        $state->pushTable('aod_index');
+        $state->pushTable('tracker');
+
         $note = new Note();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $note->mark_deleted(1);
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
+        
+        // clean up
+        $state->popTable('tracker');
+        $state->popTable('aod_index');
     }
 
     public function testdeleteAttachment()
     {
+        // save state
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushGlobals();
+        $state->pushTable('tracker');
+
+        // test
         $note = new Note();
 
         $note->id = 1;
         $result = $note->deleteAttachment();
         $this->assertEquals(true, $result);
+
+        // clean up
+        $state->popTable('tracker');
+        $state->popGlobals();
     }
 
     public function testget_summary_text()
@@ -98,7 +114,7 @@ class NoteTest extends SuitePHPUnitFrameworkTestCase
     {
         $note = new Note();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $note->fill_in_additional_list_fields();
             $this->assertTrue(true);
@@ -111,7 +127,7 @@ class NoteTest extends SuitePHPUnitFrameworkTestCase
     {
         $note = new Note();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $note->fill_in_additional_detail_fields();
             $this->assertTrue(true);
@@ -147,11 +163,19 @@ class NoteTest extends SuitePHPUnitFrameworkTestCase
 
     public function testlistviewACLHelper()
     {
+        // save state
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushGlobals();
+
+        // test
         $note = new Note();
 
         $expected = array('MAIN' => 'a', 'PARENT' => 'a', 'CONTACT' => 'a');
         $actual = $note->listviewACLHelper();
         $this->assertSame($expected, $actual);
+
+        // clean up
+        $state->popGlobals();
     }
 
     public function testbean_implements()

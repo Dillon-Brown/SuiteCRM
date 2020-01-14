@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class AOS_PDF_TemplatesTest extends SuitePHPUnitFrameworkTestCase
+class AOS_PDF_TemplatesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +13,7 @@ class AOS_PDF_TemplatesTest extends SuitePHPUnitFrameworkTestCase
 
     public function testAOS_PDF_Templates()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $aosPdfTemplates = new AOS_PDF_Templates();
         $this->assertInstanceOf('AOS_PDF_Templates', $aosPdfTemplates);
         $this->assertInstanceOf('Basic', $aosPdfTemplates);

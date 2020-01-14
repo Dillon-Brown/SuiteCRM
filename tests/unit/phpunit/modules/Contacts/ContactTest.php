@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class ContactTest extends SuitePHPUnitFrameworkTestCase
+class ContactTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +13,8 @@ class ContactTest extends SuitePHPUnitFrameworkTestCase
 
     public function testContact()
     {
-        // Execute the constructor and check for the Object type and  attributes
+
+        //execute the contructor and check for the Object type and  attributes
         $contact = new Contact();
         $this->assertInstanceOf('Contact', $contact);
         $this->assertInstanceOf('Person', $contact);
@@ -61,12 +60,21 @@ class ContactTest extends SuitePHPUnitFrameworkTestCase
     {
         self::markTestIncomplete('environment dependency');
 
+        // save state
 
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushGlobals();
+
+        // test
         $contact = new Contact();
 
         $expected = array( "MAIN"=>"span", "ACCOUNT"=>"span");
         $actual = $contact->listviewACLHelper();
         $this->assertSame($expected, $actual);
+
+        // clean up
+        
+        $state->popGlobals();
     }
 
     /**
@@ -90,6 +98,7 @@ class ContactTest extends SuitePHPUnitFrameworkTestCase
         */
         $this->assertTrue(true, "NEEDS FIXING!");
     }
+
 
     public function testaddress_popup_create_new_list_query()
     {
@@ -145,11 +154,12 @@ class ContactTest extends SuitePHPUnitFrameworkTestCase
         $this->assertEquals("", $contact->report_to_name);
     }
 
+
     public function testload_contacts_users_relationship()
     {
         $contact = new Contact();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $contact->load_contacts_users_relationship();
             $this->assertTrue(true);
@@ -160,6 +170,12 @@ class ContactTest extends SuitePHPUnitFrameworkTestCase
 
     public function testget_list_view_data()
     {
+        // save state
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushTable('email_addresses');
+        $state->pushTable('tracker');
+
+        // test
         $contact = new Contact();
 
         //test with attributes preset and verify attributes are set accordingly
@@ -188,6 +204,11 @@ class ContactTest extends SuitePHPUnitFrameworkTestCase
         $this->assertEquals($expected['FULL_NAME'], $actual['FULL_NAME']);
         $this->assertEquals($expected['ENCODED_NAME'], $actual['ENCODED_NAME']);
         $this->assertEquals($expected['EMAIL_AND_NAME1'], $actual['EMAIL_AND_NAME1']);
+
+        
+        // clean up
+        $state->popTable('tracker');
+        $state->popTable('email_addresses');
     }
 
     public function testbuild_generic_where_clause()
@@ -237,7 +258,7 @@ class ContactTest extends SuitePHPUnitFrameworkTestCase
     {
         $contact = new Contact();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $contact->save_relationship_changes(true);
             $contact->save_relationship_changes(false);
@@ -271,11 +292,12 @@ class ContactTest extends SuitePHPUnitFrameworkTestCase
         $this->assertSame($expected, $actual);
     }
 
+
     public function testprocess_sync_to_outlook()
     {
         $contact = new Contact();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $contact->process_sync_to_outlook("all");
             $this->assertTrue(true);
@@ -283,7 +305,7 @@ class ContactTest extends SuitePHPUnitFrameworkTestCase
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $contact->process_sync_to_outlook("1");
             $this->assertTrue(true);

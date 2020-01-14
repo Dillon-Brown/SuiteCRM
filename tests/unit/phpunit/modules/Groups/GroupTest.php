@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class GroupTest extends SuitePHPUnitFrameworkTestCase
+class GroupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +13,8 @@ class GroupTest extends SuitePHPUnitFrameworkTestCase
 
     public function testGroup()
     {
-        //execute the constructor and check for the Object type and attributes
+
+        //execute the contructor and check for the Object type and  attributes
         $group = new Group();
         $this->assertInstanceOf('Group', $group);
         $this->assertInstanceOf('User', $group);
@@ -29,16 +28,26 @@ class GroupTest extends SuitePHPUnitFrameworkTestCase
     public function testmark_deleted()
     {
         self::markTestIncomplete('environment dependency (php7: Incorrect state hash: Hash doesn\'t match at key "database::users".)');
+        
+        $state = new SuiteCRM\StateSaver();
+        $state->pushTable('aod_index');
+        $state->pushTable('tracker');
+        $state->pushTable('users');
 
         $group = new Group();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $group->mark_deleted('');
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
+        
+        // clean up
+        $state->popTable('users');
+        $state->popTable('tracker');
+        $state->popTable('aod_index');
     }
 
     public function testcreate_export_query()

@@ -1,10 +1,5 @@
 <?php
 
-use Codeception\Actor;
-use Codeception\Lib\Friend;
-use Helper\WebDriverHelper;
-use SuiteCRM\Enumerator\DatabaseDriver;
-
 
 /**
  * Inherited Methods
@@ -17,20 +12,11 @@ use SuiteCRM\Enumerator\DatabaseDriver;
  * @method void am($role)
  * @method void lookForwardTo($achieveValue)
  * @method void comment($description)
- * @method Friend haveFriend($name, $actorClass = null)
- * @method checkOption(string $string)
- * @method click(string $string)
- * @method see(string $string)
- * @method waitForText(string $string)
- * @method seeElement(string $string)
- * @method fillField(string $string, string $string1)
- * @method waitForElement(string $string, int $int)
- * @method dontSee(string $string)
- * @method executeJS(string $string)
+ * @method \Codeception\Lib\Friend haveFriend($name, $actorClass = NULL)
  *
  * @SuppressWarnings(PHPMD)
- */
-class InstallTester extends Actor
+*/
+class InstallTester extends \Codeception\Actor
 {
     use _generated\InstallTesterActions;
 
@@ -43,9 +29,9 @@ class InstallTester extends Actor
         $scenario = $I->getScenario();
 
         if (!$this->isOldPhpVersionDetected()) {
-            $scenario->comment('PHP Version ' . PHP_VERSION . ' meets the recommended requirements.');
+            $scenario->comment('PHP Version '. PHP_VERSION .' meets the recommended requirements.');
         } else {
-            $scenario->comment('PHP Version ' . PHP_VERSION . ' does not meet the recommended requirements.');
+            $scenario->comment('PHP Version '. PHP_VERSION .' does not meet the recommended requirements.');
             $I->see('Old PHP Version Detected');
             $I->dontSeeMissingLabels();
             $I->checkOption('setup_old_php');
@@ -87,11 +73,11 @@ class InstallTester extends Actor
     }
 
     /**
-     * @param WebDriverHelper $webDriverHelper
+     * @param \Helper\WebDriverHelper $webDriverHelper
      * @throws Exception
      * Configures the installer based on the webdriver configuration and moves to the next stage of the wizard
      */
-    public function configureInstaller(WebDriverHelper $webDriverHelper)
+    public function configureInstaller(\Helper\WebDriverHelper $webDriverHelper)
     {
         $I = $this;
         $I->comment('Configure installer using Web Driver configuration.');
@@ -103,16 +89,16 @@ class InstallTester extends Actor
 
         // Select Database type
         switch ($webDriverHelper->getDatabaseDriver()) {
-            case DatabaseDriver::MYSQL:
+            case \SuiteCRM\Enumerator\DatabaseDriver::MYSQL:
                 $I->checkOption('#setup_db_type[value=mysql]');
                 break;
-            case DatabaseDriver::MSSQL:
+            case \SuiteCRM\Enumerator\DatabaseDriver::MSSQL:
                 $I->checkOption('#setup_db_type[value=mssql]');
                 // clear instance field
                 $I->fillField('#setup_db_host_instance', '');
                 break;
             default:
-                throw new \RuntimeException('No Database Driver Specified');
+                throw new Exception('No Database Driver Specified');
         }
 
         // Fill in database configuration

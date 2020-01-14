@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class Calls_RescheduleTest extends SuitePHPUnitFrameworkTestCase
+class Calls_RescheduleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +13,7 @@ class Calls_RescheduleTest extends SuitePHPUnitFrameworkTestCase
 
     public function testCalls_Reschedule()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $callsReschedule = new Calls_Reschedule();
         $this->assertInstanceOf('Calls_Reschedule', $callsReschedule);
         $this->assertInstanceOf('Basic', $callsReschedule);

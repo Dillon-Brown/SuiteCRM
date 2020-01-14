@@ -1,33 +1,24 @@
 <?php
-
 namespace SuiteCRM\Test;
 
-use BeanFactory;
-use DBManager;
 use DBManagerFactory;
-use LoggerManager;
-use SuiteCRM\Exception\Exception;
-use SuiteCRM\TestCaseAbstract;
 
-/**
- * Class SuitePHPUnitFrameworkTestCase
- * @package SuiteCRM\Test
- */
-abstract class SuitePHPUnitFrameworkTestCase extends TestCaseAbstract
+/** @noinspection PhpUndefinedClassInspection */
+abstract class SuitePHPUnit_Framework_TestCase extends \SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
 
     /**
      * @var array
      */
-    protected $env = [];
+    protected $env = array();
 
     /**
-     * @var LoggerManager
+     * @var \LoggerManager
      */
     protected $log;
 
     /**
-     * @var DBManager
+     * @var \DBManager
      */
     protected $db;
 
@@ -53,14 +44,16 @@ abstract class SuitePHPUnitFrameworkTestCase extends TestCaseAbstract
     /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
-     * @throws Exception
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
         global $current_user, $sugar_config;
-        $current_user = @BeanFactory::getBean('Users');
+        try {
+            $current_user = @\BeanFactory::getBean('Users'); //new User();
+        } catch (Exception $e) {
+        }
         get_sugar_config_defaults();
 
         $this->log = $GLOBALS['log'];
@@ -84,7 +77,7 @@ abstract class SuitePHPUnitFrameworkTestCase extends TestCaseAbstract
      * Tears down the fixture, for example, close a network connection.
      * This method is called after a test is executed.
      */
-    public function tearDown()
+    protected function tearDown()
     {
         global $sugar_config;
 
@@ -100,7 +93,7 @@ abstract class SuitePHPUnitFrameworkTestCase extends TestCaseAbstract
         $GLOBALS['log'] = $this->log;
 
         DBManagerFactory::$instances = $this->dbManagerFactoryInstances;
-
+        
         parent::tearDown();
     }
 }

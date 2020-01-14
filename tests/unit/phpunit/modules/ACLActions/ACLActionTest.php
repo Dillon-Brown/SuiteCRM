@@ -1,10 +1,8 @@
-<?php /** @noinspection ALL */
+<?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class ACLActionTest extends SuitePHPUnitFrameworkTestCase
+class ACLActionTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -13,7 +11,7 @@ class ACLActionTest extends SuitePHPUnitFrameworkTestCase
         $current_user = new User();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         parent::tearDown();
     }
@@ -21,29 +19,49 @@ class ACLActionTest extends SuitePHPUnitFrameworkTestCase
     public function testACLAction()
     {
         self::markTestIncomplete('environment dependency');
-
-        $_POST['foo'] = 'bar123ase';
-        // Execute the constructor and check for the Object type and type attribute
-        $aclAction = new ACLAction();
-        $this->assertInstanceOf('ACLAction', $aclAction);
-        $this->assertInstanceOf('SugarBean', $aclAction);
-
-        $this->assertAttributeEquals('ACLActions', 'module_dir', $aclAction);
-        $this->assertAttributeEquals('ACLAction', 'object_name', $aclAction);
-        $this->assertAttributeEquals('acl_actions', 'table_name', $aclAction);
-        $this->assertAttributeEquals(true, 'new_schema', $aclAction);
-        $this->assertAttributeEquals(true, 'disable_custom_fields', $aclAction);
+//
+//        $state = new SuiteCRM\StateSaver();
+//        $state->pushTable('acl_actions');
+//        $state->pushGlobals();
+//
+//        $_POST['foo'] = 'bar123ase';
+//        //execute the contructor and check for the Object type and type attribute
+//        $aclAction = new ACLAction();
+//        $this->assertInstanceOf('ACLAction', $aclAction);
+//        $this->assertInstanceOf('SugarBean', $aclAction);
+//
+//        $this->assertAttributeEquals('ACLActions', 'module_dir', $aclAction);
+//        $this->assertAttributeEquals('ACLAction', 'object_name', $aclAction);
+//        $this->assertAttributeEquals('acl_actions', 'table_name', $aclAction);
+//        $this->assertAttributeEquals(true, 'new_schema', $aclAction);
+//        $this->assertAttributeEquals(true, 'disable_custom_fields', $aclAction);
+//
+//        // clean up
+//
+//        $state->popGlobals();
+//        $state->popTable('acl_actions');
     }
 
     public function testaddActions()
     {
         self::markTestIncomplete('environment dependency');
-
-        //take count of actions initially and then after method execution and test if action count increases
-        $action_count = count(ACLAction::getDefaultActions());
-        ACLAction::addActions('Test');
-        $actual = ACLAction::getDefaultActions();
-        $this->assertGreaterThan($action_count, count($actual));
+//
+//        $state = new SuiteCRM\StateSaver();
+//        $state->pushTable('acl_actions');
+//        $state->pushTable('aod_index');
+//
+//
+//
+//        //take count of actions initially and then after method execution and test if action count increases
+//        $action_count = count(ACLAction::getDefaultActions());
+//        ACLAction::addActions('Test');
+//        $actual = ACLAction::getDefaultActions();
+//        $this->assertGreaterThan($action_count, count($actual));
+//
+//        // clean up
+//
+//        $state->popTable('aod_index');
+//        $state->popTable('acl_actions');
     }
 
     public function testremoveActions()
@@ -103,58 +121,67 @@ class ACLActionTest extends SuitePHPUnitFrameworkTestCase
 
     public function testuserNeedsSecurityGroup()
     {
+        $state = new SuiteCRM\StateSaver();
+        $state->pushGlobals();
+
         $this->assertFalse(ACLAction::userNeedsSecurityGroup('1', '', ''));//test with empty module and action
         $this->assertFalse(ACLAction::userNeedsSecurityGroup('1', 'Accounts',
             'list')); //test with valid module and action
+
+        // clean up
+        $state->popGlobals();
     }
 
     public function testuserHasAccess()
     {
         self::markTestIncomplete('Need to fix checking user access. Hint: session is a system state perhaps its failing because the user session');
-
-        // Test with empty module and action
-        $this->assertFalse(ACLAction::userHasAccess('', '', ''));
-        // Test with empty user and valid module and action
-        $this->assertTrue(ACLAction::userHasAccess('', 'Accounts',
-            'list'));
-        // Test with valid User, module and action
-        $this->assertTrue(ACLAction::userHasAccess('1', 'Accounts', 'list'));
-        // Test with valid User, module and action
-        $this->assertTrue(ACLAction::userHasAccess('1', 'SecurityGroups',
-            'list'));
-        // Test with valid User, module and action
-        $this->assertTrue(ACLAction::userHasAccess('1', 'Users', 'list'));
+//
+//        $state = new SuiteCRM\StateSaver();
+//        $state->pushGlobals();
+//
+//        $this->assertFalse(ACLAction::userHasAccess('', '', '')); //test with empty module and action
+//        $this->assertTrue(ACLAction::userHasAccess('', 'Accounts', 'list')); //test with e,pty user and valid module and action
+//        $this->assertTrue(ACLAction::userHasAccess('1', 'Accounts', 'list')); //test with valid User, module and action
+//        $this->assertTrue(ACLAction::userHasAccess('1', 'SecurityGroups', 'list')); //test with valid User, module and action
+//        $this->assertTrue(ACLAction::userHasAccess('1', 'Users', 'list')); //test with valid User, module and action
+//
+//        // clean up
+//
+//        $state->popGlobals();
     }
 
     public function testgetUserAccessLevel()
     {
         self::markTestIncomplete('Need to fix checking user access. Hint: session is a system state perhaps its failing because the user session');
-
-        //tes for accoounts module with two different actions
-        $this->assertEquals(90, ACLAction::getUserAccessLevel('1', 'Accounts', 'list'));
-        $this->assertEquals(89, ACLAction::getUserAccessLevel('1', 'Accounts', 'access'));
-
-        //tes for users module with two different actions
-        $this->assertEquals(90, ACLAction::getUserAccessLevel('1', 'Users', 'list'));
-        $this->assertEquals(89, ACLAction::getUserAccessLevel('1', 'Users', 'access'));
+//
+//
+//        //tes for accoounts module with two different actions
+//        $this->assertEquals(90, ACLAction::getUserAccessLevel('1', 'Accounts', 'list'));
+//        $this->assertEquals(89, ACLAction::getUserAccessLevel('1', 'Accounts', 'access'));
+//
+//        //tes for users module with two different actions
+//        $this->assertEquals(90, ACLAction::getUserAccessLevel('1', 'Users', 'list'));
+//        $this->assertEquals(89, ACLAction::getUserAccessLevel('1', 'Users', 'access'));
     }
 
     public function testuserNeedsOwnership()
     {
         self::markTestIncomplete('Need to fix checking user access. Hint: session is a system state perhaps its failing because the user session');
-
-        //test with invalid values
-        $this->assertFalse(ACLAction::userNeedsOwnership('', '', ''));
-
-        //test with valid values for different module and action combination
-        $this->assertFalse(ACLAction::userNeedsOwnership('1', 'Accounts', 'list'));
-        $this->assertFalse(ACLAction::userNeedsOwnership('1', 'Accounts', 'delete'));
-        $this->assertFalse(ACLAction::userNeedsOwnership('1', 'Users', 'delete'));
-        $this->assertFalse(ACLAction::userNeedsOwnership('1', 'Users', 'list'));
+//
+//
+//        //test with invalid values
+//        $this->assertFalse(ACLAction::userNeedsOwnership('', '', ''));
+//
+//        //test with valid values for different module and action combination
+//        $this->assertFalse(ACLAction::userNeedsOwnership('1', 'Accounts', 'list'));
+//        $this->assertFalse(ACLAction::userNeedsOwnership('1', 'Accounts', 'delete'));
+//        $this->assertFalse(ACLAction::userNeedsOwnership('1', 'Users', 'delete'));
+//        $this->assertFalse(ACLAction::userNeedsOwnership('1', 'Users', 'list'));
     }
 
     public function testsetupCategoriesMatrix()
     {
+
         //preset required data
         $categories = array();
         $categories['Accounts']['module']['list'][] = 'list';

@@ -1,12 +1,10 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class ViewAjaxUITest extends SuitePHPUnitFrameworkTestCase
+class ViewAjaxUITest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function test__construct()
     {
-        // Execute the constructor and check for the Object type and type attribute
+        //execute the contructor and check for the Object type and type attribute
         $view = new ViewAjaxUI();
         $this->assertInstanceOf('ViewAjaxUI', $view);
         $this->assertInstanceOf('SugarView', $view);

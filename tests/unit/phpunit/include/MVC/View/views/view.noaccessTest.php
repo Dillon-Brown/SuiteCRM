@@ -1,12 +1,10 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class ViewNoaccessTest extends SuitePHPUnitFrameworkTestCase
+class ViewNoaccessTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function testdisplay()
     {
-        //execute the method and check for default attributes and check that it returns some html.
+        //executet the method and check for default attributes and check that it returns some html.
         $view = new ViewNoaccess();
 
         ob_start();

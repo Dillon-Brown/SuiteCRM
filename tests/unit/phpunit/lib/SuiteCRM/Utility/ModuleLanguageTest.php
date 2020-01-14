@@ -1,8 +1,7 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
 
-class ModuleLanguageTest extends SuitePHPUnitFrameworkTestCase
+class ModuleLanguageTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     /**
      * @var \UnitTester

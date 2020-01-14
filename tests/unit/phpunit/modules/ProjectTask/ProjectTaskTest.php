@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class ProjectTaskTest extends SuitePHPUnitFrameworkTestCase
+class ProjectTaskTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -36,7 +34,7 @@ class ProjectTaskTest extends SuitePHPUnitFrameworkTestCase
 
     public function testProjectTask()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $projectTask = new ProjectTask();
 
         $this->assertInstanceOf('ProjectTask', $projectTask);
@@ -67,6 +65,15 @@ class ProjectTaskTest extends SuitePHPUnitFrameworkTestCase
 
     public function testsave()
     {
+        // save state
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushTable('aod_indexevent');
+        $state->pushTable('project_task');
+        $state->pushTable('tracker');
+        $state->pushTable('aod_index');
+        $state->pushGlobals();
+
+        // test
         $projectTask = new ProjectTask();
 
         $projectTask->name = 'test';
@@ -88,6 +95,13 @@ class ProjectTaskTest extends SuitePHPUnitFrameworkTestCase
         $projectTask->mark_deleted($projectTask->id);
         $result = $projectTask->retrieve($projectTask->id);
         $this->assertEquals(null, $result);
+        
+        // clean up
+        $state->popGlobals();
+        $state->popTable('aod_index');
+        $state->popTable('tracker');
+        $state->popTable('project_task');
+        $state->popTable('aod_indexevent');
     }
 
     public function _get_depends_on_name($id)
@@ -105,7 +119,7 @@ class ProjectTaskTest extends SuitePHPUnitFrameworkTestCase
     {
         $projectTask = new ProjectTask();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $projectTask->updateParentProjectTaskPercentage();
             $this->assertTrue(true);
@@ -133,15 +147,22 @@ class ProjectTaskTest extends SuitePHPUnitFrameworkTestCase
 
     public function testupdateStatistic()
     {
+        $state = new SuiteCRM\StateSaver();
+        $state->pushGlobals();
+
+        // test
         $projectTask = new ProjectTask();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $projectTask->updateStatistic();
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
+        
+        // clean up
+        $state->popGlobals();
     }
 
     public function testfill_in_additional_detail_fields()
@@ -262,11 +283,19 @@ class ProjectTaskTest extends SuitePHPUnitFrameworkTestCase
 
     public function testlistviewACLHelper()
     {
+        // save state
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushGlobals();
+
+        // test
         $projectTask = new ProjectTask();
 
         $expected = array('MAIN' => 'a', 'PARENT' => 'a', 'PARENT_TASK' => 'a');
         $actual = $projectTask->listviewACLHelper();
         $this->assertSame($expected, $actual);
+        
+        // clean up
+        $state->popGlobals();
     }
 
     public function testgetUtilizationDropdown()

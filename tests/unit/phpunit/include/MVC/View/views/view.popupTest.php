@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class ViewPopupTest extends SuitePHPUnitFrameworkTestCase
+class ViewPopupTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +13,8 @@ class ViewPopupTest extends SuitePHPUnitFrameworkTestCase
 
     public function testViewPopup()
     {
-        // Execute the constructor and check for the Object type and type attribute
+
+        //execute the contructor and check for the Object type and type attribute
         $view = new ViewPopup();
         $this->assertInstanceOf('ViewPopup', $view);
         $this->assertInstanceOf('SugarView', $view);
@@ -40,6 +39,8 @@ class ViewPopupTest extends SuitePHPUnitFrameworkTestCase
         } catch (Exception $e) {
             self::assertTrue(true);
         }
+
+        // clean up
 
         if (isset($session)) {
             $_SESSION = $session;

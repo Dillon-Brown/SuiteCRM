@@ -1,23 +1,43 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
 require_once 'modules/iCals/iCal.php';
-class iCalTest extends SuitePHPUnitFrameworkTestCase
+class iCalTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function test__construct()
     {
         self::markTestIncomplete('environment dependency');
         
-        // Execute the constructor and check for the Object type and  attributes
+        // save state
+
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushTable('email_addresses');
+        $state->pushGlobals();
+        
+        // test
+        
+        //execute the contructor and check for the Object type and  attributes
         $ical = new iCal();
         $this->assertInstanceOf('iCal', $ical);
         $this->assertInstanceOf('vCal', $ical);
         $this->assertInstanceOf('SugarBean', $ical);
+        
+        // clean up
+        
+        $state->popGlobals();
+        $state->popTable('email_addresses');
     }
 
 //    public function testgetVcalIcal()
 //    {
+//	// save state
+//
+//        $state = new \SuiteCRM\StateSaver();
+//        $state->pushTable('email_addresses');
+//        $state->pushGlobals();
+//
+//	// test
+//
+//
 //        //error_reporting(E_ERROR | E_PARSE);
 //
 //        $ical = new iCal();
@@ -32,5 +52,10 @@ class iCalTest extends SuitePHPUnitFrameworkTestCase
 //        //match the leading and trailing string parts to verify it returns expected results
 //        $this->assertStringStartsWith($expectedStart, $actual);
 //        $this->assertStringEndsWith($expectedEnd, $actual);
+//
+//        // clean up
+//
+//        $state->popGlobals();
+//        $state->popTable('email_addresses');
 //    }
 }

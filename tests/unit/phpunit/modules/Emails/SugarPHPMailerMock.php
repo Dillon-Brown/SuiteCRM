@@ -51,6 +51,7 @@ require_once __DIR__ . '/../../../../../include/SugarPHPMailer.php';
  */
 class SugarPHPMailerMock extends SugarPHPMailer
 {
+    
     /**
      *
      * @return bool

@@ -42,7 +42,7 @@
 use SuiteCRM\JsonApiErrorObject;
 use SuiteCRM\LangException;
 use SuiteCRM\LangText;
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
+use SuiteCRM\StateCheckerPHPUnitTestCaseAbstract;
 
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
@@ -53,9 +53,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
  *
  * @author gyula
  */
-class JsonApiErrorObjectTest extends SuitePHPUnitFrameworkTestCase
+class JsonApiErrorObjectTest extends StateCheckerPHPUnitTestCaseAbstract
 {
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         if (!defined('sugarEntry')) {
@@ -79,7 +79,7 @@ class JsonApiErrorObjectTest extends SuitePHPUnitFrameworkTestCase
         include_once __DIR__ . '/../../../../include/LangException.php';
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         parent::tearDown();
     }

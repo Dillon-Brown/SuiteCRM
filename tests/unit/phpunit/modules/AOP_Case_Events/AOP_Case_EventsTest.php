@@ -1,12 +1,11 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class AOP_Case_EventsTest extends SuitePHPUnitFrameworkTestCase
+class AOP_Case_EventsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function testAOP_Case_Events()
     {
-        // Execute the constructor and check for the Object type and type attribute
+
+        //execute the contructor and check for the Object type and type attribute
         $aopCaseEvents = new AOP_Case_Events();
         $this->assertInstanceOf('AOP_Case_Events', $aopCaseEvents);
         $this->assertInstanceOf('Basic', $aopCaseEvents);

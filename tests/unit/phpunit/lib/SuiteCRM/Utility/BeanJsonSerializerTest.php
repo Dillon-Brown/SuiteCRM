@@ -39,9 +39,8 @@
 
 use SuiteCRM\Utility\BeanJsonSerializer;
 use SuiteCRM\Utility\BeanJsonSerializerTestData\BeanMock;
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
 
-class BeanJsonSerializerTest extends SuitePHPUnitFrameworkTestCase
+class BeanJsonSerializerTest extends \SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function testToArrayContact()
     {

@@ -40,20 +40,22 @@
 
 use SuiteCRM\ErrorMessage;
 use SuiteCRM\ErrorMessageException;
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
+use SuiteCRM\StateCheckerPHPUnitTestCaseAbstract;
 
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
+
+
 
 /**
  * ErrorMessageTest
  *
  * @author gyula
  */
-class ErrorMessageTest extends SuitePHPUnitFrameworkTestCase
+class ErrorMessageTest extends StateCheckerPHPUnitTestCaseAbstract
 {
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         if (!defined('sugarEntry')) {
@@ -77,7 +79,7 @@ class ErrorMessageTest extends SuitePHPUnitFrameworkTestCase
         include_once __DIR__ . '/../../../../include/LangException.php';
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         parent::tearDown();
     }

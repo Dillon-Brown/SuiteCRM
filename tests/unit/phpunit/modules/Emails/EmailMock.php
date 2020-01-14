@@ -49,6 +49,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 class EmailMock extends Email
 {
+    
     /**
      *
      * @param int $err
@@ -57,7 +58,7 @@ class EmailMock extends Email
     {
         return parent::setLastSaveAndStoreInSentError($err);
     }
-
+    
     /**
      * preps SMTP info for email transmission
      * @param object $mail SugarPHPMailer object

@@ -1,8 +1,7 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
 
-class CampaignLogTest extends SuitePHPUnitFrameworkTestCase
+class CampaignLogTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +14,8 @@ class CampaignLogTest extends SuitePHPUnitFrameworkTestCase
 
     public function testCampaignLog()
     {
-        // Execute the constructor and check for the Object type and  attributes
+
+        //execute the contructor and check for the Object type and  attributes
         $campaignLog = new CampaignLog();
         $this->assertInstanceOf('CampaignLog', $campaignLog);
         $this->assertInstanceOf('SugarBean', $campaignLog);

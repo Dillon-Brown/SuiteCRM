@@ -1,8 +1,7 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
 
-class ProspectTest extends SuitePHPUnitFrameworkTestCase
+class ProspectTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +14,8 @@ class ProspectTest extends SuitePHPUnitFrameworkTestCase
 
     public function testProspect()
     {
-        // Execute the constructor and check for the Object type and  attributes
+
+        //execute the contructor and check for the Object type and  attributes
         $prospect = new Prospect();
 
         $this->assertInstanceOf('Prospect', $prospect);
@@ -78,9 +78,11 @@ class ProspectTest extends SuitePHPUnitFrameworkTestCase
 
     public function testconverted_prospect()
     {
+        $state = new SuiteCRM\StateSaver();
+        
         $prospect = new Prospect();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             //$prospect->converted_prospect('1', '2', '3', '4');
             $this->assertTrue(true);
@@ -89,6 +91,8 @@ class ProspectTest extends SuitePHPUnitFrameworkTestCase
         }
 
         $this->markTestIncomplete('Multiple errors in query');
+        
+        // clean up
     }
 
     public function testbean_implements()

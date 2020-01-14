@@ -1,35 +1,43 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
 
-class SugarAutoLoaderTest extends SuitePHPUnitFrameworkTestCase
+class SugarAutoLoaderTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function testautoload()
     {
-        // Execute the method and test that it returns expected values
+        //execute the method and test if it returns expected values
 
-        // Test with an invalid class.
+        //test with a invalid class .
         $result = SugarAutoLoader::autoload('foo');
         $this->assertFalse($result);
 
-        // Test with a valid class out of autoload mappings.
+        //test with a valid class out of autoload mappings.
         $result = SugarAutoLoader::autoload('SugarArray');
         $this->assertFalse($result);
 
-        // Test with a valid class registered in autoload mappings.
+        //test with a valid class registered in autoload mappings
         $result = SugarAutoLoader::autoload('User');
         $this->assertTrue($result);
     }
 
     public function testloadAll()
     {
-        // Execute the method and check that it works and doesn't throw an exception.
-        // This method only includes file so there is no output to test.
+        $state = new SuiteCRM\StateSaver();
+        
+        
+        
+        
+        
+
+        //execute the method and check if it works and doesn't throws an exception
+        //this method only includes file so there is no output to test.
         try {
             SugarAutoLoader::loadAll();
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
+        
+        // clean up
     }
 }

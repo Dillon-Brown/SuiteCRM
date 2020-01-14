@@ -38,6 +38,7 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
+
 use Api\V8\Controller\LogoutController;
 
 $app->post('/test/entry', LogoutController::class);

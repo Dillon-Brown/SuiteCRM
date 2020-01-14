@@ -1,12 +1,10 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class FP_Event_LocationsTest extends SuitePHPUnitFrameworkTestCase
+class FP_Event_LocationsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function testFP_Event_Locations()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $fpEventLoc = new FP_Event_Locations();
         $this->assertInstanceOf('FP_Event_Locations', $fpEventLoc);
         $this->assertInstanceOf('Basic', $fpEventLoc);

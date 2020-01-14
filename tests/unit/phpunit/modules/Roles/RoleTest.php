@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class RoleTest extends SuitePHPUnitFrameworkTestCase
+class RoleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +13,7 @@ class RoleTest extends SuitePHPUnitFrameworkTestCase
 
     public function testRole()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $role = new Role();
 
         $this->assertInstanceOf('Role', $role);
@@ -90,7 +88,14 @@ class RoleTest extends SuitePHPUnitFrameworkTestCase
 
     public function testSet_user_relationshipAndCheck_user_role_count()
     {
+
+    // save state
+
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushTable('email_addresses');
+
         // test
+        
         $role = new Role();
 
         $role->id = 1;
@@ -113,6 +118,10 @@ class RoleTest extends SuitePHPUnitFrameworkTestCase
         //test clear_user_relationship method
         $this->clear_user_relationship($role->id, '1');
         $this->clear_user_relationship($role->id, '2');
+        
+        // clean up
+        
+        $state->popTable('email_addresses');
     }
 
     public function get_users($id)

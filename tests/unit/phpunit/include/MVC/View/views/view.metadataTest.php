@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class ViewMetadataTest extends SuitePHPUnitFrameworkTestCase
+class ViewMetadataTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function testdisplayCheckBoxes()
     {
@@ -85,7 +83,7 @@ class ViewMetadataTest extends SuitePHPUnitFrameworkTestCase
             $request = $_REQUEST;
         }
         
-
+        $state = new SuiteCRM\StateSaver();
         
         
         
@@ -107,7 +105,12 @@ class ViewMetadataTest extends SuitePHPUnitFrameworkTestCase
         $renderedContent = ob_get_contents();
         ob_end_clean();
         $this->assertGreaterThan(0, strlen($renderedContent));
-
+        
+        
+        // clean up
+        
+        
+        
         if (isset($request)) {
             $_REQUEST = $request;
         } else {
@@ -117,6 +120,7 @@ class ViewMetadataTest extends SuitePHPUnitFrameworkTestCase
 
     public function testgetModules()
     {
+
         //execute the method and test if it returns a array.
         $modules = VardefBrowser::getModules();
         $this->assertTrue(is_array($modules));
@@ -124,6 +128,7 @@ class ViewMetadataTest extends SuitePHPUnitFrameworkTestCase
 
     public function testfindFieldsWithAttributes()
     {
+
         //check with emptty attributes array
         $attributes = array();
         $fields1 = VardefBrowser::findFieldsWithAttributes($attributes);
@@ -147,6 +152,7 @@ class ViewMetadataTest extends SuitePHPUnitFrameworkTestCase
 
     public function testfindVardefs()
     {
+
         //check with empty modules array
         $modules = array();
         $defs1 = VardefBrowser::findVardefs($modules);
@@ -163,6 +169,7 @@ class ViewMetadataTest extends SuitePHPUnitFrameworkTestCase
 
     public function testfindFieldAttributes()
     {
+
         //check with emptty attributes array
         $attributes = array();
         $fields1 = VardefBrowser::findFieldAttributes();

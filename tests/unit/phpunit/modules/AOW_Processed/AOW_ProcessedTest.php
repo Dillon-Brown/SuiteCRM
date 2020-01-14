@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class AOW_ProcessedTest extends SuitePHPUnitFrameworkTestCase
+class AOW_ProcessedTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +13,7 @@ class AOW_ProcessedTest extends SuitePHPUnitFrameworkTestCase
 
     public function testAOW_Processed()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $aowProcessed = new AOW_Processed();
         $this->assertInstanceOf('AOW_Processed', $aowProcessed);
         $this->assertInstanceOf('Basic', $aowProcessed);

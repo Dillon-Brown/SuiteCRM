@@ -51,6 +51,7 @@ require_once __DIR__ . '/../../../../../modules/Emails/NonGmailSentFolderHandler
  */
 class NonGmailSentFolderHandlerMock extends NonGmailSentFolderHandler
 {
+    
     /**
      *
      * @param InboundEmail $ie
@@ -63,7 +64,7 @@ class NonGmailSentFolderHandlerMock extends NonGmailSentFolderHandler
         LoggerManager::getLogger()->debug('NonGmailSentFolderHandlerMock::connectToNonGmailServer() is called');
         return true; // emulate a success connection
     }
-
+    
     /**
      *
      * @param InboundEmail $ie
@@ -74,7 +75,7 @@ class NonGmailSentFolderHandlerMock extends NonGmailSentFolderHandler
     {
         return parent::getProblemOfStoringInNonGmailSentFolder($ie, $mail);
     }
-
+    
     /**
      *
      * @param InboundEmail $ie

@@ -1,10 +1,11 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
+
 /**
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2019 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2018 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -42,7 +43,7 @@ use SuiteCRM\Search\Index\Documentify\JsonSerializerDocumentifier;
 use SuiteCRM\Search\Index\Documentify\SearchDefsDocumentifier;
 use SuiteCRM\Search\SearchQuery;
 use SuiteCRM\Search\SearchWrapper;
-
+use SuiteCRM\StateSaver;
 
 /** @noinspection PhpIncludeInspection */
 require_once 'lib/Search/ElasticSearch/ElasticSearchEngine.php';
@@ -54,14 +55,19 @@ class ElasticSearchIntegrationTest extends SuiteCRM\Search\SearchTestAbstract
     private $indexer;
     /** @var ElasticSearchEngine */
     private $searchEngine;
+    /** @var StateSaver */
+    private $state;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         echo PHP_EOL;
 
         $this->indexer = new ElasticSearchIndexer();
         $this->searchEngine = new ElasticSearchEngine();
+        $this->state = new StateSaver();
+
+        $this->saveState();
 
         $GLOBALS['sugar_config']['search']['ElasticSearch']['enabled'] = true;
         $this->searchEngine->setIndex('test');
@@ -71,15 +77,37 @@ class ElasticSearchIntegrationTest extends SuiteCRM\Search\SearchTestAbstract
         $this->indexer->removeIndex();
     }
 
-    public function tearDown()
+    /**
+     * @throws \SuiteCRM\StateSaverException
+     */
+    private function saveState()
+    {
+        $this->state->pushTable('contacts');
+        $this->state->pushTable('aod_indexevent');
+        $this->state->pushTable('contacts_cstm');
+        $this->state->pushTable('sugarfeed');
+        $this->state->pushFile(self::LOCK_FILE);
+        $this->state->pushGlobals();
+    }
+
+    protected function tearDown()
     {
         $this->restore();
 
         parent::tearDown();
     }
 
+    /**
+     * @throws \SuiteCRM\StateSaverException
+     */
     private function restore()
     {
+        $this->state->popGlobals();
+        $this->state->popTable('contacts');
+        $this->state->popTable('aod_indexevent');
+        $this->state->popTable('contacts_cstm');
+        $this->state->popTable('sugarfeed');
+        $this->state->popFile(self::LOCK_FILE);
         $this->indexer->removeIndex('test');
     }
 

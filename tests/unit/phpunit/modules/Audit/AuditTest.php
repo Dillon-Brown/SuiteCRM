@@ -1,9 +1,7 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
 require_once 'modules/Audit/Audit.php';
-class AuditTest extends SuitePHPUnitFrameworkTestCase
+class AuditTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -16,7 +14,7 @@ class AuditTest extends SuitePHPUnitFrameworkTestCase
 
     public function testAudit()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $audit = new Audit();
         $this->assertInstanceOf('Audit', $audit);
         $this->assertInstanceOf('SugarBean', $audit);
@@ -38,9 +36,11 @@ class AuditTest extends SuitePHPUnitFrameworkTestCase
 
     public function testcreate_export_query()
     {
+        $state = new SuiteCRM\StateSaver();
+        
         $audit = new Audit();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $audit->create_export_query('', '');
             $this->assertTrue(true);
@@ -49,12 +49,16 @@ class AuditTest extends SuitePHPUnitFrameworkTestCase
         }
 
         $this->markTestIncomplete('method has no implementation');
+        
+        // clean up
     }
 
     public function testfill_in_additional_list_fields()
     {
+        $state = new SuiteCRM\StateSaver();
+        
         $audit = new Audit();
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $audit->fill_in_additional_list_fields();
             $this->assertTrue(true);
@@ -63,12 +67,16 @@ class AuditTest extends SuitePHPUnitFrameworkTestCase
         }
 
         $this->markTestIncomplete('method has no implementation');
+        
+        // clean up
     }
 
     public function testfill_in_additional_detail_fields()
     {
+        $state = new SuiteCRM\StateSaver();
+        
         $audit = new Audit();
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $audit->fill_in_additional_detail_fields();
             $this->assertTrue(true);
@@ -77,12 +85,16 @@ class AuditTest extends SuitePHPUnitFrameworkTestCase
         }
 
         $this->markTestIncomplete('method has no implementation');
+        
+        // clean up
     }
 
     public function testfill_in_additional_parent_fields()
     {
+        $state = new SuiteCRM\StateSaver();
+        
         $audit = new Audit();
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $audit->fill_in_additional_parent_fields();
             $this->assertTrue(true);
@@ -91,12 +103,16 @@ class AuditTest extends SuitePHPUnitFrameworkTestCase
         }
 
         $this->markTestIncomplete('method has no implementation');
+        
+        // clean up
     }
 
     public function testget_list_view_data()
     {
+        $state = new SuiteCRM\StateSaver();
+        
         $audit = new Audit();
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $audit->get_list_view_data();
             $this->assertTrue(true);
@@ -105,12 +121,16 @@ class AuditTest extends SuitePHPUnitFrameworkTestCase
         }
 
         $this->markTestIncomplete('method has no implementation');
+        
+        // clean up
     }
 
     public function testget_audit_link()
     {
+        $state = new SuiteCRM\StateSaver();
+        
         $audit = new Audit();
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $audit->get_audit_link();
             $this->assertTrue(true);
@@ -119,6 +139,8 @@ class AuditTest extends SuitePHPUnitFrameworkTestCase
         }
 
         $this->markTestIncomplete('method has no implementation');
+        
+        // clean up
     }
 
     public function testget_audit_list()

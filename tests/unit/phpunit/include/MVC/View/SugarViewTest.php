@@ -1,21 +1,169 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
+use SuiteCRM\StateCheckerPHPUnitTestCaseAbstract;
+use SuiteCRM\StateSaver;
 
-class SugarViewTest extends SuitePHPUnitFrameworkTestCase
+class SugarViewTest extends StateCheckerPHPUnitTestCaseAbstract
 {
-    public function setUp()
+    /**
+     *
+     * @var StateSaver
+     */
+    protected $state;
+  
+
+    protected function setUp()
     {
         parent::setUp();
+        
+        $this->state = new StateSaver();
+        $this->state->pushGlobals();
 
-        global $current_user;
-        get_sugar_config_defaults();
-        $current_user = new User();
+//        global $current_user;
+//        get_sugar_config_defaults();
+//        $current_user = new User();
+    }
+    
+    protected function tearDown()
+    {
+        $this->state->popGlobals();
+        
+        parent::tearDown();
+    }
+    
+    public function testDisplayJavascriptNotLoginHasDomJS()
+    {
+        $view = new SugarView();
+        $this->action = 'foo';
+        
+        try {
+            $view->addDomJS('bar', 'bazz');
+            $this->assertTrue(false);
+        } catch (InvalidArgumentException $e) {
+            $this->assertEquals(SugarView::ERR_NOT_ARRAY, $e->getCode());
+        }
+        
+        try {
+            $view->addDomJS(['bar'], 'bazz');
+            $this->assertTrue(false);
+        } catch (InvalidArgumentException $e) {
+            $this->assertEquals(SugarView::ERR_NOT_SUB_ARRAY, $e->getCode());
+        }
+        
+        $ret = $view->addDomJS([['bar']], 'bazz');
+        $this->assertEquals(SugarView::NO_ERROR, $ret);
+        
+        ob_start();
+        $view->renderJavascript();
+        $output = ob_get_clean();
+        $this->assertContains('SUGAR.append(SUGAR, { settings:{"bazz":["bar"]} } );', $output);
+    }
+    
+    public function testDisplayJavascriptNotLoginHasntDomJS()
+    {
+        $view = new SugarView();
+        $this->action = 'foo';
+        ob_start();
+        $view->renderJavascript();
+        $output = ob_get_clean();
+        $this->assertNotContains('SUGAR.append(SUGAR, { settings:', $output);
+    }
+    
+    public function testDisplayJavascriptLoginHasDomJS()
+    {
+        $view = new SugarView();
+        $this->action = 'login';
+        $ret = $view->addDomJS([['bar']], 'bazz');
+        $this->assertEquals(SugarView::NO_ERROR, $ret);
+        ob_start();
+        $view->renderJavascript();
+        $output = ob_get_clean();
+        $this->assertContains('SUGAR.append(SUGAR, { settings:{"bazz":["bar"]} } );', $output);
+    }
+    
+    public function testDisplayJavascriptLoginHasntDomJS()
+    {
+        $view = new SugarView();
+        $this->action = 'login';
+        ob_start();
+        $view->renderJavascript();
+        $output = ob_get_clean();
+        $this->assertNotContains('SUGAR.append(SUGAR, { settings:', $output);
+    }
+    
+    public function testGetDomJs()
+    {
+        $view = new SugarView();
+        $this->assertFalse($view->hasDomJS());
+        
+        try {
+            $view->addDomJS('123', 'foo');
+            $this->assertTrue(false);
+        } catch (InvalidArgumentException $e) {
+            $this->assertEquals(SugarView::ERR_NOT_ARRAY, $e->getCode());
+        }
+        
+        $ret1 = $view->addDomJS([['blahblah']], 'foo');
+        $this->assertEquals(SugarView::NO_ERROR, $ret1);
+        
+        $ret2 = $view->addDomJS([['123']], 'foo');
+        $this->assertEquals(SugarView::WARN_SCOPE_EXISTS, $ret2);
+        
+        $this->assertTrue($view->hasDomJS());
+        $domJs = $view->getDomJS();
+        $this->assertEquals('{"foo":["123"]}', $domJs);
+        
+        // testing for a deep array
+        try {
+            $view->addDomJS([['deeply', 123, ['more' => 'deep', 'array' => new stdClass()]], 'second'], 'deeply');
+            $this->assertTrue(false);
+        } catch (InvalidArgumentException $e) {
+            $this->assertEquals(SugarView::ERR_NOT_SUB_ARRAY, $e->getCode());
+        }
+        
+        $ret3 = $view->addDomJS([['deeply', 123, ['more' => 'deep', 'array' => new stdClass()]], ['second']], 'deeply');
+        $this->assertEquals(SugarView::NO_ERROR, $ret3);
+        
+        $domJs1 = $view->getDomJS();
+        $this->assertEquals('{"foo":["123"],"deeply":["deeply",123,{"more":"deep","array":{}},"second"]}', $domJs1);
+        
+        $_REQUEST['foo'] = 1;
+        $ret4 = $view->addDomJS([['a' => 'deeply', 'b' => 123, 'sec' => ['more' => 'deep', 'array' => new stdClass()]], ['sec' => ['foo' => 'second']]], 'deeply');
+        $this->assertEquals(SugarView::WARN_SCOPE_EXISTS, $ret4);
+        
+        $domJs2 = $view->getDomJS();
+        $this->assertEquals('{"foo":["123"],"deeply":{"a":"deeply","b":123,"sec":{"more":"deep","array":{},"foo":"second"}}}', $domJs2);
+    }
+    
+    public function testAddDomJsNoScope()
+    {
+        $view = new SugarView();
+        
+        try {
+            $view->addDomJS(null, null);
+            $this->acceptTrue(false, 'it should throws an exceptions as the scope parameter is empty');
+        } catch (InvalidArgumentException $e) {
+            $code = $e->getCode();
+            $this->assertEquals(SugarView::ERR_EMPTY_SCOPE, $code);
+        }
+        
+        try {
+            $view->addDomJS(null, '');
+            $this->acceptTrue(false, 'it should throws an exceptions as the scope parameter is empty');
+        } catch (InvalidArgumentException $e) {
+            $code = $e->getCode();
+            $this->assertEquals(SugarView::ERR_EMPTY_SCOPE, $code);
+        }
     }
 
     public function testinit()
     {
+        $state = new StateSaver();
+        
+        
+        
         //error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
         $SugarView = new SugarView();
 
         //execute the method and check if it works and doesn't throws an exception
@@ -30,6 +178,13 @@ class SugarViewTest extends SuitePHPUnitFrameworkTestCase
 
     public function testprocess()
     {
+        // save state
+
+        $state = new StateSaver();
+        $state->pushTable('tracker');
+        $state->pushGlobals();
+        $state->pushPHPConfigOptions();
+
         // test
         $SugarView = new SugarView();
         $SugarView->module = 'Users';
@@ -49,10 +204,21 @@ class SugarViewTest extends SuitePHPUnitFrameworkTestCase
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
+        
+        // clean up
+        $state->popPHPConfigOptions();
+        $state->popGlobals();
+        $state->popTable('tracker');
     }
 
     public function testdisplayErrors()
     {
+        $state = new StateSaver();
+        
+        
+        
+        
+        
         $SugarView = new SugarView();
 
         //execute the method and check if it works and doesn't throws an exception
@@ -68,6 +234,12 @@ class SugarViewTest extends SuitePHPUnitFrameworkTestCase
 
     public function testpreDisplay()
     {
+        $state = new StateSaver();
+        
+        
+        
+        
+        
         $SugarView = new SugarView();
 
         //execute the method and check if it works and doesn't throws an exception
@@ -82,6 +254,12 @@ class SugarViewTest extends SuitePHPUnitFrameworkTestCase
 
     public function testdisplay()
     {
+        $state = new StateSaver();
+        
+        
+        
+        
+        
         $SugarView = new SugarView();
 
         //execute the method and check if it works and doesn't throws an exception
@@ -96,6 +274,12 @@ class SugarViewTest extends SuitePHPUnitFrameworkTestCase
 
     public function testdisplayHeader()
     {
+        $state = new StateSaver();
+        
+        
+        
+        
+        
         $SugarView = new SugarView();
         $SugarView->module = 'Users';
         $GLOBALS['app'] = new SugarApplication();
@@ -118,6 +302,12 @@ class SugarViewTest extends SuitePHPUnitFrameworkTestCase
 
     public function testgetModuleMenuHTML()
     {
+        $state = new StateSaver();
+        
+        
+        
+        
+        
         $SugarView = new SugarView();
 
         //execute the method and check if it works and doesn't throws an exception
@@ -132,6 +322,12 @@ class SugarViewTest extends SuitePHPUnitFrameworkTestCase
 
     public function testincludeClassicFile()
     {
+        $state = new StateSaver();
+        
+        
+        
+        
+        
         $SugarView = new SugarView();
 
         //execute the method and check if it works and doesn't throws an exception
@@ -154,6 +350,11 @@ class SugarViewTest extends SuitePHPUnitFrameworkTestCase
 
     public function testdisplayFooter()
     {
+        $state = new StateSaver();
+        
+        
+        
+        
         $SugarView = new SugarView();
 
         //execute the method and check if it works and doesn't throws an exception
@@ -174,6 +375,12 @@ class SugarViewTest extends SuitePHPUnitFrameworkTestCase
 
     public function testrenderJavascript()
     {
+        $state = new StateSaver();
+        
+        
+        
+        
+        
         $SugarView = new SugarView();
 
         //execute the method and check if it works and doesn't throws an exception
@@ -194,6 +401,7 @@ class SugarViewTest extends SuitePHPUnitFrameworkTestCase
 
     public function testgetMenu()
     {
+
         ////error_reporting(E_ALL);
 
         $SugarView = new SugarView();

@@ -1,12 +1,12 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
 
-class ViewXMLTest extends SuitePHPUnitFrameworkTestCase
+class ViewXMLTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function testViewXML()
     {
-        // Execute the constructor and check for the Object type and type attribute
+
+        //execute the contructor and check for the Object type and type attribute
         $view = new ViewXML();
         $this->assertInstanceOf('ViewXML', $view);
         $this->assertInstanceOf('SugarView', $view);
@@ -15,6 +15,13 @@ class ViewXMLTest extends SuitePHPUnitFrameworkTestCase
 
     public function testdisplay()
     {
+        $state = new SuiteCRM\StateSaver();
+        
+        
+        
+        
+        
+
         //execute the method and check for rexcetions. it should return some html.
         $view = new ViewXML();
 
@@ -30,5 +37,7 @@ class ViewXMLTest extends SuitePHPUnitFrameworkTestCase
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
+        
+        // clean up
     }
 }

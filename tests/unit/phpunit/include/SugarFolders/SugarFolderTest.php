@@ -38,17 +38,48 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
+use SuiteCRM\StateSaver;
 
-class SugarFolderTest extends SuitePHPUnitFrameworkTestCase
+include_once __DIR__ . '/../../../../../modules/Users/User.php';
+include_once __DIR__ . '/../../../../../include/SugarFolders/SugarFolders.php';
+
+class SugarFolderTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected $folderId = null;
+    protected $state    = null;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
-        include_once __DIR__ . '/../../../../../modules/Users/User.php';
-        include_once __DIR__ . '/../../../../../include/SugarFolders/SugarFolders.php';
+        $this->pushState();
+    }
+    
+    protected function tearDown()
+    {
+        $this->popState();
+        parent::tearDown();
+    }
+
+    protected function pushState()
+    {
+        $this->state = new StateSaver();
+        $this->state->pushTable('folders');
+        $this->state->pushTable('folders_rel');
+        $this->state->pushTable('folders_subscriptions');
+        $this->state->pushTable('emails');
+        $this->state->pushTable('emails_text');
+        $this->state->pushTable('job_queue');
+    }
+
+    protected function popState()
+    {
+        $this->state->popTable('folders');
+        $this->state->popTable('folders_rel');
+        $this->state->popTable('folders_subscriptions');
+        $this->state->popTable('emails');
+        $this->state->popTable('emails_text');
+        $this->state->popTable('job_queue');
+        $this->state = null;
     }
 
     /**
@@ -108,6 +139,7 @@ class SugarFolderTest extends SuitePHPUnitFrameworkTestCase
 
         $this->assertEquals($sql, $expected);
     }
+
 
     public function testFolderSubscriptions()
     {

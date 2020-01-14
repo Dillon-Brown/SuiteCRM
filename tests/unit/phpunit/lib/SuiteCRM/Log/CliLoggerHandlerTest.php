@@ -41,14 +41,14 @@
 
 use Monolog\Logger;
 use SuiteCRM\Log\CliLoggerHandler;
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
+use SuiteCRM\StateCheckerPHPUnitTestCaseAbstract;
 
 /**
  * Class CliLoggerHandlerTest test for CliLoggerHandler.
  *
  * @see CliLoggerHandler
  */
-class CliLoggerHandlerTest extends SuitePHPUnitFrameworkTestCase
+class CliLoggerHandlerTest extends StateCheckerPHPUnitTestCaseAbstract
 {
     /** @var Logger */
     private $logger;

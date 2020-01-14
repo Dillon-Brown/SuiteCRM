@@ -1,9 +1,8 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
 use SuiteCRM\Utility\StringValidator;
 
-class StringValidatorTest extends SuitePHPUnitFrameworkTestCase
+class StringValidatorTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     /**
      * @var \UnitTester

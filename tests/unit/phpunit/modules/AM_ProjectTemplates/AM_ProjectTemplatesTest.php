@@ -1,12 +1,11 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
 
-class AM_ProjectTemplatesTest extends SuitePHPUnitFrameworkTestCase
+class AM_ProjectTemplatesTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function testAM_ProjectTemplates()
     {
-        // Execute the constructor and check for the Object type and type attribute
+        //execute the contructor and check for the Object type and type attribute
         $am_projectTemplate = new AM_ProjectTemplates();
         $this->assertInstanceOf('AM_ProjectTemplates', $am_projectTemplate);
         $this->assertInstanceOf('Basic', $am_projectTemplate);

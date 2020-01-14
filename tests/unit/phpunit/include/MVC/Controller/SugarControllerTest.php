@@ -1,20 +1,32 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
+use SuiteCRM\StateCheckerPHPUnitTestCaseAbstract;
+use SuiteCRM\StateSaver;
 use SuiteCRM\Test\TestLogger;
 
-class SugarControllerTest extends SuitePHPUnitFrameworkTestCase
+class SugarControllerTest extends StateCheckerPHPUnitTestCaseAbstract
 {
-    public function setUp()
+    /**
+     *
+     * @var StateSaver
+     */
+    protected $state;
+
+    protected function setUp()
     {
         parent::setUp();
 
-        global $current_user;
-        $current_user = new User();
-        get_sugar_config_defaults();
-        if (!isset($GLOBALS['app']) || !$GLOBALS['app']) {
-            $GLOBALS['app'] = new SugarApplication();
-        }
+        $this->state = new StateSaver();
+        $this->state->pushTable('user_preferences');
+        $this->state->pushTable('users');
+    }
+
+    protected function tearDown()
+    {
+        $this->state->popTable('users');
+        $this->state->popTable('user_preferences');
+
+        parent::tearDown();
     }
 
     public function testsetup()
@@ -63,6 +75,13 @@ class SugarControllerTest extends SuitePHPUnitFrameworkTestCase
 
     public function testexecute()
     {
+        // save state
+
+        $state = new StateSaver();
+        $state->pushTable('tracker');
+        $state->pushGlobals();
+        $state->pushPHPConfigOptions();
+
         // suppress output during the test
         $this->setOutputCallback(function () {});
 
@@ -86,10 +105,21 @@ class SugarControllerTest extends SuitePHPUnitFrameworkTestCase
 
         // exam log
         $this->assertTrue(true);
+        
+        // clean up
+        $state->popPHPConfigOptions();
+        $state->popGlobals();
+        $state->popTable('tracker');
     }
 
     public function testprocess()
     {
+        $state = new StateSaver();
+        
+        
+        
+        
+        
         $SugarController = new SugarController();
 
         //execute the method and check if it works and doesn't throws an exception
@@ -143,6 +173,12 @@ class SugarControllerTest extends SuitePHPUnitFrameworkTestCase
 
     public function testaction_save()
     {
+        $state = new StateSaver();
+        $state->pushTable('aod_index');
+        $state->pushTable('tracker');
+        $state->pushTable('users');
+        $state->pushTable('user_preferences');
+        
         if (isset($_SESSION)) {
             $session = $_SESSION;
         }
@@ -152,7 +188,8 @@ class SugarControllerTest extends SuitePHPUnitFrameworkTestCase
         $resource = DBManagerFactory::getInstance()->query($query);
         $row = $resource->fetch_assoc();
         $testUserDateModified = $row['date_modified'];
-
+        
+        
         $SugarController = new SugarController();
         $SugarController->setModule('Users');
         $SugarController->record = "1";
@@ -175,9 +212,14 @@ class SugarControllerTest extends SuitePHPUnitFrameworkTestCase
         } else {
             unset($_SESSION);
         }
-
+        
         $query = "UPDATE users SET date_modified = '$testUserDateModified' WHERE id = '$testUserId' LIMIT 1";
         DBManagerFactory::getInstance()->query($query);
+        
+        $state->popTable('user_preferences');
+        $state->popTable('users');
+        $state->popTable('tracker');
+        $state->popTable('aod_index');
     }
 
     public function testaction_spot()
@@ -205,6 +247,12 @@ class SugarControllerTest extends SuitePHPUnitFrameworkTestCase
 
     public function testcheckEntryPointRequiresAuth()
     {
+        // store state
+        
+        $state = new StateSaver();
+        $state->pushGlobals();
+        
+        // test
         $SugarController = new SugarController();
 
         // check with a invalid value
@@ -218,5 +266,8 @@ class SugarControllerTest extends SuitePHPUnitFrameworkTestCase
         // check with a valid False value
         $result = $SugarController->checkEntryPointRequiresAuth('GeneratePassword');
         $this->assertFalse($result);
+        
+        // clean up
+        $state->popGlobals();
     }
 }

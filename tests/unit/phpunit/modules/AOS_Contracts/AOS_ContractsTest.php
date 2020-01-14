@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class AOS_ContractsTest extends SuitePHPUnitFrameworkTestCase
+class AOS_ContractsTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +13,8 @@ class AOS_ContractsTest extends SuitePHPUnitFrameworkTestCase
 
     public function testAOS_Contracts()
     {
-        // Execute the constructor and check for the Object type and attributes
+
+        //execute the contructor and check for the Object type and attributes
         $aosContracts = new AOS_Contracts();
         $this->assertInstanceOf('AOS_Contracts', $aosContracts);
         $this->assertInstanceOf('Basic', $aosContracts);
@@ -33,6 +32,14 @@ class AOS_ContractsTest extends SuitePHPUnitFrameworkTestCase
 
     public function testsaveAndDelete()
     {
+        $state = new SuiteCRM\StateSaver();
+        
+        $state->pushTable('aod_indexevent');
+        $state->pushTable('aos_contracts');
+        $state->pushTable('tracker');
+        $state->pushTable('aod_index');
+        $state->pushGlobals();
+
         $aosContracts = new AOS_Contracts();
         $aosContracts->name = 'test';
 
@@ -46,10 +53,24 @@ class AOS_ContractsTest extends SuitePHPUnitFrameworkTestCase
         $aosContracts->mark_deleted($aosContracts->id);
         $result = $aosContracts->retrieve($aosContracts->id);
         $this->assertEquals(null, $result);
+        
+        // clean up
+        $state->popGlobals();
+        $state->popTable('aod_index');
+        $state->popTable('tracker');
+        $state->popTable('aos_contracts');
+        $state->popTable('aod_indexevent');
     }
 
     public function testCreateReminderAndCreateLinkAndDeleteCall()
     {
+        $state = new SuiteCRM\StateSaver();
+        $state->pushTable('aod_indexevent');
+        $state->pushTable('calls');
+        $state->pushTable('vcals');
+        $state->pushTable('tracker');
+        $state->pushGlobals();
+        
         $call = new call();
 
         $aosContracts = new AOS_Contracts();
@@ -75,5 +96,12 @@ class AOS_ContractsTest extends SuitePHPUnitFrameworkTestCase
         $aosContracts->deleteCall();
         $result = $call->retrieve($aosContracts->call_id);
         $this->assertEquals(null, $result);
+        
+        // clean up
+        $state->popGlobals();
+        $state->popTable('tracker');
+        $state->popTable('vcals');
+        $state->popTable('calls');
+        $state->popTable('aod_indexevent');
     }
 }

@@ -1,12 +1,10 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class ViewImportvcardTest extends SuitePHPUnitFrameworkTestCase
+class ViewImportvcardTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function test__construct()
     {
-        // Execute the constructor and check for the Object type and type attribute
+        //execute the contructor and check for the Object type and type attribute
         $view = new ViewImportvcard();
         $this->assertInstanceOf('ViewImportvcard', $view);
         $this->assertInstanceOf('SugarView', $view);

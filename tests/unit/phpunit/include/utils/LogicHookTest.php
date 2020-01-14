@@ -1,16 +1,20 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
 
-class LogicHookTest extends SuitePHPUnitFrameworkTestCase
+class LogicHookTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
-    public function setUp()
+    protected $stateSaver;
+
+    protected function setUp()
     {
         parent::setUp();
+        $this->stateSaver = new SuiteCRM\StateSaver();
+        $this->stateSaver->pushTable('email_addresses');
     }
     
-    public function tearDown()
+    protected function tearDown()
     {
+        $this->stateSaver->popTable('email_addresses');
         parent::tearDown();
     }
     
@@ -40,6 +44,7 @@ class LogicHookTest extends SuitePHPUnitFrameworkTestCase
         $this->assertInstanceOf('LogicHook', $result);
         $this->assertInstanceOf('User', $result->bean);
     }
+
 
     public function testgetHooksMap()
     {
@@ -462,6 +467,7 @@ class LogicHookTest extends SuitePHPUnitFrameworkTestCase
         }
     }
 
+
     public function testcall_custom_logic()
     {
         //execute the method and test if it doesn't throws an exception
@@ -475,6 +481,7 @@ class LogicHookTest extends SuitePHPUnitFrameworkTestCase
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
     }
+
 
     public function testprocess_hooks()
     {

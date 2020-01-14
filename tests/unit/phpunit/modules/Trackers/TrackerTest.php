@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class TrackerTest extends SuitePHPUnitFrameworkTestCase
+class TrackerTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -12,10 +10,10 @@ class TrackerTest extends SuitePHPUnitFrameworkTestCase
         get_sugar_config_defaults();
         $current_user = new User();
     }
-
+    
     public function testTracker()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $tracker = new Tracker();
 
         $this->assertInstanceOf('Tracker', $tracker);
@@ -34,19 +32,27 @@ class TrackerTest extends SuitePHPUnitFrameworkTestCase
 
     public function testget_recently_viewed()
     {
+        // save state
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushGlobals();
+
+        // test
         $tracker = new Tracker();
 
         $result = $tracker->get_recently_viewed(1);
 
         $this->assertInstanceOf('BreadCrumbStack', $_SESSION['breadCrumbs']);
         $this->assertTrue(is_array($result));
+        
+        // clean up
+        $state->popGlobals();
     }
 
     public function testmakeInvisibleForAll()
     {
         $tracker = new Tracker();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $tracker->makeInvisibleForAll(1);
             $this->assertTrue(true);
@@ -67,6 +73,10 @@ class TrackerTest extends SuitePHPUnitFrameworkTestCase
     public function testlogPage()
     {
         self::markTestIncomplete('Test parameters and local variables are not set');
+                
+        $state = new SuiteCRM\StateSaver();
+        
+        $state->pushGlobals();
 
         //test without setting headerDisplayed
         Tracker::logPage();
@@ -78,5 +88,8 @@ class TrackerTest extends SuitePHPUnitFrameworkTestCase
         $this->assertEquals(time(), $_SESSION['lpage']);
         
         //$this->assertEquals(time(), null);
+        
+        // clean up
+        $state->popGlobals();
     }
 }

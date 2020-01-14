@@ -1,12 +1,10 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class EmailTextTest extends SuitePHPUnitFrameworkTestCase
+class EmailTextTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function testEmailText()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $emailText = new EmailText();
 
         $this->assertInstanceOf('EmailText', $emailText);

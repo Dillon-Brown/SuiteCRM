@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class SugarModuleTest extends SuitePHPUnitFrameworkTestCase
+class SugarModuleTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function testconstructor()
     {

@@ -1,8 +1,6 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class vCalTest extends SuitePHPUnitFrameworkTestCase
+class vCalTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     protected function setUp()
     {
@@ -15,7 +13,7 @@ class vCalTest extends SuitePHPUnitFrameworkTestCase
 
     public function testvCal()
     {
-        // Execute the constructor and check for the Object type and  attributes
+        //execute the contructor and check for the Object type and  attributes
         $vcal = new vCal();
 
         $this->assertInstanceOf('vCal', $vcal);
@@ -44,9 +42,11 @@ class vCalTest extends SuitePHPUnitFrameworkTestCase
 
     public function testfill_in_additional_list_fields()
     {
+        $state = new SuiteCRM\StateSaver();
+        
         $vcal = new vCal();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $vcal->fill_in_additional_list_fields();
             $this->assertTrue(true);
@@ -55,13 +55,21 @@ class vCalTest extends SuitePHPUnitFrameworkTestCase
         }
 
         $this->markTestIncomplete('method has no implementation');
+        
+        // clean up
     }
 
     public function testfill_in_additional_detail_fields()
     {
+        $state = new SuiteCRM\StateSaver();
+        
+        
+        
+        
+        
         $vcal = new vCal();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $vcal->fill_in_additional_detail_fields();
             $this->assertTrue(true);
@@ -70,13 +78,21 @@ class vCalTest extends SuitePHPUnitFrameworkTestCase
         }
 
         $this->markTestIncomplete('method has no implementation');
+        
+        // clean up
     }
 
     public function testget_list_view_data()
     {
+        $state = new SuiteCRM\StateSaver();
+        
+        
+        
+        
+        
         $vcal = new vCal();
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $vcal->get_list_view_data();
             $this->assertTrue(true);
@@ -85,6 +101,8 @@ class vCalTest extends SuitePHPUnitFrameworkTestCase
         }
 
         $this->markTestIncomplete('method has no implementation');
+        
+        // clean up
     }
 
     public function testget_freebusy_lines_cache()
@@ -105,6 +123,11 @@ class vCalTest extends SuitePHPUnitFrameworkTestCase
 
     public function testcreate_sugar_freebusy()
     {
+        // save state
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushGlobals();
+
+        // test
         global $locale, $timedate;
 
         $vcal = new vCal();
@@ -116,10 +139,18 @@ class vCalTest extends SuitePHPUnitFrameworkTestCase
 
         $result = $vcal->create_sugar_freebusy($user_bean, $start_date_time, $end_date_time);
         $this->assertGreaterThanOrEqual(0, strlen($result));
+        
+        // clean up
+        $state->popGlobals();
     }
 
     public function testget_vcal_freebusy()
     {
+        // save state
+        $state = new \SuiteCRM\StateSaver();
+        $state->pushGlobals();
+
+        // test
         $vcal = new vCal();
         $user_focus = new User('1');
 
@@ -130,34 +161,64 @@ class vCalTest extends SuitePHPUnitFrameworkTestCase
 
         $this->assertStringStartsWith($expectedStart, $result);
         $this->assertStringEndsWith($expectedEnd, $result);
+
+        // clean up
+        $state->popGlobals();
     }
 
     public function testcache_sugar_vcal()
     {
+        $state = new SuiteCRM\StateSaver();
+        
+        $state->pushTable('tracker');
+        $state->pushTable('vcals');
+        $state->pushTable('aod_index');
+        $state->pushGlobals();
+
         $vcal = new vCal();
         $user_focus = new User('1');
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $vcal->cache_sugar_vcal($user_focus);
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
+        
+        // clean up
+        $state->popGlobals();
+        $state->popTable('aod_index');
+        $state->popTable('vcals');
+        $state->popTable('tracker');
     }
 
     public function testcache_sugar_vcal_freebusy()
     {
+        $state = new SuiteCRM\StateSaver();
+        
+        $state->pushTable('tracker');
+        $state->pushTable('vcals');
+        $state->pushGlobals();
+        
+        
+        
+        
         $vcal = new vCal();
         $user_focus = new User('1');
 
-        // Execute the method and test that it works and doesn't throw an exception.
+        //execute the method and test if it works and does not throws an exception.
         try {
             $vcal->cache_sugar_vcal_freebusy($user_focus);
             $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
         }
+        
+        // clean up
+        $state->popGlobals();
+        $state->popTable('vcals');
+        $state->popTable('tracker');
     }
 
     public function testfold_ical_lines()

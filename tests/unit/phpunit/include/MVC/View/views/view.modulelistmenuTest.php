@@ -1,12 +1,11 @@
 <?php
 
-use SuiteCRM\Test\SuitePHPUnitFrameworkTestCase;
-
-class ViewModulelistmenuTest extends SuitePHPUnitFrameworkTestCase
+class ViewModulelistmenuTest extends SuiteCRM\StateCheckerPHPUnitTestCaseAbstract
 {
     public function test__construct()
     {
-        // Execute the constructor and check for the Object type and options attribute
+
+        //execute the contructor and check for the Object type and options attribute
         $view = new ViewModulelistmenu();
 
         $this->assertInstanceOf('ViewModulelistmenu', $view);
@@ -19,7 +18,8 @@ class ViewModulelistmenuTest extends SuitePHPUnitFrameworkTestCase
         if (isset($_SESSION)) {
             $session = $_SESSION;
         }
-
+        
+        
         //execute the method with required child objects preset. it should return some html.
         $view = new ViewModulelistmenu();
         $view->ss = new Sugar_Smarty();
