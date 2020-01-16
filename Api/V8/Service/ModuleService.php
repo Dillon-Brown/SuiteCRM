@@ -85,12 +85,16 @@ class ModuleService
     /**
      * @param GetModulesParams $params
      * @param Request $request
-     * @return DocumentResponse
+     * @param int $row_offset starting position
+     *@return BeanListResponse
      * @throws AccessDeniedException
      */
+
     public function getRecords(GetModulesParams $params, Request $request)
     {
         global $db;
+        global $sugar_config;
+
         // this whole method should split into separated classes later
         $module = $params->getModuleName();
         $orderBy = $params->getSort();
@@ -124,58 +128,160 @@ class ModuleService
         if ((property_exists($bean, 'email1') && strpos($where, 'email1')) || (property_exists($bean,
                     'email2') && strpos($where, 'email2'))) {
 
-            $selectedFields = substr( strtolower($module), 0, 1).'.'. implode(','. substr( strtolower($module), 0, 1).'.' , $fields);
-            $selectedModule = strtolower($module).' ' . substr( strtolower($module), 0, 1);
+            $selectedFields = strtolower($module) . '.' . implode(',' . substr(strtolower($module), 0, 1) . '.', $fields);
+
+            $selectedModule = strtolower($module);
 
             $quotedModuleName = $db->quoted($module);
 
             $quotedEmailAddress = $db->quoted($_REQUEST['filter'] ['email1'] ['eq']);
 
-            $query = "SELECT {$selectedFields} FROM email_addresses ea join email_addr_bean_rel eabr on ea.id = eabr.email_address_id join {$selectedModule} on a.id = eabr.bean_id ";
-            $query .= " where email_address= {$quotedEmailAddress} ";
-            $query .= " and eabr.bean_module= {$quotedModuleName}";
 
 
-           $result = $db->query($query, true, "");
+            $query = "SELECT {$selectedFields} FROM email_addresses join email_addr_bean_rel on email_addresses.id = email_addr_bean_rel.email_address_id join {$selectedModule} on {$selectedModule}.id = email_addr_bean_rel.bean_id ";
+            //$query .= " where email_address= {$quotedEmailAddress} ";
+            $modifiedWhere = str_replace("accounts.email1", "email_addresses.email_address", $where);
+            $query .= "where $modifiedWhere" ;
 
-//           $data = $db->fetchByAssoc($result);
+            $query .= " and email_addr_bean_rel.bean_module= {$quotedModuleName} ";
 
-           while (($row = $db->fetchByAssoc($result))) {
-               $data[] = $row;
-           }
 
+            $max_per_page = -1;
+
+            if ($max_per_page == -1) {
+                $max_per_page = $sugar_config['list_max_entries_per_page'];
+            }
+
+            $order_by = new \SugarBean();
+            $orderBy = $order_by->process_order_by($orderBy);
+
+            $query .= " $orderBy ";
+
+            $show_deleted = 0;
+            $order_by = "";
+
+
+            $where_auto = '1=1';
+            if ($show_deleted == 0) {
+                $where_auto = "$db->table_name.deleted=0";
+            } elseif ($show_deleted == 1) {
+                $where_auto = "$db->table_name.deleted=1";
+            }
+
+
+            if ($where != "") {
+                $ret_array['where'] = " where ($where) AND $where_auto";
+            } else {
+                $ret_array['where'] = " where $where_auto";
+            }
+
+            //make call to process the order by clause
+            if (!empty($order_by)) {
+                $ret_array['order_by'] = " ORDER BY " . $order_by;
+            }
+
+            $query .= "$ret_array ";
+            $query .= "$where_auto ";
+
+
+
+            $toEnd = (string)$offset == 'end';
+////                $count_query = $db->query;
+                if (!empty($count_query) && (empty($limit) || $limit == -1)) {
+                    // We have a count query.  Run it and get the re
+                    if (!empty($limit)) {
+                        $limit = $sugar_config['list_max_entries_per_page'];
+                    }
+                    if ($toEnd) {
+                        $offset = (floor(($offset - 1) / $limit)) * $limit;
+                    }
 
             } else {
-           $beanListResponse = $this->beanManager->getList($module)
-               ->orderBy($orderBy)
-               ->where($where)
-               ->offset($offset)
-               ->limit($limit)
-               ->max($size)
-               ->deleted($deleted)
-               ->fields($this->beanManager->filterAcceptanceFields($bean, $fields))
-               ->fetch();
+                if ((empty($limit) || $limit == -1)) {
+                    $max_per_page = $limit;
+                    $limit = $max_per_page + 1;
+                    $max_per_page = $limit;
+                }
+            }
+
+            if (empty($offset)) {
+                $offset = 0;
+            }
+            if (!empty($limit) && $limit != -1 && $limit != -99) {
+
+            $result = $db->limitQuery($query, $offset, $limit, $max_per_page, true, "Error retrieving $db->object_name list:");
+
+            }else{
+            $result = $db->query($query, true, "");
+            }
+
+            while (($row = $db->fetchByAssoc($result))) {
+                $data[] = $row;
+            }
 
 
-           $beanArray = [];
-           foreach ($beanListResponse->getBeans() as $bean) {
-               $bean = $this->beanManager->getBeanSafe(
-                   $params->getModuleName(),
-                   $bean->id
-               );
-               $beanArray[] = $bean;
-           }
-           $data = [];
-           foreach ($beanArray as $bean) {
-               $dataResponse = $this->getDataResponse(
-                   $bean,
-                   $fields,
-                   $request->getUri()->getPath() . '/' . $bean->id
-               );
+            fetch();
+            return new BeanListResponse($db->get_list(
+                $this->orderBy,
+                $this->where,
+                $this->offset,
+                $this->limit,
+                $this->max,
+                $this->deleted,
+                $this->singleSelect,
+                $this->fields
+            ));
 
-               $data[] = $dataResponse;
-           }
-       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        } else {
+            $beanListResponse = $this->beanManager->getList($module)
+                ->orderBy($orderBy)
+                ->where($where)
+                ->offset($offset)
+                ->limit($limit)
+                ->max($size)
+                ->deleted($deleted)
+                ->fields($this->beanManager->filterAcceptanceFields($bean, $fields))
+                ->fetch();
+
+
+            $beanArray = [];
+            foreach ($beanListResponse->getBeans() as $bean) {
+                $bean = $this->beanManager->getBeanSafe(
+                    $params->getModuleName(),
+                    $bean->id
+                );
+                $beanArray[] = $bean;
+            }
+            $data = [];
+            foreach ($beanArray as $bean) {
+                $dataResponse = $this->getDataResponse(
+                    $bean,
+                    $fields,
+                    $request->getUri()->getPath() . '/' . $bean->id
+                );
+
+                $data[] = $dataResponse;
+            }
+        }
 
             $response = new DocumentResponse();
             $response->setData($data);
