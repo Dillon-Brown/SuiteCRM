@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bc3091e35567007a03a18efb925ff0f4",
+    "content-hash": "23f220cedd1a7af57ef4bee96ebed821",
     "packages": [
         {
             "name": "consolidation/annotated-command",
@@ -5374,7 +5374,6 @@
                 "selenium",
                 "webdriver"
             ],
-            "abandoned": "php-webdriver/webdriver",
             "time": "2019-06-13T08:02:18+00:00"
         },
         {
@@ -8024,10 +8023,10 @@
         "php": ">=5.6.0",
         "ext-curl": "*",
         "ext-gd": "*",
+        "ext-imap": "*",
         "ext-json": "*",
         "ext-openssl": "*",
-        "ext-zip": "*",
-        "ext-imap": "*"
+        "ext-zip": "*"
     },
     "platform-dev": [],
     "platform-overrides": {
