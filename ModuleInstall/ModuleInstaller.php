@@ -55,7 +55,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
  */
 
 
-
+require_once('include/entryPoint.php');
 require_once('include/utils/progress_bar_utils.php');
 
 require_once('ModuleInstall/ModuleScanner.php');
