@@ -129,9 +129,9 @@ function write_array_to_file($the_name, $the_array, $the_file, $mode="w", $heade
     return sugar_file_put_contents($the_file, $the_string, LOCK_EX) !== false;
 }
 
-function write_override_label_to_file($the_name, $the_array, $the_file, $mode = "w", $header = '')
+function write_override_label_to_file($the_name, $the_array, $the_file, $mode = 'w', $header = '')
 {
-    if (!empty($header) && ($mode != 'a' || !file_exists($the_file))) {
+    if (!empty($header) && ($mode !== 'a' || !file_exists($the_file))) {
         $the_string = $header;
     } else {
         $the_string = "<?php\n" .
@@ -139,7 +139,7 @@ function write_override_label_to_file($the_name, $the_array, $the_file, $mode = 
     }
 
     foreach ($the_array as $labelName => $labelValue) {
-        $the_string .= "$" . "{$the_name}['{$labelName}'] = '{$labelValue}';\n";
+        $the_string .= '$' . "{$the_name}['{$labelName}'] = '{$labelValue}';\n";
     }
 
     $result = sugar_file_put_contents($the_file, $the_string, LOCK_EX) !== false;
