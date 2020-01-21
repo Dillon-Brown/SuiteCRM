@@ -40,7 +40,7 @@
 
 namespace SuiteCRM\API\v8\Controller;
 
-use Interop\Container\Exception\ContainerException;
+use Psr\Container\ContainerExceptionInterface;
 use JsonSchema\Validator;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
