@@ -1,6 +1,7 @@
 <?php
 namespace Api\V8\Service;
 
+use Api\V8\BeanDecorator\BeanListResponse;
 use Api\V8\BeanDecorator\BeanManager;
 use Api\V8\JsonApi\Helper\AttributeObjectHelper;
 use Api\V8\JsonApi\Helper\PaginationObjectHelper;
@@ -49,7 +50,7 @@ class ModuleService
         AttributeObjectHelper $attributeHelper,
         RelationshipObjectHelper $relationshipHelper,
         PaginationObjectHelper $paginationHelper
-    ) {
+    ){
         $this->beanManager = $beanManager;
         $this->attributeHelper = $attributeHelper;
         $this->relationshipHelper = $relationshipHelper;
@@ -86,15 +87,12 @@ class ModuleService
      * @param GetModulesParams $params
      * @param Request $request
      * @param int $row_offset starting position
-     *@return BeanListResponse
+     * @return BeanListResponse
      * @throws AccessDeniedException
      */
-
     public function getRecords(GetModulesParams $params, Request $request)
     {
-        global $db;
-        global $sugar_config;
-
+        global $db, $sugar_config;
         // this whole method should split into separated classes later
         $module = $params->getModuleName();
         $orderBy = $params->getSort();
@@ -127,130 +125,53 @@ class ModuleService
         // Detect if bean has email field
         if ((property_exists($bean, 'email1') && strpos($where, 'email1')) || (property_exists($bean,
                     'email2') && strpos($where, 'email2'))) {
-
             $selectedFields = strtolower($module) . '.' . implode(',' . substr(strtolower($module), 0, 1) . '.', $fields);
-
             $selectedModule = strtolower($module);
 
-            $quotedModuleName = $db->quoted($module);
+            //Selects Module or COUNT(*) and will add one to the query.
+            $idSelect = "SELECT {$selectedModule}.id ";
+            $countSelect = 'SELECT COUNT(*) AS cnt ';
 
-            $quotedEmailAddress = $db->quoted($_REQUEST['filter'] ['email1'] ['eq']);
-
-
-
-            $query = "SELECT {$selectedFields} FROM email_addresses join email_addr_bean_rel on email_addresses.id = email_addr_bean_rel.email_address_id join {$selectedModule} on {$selectedModule}.id = email_addr_bean_rel.bean_id ";
-            //$query .= " where email_address= {$quotedEmailAddress} ";
+            //Email where clause
+            $fromQuery = "FROM email_addresses join email_addr_bean_rel on email_addresses.id = email_addr_bean_rel.email_address_id join {$selectedModule} on {$selectedModule}.id = email_addr_bean_rel.bean_id ";
             $modifiedWhere = str_replace("accounts.email1", "email_addresses.email_address", $where);
-            $query .= "where $modifiedWhere" ;
+            $where = "$modifiedWhere";
 
-            $query .= " and email_addr_bean_rel.bean_module= {$quotedModuleName} ";
-
-
-            $max_per_page = -1;
-
-            if ($max_per_page == -1) {
-                $max_per_page = $sugar_config['list_max_entries_per_page'];
+            //Sets and adds deleted to the query
+            if ($deleted == 0) {
+                $where_auto = "$bean->table_name.deleted=0";
+            } elseif ($deleted == 1) {
+                $where_auto = "$bean->table_name.deleted=1";
             }
-
-            $order_by = new \SugarBean();
-            $orderBy = $order_by->process_order_by($orderBy);
-
-            $query .= " $orderBy ";
-
-            $show_deleted = 0;
-            $order_by = "";
-
-
-            $where_auto = '1=1';
-            if ($show_deleted == 0) {
-                $where_auto = "$db->table_name.deleted=0";
-            } elseif ($show_deleted == 1) {
-                $where_auto = "$db->table_name.deleted=1";
-            }
-
-
             if ($where != "") {
-                $ret_array['where'] = " where ($where) AND $where_auto";
+                $where = " where ($where) AND $where_auto";
             } else {
-                $ret_array['where'] = " where $where_auto";
+                $where = " where $where_auto";
             }
 
-            //make call to process the order by clause
-            if (!empty($order_by)) {
-                $ret_array['order_by'] = " ORDER BY " . $order_by;
+            //Joins parts together to form query
+            $query = $idSelect . $fromQuery . $where;
+            $countQuery = $countSelect . $fromQuery . $where;
+            $realRowCount = (int)$db->fetchRow($db->query($countQuery, true, ""))["cnt"];;
+
+            //Sets orderby into the query
+            $order_by = $bean->process_order_by($orderBy);
+            if (!empty($orderBy)) {
+                $query .= ' ORDER BY ' . $order_by;
             }
 
-            $query .= "$ret_array ";
-            $query .= "$where_auto ";
+            $result = $bean->process_list_query($query, $offset, $limit, -1, $where);
+            $beanResult['row_count'] = $result['row_count'];
+            $beanList = [];
 
-
-
-            $toEnd = (string)$offset == 'end';
-////                $count_query = $db->query;
-                if (!empty($count_query) && (empty($limit) || $limit == -1)) {
-                    // We have a count query.  Run it and get the re
-                    if (!empty($limit)) {
-                        $limit = $sugar_config['list_max_entries_per_page'];
-                    }
-                    if ($toEnd) {
-                        $offset = (floor(($offset - 1) / $limit)) * $limit;
-                    }
-
-            } else {
-                if ((empty($limit) || $limit == -1)) {
-                    $max_per_page = $limit;
-                    $limit = $max_per_page + 1;
-                    $max_per_page = $limit;
-                }
+            foreach($result['list'] as $resultBean)
+            {
+                $queryModuleBean = \BeanFactory::newBean($module);
+                $queryModuleBean->id = $resultBean->id;
+                array_push($beanList, $queryModuleBean);
             }
-
-            if (empty($offset)) {
-                $offset = 0;
-            }
-            if (!empty($limit) && $limit != -1 && $limit != -99) {
-
-            $result = $db->limitQuery($query, $offset, $limit, $max_per_page, true, "Error retrieving $db->object_name list:");
-
-            }else{
-            $result = $db->query($query, true, "");
-            }
-
-            while (($row = $db->fetchByAssoc($result))) {
-                $data[] = $row;
-            }
-
-
-            fetch();
-            return new BeanListResponse($db->get_list(
-                $this->orderBy,
-                $this->where,
-                $this->offset,
-                $this->limit,
-                $this->max,
-                $this->deleted,
-                $this->singleSelect,
-                $this->fields
-            ));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            $beanResult['list'] = $beanList;
+            $beanListResponse = new BeanListResponse($beanResult);
         } else {
             $beanListResponse = $this->beanManager->getList($module)
                 ->orderBy($orderBy)
@@ -261,7 +182,7 @@ class ModuleService
                 ->deleted($deleted)
                 ->fields($this->beanManager->filterAcceptanceFields($bean, $fields))
                 ->fetch();
-
+        }
 
             $beanArray = [];
             foreach ($beanListResponse->getBeans() as $bean) {
@@ -280,25 +201,24 @@ class ModuleService
                 );
 
                 $data[] = $dataResponse;
-            }
         }
 
-            $response = new DocumentResponse();
-            $response->setData($data);
+        $response = new DocumentResponse();
+        $response->setData($data);
 
-            // pagination
-            if ($data && $limit !== BeanManager::DEFAULT_LIMIT) {
-                $totalPages = ceil($realRowCount / $size);
+        // pagination
+        if ($data && $limit !== BeanManager::DEFAULT_LIMIT) {
+            $totalPages = ceil($realRowCount / $size);
 
-                $paginationMeta = $this->paginationHelper->getPaginationMeta($totalPages, count($data));
-                $paginationLinks = $this->paginationHelper->getPaginationLinks($request, $totalPages, $number);
+            $paginationMeta = $this->paginationHelper->getPaginationMeta($totalPages, count($data));
+            $paginationLinks = $this->paginationHelper->getPaginationLinks($request, $totalPages, $number);
 
-                $response->setMeta($paginationMeta);
-                $response->setLinks($paginationLinks);
-            }
-
-            return $response;
+            $response->setMeta($paginationMeta);
+            $response->setLinks($paginationLinks);
         }
+
+        return $response;
+    }
 
     /**
      * @param CreateModuleParams $params
@@ -340,7 +260,6 @@ class ModuleService
         }
 
         $bean->save();
-        
         $bean->retrieve($bean->id);
 
         $dataResponse = $this->getDataResponse(
@@ -379,9 +298,8 @@ class ModuleService
         }
 
         $bean->save();
-        
-        $bean->retrieve($bean->id);
 
+        $bean->retrieve($bean->id);
 
         $dataResponse = $this->getDataResponse(
             $bean,
