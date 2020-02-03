@@ -46,13 +46,8 @@ function installSystemEmailTemplates()
     require_once __DIR__ . '/../../modules/EmailTemplates/EmailTemplate.php';
     global $sugar_config;
 
-    $templates = getSystemEmailTemplates();
-    foreach ($templates as $configKey => $templateData) {
-        if (
-            isset($sugar_config['system_email_templates'])
-            && isset($sugar_config['system_email_templates'][$configKey . "_id"])
-            && !empty($sugar_config['system_email_templates'][$configKey . "_id"])
-        ) {
+    foreach (getSystemEmailTemplates() as $configKey => $templateData) {
+        if (isset($sugar_config['system_email_templates']) && !empty($sugar_config['system_email_templates'][$configKey . '_id'])) {
             continue;
         }
 
@@ -82,13 +77,9 @@ function setSystemEmailTemplatesDefaultConfig()
 
 
     // set confirm_opt_in_template
-    if (
-        isset($sugar_config['system_email_templates'])
-        && isset($sugar_config['system_email_templates']['confirm_opt_in_template' . "_id"])
-        && isset($sugar_config['email_enable_confirm_opt_in'])
-    ) {
+    if (isset($sugar_config['system_email_templates']['confirm_opt_in_template' . '_id'], $sugar_config['email_enable_confirm_opt_in'])) {
         $sugar_config['email_confirm_opt_in_email_template_id'] =
-            $sugar_config['system_email_templates']['confirm_opt_in_template' . "_id"];
+            $sugar_config['system_email_templates']['confirm_opt_in_template' . '_id'];
     }
 
     ksort($sugar_config);
@@ -101,8 +92,8 @@ function setSystemEmailTemplatesDefaultConfig()
  */
 function getSystemEmailTemplates()
 {
-    $templates = array();
-    $templates['confirm_opt_in_template'] = array(
+    $templates = [];
+    $templates['confirm_opt_in_template'] = [
         'name' => 'Confirmed Opt In',
         'published' => 'off',
         'description' => 'Email template to send to a contact to confirm they have opted in.',
@@ -115,7 +106,7 @@ function getSystemEmailTemplates()
                 Please confirm that you have opted in by selecting the following link:
                 <a href="$sugarurl/index.php?entryPoint=ConfirmOptIn&from=$emailaddress_confirm_opt_in_token">Opt In</a>
              </p>'
-    );
+    ];
 
     return $templates;
 }

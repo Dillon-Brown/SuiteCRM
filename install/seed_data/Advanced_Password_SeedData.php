@@ -52,15 +52,11 @@ if (file_exists(__DIR__ . '/../language/' . $current_language . '.lang.php')) {
     require_once __DIR__ . '/../language/en_us.lang.php';
 }
 
-global $sugar_config;
-global $timedate;
+global $sugar_config, $timedate;
 
 
 //Sent when the admin generate a new password
-if (
-    !isset($sugar_config['passwordsetting']['generatepasswordtmpl'])
-    || empty($sugar_config['passwordsetting']['generatepasswordtmpl'])
-) {
+if (empty($sugar_config['passwordsetting']['generatepasswordtmpl'])) {
     $EmailTemp = BeanFactory::newBean('EmailTemplates');
     $EmailTemp->name = $mod_strings['advanced_password_new_account_email']['name'];
     $EmailTemp->description = $mod_strings['advanced_password_new_account_email']['description'];
@@ -76,11 +72,8 @@ if (
 }
 
 
-//User generate a link to set a new password
-if (
-    !isset($sugar_config['passwordsetting']['lostpasswordtmpl'])
-    || empty($sugar_config['passwordsetting']['lostpasswordtmpl'])
-) {
+// User generate a link to set a new password
+if (empty($sugar_config['passwordsetting']['lostpasswordtmpl'])) {
     $EmailTemp = BeanFactory::newBean('EmailTemplates');
     $EmailTemp->name = $mod_strings['advanced_password_forgot_password_email']['name'];
     $EmailTemp->description = $mod_strings['advanced_password_forgot_password_email']['description'];
@@ -96,11 +89,8 @@ if (
 }
 
 
-//Two Factor Authentication code template
-if (
-    !isset($sugar_config['passwordsetting']['factoremailtmpl'])
-    || empty($sugar_config['passwordsetting']['factoremailtmpl'])
-) {
+// Two Factor Authentication code template
+if (empty($sugar_config['passwordsetting']['factoremailtmpl'])) {
     $EmailTemp = BeanFactory::newBean('EmailTemplates');
     $EmailTemp->name = $mod_strings['two_factor_auth_email']['name'];
     $EmailTemp->description = $mod_strings['two_factor_auth_email']['description'];
@@ -135,4 +125,4 @@ if ($sugar_config['passwordsetting']['systexpirationtype'] === '0') {
     $sugar_config['passwordsetting']['systexpirationtype'] = 1;
 }
 
-write_array_to_file("sugar_config", $sugar_config, "config.php");
+write_array_to_file('sugar_config', $sugar_config, 'config.php');
