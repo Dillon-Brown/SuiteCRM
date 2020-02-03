@@ -254,7 +254,7 @@ function commitPatch($unlink = false, $type = 'patch')
     $errors = array();
     $files = array();
     global $current_user;
-    $current_user = BeanFactory::newBean('Users');
+    $current_user = new User();
     $current_user->is_admin = '1';
     $old_mod_strings = $mod_strings;
     if (is_dir($base_upgrade_dir)) {
@@ -324,7 +324,7 @@ function commitModules($unlink = false, $type = 'module')
     $errors = array();
     $files = array();
     global $current_user;
-    $current_user = BeanFactory::newBean('Users');
+    $current_user = new User();
     $current_user->is_admin = '1';
     $old_mod_strings = $mod_strings;
     if (is_dir(sugar_cached("upload/upgrades"))) {
@@ -1288,7 +1288,7 @@ function create_default_users()
     require_once('install/UserDemoData.php');
 
     //Create default admin user
-    $user = BeanFactory::newBean('Users');
+    $user = new User();
     $user->id = 1;
     $user->new_with_id = true;
     $user->last_name = 'Administrator';
@@ -1305,7 +1305,7 @@ function create_default_users()
 
 
     if ($create_default_user) {
-        $default_user = BeanFactory::newBean('Users');
+        $default_user = new User();
         $default_user->last_name = $sugar_config['default_user_name'];
         $default_user->user_name = $sugar_config['default_user_name'];
         $default_user->status = 'Active';
@@ -2181,7 +2181,7 @@ function post_install_modules()
 {
     if (is_file('modules_post_install.php')) {
         global $current_user, $mod_strings;
-        $current_user = BeanFactory::newBean('Users');
+        $current_user = new User();
         $current_user->is_admin = '1';
         require_once('ModuleInstall/PackageManager/PackageManager.php');
         require_once('modules_post_install.php');
@@ -2229,7 +2229,7 @@ function addDefaultRoles($defaultRoles = array())
 
     foreach ($defaultRoles as $roleName=>$role) {
         $ACLField = new ACLField();
-        $role1= BeanFactory::newBean('ACLRoles');
+        $role1= new ACLRole();
         $role1->name = $roleName;
         $role1->description = $roleName." Role";
         $role1_id=$role1->save();
@@ -2257,7 +2257,7 @@ function addDefaultRoles($defaultRoles = array())
  */
 function enableSugarFeeds()
 {
-    $admin = BeanFactory::newBean('Administration');
+    $admin = new Administration();
     $admin->saveSetting('sugarfeed', 'enabled', '1');
 
     foreach (SugarFeed::getAllFeedModules() as $module) {
