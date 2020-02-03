@@ -52,12 +52,16 @@ if (file_exists(__DIR__ . '/../language/' . $current_language . '.lang.php')) {
     require_once __DIR__ . '/../language/en_us.lang.php';
 }
 
-global $sugar_config, $timedate;
+global $sugar_config;
+global $timedate;
 
 
 //Sent when the admin generate a new password
-if (empty($sugar_config['passwordsetting']['generatepasswordtmpl'])) {
-    $EmailTemp = BeanFactory::newBean('EmailTemplates');
+if (
+    !isset($sugar_config['passwordsetting']['generatepasswordtmpl'])
+    || empty($sugar_config['passwordsetting']['generatepasswordtmpl'])
+) {
+    $EmailTemp = new EmailTemplate();
     $EmailTemp->name = $mod_strings['advanced_password_new_account_email']['name'];
     $EmailTemp->description = $mod_strings['advanced_password_new_account_email']['description'];
     $EmailTemp->subject = $mod_strings['advanced_password_new_account_email']['subject'];
@@ -72,9 +76,12 @@ if (empty($sugar_config['passwordsetting']['generatepasswordtmpl'])) {
 }
 
 
-// User generate a link to set a new password
-if (empty($sugar_config['passwordsetting']['lostpasswordtmpl'])) {
-    $EmailTemp = BeanFactory::newBean('EmailTemplates');
+//User generate a link to set a new password
+if (
+    !isset($sugar_config['passwordsetting']['lostpasswordtmpl'])
+    || empty($sugar_config['passwordsetting']['lostpasswordtmpl'])
+) {
+    $EmailTemp = new EmailTemplate();
     $EmailTemp->name = $mod_strings['advanced_password_forgot_password_email']['name'];
     $EmailTemp->description = $mod_strings['advanced_password_forgot_password_email']['description'];
     $EmailTemp->subject = $mod_strings['advanced_password_forgot_password_email']['subject'];
@@ -89,9 +96,12 @@ if (empty($sugar_config['passwordsetting']['lostpasswordtmpl'])) {
 }
 
 
-// Two Factor Authentication code template
-if (empty($sugar_config['passwordsetting']['factoremailtmpl'])) {
-    $EmailTemp = BeanFactory::newBean('EmailTemplates');
+//Two Factor Authentication code template
+if (
+    !isset($sugar_config['passwordsetting']['factoremailtmpl'])
+    || empty($sugar_config['passwordsetting']['factoremailtmpl'])
+) {
+    $EmailTemp = new EmailTemplate();
     $EmailTemp->name = $mod_strings['two_factor_auth_email']['name'];
     $EmailTemp->description = $mod_strings['two_factor_auth_email']['description'];
     $EmailTemp->subject = $mod_strings['two_factor_auth_email']['subject'];
@@ -125,4 +135,4 @@ if ($sugar_config['passwordsetting']['systexpirationtype'] === '0') {
     $sugar_config['passwordsetting']['systexpirationtype'] = 1;
 }
 
-write_array_to_file('sugar_config', $sugar_config, 'config.php');
+write_array_to_file("sugar_config", $sugar_config, "config.php");
