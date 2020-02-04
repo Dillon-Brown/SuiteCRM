@@ -87,12 +87,12 @@ class ModuleService
      * @param GetModulesParams $params
      * @param Request $request
      * @param int $row_offset starting position
-     * @return BeanListResponse
+     * @return DocumentResponse
      * @throws AccessDeniedException
      */
     public function getRecords(GetModulesParams $params, Request $request)
     {
-        global $db, $sugar_config;
+        global $db;
         // this whole method should split into separated classes later
         $module = $params->getModuleName();
         $orderBy = $params->getSort();
@@ -115,48 +115,52 @@ class ModuleService
         $realRowCount = $this->beanManager->countRecords($module, $where);
         $limit = $size === BeanManager::DEFAULT_ALL_RECORDS ? BeanManager::DEFAULT_LIMIT : $size;
         $deleted = $params->getDeleted();
-        $data = [];
 
         if (empty($fields)) {
             $fields = $this->beanManager->getDefaultFields($bean);
         }
 
-
         // Detect if bean has email field
-        if ((property_exists($bean, 'email1') && strpos($where, 'email1')) || (property_exists($bean,
+        if ((property_exists($bean, 'email1') && strpos($where, 'email1' !== false)) || (property_exists($bean,
                     'email2') && strpos($where, 'email2'))) {
-            $selectedFields = strtolower($module) . '.' . implode(',' . substr(strtolower($module), 0, 1) . '.', $fields);
+            $selectedFields = strtolower($module) . '.' . implode(',' . strtolower($module[0]) . '.', $fields);
             $selectedModule = strtolower($module);
 
-            //Selects Module or COUNT(*) and will add one to the query.
-            $idSelect = "SELECT {$selectedModule}.id ";
+            // Selects Module or COUNT(*) and will add one to the query.
+            $idSelect = 'SELECT {$selectedModule}.id ';
             $countSelect = 'SELECT COUNT(*) AS cnt ';
 
-            //Email where clause
-            $fromQuery = "FROM email_addresses join email_addr_bean_rel on email_addresses.id = email_addr_bean_rel.email_address_id join {$selectedModule} on {$selectedModule}.id = email_addr_bean_rel.bean_id ";
-            $modifiedWhere = str_replace("accounts.email1", "email_addresses.email_address", $where);
-            $where = "$modifiedWhere";
+            $quotedCountSelect = $db->quote($countSelect);
 
-            //Sets and adds deleted to the query
-            if ($deleted == 0) {
-                $where_auto = "$bean->table_name.deleted=0";
+            // Email where clause
+            $fromQuery = 'FROM email_addresses join email_addr_bean_rel on email_addresses.id = email_addr_bean_rel.email_address_id join {$selectedModule} on {$selectedModule}.id = email_addr_bean_rel.bean_id ';
+            $modifiedWhere = str_replace('accounts.email1', 'email_addresses.email_address', $where);
+            $where = (string)$modifiedWhere;
+
+            /** @noinspection TypeUnsafeComparisonInspection */
+            // Sets and adds deleted to the query
+            if ($deleted == 0)
+            {
+                $whereAuto = '$bean->table_name.deleted=0';
             } elseif ($deleted == 1) {
-                $where_auto = "$bean->table_name.deleted=1";
+                $whereAuto = '$bean->table_name.deleted=1';
             }
-            if ($where != "") {
-                $where = " where ($where) AND $where_auto";
+            if ($where != "")
+            {
+                $where = " where ($where) AND $whereAuto";
             } else {
-                $where = " where $where_auto";
+                $where = " where $whereAuto";
             }
 
-            //Joins parts together to form query
+            // Joins parts together to form query
             $query = $idSelect . $fromQuery . $where;
-            $countQuery = $countSelect . $fromQuery . $where;
-            $realRowCount = (int)$db->fetchRow($db->query($countQuery, true, ""))["cnt"];;
+            $countQuery = $quotedCountSelect . $fromQuery . $where;
+            $realRowCount = (int)$db->fetchRow($db->query($countQuery, true, ''))['cnt'];
 
-            //Sets orderby into the query
+            // Sets orderby into the query
             $order_by = $bean->process_order_by($orderBy);
-            if (!empty($orderBy)) {
+            if (!empty($orderBy))
+            {
                 $query .= ' ORDER BY ' . $order_by;
             }
 
@@ -168,7 +172,7 @@ class ModuleService
             {
                 $queryModuleBean = \BeanFactory::newBean($module);
                 $queryModuleBean->id = $resultBean->id;
-                array_push($beanList, $queryModuleBean);
+                $beanList[] = $queryModuleBean;
             }
             $beanResult['list'] = $beanList;
             $beanListResponse = new BeanListResponse($beanResult);
@@ -185,7 +189,8 @@ class ModuleService
         }
 
             $beanArray = [];
-            foreach ($beanListResponse->getBeans() as $bean) {
+            foreach ($beanListResponse->getBeans() as $bean)
+            {
                 $bean = $this->beanManager->getBeanSafe(
                     $params->getModuleName(),
                     $bean->id
@@ -193,13 +198,13 @@ class ModuleService
                 $beanArray[] = $bean;
             }
             $data = [];
-            foreach ($beanArray as $bean) {
+            foreach ($beanArray as $bean)
+            {
                 $dataResponse = $this->getDataResponse(
                     $bean,
                     $fields,
                     $request->getUri()->getPath() . '/' . $bean->id
                 );
-
                 $data[] = $dataResponse;
         }
 
@@ -207,7 +212,8 @@ class ModuleService
         $response->setData($data);
 
         // pagination
-        if ($data && $limit !== BeanManager::DEFAULT_LIMIT) {
+        if ($data && $limit !== BeanManager::DEFAULT_LIMIT)
+        {
             $totalPages = ceil($realRowCount / $size);
 
             $paginationMeta = $this->paginationHelper->getPaginationMeta($totalPages, count($data));
