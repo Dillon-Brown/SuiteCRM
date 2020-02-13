@@ -41,17 +41,17 @@ class ModuleService
     protected $paginationHelper;
 
     /**
-     * @param BeanManager $beanManager
-     * @param AttributeObjectHelper $attributeHelper
+     * @param BeanManager              $beanManager
+     * @param AttributeObjectHelper    $attributeHelper
      * @param RelationshipObjectHelper $relationshipHelper
-     * @param PaginationObjectHelper $paginationHelper
+     * @param PaginationObjectHelper   $paginationHelper
      */
     public function __construct(
         BeanManager $beanManager,
         AttributeObjectHelper $attributeHelper,
         RelationshipObjectHelper $relationshipHelper,
         PaginationObjectHelper $paginationHelper
-    ){
+    ) {
         $this->beanManager = $beanManager;
         $this->attributeHelper = $attributeHelper;
         $this->relationshipHelper = $relationshipHelper;
@@ -60,7 +60,8 @@ class ModuleService
 
     /**
      * @param GetModuleParams $params
-     * @param $path
+     * @param                 $path
+     *
      * @return DocumentResponse
      * @throws AccessDeniedException
      */
@@ -86,8 +87,9 @@ class ModuleService
 
     /**
      * @param GetModulesParams $params
-     * @param Request $request
-     * @param int $row_offset starting position
+     * @param Request          $request
+     * @param int              $row_offset starting position
+     *
      * @return DocumentResponse
      * @throws AccessDeniedException
      */
@@ -114,7 +116,8 @@ class ModuleService
         // negative numbers are validated in params
         $offset = $number !== 0 ? ($number - 1) * $size : $number;
         $realRowCount = $this->beanManager->countRecords($module, $where);
-        $limit = $size === BeanManager::DEFAULT_ALL_RECORDS ? BeanManager::DEFAULT_LIMIT : $size;
+        $limit = $size === BeanManager::DEFAULT_ALL_RECORDS
+            ? BeanManager::DEFAULT_LIMIT : $size;
         $deleted = $params->getDeleted();
 
         if (empty($fields)) {
@@ -122,9 +125,14 @@ class ModuleService
         }
 
         // Detect if bean has email field
-        if ((property_exists($bean, 'email1') && strpos($where, 'email1' !== false)) || (property_exists($bean,
-                    'email2') && strpos($where, 'email2'))) {
-            $selectedFields = strtolower($module) . '.' . implode(',' . strtolower($module[0]) . '.', $fields);
+        if ((property_exists($bean, 'email1')
+                && strpos($where, 'email1') !== false)
+            || (property_exists($bean,
+                    'email2')
+                && strpos($where, 'email2') !== false)
+        ) {
+            $selectedFields = strtolower($module) . '.' . implode(','
+                    . strtolower($module[0]) . '.', $fields);
             $selectedModule = strtolower($module);
 
             // Selects Module or COUNT(*) and will add one to the query.
@@ -134,43 +142,43 @@ class ModuleService
             $quotedCountSelect = $db->quote($countSelect);
 
             // Email where clause
-            $fromQuery = 'FROM email_addresses join email_addr_bean_rel on email_addresses.id = email_addr_bean_rel.email_address_id join {$selectedModule} on {$selectedModule}.id = email_addr_bean_rel.bean_id ';
-            $modifiedWhere = str_replace('accounts.email1', 'email_addresses.email_address', $where);
+            $fromQuery
+                = 'FROM email_addresses join email_addr_bean_rel on email_addresses.id = email_addr_bean_rel.email_address_id join {$selectedModule} on {$selectedModule}.id = email_addr_bean_rel.bean_id ';
+            $modifiedWhere = str_replace('accounts.email1',
+                'email_addresses.email_address', $where);
             $where = (string)$modifiedWhere;
 
             /** @noinspection TypeUnsafeComparisonInspection */
             // Sets and adds deleted to the query
-            if ($deleted == 0)
-            {
+            if ($deleted == 0) {
                 $whereAuto = '$bean->table_name.deleted=0';
             } elseif ($deleted == 1) {
                 $whereAuto = '$bean->table_name.deleted=1';
             }
-            if ($where != "")
-            {
-                $where = " where ($where) AND $whereAuto";
+            if ($where != '') {
+                $where = ' where ($where) AND $whereAuto';
             } else {
-                $where = " where $whereAuto";
+                $where = ' where $whereAuto';
             }
 
             // Joins parts together to form query
             $query = $idSelect . $fromQuery . $where;
             $countQuery = $quotedCountSelect . $fromQuery . $where;
-            $realRowCount = (int)$db->fetchRow($db->query($countQuery, true, ''))['cnt'];
+            $realRowCount = (int)$db->fetchRow($db->query($countQuery, true,
+                ''))['cnt'];
 
             // Sets orderby into the query
             $order_by = $bean->process_order_by($orderBy);
-            if (!empty($orderBy))
-            {
+            if (!empty($orderBy)) {
                 $query .= ' ORDER BY ' . $order_by;
             }
 
-            $result = $bean->process_list_query($query, $offset, $limit, -1, $where);
+            $result = $bean->process_list_query($query, $offset, $limit, -1,
+                $where);
             $beanResult['row_count'] = $result['row_count'];
             $beanList = [];
 
-            foreach($result['list'] as $resultBean)
-            {
+            foreach ($result['list'] as $resultBean) {
                 $queryModuleBean = \BeanFactory::newBean($module);
                 $queryModuleBean->id = $resultBean->id;
                 $beanList[] = $queryModuleBean;
@@ -185,40 +193,42 @@ class ModuleService
                 ->limit($limit)
                 ->max($size)
                 ->deleted($deleted)
-                ->fields($this->beanManager->filterAcceptanceFields($bean, $fields))
+                ->fields($this->beanManager->filterAcceptanceFields($bean,
+                    $fields))
                 ->fetch();
         }
 
-            $beanArray = [];
-            foreach ($beanListResponse->getBeans() as $bean)
-            {
-                $bean = $this->beanManager->getBeanSafe(
-                    $params->getModuleName(),
-                    $bean->id
-                );
-                $beanArray[] = $bean;
-            }
-            $data = [];
-            foreach ($beanArray as $bean)
-            {
-                $dataResponse = $this->getDataResponse(
-                    $bean,
-                    $fields,
-                    $request->getUri()->getPath() . '/' . $bean->id
-                );
-                $data[] = $dataResponse;
+        $beanArray = [];
+        foreach ($beanListResponse->getBeans() as $bean) {
+            $bean = $this->beanManager->getBeanSafe(
+                $params->getModuleName(),
+                $bean->id
+            );
+            $beanArray[] = $bean;
+        }
+        $data = [];
+        foreach ($beanArray as $bean) {
+            $dataResponse = $this->getDataResponse(
+                $bean,
+                $fields,
+                $request->getUri()->getPath() . '/' . $bean->id
+            );
+            $data[] = $dataResponse;
         }
 
         $response = new DocumentResponse();
         $response->setData($data);
 
         // pagination
-        if ($data && $limit !== BeanManager::DEFAULT_LIMIT)
-        {
+        if ($data && $limit !== BeanManager::DEFAULT_LIMIT) {
             $totalPages = ceil($realRowCount / $size);
 
-            $paginationMeta = $this->paginationHelper->getPaginationMeta($totalPages, count($data));
-            $paginationLinks = $this->paginationHelper->getPaginationLinks($request, $totalPages, $number);
+            $paginationMeta
+                = $this->paginationHelper->getPaginationMeta($totalPages,
+                count($data));
+            $paginationLinks
+                = $this->paginationHelper->getPaginationLinks($request,
+                $totalPages, $number);
 
             $response->setMeta($paginationMeta);
             $response->setLinks($paginationLinks);
@@ -229,7 +239,7 @@ class ModuleService
 
     /**
      * @param CreateModuleParams $params
-     * @param Request $request
+     * @param Request            $request
      *
      * @return DocumentResponse
      * @throws \InvalidArgumentException When bean is already exist.
@@ -241,7 +251,10 @@ class ModuleService
         $id = $params->getData()->getId();
         $attributes = $params->getData()->getAttributes();
 
-        if ($id !== null && $this->beanManager->getBean($module, $id, [], false) instanceof \SugarBean) {
+        if ($id !== null
+            && $this->beanManager->getBean($module, $id, [], false) instanceof
+            \SugarBean
+        ) {
             throw new \InvalidArgumentException(sprintf(
                 'Bean %s with id %s is already exist',
                 $module,
@@ -264,11 +277,11 @@ class ModuleService
         $fileUpload = $this->processAttributes($bean, $attributes);
 
         $bean->save();
-      
+
         if ($fileUpload) {
             $this->addFileToNote($bean->id, $attributes);
         }
-      
+
         $bean->retrieve($bean->id);
 
         $dataResponse = $this->getDataResponse(
@@ -286,6 +299,7 @@ class ModuleService
     /**
      * @param $beanId
      * @param $attributes
+     *
      * @throws \Exception
      */
     private function addFileToNote($beanId, $attributes)
@@ -301,8 +315,10 @@ class ModuleService
             $extPos = strrpos($attributes['filename'], '.');
             $fileExtension = substr($attributes['filename'], $extPos + 1);
 
-            if ($extPos === false || empty($fileExtension) || in_array($fileExtension, $sugar_config['upload_badext'],
-                    true)) {
+            if ($extPos === false || empty($fileExtension)
+                || in_array($fileExtension, $sugar_config['upload_badext'],
+                    true)
+            ) {
                 throw new \Exception('File upload failed: File extension is not included or is not valid.');
             }
 
@@ -329,7 +345,8 @@ class ModuleService
 
     /**
      * @param UpdateModuleParams $params
-     * @param Request $request
+     * @param Request            $request
+     *
      * @return DocumentResponse
      * @throws AccessDeniedException
      */
@@ -369,6 +386,7 @@ class ModuleService
     /**
      * @param $bean
      * @param $attributes
+     *
      * @return bool
      */
     protected function processAttributes(&$bean, $attributes)
@@ -392,18 +410,23 @@ class ModuleService
 
     /**
      * @param \SugarBean $bean
-     * @param array $attributes
+     * @param array      $attributes
      */
-    protected function setRecordUpdateParams(\SugarBean $bean, array $attributes)
-    {
-        $bean->set_created_by = !(isset($attributes['created_by']) || isset($attributes['created_by_name']));
-        $bean->update_modified_by = !(isset($attributes['modified_user_id']) || isset($attributes['modified_by_name']));
+    protected function setRecordUpdateParams(
+        \SugarBean $bean,
+        array $attributes
+    ) {
+        $bean->set_created_by = !(isset($attributes['created_by'])
+            || isset($attributes['created_by_name']));
+        $bean->update_modified_by = !(isset($attributes['modified_user_id'])
+            || isset($attributes['modified_by_name']));
         $bean->update_date_entered = isset($attributes['date_entered']);
         $bean->update_date_modified = !isset($attributes['date_modified']);
     }
 
     /**
      * @param DeleteModuleParams $params
+     *
      * @return DocumentResponse
      * @throws AccessDeniedException
      */
@@ -422,25 +445,32 @@ class ModuleService
 
         $response = new DocumentResponse();
         $response->setMeta(
-            new MetaResponse(['message' => sprintf('Record with id %s is deleted', $bean->id)])
+            new MetaResponse([
+                'message' => sprintf('Record with id %s is deleted', $bean->id)
+            ])
         );
 
         return $response;
     }
 
     /**
-     * @param \SugarBean $bean
-     * @param array|null $fields
+     * @param \SugarBean  $bean
+     * @param array|null  $fields
      * @param string|null $path
      *
      * @return DataResponse
      */
-    public function getDataResponse(\SugarBean $bean, $fields = null, $path = null)
-    {
+    public function getDataResponse(
+        \SugarBean $bean,
+        $fields = null,
+        $path = null
+    ) {
         // this will be split into separated classed later
         $dataResponse = new DataResponse($bean->getObjectName(), $bean->id);
-        $dataResponse->setAttributes($this->attributeHelper->getAttributes($bean, $fields));
-        $dataResponse->setRelationships($this->relationshipHelper->getRelationships($bean, $path));
+        $dataResponse->setAttributes($this->attributeHelper->getAttributes($bean,
+            $fields));
+        $dataResponse->setRelationships($this->relationshipHelper->getRelationships($bean,
+            $path));
 
         return $dataResponse;
     }
