@@ -48,14 +48,7 @@ class SuiteValidator
      */
     public function isValidId($id)
     {
-        global $sugar_config;
-
-        if (isset($sugar_config['strict_id_validation']) && $sugar_config['strict_id_validation'] === true) {
-            $valid = is_numeric($id) || (is_string($id) && preg_match('/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/i',
-                        $id));
-        } else {
-            $valid = is_numeric($id) || (is_string($id) && preg_match('/^[a-zA-Z0-9_-]*$/i', $id));
-        }
+        $valid = is_numeric($id) || (is_string($id) && preg_match('/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/i', $id));
 
         return $valid;
     }
