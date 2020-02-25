@@ -34,8 +34,8 @@ class GetRecordsCest
         $I->seeResponseContainsJson(
             [
                 'name' => [
-                    'type' => 'name',
-                    "dbType" => "varchar",
+                    'type' => 'fields',
+                    'data' => 'name',
                 ],
             ]
         );
