@@ -69,6 +69,7 @@ class SugarBeanTest extends SuitePHPUnitFrameworkTestCase
 
         // test dup3
         include_once __DIR__ . '/../../../../modules/AM_ProjectTemplates/AM_ProjectTemplates_sugar.php';
+        $GLOBALS['reload_vardefs'] = true;
         $bean = new AM_ProjectTemplates_sugar();
         self::assertInstanceOf(DBManager::class, $bean->db);
         self::assertEquals('AM_ProjectTemplates', $bean->module_name);
@@ -141,7 +142,7 @@ class SugarBeanTest extends SuitePHPUnitFrameworkTestCase
 
 
         // test
-
+        $GLOBALS['reload_vardefs'] = false;
         $GLOBALS['log']->reset();
         $bean = BeanFactory::getBean('Users');
         self::assertInstanceOf(DBManager::class, $bean->db);
@@ -162,6 +163,7 @@ class SugarBeanTest extends SuitePHPUnitFrameworkTestCase
         self::assertTrue(isset($bean->acl_fields));
 
         // test
+        $GLOBALS['reload_vardefs'] = false;
         $dictionary['']['optimistic_locking'] = true;
         $bean = BeanFactory::getBean('Users');
         self::assertInstanceOf(DBManager::class, $bean->db);
@@ -183,6 +185,7 @@ class SugarBeanTest extends SuitePHPUnitFrameworkTestCase
         $dictionary['']['optimistic_locking'] = null;
 
         // test
+        $GLOBALS['reload_vardefs'] = false;
         $bean = BeanFactory::getBean('Users');
         self::assertInstanceOf(DBManager::class, $bean->db);
         self::assertNotEquals('', $bean->module_name);
@@ -2428,7 +2431,12 @@ class SugarBeanTest extends SuitePHPUnitFrameworkTestCase
         self::assertFalse(isset($bean->date_entered));
         /** @noinspection UnSafeIsSetOverArrayInspection */
         self::assertEquals(isset($current_user) ? $current_user->id : '', $bean->created_by);
+
+        $GLOBALS['sugar_config']['strict_id_validation'] = false;
+        self::assertTrue($isValidator->isValidId($bean->id));
+        $GLOBALS['sugar_config']['strict_id_validation'] = true;
         self::assertFalse($isValidator->isValidId($bean->id));
+
         self::assertEquals($bean, $bean->custom_fields->bean);
         self::assertEquals(false, $bean->new_with_id);
         
@@ -2606,6 +2614,8 @@ class SugarBeanTest extends SuitePHPUnitFrameworkTestCase
 
         BeanFactory::getBean('Users')->field_defs = $userFieldDefs;
         BeanFactory::getBean('Contacts')->field_defs = $contactFieldDefs;
+
+        $GLOBALS['sugar_config']['strict_id_validation'] = false;
     }
 
     /**
