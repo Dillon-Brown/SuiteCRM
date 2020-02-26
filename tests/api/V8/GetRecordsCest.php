@@ -32,7 +32,7 @@ class GetRecordsCest
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(
             [
-                'name' => [
+                'data' => [
                     'name' => [],
                 ],
             ]
