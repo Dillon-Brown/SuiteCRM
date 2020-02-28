@@ -33,7 +33,7 @@
     "ext-zip": "*",
     "consolidation/robo": "^1.4",
     "elasticsearch/elasticsearch": "^5.3",
-    "ezyang/htmlpurifier": "^4.10",
+    "ezyang/htmlpurifier": "^4.12.0",
     "google/apiclient": "^2.0",
     "google/recaptcha": "^1.1",
     "justinrainbow/json-schema": "^5.2",
