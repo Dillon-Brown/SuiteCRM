@@ -44,4 +44,12 @@ class ClientRepository implements ClientRepositoryInterface
 
         return $this->clientEntity;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateClient($clientIdentifier, $clientSecret, $grantType): bool
+    {
+        return true;
+    }
 }
