@@ -48,9 +48,8 @@ class ClientRepository implements ClientRepositoryInterface
 {
     /**
      * {@inheritdoc}
-     * @return null|ClientEntity
      */
-    public function getClientEntity($clientIdentifier, $grantType, $clientSecret = null, $mustValidateSecret = true)
+    public function getClientEntity($clientIdentifier, $grantType = null, $clientSecret = null, $mustValidateSecret = true)
     {
         $client = new \OAuth2Clients();
         $client->retrieve($clientIdentifier);
