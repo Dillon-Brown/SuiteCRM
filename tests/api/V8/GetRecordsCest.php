@@ -36,7 +36,7 @@ class GetRecordsCest
                     0 => [
                         'type' => 'Account',
                         'id' => '1ac9f004-e246-96f6-4e65-5e569f7fd593',
-                        'attributes' => ["name" => "JBC Banking Inc",
+                        'attributes' => ['"name" => "JBC Banking Inc",
                                         "date_entered" => "2020-02-26T16 =>38 =>00+00 =>00",
                                         "date_modified" => "2020-02-26T16 =>38 =>00+00 =>00",
                                         "modified_user_id" => "1",
@@ -114,8 +114,8 @@ class GetRecordsCest
                                         "jjwg_maps_lat_c" => "",
                                         "jjwg_maps_address_c" => "",
                                         "jjwg_maps_geocode_status_c" => "",
-                                        ],
-                        'relationships' => ["AOS_Contracts" => {
+                                        '],
+                        'relationships' => ['"AOS_Contracts" => {
                                                 "links" => {
                                                     "related" => "V8/module/Accounts/1ac9f004-e246-96f6-4e65-5e569f7fd593/relationships/aos_contracts"
                                                 }
@@ -215,7 +215,7 @@ class GetRecordsCest
                                                     "related" => "V8/module/Accounts/1ac9f004-e246-96f6-4e65-5e569f7fd593/relationships/modified_user_link"
                                                 }
                                             },      
-                                        ],
+                                        '],
                     ],
                 ],
             ]
