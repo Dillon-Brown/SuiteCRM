@@ -213,8 +213,9 @@ class GetRecordsCest
                                             "Users": {
                                                 "links": {
                                                     "related": "V8/module/Accounts/1ac9f004-e246-96f6-4e65-5e569f7fd593/relationships/modified_user_link"
-                                                },
-                                            ],
+                                                }
+                                            },    
+                                        ],
                     ],
                 ],
             ]
