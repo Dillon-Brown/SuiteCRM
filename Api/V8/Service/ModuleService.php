@@ -125,9 +125,13 @@ class ModuleService
         }
 
         // Detect if bean has email field
-        if ((property_exists($bean, 'email1') && strpos($where, 'email1') !== false) || (property_exists($bean, 'email2') && strpos($where, 'email2') !== false))
-        {
-            $selectedFields = strtolower($module) . '.' . implode(',' . strtolower($module[0]) . '.', $fields);
+        if ((property_exists($bean, 'email1')
+                && strpos($where, 'email1') !== false)
+            || (property_exists($bean, 'email2')
+                && strpos($where, 'email2') !== false)
+        ) {
+            $selectedFields = strtolower($module) . '.' . implode(','
+                    . strtolower($module[0]) . '.', $fields);
             $selectedModule = strtolower($module);
 
             // Selects Module or COUNT(*) and will add one to the query.
@@ -137,8 +141,12 @@ class ModuleService
             $quotedCountSelect = $db->quote($countSelect);
 
             // Email where clause
-            $fromQuery = 'FROM email_addresses join email_addr_bean_rel on email_addresses.id = email_addr_bean_rel.email_address_id join ' . $selectedModule . ' on ' . $selectedModule . '.id = email_addr_bean_rel.bean_id ';
-            $modifiedWhere = str_replace('accounts.email1', 'email_addresses.email_address', $where);
+            $fromQuery
+                = 'FROM email_addresses join email_addr_bean_rel on email_addresses.id = email_addr_bean_rel.email_address_id join '
+                . $selectedModule . ' on ' . $selectedModule
+                . '.id = email_addr_bean_rel.bean_id ';
+            $modifiedWhere = str_replace('accounts.email1',
+                'email_addresses.email_address', $where);
             $where = (string)$modifiedWhere;
 
             /** @noinspection TypeUnsafeComparisonInspection */
@@ -149,7 +157,7 @@ class ModuleService
                 $whereAuto = '' . $bean->table_name . ' .deleted=1';
             }
             if ($where != '') {
-                $where = ' where (' . $where .  ') AND ' . $whereAuto .'';
+                $where = ' where (' . $where . ') AND ' . $whereAuto . '';
             } else {
                 $where = ' where ' . $whereAuto . '';
             }

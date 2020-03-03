@@ -33,7 +33,9 @@ class GetRecordsCest
         $I->seeResponseContainsJson(
             [
                 'data' => [
-                    0 => [],
+                    0 => [
+                        'email1' => 'phone.section.beans@example.name'
+                    ],
                 ],
             ]
         );
