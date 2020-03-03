@@ -60,7 +60,7 @@ class GetRecordsCest
                                         "billing_address_street_3" => "",
                                         "billing_address_street_4" => "",
                                         "billing_address_city" => "Cupertino",
-                                        "billing_address_state" => "NY",
+                                        "billing_address_state" => "--allNY",
                                         "billing_address_postalcode" => "15186",
                                         "billing_address_country" => "USA",
                                         "rating" => "",
