@@ -30,11 +30,10 @@ class GetRecordsCest
         $I->sendGET($I->getInstanceURL() . $iterator->offsetGet('endPoint'));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(['type' => 'fields']);
         $I->seeResponseContainsJson(
             [
-                'name' => [
-                    'data' => [],
+                'data' => [
+                    0 => [],
                 ],
             ]
         );
