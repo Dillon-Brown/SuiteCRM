@@ -113,7 +113,7 @@ class GetRecordsCest
                                         "jjwg_maps_lng_c": "",
                                         "jjwg_maps_lat_c": "",
                                         "jjwg_maps_address_c": "",
-                                        "jjwg_maps_geocode_status_c": ""
+                                        "jjwg_maps_geocode_status_c": "",
                                         ],
                         'relationships' => ["AOS_Contracts": {
                                                 "links": {
@@ -213,7 +213,7 @@ class GetRecordsCest
                                             "Users": {
                                                 "links": {
                                                     "related": "V8/module/Accounts/1ac9f004-e246-96f6-4e65-5e569f7fd593/relationships/modified_user_link"
-                                                }
+                                                },
                                             ],
                     ],
                 ],
