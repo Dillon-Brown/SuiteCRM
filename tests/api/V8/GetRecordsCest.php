@@ -34,7 +34,10 @@ class GetRecordsCest
             [
                 'data' => [
                     0 => [
-                        'email1' => 'phone.section.beans@example.name'
+                        'type' => 'Account'
+                        'id' => 'c6aad435-6800-e02f-7d86-5e5e5c3b9d8e'
+                        'attributes' => ['email1' => 'phone.section.beans@example.name']
+                        'relationships' => []
                     ],
                 ],
             ]
