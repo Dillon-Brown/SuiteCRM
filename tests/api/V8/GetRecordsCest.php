@@ -33,7 +33,7 @@ class GetRecordsCest
         $I->seeResponseContainsJson(
             [
                 'data' => [
-                    'meta' => [
+                     'meta' => [
                         'type' => 'Account',
                         'id' => '22ad4c3d-dcff-0ec9-5f16-5e569fd3e780',
                         'attributes' => ['"name" => "Southern Realty",
