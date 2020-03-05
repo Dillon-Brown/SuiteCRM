@@ -149,7 +149,7 @@ class GetRecordsCest
     {
         return [
             [
-                'endPoint' => '/Api/V8/module/Accounts/22ad4c3d-dcff-0ec9-5f16-5e569fd3e780',
+                'endPoint' => '/Api/V8/module/Accounts/?filter[email1][eq]=kid.hr.beans@example.com',
             ],
         ];
     }
