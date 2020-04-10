@@ -153,6 +153,32 @@ $dictionary['AOW_Processed'] = array(
     'studio' => 'visible',
     'dependency' => false,
   ),
+  'successful_run' =>
+      array(
+          'required' => false,
+          'name' => 'successful_run',
+          'vname' => 'LBL_SUCCESSFUL_RUN',
+          'type' => 'int',
+          'massupdate' => 0,
+          'default' => 0,
+          'len' => 100,
+          'size' => '20',
+          'studio' => 'visible',
+          'dependency' => false,
+      ),
+  'failed_run' =>
+      array(
+          'required' => false,
+          'name' => 'failed_run',
+          'vname' => 'LBL_FAILED_RUN',
+          'type' => 'int',
+          'massupdate' => 0,
+          'default' => 0,
+          'len' => 100,
+          'size' => '20',
+          'studio' => 'visible',
+          'dependency' => false,
+      ),
   'aow_actions' =>
   array(
     'name' => 'aow_actions',

@@ -132,7 +132,7 @@ class AOW_WorkFlowTest extends SuitePHPUnitFrameworkTestCase
     public function testget_flow_beans()
     {
         $aowWorkFlow = new AOW_WorkFlow();
-        
+
         //test for AOS_Quotes. it will return null as no test data is available
         $aowWorkFlow->flow_module = 'AOS_Quotes';
         $result = $aowWorkFlow->get_flow_beans();
@@ -238,7 +238,7 @@ class AOW_WorkFlowTest extends SuitePHPUnitFrameworkTestCase
         );
 
         $query = $aowWorkFlow->build_query_where($aowCondition, $call);
-        
+
         $this->assertEquals($expected, $query);
 
         //test with value type Field
@@ -311,15 +311,24 @@ class AOW_WorkFlowTest extends SuitePHPUnitFrameworkTestCase
         $call->id = 1;
 
         //execute the method and verify if it creates records in processed table
-        $result = $aowWorkFlow->run_actions($call);
+        $aowWorkFlow->run_actions($call);
 
         //test for a entry in AOW_Processed table.
         $processed = new AOW_Processed();
-        $processed->retrieve_by_string_fields(array('aow_workflow_id' => 1, 'parent_id' => 1));
+        $processed->retrieve_by_string_fields(['aow_workflow_id' => 1, 'parent_id' => 1]);
+        $processed->retrieve_by_string_fields(['successful_run' => 1, 'failed_run' => 1]);
+
 
         //test for record ID to verify that record is saved
-        $this->assertTrue(isset($processed->id));
         $this->assertEquals(36, strlen($processed->id));
+
+        $this->assertEquals(1, $processed->successful_run);
+        $this->assertEquals(0, $processed->failed_run);
+
+
+        $aowWorkFlow->run_actions($call);
+        $aowWorkFlow->run_actions($call);
+        $this->assertEquals(2, $processed->successful_run);
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $processed->mark_deleted($processed->id);

@@ -909,19 +909,20 @@ class AOW_WorkFlow extends Basic
 
     /**
      * Run the actions against the passed $bean
+     * @param SugarBean $bean
+     * @param bool $in_save
+     * @return bool
      */
-    public function run_actions(SugarBean &$bean, $in_save = false)
+    public function run_actions(SugarBean $bean, $in_save = false)
     {
         require_once('modules/AOW_Processed/AOW_Processed.php');
         $processed = new AOW_Processed();
-        if (!$this->multiple_runs) {
-            $processed->retrieve_by_string_fields(array('aow_workflow_id' => $this->id,'parent_id' => $bean->id));
+        $processed->retrieve_by_string_fields(['aow_workflow_id' => $this->id, 'parent_id' => $bean->id]);
 
-            if ($processed->status == 'Complete') {
-                //should not have gotten this far, so return
-                return true;
-            }
+        if ($processed->status === 'Complete' && !$this->multiple_runs) {
+            return true;
         }
+
         $processed->aow_workflow_id = $this->id;
         $processed->parent_id = $bean->id;
         $processed->parent_type = $bean->module_dir;
@@ -931,29 +932,25 @@ class AOW_WorkFlow extends Basic
 
         $pass = true;
 
-        $sql = "SELECT id FROM aow_actions WHERE aow_workflow_id = '".$this->id."' AND deleted = 0 ORDER BY action_order ASC";
+        $sql = "SELECT id FROM aow_actions WHERE aow_workflow_id = '" . $this->id . "' AND deleted = 0 ORDER BY action_order ASC";
         $result = $this->db->query($sql);
 
         while ($row = $this->db->fetchByAssoc($result)) {
             $action = new AOW_Action();
             $action->retrieve($row['id']);
 
-            if ($this->multiple_runs || !$processed->db->getOne("select id from aow_processed_aow_actions where aow_processed_id = '".$processed->id."' AND aow_action_id = '".$action->id."' AND status = 'Complete'")) {
-                $action_name = 'action'.$action->action;
+            if ($this->multiple_runs || !$processed->db->getOne("select id from aow_processed_aow_actions where aow_processed_id = '" . $processed->id . "' AND aow_action_id = '" . $action->id . "' AND status = 'Complete'")) {
+                $action_name = 'action' . $action->action;
 
-                if (file_exists('custom/modules/AOW_Actions/actions/'.$action_name.'.php')) {
-                    require_once('custom/modules/AOW_Actions/actions/'.$action_name.'.php');
-                } elseif (file_exists('modules/AOW_Actions/actions/'.$action_name.'.php')) {
-                    require_once('modules/AOW_Actions/actions/'.$action_name.'.php');
+                if (file_exists('custom/modules/AOW_Actions/actions/' . $action_name . '.php')) {
+                    require_once('custom/modules/AOW_Actions/actions/' . $action_name . '.php');
+                } elseif (file_exists('modules/AOW_Actions/actions/' . $action_name . '.php')) {
+                    require_once('modules/AOW_Actions/actions/' . $action_name . '.php');
                 } else {
-                    if (file_exists('modules/AOW_Actions/actions/'.$action_name.'.php')) {
-                        require_once('modules/AOW_Actions/actions/'.$action_name.'.php');
-                    } else {
-                        return false;
-                    }
+                    return false;
                 }
 
-                $custom_action_name = "custom" . $action_name;
+                $custom_action_name = 'custom' . $action_name;
                 if (class_exists($custom_action_name)) {
                     $action_name = $custom_action_name;
                 }
@@ -962,17 +959,19 @@ class AOW_WorkFlow extends Basic
                 $flow_action = new $action_name($action->id);
                 if (!$flow_action->run_action($bean, unserialize(base64_decode($action->parameters)), $in_save)) {
                     $pass = false;
-                    $processed->aow_actions->add($action->id, array('status' => 'Failed'));
+                    $processed->aow_actions->add($action->id, ['status' => 'Failed']);
                 } else {
-                    $processed->aow_actions->add($action->id, array('status' => 'Complete'));
+                    $processed->aow_actions->add($action->id, ['status' => 'Complete']);
                 }
             }
         }
 
         if ($pass) {
             $processed->status = 'Complete';
+            ++$processed->successful_run;
         } else {
             $processed->status = 'Failed';
+            ++$processed->failed_run;
         }
         $processed->save(false);
 

@@ -282,6 +282,8 @@ $mod_strings = array(
     'LBL_REG_CONF_1' => 'Please complete the short form below to receive product announcements, training news, special offers and special event invitations from SuiteCRM. We do not sell, rent, share or otherwise distribute the information collected here to third parties.',
     'LBL_REG_CONF_3' => 'Thank you for registering. Click on the Finish button to login to SuiteCRM. You will need to log in for the first time using the username "admin" and the password you entered in step 2.',
     'LBL_REG_TITLE' => 'Registration',
+    'LBL_SUCCESSFUL_RUN' => 'Successful Run',
+    'LBL_FAILED_RUN' => 'Failed Run',
 
     'LBL_REQUIRED' => '* Required field',
 
