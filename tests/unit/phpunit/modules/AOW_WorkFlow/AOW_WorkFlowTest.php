@@ -326,6 +326,7 @@ class AOW_WorkFlowTest extends SuitePHPUnitFrameworkTestCase
         $call = new Call();
         $call->id = 2;
         $aowWorkFlow->run_actions($call);
+        $processed->retrieve_by_string_fields(['aow_workflow_id' => 1, 'parent_id' => 1]);
         $this->assertEquals(2, $processed->successful_run);
         $this->assertEquals(0, $processed->failed_run);
 
