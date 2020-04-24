@@ -316,7 +316,6 @@ class AOW_WorkFlowTest extends SuitePHPUnitFrameworkTestCase
         //test for a entry in AOW_Processed table.
         $processed = new AOW_Processed();
         $processed->retrieve_by_string_fields(['aow_workflow_id' => 1, 'parent_id' => 1]);
-        $processed->retrieve_by_string_fields(['successful_run' => 1, 'failed_run' => 0]);
 
 
         //test for record ID to verify that record is saved
