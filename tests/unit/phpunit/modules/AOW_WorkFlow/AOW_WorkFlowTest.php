@@ -324,11 +324,6 @@ class AOW_WorkFlowTest extends SuitePHPUnitFrameworkTestCase
         $this->assertEquals(1, $processed->successful_run);
         $this->assertEquals(0, $processed->failed_run);
 
-
-        $aowWorkFlow->run_actions($call);
-        $aowWorkFlow->run_actions($call);
-        $this->assertEquals(2, $processed->successful_run);
-
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
         $processed->mark_deleted($processed->id);
         $result = $processed->retrieve($processed->id);
