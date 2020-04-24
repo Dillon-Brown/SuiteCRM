@@ -320,8 +320,13 @@ class AOW_WorkFlowTest extends SuitePHPUnitFrameworkTestCase
 
         //test for record ID to verify that record is saved
         $this->assertEquals(36, strlen($processed->id));
-
         $this->assertEquals(1, $processed->successful_run);
+        $this->assertEquals(0, $processed->failed_run);
+
+        $call = new Call();
+        $call->id = 2;
+        $aowWorkFlow->run_actions($call);
+        $this->assertEquals(2, $processed->successful_run);
         $this->assertEquals(0, $processed->failed_run);
 
         //mark the record as deleted and verify that this record cannot be retrieved anymore.
