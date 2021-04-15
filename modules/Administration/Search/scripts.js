@@ -3,7 +3,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2021 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -36,18 +36,53 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-$(function () {
-    var checkBox = $("#search-wrapper-enabled");
-    var select = $("#search-engine");
+$("#es-test-connection").click(function () {
+    var url = "index.php?module=Administration&action=SearchSettings&do=TestConnection";
+    var host = $("#es-host").val();
+    var user = $("#es-user").val();
+    var pass = $("#es-password").val();
 
-    function toggle() {
-        var enabled = checkBox.prop("checked");
-        select.prop("disabled", !enabled);
-    }
-
-    checkBox.change(function () {
-        toggle();
+    $.ajax({
+        url: url,
+        method: "POST",
+        data: {
+            host: host,
+            user: user,
+            pass: pass
+        }
+    }).done(function (data) {
+        if (data.status === "success") {
+            alert(
+              SUGAR.language.get("Administration", "LBL_ELASTIC_SEARCH_TEST_CONNECTION_SUCCESS")
+              + "\n\nPing: " + data.ping / 1000 + " ms\nElasticsearch v" + data.info.version.number
+            );
+        } else {
+            alert(
+              SUGAR.language.get("Administration", "LBL_ELASTIC_SEARCH_TEST_CONNECTION_FAIL")
+              + "\n\n" + data.error + "."
+            );
+        }
+    }).error(function () {
+        alert(SUGAR.language.get("Administration", "LBL_ELASTIC_SEARCH_TEST_CONNECTION_ERROR"));
     });
+});
 
-    toggle();
+$("#es-full-index").click(function () {
+    var url = "index.php?module=Administration&action=SearchSettings&do=FullIndex";
+
+    $.ajax(url).done(function () {
+        alert(SUGAR.language.get("Administration", "LBL_ELASTIC_SEARCH_INDEX_SCHEDULE_FULL_SUCCESS"));
+    }).error(function () {
+        alert(SUGAR.language.get("Administration", "LBL_ELASTIC_SEARCH_INDEX_SCHEDULE_FULL_FAIL"));
+    });
+});
+
+$("#es-partial-index").click(function () {
+    var url = "index.php?module=Administration&action=SearchSettings&do=PartialIndex";
+
+    $.ajax(url).done(function () {
+        alert(SUGAR.language.get("Administration", "LBL_ELASTIC_SEARCH_INDEX_SCHEDULE_PART_SUCCESS"));
+    }).error(function () {
+        alert(SUGAR.language.get("Administration", "LBL_ELASTIC_SEARCH_INDEX_SCHEDULE_PART_FAIL"));
+    });
 });

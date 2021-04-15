@@ -44,11 +44,13 @@ if (!defined('sugarEntry') || !sugarEntry) {
 }
 
 use SuiteCRM\Search\SearchWrapper;
+use LoggerManager;
+use SuiteCRM\Modules\Administration\Search\MVC\View as AbstractView;
 
 /**
  * Class View renders the Search settings.
  */
-class View extends MVC\View
+class View extends AbstractView
 {
     public function __construct()
     {
@@ -68,5 +70,15 @@ class View extends MVC\View
             ],
             translate('LBL_SEARCH_WRAPPER_ENGINES') => $this->getEngines(),
         ]);
+
+        global $sugar_config;
+
+        if (!isset($sugar_config['search']['ElasticSearch']) || $sugar_config['search']['ElasticSearch']) {
+            LoggerManager::getLogger()->warn('Configuration does not contains Elasticsearch default settings.');
+        }
+
+        $elasticsearchConfig = isset($sugar_config['search']['ElasticSearch']) ? $sugar_config['search']['ElasticSearch'] : null;
+
+        $this->smarty->assign('config', $elasticsearchConfig);
     }
 }
