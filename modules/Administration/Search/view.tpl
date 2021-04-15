@@ -3,7 +3,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2021 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -44,44 +44,43 @@
       method="POST"
       action="index.php?module=Administration&action=SearchSettings&do=Save">
 
-    <table class="edit view" width="100%" cellspacing="1" cellpadding="0" border="0">
-        <tr>
-            <th scope="row" colspan="4" align="left">
-                <h4>{sugar_translate label="LBL_SEARCH_INTERFACE"}</h4>
-            </th>
-        </tr>
 
-        <tr>
-            {*search engine*}
-            <td>
-                <div class="td-container">
-                    <div>
-                        <label for="search-engine">{sugar_translate label="LBL_SEARCH_ENGINE"}</label>
-                        {sugar_help text=$MOD.LBL_SEARCH_ENGINE_TOOLTIP}
-                    </div>
-                    <div>
-                        <small class="form-text text-muted">{sugar_translate label="LBL_SEARCH_ENGINE_HELP"}</small>
+    <div class="row">
+        <div class="panel panel-primary">
+            <div class="panel-heading">{$MOD.LBL_SEARCH_INTERFACE}</div>
+            <div class="panel-body tab-content text-center">
+                <div class="col-md-6">
+                    <div class="form-check">
+                        <div class="td-container">
+                            <div>
+                                <label for="search-engine">{sugar_translate label="LBL_SEARCH_ENGINE"}</label>
+                                {sugar_help text=$MOD.LBL_SEARCH_ENGINE_TOOLTIP}
+                            </div>
+                            <div>
+                                <small class="form-text text-muted">{sugar_translate label="LBL_SEARCH_ENGINE_HELP"}</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </td>
-            <td scope="row" style="vertical-align: middle">
-                {html_options
-                options=$engines
-                selected=$selectedEngine
-                id="search-engine"
-                name="search-engine"
-                class="form-control"
-                }
-            </td>
-        </tr>
-    </table>
-
-    <div class="settings-buttons">
-        {$BUTTONS}
+                <div class="col-md-6">
+                    {html_options
+                    options=$engines
+                    selected=$selectedEngine
+                    id="search-engine"
+                    name="search-engine"
+                    class="form-control"
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 
     {$JAVASCRIPT}
 
-    <script src="modules/Administration/Search/ajaxSubmit.js"></script>
-
+    <div class="settings-buttons">
+        {$BUTTONS}
+    </div>
 </form>
+
+<script src="modules/Administration/Search/ajaxSubmit.js"></script>
+

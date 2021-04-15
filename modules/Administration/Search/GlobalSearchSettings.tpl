@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2021 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -37,17 +37,11 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
-
 *}
+<h1>{$MOD.LBL_SEARCH_MODULES}</h1>
+<p class="text-muted">{$MOD.LBL_SEARCH_MODULES_HELP}</p>
+
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tr>
-    <td colspan="100">
-        <h2> {$MOD.LBL_SEARCH_MODULES}</h2>
-    </td>
-</tr>
-<tr>
-    <td colspan="100">{$MOD.LBL_SEARCH_MODULES_HELP}</td>
-</tr>
 <tr>
     <td>
         <br>
@@ -58,32 +52,32 @@
 
 <script type="text/javascript" src="{sugar_getjspath file='cache/include/javascript/sugar_grp_yui_widgets.js'}"></script>
 <link rel="stylesheet" type="text/css" href="{sugar_getjspath file='modules/Connectors/tpls/tabs.css'}"/>
+
 <form name="GlobalSearchSettings" method="POST" class="search-module-selector">
 	<input type="hidden" name="module" value="Administration">
 	<input type="hidden" name="action" value="saveGlobalSearchSettings">
 	<input type="hidden" name="enabled_modules" value="">
 
-	<div class='add_table' style='margin-bottom: 10px'>
-		<table id="GlobalSearchSettings" class="GlobalSearchSettings edit view" style='margin-bottom:0px;' border="0" cellspacing="0" cellpadding="0">
-		    <tr>
-				<td width='1%'>
-					<div id="enabled_div"></div>
-				</td>
-				<td>
-					<div id="disabled_div"></div>
-				</td>
-			</tr>
-		</table>
+	<div class="row">
+		<div class="panel panel-primary">
+			<div class="panel-heading">{$MOD.LBL_SEARCH_GENERAL}</div>
+			<div class="panel-body tab-content text-center">
+				<div class='add_table' style='margin-bottom: 10px'>
+					<table id="GlobalSearchSettings" class="GlobalSearchSettings edit view" style='margin-bottom:0px;' border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td width='1%'>
+								<div id="enabled_div"></div>
+							</td>
+							<td>
+								<div id="disabled_div"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
-	<table border="0" cellspacing="1" cellpadding="1" class="settings-buttons">
-		<tr>
-			<td>
-				<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" class="button primary" onclick="SUGAR.saveGlobalSearchSettings();" type="button" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}">
-                <input title="{$MOD.LBL_SAVE_SCHED_BUTTON}" class="button primary schedFullSystemIndex" onclick="SUGAR.FTS.schedFullSystemIndex();" style="{if !$showSchedButton}display:none;{/if}text-decoration: none;" id='schedFullSystemIndex' type="button" name="button" value="{$MOD.LBL_SAVE_SCHED_BUTTON}">
-                <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="button" onclick="document.GlobalSearchSettings.action.value='';" type="submit" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
-			</td>
-		</tr>
-	</table>
+
 </form>
 
 <div id='selectFTSModules' class="yui-hidden">
@@ -205,6 +199,4 @@
 	}
 })();
 {/literal}
-</script>
-<script type="text/javascript">
 </script>
