@@ -43,6 +43,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
+use Configurator;
 use LoggerManager;
 use SuiteCRM\Search\SearchWrapper;
 use SuiteCRM\Search\UI\MVC\View as BaseView;
@@ -77,8 +78,12 @@ abstract class View extends BaseView
         if (!isset($sugar_config['search']) || !$sugar_config['search']) {
             LoggerManager::getLogger()->warn('Configuration does not contains default search settings.');
         }
-        $search = isset($sugar_config['search']) ? $sugar_config['search'] : null;
+        $search = $sugar_config['search'] ?? null;
         $this->smarty->assign('config', $search);
+
+        $cfg = new Configurator();
+        $this->smarty->assign('aod_config', $cfg->config['aod']);
+
     }
 
     /**

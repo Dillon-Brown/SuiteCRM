@@ -84,7 +84,8 @@ class Controller extends AbstractController
             ->setEngine($searchEngine)
             ->save();
 
-        $this->doSaveConfig();
+        $this->doSaveElasticConfig();
+        $this->doSaveAODConfig();
 
         if ($this->isAjax()) {
             $this->yieldJson(['status' => 'success']);
@@ -105,7 +106,27 @@ class Controller extends AbstractController
     /**
      * Saves the configuration getting data from POST.
      */
-    public function doSaveConfig(): void
+    public function doSaveAODConfig(): void
+    {
+        $aod = filter_input(INPUT_POST, 'enable_aod', FILTER_SANITIZE_STRING);
+
+        $cfg = new Configurator();
+
+        if (!array_key_exists('aod', $cfg->config)) {
+            $cfg->config['aod'] = array(
+                'enable_aod' => '',
+            );
+        }
+
+        $cfg->config['aod']['enable_aod'] = !empty($aod);
+
+        $cfg->saveConfig();
+    }
+
+    /**
+     * Saves the configuration getting data from POST.
+     */
+    public function doSaveElasticConfig(): void
     {
         $enabled = filter_input(INPUT_POST, 'enabled', FILTER_VALIDATE_BOOLEAN);
         $host = filter_input(INPUT_POST, 'host', FILTER_SANITIZE_STRING);

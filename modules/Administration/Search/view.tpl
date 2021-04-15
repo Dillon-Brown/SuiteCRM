@@ -76,6 +76,7 @@
     </div>
 
     {include file='modules/Administration/Search/ElasticSearchView.tpl'}
+    {include file='modules/Administration/Search/AODAdmin.tpl'}
 
     {$JAVASCRIPT}
 
