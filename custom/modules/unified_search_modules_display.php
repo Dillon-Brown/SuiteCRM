@@ -1,10 +1,6 @@
 <?php
-// created: 2018-08-15 11:18:10
+// created: 2021-06-04 15:34:33
 $unified_search_modules_display = array (
-  'Accounts' => 
-  array (
-    'visible' => true,
-  ),
   'Contacts' => 
   array (
     'visible' => true,
@@ -44,6 +40,10 @@ $unified_search_modules_display = array (
   'Campaigns' => 
   array (
     'visible' => true,
+  ),
+  'Accounts' => 
+  array (
+    'visible' => false,
   ),
   'AOP_Case_Events' => 
   array (
