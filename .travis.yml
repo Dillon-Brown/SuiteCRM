@@ -81,7 +81,6 @@ script:
 
   # Run the unit tests
   - sudo chmod -R 777 .
-  - ./vendor/bin/phpunit --stop-on-failure --stop-on-error --colors --configuration ./tests/phpunit.xml.dist ./tests/unit/phpunit
   # Install OAuth2 demo data
   - mysql -u root -D automated_tests -v -e "source tests/_data/api_data.sql"
   # Install demo user data
@@ -94,11 +93,9 @@ script:
   - openssl rsa -in Api/V8/OAuth2/private.key -pubout -out Api/V8/OAuth2/public.key
   - sudo chmod 600 Api/V8/OAuth2/p*.key
   # - sudo chown www-data:www-data Api/V8/OAuth2/p*.key
-  # Run API functional tests
-  - ./vendor/bin/codecept run tests/api/V8/ -f --ext DotReporter
   # RUN Basic Acceptance test
   - echo "\$sugar_config['imap_test'] = true;" >> config_override.php
-  - ./vendor/bin/codecept run acceptance --env travis-ci-hub -f --ext DotReporter
+  - ./vendor/bin/codecept run tests/acceptance/lib --env travis-ci-hub -f --ext DotReporter
 
 after_script:
   - ./build/push_output.sh
