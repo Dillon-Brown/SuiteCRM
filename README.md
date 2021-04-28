@@ -10,6 +10,7 @@
 [![LICENSE](https://img.shields.io/github/license/suitecrm/suitecrm.svg)](https://github.com/salesagility/suitecrm/blob/master/LICENSE.txt)
 [![GitHub contributors](https://img.shields.io/github/contributors/salesagility/suitecrm)](https://github.com/salesagility/SuiteCRM/graphs/contributors)
 [![Twitter](https://img.shields.io/twitter/follow/suitecrm.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=suitecrm)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDillon-Brown%2FSuiteCRM.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FDillon-Brown%2FSuiteCRM?ref=badge_shield)
 
 [Website](https://suitecrm.com) | 
 [Demo](https://suitecrm.com/demo/) |
@@ -74,3 +75,6 @@ SuiteCRM is published under the AGPLv3 license.
 
 
 
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDillon-Brown%2FSuiteCRM.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FDillon-Brown%2FSuiteCRM?ref=badge_large)
