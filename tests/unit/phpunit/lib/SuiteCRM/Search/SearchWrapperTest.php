@@ -166,11 +166,15 @@ class SearchWrapperTest extends SearchTestAbstract
 
         $result = SearchWrapper::search('SearchEngineMock', SearchQuery::fromString('foo'));
 
-        self::assertEquals('bar', $result, "Wrong mocked search result!");
+        $hits = $result->getHits();
+
+        self::assertEquals('bar', $hits[0]);
 
         $result = SearchWrapper::search('SearchEngineMock', SearchQuery::fromString('fooz'));
 
-        self::assertEquals('barz', $result, "Wrong mocked search result!");
+        $hits = $result->getHits();
+
+        self::assertEquals('barz', $hits[0]);
     }
 
     public function testSearch2(): void
