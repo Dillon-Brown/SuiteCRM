@@ -177,9 +177,8 @@ class SearchWrapperTest extends SearchTestAbstract
         self::assertEquals('barz', $hits[0]);
     }
 
-    public function testSearch2(): void
+    public function testSearchCustomEngine(): void
     {
-        // this time try passing a custom engine
         $mockEngine = Mockery::mock(SearchEngine::class);
         $query = SearchQuery::fromString("Test");
 
@@ -189,23 +188,6 @@ class SearchWrapperTest extends SearchTestAbstract
             ->with($query);
 
         SearchWrapper::search($mockEngine, $query);
-
-        Mockery::close();
-    }
-
-    public function testSearch3(): void
-    {
-        // this time check if the validation works
-
-        $mockEngine = Mockery::mock(SearchWrapper::class); // just an object that shouldn't be passed
-        $query = SearchQuery::fromString("Test");
-
-        try {
-            SearchWrapper::search($mockEngine, $query);
-            self::fail("Exception should have been thrown!");
-        } catch (SearchEngineNotFoundException $exception) {
-            // All good!
-        }
 
         Mockery::close();
     }
