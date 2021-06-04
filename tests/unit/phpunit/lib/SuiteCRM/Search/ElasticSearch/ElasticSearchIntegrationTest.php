@@ -71,7 +71,7 @@ class ElasticSearchIntegrationTest extends SuiteCRM\Search\SearchTestAbstract
         $this->indexer->setIndex('test');
         $this->indexer->setModulesToIndex(['Contacts']);
         $this->indexer->setDifferentialIndexing(false);
-        $this->indexer->removeIndex();
+        $this->indexer->removeIndex('test');
     }
 
     protected function tearDown(): void

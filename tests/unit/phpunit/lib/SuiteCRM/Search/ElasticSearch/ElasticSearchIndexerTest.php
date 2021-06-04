@@ -398,7 +398,7 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
 
         $indexer = new ElasticSearchIndexer($mockClient);
 
-        $indexer->removeIndex();
+        $indexer->removeIndex($sugar_config['unique_key']);
     }
 
     /**
