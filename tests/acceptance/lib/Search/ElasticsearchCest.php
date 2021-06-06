@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2021 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -38,29 +38,25 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-use Facebook\WebDriver\Exception\UnexpectedAlertOpenException;
+use Codeception\Exception\ModuleException;
 use Helper\WebDriverHelper;
 use Step\Acceptance\AccountsTester;
 use Step\Acceptance\NavigationBarTester;
 
 /**
- * ElasticsearchCest
- *
+ * Class ElasticsearchCest
  * @author gyula
  */
 class ElasticsearchCest
 {
     /**
-     *
      * @param AcceptanceTester $I
      * @param WebDriverHelper $helper
+     * @throws ModuleException
      */
-    public function testSearchSetup(AcceptanceTester $I, WebDriverHelper $helper)
+    public function testSearchSetup(AcceptanceTester $I, WebDriverHelper $helper): void
     {
-        // login..
         $I->loginAsAdmin();
-
-        // setup elasticsearch..
 
         $I->click('admin');
 
@@ -98,30 +94,24 @@ class ElasticsearchCest
     }
 
     /**
-     *
      * @param AcceptanceTester $I
      */
-    public function testSearchNotFound(AcceptanceTester $I)
+    public function testSearchNotFound(AcceptanceTester $I): void
     {
-
-        // login..
         $I->loginAsAdmin();
 
         // lets try out elasticsearch..
         // TODO [Selenium browser Logs] 12:47:10.930 SEVERE - http://localhost/SuiteCRM/index.php?action=Login&module=Users - [DOM] Found 2 elements with non-unique id #form: (More info: https://goo.gl/9p2vKq)
-        $I->fillField('div.desktop-bar ul#toolbar li #searchform .input-group #query_string', 'I_bet_there_is_nothing_to_contains_this');
+        $I->fillField('div.desktop-bar ul#toolbar li #searchform .input-group #query_string',
+            'I_bet_there_is_nothing_to_contains_this');
 
         // click on search icon: TODO: search icon ID is not unique:
         $I->click('.desktop-bar #searchform > div > span > button');
 
         $I->see('SEARCH');
         $I->see('Results');
-
-        $I->fillField('div.desktop-bar ul#toolbar li #searchform .input-group #query_string', 'acc');
-        $I->click('#search-wrapper-form > table > tbody > tr:nth-child(1) > td > input.button.primary');
-
-        $I->see('SEARCH');
-        $I->see('Results');
+        $I->see('No results matching your search criteria. Try broadening your search.');
+        $I->see('Search performed in');
     }
 
     /**
