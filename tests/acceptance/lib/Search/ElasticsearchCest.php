@@ -115,37 +115,37 @@ class ElasticsearchCest
     }
 
     /**
-     *
      * @param AccountsTester $accounts
-     * @param type $max
+     * @param int $max
+     * @param int $from
      */
-    protected function createTestAccounts(AccountsTester $accounts, $max, $from = 0)
+    protected function createTestAccounts(AccountsTester $accounts, int $max, int $from = 0): void
     {
         $navi = new NavigationBarTester($accounts->getPublicScenario());
         $navi->clickAllMenuItem('Accounts');
 
-        for ($i=$from; $i<$max; $i++) {
+        for ($i = $from; $i < $max; $i++) {
             $accounts->createAccountForElasticSearch('acc_for_test ' . $i);
-            // waiting few second to elasticsearch indexer makes the job done:
+            // Wait for ElasticSearch indexer:
             $accounts->wait(3);
         }
 
-        // waiting few second to elasticsearch indexer makes the job done:
+        // Wait for ElasticSearch indexer:
         $accounts->wait(5);
     }
 
     /**
-     *
      * @param AcceptanceTester $I
      * @param AccountsTester $accounts
-     * @param type $max
+     * @param int $max
+     * @throws ModuleException
      */
-    protected function deleteTestAccounts(AcceptanceTester $I, AccountsTester $accounts, $max)
+    protected function deleteTestAccounts(AcceptanceTester $I, AccountsTester $accounts, int $max): void
     {
         $navi = new NavigationBarTester($accounts->getPublicScenario());
         $navi->clickAllMenuItem('Accounts');
 
-        for ($i=0; $i<$max; $i++) {
+        for ($i = 0; $i < $max; $i++) {
             $I->waitForElementVisible('//*[@id="MassUpdate"]/div[3]/table/tbody/tr[1]/td[3]/b/a');
             $I->click('//*[@id="MassUpdate"]/div[3]/table/tbody/tr[1]/td[3]/b/a');
             $I->waitForElementVisible('//*[@id="tab-actions"]/a');
@@ -161,32 +161,26 @@ class ElasticsearchCest
      *
      * @param AcceptanceTester $I
      * @param AccountsTester $accounts
+     * @throws ModuleException
      */
-    public function testSearchFounds(AcceptanceTester $I, AccountsTester $accounts)
+    public function testSearchFounds(AcceptanceTester $I, AccountsTester $accounts): void
     {
-        $max = 15;
-
-        // login..
         $I->loginAsAdmin();
 
-        // adding some account..
+        $max = 15;
         $this->createTestAccounts($accounts, $max);
-
-        // search for them..
 
         $I->fillField('div.desktop-bar ul#toolbar li #searchform .input-group #query_string', 'acc_for_test');
         $I->click('.desktop-bar #searchform > div > span > button');
 
         $I->see('SEARCH');
         $I->see('Results');
-//        $I->see('Total result(s): ' . $max);
         $I->see('Search performed in');
         $I->see('Page 1 of 2');
 
         $I->click('Next');
         $I->see('SEARCH');
         $I->see('Results');
-//        $I->see('Total result(s): ' . $max);
         $I->see('Search performed in');
         $I->see('Page 2 of 2');
 
@@ -194,14 +188,11 @@ class ElasticsearchCest
         $I->fillField('div.desktop-bar ul#toolbar li #searchform .input-group #query_string', '11');
         $I->see('SEARCH');
         $I->see('Results');
-        //sometimes elasticsearch indexer randomly broken in travis, so the next check randomly failing:
-        // $I->see('Total result(s): 1');
         $I->see('Search performed in');
         $I->see('Accounts');
         $I->see('Account Name');
         $I->see('acc_for_test 11');
 
-        // add few more until end of the last page
         $end = 20;
         $this->createTestAccounts($accounts, $end, $max);
 
@@ -210,12 +201,9 @@ class ElasticsearchCest
 
         $I->see('SEARCH');
         $I->see('Results');
-        //sometimes elasticsearch indexer randomly broken in travis, so the next check randomly failing:
-        //$I->see('Total result(s): ' . $end);
         $I->see('Search performed in');
         $I->see('Page 1 of 2');
 
-        // clean up test accounts
         $this->deleteTestAccounts($I, $accounts, $end);
     }
 }
