@@ -182,21 +182,18 @@ class ElasticSearchEngineTest extends SearchTestAbstract
                             0 =>
                                 [
                                     '_index' => 'accounts',
-                                    '_type' => '_doc',
                                     '_id' => 'id1',
                                     '_score' => 1.0,
                                 ],
                             1 =>
                                 [
                                     '_index' => 'accounts',
-                                    '_type' => '_doc',
                                     '_id' => 'id2',
                                     '_score' => 1.0,
                                 ],
                             2 =>
                                 [
                                     '_index' => 'accounts',
-                                    '_type' => '_doc',
                                     '_id' => 'id3',
                                     '_score' => 0.5,
                                 ],
