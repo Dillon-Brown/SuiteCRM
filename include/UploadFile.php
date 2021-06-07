@@ -45,12 +45,16 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once __DIR__.'/externalAPI/ExternalAPIFactory.php';
 require_once __DIR__.'/UploadStream.php';
 
+use SuiteCRM\Utility\AntiMalware\AntiMalwareTrait;
+
 /**
  * @api
  * Manage uploaded files
  */
 class UploadFile
 {
+    use AntiMalwareTrait;
+
     public $field_name;
     public $stored_file_name;
     public $uploaded_file_name;
@@ -295,6 +299,14 @@ class UploadFile
 
             return false;
         }
+
+        try {
+            $this->scanPathForMalware($_FILES[$this->field_name]['tmp_name']);
+        } catch (\SuiteCRM\Exception\MalwareFoundException $exception) {
+            $GLOBALS['log']->security("Malware found, unable to save file: {$_FILES[$this->field_name]['name']}");
+            return false;
+        }
+
 
         $this->mime_type = $this->getMime($_FILES[$this->field_name]);
         $this->stored_file_name = $this->create_stored_filename();

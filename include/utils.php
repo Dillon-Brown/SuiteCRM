@@ -109,6 +109,26 @@ function make_sugar_config(&$sugar_config)
 
     $sugar_config = array(
         'admin_export_only' => empty($admin_export_only) ? false : $admin_export_only,
+        'anti_malware_scanners' => array(
+            'SuiteCRM\Utility\AntiMalware\Providers\ClamTCP' => array(
+                'name' => 'ClamAV TCP',
+                'support_page' => 'https://www.clamav.net/',
+                'enabled' => false,
+                'path' => null,
+                'options' => array(
+                    'ip' => '127.0.0.1',
+                    'port' => 3310,
+                    'type' => 'local'
+                ),
+            ),
+            'SuiteCRM\Utility\AntiMalware\Providers\Sophos' => array(
+                'name' => 'Sophos Anti Virus (Linux)',
+                'support_page' => 'https://www.sophos.com/en-us/products/free-tools/sophos-antivirus-for-linux.aspx',
+                'enabled' => false,
+                'path' => '/opt/sophos-av/bin/savscan',
+                'options' => '-ss'
+            )
+        ),
         'export_delimiter' => empty($export_delimiter) ? ',' : $export_delimiter,
         'cache_dir' => empty($cache_dir) ? 'cache/' : $cache_dir,
         'calculate_response_time' => empty($calculate_response_time) ? true : $calculate_response_time,
@@ -279,6 +299,26 @@ function get_sugar_config_defaults(): array
 
     $sugar_config_defaults = [
         'admin_export_only' => false,
+        'anti_malware_scanners' => array(
+            'SuiteCRM\Utility\AntiMalware\Providers\ClamTCP' => array(
+                'name' => 'ClamAntiVirus TCP',
+                'support_page' => 'https://www.clamav.net/',
+                'enabled' => false,
+                'path' => null,
+                'options' => array(
+                    'ip' => '127.0.0.1',
+                    'port' => 3310,
+                    'type' => 'local'
+                ),
+            ),
+            'SuiteCRM\Utility\AntiMalware\Providers\Sophos' => array(
+                'name' => 'Sophos Anti Virus (Linux)',
+                'support_page' => 'https://www.sophos.com/en-us/products/free-tools/sophos-antivirus-for-linux.aspx',
+                'enabled' => false,
+                'path' => '/opt/sophos-av/bin/savscan',
+                'options' => '-ss'
+            )
+        ),
         'export_delimiter' => ',',
         'export_excel_compatible' => false,
         'cache_dir' => 'cache/',
