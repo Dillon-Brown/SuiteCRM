@@ -159,27 +159,6 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
         self::assertEquals(9, $i->getIndexedFieldsCount(), "Wrong number of fields indexed");
     }
 
-    public function testGettersAndSetters(): void
-    {
-        $batchSize = 20;
-        $index = 'test1';
-        $i = new i(null);
-
-        $i->setBatchSize($batchSize);
-        $i->setIndex($index);
-        self::assertEquals($batchSize, $i->getBatchSize());
-        self::assertEquals($index, $i->getIndex());
-
-        $i = new i(null);
-        $batchSize = 50;
-        $index = 'test2';
-
-        $i->setBatchSize($batchSize);
-        $i->setIndex($index);
-        self::assertEquals($batchSize, $i->getBatchSize());
-        self::assertEquals($index, $i->getIndex());
-    }
-
     public function testIndexBean(): void
     {
         $bean = $this->getTestBean();
@@ -551,7 +530,6 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
             ->once();
 
         $i = new i($client);
-        $i->setIndex($index);
 
         $i->putMeta($module, $meta);
     }

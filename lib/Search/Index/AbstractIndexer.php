@@ -68,9 +68,9 @@ abstract class AbstractIndexer
     /** @var bool when enabled only beans changed after the last indexing should be indexed */
     protected $differentialIndexing = false;
     /** @var AbstractDocumentifier determines how a bean is converted into a document */
-    protected $documentifier = null;
+    protected $documentifier;
     /** @var string[] The modules that have to be indexed */
-    protected $modulesToIndex = null;
+    protected $modulesToIndex;
     /** @var Logger Monolog instance to log on a separate file */
     protected $logger;
     /** @var string where the log files are going to be stored */

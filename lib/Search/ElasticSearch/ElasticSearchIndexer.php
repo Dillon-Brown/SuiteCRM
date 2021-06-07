@@ -67,8 +67,6 @@ class ElasticSearchIndexer extends AbstractIndexer
     use IndexingLockFileTrait;
     use IndexingSchedulerTrait;
 
-    /** @var string The name of the Elasticsearch index to use. */
-    private $index;
     /** @var Client */
     private $client;
     /** @var int the size of the batch to be sent to the Elasticsearch while batch indexing */
@@ -398,23 +396,6 @@ class ElasticSearchIndexer extends AbstractIndexer
     public function setBatchSize(int $batchSize): void
     {
         $this->batchSize = $batchSize;
-    }
-
-    /** @return string */
-    public function getIndex(): string
-    {
-        return $this->index;
-    }
-
-    /**
-     * Sets the name of the Elasticsearch index to send requests to.
-     *
-     * @param string $index
-     */
-    public function setIndex(string $index): void
-    {
-        $this->logger->debug("Setting index to $index");
-        $this->index = $index;
     }
 
     /**
