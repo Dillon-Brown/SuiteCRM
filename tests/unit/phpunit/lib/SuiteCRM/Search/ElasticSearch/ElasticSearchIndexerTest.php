@@ -222,7 +222,7 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
     private function getExpectedHeader(): array
     {
         return [
-            'index' => 'Contacts',
+            'index' => 'contacts',
             'id' => '00000000-0000-0000-0000-000000000000',
         ];
     }
