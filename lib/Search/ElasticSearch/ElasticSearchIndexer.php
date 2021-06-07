@@ -287,7 +287,7 @@ class ElasticSearchIndexer extends AbstractIndexer
     /** @inheritdoc */
     public function indexBean(SugarBean $bean)
     {
-        $this->logger->debug("Indexing {$bean->module_name}($bean->name)");
+        $this->logger->debug("Indexing $bean->module_name($bean->name)");
 
         $args = $this->makeIndexParamsFromBean($bean);
 
@@ -297,7 +297,7 @@ class ElasticSearchIndexer extends AbstractIndexer
     /** @inheritdoc */
     public function removeBean(SugarBean $bean)
     {
-        $this->logger->debug("Removing {$bean->module_name}($bean->name)");
+        $this->logger->debug("Removing $bean->module_name($bean->name)");
 
         $args = $this->makeParamsHeaderFromBean($bean);
         $this->client->delete($args);
@@ -546,7 +546,7 @@ class ElasticSearchIndexer extends AbstractIndexer
     private function makeParamsHeaderFromBean(SugarBean $bean): array
     {
         return [
-            'index' => $bean->module_name,
+            'index' => strtolower($bean->module_name),
             'id' => $bean->id,
         ];
     }
