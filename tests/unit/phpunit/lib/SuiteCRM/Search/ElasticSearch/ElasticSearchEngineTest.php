@@ -42,6 +42,7 @@ use Mockery\MockInterface;
 use SuiteCRM\Search\ElasticSearch\ElasticSearchEngine;
 use SuiteCRM\Search\SearchQuery;
 use SuiteCRM\Search\SearchTestAbstract;
+use SuiteCRM\Search\SearchWrapper;
 
 /** @noinspection PhpIncludeInspection */
 require_once 'lib/Search/ElasticSearch/ElasticSearchEngine.php';
@@ -51,6 +52,19 @@ require_once 'lib/Search/ElasticSearch/ElasticSearchEngine.php';
  */
 class ElasticSearchEngineTest extends SearchTestAbstract
 {
+    /**
+     * @var string
+     */
+    private $indexes;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $searchModules = SearchWrapper::getModules();
+        $this->indexes = implode(',', array_map('strtolower', $searchModules));
+    }
+
     public function testValidateQuery(): void
     {
         $engine = new ElasticSearchEngine();
@@ -65,8 +79,6 @@ class ElasticSearchEngineTest extends SearchTestAbstract
 
     public function testCreateSearchParams1(): void
     {
-        global $sugar_config;
-
         $engine = new ElasticSearchEngine();
         $searchString = "hello search*";
         $size = 30;
@@ -75,7 +87,7 @@ class ElasticSearchEngineTest extends SearchTestAbstract
         $query = SearchQuery::fromString($searchString, $size, $from);
 
         $expectedParams = [
-            'index' => $sugar_config['unique_key'],
+            'index' => $this->indexes,
             'body' => [
                 'stored_fields' => [],
                 'from' => $from,
@@ -99,8 +111,6 @@ class ElasticSearchEngineTest extends SearchTestAbstract
 
     public function testCreateSearchParams2(): void
     {
-        global $sugar_config;
-
         $engine = new ElasticSearchEngine();
         $searchString = "test*";
         $size = 30;
@@ -108,7 +118,7 @@ class ElasticSearchEngineTest extends SearchTestAbstract
         $query = SearchQuery::fromString($searchString, $size);
 
         $expectedParams = [
-            'index' => $sugar_config['unique_key'],
+            'index' => $this->indexes,
             'body' => [
                 'stored_fields' => [],
                 'from' => 0,
@@ -150,8 +160,6 @@ class ElasticSearchEngineTest extends SearchTestAbstract
      */
     private function getMockedHits(): array
     {
-        global $sugar_config;
-
         return [
             'took' => 5,
             'timed_out' => false,
@@ -164,28 +172,31 @@ class ElasticSearchEngineTest extends SearchTestAbstract
                 ],
             'hits' =>
                 [
-                    'total' => 258,
+                    'total' => [
+                        'value' => 258,
+                        'relation' => 'eq'
+                    ],
                     'max_score' => 1.0,
                     'hits' =>
                         [
                             0 =>
                                 [
-                                    '_index' => $sugar_config['unique_key'],
-                                    '_type' => 'Accounts',
+                                    '_index' => 'accounts',
+                                    '_type' => '_doc',
                                     '_id' => 'id1',
                                     '_score' => 1.0,
                                 ],
                             1 =>
                                 [
-                                    '_index' => $sugar_config['unique_key'],
-                                    '_type' => 'Accounts',
+                                    '_index' => 'accounts',
+                                    '_type' => '_doc',
                                     '_id' => 'id2',
                                     '_score' => 1.0,
                                 ],
                             2 =>
                                 [
-                                    '_index' => $sugar_config['unique_key'],
-                                    '_type' => 'Contacts',
+                                    '_index' => 'accounts',
+                                    '_type' => '_doc',
                                     '_id' => 'id3',
                                     '_score' => 0.5,
                                 ],
@@ -215,7 +226,6 @@ class ElasticSearchEngineTest extends SearchTestAbstract
         $engine = new ElasticSearchEngine();
 
         $mockedHits = $this->getMockedHits();
-
         $expectedResults = $this->getExpectedResultsForMockedHits();
 
         $results = $this->invokeMethod($engine, 'parseHits', [$mockedHits]);
@@ -229,13 +239,11 @@ class ElasticSearchEngineTest extends SearchTestAbstract
     private function getExpectedResultsForMockedHits(): array
     {
         return [
-            'Accounts' => [
+            'accounts' => [
                 'id1',
-                'id2'
+                'id2',
+                'id3'
             ],
-            'Contacts' => [
-                'id3',
-            ]
         ];
     }
 
@@ -270,36 +278,6 @@ class ElasticSearchEngineTest extends SearchTestAbstract
                 "hits" => [],
             ]
         ];
-    }
-
-    public function testSearch(): void
-    {
-        $mockedClient = $this->getMockedClient($this->getMockedHits());
-        $engine = new ElasticSearchEngine($mockedClient);
-        $expectedResults = $this->getExpectedResultsForMockedHits();
-        $query = SearchQuery::fromString("test");
-
-        $results = $engine->search($query);
-
-        self::assertEquals($expectedResults, $results->getHits());
-        self::assertEquals(258, $results->getTotal());
-        self::assertIsFloat($results->getSearchTime());
-        self::assertGreaterThan(0, $results->getSearchTime());
-    }
-
-    public function testGetIndex(): void
-    {
-        global $sugar_config;
-
-        $engine = new ElasticSearchEngine();
-
-        self::assertEquals($sugar_config['unique_key'], $engine->getIndex());
-
-        $expected = 'Foo';
-        $engine->setIndex($expected);
-        $actual = $engine->getIndex();
-
-        self::assertEquals($expected, $actual);
     }
 
     /**

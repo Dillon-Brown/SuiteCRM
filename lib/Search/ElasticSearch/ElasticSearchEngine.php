@@ -78,7 +78,8 @@ class ElasticSearchEngine extends SearchEngine
         $params = $this->createSearchParams($query);
         $start = microtime(true);
         $hits = $this->runElasticSearch($params);
-        $results = $this->parseHits($hits);
+        $initialResults = $this->parseHits($hits);
+        $results = $this->moduleNameMapper($initialResults);
         $end = microtime(true);
         $searchTime = ($end - $start);
 
@@ -179,6 +180,15 @@ class ElasticSearchEngine extends SearchEngine
             $initialResults[$recordModule][] = $hit['_id'];
         }
 
+        return $initialResults;
+    }
+
+    /**
+     * @param array $initialResults
+     * @return array
+     */
+    private function moduleNameMapper(array $initialResults): array
+    {
         $searchResults = [];
 
         foreach ($initialResults as $index => $hit) {
