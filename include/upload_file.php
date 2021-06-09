@@ -42,4 +42,5 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
+require_once "lib/Utility/AntiMalware/AntiMalwareTrait.php";
 require_once "include/UploadFile.php";
