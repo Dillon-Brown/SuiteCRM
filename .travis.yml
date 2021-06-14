@@ -10,12 +10,6 @@ matrix:
     - name: "PHP 7.4 / MySQL 5.7"
       php: "7.4"
       dist: xenial
-    # Run composer validate to make sure the composer.json and composer.lock are in sync.
-    - name: "composer validate"
-      php: "7.3"
-      dist: xenial
-      before_script: composer install
-      script: composer validate
     - name: "code coverage"
       php: "7.4"
       dist: xenial
@@ -40,12 +34,9 @@ before_install:
   - wget https://chromedriver.storage.googleapis.com/2.36/chromedriver_linux64.zip
   - unzip -o chromedriver_linux64.zip
   - ./chromedriver --url-base=/wd/hub &
-  # Lint PHP
-  - for file in $(git diff --name-status HEAD~1 HEAD | egrep "^[ACMR].*\.php$" | cut -c 3-); do php -l $file; done
 
 install:
   - phpenv config-add travis.php.ini
-  - composer self-update --stable && composer --version
 
 before_script:
   # Set up MySQL
