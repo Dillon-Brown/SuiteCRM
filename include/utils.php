@@ -108,6 +108,26 @@ function make_sugar_config(&$sugar_config)
 
     $sugar_config = array(
         'admin_export_only' => empty($admin_export_only) ? false : $admin_export_only,
+        'anti_malware_scanners' => array(
+            'SuiteCRM\Utility\AntiMalware\Providers\ClamTCP' => array(
+                'name' => 'ClamAV TCP',
+                'support_page' => 'https://www.clamav.net/',
+                'enabled' => false,
+                'path' => null,
+                'options' => array(
+                    'ip' => '127.0.0.1',
+                    'port' => 3310,
+                    'type' => 'local'
+                ),
+            ),
+            'SuiteCRM\Utility\AntiMalware\Providers\Sophos' => array(
+                'name' => 'Sophos Anti Virus (Linux)',
+                'support_page' => 'https://www.sophos.com/en-us/products/free-tools/sophos-antivirus-for-linux.aspx',
+                'enabled' => false,
+                'path' => '/opt/sophos-av/bin/savscan',
+                'options' => '-ss'
+            )
+        ),
         'export_delimiter' => empty($export_delimiter) ? ',' : $export_delimiter,
         'cache_dir' => empty($cache_dir) ? 'cache/' : $cache_dir,
         'calculate_response_time' => empty($calculate_response_time) ? true : $calculate_response_time,
@@ -274,6 +294,26 @@ function get_sugar_config_defaults()
 
     $sugar_config_defaults = array(
         'admin_export_only' => false,
+        'anti_malware_scanners' => [
+            'SuiteCRM\Utility\AntiMalware\Providers\ClamTCP' => [
+                'name' => 'ClamAntiVirus TCP',
+                'support_page' => 'https://www.clamav.net/',
+                'enabled' => false,
+                'path' => null,
+                'options' => [
+                    'ip' => '127.0.0.1',
+                    'port' => 3310,
+                    'type' => 'local'
+                ],
+            ],
+            'SuiteCRM\Utility\AntiMalware\Providers\Sophos' => [
+                'name' => 'Sophos Anti Virus (Linux)',
+                'support_page' => 'https://www.sophos.com/en-us/products/free-tools/sophos-antivirus-for-linux.aspx',
+                'enabled' => false,
+                'path' => '/opt/sophos-av/bin/savscan',
+                'options' => '-ss'
+            ]
+        ],
         'export_delimiter' => ',',
         'export_excel_compatible' => false,
         'cache_dir' => 'cache/',
@@ -560,7 +600,7 @@ function addCronAllowedUser($addUser)
             if (!in_array($addUser, $sugar_config['cron']['allowed_cron_users'])) {
                 $sugar_config['cron']['allowed_cron_users'][] = $addUser;
                 $GLOBALS['log']->error("You're using 'root' as the web-server user. This should be avoided " .
-                        "for security reasons. Review allowed_cron_users configuration in config.php.");
+                    "for security reasons. Review allowed_cron_users configuration in config.php.");
             }
         } else {
             $sugar_config['cron']['allowed_cron_users'][] = $addUser;
@@ -1664,7 +1704,7 @@ function get_workflow_admin_modules_for_user($user)
     }
     foreach ($workflow_mod_list as $key => $val) {
         if (!in_array($val, $workflow_admin_modules) && ($val != 'iFrames' && $val != 'Feeds' && $val != 'Home' && $val != 'Dashboard' && $val != 'Calendar' && $val != 'Activities' && $val != 'Reports') &&
-                ($user->isDeveloperForModule($key))
+            ($user->isDeveloperForModule($key))
         ) {
             $workflow_admin_modules[$key] = $val;
         }
@@ -1802,9 +1842,9 @@ function get_select_options_with_id_separate_key($label_list, $key_list, $select
         // the system is evaluating $selected_key == 0 || '' to true.  Be very careful when changing this.  Test all cases.
         // The bug was only happening with one of the users in the drop down.  It was being replaced by none.
         if (
-                ($option_key != '' && $selected_key == $option_key) || (
-                    $option_key == '' && (($selected_key == '' && !$massupdate) || $selected_key == '__SugarMassUpdateClearField__')
-                ) || (is_array($selected_key) && in_array($option_key, $selected_key))
+            ($option_key != '' && $selected_key == $option_key) || (
+                $option_key == '' && (($selected_key == '' && !$massupdate) || $selected_key == '__SugarMassUpdateClearField__')
+            ) || (is_array($selected_key) && in_array($option_key, $selected_key))
         ) {
             $selected_string = 'selected ';
         }
@@ -2074,7 +2114,7 @@ function translate($string, $mod = '', $selectedValue = '')
 
 /**
  * Converts a number from '1,000' to '1000', and '1,50' (if using commas as a decimal separator) to '1.50'.
- * 
+ *
  * @deprecated This function is unused and will be removed in a future release.
  */
 function unTranslateNum($num)
@@ -2104,8 +2144,8 @@ function unTranslateNum($num)
 function isSSL()
 {
     if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
-            (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
-            (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on')
+        (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
+        (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on')
     ) {
         return true;
     }
@@ -2527,7 +2567,7 @@ function securexss($value)
 
         return $new;
     }
-    
+
     static $xss_cleanup = ['&quot;' => '&#38;', '"' => '&quot;', "'" => '&#039;', '<' => '&lt;', '>' => '&gt;', '`' => '&#96;'];
 
     $value = preg_replace(array('/javascript:/i', '/\0/'), array('java script:', ''), $value);
@@ -3127,7 +3167,7 @@ function display_notice($msg = false)
 
 /**
  * Checks if it is a number that at least has the plus at the beginning.
- * 
+ *
  * @deprecated No longer used, will be removed without replacement in SuiteCRM 7.12.
  */
 function skype_formatted($number)
@@ -3501,7 +3541,7 @@ function sugar_cleanup($exit = false)
 
     //check to see if this is not an `ajax call AND the user preference error flag is set
     if (
-            (isset($_SESSION['USER_PREFRENCE_ERRORS']) && $_SESSION['USER_PREFRENCE_ERRORS']) && ($_REQUEST['action'] != 'modulelistmenu' && $_REQUEST['action'] != 'DynamicAction') && ($_REQUEST['action'] != 'favorites' && $_REQUEST['action'] != 'DynamicAction') && (empty($_REQUEST['to_pdf']) || !$_REQUEST['to_pdf']) && (empty($_REQUEST['sugar_body_only']) || !$_REQUEST['sugar_body_only'])
+        (isset($_SESSION['USER_PREFRENCE_ERRORS']) && $_SESSION['USER_PREFRENCE_ERRORS']) && ($_REQUEST['action'] != 'modulelistmenu' && $_REQUEST['action'] != 'DynamicAction') && ($_REQUEST['action'] != 'favorites' && $_REQUEST['action'] != 'DynamicAction') && (empty($_REQUEST['to_pdf']) || !$_REQUEST['to_pdf']) && (empty($_REQUEST['sugar_body_only']) || !$_REQUEST['sugar_body_only'])
     ) {
         global $app_strings;
         //this is not an ajax call and the user preference error flag is set, so reset the flag and print js to flash message
@@ -3679,7 +3719,7 @@ function StackTraceErrorHandler($errno, $errstr, $errfile, $errline, $errcontext
 //            return; //depricated we have lots of these ignore them
         case E_USER_NOTICE:
             $type = 'User notice';
-            // no break
+        // no break
         case E_NOTICE:
             $type = 'Notice';
             $halt_script = false;
@@ -3688,13 +3728,13 @@ function StackTraceErrorHandler($errno, $errstr, $errfile, $errline, $errcontext
 
         case E_USER_WARNING:
             $type = 'User warning';
-            // no break
+        // no break
         case E_COMPILE_WARNING:
             $type = 'Compile warning';
-            // no break
+        // no break
         case E_CORE_WARNING:
             $type = 'Core warning';
-            // no break
+        // no break
         case E_WARNING:
             $type = 'Warning';
             $halt_script = false;
@@ -3702,13 +3742,13 @@ function StackTraceErrorHandler($errno, $errstr, $errfile, $errline, $errcontext
 
         case E_USER_ERROR:
             $type = 'User error';
-            // no break
+        // no break
         case E_COMPILE_ERROR:
             $type = 'Compile error';
-            // no break
+        // no break
         case E_CORE_ERROR:
             $type = 'Core error';
-            // no break
+        // no break
         case E_ERROR:
             $type = 'Error';
             $halt_script = true;
@@ -3782,7 +3822,7 @@ function mark_delete_components($sub_object_array, $run_second_level = false, $s
  * Translates php.ini memory values into bytes.
  * For example, an input value of '8M' will return 8388608.
  * 8M is 8 mebibytes, 1 mebibyte is 1,048,576 bytes or 2^20 bytes.
- * 
+ *
  * @param string $val A string like '8M'.
  * @return integer The number of bytes represented by that string.
  */
@@ -3795,10 +3835,10 @@ function return_bytes($val)
     switch ($last) {
         case 'g':
             $val *= 1024;
-            // no break
+        // no break
         case 'm':
             $val *= 1024;
-            // no break
+        // no break
         case 'k':
             $val *= 1024;
     }
@@ -4153,11 +4193,11 @@ function string_format($format, $args, $escape = true)
             }
             $args[$i] = implode("','", $values);
             $result = str_replace('{'.$i.'}', $args[$i], $result);
-       }
-        else if ($escape){       
+        }
+        else if ($escape){
             $result = str_replace('{'.$i.'}', $db->quote($args[$i]), $result);
         }
-        else{       
+        else{
             $result = str_replace('{'.$i.'}', $args[$i], $result);
         }
     }
@@ -5321,7 +5361,7 @@ function verify_uploaded_image($path, $jpeg_only = false)
     $tmpArray = explode('.', $path);
     $ext = end($tmpArray);
     if (substr_count('..', $path) > 0 || ($ext !== $path && !isset($supportedExtensions[strtolower($ext)])) ||
-            !in_array($filetype, array_values($supportedExtensions))
+        !in_array($filetype, array_values($supportedExtensions))
     ) {
         return false;
     }
@@ -5370,14 +5410,14 @@ function sql_like_string($str, $like_char, $wildcard = '%', $appendWildcard = tr
 
     // override default wildcard character
     if (isset($GLOBALS['sugar_config']['search_wildcard_char']) &&
-            strlen($GLOBALS['sugar_config']['search_wildcard_char']) == 1
+        strlen($GLOBALS['sugar_config']['search_wildcard_char']) == 1
     ) {
         $wildcard = $GLOBALS['sugar_config']['search_wildcard_char'];
     }
 
     // add wildcard at the beginning of the search string
     if (isset($GLOBALS['sugar_config']['search_wildcard_infront']) &&
-            $GLOBALS['sugar_config']['search_wildcard_infront'] == true
+        $GLOBALS['sugar_config']['search_wildcard_infront'] == true
     ) {
         if (substr($str, 0, 1) != $wildcard) {
             $str = $wildcard . $str;

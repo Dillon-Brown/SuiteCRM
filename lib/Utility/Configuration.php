@@ -38,30 +38,72 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-namespace SuiteCRM\Enumerator;
+namespace SuiteCRM\Utility;
+
+use ArrayAccess;
+use Configurator;
+use SuiteCRM\Exception\Exception;
 
 /**
- * Class ExceptionCode
- * @package SuiteCRM\Enumerator
- * Holds all the error codes for exceptions
- * Convention: [Sub_System]_[Error_Name] = unique integer
+ * Class Configuration
+ * @package SuiteCRM\Utility
  */
-class ExceptionCode
+class Configuration implements ArrayAccess
 {
-    const APPLICATION_MALWARE_FOUND = 4000;
-    const APPLICATION_UNHANDLED_BEHAVIOUR = 6000;
-    const APPLICTAION_MODULE_NOT_FOUND = 6005;
-    const API_EXCEPTION = 8000;
-    const API_CONTENT_NEGOTIATION_FAILED = 8005;
-    const API_INVALID_BODY = 8010;
-    const API_MODULE_NOT_FOUND = 8015;
-    const API_MISSING_REQUIRED = 8020;
-    const API_DATE_CONVERTION_SUGARBEAN = 8025;
-    const API_USER_NOT_ACTIVE = 8030;
-    const API_NOT_IMPLEMENTED = 8035;
-    const API_RESERVED_KEYWORD_NOT_ALLOWED = 8040;
-    const API_RELATIONSHIP_NOT_FOUND = 8045;
-    const API_RECORD_NOT_FOUND = 8050;
-    const API_VIEWDEF_NOT_FOUND = 8055;
-    const API_ID_ALREADY_EXISTS = 8060;
+
+    private $container;
+
+    /**
+     * Configuration constructor.
+     */
+    public function __construct()
+    {
+        global $sugar_config;
+        require_once 'modules/Configurator/Configurator.php';
+        $this->container = (new Configurator())->config;
+    }
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     * @throws Exception
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (is_null($offset)) {
+            throw new Exception('[Configuration][missing offset]');
+        }
+
+        if (!isset($this->container[$offset])) {
+            throw new Exception('[Configuration][not found]');
+        }
+
+        $this->container[$offset] = $value;
+    }
+
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->container[$offset]);
+    }
+
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->container[$offset]);
+    }
+
+    /**
+     * @param mixed $offset
+     * @return mixed|null
+     */
+    public function offsetGet($offset)
+    {
+        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+    }
 }

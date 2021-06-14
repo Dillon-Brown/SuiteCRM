@@ -42,8 +42,11 @@ if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
-require_once __DIR__.'/externalAPI/ExternalAPIFactory.php';
-require_once __DIR__.'/UploadStream.php';
+require_once __DIR__ . '/externalAPI/ExternalAPIFactory.php';
+require_once __DIR__ . '/UploadStream.php';
+
+use SuiteCRM\Exception\MalwareFoundException;
+use SuiteCRM\Utility\AntiMalware\AntiMalwareTrait;
 
 /**
  * @api
@@ -51,6 +54,8 @@ require_once __DIR__.'/UploadStream.php';
  */
 class UploadFile
 {
+    use AntiMalwareTrait;
+
     public $field_name;
     public $stored_file_name;
     public $uploaded_file_name;
@@ -209,7 +214,7 @@ class UploadFile
         }
 
         $destination = "upload://$new_id";
-        
+
         if (is_dir($source)) {
             LoggerManager::getLogger()->warn('Upload File error: Argument cannot be a directory. Argument was: "' . $source . '"');
         } else {
@@ -219,7 +224,7 @@ class UploadFile
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -292,6 +297,14 @@ class UploadFile
 
         if (!UploadStream::writable()) {
             $GLOBALS['log']->fatal("ERROR: cannot write to upload directory");
+
+            return false;
+        }
+
+        try {
+            $this->scanPathForMalware($_FILES[$this->field_name]['tmp_name']);
+        } catch (MalwareFoundException $exception) {
+            LoggerManager::getLogger()->security("Malware found, unable to save file: {$_FILES[$this->field_name]['name']}");
 
             return false;
         }
