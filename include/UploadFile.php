@@ -301,13 +301,13 @@ class UploadFile
             return false;
         }
 
-        try {
-            $this->scanPathForMalware($_FILES[$this->field_name]['tmp_name']);
-        } catch (MalwareFoundException $exception) {
-            LoggerManager::getLogger()->security("Malware found, unable to save file: {$_FILES[$this->field_name]['name']}");
-
-            return false;
-        }
+//        try {
+//            $this->scanPathForMalware($_FILES[$this->field_name]['tmp_name']);
+//        } catch (MalwareFoundException $exception) {
+//            LoggerManager::getLogger()->security("Malware found, unable to save file: {$_FILES[$this->field_name]['name']}");
+//
+//            return false;
+//        }
 
         $this->mime_type = $this->getMime($_FILES[$this->field_name]);
         $this->stored_file_name = $this->create_stored_filename();
