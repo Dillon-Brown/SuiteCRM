@@ -6,3 +6,4 @@ extensions:
 exclude:
   - vendor
   - modules/AOS_PDF_Templates/PDF_Lib
+  - include/SugarObjects
