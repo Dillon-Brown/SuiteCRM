@@ -29,7 +29,20 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
   code:
-    name: Code
+    name: Code validators
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v2
+
+      - name: Lint PHP files
+        uses: overtrue/phplint@7.4
+
+      - name: CodeCov validation check
+        run: curl --data-binary @codecov.yml https://codecov.io/validate
+
+  security:
+    name: Security checks
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout
@@ -38,8 +51,11 @@ jobs:
       - name: DevSkim security scan
         uses: microsoft/DevSkim-Action@v1
 
-      - name: Lint PHP files
-        uses: overtrue/phplint@7.4
+      - name: Dependency vulnerability check
+        uses: symfonycorp/security-checker-action@v2
+        with:
+          disable-exit-code: 1
+        id: security-check
 
-      - name: CodeCov validation check
-        run: curl --data-binary @codecov.yml https://codecov.io/validate
+      - name: Vulnerability JSON
+        run: echo ${{ steps.security-check.outputs.vulns }}
