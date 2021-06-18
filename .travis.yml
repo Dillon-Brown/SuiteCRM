@@ -69,6 +69,11 @@ before_script:
   # Additional PHP config
   - phpenv config-add travis.php.ini
   - sudo service apache2 restart
+  # add keys
+  - sudo chmod -R 777 .
+  - openssl genrsa -out Api/V8/OAuth2/private.key 2048
+  - openssl rsa -in Api/V8/OAuth2/private.key -pubout -out Api/V8/OAuth2/public.key
+  - sudo chmod 600 Api/V8/OAuth2/p*.key
   # Install composer
   - composer install
   - ./vendor/bin/codecept build
@@ -88,12 +93,6 @@ script:
   - mysql -u root -D automated_tests -v -e "source tests/_data/demo_users.sql"
   # set the log level to error
   - echo "\$sugar_config['logger']['level'] = 'error';" >> config_override.php
-  # add keys
-  - sudo chmod -R 777 .
-  - openssl genrsa -out Api/V8/OAuth2/private.key 2048
-  - openssl rsa -in Api/V8/OAuth2/private.key -pubout -out Api/V8/OAuth2/public.key
-  - sudo chmod 600 Api/V8/OAuth2/p*.key
-  # - sudo chown www-data:www-data Api/V8/OAuth2/p*.key
   # Run API functional tests
   - ./vendor/bin/codecept run tests/api/V8/ -f --ext DotReporter
   # RUN Basic Acceptance test
