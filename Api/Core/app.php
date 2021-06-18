@@ -1,8 +1,10 @@
 <?php
-// Swagger needs this, but should remove - CORS
-header("Access-Control-Allow-Origin: *");
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE');
-header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
+if (!defined('SUITE_PHPUNIT_RUNNER')) {
+    // Swagger needs this, but should remove - CORS
+    header("Access-Control-Allow-Origin: *");
+    header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE');
+    header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
+}
 
 // @codingStandardsIgnoreStart
 if (!defined('sugarEntry')) {
