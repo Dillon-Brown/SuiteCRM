@@ -116,6 +116,7 @@ class EmailUI
     /**
      * Renders the frame for emails
      * @throws RuntimeException
+     * @noinspection PhpPossiblePolymorphicInvocationInspection
      */
     public function displayEmailFrame($baseTpl = "modules/Emails/templates/_baseEmail.tpl")
     {
@@ -265,15 +266,22 @@ class EmailUI
         $defaultSignatureId = $user->getPreference('signature_default');
         $this->smarty->assign(
             'signatures',
-            $user->getSignatures(false, $defaultSignatureId, false, 'signature_id')
+            $user->generateSignatureSelectionHTML(false, $defaultSignatureId)
         );
         $this->smarty->assign(
             'signaturesSettings',
-            $user->getSignatures(false, $defaultSignatureId, false, 'signature_id')
+            $user->generateSignatureSelectionHTML(false, $defaultSignatureId)
         );
         $this->smarty->assign(
             'signaturesAccountSettings',
-            $user->getEmailAccountSignatures(false, $defaultSignatureId, false, 'account_signature_id')
+            $user->generateSignatureSelectionHTML(
+                false,
+                $defaultSignatureId,
+                false,
+                'account_signature_id',
+                false,
+                true
+            )
         );
         $signatureButtons = $user->getSignatureButtons(
             'SUGAR.email2.settings.createSignature',

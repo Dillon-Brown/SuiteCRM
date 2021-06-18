@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2021 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -37,26 +37,18 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
+
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
 
 /**
- * EmailsDataAddressCollector
- *
+ * Class EmailsDataAddressCollector
  * @author gyula
  */
 class EmailsDataAddressCollector
 {
     const ERR_INVALID_INBOUND_EMAIL_TYPE = 201;
-    const ERR_STORED_OUTBOUND_EMAIL_NOT_SET = 202;
-    const ERR_STORED_OUTBOUND_EMAIL_ID_IS_INVALID = 203;
-    const ERR_REPLY_TO_ADDR_NOT_FOUND = 204;
-    const ERR_REPLY_TO_FORMAT_INVALID_SPLITS = 205;
-    const ERR_STORED_OUTBOUND_EMAIL_NOT_FOUND = 206;
-    const ERR_REPLY_TO_FORMAT_INVALID_NO_NAME = 207;
-    const ERR_REPLY_TO_FORMAT_INVALID_NO_ADDR = 208;
-    const ERR_REPLY_TO_FORMAT_INVALID_AS_FROM = 209;
 
     /**
      *
@@ -69,12 +61,6 @@ class EmailsDataAddressCollector
      * @var array
      */
     protected $sugarConfig;
-
-    /**
-     *
-     * @var int
-     */
-    protected $err;
 
     /**
      *
@@ -117,7 +103,7 @@ class EmailsDataAddressCollector
     // -------------------------------------------------------
 
     /**
-     *
+     * EmailsDataAddressCollector constructor.
      * @param User $currentUser
      * @param array $sugarConfig
      */
@@ -128,37 +114,32 @@ class EmailsDataAddressCollector
     }
 
     /**
-     * @param $ieAccounts
-     * @param $showFolders
-     * @param $prependSignature
-     * @param $emailSignatures
-     * @param $defaultEmailSignature
+     * @param array|InboundEmail[] $ieAccounts
+     * @param array $showFolders
+     * @param bool $prependSignature
+     * @param array $emailSignatures
+     * @param array $defaultEmailSignature
      * @return array
-     * @throws EmailValidatorException
      */
     public function collectDataAddressesFromIEAccounts(
-        $ieAccounts,
-        $showFolders,
+        array $ieAccounts,
+        array $showFolders,
         $prependSignature,
-        $emailSignatures,
-        $defaultEmailSignature
+        array $emailSignatures,
+        array $defaultEmailSignature
     ) {
-        $dataAddresses = array();
+        $dataAddresses = [];
         foreach ($ieAccounts as $inboundEmail) {
             $this->validateInboundEmail($inboundEmail);
 
+            /** @noinspection PhpRedundantOptionalArgumentInspection */
             if (in_array($inboundEmail->id, $showFolders, false)) {
-                $storedOptions = sugar_unserialize(base64_decode($inboundEmail->stored_options));
                 $isGroupEmailAccount = $inboundEmail->isGroupEmailAccount();
                 $isPersonalEmailAccount = $inboundEmail->isPersonalEmailAccount();
+                $storedOptions = $inboundEmail->getStoredOptions();
 
-                $this->getOutboundEmailOrError($storedOptions, $inboundEmail);
                 $this->retrieveFromDataStruct($storedOptions);
-
-                $emailFromValidator = new EmailFromValidator();
-
-                $this->logReplyToError($emailFromValidator);
-
+                $this->retrieveOutBoundEmail($this->oeId);
 
                 $dataAddress = $this->getDataAddressFromIEAccounts(
                     $inboundEmail,
@@ -177,10 +158,8 @@ class EmailsDataAddressCollector
         return $this->fillDataAddress($dataAddresses, $defaultEmailSignature, $prependSignature);
     }
 
-
     /**
-     *
-     * @param InboundEmail $inboundEmail
+     * @param InboundEmail|null $inboundEmail
      * @throws InvalidArgumentException
      */
     protected function validateInboundEmail($inboundEmail = null)
@@ -195,31 +174,6 @@ class EmailsDataAddressCollector
 
     /**
      *
-     * @param array $storedOptions
-     * @param InboundEmail $inboundEmail
-     */
-    protected function getOutboundEmailOrError($storedOptions, InboundEmail $inboundEmail)
-    {
-        $this->err = null;
-        $this->setOe(null);
-        if (!isset($storedOptions['outbound_email'])) {
-            // exception
-            LoggerManager::getLogger()->error('EmailController::action_getFromFields() expects an outbound email id as stored option of inbound email (' . $inboundEmail->id . ') but it isn\'t set.');
-            $this->err = self::ERR_STORED_OUTBOUND_EMAIL_NOT_SET;
-        } else {
-            $validator = new SuiteCRM\Utility\SuiteValidator();
-            if ($validator->isValidId($storedOptions['outbound_email'])) {
-                // exception
-                LoggerManager::getLogger()->error('EmailController::action_getFromFields() expects an outbound email id as stored option of inbound email (' . $inboundEmail->id . ') but it isn\'t valid.');
-                $this->err = self::ERR_STORED_OUTBOUND_EMAIL_ID_IS_INVALID;
-            } else {
-                $this->setOe($this->getOutboundEmailOrErrorByStoredOptions($storedOptions));
-            }
-        }
-    }
-
-    /**
-     *
      * @param OutboundEmail|null $oe
      */
     protected function setOe($oe)
@@ -228,122 +182,14 @@ class EmailsDataAddressCollector
     }
 
     /**
-     *
      * @param array $storedOptions
      */
-    protected function retrieveFromDataStruct($storedOptions)
+    protected function retrieveFromDataStruct(array $storedOptions)
     {
-        if ($this->err) {
-            LoggerManager::getLogger()->error('EmailController::action_getFromFields() panic: An error occurred! (' . $this->err . ')');
-
-            $this->replyTo = $this->getReplyToOnError($storedOptions);
-            $this->fromName = $this->getFromNameOnError($storedOptions);
-            $this->fromAddr = $this->getFromAddrOnError($storedOptions);
-            $this->oeId = null;
-            $this->oeName = null;
-        } else {
-            $this->replyTo = utf8_encode($storedOptions['reply_to_addr']);
-            $this->fromName = utf8_encode($storedOptions['from_name']);
-            $this->fromAddr = utf8_encode($storedOptions['from_addr']);
-            $this->oeId = $this->oe->id;
-            $this->oeName = $this->oe->name;
-        }
-    }
-
-    /**
-     * @param EmailFromValidator $emailFromValidator
-     * @throws EmailValidatorException
-     */
-    protected function logReplyToError(EmailFromValidator $emailFromValidator)
-    {
-        if (!$this->replyTo) {
-            // exception
-            LoggerManager::getLogger()->error('EmailController::action_getFromFields() panic: An Outbound Email Reply-to Address is not found.');
-            $replyToErr = self::ERR_REPLY_TO_ADDR_NOT_FOUND;
-        } else {
-            $splits = explode(' ', $this->replyTo);
-            if (count($splits) !== 2) {
-                LoggerManager::getLogger()->error('Incorrect "replay to" format found: ' . $this->replyTo);
-                $replyToErr = self::ERR_REPLY_TO_FORMAT_INVALID_SPLITS;
-            } else {
-                $replyToErr = null;
-                $tmpName = $this->getTmpNameForLogReplyToError($splits, $replyToErr);
-                $tmpAddr = $this->getTmpAddrForLogReplyToError($splits, $replyToErr);
-
-                $this->validateForLogReplyToError($tmpName, $tmpAddr, $emailFromValidator, $replyToErr);
-            }
-        }
-
-        if (isset($replyToErr) && $replyToErr) {
-            // exception
-            LoggerManager::getLogger()->error('EmailController::action_getFromFields() error: ' . $replyToErr);
-        }
-    }
-
-    /**
-     *
-     * @param array $splits
-     * @param int $replyToErr
-     * @return string
-     */
-    protected function getTmpNameForLogReplyToError($splits, &$replyToErr)
-    {
-        if (!isset($splits[0])) {
-            LoggerManager::getLogger()->error('Reply-to name part not found: ' . $this->getReplyTo());
-            $replyToErr = self::ERR_REPLY_TO_FORMAT_INVALID_NO_NAME;
-        }
-
-        return isset($splits[0]) ? $splits[0] : null;
-    }
-
-    /**
-     *
-     * @param array $splits
-     * @param int $replyToErr
-     * @return string
-     */
-    protected function getTmpAddrForLogReplyToError($splits, &$replyToErr)
-    {
-        if (!isset($splits[1])) {
-            LoggerManager::getLogger()->error('Reply-to email address part not found: ' . $this->getReplyTo());
-            $replyToErr = self::ERR_REPLY_TO_FORMAT_INVALID_NO_ADDR;
-        }
-
-        return isset($splits[1]) ? $splits[1] : null;
-    }
-
-    /**
-     * @param $tmpName
-     * @param $tmpAddr
-     * @param EmailFromValidator $emailFromValidator
-     * @param $replyToErr
-     * @throws EmailValidatorException
-     */
-    protected function validateForLogReplyToError(
-        $tmpName,
-        $tmpAddr,
-        EmailFromValidator $emailFromValidator,
-        &$replyToErr
-    ) {
-        $tmpEmail = BeanFactory::newBean('Emails');
-        $tmpEmail->FromName = $tmpEmail->from_name = $tmpName;
-        $tmpEmail->From = $tmpEmail->from_addr = $tmpAddr;
-        $tmpEmail->from_addr_name = $this->getReplyTo();
-
-        if (!$emailFromValidator->isValid($tmpEmail)) {
-            // exception
-            LoggerManager::getLogger()->error('EmailController::action_getFromFields() panic: An Outbound Email Reply-to Address is invalid.');
-            $replyToErr = self::ERR_REPLY_TO_FORMAT_INVALID_AS_FROM;
-        }
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function getReplyTo()
-    {
-        return $this->replyTo;
+        $this->replyTo = utf8_encode($storedOptions['reply_to_addr']);
+        $this->fromName = utf8_encode($storedOptions['from_name']);
+        $this->fromAddr = utf8_encode($storedOptions['from_addr']);
+        $this->oeId = $storedOptions['outbound_email'];
     }
 
     /**
@@ -359,12 +205,12 @@ class EmailsDataAddressCollector
      */
     protected function getDataAddressFromIEAccounts(
         InboundEmail $inboundEmail,
-        $storedOptions,
+        array $storedOptions,
         $prependSignature,
         $isPersonalEmailAccount,
         $isGroupEmailAccount,
-        $emailSignatures,
-        $defaultEmailSignature
+        array $emailSignatures,
+        array $defaultEmailSignature
     ) {
         $dataAddress = $this->getDataAddressArrayFromIEAccounts(
             $inboundEmail,
@@ -375,22 +221,22 @@ class EmailsDataAddressCollector
         );
 
         $emailSignatureId = $this->getEmailSignatureId($emailSignatures, $inboundEmail);
-
         $signature = $this->currentUser->getSignature($emailSignatureId);
+
         if (!$signature) {
             if ($defaultEmailSignature['no_default_available'] === true) {
                 $dataAddress['emailSignatures'] = $defaultEmailSignature;
             } else {
-                $dataAddress['emailSignatures'] = array(
-                    'html' => utf8_encode(html_entity_decode($defaultEmailSignature['signature_html'])),
+                $dataAddress['emailSignatures'] = [
+                    'html' => $defaultEmailSignature['signature_html'],
                     'plain' => $defaultEmailSignature['signature'],
-                );
+                ];
             }
         } else {
-            $dataAddress['emailSignatures'] = array(
-                'html' => utf8_encode(html_entity_decode($signature['signature_html'])),
+            $dataAddress['emailSignatures'] = [
+                'html' => $signature['signature_html'],
                 'plain' => $signature['signature'],
-            );
+            ];
         }
 
         return $dataAddress;
@@ -408,14 +254,12 @@ class EmailsDataAddressCollector
      */
     protected function getDataAddressArrayFromIEAccounts(
         InboundEmail $inboundEmail,
-        $storedOptions,
+        array $storedOptions,
         $prependSignature,
         $isPersonalEmailAccount,
         $isGroupEmailAccount
     ) {
-        $dataAddress = new EmailsDataAddress();
-
-        return $dataAddress->getDataArray(
+        return (new EmailsDataAddress())->getDataArray(
             $inboundEmail->module_name,
             $inboundEmail->id,
             $storedOptions['reply_to_addr'],
@@ -450,32 +294,27 @@ class EmailsDataAddressCollector
     }
 
     /**
-     *
      * @param array $emailSignatures
      * @param InboundEmail $inboundEmail
      * @return string
      */
-    protected function getEmailSignatureId($emailSignatures, InboundEmail $inboundEmail)
+    protected function getEmailSignatureId(array $emailSignatures, InboundEmail $inboundEmail)
     {
-
-        // Include signature
-        if (isset($emailSignatures[$inboundEmail->id]) && !empty($emailSignatures[$inboundEmail->id])) {
-            $emailSignatureId = $emailSignatures[$inboundEmail->id];
-        } else {
-            $emailSignatureId = '';
+        $emailSignatureID = $emailSignatures[$inboundEmail->id];
+        if (!empty($emailSignatureID) && is_string($emailSignatureID)) {
+            return $emailSignatureID;
         }
 
-        return $emailSignatureId;
+        return '';
     }
 
     /**
-     *
      * @param array $dataAddresses
      * @param array $defaultEmailSignature
      * @param string $prependSignature
      * @return array
      */
-    protected function fillDataAddress($dataAddresses, $defaultEmailSignature, $prependSignature)
+    protected function fillDataAddress(array $dataAddresses, array $defaultEmailSignature, $prependSignature)
     {
         $dataAddressesWithUserAddresses = $this->fillDataAddressFromUserAddresses(
             $dataAddresses,
@@ -487,24 +326,22 @@ class EmailsDataAddressCollector
             $defaultEmailSignature
         );
 
-        return
-            $this->fillDataAddressFromPersonal(
-                $dataAddressesWithUserAddressesAndSystem
-            );
+        return $this->fillDataAddressFromPersonal($dataAddressesWithUserAddressesAndSystem);
     }
 
     /**
-     *
      * @param array $dataAddresses
      * @param array $defaultEmailSignature
      * @param string $prependSignature
      * @return array
      */
-    protected function fillDataAddressFromUserAddresses($dataAddresses, $defaultEmailSignature, $prependSignature)
-    {
-        if (isset($this->sugarConfig['email_allow_send_as_user']) && $this->sugarConfig['email_allow_send_as_user']) {
-            $sugarEmailAddress = new SugarEmailAddress();
-            $userAddressesArr = $sugarEmailAddress->getAddressesByGUID($this->currentUser->id, 'Users');
+    protected function fillDataAddressFromUserAddresses(
+        array $dataAddresses,
+        array $defaultEmailSignature,
+        $prependSignature
+    ) {
+        if (!empty($this->sugarConfig['email_allow_send_as_user'])) {
+            $userAddressesArr = (new SugarEmailAddress())->getAddressesByGUID($this->currentUser->id, 'Users');
             $dataAddresses = $this->collectDataAddressesFromUserAddresses(
                 $dataAddresses,
                 $userAddressesArr,
@@ -516,9 +353,7 @@ class EmailsDataAddressCollector
         return $dataAddresses;
     }
 
-
     /**
-     *
      * @param array $dataAddresses
      * @param array $userAddressesArr
      * @param array $defaultEmailSignature
@@ -526,25 +361,22 @@ class EmailsDataAddressCollector
      * @return array
      */
     protected function collectDataAddressesFromUserAddresses(
-        $dataAddresses,
+        array $dataAddresses,
         $userAddressesArr,
-        $defaultEmailSignature,
+        array $defaultEmailSignature,
         $prependSignature
     ) {
         foreach ($userAddressesArr as $userAddress) {
-            if (!isset($userAddress['reply_to_addr']) || !$userAddress['reply_to_addr']) {
+            if (!empty($userAddress['reply_to_addr'])) {
                 LoggerManager::getLogger()->error('EmailController::action_getFromFields() is Panicking: Reply-To address is not filled.');
             }
             $fromString = $this->getFromString($userAddress);
-            $signatureHtml = $this->getSignatureHtml($defaultEmailSignature);
-            $signatureTxt = $this->getSignatureTxt($defaultEmailSignature);
 
             $dataAddresses[] = $this->getCollectDataAddressArrayFromUserAddresses(
                 $userAddress,
                 $fromString,
                 $prependSignature,
-                $signatureHtml,
-                $signatureTxt
+                $defaultEmailSignature
             );
         }
 
@@ -577,58 +409,19 @@ class EmailsDataAddressCollector
     }
 
     /**
-     *
-     * @param array $defaultEmailSignature
-     * @return string
-     */
-    protected function getSignatureHtml($defaultEmailSignature)
-    {
-        if (!isset($defaultEmailSignature['signature_html'])) {
-            LoggerManager::getLogger()->warn('EmailController::action_getFromFields() is Panicking: Default email signature array does not have index as signature_html');
-            $signatureHtml = null;
-        } else {
-            $signatureHtml = $defaultEmailSignature['signature_html'];
-        }
-
-        return $signatureHtml;
-    }
-
-    /**
-     *
-     * @param array $defaultEmailSignature
-     * @return string
-     */
-    protected function getSignatureTxt($defaultEmailSignature)
-    {
-        if (!isset($defaultEmailSignature['signature'])) {
-            LoggerManager::getLogger()->warn('EmailController::action_getFromFields() is Panicking: Default email signature array does not have index as signature');
-            $signatureTxt = null;
-        } else {
-            $signatureTxt = $defaultEmailSignature['signature'];
-        }
-
-        return $signatureTxt;
-    }
-
-    /**
-     *
      * @param array $userAddress
      * @param string $fromString
      * @param string $prependSignature
-     * @param string $signatureHtml
-     * @param string $signatureTxt
+     * @param array $defaultEmailSignature
      * @return array
      */
     protected function getCollectDataAddressArrayFromUserAddresses(
         $userAddress,
         $fromString,
         $prependSignature,
-        $signatureHtml,
-        $signatureTxt
+        array $defaultEmailSignature
     ) {
-        $dataAddress = new EmailsDataAddress();
-
-        return $dataAddress->getDataArray(
+        return (new EmailsDataAddress())->getDataArray(
             'personal',
             $userAddress['email_address_id'],
             $this->currentUser->full_name . ' &lt;' . $userAddress['email_address'] . '&gt;',
@@ -640,20 +433,16 @@ class EmailsDataAddressCollector
             false,
             null,
             null,
-            [
-                'html' => utf8_encode(html_entity_decode($signatureHtml)),
-                'plain' => $signatureTxt,
-            ]
+            $defaultEmailSignature
         );
     }
 
     /**
-     *
      * @param array $dataAddresses
      * @param array $defaultEmailSignature
      * @return array
      */
-    protected function fillDataAddressWithSystemMailerSettings($dataAddresses, $defaultEmailSignature)
+    protected function fillDataAddressWithSystemMailerSettings(array $dataAddresses, array $defaultEmailSignature)
     {
         $this->setOe(new OutboundEmail());
         if ($this->getOe()->isAllowUserAccessToSystemDefaultOutbound()) {
@@ -672,16 +461,16 @@ class EmailsDataAddressCollector
     }
 
     /**
-     * @param $dataAddresses
-     * @return mixed
+     * @param array $dataAddresses
+     * @return array
      */
-    protected function fillDataAddressFromPersonal($dataAddresses)
+    protected function fillDataAddressFromPersonal(array $dataAddresses)
     {
         foreach ($dataAddresses as $address => $userAddress) {
-            if ($userAddress['type'] !== 'system') {
+            if ($userAddress['type'] !== 'system' && $userAddress['type'] !== 'personal') {
                 $emailInfo = $userAddress['attributes'];
-                $fromString = $emailInfo['from'];
-                $replyString = $emailInfo['reply_to'];
+                $fromString = $this->addCurrentUserToEmailString($emailInfo['from']);
+                $replyString = $this->addCurrentUserToEmailString($emailInfo['reply_to']);
 
                 $dataAddresses[$address]['attributes'] = [
                     'from' => $fromString,
@@ -721,11 +510,9 @@ class EmailsDataAddressCollector
         $fromName,
         $fromAddr,
         $mailUser,
-        $defaultEmailSignature
+        array $defaultEmailSignature
     ) {
-        $dataAddress = new EmailsDataAddress();
-
-        return $dataAddress->getDataArray(
+        return (new EmailsDataAddress())->getDataArray(
             'system',
             $id,
             "$fromName &lt;$fromAddr&gt;",
@@ -742,70 +529,12 @@ class EmailsDataAddressCollector
     }
 
     /**
-     *
-     * @param array $storedOptions
-     * @return OutboundEmail
+     * @param string $outboundEmailID
      */
-    protected function getOutboundEmailOrErrorByStoredOptions($storedOptions)
+    protected function retrieveOutboundEmail($outboundEmailID)
     {
-        $this->oe = new OutboundEmail();
-        if (!$this->oe->retrieve($storedOptions['outbound_email'])) {
-            // exception
-            LoggerManager::getLogger()->error('Trying to retrieve an OutboundEmail by ID: ' . $storedOptions['outbound_email'] . ' but it is not found.');
-            $this->err = self::ERR_STORED_OUTBOUND_EMAIL_NOT_FOUND;
-        }
-
-        return $this->oe;
-    }
-
-    /**
-     *
-     * @param array $storedOptions
-     * @return string
-     */
-    protected function getReplyToOnError($storedOptions)
-    {
-        if (!isset($storedOptions['reply_to_addr'])) {
-            LoggerManager::getLogger()->warn('Stored reply to address is not set.');
-        } elseif (!$storedOptions['reply_to_addr']) {
-            LoggerManager::getLogger()->warn('Stored reply to address is not filled.');
-        }
-        $this->replyTo = isset($storedOptions['reply_to_addr']) ? $storedOptions['reply_to_addr'] : null;
-
-        return $this->replyTo;
-    }
-
-    /**
-     *
-     * @param array $storedOptions
-     * @return string
-     */
-    protected function getFromNameOnError($storedOptions)
-    {
-        if (!isset($storedOptions['from_name'])) {
-            LoggerManager::getLogger()->warn('Stored from name is not set.');
-        } elseif (!$storedOptions['from_name']) {
-            LoggerManager::getLogger()->warn('Stored from name is not filled.');
-        }
-        $this->fromName = isset($storedOptions['from_name']) ? $storedOptions['from_name'] : null;
-
-        return $this->fromName;
-    }
-
-    /**
-     *
-     * @param array $storedOptions
-     * @return string
-     */
-    protected function getFromAddrOnError($storedOptions)
-    {
-        if (!isset($storedOptions['from_addr'])) {
-            LoggerManager::getLogger()->warn('Stored from address is not set.');
-        } elseif (!$storedOptions['from_addr']) {
-            LoggerManager::getLogger()->warn('Stored from address is not filled.');
-        }
-        $this->fromAddr = isset($storedOptions['from_addr']) ? $storedOptions['from_addr'] : null;
-
-        return $this->fromAddr;
+        $this->oe = (new OutboundEmail())->retrieve($outboundEmailID);
+        $this->oeId = $this->oe->id;
+        $this->oeName = $this->oe->name;
     }
 }

@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2019 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2021 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -172,38 +172,42 @@ class User extends Person implements EmailInterface
 
     /**
      * convenience function to get user's default signature
-     * return array
+     * @return array
      */
     public function getDefaultSignature()
     {
         if ($defaultId = $this->getPreference('signature_default')) {
             return $this->getSignature($defaultId);
         }
-        return array();
+
+        return [];
     }
 
     /**
      * retrieves the signatures for a user
-     * @param string id ID of user_signature
+     * @param string $id id ID of user_signature
      * @return array ID, signature, and signature_html
      */
     public function getSignature($id)
     {
         $signatures = $this->getSignaturesArray();
 
-        return isset($signatures[$id]) ? $signatures[$id] : false;
+        if (empty($signatures[$id])) {
+            LoggerManager::getLogger()->warn('Invalid user_signature ID: ' . $id);
+            return [];
+        }
+
+        return $signatures[$id];
     }
 
     /**
      * @param bool $useRequestedRecord
      * @return array
-     * @throws \RuntimeException
      */
     public function getSignaturesArray($useRequestedRecord = false)
     {
         if ($useRequestedRecord) {
-            $user = $this->getRequestedUserRecord();
-            $uid = $user->id;
+            $uid = $this->getRequestedUserRecord()->id;
         } else {
             $uid = $this->id;
         }
@@ -211,8 +215,7 @@ class User extends Person implements EmailInterface
         $q = 'SELECT * FROM users_signatures WHERE user_id = \'' . $uid . '\' AND deleted = 0 ORDER BY name ASC';
         $r = $this->db->query($q);
 
-        // provide "none"
-        $sig = array("" => "");
+        $sig = [];
 
         while ($a = $this->db->fetchByAssoc($r)) {
             $sig[$a['id']] = $a;
@@ -223,13 +226,15 @@ class User extends Person implements EmailInterface
 
     /**
      * retrieves any signatures that the User may have created as <select>
+     *
      * @param bool $live
      * @param string $defaultSig
      * @param bool $forSettings
      * @param string $elementId
      * @param bool $useRequestedRecord
      * @return string
-     * @throws \RuntimeException
+     * @throws RuntimeException
+     * @deprecated use User::generateSignatureSelectionHTML
      */
     public function getSignatures(
         $live = false,
@@ -238,34 +243,29 @@ class User extends Person implements EmailInterface
         $elementId = 'signature_id',
         $useRequestedRecord = false
     ) {
-        $sig = $this->getSignaturesArray($useRequestedRecord);
-        $sigs = array();
-        foreach ($sig as $key => $arr) {
-            $sigs[$key] = !empty($arr['name']) ? $arr['name'] : '';
-        }
+        $deprecatedMessage = 'User::getSignatures() is deprecated, please update your code to use User::generateSignatureSelectionHTML()';
+        LoggerManager::getLogger()->deprecated($deprecatedMessage);
 
-        $change = '';
-        if (!$live) {
-            $change = ($forSettings) ? "onChange='displaySignatureEdit();'" : "onChange='setSigEditButtonVisibility();'";
-        }
-
-        $id = (!$forSettings) ? $elementId : 'signature_idDisplay';
-
-        $out = "<select {$change} id='{$id}' name='{$id}'>";
-        $out .= get_select_options_with_id($sigs, $defaultSig) . '</select>';
-
-        return $out;
+        return $this->generateSignatureSelectionHTML(
+            $live,
+            $defaultSig,
+            $forSettings,
+            $elementId,
+            $useRequestedRecord
+        );
     }
 
     /**
      * retrieves any signatures that the User may have created as <select>
+     *
      * @param bool $live
      * @param string $defaultSig
      * @param bool $forSettings
      * @param string $elementId
      * @param bool $useRequestedRecord
      * @return string
-     * @throws \RuntimeException
+     * @throws RuntimeException
+     * @deprecated use User::generateSignatureSelectionHTML
      */
     public function getEmailAccountSignatures(
         $live = false,
@@ -274,27 +274,63 @@ class User extends Person implements EmailInterface
         $elementId = 'account_signature_id',
         $useRequestedRecord = false
     ) {
+        $deprecatedMessage = 'User::getEmailAccountSignatures() is deprecated, please update your code to use User::generateSignatureSelectionHTML()';
+        LoggerManager::getLogger()->deprecated($deprecatedMessage);
+
+        return $this->generateSignatureSelectionHTML(
+            $live,
+            $defaultSig,
+            $forSettings,
+            $elementId,
+            $useRequestedRecord,
+            true
+        );
+    }
+
+    /**
+     * Retrieves any signatures that the User may have created as <select>
+     *
+     * @param bool $live
+     * @param string $defaultSig
+     * @param bool $forSettings
+     * @param string $elementId
+     * @param bool $useRequestedRecord
+     * @param bool $selectEmptyOption
+     * @return string
+     */
+    public function generateSignatureSelectionHTML(
+        $live = false,
+        $defaultSig = '',
+        $forSettings = false,
+        $elementId = 'signature_id',
+        $useRequestedRecord = false,
+        $selectEmptyOption = false
+    ) {
         $sig = $this->getSignaturesArray($useRequestedRecord);
-        $sigs = array();
+        $sigs = [];
+
         foreach ($sig as $key => $arr) {
             $sigs[$key] = !empty($arr['name']) ? $arr['name'] : '';
         }
 
         $change = '';
         if (!$live) {
-            $change = ($forSettings) ? "onChange='displaySignatureEdit();'" : "onChange='setSigEditButtonVisibility();'";
+            $change = $forSettings ? "onChange='displaySignatureEdit();'" : "onChange='setSigEditButtonVisibility();'";
         }
 
-        $id = (!$forSettings) ? $elementId : 'signature_idDisplay';
+        $selectionID = !$forSettings ? $elementId : 'signature_idDisplay';
 
-        $out = "<select {$change} id='{$id}' name='{$id}'>";
-        if (empty($defaultSig)) {
-            $out .= get_select_empty_option($defaultSig, true, 'LBL_DEFAULT_EMAIL_SIGNATURES');
-        } else {
-            $out .= get_select_empty_option($defaultSig, false, 'LBL_DEFAULT_EMAIL_SIGNATURES');
+        $out = "<select $change id='$selectionID' name='$selectionID'>";
+
+        if ($selectEmptyOption === true) {
+            if (empty($defaultSig)) {
+                $out .= get_select_empty_option($defaultSig, true, 'LBL_DEFAULT_EMAIL_SIGNATURES');
+            } else {
+                $out .= get_select_empty_option($defaultSig, false, 'LBL_DEFAULT_EMAIL_SIGNATURES');
+            }
         }
-        $out .= get_select_full_options_with_id($sigs, $defaultSig);
-        $out .= '</select>';
+
+        $out .= get_select_options_with_id($sigs, $defaultSig) . '</select>';
 
         return $out;
     }
@@ -2348,7 +2384,7 @@ EOQ;
     public function afterImportSave()
     {
         if (
-                $this->user_hash == false && !$this->is_group && !$this->portal_only && isset($GLOBALS['sugar_config']['passwordsetting']['SystemGeneratedPasswordON']) && $GLOBALS['sugar_config']['passwordsetting']['SystemGeneratedPasswordON']
+            $this->user_hash == false && !$this->is_group && !$this->portal_only && isset($GLOBALS['sugar_config']['passwordsetting']['SystemGeneratedPasswordON']) && $GLOBALS['sugar_config']['passwordsetting']['SystemGeneratedPasswordON']
         ) {
             $backUpPost = $_POST;
             $_POST = array(

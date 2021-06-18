@@ -13,7 +13,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testgetSignatureButtons()
     {
         self::markTestIncomplete('environment dependency');
-        
+
         global $mod_strings;
 
         $user = BeanFactory::newBean('Users');
@@ -71,50 +71,40 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
 
     public function testgetDefaultSignature()
     {
-        // test
-        $db = DBManagerFactory::getInstance();
-        $db->disconnect();
-        unset($db->database);
-        $db->checkConnection();
+        /** @var User $userBean */
+        $userBean = BeanFactory::newBean('Users')->retrieve(1);
 
-        $user = BeanFactory::newBean('Users');
-
-        $user->retrieve(1);
-
-        $result = $user->getDefaultSignature();
-        $this->assertTrue(is_array($result));
+        $result = $userBean->getDefaultSignature();
+        self::assertTrue(is_array($result));
     }
 
     public function testgetSignature()
     {
-        $user = BeanFactory::newBean('Users');
+        /** @var User $userBean */
+        $userBean = BeanFactory::newBean('Users')->retrieve(1);
 
-        $user->retrieve(1);
-
-        $result = $user->getSignature(1);
-        $this->assertEquals(false, $result);
+        $result = $userBean->getSignature(1);
+        self::assertEquals([], $result);
     }
 
     public function testgetSignaturesArray()
     {
-        $user = BeanFactory::newBean('Users');
+        /** @var User $userBean */
+        $userBean = BeanFactory::newBean('Users')->retrieve(1);
 
-        $user->retrieve(1);
-
-        $result = $user->getSignaturesArray();
+        $result = $userBean->getSignaturesArray();
         $this->assertTrue(is_array($result));
     }
 
     public function testgetSignatures()
     {
-        $user = BeanFactory::newBean('Users');
+        /** @var User $userBean */
+        $userBean = BeanFactory::newBean('Users')->retrieve(1);
 
-        $user->retrieve(1);
-
-        $expected = "<select onChange='setSigEditButtonVisibility();' id='signature_id' name='signature_id'>\n<OPTION selected value=''>--None--</OPTION>";
-        $actual = $user->getSignatures();
-        $this->assertTrue(strpos($actual, $expected) === 0);
-        $this->assertEquals(preg_match('/\<\/select\>$/', $actual), 1);
+        $expected = "<select onChange='setSigEditButtonVisibility();' id='signature_id' name='signature_id'></select>";
+        $actual = $userBean->generateSignatureSelectionHTML();
+        self::assertEquals($expected, $actual);
+        self::assertRegExp('/\<\/select\>$/', $actual);
     }
 
     public function testhasPersonalEmail()
@@ -130,7 +120,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testgetUserPrivGuid()
     {
         self::markTestIncomplete('environment dependency');
-                
+
         $db = DBManagerFactory::getInstance();
         $db->disconnect();
         unset($db->database);
@@ -153,7 +143,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testsetUserPrivGuid()
     {
         self::markTestIncomplete('environment dependency');
-                
+
         $db = DBManagerFactory::getInstance();
         $db->disconnect();
         unset($db->database);
@@ -437,7 +427,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     }
 
     // --- OK
- 
+
     public function authenticate_user($id)
     {
         $user = BeanFactory::newBean('Users');
@@ -594,7 +584,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testfill_in_additional_list_fields()
     {
         self::markTestIncomplete('environment dependency');
-        
+
         $user = BeanFactory::newBean('Users');
 
         $user->retrieve(1);
@@ -607,7 +597,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testfill_in_additional_detail_fields()
     {
         self::markTestIncomplete('environment dependency');
-        
+
         $user = BeanFactory::newBean('Users');
 
         $user->retrieve(1);
@@ -620,7 +610,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
     public function testretrieve_user_id()
     {
         self::markTestIncomplete('environment dependency');
-        
+
         $user = BeanFactory::newBean('Users');
 
         $result1 = $user->retrieve_user_id('admin');
@@ -1025,25 +1015,25 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
         $user->email1 = "abc@abc.com";
         $this->assertEquals(true, $user->isPrimaryEmail("abc@abc.com"));
     }
-    
+
     public function testError()
     {
         global $app_strings;
 
         // setup
         $this->assertTrue(!isset($app_strings['TEST_ERROR_MESSAGE']));
-        
+
         // test if there is no error
-        
+
         ob_start();
         include __DIR__ . '/../../../../../modules/Users/Error.php';
         $contents = ob_get_contents();
         ob_end_clean();
         $expected = '<span class=\'error\'><br><br>' . "\n" . $app_strings['NTC_CLICK_BACK'] . '</span>';
         $this->assertContains($expected, $contents);
-        
+
         // test if there is an error
-        
+
         $app_strings['TEST_ERROR_MESSAGE'] = 'Hello error';
         $request['error_string'] = 'TEST_ERROR_MESSAGE';
         $this->assertEquals($request['error_string'], 'TEST_ERROR_MESSAGE');
@@ -1053,7 +1043,7 @@ class UserTest extends SuitePHPUnitFrameworkTestCase
         ob_end_clean();
         $expected = '<span class=\'error\'>Hello error<br><br>' . "\n"  . $app_strings['NTC_CLICK_BACK'] . '</span>';
         $this->assertContains($expected, $contents);
-        
+
 
         unset($app_strings['TEST_ERROR_MESSAGE']);
     }

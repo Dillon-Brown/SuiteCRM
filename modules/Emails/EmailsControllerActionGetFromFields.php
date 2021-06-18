@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2021 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -37,6 +37,7 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
+
 if (!defined('sugarEntry') || !sugarEntry) {
     die('Not A Valid Entry Point');
 }
@@ -47,7 +48,7 @@ require_once __DIR__ . '/EmailsDataAddress.php';
 require_once __DIR__ . '/EmailsDataAddressCollector.php';
 
 /**
- *
+ * Class EmailsControllerActionGetFromFields
  * @author gyula
  */
 class EmailsControllerActionGetFromFields
@@ -58,7 +59,7 @@ class EmailsControllerActionGetFromFields
      * @var User
      */
     protected $currentUser;
-    
+
     /**
      *
      * @var EmailsDataAddressCollector
@@ -77,10 +78,9 @@ class EmailsControllerActionGetFromFields
     }
 
     /**
-     *
      * @param Email $email
      * @param InboundEmail $ie
-     * @return string JSON
+     * @return string
      */
     public function handleActionGetFromFields(Email $email, InboundEmail $ie)
     {
@@ -99,44 +99,60 @@ class EmailsControllerActionGetFromFields
             $emailSignatures,
             $defaultEmailSignature
         );
-
-        $dataEncoded = json_encode(array('data' => $dataAddresses), JSON_UNESCAPED_UNICODE);
+        $dataEncoded = json_encode(['data' => $dataAddresses], JSON_UNESCAPED_UNICODE);
         $results = utf8_decode($dataEncoded);
+
+        if ($results === false) {
+            LoggerManager::getLogger()->warn('Failed to decode email data addresses');
+
+            return '';
+        }
+
         return $results;
     }
 
     /**
-     *
      * @param string|null $accountSignatures
-     * @return array|null
+     * @return array
      */
     protected function getEmailSignatures($accountSignatures = null)
     {
-        if ($accountSignatures != null) {
-            $emailSignatures = sugar_unserialize(base64_decode($accountSignatures));
-        } else {
-            $GLOBALS['log']->warn('User ' . $this->currentUser->name . ' does not have a signature');
-            $emailSignatures = null;
+        $emailSignatures = [];
+        $userName = $this->currentUser->name;
+
+        if ($accountSignatures === null) {
+            LoggerManager::getLogger()->warn('User ' . $userName . ' does not have an email signature');
+
+            return $emailSignatures;
         }
 
-        return $emailSignatures;
+        $decodedSignatures = sugar_unserialize(base64_decode($accountSignatures));
+
+        if (!is_array($decodedSignatures)) {
+            LoggerManager::getLogger()->warn('Unable to decode user ' . $userName . ' email signature');
+
+            return $emailSignatures;
+        }
+
+        return $decodedSignatures;
     }
 
     /**
-     *
      * @return array
      */
     protected function getDefaultSignatures()
     {
         $defaultEmailSignature = $this->currentUser->getDefaultSignature();
+
         if (empty($defaultEmailSignature)) {
-            $defaultEmailSignature = array(
+            $defaultEmailSignature = [
                 'html' => '<br>',
                 'plain' => '\r\n',
-            );
-            $defaultEmailSignature['no_default_available'] = true;
+                'no_default_available' => true
+            ];
         } else {
             $defaultEmailSignature['no_default_available'] = false;
+            $defaultEmailSignature['signature_html'] = utf8_encode(html_entity_decode($defaultEmailSignature['signature_html']));
         }
 
         return $defaultEmailSignature;
