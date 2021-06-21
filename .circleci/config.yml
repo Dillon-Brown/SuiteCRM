@@ -45,8 +45,3 @@ jobs:
       - run: ./vendor/bin/codecept build
       - run: ./vendor/bin/codecept run install --env travis-ci-hub -f --ext DotReporter
       - run: ./vendor/bin/phpunit --stop-on-failure --stop-on-error --colors --configuration ./tests/phpunit.xml.dist ./tests/unit/phpunit
-
-      # Install demo data
-      - run: mysql -u root -D automated_tests -v -e "source tests/_data/api_data.sql"
-      - run: mysql -u root -D automated_tests -v -e "source tests/_data/demo_users.sql"
-      - run: echo "\$sugar_config['logger']['level'] = 'error';" >> config_override.php
