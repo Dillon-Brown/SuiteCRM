@@ -12,13 +12,11 @@ jobs:
     steps:
       - checkout
 
-      - run: sudo apt update
-      - run: sudo apt-get install -y php-curl
-      - run: sudo apt-get install -y php-gd
-      - run: sudo apt-get install -y php-imap
-      - run: sudo apt-get install -y php-json
-      - run: sudo apt-get install -y openssl
-      - run: sudo apt-get install -y php-zip
+      - run:
+          name: Install Extensions
+          command: |
+            sudo apt update && sudo apt-get install -y php-curl, php-gd, php-imap, php-json, openssl, php-zip,
+            php-intl, php-mbstring
 
       # Download and cache dependencies
       - restore_cache:
