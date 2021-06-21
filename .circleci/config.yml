@@ -8,6 +8,12 @@ jobs:
     docker:
       - image: cimg/php:7.4
       - image: circleci/mysql:5.7-ram
+        command: mysqld --default-authentication-plugin=mysql_native_password
+        environment:
+          MYSQL_USER: automated_tests
+          MYSQL_DATABASE: automated_tests
+          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_PASSWORD: ''
 
     steps:
       - checkout
