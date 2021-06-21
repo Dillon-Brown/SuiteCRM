@@ -1,0 +1,49 @@
+# PHP CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-php/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/php:7.3-node-browsers
+      - image: circleci/mysql:5.7-ram
+
+    steps:
+      - checkout
+
+      - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
+      - run: sudo docker-php-ext-install zip
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            # "composer.lock" can be used if it is committed to the repo
+            - v1-dependencies-{{ checksum "composer.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: composer install -n --prefer-dist
+      - save_cache:
+          key: v1-dependencies-{{ checksum "composer.json" }}
+          paths:
+            - ./vendor
+      - restore_cache:
+          keys:
+            - node-v1-{{ checksum "package.json" }}
+            - node-v1-
+
+      # prepare the database
+      - run: touch storage/testing.sqlite
+      - run: php artisan migrate --env=testing --database=sqlite_testing --force
+
+      # run tests with phpunit or codecept
+      #- run: ./vendor/bin/phpunit
+      - run: ./vendor/bin/codecept build
+      - run: ./vendor/bin/codecept run install --env travis-ci-hub -f --ext DotReporter
+      - run: ./vendor/bin/phpunit --stop-on-failure --stop-on-error --colors --configuration ./tests/phpunit.xml.dist ./tests/unit/phpunit
+
+      # Install demo data
+      - run: mysql -u root -D automated_tests -v -e "source tests/_data/api_data.sql"
+      - run: mysql -u root -D automated_tests -v -e "source tests/_data/demo_users.sql"
+      - run: echo "\$sugar_config['logger']['level'] = 'error';" >> config_override.php
