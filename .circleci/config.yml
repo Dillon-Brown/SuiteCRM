@@ -13,12 +13,12 @@ jobs:
       - checkout
 
       - run: sudo apt update
-      - run: sudo docker-php-ext-install curl
-      - run: sudo docker-php-ext-install gd
-      - run: sudo docker-php-ext-install imap
-      - run: sudo docker-php-ext-install json
-      - run: sudo docker-php-ext-install openssl
-      - run: sudo docker-php-ext-install zip
+      - run: sudo apt-get install -y curl
+      - run: sudo apt-get install -y gd
+      - run: sudo apt-get install -y imap
+      - run: sudo apt-get install -y json
+      - run: sudo apt-get install -y openssl
+      - run: sudo apt-get install -y zip
 
       # Download and cache dependencies
       - restore_cache:
