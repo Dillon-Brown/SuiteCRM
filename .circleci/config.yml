@@ -10,10 +10,11 @@ jobs:
       - image: circleci/mysql:5.7-ram
         command: mysqld --default-authentication-plugin=mysql_native_password
         environment:
-          MYSQL_USER: automated_tests
-          MYSQL_DATABASE: automated_tests
-          MYSQL_ROOT_PASSWORD: ''
-          MYSQL_PASSWORD: ''
+          DATABASE_DRIVER: MYSQL
+          DATABASE_NAME: automated_tests
+          DATABASE_HOST: localhost
+          DATABASE_USER: automated_tests
+          DATABASE_PASSWORD: automated_tests
 
     steps:
       - checkout
