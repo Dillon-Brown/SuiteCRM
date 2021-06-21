@@ -67,7 +67,7 @@ class MPDFEngineTest extends SuitePHPUnitFrameworkTestCase
     {
         parent::setUp();
 
-        $this->pdf = PDFWrapper::getPDFEngine();
+        @$this->pdf = PDFWrapper::getPDFEngine();
     }
 
     public function testWriteFooter(): void
