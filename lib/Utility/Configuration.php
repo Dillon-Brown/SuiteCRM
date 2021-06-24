@@ -42,9 +42,10 @@
 namespace SuiteCRM\Utility;
 
 
+use ArrayAccess;
 use SuiteCRM\Exception\Exception;
 
-class Configuration implements \ArrayAccess
+class Configuration implements ArrayAccess
 {
 
     private $container;

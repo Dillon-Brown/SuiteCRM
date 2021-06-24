@@ -111,10 +111,10 @@ class UploadMultipleFiles
 
     /**
      * Get URL for a document
-     * @deprecated
      * @param string stored_file_name File name in filesystem
      * @param string bean_id note bean ID
      * @return string path with file name
+     * @deprecated
      */
     public static function get_url($stored_file_name, $bean_id)
     {
