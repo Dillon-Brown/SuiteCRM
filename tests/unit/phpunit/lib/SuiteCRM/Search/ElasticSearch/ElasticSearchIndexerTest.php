@@ -1,4 +1,13 @@
 <?php
+
+use Elasticsearch\Client;
+use Mockery as m;
+use SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer;
+use SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer as i;
+use SuiteCRM\Search\Index\Documentify\SearchDefsDocumentifier;
+use SuiteCRM\Tests\Unit\lib\SuiteCRM\Search\SearchTestAbstract;
+use SuiteCRM\Tests\Unit\lib\SuiteCRM\Utility\BeanJsonSerializerTestData\BeanMock;
+
 /** @noinspection PhpUnhandledExceptionInspection */
 
 /**
@@ -39,14 +48,6 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-use Mockery as m;
-use Mockery\Exception\InvalidCountException;
-use SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer;
-use SuiteCRM\Search\ElasticSearch\ElasticSearchIndexer as i;
-use SuiteCRM\Search\Index\Documentify\SearchDefsDocumentifier;
-use SuiteCRM\Tests\Unit\lib\SuiteCRM\Search\SearchTestAbstract;
-use SuiteCRM\Tests\Unit\lib\SuiteCRM\Utility\BeanJsonSerializerTestData\BeanMock;
-
 include_once __DIR__ . '/../../Utility/BeanJsonSerializerTestData/BeanMock.php';
 include_once __DIR__ . '/../SearchTestAbstract.php';
 
@@ -82,14 +83,64 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
         $bean7 = BeanFactory::newBean($mockedModule);
         $bean8 = BeanFactory::newBean($mockedModule);
 
-        $bean1->fromArray(["id" => 1, 'name' => 'name 1', "deleted" => false, "module_name" => $mockedModule, "column_fields" => ["name"]]);
-        $bean2->fromArray(["id" => 2, 'name' => 'name 2', "deleted" => false, "module_name" => $mockedModule, "column_fields" => ["name"]]);
-        $bean3->fromArray(["id" => 3, 'name' => 'name 3', "deleted" => false, "module_name" => $mockedModule, "column_fields" => ["name"]]);
-        $bean4->fromArray(["id" => 4, 'name' => 'name 4', "deleted" => false, "module_name" => $mockedModule, "column_fields" => ["name"]]);
-        $bean5->fromArray(["id" => 5, 'name' => 'name 5', "deleted" => false, "module_name" => $mockedModule, "column_fields" => ["name"]]);
-        $bean6->fromArray(["id" => 6, 'name' => 'name 6', "deleted" => true, "module_name" => $mockedModule, "column_fields" => ["name"]]);
-        $bean7->fromArray(["id" => 7, 'name' => 'name 7', "opt" => 'ciao', "deleted" => false, "module_name" => $mockedModule, "column_fields" => ["name", "opt"]]);
-        $bean8->fromArray(["id" => 8, 'name' => 'name 8', "opt" => 'ciao', "deleted" => false, "module_name" => $mockedModule, "column_fields" => ["name", "opt"]]);
+        $bean1->fromArray([
+            "id" => 1,
+            'name' => 'name 1',
+            "deleted" => false,
+            "module_name" => $mockedModule,
+            "column_fields" => ["name"]
+        ]);
+        $bean2->fromArray([
+            "id" => 2,
+            'name' => 'name 2',
+            "deleted" => false,
+            "module_name" => $mockedModule,
+            "column_fields" => ["name"]
+        ]);
+        $bean3->fromArray([
+            "id" => 3,
+            'name' => 'name 3',
+            "deleted" => false,
+            "module_name" => $mockedModule,
+            "column_fields" => ["name"]
+        ]);
+        $bean4->fromArray([
+            "id" => 4,
+            'name' => 'name 4',
+            "deleted" => false,
+            "module_name" => $mockedModule,
+            "column_fields" => ["name"]
+        ]);
+        $bean5->fromArray([
+            "id" => 5,
+            'name' => 'name 5',
+            "deleted" => false,
+            "module_name" => $mockedModule,
+            "column_fields" => ["name"]
+        ]);
+        $bean6->fromArray([
+            "id" => 6,
+            'name' => 'name 6',
+            "deleted" => true,
+            "module_name" => $mockedModule,
+            "column_fields" => ["name"]
+        ]);
+        $bean7->fromArray([
+            "id" => 7,
+            'name' => 'name 7',
+            "opt" => 'ciao',
+            "deleted" => false,
+            "module_name" => $mockedModule,
+            "column_fields" => ["name", "opt"]
+        ]);
+        $bean8->fromArray([
+            "id" => 8,
+            'name' => 'name 8',
+            "opt" => 'ciao',
+            "deleted" => false,
+            "module_name" => $mockedModule,
+            "column_fields" => ["name", "opt"]
+        ]);
 
         $mockedBeans = [$bean1, $bean2, $bean3, $bean4, $bean5, $bean6, $bean7, $bean8];
 
@@ -172,11 +223,8 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
      */
     private function getExpectedHeader(): array
     {
-        global $sugar_config;
-
         return [
-            'index' => $sugar_config['unique_key'],
-            'type' => 'Contacts',
+            'index' => 'Contacts',
             'id' => '00000000-0000-0000-0000-000000000000',
         ];
     }
@@ -312,9 +360,7 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
 
     public function testRemoveBeans(): void
     {
-        global $sugar_config;
-
-        $mock = m::mock('Elasticsearch\Client');
+        $mock = m::mock(Client::class);
         $beans = [$this->getTestBean(), $this->getTestBean()];
 
         $params = [
@@ -324,15 +370,13 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
             'body' => [
                 [
                     'delete' => [
-                        'index' => $sugar_config['unique_key'],
-                        'type' => 'Contacts',
+                        'index' => 'Contacts',
                         'id' => '00000000-0000-0000-0000-000000000000',
                     ]
                 ],
                 [
                     'delete' => [
-                        'index' => $sugar_config['unique_key'],
-                        'type' => 'Contacts',
+                        'index' => 'Contacts',
                         'id' => '00000000-0000-0000-0000-000000000000',
                     ]
                 ],
@@ -356,14 +400,11 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
 
     public function testRemoveBean(): void
     {
-        global $sugar_config;
-
-        $mock = m::mock('Elasticsearch\Client');
+        $mock = m::mock(Client::class);
         $bean = $this->getTestBean();
 
         $params = [
-            'index' => $sugar_config['unique_key'],
-            'type' => 'Contacts',
+            'index' => 'Contacts',
             'id' => '00000000-0000-0000-0000-000000000000',
         ];
 
@@ -396,19 +437,17 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
 
     public function testRemoveIndex(): void
     {
-        global $sugar_config;
-
         [$mockClient, $mockIndices] = $this->getMockIndices();
 
         $mockIndices
             ->shouldReceive('delete')
             ->once()
-            ->with(['index' => $sugar_config['unique_key'], 'client' => ['ignore' => [404]]]);
+            ->with(['index' => 'test', 'client' => ['ignore' => [404]]]);
 
         $indexer = new ElasticSearchIndexer($mockClient);
 
         try {
-            $indexer->removeIndex();
+            $indexer->removeIndex('test');
             self::assertTrue(true);
         } catch (Exception $e) {
             self::fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
@@ -428,6 +467,7 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
             ->once()
             ->withNoArgs()
             ->andReturn($mockIndices);
+
         return [$mockClient, $mockIndices];
     }
 
@@ -523,62 +563,6 @@ class ElasticSearchIndexerTest extends SearchTestAbstract
         $actual = (new ElasticSearchIndexer($mockClient))->ping();
         self::assertNotFalse($actual);
         self::assertIsNumeric($actual);
-    }
-
-    public function testPutMappings(): void
-    {
-        $meta = ['foo' => 'bar'];
-        $module = 'Accounts';
-        $index = 'test';
-
-        $params = [
-            'index' => $index,
-            'type' => $module,
-            'body' => ['_meta' => $meta]
-        ];
-
-        [$client, $indices] = $this->getMockIndices();
-
-        $indices
-            ->shouldReceive('putMapping')
-            ->with($params)
-            ->once();
-
-        $i = new i($client);
-
-        try {
-            $i->setIndex($index);
-            $i->putMeta($module, $meta);
-            self::assertTrue(true);
-        } catch (Exception $e) {
-            self::fail($e->getMessage() . "\nTrace:\n" . $e->getTraceAsString());
-        }
-    }
-
-    public function testGetMeta(): void
-    {
-        $meta = ['foo' => 'bar'];
-        $module = 'Accounts';
-        $index = 'test';
-
-        $params = ['index' => $index, 'filter_path' => "$index.mappings.$module._meta"];
-        $response = [$index => ['mappings' => [$module => ['_meta' => $meta]]]];
-
-        [$client, $indices] = $this->getMockIndices();
-
-        $indices
-            ->shouldReceive('getMapping')
-            ->with($params)
-            ->once()
-            ->andReturn($response);
-
-        $i = new i($client);
-
-        $i->setIndex($index);
-
-        $actual = $i->getMeta($module);
-
-        self::assertEquals($meta, $actual);
     }
 
     public function testCreateIndex(): void
