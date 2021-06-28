@@ -45,6 +45,7 @@ if (!defined('sugarEntry') || !sugarEntry) {
 require_once __DIR__ . '/externalAPI/ExternalAPIFactory.php';
 require_once __DIR__ . '/UploadStream.php';
 
+use SuiteCRM\Exception\MalwareFoundException;
 use SuiteCRM\Utility\AntiMalware\AntiMalwareTrait;
 
 /**
@@ -302,8 +303,9 @@ class UploadFile
 
         try {
             $this->scanPathForMalware($_FILES[$this->field_name]['tmp_name']);
-        } catch (\SuiteCRM\Exception\MalwareFoundException $exception) {
-            $GLOBALS['log']->security("Malware found, unable to save file: {$_FILES[$this->field_name]['name']}");
+        } catch (MalwareFoundException $exception) {
+            LoggerManager::getLogger()->security("Malware found, unable to save file: {$_FILES[$this->field_name]['name']}");
+
             return false;
         }
 

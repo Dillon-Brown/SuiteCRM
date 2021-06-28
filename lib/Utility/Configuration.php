@@ -5,7 +5,7 @@
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
  *
  * SuiteCRM is an extension to SugarCRM Community Edition developed by SalesAgility Ltd.
- * Copyright (C) 2011 - 2018 SalesAgility Ltd.
+ * Copyright (C) 2011 - 2021 SalesAgility Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License version 3 as published by the
@@ -38,13 +38,15 @@
  * display the words "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  */
 
-
 namespace SuiteCRM\Utility;
-
 
 use ArrayAccess;
 use SuiteCRM\Exception\Exception;
 
+/**
+ * Class Configuration
+ * @package SuiteCRM\Utility
+ */
 class Configuration implements ArrayAccess
 {
 
@@ -57,8 +59,7 @@ class Configuration implements ArrayAccess
     {
         global $sugar_config;
         require_once 'modules/Configurator/Configurator.php';
-        $configurator = new \Configurator();
-        $this->container = $configurator->config;
+        $this->container = (new \Configurator())->config;
     }
 
     /**
@@ -102,6 +103,6 @@ class Configuration implements ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return $this->container[$offset] ?? null;
     }
 }
